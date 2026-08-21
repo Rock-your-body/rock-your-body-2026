@@ -33,48 +33,62 @@ body {
 }
 
 .page {
-  width: 100%;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 12px;
+  padding: 10px;
 }
 
 .dashboard {
   position: relative;
   width: 100%;
   max-width: 1250px;
+
   aspect-ratio: 2500 / 1686;
-  overflow: hidden;
+
   background: #fff;
+  overflow: hidden;
+
   border-radius: 18px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.12);
+
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.12);
 }
+
+/* =========================================
+   BACKGROUND
+========================================= */
 
 .dashboard-bg {
   position: absolute;
   inset: 0;
+
   width: 100%;
   height: 100%;
+
   object-fit: fill;
+
   display: block;
-  pointer-events: none;
+
   user-select: none;
+  pointer-events: none;
 }
 
-/* ==========================================
-   PROFILE
-========================================== */
+/* =========================================
+   PROFILE PHOTO
+========================================= */
 
 .profile-photo {
   position: absolute;
+
   z-index: 5;
 
-  left: 18.85%;
-  top: 35.4%;
+  left: 18.8%;
+  top: 38%;
 
-  width: 28.4%;
+  width: 27.5%;
+
   aspect-ratio: 1 / 1;
 
   transform: translate(-50%, -50%);
@@ -88,16 +102,19 @@ body {
 .profile-photo img {
   width: 100%;
   height: 100%;
+
   object-fit: cover;
+
   display: none;
 }
 
-/* ==========================================
-   LIVE VALUES
-========================================== */
+/* =========================================
+   COMMON REALTIME TEXT
+========================================= */
 
 .live-value {
   position: absolute;
+
   z-index: 20;
 
   display: flex;
@@ -105,32 +122,40 @@ body {
   justify-content: center;
 
   font-weight: 900;
+
+  text-align: center;
   white-space: nowrap;
+
   line-height: 1;
 
   pointer-events: none;
 }
 
-/* ROCK COIN */
+/* =========================================
+   ROCK COIN
+========================================= */
 
 #rockCoinValue {
   left: 80.8%;
-  top: 8.1%;
+  top: 6.1%;
 
   transform: translate(-50%, -50%);
 
-  width: 7%;
+  width: 8%;
 
   color: #08245b;
 
-  font-size: clamp(10px, 1.15vw, 20px);
+  font-size:
+    clamp(12px, 1.5vw, 25px);
 }
 
-/* ENERGY */
+/* =========================================
+   ENERGY
+========================================= */
 
 #energyValue {
-  left: 92.3%;
-  top: 8.1%;
+  left: 92.8%;
+  top: 6.1%;
 
   transform: translate(-50%, -50%);
 
@@ -138,73 +163,86 @@ body {
 
   color: #08245b;
 
-  font-size: clamp(9px, 1.05vw, 19px);
+  font-size:
+    clamp(11px, 1.35vw, 23px);
 }
 
-/* CURRENT WEIGHT */
+/* =========================================
+   CURRENT WEIGHT
+========================================= */
 
 #currentWeightValue {
-  left: 52.15%;
-  top: 39.8%;
+  left: 49.6%;
+  top: 39.3%;
 
   transform: translate(-50%, -50%);
 
-  width: 10%;
+  width: 13%;
 
   color: #08245b;
 
-  font-size: clamp(13px, 1.8vw, 30px);
+  font-size:
+    clamp(18px, 2.6vw, 43px);
 }
 
-/* TARGET */
+/* =========================================
+   TARGET WEIGHT
+========================================= */
 
 #targetWeightValue {
-  left: 52.15%;
-  top: 61.8%;
+  left: 49.6%;
+  top: 61.5%;
 
   transform: translate(-50%, -50%);
 
-  width: 10%;
+  width: 13%;
 
   color: #d31317;
 
-  font-size: clamp(13px, 1.8vw, 30px);
+  font-size:
+    clamp(18px, 2.6vw, 43px);
 }
 
-/* LEVEL */
+/* =========================================
+   LEVEL
+========================================= */
 
 #levelValue {
-  left: 29.65%;
-  top: 63.2%;
+  left: 29.45%;
+  top: 64.3%;
 
   transform: translate(-50%, -50%);
 
-  width: 4%;
+  width: 4.5%;
 
   color: #fff;
 
-  font-size: clamp(9px, 1.15vw, 19px);
+  font-size:
+    clamp(11px, 1.35vw, 22px);
 
-  text-shadow: 0 2px 4px rgba(0,0,0,.45);
+  text-shadow:
+    0 2px 4px rgba(0,0,0,.5);
 }
 
-/* ==========================================
+/* =========================================
    EXP BAR
-========================================== */
+========================================= */
 
 .exp-track {
   position: absolute;
+
   z-index: 18;
 
-  left: 10.35%;
-  top: 71.15%;
+  left: 10.2%;
+  top: 71.45%;
 
-  width: 21.25%;
-  height: 3.5%;
+  width: 14.4%;
+  height: 2.8%;
 
-  padding: 3px;
+  padding: 2px;
 
   border-radius: 999px;
+
   overflow: hidden;
 
   background: transparent;
@@ -218,32 +256,34 @@ body {
 
   border-radius: 999px;
 
-  background: linear-gradient(
-    90deg,
-    #00b8ff 0%,
-    #087bff 48%,
-    #0640df 100%
-  );
+  background:
+    linear-gradient(
+      90deg,
+      #00b8ff 0%,
+      #087bff 50%,
+      #0640df 100%
+    );
 
   box-shadow:
-    inset 0 0 4px rgba(255,255,255,.55);
+    inset 0 0 4px rgba(255,255,255,.6);
 
   transition: width .4s ease;
 }
 
-/* ==========================================
+/* =========================================
    CLICK AREAS
-========================================== */
+========================================= */
 
 .click-area {
   position: absolute;
-  z-index: 30;
 
-  margin: 0;
-  padding: 0;
+  z-index: 30;
 
   border: 0;
   outline: 0;
+
+  margin: 0;
+  padding: 0;
 
   background: transparent;
 
@@ -254,16 +294,16 @@ body {
 }
 
 #profileButton {
-  left: 2.5%;
+  left: 2%;
   top: 15%;
-  width: 33%;
-  height: 44%;
+  width: 34%;
+  height: 46%;
 }
 
 #weightCheckButton {
   left: 59%;
   top: 15%;
-  width: 18.5%;
+  width: 18%;
   height: 30%;
 }
 
@@ -277,7 +317,7 @@ body {
 #rankingButton {
   left: 59%;
   top: 46%;
-  width: 18.5%;
+  width: 18%;
   height: 30%;
 }
 
@@ -290,9 +330,9 @@ body {
 
 #weightCardButton {
   left: 35%;
-  top: 24%;
+  top: 25%;
   width: 22%;
-  height: 21%;
+  height: 20%;
 }
 
 #targetButton {
@@ -303,7 +343,7 @@ body {
 }
 
 #homeButton {
-  left: 1.5%;
+  left: 1%;
   top: 79%;
   width: 32%;
   height: 19%;
@@ -319,16 +359,17 @@ body {
 #battleButton {
   left: 67%;
   top: 79%;
-  width: 31.5%;
+  width: 32%;
   height: 19%;
 }
 
-/* ==========================================
+/* =========================================
    STATUS
-========================================== */
+========================================= */
 
 .status {
   position: fixed;
+
   z-index: 300;
 
   left: 50%;
@@ -346,12 +387,13 @@ body {
 
   color: #fff;
 
+  text-align: center;
+
   font-size: 14px;
   font-weight: 800;
 
-  text-align: center;
-
-  box-shadow: 0 8px 25px rgba(0,0,0,.22);
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.22);
 
   display: none;
 }
@@ -368,16 +410,19 @@ body {
   background: rgba(3,143,69,.95);
 }
 
-/* ==========================================
-   TARGET MODAL
-========================================== */
+/* =========================================
+   MODAL
+========================================= */
 
 .modal-backdrop {
   position: fixed;
+
   inset: 0;
+
   z-index: 400;
 
   display: none;
+
   align-items: center;
   justify-content: center;
 
@@ -400,7 +445,8 @@ body {
 
   background: #fff;
 
-  box-shadow: 0 20px 60px rgba(0,0,0,.30);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.3);
 }
 
 .modal h2 {
@@ -411,7 +457,6 @@ body {
 .modal p {
   margin: 0 0 18px;
   color: #64748b;
-  line-height: 1.5;
 }
 
 .target-input-wrap {
@@ -444,8 +489,8 @@ body {
 
 .target-input-wrap span {
   color: #64748b;
-  font-size: 18px;
   font-weight: 900;
+  font-size: 18px;
 }
 
 .modal-actions {
@@ -479,9 +524,9 @@ body {
   color: #fff;
 }
 
-/* ==========================================
+/* =========================================
    MOBILE
-========================================== */
+========================================= */
 
 @media (max-width: 650px) {
 
@@ -496,27 +541,26 @@ body {
   }
 
   #rockCoinValue {
-    font-size: clamp(7px, 2vw, 13px);
+    font-size: clamp(8px, 2.4vw, 14px);
   }
 
   #energyValue {
-    font-size: clamp(7px, 2vw, 13px);
+    font-size: clamp(8px, 2.3vw, 14px);
   }
 
   #currentWeightValue,
   #targetWeightValue {
-    font-size: clamp(9px, 2.6vw, 17px);
+    font-size: clamp(11px, 3.2vw, 19px);
   }
 
   #levelValue {
-    font-size: clamp(7px, 2vw, 13px);
+    font-size: clamp(8px, 2.2vw, 13px);
   }
 
   .exp-track {
     padding: 1px;
   }
 }
-
 </style>
 </head>
 
@@ -709,9 +753,9 @@ body {
 
 <script>
 
-/* ==========================================
+/* =========================================
    CONFIG
-========================================== */
+========================================= */
 
 const LIFF_ID =
   "2011201679-uNWz5yqF";
@@ -731,19 +775,17 @@ const BATTLE_URL =
 const AUTO_REFRESH_MS =
   10000;
 
-
-/* ==========================================
+/* =========================================
    STATE
-========================================== */
+========================================= */
 
 let dashboardData = null;
 let refreshTimer = null;
 let requestRunning = false;
 
-
-/* ==========================================
+/* =========================================
    ELEMENTS
-========================================== */
+========================================= */
 
 const statusEl =
   document.getElementById("status");
@@ -775,10 +817,9 @@ const targetModal =
 const targetInput =
   document.getElementById("targetInput");
 
-
-/* ==========================================
+/* =========================================
    STATUS
-========================================== */
+========================================= */
 
 function showStatus(
   message,
@@ -797,17 +838,15 @@ function showStatus(
     );
 }
 
-
 function hideStatus() {
 
   statusEl.className =
     "status";
 }
 
-
-/* ==========================================
-   FORMAT
-========================================== */
+/* =========================================
+   FORMATTERS
+========================================= */
 
 function formatInteger(value) {
 
@@ -822,7 +861,6 @@ function formatInteger(value) {
     .round(number)
     .toLocaleString("en-US");
 }
-
 
 function formatWeight(value) {
 
@@ -844,10 +882,9 @@ function formatWeight(value) {
   return number.toFixed(1);
 }
 
-
-/* ==========================================
+/* =========================================
    API
-========================================== */
+========================================= */
 
 async function callAPI(
   action,
@@ -858,6 +895,7 @@ async function callAPI(
     liff.getIDToken();
 
   if (!idToken) {
+
     throw new Error(
       "ไม่พบ LINE ID Token"
     );
@@ -914,10 +952,9 @@ async function callAPI(
   return data;
 }
 
-
-/* ==========================================
+/* =========================================
    RENDER
-========================================== */
+========================================= */
 
 function renderDashboard(data) {
 
@@ -942,7 +979,7 @@ function renderDashboard(data) {
       formatInteger(
         data.energy.current
       ) +
-      " / " +
+      "/" +
       formatInteger(
         data.energy.max
       );
@@ -960,7 +997,7 @@ function renderDashboard(data) {
       data.weight?.current
     );
 
-  /* TARGET */
+  /* TARGET WEIGHT */
 
   targetWeightValue.textContent =
     formatWeight(
@@ -975,7 +1012,7 @@ function renderDashboard(data) {
   ) {
 
     levelValue.textContent =
-      formatInteger(
+      String(
         data.level
       );
 
@@ -1004,9 +1041,7 @@ function renderDashboard(data) {
     );
 
   expBar.style.width =
-    safeProgress > 0
-      ? safeProgress + "%"
-      : "0%";
+    safeProgress + "%";
 
   /* PROFILE */
 
@@ -1028,10 +1063,9 @@ function renderDashboard(data) {
   }
 }
 
-
-/* ==========================================
-   LOAD DASHBOARD
-========================================== */
+/* =========================================
+   LOAD
+========================================= */
 
 async function loadDashboard(
   showLoading = true
@@ -1082,10 +1116,9 @@ async function loadDashboard(
   }
 }
 
-
-/* ==========================================
+/* =========================================
    AUTO REFRESH
-========================================== */
+========================================= */
 
 function startAutoRefresh() {
 
@@ -1113,10 +1146,9 @@ function startAutoRefresh() {
     );
 }
 
-
-/* ==========================================
-   TARGET
-========================================== */
+/* =========================================
+   TARGET MODAL
+========================================= */
 
 function openTargetModal() {
 
@@ -1150,14 +1182,12 @@ function openTargetModal() {
   );
 }
 
-
 function closeTargetModal() {
 
   targetModal
     .classList
     .remove("show");
 }
-
 
 async function saveTarget() {
 
@@ -1223,10 +1253,9 @@ async function saveTarget() {
   }
 }
 
-
-/* ==========================================
+/* =========================================
    NAVIGATION
-========================================== */
+========================================= */
 
 function go(url) {
 
@@ -1234,10 +1263,9 @@ function go(url) {
     url;
 }
 
-
-/* ==========================================
+/* =========================================
    EVENTS
-========================================== */
+========================================= */
 
 document
   .getElementById(
@@ -1379,10 +1407,9 @@ targetModal
     }
   );
 
-
-/* ==========================================
+/* =========================================
    VISIBILITY
-========================================== */
+========================================= */
 
 document
   .addEventListener(
@@ -1400,10 +1427,9 @@ document
     }
   );
 
-
-/* ==========================================
-   LIFF
-========================================== */
+/* =========================================
+   LIFF INIT
+========================================= */
 
 async function initLIFF() {
 
@@ -1449,10 +1475,9 @@ async function initLIFF() {
   }
 }
 
-
-/* ==========================================
+/* =========================================
    START
-========================================== */
+========================================= */
 
 initLIFF();
 
