@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ROCK YOUR BODY 2026 - Mission</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; min-height: 100%; background: #eef5ff; color: #08245b; font-family: Arial, "Noto Sans Thai", sans-serif; }
+.page { min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 10px; }
+.dashboard { position: relative; width: 100%; max-width: 1250px; aspect-ratio: 2500 / 1686; background: #fff; overflow: hidden; border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.12); }
+.dashboard-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; display: block; pointer-events: none; }
+
+.live-value { position: absolute; z-index: 20; display: flex; align-items: center; justify-content: center; font-weight: 900; white-space: nowrap; line-height: 1; pointer-events: none; }
+#rockCoinValue { left: 80.8%; top: 6.1%; transform: translate(-50%, -50%); width: 8%; color: #08245b; font-size: clamp(12px, 1.5vw, 25px); }
+#energyValue { left: 92.8%; top: 6.1%; transform: translate(-50%, -50%); width: 10%; color: #08245b; font-size: clamp(11px, 1.35vw, 23px); }
+
+.click-area { position: absolute; z-index: 30; border: 0; background: transparent; cursor: pointer; }
+#homeButton { left: 1%; top: 79%; width: 32%; height: 19%; }
+#missionButton { left: 34%; top: 79%; width: 32%; height: 19%; }
+#battleButton { left: 67%; top: 79%; width: 32%; height: 19%; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="dashboard">
+    <img class="dashboard-bg" src="./rock-mission-2500x1686-682KB.jpg" alt="Mission">
+    
+    <div id="rockCoinValue" class="live-value"></div>
+    <div id="energyValue" class="live-value"></div>
+
+    <button id="homeButton" class="click-area" onclick="location.href='dashboard.html'"></button>
+    <button id="missionButton" class="click-area" onclick="location.href='mission.html'"></button>
+    <button id="battleButton" class="click-area" onclick="location.href='battle.html'"></button>
+  </div>
+</div>
+
+<script>
+const LIFF_ID = "2011201679-uNWz5yqF";
+const API_URL = "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
+
+async function initMission() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) { liff.login(); return; }
+    const idToken = liff.getIDToken();
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "dashboard", idToken })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById("rockCoinValue").textContent = Number(data.rockCoin || 0).toLocaleString();
+      document.getElementById("energyValue").textContent = (data.energy?.current || 0) + "/" + (data.energy?.max || 200);
+    }
+  } catch (err) { console.error(err); }
+}
+initMission();
+</script>
+</body>
+</html>
