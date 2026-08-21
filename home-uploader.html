@@ -62,11 +62,9 @@ h1 {
   border: 2px dashed #9db4d5;
   border-radius: 14px;
   overflow: hidden;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: #70829a;
 }
 
@@ -99,13 +97,10 @@ button {
   margin-top: 20px;
   border: 0;
   border-radius: 14px;
-
   background: #06c755;
   color: white;
-
   font-size: 20px;
   font-weight: bold;
-
   cursor: pointer;
 }
 
@@ -190,7 +185,6 @@ button:disabled {
 
   </div>
 
-
   <div class="card">
 
     <div class="preview">
@@ -206,36 +200,33 @@ button:disabled {
 
     </div>
 
-
     <input
       id="homeFile"
       type="file"
       accept="image/jpeg,image/png"
     >
 
-
     <div
       id="fileInfo"
       class="info"
     >
       รองรับ JPG / PNG<br>
+      ขนาด 2500 × 1686 px<br>
       ขนาดไฟล์ไม่เกิน 1 MB
     </div>
-
 
     <button
       id="uploadButton"
       type="button"
+      disabled
     >
       🚀 UPLOAD & ACTIVATE HOME
     </button>
-
 
     <div
       id="result"
       class="result"
     ></div>
-
 
     <div class="note">
 
@@ -253,12 +244,14 @@ button:disabled {
 
 </div>
 
-
 <script>
 
 const API_URL =
   "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/richmenu-uploader";
 
+const MAX_FILE_SIZE = 1_000_000;
+const REQUIRED_WIDTH = 2500;
+const REQUIRED_HEIGHT = 1686;
 
 const input =
   document.getElementById("homeFile");
@@ -278,8 +271,31 @@ const result =
 const button =
   document.getElementById("uploadButton");
 
-
 let previewUrl = null;
+
+
+// ==========================================
+// RESET PREVIEW
+// ==========================================
+
+function resetPreview() {
+
+  if (previewUrl) {
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = null;
+  }
+
+  preview.removeAttribute("src");
+  preview.style.display = "none";
+  previewText.style.display = "block";
+
+  fileInfo.innerHTML =
+    "รองรับ JPG / PNG<br>" +
+    "ขนาด 2500 × 1686 px<br>" +
+    "ขนาดไฟล์ไม่เกิน 1 MB";
+
+  button.disabled = true;
+}
 
 
 // ==========================================
@@ -296,8 +312,8 @@ input.addEventListener(
     result.style.display =
       "none";
 
-
     if (!file) {
+      resetPreview();
       return;
     }
 
@@ -314,24 +330,34 @@ input.addEventListener(
       );
 
       input.value = "";
+      resetPreview();
 
       return;
     }
 
 
-    // SIZE CHECK
+    // FILE SIZE CHECK
 
-    if (file.size > 1000000) {
+    if (file.size > MAX_FILE_SIZE) {
 
       alert(
-        "ไฟล์มีขนาดเกิน 1 MB"
+        "ไฟล์มีขนาดเกิน 1 MB\n\n" +
+        "ไฟล์: " +
+        file.name +
+        "\n" +
+        "ขนาดจริง: " +
+        Math.round(file.size / 1024) +
+        " KB"
       );
 
       input.value = "";
+      resetPreview();
 
       return;
     }
 
+
+    // CREATE PREVIEW
 
     if (previewUrl) {
       URL.revokeObjectURL(
@@ -339,10 +365,8 @@ input.addEventListener(
       );
     }
 
-
     previewUrl =
       URL.createObjectURL(file);
-
 
     preview.src =
       previewUrl;
@@ -354,9 +378,10 @@ input.addEventListener(
       "none";
 
 
+    // IMAGE SIZE CHECK
+
     const img =
       new Image();
-
 
     img.onload =
       function () {
@@ -366,8 +391,7 @@ input.addEventListener(
             file.size / 1024
           );
 
-
-        fileInfo.innerHTML =
+        let html =
           "<b>" +
           file.name +
           "</b><br>" +
@@ -382,17 +406,30 @@ input.addEventListener(
 
 
         if (
-          img.width !== 2500 ||
-          img.height !== 1686
+          img.width !== REQUIRED_WIDTH ||
+          img.height !== REQUIRED_HEIGHT
         ) {
 
-          fileInfo.innerHTML +=
+          html +=
             "<br><span style='color:#c77700'>" +
-            "⚠ แนะนำให้ใช้รูป 2500 × 1686 px" +
+            "❌ รูปต้องมีขนาด 2500 × 1686 px" +
             "</span>";
-        }
-      };
 
+          button.disabled = true;
+
+        } else {
+
+          html +=
+            "<br><span style='color:#08783c'>" +
+            "✅ ขนาดถูกต้อง พร้อมอัปโหลด" +
+            "</span>";
+
+          button.disabled = false;
+        }
+
+        fileInfo.innerHTML =
+          html;
+      };
 
     img.src =
       previewUrl;
@@ -411,7 +448,6 @@ button.addEventListener(
     const file =
       input.files[0];
 
-
     if (!file) {
 
       alert(
@@ -422,11 +458,20 @@ button.addEventListener(
     }
 
 
+    if (file.size > MAX_FILE_SIZE) {
+
+      alert(
+        "ไฟล์มีขนาดเกิน 1 MB"
+      );
+
+      return;
+    }
+
+
     const confirmed =
       confirm(
         "ยืนยันอัปโหลดและเปิดใช้งาน HOME Rich Menu ใหม่นี้?"
       );
-
 
     if (!confirmed) {
       return;
@@ -439,7 +484,6 @@ button.addEventListener(
     button.textContent =
       "กำลังอัปโหลด...";
 
-
     result.className =
       "result loading";
 
@@ -449,7 +493,6 @@ button.addEventListener(
 
     const form =
       new FormData();
-
 
     form.append(
       "home",
@@ -468,13 +511,10 @@ button.addEventListener(
           }
         );
 
-
       const text =
         await response.text();
 
-
       let data;
-
 
       try {
 
@@ -487,7 +527,6 @@ button.addEventListener(
           "Server ไม่ได้ตอบกลับเป็น JSON: " +
           text.substring(0, 200)
         );
-
       }
 
 
@@ -500,13 +539,11 @@ button.addEventListener(
           data.error ||
           "Upload failed"
         );
-
       }
 
 
       result.className =
         "result success";
-
 
       result.innerHTML =
         "<b>✅ สำเร็จ</b><br>" +
@@ -539,10 +576,8 @@ button.addEventListener(
         error
       );
 
-
       result.className =
         "result error";
-
 
       result.innerHTML =
         "<b>❌ Upload ไม่สำเร็จ</b><br>" +
@@ -553,12 +588,12 @@ button.addEventListener(
 
     } finally {
 
-      button.disabled =
-        false;
-
       button.textContent =
         "🚀 UPLOAD & ACTIVATE HOME";
 
+      if (input.files[0]) {
+        button.disabled = false;
+      }
     }
 
   }
