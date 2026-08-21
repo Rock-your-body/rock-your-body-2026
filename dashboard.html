@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#eef5ff">
+
+<title>ROCK YOUR BODY 2026 - Dashboard</title>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    sans-serif;
+
+  background: #eef5ff;
+
+  color: #08245b;
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: 12px;
+}
+
+
+/* =====================================================
+   DASHBOARD WRAPPER
+===================================================== */
+
+.dashboard {
+  position: relative;
+
+  width: 100%;
+  max-width: 1000px;
+
+  aspect-ratio: 2500 / 1686;
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.12);
+}
+
+
+/* =====================================================
+   BACKGROUND IMAGE
+===================================================== */
+
+.dashboard-bg {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: fill;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   REALTIME VALUES
+===================================================== */
+
+.live-value {
+  position: absolute;
+
+  z-index: 10;
+
+  font-weight: 900;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  color: #08245b;
+
+  text-shadow:
+    0 1px 2px rgba(255,255,255,.9);
+}
+
+
+/* ROCK COIN */
+
+#rockCoinValue {
+  left: 79.1%;
+  top: 7.6%;
+
+  transform:
+    translate(-50%, -50%);
+
+  font-size:
+    clamp(12px, 2vw, 30px);
+}
+
+
+/* ENERGY */
+
+#energyValue {
+  left: 91.8%;
+  top: 7.6%;
+
+  transform:
+    translate(-50%, -50%);
+
+  font-size:
+    clamp(11px, 1.8vw, 28px);
+}
+
+
+/* CURRENT WEIGHT */
+
+#currentWeightValue {
+  left: 52.8%;
+  top: 40.1%;
+
+  transform:
+    translate(-50%, -50%);
+
+  font-size:
+    clamp(14px, 2.2vw, 34px);
+
+  color: #08245b;
+}
+
+
+/* TARGET WEIGHT */
+
+#targetWeightValue {
+  left: 52.8%;
+  top: 62.2%;
+
+  transform:
+    translate(-50%, -50%);
+
+  font-size:
+    clamp(14px, 2.2vw, 34px);
+
+  color: #d31317;
+}
+
+
+/* LEVEL */
+
+#levelValue {
+  left: 29.4%;
+  top: 64.2%;
+
+  transform:
+    translate(-50%, -50%);
+
+  font-size:
+    clamp(12px, 1.8vw, 28px);
+
+  color: #ffffff;
+
+  text-shadow:
+    0 2px 4px rgba(0,0,0,.35);
+}
+
+
+/* =====================================================
+   EXP BAR
+===================================================== */
+
+.exp-track {
+  position: absolute;
+
+  z-index: 10;
+
+  left: 10.25%;
+  top: 71.25%;
+
+  width: 21.4%;
+  height: 2.9%;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  background: transparent;
+}
+
+
+.exp-fill {
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #00b7ff 0%,
+      #0867ff 45%,
+      #0538d4 100%
+    );
+
+  box-shadow:
+    inset 0 0 4px rgba(255,255,255,.7);
+
+  transition:
+    width .45s ease;
+}
+
+
+/* =====================================================
+   PROFILE IMAGE
+===================================================== */
+
+.profile-photo {
+  position: absolute;
+
+  z-index: 8;
+
+  left: 18.85%;
+  top: 35.5%;
+
+  width: 28.6%;
+  aspect-ratio: 1 / 1;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: none;
+}
+
+
+/* =====================================================
+   CLICK AREAS
+===================================================== */
+
+.click-area {
+  position: absolute;
+
+  z-index: 20;
+
+  cursor: pointer;
+
+  background:
+    rgba(0,0,0,0);
+
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+
+/* PROFILE */
+
+#profileButton {
+  left: 2%;
+  top: 15%;
+  width: 33%;
+  height: 44%;
+}
+
+
+/* WEIGHT CHECK */
+
+#weightCheckButton {
+  left: 59%;
+  top: 15%;
+  width: 18.5%;
+  height: 30%;
+}
+
+
+/* MY PROGRESS */
+
+#progressButton {
+  left: 78.5%;
+  top: 15%;
+  width: 19%;
+  height: 30%;
+}
+
+
+/* RANKING */
+
+#rankingButton {
+  left: 59%;
+  top: 46%;
+  width: 18.5%;
+  height: 30%;
+}
+
+
+/* REWARDS */
+
+#rewardsButton {
+  left: 78.5%;
+  top: 46%;
+  width: 19%;
+  height: 30%;
+}
+
+
+/* HOME */
+
+#homeButton {
+  left: 1.5%;
+  top: 79%;
+  width: 32%;
+  height: 19%;
+}
+
+
+/* MISSION */
+
+#missionButton {
+  left: 34%;
+  top: 79%;
+  width: 32%;
+  height: 19%;
+}
+
+
+/* BATTLE */
+
+#battleButton {
+  left: 67%;
+  top: 79%;
+  width: 31.5%;
+  height: 19%;
+}
+
+
+/* TARGET AREA */
+
+#targetButton {
+  left: 35%;
+  top: 45%;
+  width: 22%;
+  height: 25%;
+}
+
+
+/* =====================================================
+   STATUS / LOADING
+===================================================== */
+
+.status {
+  position: fixed;
+
+  left: 50%;
+  bottom: 18px;
+
+  transform:
+    translateX(-50%);
+
+  z-index: 100;
+
+  min-width: 220px;
+  max-width: 90vw;
+
+  padding: 12px 18px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-align: center;
+
+  background:
+    rgba(7,59,147,.93);
+
+  color: white;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.2);
+
+  display: none;
+}
+
+
+.status.show {
+  display: block;
+}
+
+
+.status.error {
+  background:
+    rgba(180,20,20,.95);
+}
+
+
+/* =====================================================
+   TARGET MODAL
+===================================================== */
+
+.modal-backdrop {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 200;
+
+  background:
+    rgba(0,0,0,.45);
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+}
+
+
+.modal-backdrop.show {
+  display: flex;
+}
+
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+
+  background: white;
+
+  border-radius: 22px;
+
+  padding: 22px;
+
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.28);
+}
+
+
+.modal h2 {
+  margin:
+    0 0 8px;
+
+  color: #073b93;
+}
+
+
+.modal p {
+  margin:
+    0 0 18px;
+
+  color: #64748b;
+
+  line-height: 1.5;
+}
+
+
+.target-input-wrap {
+  display: flex;
+  align-items: center;
+
+  border:
+    2px solid #c8d7ed;
+
+  border-radius: 14px;
+
+  padding:
+    4px 14px;
+
+  background: #f8fbff;
+}
+
+
+.target-input-wrap input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  padding:
+    14px 4px;
+
+  font-size: 26px;
+  font-weight: 800;
+
+  color: #073b93;
+}
+
+
+.target-input-wrap span {
+  font-size: 18px;
+  font-weight: 800;
+
+  color: #64748b;
+}
+
+
+.modal-actions {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+
+.modal-actions button {
+  min-height: 48px;
+
+  border: 0;
+
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+
+.btn-cancel {
+  background:
+    #e9eef6;
+
+  color:
+    #334155;
+}
+
+
+.btn-save {
+  background:
+    #06c755;
+
+  color:
+    white;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (
+  max-width: 600px
+) {
+
+  .page {
+    padding: 0;
+  }
+
+  .dashboard {
+    border-radius: 0;
+
+    width: 100vw;
+  }
+
+  #rockCoinValue {
+    font-size:
+      clamp(8px, 2.4vw, 16px);
+  }
+
+  #energyValue {
+    font-size:
+      clamp(8px, 2.3vw, 16px);
+  }
+
+  #currentWeightValue,
+  #targetWeightValue {
+    font-size:
+      clamp(10px, 3vw, 19px);
+  }
+
+  #levelValue {
+    font-size:
+      clamp(8px, 2.5vw, 16px);
+  }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+  <div
+    id="dashboard"
+    class="dashboard"
+  >
+
+    <!-- =========================================
+         BACKGROUND
+    ========================================== -->
+
+    <img
+      class="dashboard-bg"
+      src="rock-home-2500x1686-under1MB.jpg"
+      alt="ROCK YOUR BODY HOME"
+    >
+
+
+    <!-- =========================================
+         PROFILE
+    ========================================== -->
+
+    <div class="profile-photo">
+
+      <img
+        id="profileImage"
+        alt="Profile"
+      >
+
+    </div>
+
+
+    <!-- =========================================
+         REALTIME VALUES
+    ========================================== -->
+
+    <div
+      id="rockCoinValue"
+      class="live-value"
+    >
+    </div>
+
+
+    <div
+      id="energyValue"
+      class="live-value"
+    >
+    </div>
+
+
+    <div
+      id="currentWeightValue"
+      class="live-value"
+    >
+    </div>
+
+
+    <div
+      id="targetWeightValue"
+      class="live-value"
+    >
+    </div>
+
+
+    <div
+      id="levelValue"
+      class="live-value"
+    >
+    </div>
+
+
+    <!-- =========================================
+         EXP REALTIME
+    ========================================== -->
+
+    <div class="exp-track">
+
+      <div
+        id="expBar"
+        class="exp-fill"
+      ></div>
+
+    </div>
+
+
+    <!-- =========================================
+         CLICK AREAS
+    ========================================== -->
+
+    <button
+      id="profileButton"
+      class="click-area"
+      aria-label="Profile"
+    ></button>
+
+
+    <button
+      id="weightCheckButton"
+      class="click-area"
+      aria-label="Weight Check"
+    ></button>
+
+
+    <button
+      id="progressButton"
+      class="click-area"
+      aria-label="My Progress"
+    ></button>
+
+
+    <button
+      id="rankingButton"
+      class="click-area"
+      aria-label="Ranking"
+    ></button>
+
+
+    <button
+      id="rewardsButton"
+      class="click-area"
+      aria-label="Rewards"
+    ></button>
+
+
+    <button
+      id="targetButton"
+      class="click-area"
+      aria-label="Set target weight"
+    ></button>
+
+
+    <button
+      id="homeButton"
+      class="click-area"
+      aria-label="Home"
+    ></button>
+
+
+    <button
+      id="missionButton"
+      class="click-area"
+      aria-label="Mission"
+    ></button>
+
+
+    <button
+      id="battleButton"
+      class="click-area"
+      aria-label="Battle"
+    ></button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================
+     STATUS
+========================================== -->
+
+<div
+  id="status"
+  class="status"
+></div>
+
+
+<!-- =========================================
+     TARGET MODAL
+========================================== -->
+
+<div
+  id="targetModal"
+  class="modal-backdrop"
+>
+
+  <div class="modal">
+
+    <h2>
+      🎯 ตั้งเป้าหมายน้ำหนัก
+    </h2>
+
+    <p>
+      กำหนดน้ำหนักเป้าหมายของคุณ
+    </p>
+
+    <div class="target-input-wrap">
+
+      <input
+        id="targetInput"
+        type="number"
+        min="20"
+        max="400"
+        step="0.1"
+        inputmode="decimal"
+      >
+
+      <span>
+        kg
+      </span>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+      <button
+        id="cancelTargetButton"
+        class="btn-cancel"
+        type="button"
+      >
+        ยกเลิก
+      </button>
+
+
+      <button
+        id="saveTargetButton"
+        class="btn-save"
+        type="button"
+      >
+        บันทึก
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const LIFF_ID = "2011201679-uNWz5yqF";
+
+
+const API_URL =
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
+
+
+const WEIGHT_CHECK_URL =
+  "https://liff.line.me/2011201679-uN62Coga";
+
+
+/*
+  เปลี่ยน URLs 3 ตัวนี้ภายหลัง
+  ถ้าสร้าง dashboard แยกหน้า
+*/
+
+const MISSION_URL =
+  "mission.html";
+
+
+const BATTLE_URL =
+  "battle.html";
+
+
+const PROGRESS_URL =
+  "progress.html";
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let dashboardData =
+  null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const statusEl =
+  document.getElementById(
+    "status"
+  );
+
+
+const profileImage =
+  document.getElementById(
+    "profileImage"
+  );
+
+
+const rockCoinValue =
+  document.getElementById(
+    "rockCoinValue"
+  );
+
+
+const energyValue =
+  document.getElementById(
+    "energyValue"
+  );
+
+
+const currentWeightValue =
+  document.getElementById(
+    "currentWeightValue"
+  );
+
+
+const targetWeightValue =
+  document.getElementById(
+    "targetWeightValue"
+  );
+
+
+const levelValue =
+  document.getElementById(
+    "levelValue"
+  );
+
+
+const expBar =
+  document.getElementById(
+    "expBar"
+  );
+
+
+const targetModal =
+  document.getElementById(
+    "targetModal"
+  );
+
+
+const targetInput =
+  document.getElementById(
+    "targetInput"
+  );
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function showStatus(
+  message,
+  isError = false
+) {
+
+  statusEl.textContent =
+    message;
+
+  statusEl.className =
+    "status show" +
+    (
+      isError
+        ? " error"
+        : ""
+    );
+}
+
+
+function hideStatus() {
+
+  statusEl.className =
+    "status";
+}
+
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function formatNumber(
+  value
+) {
+
+  const number =
+    Number(value);
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    return "0";
+  }
+
+
+  return number
+    .toLocaleString(
+      "en-US"
+    );
+}
+
+
+function formatWeight(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+  }
+
+
+  const number =
+    Number(value);
+
+
+  if (
+    !Number.isFinite(number)
+  ) {
+
+    return "";
+  }
+
+
+  return number
+    .toFixed(1);
+}
+
+
+/* =====================================================
+   API CALL
+===================================================== */
+
+async function callAPI(
+  action,
+  extra = {}
+) {
+
+  const idToken =
+    liff.getIDToken();
+
+
+  if (!idToken) {
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+
+  const response =
+    await fetch(
+      API_URL,
+      {
+        method:
+          "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+            action,
+            idToken,
+            ...extra
+          })
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+
+  let data;
+
+
+  try {
+
+    data =
+      JSON.parse(text);
+
+  } catch {
+
+    throw new Error(
+      "API ไม่ได้ตอบกลับเป็น JSON"
+    );
+  }
+
+
+  if (
+    !response.ok ||
+    !data.success
+  ) {
+
+    throw new Error(
+      data.error ||
+      "โหลดข้อมูลไม่สำเร็จ"
+    );
+  }
+
+
+  return data;
+}
+
+
+/* =====================================================
+   RENDER DASHBOARD
+===================================================== */
+
+function renderDashboard(
+  data
+) {
+
+  dashboardData =
+    data;
+
+
+  /* ------------------------
+     COIN
+  ------------------------- */
+
+  rockCoinValue.textContent =
+    formatNumber(
+      data.rockCoin
+    );
+
+
+  /* ------------------------
+     ENERGY
+  ------------------------- */
+
+  if (
+    data.energy
+  ) {
+
+    energyValue.textContent =
+      formatNumber(
+        data.energy.current
+      ) +
+      " / " +
+      formatNumber(
+        data.energy.max
+      );
+
+  } else {
+
+    energyValue.textContent =
+      "";
+  }
+
+
+  /* ------------------------
+     CURRENT WEIGHT
+  ------------------------- */
+
+  currentWeightValue.textContent =
+    formatWeight(
+      data.weight?.current
+    );
+
+
+  /* ------------------------
+     TARGET WEIGHT
+  ------------------------- */
+
+  targetWeightValue.textContent =
+    formatWeight(
+      data.weight?.target
+    );
+
+
+  /* ------------------------
+     LEVEL
+  ------------------------- */
+
+  levelValue.textContent =
+    data.level
+      ? String(
+          data.level
+        )
+      : "";
+
+
+  /* ------------------------
+     EXP BAR
+  ------------------------- */
+
+  const expProgress =
+    Number(
+      data.exp?.progress ||
+      0
+    );
+
+
+  const safeExp =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        expProgress
+      )
+    );
+
+
+  expBar.style.width =
+    safeExp +
+    "%";
+
+
+  /*
+    ไม่มี EXP = ไม่มีสี
+  */
+
+  if (
+    safeExp <= 0
+  ) {
+
+    expBar.style.width =
+      "0%";
+  }
+
+
+  /* ------------------------
+     PROFILE IMAGE
+  ------------------------- */
+
+  const pictureUrl =
+    data.user?.pictureUrl;
+
+
+  if (
+    pictureUrl
+  ) {
+
+    profileImage.src =
+      pictureUrl;
+
+    profileImage.style.display =
+      "block";
+  }
+
+}
+
+
+/* =====================================================
+   LOAD DASHBOARD
+===================================================== */
+
+async function loadDashboard() {
+
+  showStatus(
+    "กำลังโหลดข้อมูล..."
+  );
+
+
+  try {
+
+    const data =
+      await callAPI(
+        "dashboard"
+      );
+
+
+    renderDashboard(
+      data
+    );
+
+
+    hideStatus();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    showStatus(
+      error.message ||
+      "โหลดข้อมูลไม่สำเร็จ",
+      true
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   TARGET MODAL
+===================================================== */
+
+function openTargetModal() {
+
+  if (
+    dashboardData?.weight?.target
+  ) {
+
+    targetInput.value =
+      Number(
+        dashboardData
+          .weight
+          .target
+      )
+      .toFixed(1);
+
+  } else {
+
+    targetInput.value =
+      "";
+  }
+
+
+  targetModal.classList
+    .add(
+      "show"
+    );
+
+
+  setTimeout(
+    () =>
+      targetInput
+        .focus(),
+    100
+  );
+}
+
+
+function closeTargetModal() {
+
+  targetModal.classList
+    .remove(
+      "show"
+    );
+}
+
+
+/* =====================================================
+   SAVE TARGET
+===================================================== */
+
+async function saveTarget() {
+
+  const target =
+    Number(
+      targetInput.value
+    );
+
+
+  if (
+    !Number.isFinite(target) ||
+    target < 20 ||
+    target > 400
+  ) {
+
+    alert(
+      "กรุณากรอกเป้าหมายน้ำหนักที่ถูกต้อง"
+    );
+
+    return;
+  }
+
+
+  showStatus(
+    "กำลังบันทึกเป้าหมาย..."
+  );
+
+
+  try {
+
+    const data =
+      await callAPI(
+        "setTarget",
+        {
+          targetWeight:
+            target
+        }
+      );
+
+
+    renderDashboard(
+      data
+    );
+
+
+    closeTargetModal();
+
+    showStatus(
+      "✅ บันทึกเป้าหมายแล้ว"
+    );
+
+
+    setTimeout(
+      hideStatus,
+      1500
+    );
+
+  } catch (error) {
+
+    showStatus(
+      error.message ||
+      "บันทึกไม่สำเร็จ",
+      true
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function go(
+  url
+) {
+
+  window.location.href =
+    url;
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
+===================================================== */
+
+document
+  .getElementById(
+    "weightCheckButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      go(
+        WEIGHT_CHECK_URL
+      );
+    }
+  );
+
+
+document
+  .getElementById(
+    "progressButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      go(
+        PROGRESS_URL
+      );
+    }
+  );
+
+
+document
+  .getElementById(
+    "rankingButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      alert(
+        "RANKING กำลังพัฒนา"
+      );
+    }
+  );
+
+
+document
+  .getElementById(
+    "rewardsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      alert(
+        "REWARDS กำลังพัฒนา"
+      );
+    }
+  );
+
+
+document
+  .getElementById(
+    "missionButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      go(
+        MISSION_URL
+      );
+    }
+  );
+
+
+document
+  .getElementById(
+    "battleButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      go(
+        BATTLE_URL
+      );
+    }
+  );
+
+
+document
+  .getElementById(
+    "homeButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      loadDashboard();
+    }
+  );
+
+
+document
+  .getElementById(
+    "targetButton"
+  )
+  .addEventListener(
+    "click",
+    openTargetModal
+  );
+
+
+document
+  .getElementById(
+    "cancelTargetButton"
+  )
+  .addEventListener(
+    "click",
+    closeTargetModal
+  );
+
+
+document
+  .getElementById(
+    "saveTargetButton"
+  )
+  .addEventListener(
+    "click",
+    saveTarget
+  );
+
+
+targetModal
+  .addEventListener(
+    "click",
+    function (
+      event
+    ) {
+
+      if (
+        event.target ===
+        targetModal
+      ) {
+
+        closeTargetModal();
+      }
+    }
+  );
+
+
+/* =====================================================
+   PROFILE BUTTON
+===================================================== */
+
+document
+  .getElementById(
+    "profileButton"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      alert(
+        "ระบบอัปโหลดรูปโปรไฟล์จะเชื่อมต่อในขั้นถัดไป"
+      );
+    }
+  );
+
+
+/* =====================================================
+   LIFF INIT
+===================================================== */
+
+async function initLIFF() {
+
+  showStatus(
+    "กำลังเชื่อมต่อ LINE..."
+  );
+
+
+  try {
+
+    await liff.init({
+      liffId:
+        LIFF_ID
+    });
+
+
+    if (
+      !liff.isLoggedIn()
+    ) {
+
+      liff.login();
+
+      return;
+    }
+
+
+    await loadDashboard();
+
+
+  } catch (error) {
+
+    console.error(
+      "LIFF ERROR:",
+      error
+    );
+
+
+    showStatus(
+      "เปิด Dashboard ไม่สำเร็จ: " +
+      (
+        error.message ||
+        error
+      ),
+      true
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+initLIFF();
+
+</script>
+
+</body>
+</html>
