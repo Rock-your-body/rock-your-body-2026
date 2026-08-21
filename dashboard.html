@@ -15,6 +15,10 @@
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 <style>
+/* =====================================================
+   RESET
+===================================================== */
+
 * {
   box-sizing: border-box;
 }
@@ -27,25 +31,42 @@ body {
 }
 
 body {
-  font-family: Arial, "Noto Sans Thai", sans-serif;
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    sans-serif;
+
   background: #eef5ff;
   color: #08245b;
 }
 
+
+/* =====================================================
+   PAGE
+===================================================== */
+
 .page {
   min-height: 100vh;
+
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 10px;
+
+  padding: 8px;
 }
 
-.dashboard {
-  position: relative;
-  width: 100%;
-  max-width: 1250px;
 
-  aspect-ratio: 2500 / 1686;
+/* =====================================================
+   HOME BOARD
+===================================================== */
+
+.home-board {
+  position: relative;
+
+  width: 100%;
+  max-width: 1280px;
+
+  aspect-ratio: 1536 / 1024;
 
   overflow: hidden;
 
@@ -54,15 +75,18 @@ body {
   border-radius: 18px;
 
   box-shadow:
-    0 12px 40px rgba(0,0,0,.12);
+    0 12px 35px
+    rgba(0,0,0,.12);
 }
 
+
 /* =====================================================
-   BACKGROUND
+   BACKGROUND IMAGE
 ===================================================== */
 
-.dashboard-bg {
+.home-image {
   position: absolute;
+
   inset: 0;
 
   width: 100%;
@@ -76,47 +100,15 @@ body {
   user-select: none;
 }
 
-/* =====================================================
-   PROFILE
-===================================================== */
-
-.profile-photo {
-  position: absolute;
-
-  z-index: 5;
-
-  left: 18.8%;
-  top: 38%;
-
-  width: 27.5%;
-
-  aspect-ratio: 1 / 1;
-
-  transform: translate(-50%, -50%);
-
-  border-radius: 50%;
-  overflow: hidden;
-
-  pointer-events: none;
-}
-
-.profile-photo img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
-  display: none;
-}
 
 /* =====================================================
-   LIVE VALUES
+   BASE LIVE TEXT
 ===================================================== */
 
-.live-value {
+.live {
   position: absolute;
 
-  z-index: 20;
+  z-index: 30;
 
   display: flex;
   align-items: center;
@@ -128,93 +120,171 @@ body {
 
   white-space: nowrap;
 
-  text-align: center;
-
   pointer-events: none;
 }
 
-/* ROCK COIN */
 
-#rockCoinValue {
-  left: 80.8%;
-  top: 6.2%;
+/* =====================================================
+   PROFILE PHOTO
+===================================================== */
 
-  transform: translate(-50%, -50%);
+.profile-wrap {
+  position: absolute;
 
-  width: 8%;
+  z-index: 20;
 
-  color: #08245b;
+  /*
+    ตำแหน่งวงกลมรูปคน
+  */
 
-  font-size:
-    clamp(12px, 1.45vw, 25px);
+  left: 18.6%;
+  top: 38.2%;
+
+  width: 25.9%;
+
+  aspect-ratio: 1 / 1;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  overflow: hidden;
 }
 
-/* ENERGY */
+.profile-wrap img {
+  width: 100%;
+  height: 100%;
 
-#energyValue {
-  left: 92.6%;
+  object-fit: cover;
+
+  display: none;
+}
+
+
+/* =====================================================
+   ROCK COIN
+===================================================== */
+
+#coinValue {
+  left: 80.2%;
   top: 6.2%;
 
-  transform: translate(-50%, -50%);
+  width: 7%;
+
+  transform:
+    translate(-50%, -50%);
+
+  color: #061e62;
+
+  font-size:
+    clamp(
+      13px,
+      1.7vw,
+      30px
+    );
+}
+
+
+/* =====================================================
+   ENERGY
+===================================================== */
+
+#energyValue {
+  left: 92.7%;
+  top: 6.2%;
 
   width: 10%;
 
-  color: #08245b;
+  transform:
+    translate(-50%, -50%);
+
+  color: #061e62;
 
   font-size:
-    clamp(11px, 1.3vw, 23px);
+    clamp(
+      12px,
+      1.55vw,
+      27px
+    );
 }
 
-/* CURRENT WEIGHT */
 
-#currentWeightValue {
-  left: 49.3%;
-  top: 39.2%;
+/* =====================================================
+   CURRENT WEIGHT
+===================================================== */
 
-  transform: translate(-50%, -50%);
+#weightValue {
+  left: 49.1%;
+  top: 39.5%;
 
-  width: 13%;
+  min-width: 14%;
 
-  color: #08245b;
+  transform:
+    translate(-50%, -50%);
+
+  color: #061e62;
 
   font-size:
-    clamp(18px, 2.55vw, 43px);
+    clamp(
+      22px,
+      3.5vw,
+      57px
+    );
 }
 
-/* TARGET */
 
-#targetWeightValue {
-  left: 49.3%;
-  top: 61.3%;
+/* =====================================================
+   TARGET WEIGHT
+===================================================== */
 
-  transform: translate(-50%, -50%);
+#targetValue {
+  left: 49.1%;
+  top: 61.1%;
 
-  width: 13%;
+  min-width: 14%;
 
-  color: #d31317;
+  transform:
+    translate(-50%, -50%);
+
+  color: #d20b10;
 
   font-size:
-    clamp(18px, 2.55vw, 43px);
+    clamp(
+      22px,
+      3.5vw,
+      57px
+    );
 }
 
-/* LEVEL */
+
+/* =====================================================
+   LEVEL
+===================================================== */
 
 #levelValue {
-  left: 29.2%;
-  top: 64.3%;
+  left: 28.9%;
+  top: 64.0%;
 
-  transform: translate(-50%, -50%);
+  width: 5%;
 
-  width: 4.5%;
+  transform:
+    translate(-50%, -50%);
 
   color: #fff;
 
   font-size:
-    clamp(10px, 1.3vw, 21px);
+    clamp(
+      11px,
+      1.5vw,
+      25px
+    );
 
   text-shadow:
-    0 2px 4px rgba(0,0,0,.5);
+    0 2px 5px
+    rgba(0,0,0,.7);
 }
+
 
 /* =====================================================
    EXP BAR
@@ -223,21 +293,19 @@ body {
 .exp-track {
   position: absolute;
 
-  z-index: 18;
+  z-index: 25;
 
-  left: 10.2%;
-  top: 71.5%;
+  left: 10.25%;
+  top: 71.45%;
 
   width: 14.5%;
-  height: 2.8%;
-
-  padding: 2px;
+  height: 2.3%;
 
   border-radius: 999px;
 
   overflow: hidden;
 
-  background: transparent;
+  background: rgba(190,210,235,.45);
 
   pointer-events: none;
 }
@@ -246,37 +314,117 @@ body {
   width: 0%;
   height: 100%;
 
-  border-radius: 999px;
+  border-radius: inherit;
 
   background:
     linear-gradient(
       90deg,
-      #00b8ff 0%,
-      #087bff 50%,
-      #0640df 100%
+      #159eff,
+      #0874f6,
+      #053dc5
     );
 
-  box-shadow:
-    inset 0 0 4px rgba(255,255,255,.6);
-
   transition:
-    width .4s ease;
+    width .35s ease;
 }
 
+
 /* =====================================================
-   CLICK AREAS
+   EXP NUMBER
 ===================================================== */
 
-.click-area {
+#expText {
   position: absolute;
 
   z-index: 30;
 
-  margin: 0;
-  padding: 0;
+  left: 28.1%;
+  top: 71.45%;
+
+  transform:
+    translate(-50%, -50%);
+
+  color: #061e62;
+
+  font-size:
+    clamp(
+      8px,
+      1.15vw,
+      19px
+    );
+
+  font-weight: 900;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   OPTIONAL LABELS
+   ถ้าใช้ภาพที่ไม่มีข้อความ สามารถเปิดชุดนี้ได้
+===================================================== */
+
+.code-label {
+  position: absolute;
+
+  z-index: 25;
+
+  font-weight: 900;
+
+  pointer-events: none;
+
+  display: none;
+}
+
+
+/*
+เปิด display:flex หากพื้นหลังของคุณ
+ลบคำว่า ROCK COIN / ENERGY ออกจากภาพ
+*/
+
+#coinLabel {
+  left: 80.0%;
+  top: 9.4%;
+
+  color: #061e62;
+
+  font-size:
+    clamp(
+      7px,
+      .9vw,
+      14px
+    );
+}
+
+#energyLabel {
+  left: 91.4%;
+  top: 9.4%;
+
+  color: #061e62;
+
+  font-size:
+    clamp(
+      7px,
+      .9vw,
+      14px
+    );
+}
+
+
+/* =====================================================
+   CLICK HOTSPOTS
+===================================================== */
+
+.hotspot {
+  position: absolute;
+
+  z-index: 100;
 
   border: 0;
   outline: 0;
+
+  margin: 0;
+  padding: 0;
 
   background: transparent;
 
@@ -286,15 +434,39 @@ body {
   -webkit-appearance: none;
 }
 
-/* PROFILE */
+
+/* PROFILE / CAMERA */
 
 #profileButton {
   left: 2%;
   top: 15%;
 
   width: 34%;
-  height: 46%;
+  height: 47%;
 }
+
+
+/* WEIGHT CARD */
+
+#weightCardButton {
+  left: 35%;
+  top: 25%;
+
+  width: 23%;
+  height: 21%;
+}
+
+
+/* TARGET CARD */
+
+#targetButton {
+  left: 35%;
+  top: 47%;
+
+  width: 23%;
+  height: 26%;
+}
+
 
 /* WEIGHT CHECK */
 
@@ -302,89 +474,76 @@ body {
   left: 59%;
   top: 15%;
 
-  width: 18%;
-  height: 30%;
+  width: 19%;
+  height: 31%;
 }
+
 
 /* MY PROGRESS */
 
 #progressButton {
-  left: 78.5%;
+  left: 79%;
   top: 15%;
 
-  width: 19%;
-  height: 30%;
+  width: 20%;
+  height: 31%;
 }
+
 
 /* RANKING */
 
 #rankingButton {
   left: 59%;
-  top: 46%;
+  top: 47%;
 
-  width: 18%;
-  height: 30%;
+  width: 19%;
+  height: 31%;
 }
+
 
 /* REWARDS */
 
 #rewardsButton {
-  left: 78.5%;
-  top: 46%;
+  left: 79%;
+  top: 47%;
 
-  width: 19%;
-  height: 30%;
+  width: 20%;
+  height: 31%;
 }
 
-/* CURRENT WEIGHT CARD */
-
-#weightCardButton {
-  left: 35%;
-  top: 25%;
-
-  width: 22%;
-  height: 20%;
-}
-
-/* TARGET CARD */
-
-#targetButton {
-  left: 35%;
-  top: 46%;
-
-  width: 22%;
-  height: 25%;
-}
 
 /* HOME */
 
 #homeButton {
   left: 1%;
-  top: 79%;
+  top: 80%;
 
   width: 32%;
   height: 19%;
 }
+
 
 /* MISSION */
 
 #missionButton {
   left: 34%;
-  top: 79%;
+  top: 80%;
 
   width: 32%;
   height: 19%;
 }
+
 
 /* BATTLE */
 
 #battleButton {
   left: 67%;
-  top: 79%;
+  top: 80%;
 
   width: 32%;
   height: 19%;
 }
+
 
 /* =====================================================
    STATUS
@@ -393,32 +552,36 @@ body {
 .status {
   position: fixed;
 
-  z-index: 300;
+  z-index: 999;
 
   left: 50%;
   bottom: 18px;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(-50%);
 
   max-width: 90vw;
 
-  padding: 12px 20px;
+  padding:
+    12px 20px;
 
   border-radius: 999px;
 
-  background: rgba(7,59,147,.94);
+  display: none;
+
+  background:
+    rgba(5,61,158,.96);
 
   color: #fff;
-
-  text-align: center;
 
   font-size: 14px;
   font-weight: 800;
 
-  box-shadow:
-    0 8px 25px rgba(0,0,0,.22);
+  text-align: center;
 
-  display: none;
+  box-shadow:
+    0 8px 25px
+    rgba(0,0,0,.22);
 }
 
 .status.show {
@@ -426,131 +589,10 @@ body {
 }
 
 .status.error {
-  background: rgba(190,27,27,.96);
+  background:
+    rgba(190,26,26,.96);
 }
 
-.status.success {
-  background: rgba(3,143,69,.95);
-}
-
-/* =====================================================
-   TARGET MODAL
-===================================================== */
-
-.modal-backdrop {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 400;
-
-  display: none;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 18px;
-
-  background: rgba(0,0,0,.5);
-}
-
-.modal-backdrop.show {
-  display: flex;
-}
-
-.modal {
-  width: 100%;
-  max-width: 420px;
-
-  padding: 22px;
-
-  border-radius: 22px;
-
-  background: #fff;
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.3);
-}
-
-.modal h2 {
-  margin: 0 0 8px;
-
-  color: #073b93;
-}
-
-.modal p {
-  margin: 0 0 18px;
-
-  color: #64748b;
-}
-
-.target-input-wrap {
-  display: flex;
-  align-items: center;
-
-  padding: 4px 14px;
-
-  border: 2px solid #c8d7ed;
-  border-radius: 14px;
-
-  background: #f8fbff;
-}
-
-.target-input-wrap input {
-  width: 100%;
-
-  padding: 14px 4px;
-
-  border: 0;
-  outline: 0;
-
-  background: transparent;
-
-  color: #073b93;
-
-  font-size: 26px;
-  font-weight: 900;
-}
-
-.target-input-wrap span {
-  color: #64748b;
-
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.modal-actions {
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 10px;
-
-  margin-top: 18px;
-}
-
-.modal-actions button {
-  min-height: 48px;
-
-  border: 0;
-  border-radius: 12px;
-
-  cursor: pointer;
-
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.btn-cancel {
-  background: #e9eef6;
-  color: #334155;
-}
-
-.btn-save {
-  background: #06c755;
-  color: #fff;
-}
 
 /* =====================================================
    MOBILE
@@ -562,7 +604,7 @@ body {
     padding: 0;
   }
 
-  .dashboard {
+  .home-board {
     width: 100vw;
 
     border-radius: 0;
@@ -570,56 +612,82 @@ body {
     box-shadow: none;
   }
 
-  #rockCoinValue {
+  #coinValue {
     font-size:
-      clamp(8px, 2.4vw, 14px);
+      clamp(
+        8px,
+        2.5vw,
+        14px
+      );
   }
 
   #energyValue {
     font-size:
-      clamp(8px, 2.3vw, 14px);
+      clamp(
+        8px,
+        2.4vw,
+        14px
+      );
   }
 
-  #currentWeightValue,
-  #targetWeightValue {
+  #weightValue,
+  #targetValue {
     font-size:
-      clamp(11px, 3.2vw, 19px);
+      clamp(
+        12px,
+        3.6vw,
+        21px
+      );
   }
 
   #levelValue {
     font-size:
-      clamp(8px, 2.2vw, 13px);
+      clamp(
+        8px,
+        2.2vw,
+        13px
+      );
   }
 
-  .exp-track {
-    padding: 1px;
+  #expText {
+    font-size:
+      clamp(
+        6px,
+        1.8vw,
+        10px
+      );
   }
 }
 
 </style>
-
 </head>
+
 
 <body>
 
 <div class="page">
 
-  <div
-    id="dashboard"
-    class="dashboard"
+  <main
+    id="homeBoard"
+    class="home-board"
   >
 
-    <!-- BACKGROUND -->
+    <!-- =================================================
+         NEW HOME IMAGE
+    ================================================== -->
 
     <img
-      class="dashboard-bg"
-      src="./rock-home-2500x1686-under1MB.jpg"
-      alt="ROCK YOUR BODY HOME"
+      class="home-image"
+      src="./rock-home-dashboard.png"
+      alt="ROCK YOUR BODY 2026 HOME"
     >
 
-    <!-- PROFILE -->
 
-    <div class="profile-photo">
+    <!-- =================================================
+         PROFILE
+    ================================================== -->
+
+    <div class="profile-wrap">
 
       <img
         id="profileImage"
@@ -628,32 +696,50 @@ body {
 
     </div>
 
-    <!-- REALTIME DATA -->
+
+    <!-- =================================================
+         LIVE DATA
+    ================================================== -->
 
     <div
-      id="rockCoinValue"
-      class="live-value"
-    ></div>
+      id="coinValue"
+      class="live"
+    >
+      0
+    </div>
+
 
     <div
       id="energyValue"
-      class="live-value"
-    ></div>
+      class="live"
+    >
+      0/200
+    </div>
+
 
     <div
-      id="currentWeightValue"
-      class="live-value"
-    ></div>
+      id="weightValue"
+      class="live"
+    >
+      --
+    </div>
+
 
     <div
-      id="targetWeightValue"
-      class="live-value"
-    ></div>
+      id="targetValue"
+      class="live"
+    >
+      --
+    </div>
+
 
     <div
       id="levelValue"
-      class="live-value"
-    ></div>
+      class="live"
+    >
+      1
+    </div>
+
 
     <!-- EXP -->
 
@@ -666,144 +752,122 @@ body {
 
     </div>
 
-    <!-- BUTTON AREAS -->
+
+    <div id="expText">
+      0 / 500
+    </div>
+
+
+    <!-- Optional labels -->
+
+    <div
+      id="coinLabel"
+      class="code-label"
+    >
+      ROCK COIN
+    </div>
+
+    <div
+      id="energyLabel"
+      class="code-label"
+    >
+      ENERGY
+    </div>
+
+
+    <!-- =================================================
+         HOTSPOTS
+    ================================================== -->
 
     <button
       id="profileButton"
-      class="click-area"
+      class="hotspot"
       type="button"
       aria-label="Profile"
     ></button>
 
-    <button
-      id="weightCheckButton"
-      class="click-area"
-      type="button"
-      aria-label="Weight Check"
-    ></button>
-
-    <button
-      id="progressButton"
-      class="click-area"
-      type="button"
-      aria-label="My Progress"
-    ></button>
-
-    <button
-      id="rankingButton"
-      class="click-area"
-      type="button"
-      aria-label="Ranking"
-    ></button>
-
-    <button
-      id="rewardsButton"
-      class="click-area"
-      type="button"
-      aria-label="Rewards"
-    ></button>
 
     <button
       id="weightCardButton"
-      class="click-area"
+      class="hotspot"
       type="button"
       aria-label="Current Weight"
     ></button>
 
+
     <button
       id="targetButton"
-      class="click-area"
+      class="hotspot"
       type="button"
       aria-label="Target Weight"
     ></button>
 
+
+    <button
+      id="weightCheckButton"
+      class="hotspot"
+      type="button"
+      aria-label="Weight Check"
+    ></button>
+
+
+    <button
+      id="progressButton"
+      class="hotspot"
+      type="button"
+      aria-label="My Progress"
+    ></button>
+
+
+    <button
+      id="rankingButton"
+      class="hotspot"
+      type="button"
+      aria-label="Ranking"
+    ></button>
+
+
+    <button
+      id="rewardsButton"
+      class="hotspot"
+      type="button"
+      aria-label="Rewards"
+    ></button>
+
+
     <button
       id="homeButton"
-      class="click-area"
+      class="hotspot"
       type="button"
       aria-label="Home"
     ></button>
 
+
     <button
       id="missionButton"
-      class="click-area"
+      class="hotspot"
       type="button"
       aria-label="Mission"
     ></button>
 
+
     <button
       id="battleButton"
-      class="click-area"
+      class="hotspot"
       type="button"
       aria-label="Battle"
     ></button>
 
-  </div>
+  </main>
 
 </div>
+
 
 <div
   id="status"
   class="status"
 ></div>
 
-<!-- TARGET MODAL -->
-
-<div
-  id="targetModal"
-  class="modal-backdrop"
->
-
-  <div class="modal">
-
-    <h2>
-      🎯 ตั้งเป้าหมายน้ำหนัก
-    </h2>
-
-    <p>
-      ระบุน้ำหนักที่ต้องการเป็นเป้าหมาย
-    </p>
-
-    <div class="target-input-wrap">
-
-      <input
-        id="targetInput"
-        type="number"
-        min="20"
-        max="400"
-        step="0.1"
-        inputmode="decimal"
-      >
-
-      <span>
-        kg
-      </span>
-
-    </div>
-
-    <div class="modal-actions">
-
-      <button
-        id="cancelTargetButton"
-        class="btn-cancel"
-        type="button"
-      >
-        ยกเลิก
-      </button>
-
-      <button
-        id="saveTargetButton"
-        class="btn-save"
-        type="button"
-      >
-        บันทึก
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
 
 <script>
 
@@ -814,76 +878,174 @@ body {
 const LIFF_ID =
   "2011201679-uNWz5yqF";
 
-const API_URL =
+
+const PLAYER_API =
   "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
 
-const WEIGHT_CHECK_URL =
+
+const WEIGHT_URL =
   "weight-check.html";
+
 
 const MISSION_URL =
   "mission.html";
 
+
 const BATTLE_URL =
   "battle.html";
 
+
+const EXP_PER_LEVEL =
+  500;
+
+
 const AUTO_REFRESH_MS =
   10000;
+
 
 /* =====================================================
    STATE
 ===================================================== */
 
-let dashboardData = null;
-let refreshTimer = null;
-let requestRunning = false;
+let refreshTimer =
+  null;
+
+
+let loading =
+  false;
+
 
 /* =====================================================
    ELEMENTS
 ===================================================== */
 
-const statusEl =
-  document.getElementById("status");
-
 const profileImage =
-  document.getElementById("profileImage");
+  document.getElementById(
+    "profileImage"
+  );
 
-const rockCoinValue =
-  document.getElementById("rockCoinValue");
+
+const coinValue =
+  document.getElementById(
+    "coinValue"
+  );
+
 
 const energyValue =
-  document.getElementById("energyValue");
+  document.getElementById(
+    "energyValue"
+  );
 
-const currentWeightValue =
-  document.getElementById("currentWeightValue");
 
-const targetWeightValue =
-  document.getElementById("targetWeightValue");
+const weightValue =
+  document.getElementById(
+    "weightValue"
+  );
+
+
+const targetValue =
+  document.getElementById(
+    "targetValue"
+  );
+
 
 const levelValue =
-  document.getElementById("levelValue");
+  document.getElementById(
+    "levelValue"
+  );
+
 
 const expBar =
-  document.getElementById("expBar");
+  document.getElementById(
+    "expBar"
+  );
 
-const targetModal =
-  document.getElementById("targetModal");
 
-const targetInput =
-  document.getElementById("targetInput");
+const expText =
+  document.getElementById(
+    "expText"
+  );
+
+
+const statusBox =
+  document.getElementById(
+    "status"
+  );
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function toNumber(
+  value,
+  fallback = 0
+) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : fallback;
+}
+
+
+function formatInteger(
+  value
+) {
+
+  return Math
+    .round(
+      toNumber(value)
+    )
+    .toLocaleString(
+      "en-US"
+    );
+}
+
+
+function formatWeight(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+
+    return "--";
+  }
+
+  const n =
+    Number(value);
+
+  if (
+    !Number.isFinite(n)
+  ) {
+
+    return "--";
+  }
+
+  return n
+    .toFixed(1);
+}
+
 
 /* =====================================================
    STATUS
 ===================================================== */
 
 function showStatus(
-  message,
+  text,
   type = ""
 ) {
 
-  statusEl.textContent =
-    message;
+  statusBox.textContent =
+    text;
 
-  statusEl.className =
+  statusBox.className =
     "status show" +
     (
       type
@@ -892,59 +1054,19 @@ function showStatus(
     );
 }
 
+
 function hideStatus() {
 
-  statusEl.className =
+  statusBox.className =
     "status";
 }
 
-/* =====================================================
-   FORMATTERS
-===================================================== */
-
-function formatInteger(value) {
-
-  const number =
-    Number(value);
-
-  if (!Number.isFinite(number)) {
-    return "0";
-  }
-
-  return Math
-    .round(number)
-    .toLocaleString("en-US");
-}
-
-function formatWeight(value) {
-
-  if (
-    value === null ||
-    value === undefined ||
-    value === ""
-  ) {
-
-    return "";
-  }
-
-  const number =
-    Number(value);
-
-  if (!Number.isFinite(number)) {
-    return "";
-  }
-
-  return number.toFixed(1);
-}
 
 /* =====================================================
    API
 ===================================================== */
 
-async function callAPI(
-  action,
-  extra = {}
-) {
+async function callPlayerAPI() {
 
   const idToken =
     liff.getIDToken();
@@ -956,11 +1078,13 @@ async function callAPI(
     );
   }
 
+
   const response =
     await fetch(
-      API_URL,
+      PLAYER_API,
       {
-        method: "POST",
+        method:
+          "POST",
 
         headers: {
           "Content-Type":
@@ -969,29 +1093,37 @@ async function callAPI(
 
         body:
           JSON.stringify({
-            action,
-            idToken,
-            ...extra
+            action:
+              "dashboard",
+
+            idToken:
+              idToken
           })
       }
     );
 
+
   const text =
     await response.text();
 
+
   let data;
+
 
   try {
 
     data =
-      JSON.parse(text);
+      JSON.parse(
+        text
+      );
 
   } catch {
 
     throw new Error(
-      "API ตอบกลับไม่ถูกต้อง"
+      "player-dashboard ตอบกลับไม่ถูกต้อง"
     );
   }
+
 
   if (
     !response.ok ||
@@ -1000,113 +1132,165 @@ async function callAPI(
 
     throw new Error(
       data.error ||
-      "โหลดข้อมูลไม่สำเร็จ"
+      "ไม่สามารถโหลดข้อมูลผู้เล่นได้"
     );
   }
 
+
   return data;
 }
+
+
+/* =====================================================
+   NORMALIZE API RESPONSE
+===================================================== */
+
+function normalize(
+  raw
+) {
+
+  const player =
+    raw.player ??
+    raw.user ??
+    {};
+
+
+  const weight =
+    raw.weight ??
+    {};
+
+
+  const energyObject =
+    (
+      raw.energy &&
+      typeof raw.energy ===
+        "object"
+    )
+      ? raw.energy
+      : {};
+
+
+  let totalExp = 0;
+
+
+  if (
+    raw.exp &&
+    typeof raw.exp ===
+      "object"
+  ) {
+
+    totalExp =
+      toNumber(
+        raw.exp.current,
+        0
+      );
+
+  } else {
+
+    totalExp =
+      toNumber(
+        raw.exp ??
+        player.exp,
+        0
+      );
+  }
+
+
+  const calculatedLevel =
+    Math.floor(
+      totalExp /
+      EXP_PER_LEVEL
+    ) + 1;
+
+
+  return {
+
+    pictureUrl:
+      player.pictureUrl ??
+      player.picture_url ??
+      raw.pictureUrl ??
+      "",
+
+
+    coin:
+      toNumber(
+        raw.rockCoin ??
+        player.rockCoin ??
+        player.rock_coin,
+        0
+      ),
+
+
+    energy:
+      toNumber(
+        energyObject.current ??
+        player.energy ??
+        raw.energyCurrent,
+        0
+      ),
+
+
+    maxEnergy:
+      toNumber(
+        energyObject.max ??
+        player.max_energy ??
+        player.maxEnergy ??
+        raw.maxEnergy,
+        200
+      ),
+
+
+    weight:
+      weight.current ??
+      player.current_weight ??
+      raw.currentWeight ??
+      null,
+
+
+    target:
+      weight.target ??
+      player.target_weight ??
+      raw.targetWeight ??
+      null,
+
+
+    totalExp:
+      totalExp,
+
+
+    level:
+      Math.max(
+        calculatedLevel,
+        toNumber(
+          raw.level ??
+          player.level,
+          calculatedLevel
+        )
+      )
+  };
+}
+
 
 /* =====================================================
    RENDER
 ===================================================== */
 
-function renderDashboard(data) {
+function renderHome(
+  raw
+) {
 
-  dashboardData =
-    data;
+  const data =
+    normalize(raw);
 
-  /* ROCK COIN */
-
-  rockCoinValue.textContent =
-    formatInteger(
-      data.rockCoin
-    );
-
-  /* ENERGY */
-
-  if (
-    data.energy &&
-    data.energy.current !== undefined
-  ) {
-
-    energyValue.textContent =
-      formatInteger(
-        data.energy.current
-      ) +
-      "/" +
-      formatInteger(
-        data.energy.max
-      );
-
-  } else {
-
-    energyValue.textContent =
-      "";
-  }
-
-  /* CURRENT WEIGHT */
-
-  currentWeightValue.textContent =
-    formatWeight(
-      data.weight?.current
-    );
-
-  /* TARGET WEIGHT */
-
-  targetWeightValue.textContent =
-    formatWeight(
-      data.weight?.target
-    );
-
-  /* LEVEL */
-
-  if (
-    data.level !== null &&
-    data.level !== undefined
-  ) {
-
-    levelValue.textContent =
-      String(
-        data.level
-      );
-
-  } else {
-
-    levelValue.textContent =
-      "";
-  }
-
-  /* EXP */
-
-  const progress =
-    Number(
-      data.exp?.progress ?? 0
-    );
-
-  const safeProgress =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        Number.isFinite(progress)
-          ? progress
-          : 0
-      )
-    );
-
-  expBar.style.width =
-    safeProgress + "%";
 
   /* PROFILE */
 
-  const pictureUrl =
-    data.user?.pictureUrl;
-
-  if (pictureUrl) {
+  if (
+    data.pictureUrl
+  ) {
 
     profileImage.src =
-      pictureUrl;
+      data.pictureUrl;
 
     profileImage.style.display =
       "block";
@@ -1116,309 +1300,261 @@ function renderDashboard(data) {
     profileImage.style.display =
       "none";
   }
+
+
+  /* COIN */
+
+  coinValue.textContent =
+    formatInteger(
+      data.coin
+    );
+
+
+  /* ENERGY */
+
+  const safeMaxEnergy =
+    Math.max(
+      1,
+      data.maxEnergy
+    );
+
+
+  const safeEnergy =
+    Math.min(
+      safeMaxEnergy,
+      Math.max(
+        0,
+        data.energy
+      )
+    );
+
+
+  energyValue.textContent =
+    formatInteger(
+      safeEnergy
+    ) +
+    "/" +
+    formatInteger(
+      safeMaxEnergy
+    );
+
+
+  /* WEIGHT */
+
+  weightValue.textContent =
+    formatWeight(
+      data.weight
+    );
+
+
+  /* TARGET */
+
+  targetValue.textContent =
+    formatWeight(
+      data.target
+    );
+
+
+  /* LEVEL */
+
+  levelValue.textContent =
+    String(
+      data.level
+    );
+
+
+  /* EXP */
+
+  const expCurrentLevel =
+    data.totalExp %
+    EXP_PER_LEVEL;
+
+
+  const expPercent =
+    (
+      expCurrentLevel /
+      EXP_PER_LEVEL
+    ) * 100;
+
+
+  expBar.style.width =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        expPercent
+      )
+    ) +
+    "%";
+
+
+  expText.textContent =
+    formatInteger(
+      expCurrentLevel
+    ) +
+    " / " +
+    formatInteger(
+      EXP_PER_LEVEL
+    );
 }
 
+
 /* =====================================================
-   LOAD DASHBOARD
+   LOAD HOME
 ===================================================== */
 
-async function loadDashboard(
-  showLoading = true
+async function loadHome(
+  showLoading = false
 ) {
 
-  if (requestRunning) {
+  if (loading) {
     return;
   }
 
-  requestRunning =
+
+  loading =
     true;
 
-  if (showLoading) {
+
+  if (
+    showLoading
+  ) {
 
     showStatus(
       "กำลังโหลดข้อมูล..."
     );
   }
 
+
   try {
 
     const data =
-      await callAPI(
-        "dashboard"
-      );
+      await callPlayerAPI();
 
-    renderDashboard(
+
+    renderHome(
       data
     );
 
+
     hideStatus();
+
 
   } catch (error) {
 
     console.error(
-      "DASHBOARD LOAD ERROR:",
+      "HOME LOAD ERROR:",
       error
     );
 
+
     showStatus(
       error.message ||
-      "โหลดข้อมูลไม่สำเร็จ",
+      "ไม่สามารถโหลดข้อมูลได้",
       "error"
     );
 
+
   } finally {
 
-    requestRunning =
+    loading =
       false;
   }
 }
 
-/* =====================================================
-   AUTO REFRESH
-===================================================== */
-
-function startAutoRefresh() {
-
-  if (refreshTimer) {
-
-    clearInterval(
-      refreshTimer
-    );
-  }
-
-  refreshTimer =
-    setInterval(
-      function () {
-
-        if (
-          document.visibilityState ===
-          "visible"
-        ) {
-
-          loadDashboard(false);
-        }
-
-      },
-      AUTO_REFRESH_MS
-    );
-}
-
-/* =====================================================
-   TARGET MODAL
-===================================================== */
-
-function openTargetModal() {
-
-  const current =
-    dashboardData?.weight?.target;
-
-  if (
-    current !== null &&
-    current !== undefined
-  ) {
-
-    targetInput.value =
-      Number(current)
-        .toFixed(1);
-
-  } else {
-
-    targetInput.value =
-      "";
-  }
-
-  targetModal
-    .classList
-    .add("show");
-
-  setTimeout(
-    function () {
-      targetInput.focus();
-    },
-    100
-  );
-}
-
-function closeTargetModal() {
-
-  targetModal
-    .classList
-    .remove("show");
-}
-
-async function saveTarget() {
-
-  const target =
-    Number(
-      targetInput.value
-    );
-
-  if (
-    !Number.isFinite(target) ||
-    target < 20 ||
-    target > 400
-  ) {
-
-    alert(
-      "กรุณากรอกเป้าหมายน้ำหนักที่ถูกต้อง"
-    );
-
-    return;
-  }
-
-  showStatus(
-    "กำลังบันทึกเป้าหมาย..."
-  );
-
-  try {
-
-    const data =
-      await callAPI(
-        "setTarget",
-        {
-          targetWeight:
-            target
-        }
-      );
-
-    renderDashboard(
-      data
-    );
-
-    closeTargetModal();
-
-    showStatus(
-      "บันทึกเป้าหมายแล้ว",
-      "success"
-    );
-
-    setTimeout(
-      hideStatus,
-      1200
-    );
-
-  } catch (error) {
-
-    console.error(
-      "SAVE TARGET ERROR:",
-      error
-    );
-
-    showStatus(
-      error.message ||
-      "บันทึกเป้าหมายไม่สำเร็จ",
-      "error"
-    );
-  }
-}
 
 /* =====================================================
    NAVIGATION
 ===================================================== */
 
-function go(url) {
+function go(
+  url
+) {
 
   window.location.href =
     url;
 }
 
+
 /* =====================================================
    BUTTONS
 ===================================================== */
 
+
 /* WEIGHT CHECK */
 
 document
-  .getElementById("weightCheckButton")
+  .getElementById(
+    "weightCheckButton"
+  )
   .addEventListener(
     "click",
     function () {
 
       go(
-        WEIGHT_CHECK_URL
+        WEIGHT_URL
       );
     }
   );
 
-/* CURRENT WEIGHT CARD */
+
+/* CURRENT WEIGHT */
 
 document
-  .getElementById("weightCardButton")
+  .getElementById(
+    "weightCardButton"
+  )
   .addEventListener(
     "click",
     function () {
 
       go(
-        WEIGHT_CHECK_URL
+        WEIGHT_URL
       );
     }
   );
+
 
 /* TARGET */
 
 document
-  .getElementById("targetButton")
+  .getElementById(
+    "targetButton"
+  )
   .addEventListener(
     "click",
-    openTargetModal
+    function () {
+
+      go(
+        WEIGHT_URL
+      );
+    }
   );
+
 
 /* HOME */
 
 document
-  .getElementById("homeButton")
+  .getElementById(
+    "homeButton"
+  )
   .addEventListener(
     "click",
     function () {
 
-      loadDashboard(true);
-    }
-  );
-
-/* MY PROGRESS */
-
-document
-  .getElementById("progressButton")
-  .addEventListener(
-    "click",
-    function () {
-
-      loadDashboard(true);
-    }
-  );
-
-/* RANKING */
-
-document
-  .getElementById("rankingButton")
-  .addEventListener(
-    "click",
-    function () {
-
-      alert(
-        "🏆 ระบบ Ranking จะเชื่อมในขั้นถัดไป"
+      loadHome(
+        true
       );
     }
   );
 
-/* REWARDS */
-
-document
-  .getElementById("rewardsButton")
-  .addEventListener(
-    "click",
-    function () {
-
-      alert(
-        "🎁 ระบบ Rewards จะเชื่อมในขั้นถัดไป"
-      );
-    }
-  );
 
 /* MISSION */
 
 document
-  .getElementById("missionButton")
+  .getElementById(
+    "missionButton"
+  )
   .addEventListener(
     "click",
     function () {
@@ -1429,10 +1565,13 @@ document
     }
   );
 
+
 /* BATTLE */
 
 document
-  .getElementById("battleButton")
+  .getElementById(
+    "battleButton"
+  )
   .addEventListener(
     "click",
     function () {
@@ -1443,43 +1582,113 @@ document
     }
   );
 
-/* TARGET CANCEL */
+
+/* PROFILE */
 
 document
-  .getElementById("cancelTargetButton")
+  .getElementById(
+    "profileButton"
+  )
   .addEventListener(
     "click",
-    closeTargetModal
-  );
+    function () {
 
-/* TARGET SAVE */
-
-document
-  .getElementById("saveTargetButton")
-  .addEventListener(
-    "click",
-    saveTarget
-  );
-
-/* CLICK OUTSIDE MODAL */
-
-targetModal
-  .addEventListener(
-    "click",
-    function (event) {
-
-      if (
-        event.target ===
-        targetModal
-      ) {
-
-        closeTargetModal();
-      }
+      alert(
+        "📷 ระบบเปลี่ยนรูปโปรไฟล์จะเชื่อมในขั้นถัดไป"
+      );
     }
   );
 
+
+/* PROGRESS */
+
+document
+  .getElementById(
+    "progressButton"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      alert(
+        "📈 MY PROGRESS จะเชื่อมประวัติน้ำหนักในขั้นถัดไป"
+      );
+    }
+  );
+
+
+/* RANKING */
+
+document
+  .getElementById(
+    "rankingButton"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      alert(
+        "🏆 RANKING จะเชื่อมข้อมูลอันดับในขั้นถัดไป"
+      );
+    }
+  );
+
+
+/* REWARDS */
+
+document
+  .getElementById(
+    "rewardsButton"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      alert(
+        "🎁 REWARDS จะเชื่อมระบบรางวัลในขั้นถัดไป"
+      );
+    }
+  );
+
+
 /* =====================================================
-   VISIBILITY
+   AUTO REFRESH
+===================================================== */
+
+function startRefresh() {
+
+  if (
+    refreshTimer
+  ) {
+
+    clearInterval(
+      refreshTimer
+    );
+  }
+
+
+  refreshTimer =
+    setInterval(
+      function () {
+
+        if (
+          document.visibilityState ===
+          "visible"
+        ) {
+
+          loadHome(
+            false
+          );
+        }
+
+      },
+      AUTO_REFRESH_MS
+    );
+}
+
+
+/* =====================================================
+   PAGE RETURN
 ===================================================== */
 
 document
@@ -1490,13 +1699,37 @@ document
       if (
         document.visibilityState ===
           "visible" &&
+        typeof liff !==
+          "undefined" &&
         liff.isLoggedIn()
       ) {
 
-        loadDashboard(false);
+        loadHome(
+          false
+        );
       }
     }
   );
+
+
+window
+  .addEventListener(
+    "pageshow",
+    function () {
+
+      if (
+        typeof liff !==
+          "undefined" &&
+        liff.isLoggedIn()
+      ) {
+
+        loadHome(
+          false
+        );
+      }
+    }
+  );
+
 
 /* =====================================================
    LIFF
@@ -1508,6 +1741,7 @@ async function initLIFF() {
     "กำลังเชื่อมต่อ LINE..."
   );
 
+
   try {
 
     await liff.init({
@@ -1515,28 +1749,48 @@ async function initLIFF() {
         LIFF_ID
     });
 
+
     if (
       !liff.isLoggedIn()
     ) {
 
-      liff.login();
+      liff.login({
+        redirectUri:
+          window.location.href
+      });
 
       return;
     }
 
-    await loadDashboard(true);
 
-    startAutoRefresh();
+    if (
+      !liff.getIDToken()
+    ) {
+
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+    }
+
+
+    await loadHome(
+      true
+    );
+
+
+    startRefresh();
+
 
   } catch (error) {
 
     console.error(
-      "LIFF ERROR:",
+      "LIFF INIT ERROR:",
       error
     );
 
+
     showStatus(
-      "เปิด HOME ไม่สำเร็จ: " +
+      "เชื่อมต่อ LINE ไม่สำเร็จ: " +
       (
         error.message ||
         error
@@ -1545,6 +1799,7 @@ async function initLIFF() {
     );
   }
 }
+
 
 /* =====================================================
    START
