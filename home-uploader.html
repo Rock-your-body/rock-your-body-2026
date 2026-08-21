@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ROCK YOUR BODY 2026 - HOME Uploader</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, "Noto Sans Thai", sans-serif;
+  background: #eef5ff;
+  color: #102a56;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: auto;
+  padding: 30px 18px 60px;
+}
+
+.header {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,.08);
+}
+
+h1 {
+  margin: 0;
+  color: #073b93;
+  font-size: 32px;
+}
+
+.red {
+  color: #d71920;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: #64748b;
+}
+
+.card {
+  margin-top: 20px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.08);
+}
+
+.preview {
+  width: 100%;
+  aspect-ratio: 2500 / 1686;
+  background: #e7eef8;
+  border: 2px dashed #9db4d5;
+  border-radius: 14px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #70829a;
+}
+
+.preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: none;
+}
+
+input[type=file] {
+  margin-top: 18px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #cad7e8;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.info {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #65758b;
+}
+
+button {
+  width: 100%;
+  min-height: 60px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 14px;
+
+  background: #06c755;
+  color: white;
+
+  font-size: 20px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.result {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 12px;
+  display: none;
+  line-height: 1.6;
+}
+
+.loading {
+  display: block;
+  background: #eef5ff;
+  color: #174ea6;
+}
+
+.success {
+  display: block;
+  background: #e8f8ef;
+  color: #08783c;
+}
+
+.error {
+  display: block;
+  background: #fff0f0;
+  color: #a21e1e;
+}
+
+.note {
+  margin-top: 18px;
+  padding: 15px;
+  background: #fff8e5;
+  border-left: 5px solid #ffb300;
+  border-radius: 10px;
+  color: #755600;
+  line-height: 1.7;
+}
+
+.id {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #94a3b8;
+  word-break: break-all;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 25px;
+  }
+
+  .wrap {
+    padding: 16px 12px 40px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+
+    <h1>
+      ROCK <span class="red">YOUR BODY</span> 2026
+    </h1>
+
+    <div class="subtitle">
+      HOME Rich Menu Image Uploader
+    </div>
+
+    <div class="id">
+      Rich Menu:
+      richmenu-be0be448ebdb08ec8a2368fed95c5f74
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="preview">
+
+      <span id="previewText">
+        เลือกรูป HOME เพื่อดูตัวอย่าง
+      </span>
+
+      <img
+        id="previewImage"
+        alt="HOME preview"
+      >
+
+    </div>
+
+
+    <input
+      id="homeFile"
+      type="file"
+      accept="image/jpeg,image/png"
+    >
+
+
+    <div
+      id="fileInfo"
+      class="info"
+    >
+      รองรับ JPG / PNG<br>
+      ขนาดไฟล์ไม่เกิน 1 MB
+    </div>
+
+
+    <button
+      id="uploadButton"
+      type="button"
+    >
+      🚀 UPLOAD & ACTIVATE HOME
+    </button>
+
+
+    <div
+      id="result"
+      class="result"
+    ></div>
+
+
+    <div class="note">
+
+      เมื่อกด Upload ระบบจะ:
+
+      <br>① ส่งรูป HOME เข้า LINE Rich Menu
+      <br>② เปลี่ยน alias <b>rock-home</b>
+      <br>③ ตั้ง HOME ใหม่นี้เป็น Rich Menu หลัก
+      <br>④ ไม่แก้ไข MISSION และ BATTLE
+      <br>⑤ ปุ่ม WEIGHT CHECK จะเปิดหน้า Weight Check
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/richmenu-uploader";
+
+
+const input =
+  document.getElementById("homeFile");
+
+const preview =
+  document.getElementById("previewImage");
+
+const previewText =
+  document.getElementById("previewText");
+
+const fileInfo =
+  document.getElementById("fileInfo");
+
+const result =
+  document.getElementById("result");
+
+const button =
+  document.getElementById("uploadButton");
+
+
+let previewUrl = null;
+
+
+// ==========================================
+// SELECT IMAGE
+// ==========================================
+
+input.addEventListener(
+  "change",
+  function () {
+
+    const file =
+      input.files[0];
+
+    result.style.display =
+      "none";
+
+
+    if (!file) {
+      return;
+    }
+
+
+    // TYPE CHECK
+
+    if (
+      file.type !== "image/jpeg" &&
+      file.type !== "image/png"
+    ) {
+
+      alert(
+        "รองรับเฉพาะไฟล์ JPG หรือ PNG"
+      );
+
+      input.value = "";
+
+      return;
+    }
+
+
+    // SIZE CHECK
+
+    if (file.size > 1000000) {
+
+      alert(
+        "ไฟล์มีขนาดเกิน 1 MB"
+      );
+
+      input.value = "";
+
+      return;
+    }
+
+
+    if (previewUrl) {
+      URL.revokeObjectURL(
+        previewUrl
+      );
+    }
+
+
+    previewUrl =
+      URL.createObjectURL(file);
+
+
+    preview.src =
+      previewUrl;
+
+    preview.style.display =
+      "block";
+
+    previewText.style.display =
+      "none";
+
+
+    const img =
+      new Image();
+
+
+    img.onload =
+      function () {
+
+        const kb =
+          Math.round(
+            file.size / 1024
+          );
+
+
+        fileInfo.innerHTML =
+          "<b>" +
+          file.name +
+          "</b><br>" +
+
+          img.width +
+          " × " +
+          img.height +
+          " px<br>" +
+
+          kb +
+          " KB";
+
+
+        if (
+          img.width !== 2500 ||
+          img.height !== 1686
+        ) {
+
+          fileInfo.innerHTML +=
+            "<br><span style='color:#c77700'>" +
+            "⚠ แนะนำให้ใช้รูป 2500 × 1686 px" +
+            "</span>";
+        }
+      };
+
+
+    img.src =
+      previewUrl;
+  }
+);
+
+
+// ==========================================
+// UPLOAD
+// ==========================================
+
+button.addEventListener(
+  "click",
+  async function () {
+
+    const file =
+      input.files[0];
+
+
+    if (!file) {
+
+      alert(
+        "กรุณาเลือกรูป HOME ก่อน"
+      );
+
+      return;
+    }
+
+
+    const confirmed =
+      confirm(
+        "ยืนยันอัปโหลดและเปิดใช้งาน HOME Rich Menu ใหม่นี้?"
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "กำลังอัปโหลด...";
+
+
+    result.className =
+      "result loading";
+
+    result.innerHTML =
+      "⏳ กำลังส่งรูปเข้า LINE และเปิดใช้งาน HOME...";
+
+
+    const form =
+      new FormData();
+
+
+    form.append(
+      "home",
+      file
+    );
+
+
+    try {
+
+      const response =
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+            body: form
+          }
+        );
+
+
+      const text =
+        await response.text();
+
+
+      let data;
+
+
+      try {
+
+        data =
+          JSON.parse(text);
+
+      } catch {
+
+        throw new Error(
+          "Server ไม่ได้ตอบกลับเป็น JSON: " +
+          text.substring(0, 200)
+        );
+
+      }
+
+
+      if (
+        !response.ok ||
+        !data.success
+      ) {
+
+        throw new Error(
+          data.error ||
+          "Upload failed"
+        );
+
+      }
+
+
+      result.className =
+        "result success";
+
+
+      result.innerHTML =
+        "<b>✅ สำเร็จ</b><br>" +
+
+        "อัปโหลด HOME Rich Menu เรียบร้อยแล้ว" +
+
+        "<br><br>" +
+
+        "Rich Menu ID:<br>" +
+
+        "<small>" +
+        data.richMenuId +
+        "</small>" +
+
+        "<br><br>" +
+
+        "Alias: <b>" +
+        data.alias +
+        "</b>" +
+
+        "<br><br>" +
+
+        "เปิด LINE แล้วทดสอบปุ่ม " +
+        "<b>WEIGHT CHECK</b> ได้เลย";
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      result.className =
+        "result error";
+
+
+      result.innerHTML =
+        "<b>❌ Upload ไม่สำเร็จ</b><br>" +
+        String(
+          error.message ||
+          error
+        );
+
+    } finally {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "🚀 UPLOAD & ACTIVATE HOME";
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
