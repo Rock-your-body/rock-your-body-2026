@@ -3,722 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#eef5ff">
-<title>ROCK YOUR BODY 2026 - Dashboard</title>
+<title>ROCK YOUR BODY 2026 - Home</title>
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; min-height: 100%; background: #eef5ff; color: #08245b; font-family: Arial, "Noto Sans Thai", sans-serif; }
+.page { min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 10px; }
+.dashboard { position: relative; width: 100%; max-width: 1250px; aspect-ratio: 2500 / 1686; background: #fff; overflow: hidden; border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.12); }
+.dashboard-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; display: block; pointer-events: none; }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-}
+/* รูปโปรไฟล์ LINE */
+.profile-photo { position: absolute; z-index: 5; left: 18.8%; top: 38%; width: 27.5%; aspect-ratio: 1 / 1; transform: translate(-50%, -50%); border-radius: 50%; overflow: hidden; pointer-events: none; }
+.profile-photo img { width: 100%; height: 100%; object-fit: cover; display: none; }
 
-body {
-  font-family: Arial, "Noto Sans Thai", sans-serif;
-  background: #eef5ff;
-  color: #08245b;
-}
+/* ตัวเลข Real-time */
+.live-value { position: absolute; z-index: 20; display: flex; align-items: center; justify-content: center; font-weight: 900; text-align: center; white-space: nowrap; line-height: 1; pointer-events: none; }
+#rockCoinValue { left: 80.8%; top: 6.1%; transform: translate(-50%, -50%); width: 8%; color: #08245b; font-size: clamp(12px, 1.5vw, 25px); }
+#energyValue { left: 92.8%; top: 6.1%; transform: translate(-50%, -50%); width: 10%; color: #08245b; font-size: clamp(11px, 1.35vw, 23px); }
+#currentWeightValue { left: 49.6%; top: 39.3%; transform: translate(-50%, -50%); width: 13%; color: #08245b; font-size: clamp(18px, 2.6vw, 43px); }
+#targetWeightValue { left: 49.6%; top: 61.5%; transform: translate(-50%, -50%); width: 13%; color: #d31317; font-size: clamp(18px, 2.6vw, 43px); }
+#levelValue { left: 29.45%; top: 64.3%; transform: translate(-50%, -50%); width: 4.5%; color: #fff; font-size: clamp(11px, 1.35vw, 22px); text-shadow: 0 2px 4px rgba(0,0,0,.5); }
 
-.page {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 10px;
-}
-
-.dashboard {
-  position: relative;
-  width: 100%;
-  max-width: 1250px;
-  aspect-ratio: 2500 / 1686;
-  background: #fff;
-  overflow: hidden;
-  border-radius: 18px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.12);
-}
-
-/* =========================================
-   BACKGROUND
-========================================= */
-
-.dashboard-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  display: block;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* =========================================
-   PROFILE PHOTO
-========================================= */
-
-.profile-photo {
-  position: absolute;
-  z-index: 5;
-  left: 18.8%;
-  top: 38%;
-  width: 27.5%;
-  aspect-ratio: 1 / 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.profile-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-}
-
-/* =========================================
-   COMMON REALTIME TEXT
-========================================= */
-
-.live-value {
-  position: absolute;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  text-align: center;
-  white-space: nowrap;
-  line-height: 1;
-  pointer-events: none;
-}
-
-/* =========================================
-   ROCK COIN
-========================================= */
-
-#rockCoinValue {
-  left: 80.8%;
-  top: 6.1%;
-  transform: translate(-50%, -50%);
-  width: 8%;
-  color: #08245b;
-  font-size: clamp(12px, 1.5vw, 25px);
-}
-
-/* =========================================
-   ENERGY
-========================================= */
-
-#energyValue {
-  left: 92.8%;
-  top: 6.1%;
-  transform: translate(-50%, -50%);
-  width: 10%;
-  color: #08245b;
-  font-size: clamp(11px, 1.35vw, 23px);
-}
-
-/* =========================================
-   CURRENT WEIGHT
-========================================= */
-
-#currentWeightValue {
-  left: 49.6%;
-  top: 39.3%;
-  transform: translate(-50%, -50%);
-  width: 13%;
-  color: #08245b;
-  font-size: clamp(18px, 2.6vw, 43px);
-}
-
-/* =========================================
-   TARGET WEIGHT
-========================================= */
-
-#targetWeightValue {
-  left: 49.6%;
-  top: 61.5%;
-  transform: translate(-50%, -50%);
-  width: 13%;
-  color: #d31317;
-  font-size: clamp(18px, 2.6vw, 43px);
-}
-
-/* =========================================
-   LEVEL
-========================================= */
-
-#levelValue {
-  left: 29.45%;
-  top: 64.3%;
-  transform: translate(-50%, -50%);
-  width: 4.5%;
-  color: #fff;
-  font-size: clamp(11px, 1.35vw, 22px);
-  text-shadow: 0 2px 4px rgba(0,0,0,.5);
-}
-
-/* =========================================
-   EXP BAR
-========================================= */
-
-.exp-track {
-  position: absolute;
-  z-index: 18;
-  left: 10.2%;
-  top: 71.45%;
-  width: 14.4%;
-  height: 2.8%;
-  padding: 2px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: transparent;
-  pointer-events: none;
-}
-
-.exp-fill {
-  width: 0%;
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    #00b8ff 0%,
-    #087bff 50%,
-    #0640df 100%
-  );
-  box-shadow: inset 0 0 4px rgba(255,255,255,.6);
-  transition: width .4s ease;
-}
-
-/* =========================================
-   CLICK AREAS
-========================================= */
-
-.click-area {
-  position: absolute;
-  z-index: 30;
-  border: 0;
-  outline: 0;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-#profileButton {
-  left: 2%;
-  top: 15%;
-  width: 34%;
-  height: 46%;
-}
-
-#weightCheckButton {
-  left: 59%;
-  top: 15%;
-  width: 18%;
-  height: 30%;
-}
-
-#progressButton {
-  left: 78.5%;
-  top: 15%;
-  width: 19%;
-  height: 30%;
-}
-
-#rankingButton {
-  left: 59%;
-  top: 46%;
-  width: 18%;
-  height: 30%;
-}
-
-#rewardsButton {
-  left: 78.5%;
-  top: 46%;
-  width: 19%;
-  height: 30%;
-}
-
-#weightCardButton {
-  left: 35%;
-  top: 25%;
-  width: 22%;
-  height: 20%;
-}
-
-#targetButton {
-  left: 35%;
-  top: 46%;
-  width: 22%;
-  height: 25%;
-}
-
-#homeButton {
-  left: 1%;
-  top: 79%;
-  width: 32%;
-  height: 19%;
-}
-
-#missionButton {
-  left: 34%;
-  top: 79%;
-  width: 32%;
-  height: 19%;
-}
-
-#battleButton {
-  left: 67%;
-  top: 79%;
-  width: 32%;
-  height: 19%;
-}
-
-/* =========================================
-   STATUS
-========================================= */
-
-.status {
-  position: fixed;
-  z-index: 300;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  max-width: 90vw;
-  padding: 12px 20px;
-  border-radius: 999px;
-  background: rgba(7,59,147,.94);
-  color: #fff;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 800;
-  box-shadow: 0 8px 25px rgba(0,0,0,.22);
-  display: none;
-}
-
-.status.show {
-  display: block;
-}
-
-.status.error {
-  background: rgba(190,27,27,.96);
-}
-
-.status.success {
-  background: rgba(3,143,69,.95);
-}
-
-/* =========================================
-   MODAL
-========================================= */
-
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-  background: rgba(0,0,0,.5);
-}
-
-.modal-backdrop.show {
-  display: flex;
-}
-
-.modal {
-  width: 100%;
-  max-width: 420px;
-  padding: 22px;
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 20px 60px rgba(0,0,0,.3);
-}
-
-.modal h2 {
-  margin: 0 0 8px;
-  color: #073b93;
-}
-
-.modal p {
-  margin: 0 0 18px;
-  color: #64748b;
-}
-
-.target-input-wrap {
-  display: flex;
-  align-items: center;
-  padding: 4px 14px;
-  border: 2px solid #c8d7ed;
-  border-radius: 14px;
-  background: #f8fbff;
-}
-
-.target-input-wrap input {
-  width: 100%;
-  padding: 14px 4px;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: #073b93;
-  font-size: 26px;
-  font-weight: 900;
-}
-
-.target-input-wrap span {
-  color: #64748b;
-  font-weight: 900;
-  font-size: 18px;
-}
-
-.modal-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.modal-actions button {
-  min-height: 48px;
-  border: 0;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.btn-cancel {
-  background: #e9eef6;
-  color: #334155;
-}
-
-.btn-save {
-  background: #06c755;
-  color: #fff;
-}
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 650px) {
-  .page {
-    padding: 0;
-  }
-  .dashboard {
-    width: 100vw;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  #rockCoinValue {
-    font-size: clamp(8px, 2.4vw, 14px);
-  }
-  #energyValue {
-    font-size: clamp(8px, 2.3vw, 14px);
-  }
-  #currentWeightValue,
-  #targetWeightValue {
-    font-size: clamp(11px, 3.2vw, 19px);
-  }
-  #levelValue {
-    font-size: clamp(8px, 2.2vw, 13px);
-  }
-  .exp-track {
-    padding: 1px;
-  }
-}
+/* ปุ่มคลิกต่างๆ และเมนูด้านล่าง */
+.click-area { position: absolute; z-index: 30; border: 0; background: transparent; cursor: pointer; }
+#weightCheckButton { left: 59%; top: 15%; width: 18%; height: 30%; }
+#homeButton { left: 1%; top: 79%; width: 32%; height: 19%; }
+#missionButton { left: 34%; top: 79%; width: 32%; height: 19%; }
+#battleButton { left: 67%; top: 79%; width: 32%; height: 19%; }
 </style>
 </head>
-
 <body>
-
 <div class="page">
-  <div id="dashboard" class="dashboard">
-    <img class="dashboard-bg" src="./rock-home-2500x1686-under1MB.jpg" alt="ROCK YOUR BODY HOME">
-
-    <div class="profile-photo">
-      <img id="profileImage" alt="LINE Profile">
-    </div>
-
+  <div class="dashboard">
+    <img class="dashboard-bg" src="./rock-home-2500x1686-under1MB_2.jpg" alt="Home">
+    
+    <div class="profile-photo"><img id="profileImage" alt="Profile"></div>
     <div id="rockCoinValue" class="live-value"></div>
     <div id="energyValue" class="live-value"></div>
     <div id="currentWeightValue" class="live-value"></div>
     <div id="targetWeightValue" class="live-value"></div>
     <div id="levelValue" class="live-value"></div>
 
-    <div class="exp-track">
-      <div id="expBar" class="exp-fill"></div>
-    </div>
-
-    <button id="profileButton" class="click-area" type="button" aria-label="Profile"></button>
-    <button id="weightCheckButton" class="click-area" type="button" aria-label="Weight Check"></button>
-    <button id="progressButton" class="click-area" type="button" aria-label="My Progress"></button>
-    <button id="rankingButton" class="click-area" type="button" aria-label="Ranking"></button>
-    <button id="rewardsButton" class="click-area" type="button" aria-label="Rewards"></button>
-    <button id="weightCardButton" class="click-area" type="button" aria-label="Current Weight"></button>
-    <button id="targetButton" class="click-area" type="button" aria-label="Set Target Weight"></button>
-    <button id="homeButton" class="click-area" type="button" aria-label="Home"></button>
-    <button id="missionButton" class="click-area" type="button" aria-label="Mission"></button>
-    <button id="battleButton" class="click-area" type="button" aria-label="Battle"></button>
-  </div>
-</div>
-
-<div id="status" class="status"></div>
-
-<div id="targetModal" class="modal-backdrop">
-  <div class="modal">
-    <h2>🎯 ตั้งเป้าหมายน้ำหนัก</h2>
-    <p>ระบุน้ำหนักที่ต้องการเป็นเป้าหมาย</p>
-    <div class="target-input-wrap">
-      <input id="targetInput" type="number" min="20" max="400" step="0.1" inputmode="decimal">
-      <span>kg</span>
-    </div>
-    <div class="modal-actions">
-      <button id="cancelTargetButton" class="btn-cancel" type="button">ยกเลิก</button>
-      <button id="saveTargetButton" class="btn-save" type="button">บันทึก</button>
-    </div>
+    <button id="weightCheckButton" class="click-area" onclick="location.href='https://liff.line.me/2011201679-uN62Coga'"></button>
+    <button id="homeButton" class="click-area" onclick="location.href='dashboard.html'"></button>
+    <button id="missionButton" class="click-area" onclick="location.href='mission.html'"></button>
+    <button id="battleButton" class="click-area" onclick="location.href='battle.html'"></button>
   </div>
 </div>
 
 <script>
 const LIFF_ID = "2011201679-uNWz5yqF";
 const API_URL = "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
-const WEIGHT_CHECK_URL = "https://liff.line.me/2011201679-uN62Coga";
-const MISSION_URL = "mission.html";
-const BATTLE_URL = "battle.html";
-const AUTO_REFRESH_MS = 10000;
 
-let dashboardData = null;
-let refreshTimer = null;
-let requestRunning = false;
-
-const statusEl = document.getElementById("status");
-const profileImage = document.getElementById("profileImage");
-const rockCoinValue = document.getElementById("rockCoinValue");
-const energyValue = document.getElementById("energyValue");
-const currentWeightValue = document.getElementById("currentWeightValue");
-const targetWeightValue = document.getElementById("targetWeightValue");
-const levelValue = document.getElementById("levelValue");
-const expBar = document.getElementById("expBar");
-const targetModal = document.getElementById("targetModal");
-const targetInput = document.getElementById("targetInput");
-
-function showStatus(message, type = "") {
-  statusEl.textContent = message;
-  statusEl.className = "status show" + (type ? " " + type : "");
-}
-
-function hideStatus() {
-  statusEl.className = "status";
-}
-
-function formatInteger(value) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return "0";
-  return Math.round(number).toLocaleString("en-US");
-}
-
-function formatWeight(value) {
-  if (value === null || value === undefined || value === "") return "";
-  const number = Number(value);
-  if (!Number.isFinite(number)) return "";
-  return number.toFixed(1);
-}
-
-async function callAPI(action, extra = {}) {
-  const idToken = liff.getIDToken();
-  if (!idToken) {
-    throw new Error("ไม่พบ LINE ID Token");
-  }
-
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ action, idToken, ...extra })
-  });
-
-  const text = await response.text();
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch {
-    throw new Error("API ตอบกลับไม่ถูกต้อง");
-  }
-
-  if (!response.ok || !data.success) {
-    throw new Error(data.error || "โหลดข้อมูลไม่สำเร็จ");
-  }
-
-  return data;
-}
-
-function renderDashboard(data) {
-  dashboardData = data;
-
-  /* ROCK COIN */
-  rockCoinValue.textContent = formatInteger(data.rockCoin);
-
-  /* ENERGY */
-  if (data.energy && data.energy.current !== undefined) {
-    energyValue.textContent = formatInteger(data.energy.current) + "/" + formatInteger(data.energy.max);
-  } else {
-    energyValue.textContent = "";
-  }
-
-  /* CURRENT WEIGHT (รองรับหลายรูปแบบข้อมูล) */
-  const currentWeight = 
-    data.weight?.current !== undefined ? data.weight.current : 
-    (data.currentWeight !== undefined ? data.currentWeight : null);
-  currentWeightValue.textContent = formatWeight(currentWeight);
-
-  /* TARGET WEIGHT (รองรับหลายรูปแบบข้อมูล) */
-  const targetWeight = 
-    data.weight?.target !== undefined ? data.weight.target : 
-    (data.targetWeight !== undefined ? data.targetWeight : null);
-  targetWeightValue.textContent = formatWeight(targetWeight);
-
-  /* LEVEL */
-  if (data.level !== null && data.level !== undefined) {
-    levelValue.textContent = String(data.level);
-  } else {
-    levelValue.textContent = "";
-  }
-
-  /* EXP */
-  const progress = Number(data.exp?.progress ?? 0);
-  const safeProgress = Math.max(0, Math.min(100, Number.isFinite(progress) ? progress : 0));
-  expBar.style.width = safeProgress + "%";
-
-  /* PROFILE */
-  const pictureUrl = data.user?.pictureUrl;
-  if (pictureUrl) {
-    profileImage.src = pictureUrl;
-    profileImage.style.display = "block";
-  } else {
-    profileImage.style.display = "none";
-  }
-}
-
-async function loadDashboard(showLoading = true) {
-  if (requestRunning) return;
-  requestRunning = true;
-
-  if (showLoading) {
-    showStatus("กำลังโหลดข้อมูล...");
-  }
-
-  try {
-    const data = await callAPI("dashboard");
-    renderDashboard(data);
-    hideStatus();
-  } catch (error) {
-    console.error("DASHBOARD LOAD ERROR:", error);
-    showStatus(error.message || "โหลดข้อมูลไม่สำเร็จ", "error");
-  } finally {
-    requestRunning = false;
-  }
-}
-
-function startAutoRefresh() {
-  if (refreshTimer) clearInterval(refreshTimer);
-  refreshTimer = setInterval(function () {
-    if (document.visibilityState === "visible") {
-      loadDashboard(false);
-    }
-  }, AUTO_REFRESH_MS);
-}
-
-function openTargetModal() {
-  const current = dashboardData?.weight?.target ?? dashboardData?.targetWeight;
-  if (current !== null && current !== undefined) {
-    targetInput.value = Number(current).toFixed(1);
-  } else {
-    targetInput.value = "";
-  }
-  targetModal.classList.add("show");
-  setTimeout(function () { targetInput.focus(); }, 100);
-}
-
-function closeTargetModal() {
-  targetModal.classList.remove("show");
-}
-
-async function saveTarget() {
-  const target = Number(targetInput.value);
-  if (!Number.isFinite(target) || target < 20 || target > 400) {
-    alert("กรุณากรอกเป้าหมายน้ำหนักที่ถูกต้อง");
-    return;
-  }
-
-  showStatus("กำลังบันทึกเป้าหมาย...");
-
-  try {
-    const data = await callAPI("setTarget", { targetWeight: target });
-    renderDashboard(data);
-    closeTargetModal();
-    showStatus("บันทึกเป้าหมายแล้ว", "success");
-    setTimeout(hideStatus, 1200);
-  } catch (error) {
-    console.error("SAVE TARGET ERROR:", error);
-    showStatus(error.message || "บันทึกเป้าหมายไม่สำเร็จ", "error");
-  }
-}
-
-function go(url) {
-  window.location.href = url;
-}
-
-document.getElementById("weightCheckButton").addEventListener("click", function () { go(WEIGHT_CHECK_URL); });
-document.getElementById("weightCardButton").addEventListener("click", function () { go(WEIGHT_CHECK_URL); });
-document.getElementById("targetButton").addEventListener("click", openTargetModal);
-document.getElementById("homeButton").addEventListener("click", function () { loadDashboard(true); });
-document.getElementById("progressButton").addEventListener("click", function () { loadDashboard(true); });
-document.getElementById("rankingButton").addEventListener("click", function () { alert("ระบบ Ranking จะเชื่อมต่อในขั้นถัดไป"); });
-document.getElementById("rewardsButton").addEventListener("click", function () { alert("ระบบ Rewards จะเชื่อมต่อในขั้นถัดไป"); });
-document.getElementById("missionButton").addEventListener("click", function () { if (MISSION_URL) go(MISSION_URL); });
-document.getElementById("battleButton").addEventListener("click", function () { if (BATTLE_URL) go(BATTLE_URL); });
-document.getElementById("cancelTargetButton").addEventListener("click", closeTargetModal);
-document.getElementById("saveTargetButton").addEventListener("click", saveTarget);
-
-targetModal.addEventListener("click", function (event) {
-  if (event.target === targetModal) closeTargetModal();
-});
-
-document.addEventListener("visibilitychange", function () {
-  if (document.visibilityState === "visible" && liff.isLoggedIn()) {
-    loadDashboard(false);
-  }
-});
-
-async function initLIFF() {
-  showStatus("กำลังเชื่อมต่อ LINE...");
+async function initApp() {
   try {
     await liff.init({ liffId: LIFF_ID });
-    if (!liff.isLoggedIn()) {
-      liff.login();
-      return;
+    if (!liff.isLoggedIn()) { liff.login(); return; }
+
+    const idToken = liff.getIDToken();
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "dashboard", idToken })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      document.getElementById("rockCoinValue").textContent = Number(data.rockCoin || 0).toLocaleString();
+      document.getElementById("energyValue").textContent = (data.energy?.current || 0) + "/" + (data.energy?.max || 200);
+      document.getElementById("currentWeightValue").textContent = data.weight?.current ? Number(data.weight.current).toFixed(1) : "";
+      document.getElementById("targetWeightValue").textContent = data.weight?.target ? Number(data.weight.target).toFixed(1) : "";
+      document.getElementById("levelValue").textContent = data.level || 1;
+      
+      if (data.user?.pictureUrl) {
+        const img = document.getElementById("profileImage");
+        img.src = data.user.pictureUrl;
+        img.style.display = "block";
+      }
     }
-    await loadDashboard(true);
-    startAutoRefresh();
-  } catch (error) {
-    console.error("LIFF ERROR:", error);
-    showStatus("เปิด Dashboard ไม่สำเร็จ: " + (error.message || error), "error");
+  } catch (err) {
+    console.error("Error:", err);
   }
 }
-
-initLIFF();
+initApp();
 </script>
-
 </body>
 </html>
