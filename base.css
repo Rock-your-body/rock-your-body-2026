@@ -1,7 +1,6 @@
 /* =========================================================
    ROCK YOUR BODY 2026
-   BASE CSS - CLEAN VERSION
-   HOME + MISSION + BATTLE + WEIGHT CHECK
+   BASE CSS - CLEAN FINAL
 ========================================================= */
 
 
@@ -45,10 +44,12 @@ textarea{
    TEMPLATE STAGE
 ========================================================= */
 
-.stage{
+.stage,
+#homeStage{
   position:relative;
 
-  width:min(100%,1536px);
+  width:100%;
+  max-width:1536px;
 
   margin:0 auto;
 
@@ -57,12 +58,8 @@ textarea{
   background:#eef5ff;
 }
 
-
-/* Template image */
-
 .template{
   position:relative;
-
   z-index:1;
 
   display:block;
@@ -74,16 +71,385 @@ textarea{
   padding:0;
 
   border:0;
+
+  user-select:none;
+  pointer-events:none;
 }
 
 
 /* =========================================================
-   LIVE DATA OVERLAY
+   HOME POSITION SETTINGS
+
+   ปรับตำแหน่งหน้า HOME จากตรงนี้จุดเดียว
+========================================================= */
+
+#homeStage{
+
+  /* PROFILE */
+  --profile-left:7.7%;
+  --profile-top:18.3%;
+  --profile-size:23.6%;
+
+
+  /* COIN */
+  --coin-left:76.4%;
+  --coin-top:4.2%;
+  --coin-width:7.7%;
+  --coin-height:5%;
+
+
+  /* ENERGY */
+  --energy-left:88.4%;
+  --energy-top:4.2%;
+  --energy-width:9.7%;
+  --energy-height:5%;
+
+
+  /* LEVEL */
+  --level-left:23.2%;
+  --level-top:54.8%;
+  --level-width:6.7%;
+  --level-height:4.5%;
+
+
+  /* EXP BAR */
+  --expbar-left:8.6%;
+  --expbar-top:75%;
+  --expbar-width:14%;
+  --expbar-height:1.8%;
+
+
+  /* EXP TEXT */
+  --exptext-left:22%;
+  --exptext-top:75.2%;
+  --exptext-width:9%;
+  --exptext-height:4.5%;
+
+
+  /* CURRENT WEIGHT */
+  --current-left:41.5%;
+  --current-top:24.4%;
+  --current-width:15%;
+  --current-height:8%;
+
+
+  /* UPDATED DATE */
+  --updated-left:42%;
+  --updated-top:35.8%;
+  --updated-width:14%;
+  --updated-height:4%;
+
+
+  /* TARGET */
+  --target-left:41.5%;
+  --target-top:51.2%;
+  --target-width:15%;
+  --target-height:8%;
+
+
+  /* REMAINING */
+  --remaining-left:42%;
+  --remaining-top:63.2%;
+  --remaining-width:14%;
+  --remaining-height:4%;
+
+
+  /* LOST */
+  --lost-left:35.5%;
+  --lost-top:75.8%;
+  --lost-width:10%;
+  --lost-height:4.5%;
+
+
+  /* START DATE */
+  --startdate-left:47.8%;
+  --startdate-top:75.8%;
+  --startdate-width:9.5%;
+  --startdate-height:4.5%;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+#homeStage .profile-frame{
+  position:absolute;
+  z-index:20;
+
+  left:var(--profile-left);
+  top:var(--profile-top);
+
+  width:var(--profile-size);
+  aspect-ratio:1 / 1;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  overflow:hidden;
+
+  background:transparent;
+
+  pointer-events:none;
+}
+
+#homeStage .profile-photo{
+  position:absolute;
+
+  inset:0;
+
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  object-fit:cover;
+  object-position:50% 50%;
+
+  background:transparent;
+}
+
+
+/* =========================================================
+   DATA BOX
+
+   ตัวเลขทั้งหมดอยู่กลางกรอบ
+========================================================= */
+
+.data-box{
+  position:absolute;
+  z-index:15;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+
+  margin:0;
+  padding:0;
+
+  background:transparent;
+
+  pointer-events:none;
+
+  container-type:inline-size;
+}
+
+.data-value{
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  width:100%;
+  height:100%;
+
+  margin:0;
+  padding:0 2%;
+
+  color:#06276c;
+
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    sans-serif;
+
+  font-weight:900;
+
+  line-height:1;
+
+  text-align:center;
+
+  white-space:nowrap;
+
+  font-variant-numeric:
+    tabular-nums;
+
+  font-size:
+    clamp(
+      6px,
+      11cqw,
+      28px
+    );
+}
+
+.data-weight{
+  font-size:
+    clamp(
+      13px,
+      16cqw,
+      44px
+    );
+
+  letter-spacing:-0.03em;
+}
+
+.data-small{
+  font-size:
+    clamp(
+      6px,
+      10cqw,
+      16px
+    );
+}
+
+.red{
+  color:#d20d0d;
+}
+
+.white{
+  color:#fff;
+
+  text-shadow:
+    0 2px 4px
+    rgba(0,0,0,.35);
+}
+
+
+/* =========================================================
+   HOME DATA POSITIONS
+========================================================= */
+
+.coin-box{
+  left:var(--coin-left);
+  top:var(--coin-top);
+
+  width:var(--coin-width);
+  height:var(--coin-height);
+}
+
+.energy-box{
+  left:var(--energy-left);
+  top:var(--energy-top);
+
+  width:var(--energy-width);
+  height:var(--energy-height);
+}
+
+.level-box{
+  left:var(--level-left);
+  top:var(--level-top);
+
+  width:var(--level-width);
+  height:var(--level-height);
+}
+
+.exptext-box{
+  left:var(--exptext-left);
+  top:var(--exptext-top);
+
+  width:var(--exptext-width);
+  height:var(--exptext-height);
+}
+
+.current-box{
+  left:var(--current-left);
+  top:var(--current-top);
+
+  width:var(--current-width);
+  height:var(--current-height);
+}
+
+.updated-box{
+  left:var(--updated-left);
+  top:var(--updated-top);
+
+  width:var(--updated-width);
+  height:var(--updated-height);
+}
+
+.target-box{
+  left:var(--target-left);
+  top:var(--target-top);
+
+  width:var(--target-width);
+  height:var(--target-height);
+}
+
+.remaining-box{
+  left:var(--remaining-left);
+  top:var(--remaining-top);
+
+  width:var(--remaining-width);
+  height:var(--remaining-height);
+}
+
+.lost-box{
+  left:var(--lost-left);
+  top:var(--lost-top);
+
+  width:var(--lost-width);
+  height:var(--lost-height);
+}
+
+.startdate-box{
+  left:var(--startdate-left);
+  top:var(--startdate-top);
+
+  width:var(--startdate-width);
+  height:var(--startdate-height);
+}
+
+
+/* =========================================================
+   EXP BAR
+========================================================= */
+
+.exp-track{
+  position:absolute;
+  z-index:15;
+
+  left:var(--expbar-left);
+  top:var(--expbar-top);
+
+  width:var(--expbar-width);
+  height:var(--expbar-height);
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:#d7e5f6;
+
+  pointer-events:none;
+}
+
+#expBar{
+  width:0%;
+  height:100%;
+
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #15a2ff,
+      #0b52d1
+    );
+
+  transition:
+    width .6s ease;
+}
+
+
+/* =========================================================
+   GENERIC OVERLAY
+   สำหรับ Mission / Battle
 ========================================================= */
 
 .overlay{
   position:absolute;
-
   z-index:10;
 
   display:flex;
@@ -94,11 +460,9 @@ textarea{
   margin:0;
   padding:0;
 
-  border:0 !important;
+  border:0;
 
-  background:transparent !important;
-
-  box-shadow:none !important;
+  background:transparent;
 
   font-family:
     Arial,
@@ -115,32 +479,9 @@ textarea{
 
   pointer-events:none;
 
-  text-shadow:
-    0 1px 1px
-    rgba(255,255,255,.35);
-}
-
-
-/* ไม่สร้างพื้นหลังปิด Template */
-
-.cover{
-  background:transparent !important;
-}
-
-
-/* =========================================================
-   LIVE NUMBER
-========================================================= */
-
-.live-number{
   font-variant-numeric:
     tabular-nums;
-
-  letter-spacing:-0.02em;
 }
-
-
-/* COLORS */
 
 .live-blue{
   color:#06276c;
@@ -148,10 +489,6 @@ textarea{
 
 .live-red{
   color:#d20d0d;
-}
-
-.live-green{
-  color:#07833d;
 }
 
 .live-white{
@@ -164,101 +501,11 @@ textarea{
 
 
 /* =========================================================
-   FONT SIZE
-========================================================= */
-
-.live-xl{
-  font-size:
-    clamp(
-      22px,
-      3.6vw,
-      58px
-    );
-}
-
-.live-lg{
-  font-size:
-    clamp(
-      14px,
-      2.2vw,
-      34px
-    );
-}
-
-.live-md{
-  font-size:
-    clamp(
-      10px,
-      1.5vw,
-      24px
-    );
-}
-
-.live-sm{
-  font-size:
-    clamp(
-      7px,
-      1vw,
-      16px
-    );
-}
-
-
-/* =========================================================
-   HOME SPECIFIC
-========================================================= */
-
-#coin{
-  font-size:
-    clamp(
-      10px,
-      1.5vw,
-      24px
-    );
-}
-
-#energy{
-  font-size:
-    clamp(
-      9px,
-      1.35vw,
-      22px
-    );
-}
-
-#level{
-  font-size:
-    clamp(
-      9px,
-      1.35vw,
-      22px
-    );
-}
-
-#expText{
-  font-size:
-    clamp(
-      7px,
-      1vw,
-      16px
-    );
-}
-
-#currentWeight,
-#targetWeight{
-  font-weight:1000;
-
-  line-height:1;
-}
-
-
-/* =========================================================
-   PROGRESS TRACK
+   GENERIC PROGRESS
 ========================================================= */
 
 .live-track{
   position:absolute;
-
   z-index:11;
 
   overflow:hidden;
@@ -283,25 +530,6 @@ textarea{
   transition:
     width .45s ease;
 }
-
-
-/* =========================================================
-   EXP
-========================================================= */
-
-.exp-fill{
-  background:
-    linear-gradient(
-      90deg,
-      #0878f5,
-      #0649ba
-    );
-}
-
-
-/* =========================================================
-   MISSION
-========================================================= */
 
 .mission-fill-daily{
   background:
@@ -339,11 +567,6 @@ textarea{
     );
 }
 
-
-/* =========================================================
-   BATTLE HP
-========================================================= */
-
 .hp-fill{
   background:
     linear-gradient(
@@ -352,11 +575,6 @@ textarea{
       #be0717
     );
 }
-
-
-/* =========================================================
-   ENERGY
-========================================================= */
 
 .energy-fill{
   background:
@@ -369,43 +587,17 @@ textarea{
 
 
 /* =========================================================
-   PROFILE
-========================================================= */
-
-
-/* =========================================================
-   MONSTER
-========================================================= */
-
-.live-monster{
-  position:absolute;
-
-  z-index:8;
-
-  object-fit:contain;
-
-  filter:
-    drop-shadow(
-      0 8px 12px
-      rgba(0,0,0,.28)
-    );
-}
-
-
-/* =========================================================
    HOTSPOT
 ========================================================= */
 
 .hotspot{
   position:absolute;
-
   z-index:30;
 
   margin:0;
   padding:0;
 
   border:0;
-
   outline:0;
 
   background:transparent;
@@ -430,25 +622,17 @@ textarea{
 
 
 /* =========================================================
-   EMPTY DATA
+   STATUS
 ========================================================= */
 
-.is-empty{
-  opacity:.55;
-}
-
-
-/* =========================================================
-   GLOBAL STATUS
-========================================================= */
-
-.status{
+.status,
+#status{
   display:none;
 }
 
-.status.show{
+.status.show,
+#status.show{
   position:fixed;
-
   z-index:99999;
 
   left:50%;
@@ -467,17 +651,11 @@ textarea{
 
   border-radius:999px;
 
-  background:#0a4bb2;
+  background:#0755b7;
 
   color:#fff;
 
-  font-family:
-    Arial,
-    "Noto Sans Thai",
-    sans-serif;
-
   font-size:14px;
-
   font-weight:800;
 
   text-align:center;
@@ -487,13 +665,14 @@ textarea{
     rgba(0,0,0,.18);
 }
 
-.status.error{
+.status.error,
+#status.error{
   background:#c62828;
 }
 
 
 /* =========================================================
-   WEIGHT CHECK PAGE
+   WEIGHT CHECK
 ========================================================= */
 
 .weight-page{
@@ -510,8 +689,8 @@ textarea{
   background:
     linear-gradient(
       180deg,
-      #eaf3ff 0%,
-      #f7fbff 100%
+      #eaf3ff,
+      #f7fbff
     );
 }
 
@@ -522,15 +701,8 @@ textarea{
   margin:0 auto;
 }
 
-
-/* =========================================================
-   WEIGHT HEADER
-========================================================= */
-
 .weight-header{
-  padding:
-    22px
-    18px;
+  padding:22px 18px;
 
   border-radius:24px;
 
@@ -554,8 +726,6 @@ textarea{
     );
 
   font-weight:900;
-
-  line-height:1.1;
 }
 
 .weight-brand-red{
@@ -568,14 +738,8 @@ textarea{
   color:#64748b;
 
   font-size:14px;
-
   font-weight:800;
 }
-
-
-/* =========================================================
-   WEIGHT HERO
-========================================================= */
 
 .weight-hero{
   margin-top:18px;
@@ -589,14 +753,10 @@ textarea{
   background:
     linear-gradient(
       135deg,
-      #073b93 0%,
+      #073b93,
       #0765d8 60%,
-      #148bf3 100%
+      #148bf3
     );
-
-  box-shadow:
-    0 14px 35px
-    rgba(7,59,147,.22);
 }
 
 .weight-title{
@@ -614,22 +774,7 @@ textarea{
     );
 
   font-weight:900;
-
-  line-height:1.1;
 }
-
-.weight-subtitle{
-  margin-top:8px;
-
-  font-size:15px;
-
-  font-weight:800;
-}
-
-
-/* =========================================================
-   WEIGHT SUMMARY
-========================================================= */
 
 .weight-summary-grid{
   display:grid;
@@ -650,20 +795,10 @@ textarea{
 
   padding:18px;
 
-  border:
-    1px solid
-    rgba(255,255,255,.25);
-
   border-radius:19px;
 
   background:
     rgba(255,255,255,.15);
-}
-
-.weight-summary-label{
-  font-size:14px;
-
-  font-weight:800;
 }
 
 .weight-summary-value{
@@ -677,14 +812,7 @@ textarea{
     );
 
   font-weight:900;
-
-  line-height:1;
 }
-
-
-/* =========================================================
-   WEIGHT CARD
-========================================================= */
 
 .weight-card{
   margin-top:18px;
@@ -700,29 +828,6 @@ textarea{
     rgba(15,53,103,.10);
 }
 
-.weight-card h2{
-  margin:0;
-
-  color:#08245b;
-
-  font-size:22px;
-
-  font-weight:900;
-}
-
-.weight-desc{
-  margin-top:7px;
-
-  color:#64748b;
-
-  font-size:14px;
-}
-
-
-/* =========================================================
-   WEIGHT INPUT
-========================================================= */
-
 .weight-input-box{
   display:flex;
 
@@ -733,41 +838,19 @@ textarea{
 
   margin-top:18px;
 
-  padding:
-    0
-    20px;
+  padding:0 20px;
 
-  border:
-    2px solid
-    #c9d9ef;
+  border:2px solid #c9d9ef;
 
   border-radius:18px;
 
   background:#fbfdff;
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
-}
-
-.weight-input-box:focus-within{
-  border-color:#0b67dd;
-
-  box-shadow:
-    0 0 0 4px
-    rgba(11,103,221,.08);
 }
 
 .weight-input-box input{
-  display:block;
-
   width:100%;
-  min-width:0;
-
-  padding:0;
 
   border:0;
-
   outline:0;
 
   background:transparent;
@@ -782,47 +865,15 @@ textarea{
     );
 
   font-weight:900;
-
-  line-height:1;
-}
-
-.weight-input-box input::placeholder{
-  color:#7a7a7a;
-
-  opacity:1;
 }
 
 .weight-unit{
-  flex:0 0 auto;
-
   margin-left:10px;
 
   color:#64748b;
 
-  font-size:19px;
-
   font-weight:900;
 }
-
-
-/* ลบ spinner input number */
-
-.weight-input-box input[type="number"]{
-  appearance:textfield;
-  -moz-appearance:textfield;
-}
-
-.weight-input-box input[type="number"]::-webkit-inner-spin-button,
-.weight-input-box input[type="number"]::-webkit-outer-spin-button{
-  margin:0;
-
-  -webkit-appearance:none;
-}
-
-
-/* =========================================================
-   WEIGHT BUTTON
-========================================================= */
 
 .weight-button{
   width:100%;
@@ -835,309 +886,28 @@ textarea{
   cursor:pointer;
 
   font-size:18px;
-
   font-weight:900;
-
-  transition:
-    transform .12s ease,
-    opacity .2s ease,
-    box-shadow .2s ease;
-
-  -webkit-tap-highlight-color:
-    transparent;
 }
-
-.weight-button:active{
-  transform:
-    scale(.99);
-}
-
-.weight-button:disabled{
-  opacity:.55;
-
-  cursor:not-allowed;
-
-  transform:none;
-}
-
-
-/* SAVE */
 
 .weight-save{
   margin-top:18px;
 
   color:#fff;
-
-  background:
-    linear-gradient(
-      90deg,
-      #00b84f,
-      #06c755
-    );
-
-  box-shadow:
-    0 8px 20px
-    rgba(6,199,85,.20);
+  background:#06c755;
 }
-
-
-/* TARGET */
 
 .weight-target{
   margin-top:15px;
 
   color:#073b93;
-
   background:#eaf3ff;
 }
-
-
-/* HOME */
 
 .weight-home{
   margin-top:18px;
 
   color:#fff;
-
-  background:
-    linear-gradient(
-      90deg,
-      #073b93,
-      #075ac7
-    );
-
-  box-shadow:
-    0 8px 20px
-    rgba(7,59,147,.18);
-}
-
-
-/* =========================================================
-   WEIGHT STATUS
-========================================================= */
-
-.weight-status{
-  display:none;
-
-  margin-top:16px;
-
-  padding:
-    15px
-    17px;
-
-  border-radius:15px;
-
-  font-size:14px;
-
-  font-weight:800;
-
-  line-height:1.5;
-
-  white-space:pre-line;
-}
-
-.weight-status.show{
-  display:block;
-}
-
-.weight-status.loading{
-  color:#174ea6;
-
-  background:#eef5ff;
-}
-
-.weight-status.success{
-  color:#08783c;
-
-  background:#e9f8ef;
-}
-
-.weight-status.error{
-  color:#a21e1e;
-
-  background:#fff0f0;
-}
-
-
-/* =========================================================
-   WEIGHT PROGRESS
-========================================================= */
-
-.weight-progress-grid{
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0,1fr)
-    );
-
-  gap:12px;
-
-  margin-top:18px;
-}
-
-.weight-progress-box{
-  padding:16px;
-
-  border-radius:16px;
-
-  background:#f5f8fd;
-}
-
-.weight-progress-label{
-  color:#64748b;
-
-  font-size:12px;
-}
-
-.weight-progress-value{
-  margin-top:7px;
-
-  color:#08245b;
-
-  font-size:21px;
-
-  font-weight:900;
-}
-
-.weight-progress-track{
-  width:100%;
-  height:10px;
-
-  margin-top:16px;
-
-  overflow:hidden;
-
-  border-radius:999px;
-
-  background:#dbe8f7;
-}
-
-.weight-progress-fill{
-  width:0%;
-  height:100%;
-
-  border-radius:999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #168cff,
-      #06c755
-    );
-
-  transition:
-    width .45s ease;
-}
-
-
-/* =========================================================
-   WEIGHT MODAL
-========================================================= */
-
-.weight-modal-bg{
-  position:fixed;
-
-  inset:0;
-
-  z-index:99999;
-
-  display:none;
-
-  align-items:center;
-  justify-content:center;
-
-  padding:18px;
-
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      .48
-    );
-}
-
-.weight-modal-bg.show{
-  display:flex;
-}
-
-.weight-modal{
-  width:100%;
-  max-width:420px;
-
-  padding:22px;
-
-  border-radius:22px;
-
-  background:#fff;
-
-  box-shadow:
-    0 20px 60px
-    rgba(0,0,0,.28);
-}
-
-.weight-modal h2{
-  margin:
-    0
-    0
-    8px;
-
-  color:#073b93;
-
-  font-size:22px;
-
-  font-weight:900;
-}
-
-.weight-modal-actions{
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:10px;
-
-  margin-top:18px;
-}
-
-.weight-modal-actions button{
-  min-height:50px;
-
-  border:0;
-
-  border-radius:13px;
-
-  cursor:pointer;
-
-  font-weight:900;
-}
-
-.weight-cancel{
-  color:#334155;
-
-  background:#e9eef6;
-}
-
-.weight-confirm{
-  color:#fff;
-
-  background:#06c755;
-}
-
-
-/* =========================================================
-   RESPONSIVE TABLET
-========================================================= */
-
-@media(max-width:900px){
-
-  .stage{
-    width:100%;
-  }
-
+  background:#075ac7;
 }
 
 
@@ -1147,70 +917,9 @@ textarea{
 
 @media(max-width:600px){
 
-  .overlay{
+  .data-value{
     text-shadow:none;
   }
-
-
-  .live-xl{
-    font-size:
-      clamp(
-        17px,
-        6vw,
-        35px
-      );
-  }
-
-
-  .live-lg{
-    font-size:
-      clamp(
-        13px,
-        4vw,
-        25px
-      );
-  }
-
-
-  .live-md{
-    font-size:
-      clamp(
-        9px,
-        2.6vw,
-        17px
-      );
-  }
-
-
-  .live-sm{
-    font-size:
-      clamp(
-        7px,
-        2vw,
-        13px
-      );
-  }
-
-
-  #coin{
-    font-size:
-      clamp(
-        9px,
-        2.7vw,
-        16px
-      );
-  }
-
-
-  #energy{
-    font-size:
-      clamp(
-        8px,
-        2.5vw,
-        15px
-      );
-  }
-
 
   .weight-page{
     padding:
@@ -1219,158 +928,22 @@ textarea{
       35px;
   }
 
-
   .weight-header{
     padding:
       20px
       14px;
   }
 
-
   .weight-hero{
     padding:20px;
   }
-
 
   .weight-card{
     padding:18px;
   }
 
-
-  .weight-summary{
-    min-height:95px;
-
-    padding:15px;
-  }
-
-
-  .weight-input-box{
-    min-height:70px;
-
-    padding:
-      0
-      16px;
-  }
-
-
   .weight-button{
     min-height:56px;
   }
 
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media(max-width:390px){
-
-  .weight-title{
-    font-size:25px;
-  }
-
-
-  .weight-summary-grid{
-    gap:8px;
-  }
-
-
-  .weight-summary{
-    padding:13px;
-  }
-
-
-  .weight-summary-label{
-    font-size:12px;
-  }
-
-
-  .weight-summary-value{
-    font-size:25px;
-  }
-
-
-  .weight-progress-grid{
-    gap:8px;
-  }
-
-
-  .weight-progress-box{
-    padding:13px;
-  }
-
-}
-#expBar{
-  height:100%;
-  width:0%;
-  border-radius:999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #15a2ff,
-      #0b52d1
-    );
-
-  transition:
-    width .6s ease;
-}
-/* =========================================================
-   HOME PROFILE
-   FINAL - ใช้ชุดนี้ชุดเดียว
-========================================================= */
-
-#homeStage{
-  --profile-left:7.7%;
-  --profile-top:18.3%;
-  --profile-size:23.6%;
-}
-
-
-/* กรอบวงกลม */
-#homeStage .profile-frame{
-  position:absolute;
-  z-index:20;
-
-  left:var(--profile-left);
-  top:var(--profile-top);
-
-  width:var(--profile-size);
-  aspect-ratio:1 / 1;
-
-  overflow:hidden;
-
-  margin:0;
-  padding:0;
-
-  border:0;
-  border-radius:50%;
-
-  background:transparent;
-
-  pointer-events:none;
-}
-
-
-/* รูปโปรไฟล์ LINE */
-#homeStage .profile-photo{
-  position:absolute;
-  inset:0;
-
-  display:block;
-
-  width:100%;
-  height:100%;
-
-  margin:0;
-  padding:0;
-
-  border:0;
-  border-radius:50%;
-
-  object-fit:cover;
-  object-position:center;
-
-  background:transparent;
 }
