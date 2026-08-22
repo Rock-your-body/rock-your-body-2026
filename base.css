@@ -84,10 +84,9 @@ textarea{
 ========================================================= */
 
 #homeStage{
-  --profile-left:12.6%;
-  --profile-top:18.1%;
-  --profile-size:22.4%;
-}
+  --profile-left:7.3%;
+  --profile-top:17.7%;
+  --profile-size:22.0%;
 
   /* COIN */
   --coin-left:76.4%;
@@ -95,13 +94,11 @@ textarea{
   --coin-width:7.7%;
   --coin-height:5%;
 
-
   /* ENERGY */
   --energy-left:88.4%;
   --energy-top:4.2%;
   --energy-width:9.7%;
   --energy-height:5%;
-
 
   /* LEVEL */
   --level-left:23.2%;
@@ -109,13 +106,11 @@ textarea{
   --level-width:6.7%;
   --level-height:4.5%;
 
-
   /* EXP BAR */
   --expbar-left:8.6%;
   --expbar-top:75%;
   --expbar-width:14%;
   --expbar-height:1.8%;
-
 
   /* EXP TEXT */
   --exptext-left:22%;
@@ -123,13 +118,11 @@ textarea{
   --exptext-width:9%;
   --exptext-height:4.5%;
 
-
   /* CURRENT WEIGHT */
   --current-left:41.5%;
   --current-top:24.4%;
   --current-width:15%;
   --current-height:8%;
-
 
   /* UPDATED DATE */
   --updated-left:42%;
@@ -137,13 +130,11 @@ textarea{
   --updated-width:14%;
   --updated-height:4%;
 
-
   /* TARGET */
   --target-left:41.5%;
   --target-top:51.2%;
   --target-width:15%;
   --target-height:8%;
-
 
   /* REMAINING */
   --remaining-left:42%;
@@ -151,13 +142,11 @@ textarea{
   --remaining-width:14%;
   --remaining-height:4%;
 
-
   /* LOST */
   --lost-left:35.5%;
   --lost-top:75.8%;
   --lost-width:10%;
   --lost-height:4.5%;
-
 
   /* START DATE */
   --startdate-left:47.8%;
@@ -166,43 +155,60 @@ textarea{
   --startdate-height:4.5%;
 }
 
-
 /* =========================================================
    PROFILE FRAME
 ========================================================= */
 
 #homeStage .profile-frame{
-  position: absolute;
+  position:absolute;
 
-  left: var(--profile-left);
-  top: var(--profile-top);
+  left:var(--profile-left);
+  top:var(--profile-top);
 
-  width: var(--profile-size);
-  aspect-ratio: 1 / 1;
+  width:var(--profile-size);
+  aspect-ratio:1 / 1;
 
-  border-radius: 50%;
-  overflow: hidden;
+  margin:0;
+  padding:0;
 
-  z-index: 2;
+  border:0;
+  border-radius:50%;
 
-  pointer-events: none;
+  overflow:hidden;
+
+  z-index:5;
+
+  pointer-events:none;
 }
-
-
 /* =========================================================
    LINE PROFILE IMAGE
 ========================================================= */
 
 #homeStage .profile-photo{
-  display: none;
+  position:absolute;
+  inset:0;
 
-  width: 100%;
-  height: 100%;
+  display:block;
 
-  object-fit: cover;
-  object-position: center center;
+  width:100%;
+  height:100%;
 
-  border-radius: 50%;
+  max-width:none;
+  max-height:none;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  object-fit:cover;
+  object-position:50% 50%;
+}
+
+#homeStage .profile-photo:not([src]),
+#homeStage .profile-photo[src=""]{
+  display:none;
 }
 /* =========================================================
    DATA BOX
