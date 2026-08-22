@@ -1,32 +1,1359 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ROCK YOUR BODY 2026 - HOME</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><link rel="stylesheet" href="base.css"><script src="app-config.js"></script></head><body>
-<div class="stage" id="stage">
-  <img
-  class="template"
-  src="home-template.png"
-  alt=""
-  draggable="false"
->
-  <img id="profileImage" alt="profile" style="position:absolute;z-index:4;left:6.7%;top:18.7%;width:25.8%;height:34%;object-fit:cover;border-radius:50%;display:none">
-  <div id="coin" class="overlay cover" style="left:76.6%;top:4.4%;width:7.4%;height:5.1%;font-size:clamp(11px,1.6vw,28px)">--</div>
-  <div id="energy" class="overlay cover" style="left:88.9%;top:4.4%;width:9.1%;height:5.1%;font-size:clamp(10px,1.4vw,25px)">-- / --</div>
-  <div id="level" class="overlay" style="left:24.1%;top:55.8%;width:5.4%;height:4.5%;color:#fff;font-size:clamp(10px,1.4vw,24px)">--</div>
-  <div id="expText" class="overlay cover" style="left:22.2%;top:76.1%;width:8.5%;height:4.1%;font-size:clamp(8px,1.05vw,18px)">-- / --</div>
-  <div style="position:absolute;z-index:5;left:8.8%;top:75.2%;width:13.7%;height:1.7%;background:#d9e5f4;border-radius:999px;overflow:hidden"><div id="expBar" style="height:100%;width:0;background:linear-gradient(90deg,#15a2ff,#0b52d1)"></div></div>
-  <div id="currentWeight" class="overlay cover" style="left:43.6%;top:28.0%;width:11.4%;height:8.8%;font-size:clamp(20px,3.5vw,58px)">--.-</div>
-  <div id="updatedAt" class="overlay cover" style="left:36.7%;top:37.1%;width:18.7%;height:3.9%;font-size:clamp(7px,1.05vw,17px)">--/--/----</div>
-  <div id="targetWeight" class="overlay cover" style="left:43.9%;top:53.2%;width:11.4%;height:8.8%;color:#c91818;font-size:clamp(20px,3.5vw,58px)">--.-</div>
-  <div id="remaining" class="overlay cover" style="left:39%;top:64.3%;width:14.5%;height:4.2%;color:#b91c1c;font-size:clamp(8px,1.1vw,18px)">--.- kg</div>
-  <div id="lost" class="overlay cover" style="left:36.7%;top:74.5%;width:8.8%;height:5.4%;font-size:clamp(8px,1.1vw,18px)">--.- kg</div>
-  <div id="startDate" class="overlay cover" style="left:48.2%;top:74.5%;width:9%;height:5.4%;font-size:clamp(7px,1vw,16px)">--/--/----</div>
+<!doctype html>
+<html lang="th">
 
-  <button class="hotspot" style="left:59.4%;top:16.1%;width:18.7%;height:30.9%" onclick="go(CFG.PAGE.WEIGHT)" aria-label="Weight Check"></button>
-  <button class="hotspot" style="left:79.1%;top:16.1%;width:19.4%;height:30.9%" onclick="go(CFG.PAGE.PROGRESS)" aria-label="My Progress"></button>
-  <button class="hotspot" style="left:59.4%;top:49.4%;width:18.7%;height:31.1%" onclick="go(CFG.PAGE.RANKING)" aria-label="Ranking"></button>
-  <button class="hotspot" style="left:79.1%;top:49.4%;width:19.4%;height:31.1%" onclick="go(CFG.PAGE.REWARDS)" aria-label="Rewards"></button>
-  <button class="hotspot" style="left:1.4%;top:83.2%;width:31.5%;height:14.5%" onclick="go(CFG.PAGE.HOME)" aria-label="Home"></button>
-  <button class="hotspot" style="left:33.7%;top:83.2%;width:32.2%;height:14.5%" onclick="go(CFG.PAGE.MISSION)" aria-label="Mission"></button>
-  <button class="hotspot" style="left:66.5%;top:83.2%;width:32.1%;height:14.5%" onclick="go(CFG.PAGE.BATTLE)" aria-label="Battle"></button>
-</div><div id="status" class="status"></div><script src="common.js"></script><script>
-function renderHome(raw){const d=normalize(raw),p=d.player;$('coin').textContent=fmtInt(p.coin);$('energy').textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;$('level').textContent=p.level;const e=p.exp%CFG.EXP_PER_LEVEL;$('expText').textContent=`${fmtInt(e)} / ${CFG.EXP_PER_LEVEL}`;$('expBar').style.width=pct(e,CFG.EXP_PER_LEVEL)+'%';$('currentWeight').textContent=fmtWeight(p.currentWeight);$('targetWeight').textContent=fmtWeight(p.targetWeight);$('updatedAt').textContent=formatDate(p.updatedAt);$('startDate').textContent=formatDate(p.startDate);const current=num(p.currentWeight,NaN),target=num(p.targetWeight,NaN),start=num(p.startWeight,NaN);$('remaining').textContent=Number.isFinite(current)&&Number.isFinite(target)?Math.max(0,current-target).toFixed(1)+' kg':'--.- kg';$('lost').textContent=Number.isFinite(start)&&Number.isFinite(current)?Math.max(0,start-current).toFixed(1)+' kg':'--.- kg';if(p.picture){$('profileImage').src=p.picture;$('profileImage').style.display='block'}}
-(async()=>{try{showStatus('กำลังเชื่อมต่อ LINE...');if(!await initLiff())return;renderHome(await fetchDashboard());hideStatus();setInterval(async()=>{if(document.visibilityState==='visible'){try{renderHome(await fetchDashboard())}catch(e){console.error(e)}}},CFG.REFRESH_MS)}catch(e){console.error(e);showStatus(e.message||String(e),true)}})();
-</script></body></html>
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>ROCK YOUR BODY 2026 - HOME</title>
+
+  <!-- LINE LIFF -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="./base.css"
+  >
+</head>
+
+
+<body>
+
+<div
+  class="stage"
+  id="stage"
+>
+
+  <!-- =====================================================
+       HOME TEMPLATE
+  ====================================================== -->
+
+  <img
+    class="template"
+    src="https://phattyfon-ai.github.io/rock-your-body-2026/home-template.png"
+    alt=""
+    draggable="false"
+  >
+
+
+  <!-- =====================================================
+       PROFILE
+  ====================================================== -->
+
+  <img
+    id="profileImage"
+    class="live-profile"
+    alt="LINE Profile"
+    style="
+      position:absolute;
+      z-index:4;
+      left:6.7%;
+      top:18.7%;
+      width:25.8%;
+      height:34%;
+      object-fit:cover;
+      border-radius:50%;
+      display:none;
+    "
+  >
+
+
+  <!-- =====================================================
+       ROCK COIN
+  ====================================================== -->
+
+  <div
+    id="coin"
+    class="overlay"
+    style="
+      left:76.6%;
+      top:4.4%;
+      width:7.4%;
+      height:5.1%;
+      color:#06276c;
+      font-size:clamp(11px,1.6vw,28px);
+    "
+  >
+    --
+  </div>
+
+
+  <!-- =====================================================
+       ENERGY
+  ====================================================== -->
+
+  <div
+    id="energy"
+    class="overlay"
+    style="
+      left:88.9%;
+      top:4.4%;
+      width:9.1%;
+      height:5.1%;
+      color:#06276c;
+      font-size:clamp(10px,1.4vw,25px);
+    "
+  >
+    -- / 200
+  </div>
+
+
+  <!-- =====================================================
+       LEVEL
+  ====================================================== -->
+
+  <div
+    id="level"
+    class="overlay"
+    style="
+      left:24.1%;
+      top:55.8%;
+      width:5.4%;
+      height:4.5%;
+      color:#fff;
+      font-size:clamp(10px,1.4vw,24px);
+    "
+  >
+    Lv.--
+  </div>
+
+
+  <!-- =====================================================
+       EXP BAR
+  ====================================================== -->
+
+  <div
+    style="
+      position:absolute;
+      z-index:5;
+      left:8.8%;
+      top:75.2%;
+      width:13.7%;
+      height:1.7%;
+      background:#d9e5f4;
+      border-radius:999px;
+      overflow:hidden;
+    "
+  >
+
+    <div
+      id="expBar"
+      style="
+        height:100%;
+        width:0%;
+        border-radius:999px;
+        background:linear-gradient(
+          90deg,
+          #15a2ff,
+          #0b52d1
+        );
+        transition:width .4s ease;
+      "
+    ></div>
+
+  </div>
+
+
+  <!-- EXP TEXT -->
+
+  <div
+    id="expText"
+    class="overlay"
+    style="
+      left:22.2%;
+      top:76.1%;
+      width:8.5%;
+      height:4.1%;
+      color:#06276c;
+      font-size:clamp(8px,1.05vw,18px);
+    "
+  >
+    0 / 500
+  </div>
+
+
+  <!-- =====================================================
+       CURRENT WEIGHT
+  ====================================================== -->
+
+  <div
+    id="currentWeight"
+    class="overlay"
+    style="
+      left:44.6%;
+      top:24.0%;
+      width:8.2%;
+      height:5.5%;
+      color:#06276c;
+      font-size:clamp(22px,3vw,46px);
+      font-weight:1000;
+    "
+  >
+    --.-
+  </div>
+
+
+  <!-- =====================================================
+       UPDATED DATE
+  ====================================================== -->
+
+  <div
+    id="updatedAt"
+    class="overlay"
+    style="
+      left:44.7%;
+      top:37.4%;
+      width:8.6%;
+      height:2.7%;
+      color:#06276c;
+      font-size:clamp(7px,.9vw,14px);
+    "
+  >
+    --/--/----
+  </div>
+
+
+  <!-- =====================================================
+       TARGET WEIGHT
+  ====================================================== -->
+
+  <div
+    id="targetWeight"
+    class="overlay"
+    style="
+      left:44.6%;
+      top:51.2%;
+      width:8.2%;
+      height:5.5%;
+      color:#c91818;
+      font-size:clamp(22px,3vw,46px);
+      font-weight:1000;
+    "
+  >
+    --.-
+  </div>
+
+
+  <!-- =====================================================
+       REMAINING
+  ====================================================== -->
+
+  <div
+    id="remaining"
+    class="overlay"
+    style="
+      left:44.1%;
+      top:64.7%;
+      width:8.8%;
+      height:2.6%;
+      color:#b91c1c;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    --.- kg
+  </div>
+
+
+  <!-- =====================================================
+       LOST WEIGHT
+  ====================================================== -->
+
+  <div
+    id="lost"
+    class="overlay"
+    style="
+      left:37.7%;
+      top:76.7%;
+      width:6.2%;
+      height:2.4%;
+      color:#06276c;
+      font-size:clamp(7px,.9vw,14px);
+    "
+  >
+    --.- kg
+  </div>
+
+
+  <!-- =====================================================
+       START DATE
+  ====================================================== -->
+
+  <div
+    id="startDate"
+    class="overlay"
+    style="
+      left:49.1%;
+      top:76.7%;
+      width:6.5%;
+      height:2.4%;
+      color:#06276c;
+      font-size:clamp(7px,.85vw,13px);
+    "
+  >
+    --/--/----
+  </div>
+
+
+
+  <!-- =====================================================
+       HOTSPOTS
+  ====================================================== -->
+
+
+  <!-- WEIGHT CHECK -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:59.4%;
+      top:16.1%;
+      width:18.7%;
+      height:30.9%;
+    "
+    onclick="openWeightCheck()"
+    aria-label="Weight Check"
+  ></button>
+
+
+  <!-- PROGRESS -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:79.1%;
+      top:16.1%;
+      width:19.4%;
+      height:30.9%;
+    "
+    onclick="go('./progress.html')"
+    aria-label="My Progress"
+  ></button>
+
+
+  <!-- RANKING -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:59.4%;
+      top:49.4%;
+      width:18.7%;
+      height:31.1%;
+    "
+    onclick="go('./ranking.html')"
+    aria-label="Ranking"
+  ></button>
+
+
+  <!-- REWARDS -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:79.1%;
+      top:49.4%;
+      width:19.4%;
+      height:31.1%;
+    "
+    onclick="go('./rewards.html')"
+    aria-label="Rewards"
+  ></button>
+
+
+  <!-- HOME -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:1.4%;
+      top:83.2%;
+      width:31.5%;
+      height:14.5%;
+    "
+    onclick="reloadHome()"
+    aria-label="Home"
+  ></button>
+
+
+  <!-- MISSION -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:33.7%;
+      top:83.2%;
+      width:32.2%;
+      height:14.5%;
+    "
+    onclick="go('./mission.html')"
+    aria-label="Mission"
+  ></button>
+
+
+  <!-- BATTLE -->
+
+  <button
+    class="hotspot"
+    type="button"
+    style="
+      left:66.5%;
+      top:83.2%;
+      width:32.1%;
+      height:14.5%;
+    "
+    onclick="go('./battle.html')"
+    aria-label="Battle"
+  ></button>
+
+</div>
+
+
+<!-- STATUS -->
+
+<div
+  id="status"
+  class="status"
+></div>
+
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const DASHBOARD_LIFF_ID =
+  "2011201679-uNWz5yqF";
+
+
+const WEIGHT_LIFF_URL =
+  "https://liff.line.me/2011201679-uN62Coga";
+
+
+const PLAYER_API =
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
+
+
+const EXP_PER_LEVEL =
+  500;
+
+
+const MAX_ENERGY =
+  200;
+
+
+const REFRESH_MS =
+  30000;
+
+
+/* =========================================================
+   ELEMENT
+========================================================= */
+
+function $(
+  id
+) {
+
+  return document
+    .getElementById(
+      id
+    );
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+function numberValue(
+  value,
+  fallback = 0
+) {
+
+  const number =
+    Number(
+      value
+    );
+
+
+  return Number.isFinite(
+    number
+  )
+    ? number
+    : fallback;
+}
+
+
+/* =========================================================
+   FORMAT INTEGER
+========================================================= */
+
+function formatInteger(
+  value
+) {
+
+  return Math.round(
+    numberValue(
+      value,
+      0
+    )
+  ).toLocaleString(
+    "en-US"
+  );
+}
+
+
+/* =========================================================
+   FORMAT WEIGHT
+========================================================= */
+
+function formatWeight(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+
+    return "--.-";
+  }
+
+
+  const number =
+    Number(
+      value
+    );
+
+
+  if (
+    !Number.isFinite(
+      number
+    )
+  ) {
+
+    return "--.-";
+  }
+
+
+  return number
+    .toFixed(1);
+}
+
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+
+    return "--/--/----";
+  }
+
+
+  const date =
+    new Date(
+      value
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return "--/--/----";
+  }
+
+
+  return date
+    .toLocaleDateString(
+      "th-TH",
+      {
+        day:
+          "2-digit",
+
+        month:
+          "2-digit",
+
+        year:
+          "numeric"
+      }
+    );
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+  message,
+  error = false
+) {
+
+  const status =
+    $("status");
+
+
+  if (!status) {
+
+    return;
+  }
+
+
+  status.textContent =
+    message;
+
+
+  status.className =
+    error
+      ? "status show error"
+      : "status show";
+}
+
+
+function hideStatus() {
+
+  const status =
+    $("status");
+
+
+  if (status) {
+
+    status.className =
+      "status";
+  }
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function go(
+  url
+) {
+
+  window.location.href =
+    url;
+}
+
+
+function openWeightCheck() {
+
+  window.location.href =
+    WEIGHT_LIFF_URL;
+}
+
+
+function reloadHome() {
+
+  window.location.reload();
+}
+
+
+/* =========================================================
+   INIT LIFF
+========================================================= */
+
+async function initLiff() {
+
+  if (
+    typeof liff ===
+    "undefined"
+  ) {
+
+    throw new Error(
+      "ไม่สามารถโหลด LINE LIFF SDK"
+    );
+  }
+
+
+  await liff.init({
+    liffId:
+      DASHBOARD_LIFF_ID
+  });
+
+
+  if (
+    !liff.isLoggedIn()
+  ) {
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
+    return false;
+  }
+
+
+  const idToken =
+    liff.getIDToken();
+
+
+  if (!idToken) {
+
+    liff.logout();
+
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
+    return false;
+  }
+
+
+  return true;
+}
+
+
+/* =========================================================
+   FETCH DASHBOARD
+========================================================= */
+
+async function fetchDashboard() {
+
+  const idToken =
+    liff.getIDToken();
+
+
+  if (!idToken) {
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+
+  const response =
+    await fetch(
+      PLAYER_API,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              "dashboard",
+
+            idToken:
+              idToken
+          })
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+
+  let data;
+
+
+  try {
+
+    data =
+      JSON.parse(
+        text
+      );
+
+  } catch {
+
+    console.error(
+      "PLAYER API RAW:",
+      text
+    );
+
+
+    throw new Error(
+      "Dashboard API ตอบกลับไม่ถูกต้อง"
+    );
+  }
+
+
+  if (
+    !response.ok ||
+    data.success === false
+  ) {
+
+    throw new Error(
+      data.error ||
+      "โหลดข้อมูล HOME ไม่สำเร็จ"
+    );
+  }
+
+
+  return data;
+}
+
+
+/* =========================================================
+   NORMALIZE DASHBOARD
+
+   รองรับ response รุ่นปัจจุบัน:
+   user
+   rockCoin
+   energy
+   weight
+   level
+   exp
+========================================================= */
+
+function normalizeDashboard(
+  raw
+) {
+
+  const user =
+    raw?.user ||
+    raw?.player ||
+    {};
+
+
+  const weight =
+    raw?.weight ||
+    {};
+
+
+  const energy =
+    raw?.energy &&
+    typeof raw.energy ===
+      "object"
+      ? raw.energy
+      : {};
+
+
+  let totalExp =
+    raw?.exp;
+
+
+  if (
+    totalExp &&
+    typeof totalExp ===
+      "object"
+  ) {
+
+    totalExp =
+      totalExp.total ??
+      totalExp.current ??
+      0;
+  }
+
+
+  totalExp =
+    numberValue(
+      totalExp ??
+      user.exp,
+      0
+    );
+
+
+  /*
+    กติกาหลักของระบบ:
+    ทุก 500 EXP = +1 Level
+  */
+
+  const calculatedLevel =
+    Math.floor(
+      totalExp /
+      EXP_PER_LEVEL
+    ) + 1;
+
+
+  const currentWeight =
+    weight.current ??
+    user.current_weight ??
+    null;
+
+
+  const targetWeight =
+    weight.target ??
+    user.target_weight ??
+    null;
+
+
+  const startWeight =
+    weight.start ??
+    user.start_weight ??
+    null;
+
+
+  const updatedAt =
+    weight.updatedAt ??
+    weight.lastRecordedAt ??
+    user.weight_updated_at ??
+    null;
+
+
+  const startDate =
+    weight.startDate ??
+    user.start_date ??
+    null;
+
+
+  return {
+
+    picture:
+      user.pictureUrl ??
+      user.picture_url ??
+      "",
+
+    coin:
+      numberValue(
+        raw?.rockCoin ??
+        raw?.rock_coin ??
+        user.rock_coin,
+        0
+      ),
+
+    energy:
+      numberValue(
+        energy.current ??
+        user.energy,
+        0
+      ),
+
+    maxEnergy:
+      numberValue(
+        energy.max ??
+        user.max_energy,
+        MAX_ENERGY
+      ),
+
+    exp:
+      totalExp,
+
+    level:
+      calculatedLevel,
+
+    currentWeight,
+
+    targetWeight,
+
+    startWeight,
+
+    updatedAt,
+
+    startDate
+  };
+}
+
+
+/* =========================================================
+   RENDER HOME
+========================================================= */
+
+function renderHome(
+  raw
+) {
+
+  const p =
+    normalizeDashboard(
+      raw
+    );
+
+
+  /* ----------------------
+     COIN
+  ---------------------- */
+
+  $("coin").textContent =
+    formatInteger(
+      p.coin
+    );
+
+
+  /* ----------------------
+     ENERGY
+  ---------------------- */
+
+  $("energy").textContent =
+    formatInteger(
+      p.energy
+    ) +
+    " / " +
+    formatInteger(
+      p.maxEnergy
+    );
+
+
+  /* ----------------------
+     PROFILE
+  ---------------------- */
+
+  const profile =
+    $("profileImage");
+
+
+  if (
+    profile &&
+    p.picture
+  ) {
+
+    profile.src =
+      p.picture;
+
+    profile.style.display =
+      "block";
+  }
+
+
+  /* ----------------------
+     LEVEL
+  ---------------------- */
+
+  $("level").textContent =
+    "Lv." +
+    formatInteger(
+      p.level
+    );
+
+
+  /* ----------------------
+     EXP
+  ---------------------- */
+
+  const expInLevel =
+    p.exp %
+    EXP_PER_LEVEL;
+
+
+  $("expText").textContent =
+    formatInteger(
+      expInLevel
+    ) +
+    " / " +
+    EXP_PER_LEVEL;
+
+
+  $("expBar").style.width =
+    Math.min(
+      100,
+      Math.max(
+        0,
+        (
+          expInLevel /
+          EXP_PER_LEVEL
+        ) * 100
+      )
+    ) +
+    "%";
+
+
+  /* ----------------------
+     CURRENT WEIGHT
+  ---------------------- */
+
+  $("currentWeight")
+    .textContent =
+      formatWeight(
+        p.currentWeight
+      );
+
+
+  /* ----------------------
+     TARGET
+  ---------------------- */
+
+  $("targetWeight")
+    .textContent =
+      formatWeight(
+        p.targetWeight
+      );
+
+
+  /* ----------------------
+     UPDATED
+  ---------------------- */
+
+  $("updatedAt")
+    .textContent =
+      formatDate(
+        p.updatedAt
+      );
+
+
+  /* ----------------------
+     START DATE
+  ---------------------- */
+
+  $("startDate")
+    .textContent =
+      formatDate(
+        p.startDate
+      );
+
+
+  /* ----------------------
+     REMAINING
+  ---------------------- */
+
+  const current =
+    Number(
+      p.currentWeight
+    );
+
+
+  const target =
+    Number(
+      p.targetWeight
+    );
+
+
+  if (
+    Number.isFinite(
+      current
+    ) &&
+    Number.isFinite(
+      target
+    )
+  ) {
+
+    $("remaining")
+      .textContent =
+        Math.abs(
+          current -
+          target
+        )
+        .toFixed(1) +
+        " kg";
+
+  } else {
+
+    $("remaining")
+      .textContent =
+        "--.- kg";
+  }
+
+
+  /* ----------------------
+     LOST
+  ---------------------- */
+
+  const start =
+    Number(
+      p.startWeight
+    );
+
+
+  if (
+    Number.isFinite(
+      start
+    ) &&
+    Number.isFinite(
+      current
+    )
+  ) {
+
+    $("lost")
+      .textContent =
+        Math.abs(
+          start -
+          current
+        )
+        .toFixed(1) +
+        " kg";
+
+  } else {
+
+    $("lost")
+      .textContent =
+        "--.- kg";
+  }
+}
+
+
+/* =========================================================
+   LOAD HOME
+========================================================= */
+
+let loading =
+  false;
+
+
+async function loadHome() {
+
+  if (loading) {
+
+    return;
+  }
+
+
+  loading =
+    true;
+
+
+  try {
+
+    const data =
+      await fetchDashboard();
+
+
+    console.log(
+      "HOME DATA:",
+      data
+    );
+
+
+    renderHome(
+      data
+    );
+
+
+    hideStatus();
+
+
+  } catch (error) {
+
+    console.error(
+      "HOME ERROR:",
+      error
+    );
+
+
+    showStatus(
+      error?.message ||
+      String(error),
+      true
+    );
+
+
+  } finally {
+
+    loading =
+      false;
+  }
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+(async function start() {
+
+  try {
+
+    showStatus(
+      "กำลังเชื่อมต่อ LINE..."
+    );
+
+
+    const ok =
+      await initLiff();
+
+
+    if (!ok) {
+
+      return;
+    }
+
+
+    await loadHome();
+
+
+    setInterval(
+      function () {
+
+        if (
+          document.visibilityState ===
+          "visible"
+        ) {
+
+          loadHome();
+        }
+
+      },
+      REFRESH_MS
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "HOME START ERROR:",
+      error
+    );
+
+
+    showStatus(
+      error?.message ||
+      String(error),
+      true
+    );
+  }
+
+})();
+
+
+/* =========================================================
+   RETURN TO PAGE
+========================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  function () {
+
+    if (
+      document.visibilityState ===
+        "visible" &&
+      typeof liff !==
+        "undefined" &&
+      liff.isLoggedIn()
+    ) {
+
+      loadHome();
+    }
+  }
+);
+
+
+window.addEventListener(
+  "pageshow",
+  function () {
+
+    if (
+      typeof liff !==
+        "undefined" &&
+      liff.isLoggedIn()
+    ) {
+
+      loadHome();
+    }
+  }
+);
+
+</script>
+
+</body>
+</html>
