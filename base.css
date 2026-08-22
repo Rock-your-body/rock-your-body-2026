@@ -1,37 +1,68 @@
 /* =========================================================
-   ROCK YOUR BODY - LIVE DATA OVERLAY V2
+   ROCK YOUR BODY - LIVE DATA OVERLAY V3
+   ========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  background:#eef5ff;
+}
+
+
+/* =========================================================
+   TEMPLATE STAGE
    ========================================================= */
 
 .stage{
   position:relative;
+
   width:min(100%,1536px);
+
   margin:0 auto;
+
   overflow:hidden;
+
   background:#eef5ff;
 }
 
 .template{
+  position:relative;
+
+  z-index:1;
+
+  display:block;
+
   width:100%;
   height:auto;
-  display:block;
-  position:relative;
-  z-index:1;
 }
 
-/* ข้อมูลวางบน Template */
+
+/* =========================================================
+   LIVE DATA
+   ========================================================= */
+
 .overlay{
   position:absolute;
+
   z-index:10;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
   margin:0;
   padding:0;
 
-  background:transparent !important;
   border:0 !important;
+
+  background:transparent !important;
+
   box-shadow:none !important;
 
   font-family:
@@ -40,74 +71,183 @@
     sans-serif;
 
   font-weight:900;
+
   line-height:1;
+
+  text-align:center;
 
   white-space:nowrap;
 
   pointer-events:none;
 
   text-shadow:
-    0 1px 1px rgba(255,255,255,.45);
+    0 1px 1px
+    rgba(255,255,255,.35);
 }
 
-/* ห้ามสร้างกล่องขาวปิด template */
+
+/* ไม่สร้างพื้นขาว */
 .cover{
   background:transparent !important;
 }
 
-/* ตัวเลขทั่วไป */
+
+/* =========================================================
+   NUMBER STYLES
+   ========================================================= */
+
 .live-number{
-  font-variant-numeric:tabular-nums;
+  font-variant-numeric:
+    tabular-nums;
+
   letter-spacing:-0.02em;
 }
 
-/* ตัวเลขสีน้ำเงิน */
 .live-blue{
   color:#06276c;
 }
 
-/* ตัวเลขสีแดง */
 .live-red{
   color:#d20d0d;
 }
 
-/* ตัวเลขสีขาว */
 .live-white{
   color:#fff;
+
   text-shadow:
-    0 2px 5px rgba(0,0,0,.35);
+    0 2px 5px
+    rgba(0,0,0,.35);
 }
 
-/* ตัวเลขขนาดใหญ่ */
+
+/* =========================================================
+   FONT SIZE
+   ========================================================= */
+
 .live-xl{
-  font-size:clamp(18px,4.2vw,64px);
+  font-size:
+    clamp(
+      22px,
+      3.6vw,
+      58px
+    );
 }
 
-/* ขนาดกลาง */
 .live-lg{
-  font-size:clamp(14px,2.7vw,42px);
+  font-size:
+    clamp(
+      14px,
+      2.2vw,
+      34px
+    );
 }
 
-/* ขนาดทั่วไป */
 .live-md{
-  font-size:clamp(10px,1.65vw,26px);
+  font-size:
+    clamp(
+      10px,
+      1.5vw,
+      24px
+    );
 }
 
-/* ขนาดเล็ก */
 .live-sm{
-  font-size:clamp(8px,1.15vw,18px);
+  font-size:
+    clamp(
+      7px,
+      1vw,
+      16px
+    );
 }
 
-/* Progress bar */
+
+/* =========================================================
+   HOME SPECIFIC SIZES
+   ========================================================= */
+
+#currentWeight,
+#targetWeight{
+  font-size:
+    clamp(
+      22px,
+      3.6vw,
+      58px
+    );
+
+  font-weight:1000;
+
+  line-height:1;
+}
+
+#coin{
+  font-size:
+    clamp(
+      10px,
+      1.5vw,
+      24px
+    );
+}
+
+#energy{
+  font-size:
+    clamp(
+      9px,
+      1.35vw,
+      22px
+    );
+}
+
+#level{
+  font-size:
+    clamp(
+      9px,
+      1.35vw,
+      22px
+    );
+}
+
+#expText,
+#updatedAt,
+#lost,
+#startDate{
+  font-size:
+    clamp(
+      7px,
+      1vw,
+      16px
+    );
+}
+
+#remaining{
+  font-size:
+    clamp(
+      8px,
+      1.1vw,
+      18px
+    );
+}
+
+
+/* =========================================================
+   PROGRESS BAR
+   ========================================================= */
+
 .live-track{
   position:absolute;
+
   z-index:11;
 
   overflow:hidden;
 
   border-radius:999px;
 
-  background:rgba(18,68,132,.13);
+  background:
+    rgba(
+      18,
+      68,
+      132,
+      .13
+    );
 }
 
 .live-fill{
@@ -116,8 +256,12 @@
 
   border-radius:inherit;
 
-  transition:width .45s ease;
+  transition:
+    width .45s ease;
 }
+
+
+/* EXP */
 
 .exp-fill{
   background:
@@ -128,6 +272,9 @@
     );
 }
 
+
+/* DAILY MISSION */
+
 .mission-fill-daily{
   background:
     linear-gradient(
@@ -136,6 +283,9 @@
       #ff5700
     );
 }
+
+
+/* WEEKLY */
 
 .mission-fill-weekly{
   background:
@@ -146,6 +296,9 @@
     );
 }
 
+
+/* MONTHLY */
+
 .mission-fill-monthly{
   background:
     linear-gradient(
@@ -154,6 +307,9 @@
       #6120b6
     );
 }
+
+
+/* BONUS */
 
 .mission-fill-bonus{
   background:
@@ -164,6 +320,9 @@
     );
 }
 
+
+/* BATTLE HP */
+
 .hp-fill{
   background:
     linear-gradient(
@@ -172,6 +331,9 @@
       #be0717
     );
 }
+
+
+/* ENERGY */
 
 .energy-fill{
   background:
@@ -182,9 +344,14 @@
     );
 }
 
-/* รูปโปรไฟล์ */
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
 .live-profile{
   position:absolute;
+
   z-index:8;
 
   object-fit:cover;
@@ -194,9 +361,14 @@
   background:#d7e8ff;
 }
 
-/* รูปมอนสเตอร์จริง */
+
+/* =========================================================
+   MONSTER
+   ========================================================= */
+
 .live-monster{
   position:absolute;
+
   z-index:8;
 
   object-fit:contain;
@@ -208,15 +380,21 @@
     );
 }
 
-/* ปุ่มพื้นที่กดทับ Template */
+
+/* =========================================================
+   HOTSPOT BUTTONS
+   ========================================================= */
+
 .hotspot{
   position:absolute;
+
   z-index:30;
 
-  padding:0;
   margin:0;
+  padding:0;
 
   border:0;
+
   outline:0;
 
   background:transparent;
@@ -229,15 +407,82 @@
 
 .hotspot:active{
   background:
-    rgba(255,255,255,.08);
+    rgba(
+      255,
+      255,
+      255,
+      .08
+    );
 }
 
-/* ไม่แสดง -- ใหญ่เกินไป */
+
+/* =========================================================
+   EMPTY DATA
+   ========================================================= */
+
 .is-empty{
   opacity:.55;
 }
 
-/* Mobile */
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status{
+  display:none;
+}
+
+.status.show{
+  position:fixed;
+
+  z-index:9999;
+
+  left:50%;
+  bottom:18px;
+
+  transform:
+    translateX(-50%);
+
+  display:block;
+
+  max-width:90vw;
+
+  padding:
+    10px
+    18px;
+
+  border-radius:999px;
+
+  background:#0a4bb2;
+
+  color:#fff;
+
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    sans-serif;
+
+  font-size:14px;
+
+  font-weight:800;
+
+  text-align:center;
+
+  box-shadow:
+    0 6px 18px
+    rgba(0,0,0,.18);
+}
+
+.status.error{
+  background:#c62828;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media(max-width:600px){
 
   .overlay{
@@ -245,18 +490,66 @@
   }
 
   .live-xl{
-    font-size:clamp(17px,6vw,35px);
+    font-size:
+      clamp(
+        17px,
+        6vw,
+        35px
+      );
   }
 
   .live-lg{
-    font-size:clamp(13px,4vw,25px);
+    font-size:
+      clamp(
+        13px,
+        4vw,
+        25px
+      );
   }
 
   .live-md{
-    font-size:clamp(9px,2.6vw,17px);
+    font-size:
+      clamp(
+        9px,
+        2.6vw,
+        17px
+      );
   }
 
   .live-sm{
-    font-size:clamp(7px,2vw,13px);
+    font-size:
+      clamp(
+        7px,
+        2vw,
+        13px
+      );
+  }
+
+  #currentWeight,
+  #targetWeight{
+    font-size:
+      clamp(
+        18px,
+        6vw,
+        34px
+      );
+  }
+
+  #coin{
+    font-size:
+      clamp(
+        9px,
+        2.7vw,
+        16px
+      );
+  }
+
+  #energy{
+    font-size:
+      clamp(
+        8px,
+        2.5vw,
+        15px
+      );
   }
 }
