@@ -84,8 +84,8 @@ textarea{
 ========================================================= */
 
 #homeStage{
-  --profile-left:7.0%;
-  --profile-top:18.0%;
+  --profile-left:6.9%;
+  --profile-top:18.2%;
   --profile-size:22.0%;
 
   /* COIN */
@@ -289,9 +289,9 @@ textarea{
 .data-small{
   font-size:
     clamp(
-      6px,
-      10cqw,
-      16px
+      5px,
+      8cqw,
+      13px
     );
 }
 
