@@ -9,30 +9,588 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>
-    ROCK YOUR BODY 2026 - HOME
-  </title>
+  <title>ROCK YOUR BODY 2026 - HOME</title>
 
   <!-- LINE LIFF -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <!-- SHARED CSS -->
-  <link
-    rel="stylesheet"
-    href="./base.css"
-  >
-
   <!-- APP CONFIG -->
   <script src="./app-config.js"></script>
+
+  <style>
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+      background:#eef5ff;
+
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+    }
+
+    body{
+      overflow-x:hidden;
+    }
+
+
+    /* =========================================================
+       STAGE + POSITION CONFIG
+       ปรับตำแหน่งทั้งหมดจากตรงนี้
+    ========================================================= */
+
+    #homeStage{
+      position:relative;
+
+      width:100%;
+      max-width:1536px;
+
+      margin:0 auto;
+
+      overflow:hidden;
+
+      background:#eef5ff;
+
+
+      /* ================= PROFILE ================= */
+
+      --profile-left:7.4%;
+      --profile-top:18.2%;
+      --profile-size:24.2%;
+
+
+      /* ================= COIN ================= */
+
+      --coin-left:76.4%;
+      --coin-top:4.2%;
+      --coin-width:7.7%;
+      --coin-height:5.0%;
+
+
+      /* ================= ENERGY ================= */
+
+      --energy-left:88.4%;
+      --energy-top:4.2%;
+      --energy-width:9.7%;
+      --energy-height:5.0%;
+
+
+      /* ================= LEVEL ================= */
+
+      --level-left:23.2%;
+      --level-top:54.8%;
+      --level-width:6.7%;
+      --level-height:4.5%;
+
+
+      /* ================= EXP BAR ================= */
+
+      --expbar-left:8.6%;
+      --expbar-top:75.0%;
+      --expbar-width:14.0%;
+      --expbar-height:1.8%;
+
+
+      /* ================= EXP TEXT ================= */
+
+      --exptext-left:22.0%;
+      --exptext-top:75.2%;
+      --exptext-width:9.0%;
+      --exptext-height:4.5%;
+
+
+      /* ================= CURRENT WEIGHT ================= */
+
+      --current-left:41.5%;
+      --current-top:24.4%;
+      --current-width:15.0%;
+      --current-height:8.0%;
+
+
+      /* ================= UPDATED DATE ================= */
+
+      --updated-left:42.0%;
+      --updated-top:35.8%;
+      --updated-width:14.0%;
+      --updated-height:4.0%;
+
+
+      /* ================= TARGET WEIGHT ================= */
+
+      --target-left:41.5%;
+      --target-top:51.2%;
+      --target-width:15.0%;
+      --target-height:8.0%;
+
+
+      /* ================= REMAINING ================= */
+
+      --remaining-left:42.0%;
+      --remaining-top:63.2%;
+      --remaining-width:14.0%;
+      --remaining-height:4.0%;
+
+
+      /* ================= LOST ================= */
+
+      --lost-left:35.5%;
+      --lost-top:75.8%;
+      --lost-width:10.0%;
+      --lost-height:4.5%;
+
+
+      /* ================= START DATE ================= */
+
+      --startdate-left:47.8%;
+      --startdate-top:75.8%;
+      --startdate-width:9.5%;
+      --startdate-height:4.5%;
+    }
+
+
+    /* =========================================================
+       TEMPLATE
+    ========================================================= */
+
+    .template{
+      position:relative;
+      z-index:1;
+
+      display:block;
+
+      width:100%;
+      height:auto;
+
+      margin:0;
+      padding:0;
+
+      border:0;
+
+      user-select:none;
+
+      pointer-events:none;
+    }
+
+
+    /* =========================================================
+       PROFILE FRAME
+    ========================================================= */
+
+    .profile-frame{
+      position:absolute;
+      z-index:10;
+
+      left:var(--profile-left);
+      top:var(--profile-top);
+
+      width:var(--profile-size);
+      aspect-ratio:1 / 1;
+
+      margin:0;
+      padding:0;
+
+      border-radius:50%;
+
+      overflow:hidden;
+
+      background:#dcecff;
+
+      pointer-events:none;
+    }
+
+
+    .profile-photo{
+      position:absolute;
+
+      inset:0;
+
+      display:block;
+
+      width:100%;
+      height:100%;
+
+      margin:0;
+      padding:0;
+
+      border:0;
+      border-radius:50%;
+
+      object-fit:cover;
+      object-position:50% 50%;
+
+      background:#dcecff;
+    }
+
+
+    /* =========================================================
+       DATA BOX
+       ทุกข้อมูลจะอยู่กึ่งกลางกรอบเสมอ
+    ========================================================= */
+
+    .data-box{
+      position:absolute;
+      z-index:15;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      margin:0;
+      padding:0;
+
+      overflow:hidden;
+
+      background:transparent;
+
+      pointer-events:none;
+
+      container-type:inline-size;
+    }
+
+
+    .data-value{
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      width:100%;
+      height:100%;
+
+      margin:0;
+      padding:0 2%;
+
+      color:#06276c;
+
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+
+      font-weight:900;
+
+      line-height:1;
+
+      text-align:center;
+
+      white-space:nowrap;
+
+      font-variant-numeric:
+        tabular-nums;
+
+      font-size:
+        clamp(
+          6px,
+          11cqw,
+          28px
+        );
+    }
+
+
+    /* =========================================================
+       LARGE VALUE
+    ========================================================= */
+
+    .data-weight{
+      font-size:
+        clamp(
+          13px,
+          16cqw,
+          44px
+        );
+
+      letter-spacing:-0.03em;
+    }
+
+
+    /* =========================================================
+       SMALL VALUE
+    ========================================================= */
+
+    .data-small{
+      font-size:
+        clamp(
+          6px,
+          10cqw,
+          16px
+        );
+    }
+
+
+    /* =========================================================
+       COLOR
+    ========================================================= */
+
+    .red{
+      color:#d20d0d;
+    }
+
+    .white{
+      color:#fff;
+
+      text-shadow:
+        0 2px 4px
+        rgba(0,0,0,.35);
+    }
+
+
+    /* =========================================================
+       DATA POSITIONS
+    ========================================================= */
+
+    .coin-box{
+      left:var(--coin-left);
+      top:var(--coin-top);
+
+      width:var(--coin-width);
+      height:var(--coin-height);
+    }
+
+
+    .energy-box{
+      left:var(--energy-left);
+      top:var(--energy-top);
+
+      width:var(--energy-width);
+      height:var(--energy-height);
+    }
+
+
+    .level-box{
+      left:var(--level-left);
+      top:var(--level-top);
+
+      width:var(--level-width);
+      height:var(--level-height);
+    }
+
+
+    .exptext-box{
+      left:var(--exptext-left);
+      top:var(--exptext-top);
+
+      width:var(--exptext-width);
+      height:var(--exptext-height);
+    }
+
+
+    .current-box{
+      left:var(--current-left);
+      top:var(--current-top);
+
+      width:var(--current-width);
+      height:var(--current-height);
+    }
+
+
+    .updated-box{
+      left:var(--updated-left);
+      top:var(--updated-top);
+
+      width:var(--updated-width);
+      height:var(--updated-height);
+    }
+
+
+    .target-box{
+      left:var(--target-left);
+      top:var(--target-top);
+
+      width:var(--target-width);
+      height:var(--target-height);
+    }
+
+
+    .remaining-box{
+      left:var(--remaining-left);
+      top:var(--remaining-top);
+
+      width:var(--remaining-width);
+      height:var(--remaining-height);
+    }
+
+
+    .lost-box{
+      left:var(--lost-left);
+      top:var(--lost-top);
+
+      width:var(--lost-width);
+      height:var(--lost-height);
+    }
+
+
+    .startdate-box{
+      left:var(--startdate-left);
+      top:var(--startdate-top);
+
+      width:var(--startdate-width);
+      height:var(--startdate-height);
+    }
+
+
+    /* =========================================================
+       EXP BAR
+    ========================================================= */
+
+    .exp-track{
+      position:absolute;
+      z-index:15;
+
+      left:var(--expbar-left);
+      top:var(--expbar-top);
+
+      width:var(--expbar-width);
+      height:var(--expbar-height);
+
+      overflow:hidden;
+
+      border-radius:999px;
+
+      background:#d7e5f6;
+
+      pointer-events:none;
+    }
+
+
+    #expBar{
+      width:0%;
+      height:100%;
+
+      border-radius:inherit;
+
+      background:
+        linear-gradient(
+          90deg,
+          #15a2ff,
+          #0b52d1
+        );
+
+      transition:
+        width .6s ease;
+    }
+
+
+    /* =========================================================
+       HOTSPOT
+    ========================================================= */
+
+    .hotspot{
+      position:absolute;
+      z-index:30;
+
+      margin:0;
+      padding:0;
+
+      border:0;
+
+      outline:0;
+
+      background:transparent;
+
+      cursor:pointer;
+
+      touch-action:manipulation;
+
+      -webkit-tap-highlight-color:
+        transparent;
+    }
+
+
+    .hotspot:active{
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .08
+        );
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    #status{
+      display:none;
+    }
+
+
+    #status.show{
+      position:fixed;
+      z-index:99999;
+
+      left:50%;
+      bottom:18px;
+
+      transform:
+        translateX(-50%);
+
+      display:block;
+
+      max-width:90vw;
+
+      padding:
+        10px
+        18px;
+
+      border-radius:999px;
+
+      background:#0755b7;
+
+      color:#fff;
+
+      font-size:14px;
+      font-weight:800;
+
+      text-align:center;
+
+      box-shadow:
+        0 6px 18px
+        rgba(0,0,0,.18);
+    }
+
+
+    #status.error{
+      background:#c62828;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media(max-width:600px){
+
+      .data-value{
+        text-shadow:none;
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
 <body>
 
-<div
-  class="stage"
-  id="stage"
->
+
+<div id="homeStage">
+
 
   <!-- =====================================================
        TEMPLATE
@@ -46,37 +604,35 @@
   >
 
 
- <!-- =====================================================
-     PROFILE
-====================================================== -->
-
-<div class="profile-frame">
-
-  <img
-    id="profileImage"
-    class="profile-photo"
-    alt="LINE Profile"
-    draggable="false"
-  >
-
-</div>
-
   <!-- =====================================================
-       ROCK COIN
+       PROFILE
   ====================================================== -->
 
-  <div
-    id="coin"
-    class="overlay live-number live-blue"
-    style="
-      left:76.6%;
-      top:4.4%;
-      width:7.4%;
-      height:5.1%;
-      font-size:clamp(11px,1.6vw,28px);
-    "
-  >
-    --
+  <div class="profile-frame">
+
+    <img
+      id="profileImage"
+      class="profile-photo"
+      alt="LINE Profile"
+      draggable="false"
+    >
+
+  </div>
+
+
+  <!-- =====================================================
+       COIN
+  ====================================================== -->
+
+  <div class="data-box coin-box">
+
+    <span
+      id="coin"
+      class="data-value"
+    >
+      0
+    </span>
+
   </div>
 
 
@@ -84,18 +640,15 @@
        ENERGY
   ====================================================== -->
 
-  <div
-    id="energy"
-    class="overlay live-number live-blue"
-    style="
-      left:88.9%;
-      top:4.4%;
-      width:9.1%;
-      height:5.1%;
-      font-size:clamp(10px,1.4vw,25px);
-    "
-  >
-    -- / --
+  <div class="data-box energy-box">
+
+    <span
+      id="energy"
+      class="data-value"
+    >
+      0 / 200
+    </span>
+
   </div>
 
 
@@ -103,43 +656,25 @@
        LEVEL
   ====================================================== -->
 
-  <div
-  id="level"
-  class="overlay live-white"
-  style="
-    left:23.5%;
-    top:55.0%;
-    width:6.3%;
-    height:4.2%;
-    font-size:clamp(10px,1.35vw,22px);
-    font-weight:1000;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-  "
->
-  Lv.1
-</div>
+  <div class="data-box level-box">
+
+    <span
+      id="level"
+      class="data-value white"
+    >
+      Lv.1
+    </span>
+
+  </div>
+
 
   <!-- =====================================================
        EXP BAR
   ====================================================== -->
 
-  <div
-    class="live-track"
-    style="
-      left:8.8%;
-      top:75.2%;
-      width:13.7%;
-      height:1.7%;
-    "
-  >
+  <div class="exp-track">
 
-    <div
-      id="expBar"
-      class="live-fill exp-fill"
-    ></div>
+    <div id="expBar"></div>
 
   </div>
 
@@ -148,18 +683,15 @@
        EXP TEXT
   ====================================================== -->
 
-  <div
-    id="expText"
-    class="overlay live-number live-blue"
-    style="
-      left:22.2%;
-      top:76.1%;
-      width:8.5%;
-      height:4.1%;
-      font-size:clamp(8px,1.05vw,18px);
-    "
-  >
-    0 / 500
+  <div class="data-box exptext-box">
+
+    <span
+      id="expText"
+      class="data-value"
+    >
+      0 / 500
+    </span>
+
   </div>
 
 
@@ -167,38 +699,31 @@
        CURRENT WEIGHT
   ====================================================== -->
 
-  <div
-  id="currentWeight"
-  class="overlay live-number live-blue"
-  style="
-    left:43.0%;
-    top:25.4%;
-    width:12.0%;
-    height:5.5%;
-    font-size:clamp(20px,2.8vw,43px);
-    font-weight:1000;
-  "
->
-  --.- kg
-</div>
+  <div class="data-box current-box">
+
+    <span
+      id="currentWeight"
+      class="data-value data-weight"
+    >
+      --.- kg
+    </span>
+
+  </div>
 
 
   <!-- =====================================================
        UPDATED DATE
   ====================================================== -->
 
-  <div
-    id="updatedAt"
-    class="overlay live-blue"
-    style="
-      left:44.7%;
-      top:37.4%;
-      width:8.6%;
-      height:2.7%;
-      font-size:clamp(7px,.9vw,14px);
-    "
-  >
-    --/--/----
+  <div class="data-box updated-box">
+
+    <span
+      id="updatedAt"
+      class="data-value data-small"
+    >
+      --/--/----
+    </span>
+
   </div>
 
 
@@ -206,100 +731,89 @@
        TARGET WEIGHT
   ====================================================== -->
 
-  <div
-  id="targetWeight"
-  class="overlay live-number live-red"
-  style="
-    left:43.0%;
-    top:52.3%;
-    width:12.0%;
-    height:5.5%;
-    font-size:clamp(20px,2.8vw,43px);
-    font-weight:1000;
-  "
->
-  --.- kg
-</div>
+  <div class="data-box target-box">
+
+    <span
+      id="targetWeight"
+      class="data-value data-weight red"
+    >
+      --.- kg
+    </span>
+
+  </div>
 
 
   <!-- =====================================================
        REMAINING
   ====================================================== -->
 
-  <div
-    id="remaining"
-    class="overlay live-number live-red"
-    style="
-      left:44.1%;
-      top:64.7%;
-      width:8.8%;
-      height:2.6%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    --.- kg
+  <div class="data-box remaining-box">
+
+    <span
+      id="remaining"
+      class="data-value data-small red"
+    >
+      --.- kg
+    </span>
+
   </div>
 
 
   <!-- =====================================================
-       LOST / CHANGE
+       LOST
   ====================================================== -->
 
-  <div
-  id="lost"
-  class="overlay live-number live-blue"
-  style="
-    left:36.3%;
-    top:77.7%;
-    width:8.2%;
-    height:2.6%;
-    font-size:clamp(7px,.95vw,15px);
-  "
->
-  --.- kg
-</div>
+  <div class="data-box lost-box">
+
+    <span
+      id="lost"
+      class="data-value data-small"
+    >
+      --.- kg
+    </span>
+
+  </div>
+
 
   <!-- =====================================================
        START DATE
   ====================================================== -->
 
-  <div
-    id="startDate"
-    class="overlay live-number live-blue"
-    style="
-      left:49.1%;
-      top:76.7%;
-      width:6.5%;
-      height:2.4%;
-      font-size:clamp(7px,.85vw,13px);
-    "
-  >
-    --/--/----
+  <div class="data-box startdate-box">
+
+    <span
+      id="startDate"
+      class="data-value data-small"
+    >
+      --/--/----
+    </span>
+
   </div>
 
 
-
   <!-- =====================================================
-       HOTSPOTS
+       WEIGHT CHECK
   ====================================================== -->
 
-  <!-- WEIGHT CHECK -->
-  <button
-  class="hotspot"
-  style="
-    left:59.4%;
-    top:16.1%;
-    width:18.7%;
-    height:30.9%;
-  "
-  onclick="window.location.href='./weight-check.html'"
-  aria-label="Weight Check"
-></button>
-
-  <!-- PROGRESS -->
   <button
     class="hotspot"
-    type="button"
+    style="
+      left:59.4%;
+      top:16.1%;
+      width:18.7%;
+      height:30.9%;
+    "
+    onclick="goPage('WEIGHT')"
+    aria-label="Weight Check"
+  ></button>
+
+
+  <!-- =====================================================
+       PROGRESS
+  ====================================================== -->
+
+  <button
+    class="hotspot"
     style="
       left:79.1%;
       top:16.1%;
@@ -311,10 +825,12 @@
   ></button>
 
 
-  <!-- RANKING -->
+  <!-- =====================================================
+       RANKING
+  ====================================================== -->
+
   <button
     class="hotspot"
-    type="button"
     style="
       left:59.4%;
       top:49.4%;
@@ -326,10 +842,12 @@
   ></button>
 
 
-  <!-- REWARDS -->
+  <!-- =====================================================
+       REWARDS
+  ====================================================== -->
+
   <button
     class="hotspot"
-    type="button"
     style="
       left:79.1%;
       top:49.4%;
@@ -341,25 +859,29 @@
   ></button>
 
 
-  <!-- HOME -->
+  <!-- =====================================================
+       HOME
+  ====================================================== -->
+
   <button
     class="hotspot"
-    type="button"
     style="
       left:1.4%;
       top:83.2%;
       width:31.5%;
       height:14.5%;
     "
-    onclick="reloadHome()"
+    onclick="window.location.reload()"
     aria-label="Home"
   ></button>
 
 
-  <!-- MISSION -->
+  <!-- =====================================================
+       MISSION
+  ====================================================== -->
+
   <button
     class="hotspot"
-    type="button"
     style="
       left:33.7%;
       top:83.2%;
@@ -371,10 +893,12 @@
   ></button>
 
 
-  <!-- BATTLE -->
+  <!-- =====================================================
+       BATTLE
+  ====================================================== -->
+
   <button
     class="hotspot"
-    type="button"
     style="
       left:66.5%;
       top:83.2%;
@@ -385,32 +909,52 @@
     aria-label="Battle"
   ></button>
 
+
 </div>
 
 
-<!-- =====================================================
-     STATUS
-====================================================== -->
-
-<div
-  id="status"
-  class="status"
-></div>
+<div id="status"></div>
 
 
-<!-- SHARED LOGIC -->
+<!-- =========================================================
+     COMMON
+========================================================= -->
+
 <script src="./common.js"></script>
 
 
 <script>
 
-/* =========================================================
-   ELEMENT
-========================================================= */
+const ROCK =
+  window.ROCK;
+
 
 const $ =
   id =>
     document.getElementById(id);
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function goPage(
+  pageName
+){
+
+  const url =
+    ROCK?.CFG?.PAGE?.[
+      pageName
+    ];
+
+
+  if(!url){
+    return;
+  }
+
+
+  ROCK.go(url);
+}
 
 
 /* =========================================================
@@ -420,13 +964,13 @@ const $ =
 function showStatus(
   message,
   error = false
-) {
+){
 
   const status =
     $("status");
 
 
-  if (!status) {
+  if(!status){
     return;
   }
 
@@ -437,59 +981,52 @@ function showStatus(
 
   status.className =
     error
-      ? "status show error"
-      : "status show";
+      ? "show error"
+      : "show";
 }
 
 
-function hideStatus() {
+function hideStatus(){
 
   const status =
     $("status");
 
 
-  if (status) {
+  if(status){
     status.className =
-      "status";
+      "";
   }
 }
 
 
 /* =========================================================
-   PAGE
+   NUMBER
 ========================================================= */
 
-function goPage(
-  pageName
-) {
+function num(
+  value,
+  fallback = 0
+){
 
-  const url =
-    ROCK.CFG.PAGE[
-      pageName
-    ];
-
-
-  if (url) {
-    ROCK.go(url);
-  }
-}
+  const n =
+    Number(value);
 
 
-function reloadHome() {
-
-  window.location.reload();
+  return Number.isFinite(n)
+    ? n
+    : fallback;
 }
 
 
 /* =========================================================
-   FORMAT DATE ONLY
+   DATE
 ========================================================= */
 
 function formatDateOnly(
   value
-) {
+){
 
-  if (!value) {
+  if(!value){
     return "--/--/----";
   }
 
@@ -498,11 +1035,11 @@ function formatDateOnly(
     new Date(value);
 
 
-  if (
+  if(
     Number.isNaN(
       date.getTime()
     )
-  ) {
+  ){
     return "--/--/----";
   }
 
@@ -511,59 +1048,61 @@ function formatDateOnly(
     .toLocaleDateString(
       "th-TH",
       {
-        day:
-          "2-digit",
-
-        month:
-          "2-digit",
-
-        year:
-          "numeric"
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
       }
     );
 }
 
 
 /* =========================================================
-   NORMALIZE DASHBOARD
+   NORMALIZE
 ========================================================= */
 
 function normalizeDashboard(
   raw
-) {
+){
+
+  raw =
+    raw || {};
+
 
   const user =
-    raw?.user ||
-    raw?.player ||
+    raw.user ||
+    raw.player ||
     {};
 
 
   const weight =
-    raw?.weight ||
-    {};
+    raw.weight &&
+    typeof raw.weight ===
+      "object"
+      ? raw.weight
+      : {};
 
 
   const energy =
-    raw?.energy &&
+    raw.energy &&
     typeof raw.energy ===
       "object"
       ? raw.energy
       : {};
 
 
-  /* -----------------------------------------------------
+  /* =====================================================
      EXP
-  ------------------------------------------------------ */
+  ====================================================== */
 
   let totalExp =
-    raw?.exp;
+    raw.exp;
 
 
-  if (
+  if(
     totalExp &&
     typeof totalExp ===
       "object"
-  ) {
+  ){
 
     totalExp =
       totalExp.total ??
@@ -573,173 +1112,177 @@ function normalizeDashboard(
 
 
   totalExp =
-    ROCK.num(
+    num(
       totalExp ??
       user.exp,
       0
     );
 
 
-  const expPerLevel =
-    ROCK.num(
-      ROCK.CFG.EXP_PER_LEVEL,
-      500
-    );
-
-
-  const level =
-    Math.floor(
-      totalExp /
-      expPerLevel
-    ) + 1;
-
-
- /* -----------------------------------------------------
-   WEIGHT
------------------------------------------------------- */
-
-const currentWeight =
-  weight.current ??
-  weight.currentWeight ??
-  weight.current_weight ??
-  raw?.currentWeight ??
-  raw?.current_weight ??
-  user?.currentWeight ??
-  user?.current_weight ??
-  null;
-
-
-const targetWeight =
-  weight.target ??
-  weight.targetWeight ??
-  weight.target_weight ??
-  raw?.targetWeight ??
-  raw?.target_weight ??
-  user?.targetWeight ??
-  user?.target_weight ??
-  null;
-
-
-const startWeight =
-  weight.start ??
-  weight.startWeight ??
-  weight.start_weight ??
-  raw?.startWeight ??
-  raw?.start_weight ??
-  user?.startWeight ??
-  user?.start_weight ??
-  null;
-
-
-const updatedAt =
-  weight.updatedAt ??
-  weight.updated_at ??
-  weight.lastRecordedAt ??
-  weight.last_recorded_at ??
-  raw?.weightUpdatedAt ??
-  raw?.weight_updated_at ??
-  raw?.updatedAt ??
-  raw?.updated_at ??
-  user?.weightUpdatedAt ??
-  user?.weight_updated_at ??
-  user?.updatedAt ??
-  user?.updated_at ??
-  null;
-
-
-const startDate =
-  weight.startDate ??
-  weight.start_date ??
-  raw?.startDate ??
-  raw?.start_date ??
-  user?.startDate ??
-  user?.start_date ??
-  null;
-
-
-  /* -----------------------------------------------------
-     USER
-  ------------------------------------------------------ */
-
-  const picture =
-  user?.pictureUrl ??
-  user?.picture_url ??
-  raw?.pictureUrl ??
-  raw?.picture_url ??
-  "";
-
-
-  /* -----------------------------------------------------
-     COIN
-  ------------------------------------------------------ */
-
-  const coin =
-    ROCK.num(
-      raw?.rockCoin ??
-      raw?.rock_coin ??
-      user.rock_coin,
-      0
-    );
-
-
-  /* -----------------------------------------------------
-     ENERGY
-  ------------------------------------------------------ */
-
-  const currentEnergy =
-    ROCK.num(
-      energy.current ??
-      user.energy,
-      0
-    );
-
-
-  const maxEnergy =
-    ROCK.num(
-      energy.max ??
-      user.max_energy,
-      ROCK.CFG.MAX_ENERGY
-    );
-
+  /* =====================================================
+     RETURN
+  ====================================================== */
 
   return {
 
-    picture,
+    picture:
+      user.pictureUrl ??
+      user.picture_url ??
+      raw.pictureUrl ??
+      raw.picture_url ??
+      "",
 
-    coin,
-
-    energy:
-      currentEnergy,
-
-    maxEnergy,
 
     exp:
       totalExp,
 
-    expPerLevel,
 
-    level,
+    coin:
+      num(
+        raw.rockCoin ??
+        raw.rock_coin ??
+        user.rockCoin ??
+        user.rock_coin,
+        0
+      ),
 
-    currentWeight,
 
-    targetWeight,
+    energy:
+      num(
+        energy.current ??
+        raw.energyCurrent ??
+        user.energy,
+        0
+      ),
 
-    startWeight,
 
-    updatedAt,
+    maxEnergy:
+      num(
+        energy.max ??
+        raw.maxEnergy ??
+        user.max_energy ??
+        user.maxEnergy,
+        ROCK.CFG.MAX_ENERGY ||
+        200
+      ),
 
-    startDate
+
+    currentWeight:
+      weight.current ??
+      weight.currentWeight ??
+      weight.current_weight ??
+      raw.currentWeight ??
+      raw.current_weight ??
+      user.currentWeight ??
+      user.current_weight ??
+      null,
+
+
+    targetWeight:
+      weight.target ??
+      weight.targetWeight ??
+      weight.target_weight ??
+      raw.targetWeight ??
+      raw.target_weight ??
+      user.targetWeight ??
+      user.target_weight ??
+      null,
+
+
+    startWeight:
+      weight.start ??
+      weight.startWeight ??
+      weight.start_weight ??
+      raw.startWeight ??
+      raw.start_weight ??
+      user.startWeight ??
+      user.start_weight ??
+      null,
+
+
+    updatedAt:
+      weight.updatedAt ??
+      weight.updated_at ??
+      weight.lastRecordedAt ??
+      weight.last_recorded_at ??
+      raw.weightUpdatedAt ??
+      raw.weight_updated_at ??
+      raw.updatedAt ??
+      raw.updated_at ??
+      user.weightUpdatedAt ??
+      user.weight_updated_at ??
+      user.updatedAt ??
+      user.updated_at ??
+      null,
+
+
+    startDate:
+      weight.startDate ??
+      weight.start_date ??
+      raw.startDate ??
+      raw.start_date ??
+      user.startDate ??
+      user.start_date ??
+      null
+
   };
 }
 
 
 /* =========================================================
-   RENDER
+   PROFILE
+========================================================= */
+
+function renderProfile(
+  url
+){
+
+  const image =
+    $("profileImage");
+
+
+  if(!image){
+    return;
+  }
+
+
+  if(!url){
+
+    image.style.display =
+      "none";
+
+    return;
+  }
+
+
+  image.onload =
+    function(){
+
+      image.style.display =
+        "block";
+    };
+
+
+  image.onerror =
+    function(){
+
+      image.style.display =
+        "none";
+    };
+
+
+  image.src =
+    url;
+}
+
+
+/* =========================================================
+   RENDER HOME
 ========================================================= */
 
 function renderHome(
   raw
-) {
+){
 
   const p =
     normalizeDashboard(
@@ -751,22 +1294,11 @@ function renderHome(
      PROFILE
   ====================================================== */
 
-  const profile =
-  document.getElementById("profileImage");
+  renderProfile(
+    p.picture
+  );
 
-if (profile) {
 
-  if (p.picture) {
-
-    profile.src =
-      p.picture;
-
-  } else {
-
-    profile.src =
-      "./default-profile.png";
-  }
-}
   /* =====================================================
      COIN
   ====================================================== */
@@ -791,92 +1323,105 @@ if (profile) {
     );
 
 
- /* =====================================================
-   LEVEL + EXP
-===================================================== */
+  /* =====================================================
+     LEVEL + EXP
 
-const EXP_PER_LEVEL =
-  Number(ROCK.CFG.EXP_PER_LEVEL || 500);
+     0 - 499      = Lv.1
+     500 - 999    = Lv.2
+     1000 - 1499  = Lv.3
+  ====================================================== */
 
-const totalExp =
-  Math.max(
-    0,
-    Number(p.exp || 0)
-  );
+  const expPerLevel =
+    num(
+      ROCK.CFG.EXP_PER_LEVEL,
+      500
+    );
 
-/*
-  0 - 499   = Lv.1
-  500 - 999 = Lv.2
-  1000-1499 = Lv.3
-*/
-const level =
-  Math.floor(
-    totalExp / EXP_PER_LEVEL
-  ) + 1;
 
-/*
-  EXP ภายใน Level ปัจจุบัน
-*/
-const expInLevel =
-  totalExp % EXP_PER_LEVEL;
-
-/*
-  %
-*/
-const expPercent =
-  EXP_PER_LEVEL > 0
-    ? Math.max(
-        0,
-        Math.min(
-          100,
-          (
-            expInLevel /
-            EXP_PER_LEVEL
-          ) * 100
-        )
+  const totalExp =
+    Math.max(
+      0,
+      num(
+        p.exp,
+        0
       )
-    : 0;
+    );
 
 
-/* LEVEL */
-
-$("level").textContent =
-  "Lv." + level;
-
-
-/* EXP TEXT */
-
-$("expText").textContent =
-  ROCK.fmtInt(expInLevel) +
-  " / " +
-  ROCK.fmtInt(EXP_PER_LEVEL);
+  const level =
+    Math.floor(
+      totalExp /
+      expPerLevel
+    ) + 1;
 
 
-/* EXP BAR */
+  const expInLevel =
+    totalExp %
+    expPerLevel;
 
-$("expBar").style.width =
-  expPercent + "%";
+
+  const expPercent =
+    expPerLevel > 0
+      ? Math.max(
+          0,
+          Math.min(
+            100,
+            (
+              expInLevel /
+              expPerLevel
+            ) *
+            100
+          )
+        )
+      : 0;
+
+
+  $("level").textContent =
+    "Lv." +
+    level;
+
+
+  $("expText").textContent =
+    ROCK.fmtInt(
+      expInLevel
+    ) +
+    " / " +
+    ROCK.fmtInt(
+      expPerLevel
+    );
+
+
+  $("expBar").style.width =
+    expPercent +
+    "%";
+
 
   /* =====================================================
      CURRENT WEIGHT
   ====================================================== */
 
-  $("currentWeight").textContent =
-  ROCK.fmtWeight(
-    p.currentWeight
-  ) + " kg";
+  $("currentWeight")
+    .textContent =
+      ROCK.fmtWeight(
+        p.currentWeight
+      ) +
+      " kg";
+
 
   /* =====================================================
-     TARGET
+     TARGET WEIGHT
   ====================================================== */
 
- $("targetWeight").textContent =
-  ROCK.fmtWeight(
-    p.targetWeight
-  ) + " kg";
+  $("targetWeight")
+    .textContent =
+      ROCK.fmtWeight(
+        p.targetWeight
+      ) +
+      " kg";
+
 
   /* =====================================================
-     UPDATED DATE
+     DATES
   ====================================================== */
 
   $("updatedAt")
@@ -885,10 +1430,6 @@ $("expBar").style.width =
         p.updatedAt
       );
 
-
-  /* =====================================================
-     START DATE
-  ====================================================== */
 
   $("startDate")
     .textContent =
@@ -913,25 +1454,26 @@ $("expBar").style.width =
     );
 
 
-  if (
+  if(
     Number.isFinite(
       current
     ) &&
     Number.isFinite(
       target
     )
-  ) {
+  ){
 
     $("remaining")
       .textContent =
-        Math.abs(
+        Math.max(
+          0,
           current -
           target
         )
         .toFixed(1) +
         " kg";
 
-  } else {
+  }else{
 
     $("remaining")
       .textContent =
@@ -940,7 +1482,7 @@ $("expBar").style.width =
 
 
   /* =====================================================
-     LOST / CHANGE
+     LOST
   ====================================================== */
 
   const start =
@@ -949,25 +1491,26 @@ $("expBar").style.width =
     );
 
 
-  if (
+  if(
     Number.isFinite(
       start
     ) &&
     Number.isFinite(
       current
     )
-  ) {
+  ){
 
     $("lost")
       .textContent =
-        Math.abs(
+        Math.max(
+          0,
           start -
           current
         )
         .toFixed(1) +
         " kg";
 
-  } else {
+  }else{
 
     $("lost")
       .textContent =
@@ -984,9 +1527,9 @@ let loading =
   false;
 
 
-async function loadHome() {
+async function loadHome(){
 
-  if (loading) {
+  if(loading){
     return;
   }
 
@@ -995,7 +1538,7 @@ async function loadHome() {
     true;
 
 
-  try {
+  try{
 
     const raw =
       await ROCK.fetchDashboard();
@@ -1015,9 +1558,7 @@ async function loadHome() {
     hideStatus();
 
 
-  } catch (
-    error
-  ) {
+  }catch(error){
 
     console.error(
       "HOME LOAD ERROR:",
@@ -1025,44 +1566,14 @@ async function loadHome() {
     );
 
 
-    const message =
-      error?.message ||
-      String(error);
-
-
-    if (
-      message
-        .toLowerCase()
-        .includes("token") ||
-      message
-        .toLowerCase()
-        .includes(
-          "authentication"
-        )
-    ) {
-
-      showStatus(
-        "LINE Session หมดอายุ กำลังเข้าสู่ระบบใหม่..."
-      );
-
-
-      setTimeout(
-        ROCK.loginAgain,
-        500
-      );
-
-
-      return;
-    }
-
-
     showStatus(
-      message,
+      error?.message ||
+      String(error),
       true
     );
 
 
-  } finally {
+  }finally{
 
     loading =
       false;
@@ -1074,9 +1585,17 @@ async function loadHome() {
    START
 ========================================================= */
 
-(async () => {
+(async()=>{
 
-  try {
+  try{
+
+    if(!ROCK){
+
+      throw new Error(
+        "common.js โหลดไม่สำเร็จ"
+      );
+    }
+
 
     showStatus(
       "กำลังเชื่อมต่อ LINE..."
@@ -1089,7 +1608,7 @@ async function loadHome() {
       );
 
 
-    if (!ok) {
+    if(!ok){
       return;
     }
 
@@ -1097,36 +1616,26 @@ async function loadHome() {
     await loadHome();
 
 
-    /* ---------------------------------------------------
-       REFRESH
-    ---------------------------------------------------- */
-
-    const refreshMs =
-      ROCK.num(
-        ROCK.CFG.REFRESH_MS,
-        30000
-      );
-
-
     setInterval(
-      function () {
+      function(){
 
-        if (
+        if(
           document.visibilityState ===
           "visible"
-        ) {
+        ){
 
           loadHome();
         }
 
       },
-      refreshMs
+      num(
+        ROCK.CFG.REFRESH_MS,
+        30000
+      )
     );
 
 
-  } catch (
-    error
-  ) {
+  }catch(error){
 
     console.error(
       "HOME START ERROR:",
@@ -1150,15 +1659,15 @@ async function loadHome() {
 
 document.addEventListener(
   "visibilitychange",
-  function () {
+  function(){
 
-    if (
+    if(
       document.visibilityState ===
-      "visible" &&
+        "visible" &&
       typeof liff !==
-      "undefined" &&
+        "undefined" &&
       liff.isLoggedIn()
-    ) {
+    ){
 
       loadHome();
     }
@@ -1168,13 +1677,13 @@ document.addEventListener(
 
 window.addEventListener(
   "pageshow",
-  function () {
+  function(){
 
-    if (
+    if(
       typeof liff !==
-      "undefined" &&
+        "undefined" &&
       liff.isLoggedIn()
-    ) {
+    ){
 
       loadHome();
     }
@@ -1183,6 +1692,6 @@ window.addEventListener(
 
 </script>
 
-</body>
 
+</body>
 </html>
