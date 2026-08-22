@@ -1519,3 +1519,126 @@ textarea{
 
   transform:none;
 }
+/* =========================================================
+   ROCK YOUR BODY 2026
+   HOME PROFILE - FINAL CLEAN VERSION
+========================================================= */
+
+
+/* =========================================================
+   PROFILE SETTINGS
+   แก้ตำแหน่งจาก 3 ค่านี้เท่านั้น
+
+   LEFT เพิ่ม = ไปขวา
+   TOP เพิ่ม  = ลง
+   SIZE เพิ่ม = รูปใหญ่ขึ้น
+========================================================= */
+
+#homeStage{
+  --profile-left:7.7%;
+  --profile-top:18.3%;
+  --profile-size:23.6%;
+}
+
+
+/* =========================================================
+   PROFILE FRAME
+========================================================= */
+
+#homeStage .profile-frame{
+  position:absolute;
+
+  z-index:20;
+
+  left:var(--profile-left);
+  top:var(--profile-top);
+
+  width:var(--profile-size);
+
+  /*
+    ทำให้กรอบเป็นสี่เหลี่ยมจัตุรัสเสมอ
+    ก่อนถูกตัดเป็นวงกลม
+  */
+  aspect-ratio:1 / 1;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+
+  border-radius:50%;
+
+  overflow:hidden;
+
+  background:transparent;
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   LINE PROFILE IMAGE
+========================================================= */
+
+#homeStage .profile-photo{
+  position:absolute;
+
+  inset:0;
+
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  max-width:none;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+
+  border-radius:50%;
+
+  /*
+    ให้รูปเต็มวงกลม
+    ไม่ยืด ไม่บีบ
+  */
+  object-fit:cover;
+
+  /*
+    จัดจุดกึ่งกลางของรูป
+  */
+  object-position:50% 50%;
+
+  transform:none;
+
+  background:transparent;
+}
+
+
+/* =========================================================
+   MOBILE / TABLET
+   ไม่ต้องปรับตำแหน่งใหม่
+   เพราะทุกอย่างใช้ % ตาม Template
+========================================================= */
+
+@media (max-width:900px){
+
+  #homeStage .profile-frame{
+    left:var(--profile-left);
+    top:var(--profile-top);
+    width:var(--profile-size);
+  }
+
+}
+
+
+@media (max-width:600px){
+
+  #homeStage .profile-frame{
+    left:var(--profile-left);
+    top:var(--profile-top);
+    width:var(--profile-size);
+  }
+
+}
