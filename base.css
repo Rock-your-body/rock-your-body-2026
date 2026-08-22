@@ -1329,7 +1329,7 @@ textarea{
     width .6s ease;
 }
 /* =========================================================
-   HOME PROFILE - FINAL
+   HOME PROFILE FRAME
 ========================================================= */
 
 .profile-frame{
@@ -1337,13 +1337,14 @@ textarea{
   z-index:20;
 
   /*
-    ตำแหน่งกรอบบน Template
+    ตำแหน่งบน template
+    ใช้ % เพื่อให้ responsive ตาม stage
   */
-  left:7%;
+  left:7.0%;
   top:18.2%;
 
   /*
-    กรอบจะย่อ/ขยายตาม Template อัตโนมัติ
+    ขนาดกรอบ
   */
   width:24.8%;
   aspect-ratio:1 / 1;
@@ -1352,26 +1353,42 @@ textarea{
   padding:0;
 
   border-radius:50%;
+
   overflow:hidden;
 
   background:#dcecff;
 
+  /*
+    วงขอบสีขาว + ฟ้า
+  */
   border:
-    clamp(2px,.35vw,6px)
-    solid #fff;
+    clamp(2px,.45vw,7px)
+    solid
+    #ffffff;
+
+  outline:
+    clamp(1px,.22vw,4px)
+    solid
+    #63b5ff;
+
+  outline-offset:
+    clamp(1px,.12vw,3px);
 
   box-shadow:
-    0 0 0 clamp(1px,.15vw,3px) #63b5ff,
-    0 5px 15px rgba(0,79,190,.25);
+    0 5px 16px
+    rgba(0,79,190,.28);
 
   pointer-events:none;
 }
 
 
-/* รูปจาก LINE */
+/* =========================================================
+   LINE PROFILE IMAGE
+========================================================= */
 
 .profile-photo{
   position:absolute;
+
   inset:0;
 
   display:block;
@@ -1379,14 +1396,59 @@ textarea{
   width:100%;
   height:100%;
 
+  max-width:none;
+
   margin:0;
   padding:0;
 
   border:0;
   border-radius:50%;
 
+  /*
+    สำคัญที่สุด
+    ขยายภาพให้เต็มวงกลม
+  */
   object-fit:cover;
-  object-position:center;
+
+  /*
+    ให้ภาพอยู่กึ่งกลาง
+  */
+  object-position:50% 50%;
+
+  background:#dcecff;
 
   transform:none;
+
+  opacity:1;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ไม่ต้องกำหนดขนาดใหม่ตามมือถือ
+   เพราะ stage/template ย่อพร้อมกัน
+========================================================= */
+
+@media(max-width:900px){
+
+  .profile-frame{
+    left:7.0%;
+    top:18.2%;
+    width:24.8%;
+  }
+
+}
+
+
+@media(max-width:600px){
+
+  .profile-frame{
+    left:7.0%;
+    top:18.2%;
+    width:24.8%;
+
+    border-width:
+      clamp(2px,.45vw,5px);
+  }
+
 }
