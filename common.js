@@ -7,464 +7,183 @@ window.ROCK = (() => {
   }
 
 
-  /* ======================================================
+  /* =========================================================
      NAVIGATION
-  ====================================================== */
+  ========================================================= */
 
   function go(url) {
-
-    if (!url) {
-      return;
-    }
-
+    if (!url) return;
     window.location.href = url;
   }
 
 
-  /* ======================================================
+  /* =========================================================
      LIFF ID
-  ====================================================== */
+  ========================================================= */
 
   function getLiffId(page = "DASHBOARD") {
 
-    const pageName =
-      String(page)
-        .toUpperCase();
+    const name =
+      String(page).toUpperCase();
 
-    if (
-      pageName === "WEIGHT" &&
-      CFG.LIFF_ID?.WEIGHT
-    ) {
+    if (name === "WEIGHT") {
       return CFG.LIFF_ID.WEIGHT;
     }
 
-    if (CFG.LIFF_ID?.DASHBOARD) {
-      return CFG.LIFF_ID.DASHBOARD;
-    }
-
-    throw new Error(
-      "ไม่พบ LIFF ID"
-    );
+    return CFG.LIFF_ID.DASHBOARD;
   }
 
 
-  /* ======================================================
-     PAGE PATH
-  ====================================================== */
-
-  function getPagePath(
-    page = "DASHBOARD"
-  ) {
-
-    const pageName =
-      String(page)
-        .toUpperCase();
-
-    if (pageName === "WEIGHT") {
-      return CFG.PAGE.WEIGHT;
-    }
-
-    return CFG.PAGE.HOME;
-  }
-
-
-  /* ======================================================
-     CLEAN LIFF CALLBACK URL
-
-     เอา:
-     ?code=
-     ?state=
-     ?liff.state=
-     ?liffClientId=
-     ?liffRedirectUri=
-
-     ออกจาก Address Bar
-  ====================================================== */
-
-  function cleanLiffUrl() {
-
-    try {
-
-      const url =
-        new URL(
-          window.location.href
-        );
-
-      const removeKeys = [
-        "code",
-        "state",
-        "liff.state",
-        "liffClientId",
-        "liffRedirectUri"
-      ];
-
-      let changed =
-        false;
-
-
-      removeKeys.forEach(
-        key => {
-
-          if (
-            url.searchParams.has(
-              key
-            )
-          ) {
-
-            url.searchParams.delete(
-              key
-            );
-
-            changed =
-              true;
-          }
-        }
-      );
-
-
-      if (!changed) {
-        return;
-      }
-
-
-      const cleanUrl =
-        url.pathname +
-        (
-          url.search
-            ? url.search
-            : ""
-        ) +
-        (
-          url.hash
-            ? url.hash
-            : ""
-        );
-
-
-      window.history.replaceState(
-        {},
-        document.title,
-        cleanUrl
-      );
-
-
-    } catch (error) {
-
-      console.warn(
-        "CLEAN LIFF URL ERROR:",
-        error
-      );
-    }
-  }
-
-
-  /* ======================================================
-     LOGIN
-  ====================================================== */
-
-  function login(
-    page = "DASHBOARD"
-  ) {
-
-    if (
-      typeof liff ===
-      "undefined"
-    ) {
-
-      throw new Error(
-        "LINE LIFF SDK ไม่พร้อม"
-      );
-    }
-
-
-    /*
-      Redirect กลับ URL ปกติ
-
-      เช่น
-
-      /dashboard.html
-
-      หรือ
-
-      /weight-check.html
-
-      ไม่ใช้ liff.line.me
-    */
-
-    const redirectUri =
-      window.location.origin +
-      window.location.pathname;
-
-
-    console.log(
-      "LIFF LOGIN:",
-      {
-        page,
-        redirectUri
-      }
-    );
-
-
-    liff.login({
-      redirectUri
-    });
-  }
-
-
-  /* ======================================================
+  /* =========================================================
      INIT LIFF
-  ====================================================== */
+  ========================================================= */
 
-  async function initLiff(
-    page = "DASHBOARD"
-  ) {
+  async function initLiff(page = "DASHBOARD") {
 
-    if (
-      typeof liff ===
-      "undefined"
-    ) {
-
-      throw new Error(
-        "ไม่สามารถโหลด LINE LIFF SDK"
-      );
+    if (typeof liff === "undefined") {
+      throw new Error("LINE LIFF SDK ไม่พร้อม");
     }
-
 
     const liffId =
-      getLiffId(
-        page
-      );
+      getLiffId(page);
+
+    if (!liffId) {
+      throw new Error("ไม่พบ LIFF ID");
+    }
+
+    console.log("LIFF INIT:", {
+      page,
+      liffId,
+      url: window.location.href
+    });
 
 
-    console.log(
-      "LIFF INIT:",
-      {
-        page,
-        liffId
-      }
-    );
+    await liff.init({
+      liffId: liffId
+    });
 
 
-    try {
+    /* ยังไม่ได้ Login */
 
-      /* -------------------------------
-         INIT
-      -------------------------------- */
+    if (!liff.isLoggedIn()) {
 
-      await liff.init({
-        liffId
-      });
-
-
-      /*
-        สำคัญ:
-        ต้อง clean URL หลัง liff.init()
-        เพราะ LIFF ต้องอ่าน code/state ก่อน
-      */
-
-      cleanLiffUrl();
-
-
-      /* -------------------------------
-         LOGIN
-      -------------------------------- */
-
-      if (
-        !liff.isLoggedIn()
-      ) {
-
-        login(page);
-
-        return false;
-      }
-
-
-      /* -------------------------------
-         ID TOKEN
-      -------------------------------- */
-
-      const idToken =
-        liff.getIDToken();
-
-
-      if (!idToken) {
-
-        console.warn(
-          "LIFF ID Token not found"
-        );
-
-
-        /*
-          Session มีปัญหา
-          Login ใหม่
-        */
-
-        try {
-
-          liff.logout();
-
-        } catch (error) {
-
-          console.warn(
-            "LIFF LOGOUT ERROR:",
-            error
-          );
-        }
-
-
-        login(page);
-
-        return false;
-      }
-
+      const redirectUri =
+        window.location.origin +
+        window.location.pathname;
 
       console.log(
-        "LIFF READY:",
-        page
+        "LIFF LOGIN REDIRECT:",
+        redirectUri
       );
 
+      liff.login({
+        redirectUri: redirectUri
+      });
 
-      return true;
-
-
-    } catch (error) {
-
-      console.error(
-        "LIFF INIT ERROR:",
-        error
-      );
-
-
-      throw error;
-    }
-  }
-
-
-  /* ======================================================
-     GET ID TOKEN
-  ====================================================== */
-
-  function getIdToken() {
-
-    if (
-      typeof liff ===
-      "undefined"
-    ) {
-
-      throw new Error(
-        "LINE LIFF SDK ไม่พร้อม"
-      );
+      return false;
     }
 
 
-    if (
-      !liff.isLoggedIn()
-    ) {
+    /* Login แล้ว */
 
-      throw new Error(
-        "ยังไม่ได้เข้าสู่ระบบ LINE"
-      );
-    }
-
-
-    const idToken =
+    const token =
       liff.getIDToken();
 
-
-    if (!idToken) {
-
+    if (!token) {
       throw new Error(
         "ไม่พบ LINE ID Token"
       );
     }
 
 
-    return idToken;
+    console.log(
+      "LIFF READY:",
+      page
+    );
+
+    return true;
   }
 
 
-  /* ======================================================
-     LOGIN AGAIN
-  ====================================================== */
+  /* =========================================================
+     TOKEN
+  ========================================================= */
 
-  async function loginAgain(
-    page = "DASHBOARD"
-  ) {
+  function getIdToken() {
+
+    if (typeof liff === "undefined") {
+      throw new Error(
+        "LINE LIFF SDK ไม่พร้อม"
+      );
+    }
+
+    if (!liff.isLoggedIn()) {
+      throw new Error(
+        "ยังไม่ได้เข้าสู่ระบบ LINE"
+      );
+    }
+
+    const token =
+      liff.getIDToken();
+
+    if (!token) {
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+    }
+
+    return token;
+  }
+
+
+  /* =========================================================
+     LOGIN AGAIN
+  ========================================================= */
+
+  function loginAgain() {
 
     try {
 
       if (
-        typeof liff !==
-          "undefined" &&
+        typeof liff !== "undefined" &&
         liff.isLoggedIn()
       ) {
-
         liff.logout();
       }
 
     } catch (error) {
-
-      console.warn(
-        "LOGOUT ERROR:",
-        error
-      );
+      console.warn(error);
     }
 
-
-    /*
-      ไปหน้าปัจจุบันแบบ URL ปกติก่อน
-
-      จากนั้น initLiff()
-      จะ login ใหม่เอง
-    */
-
-    const path =
-      getPagePath(
-        page
-      );
-
-
-    window.location.href =
-      path;
+    window.location.reload();
   }
 
 
-  /* ======================================================
+  /* =========================================================
      POST JSON
-  ====================================================== */
+  ========================================================= */
 
-  async function postJSON(
-    url,
-    payload
-  ) {
+  async function postJSON(url, payload) {
 
     if (!url) {
-
       throw new Error(
         "ไม่พบ API URL"
       );
     }
 
-
     const response =
-      await fetch(
-        url,
-        {
-          method:
-            "POST",
+      await fetch(url, {
 
-          headers: {
+        method: "POST",
 
-            "Content-Type":
-              "application/json"
-          },
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
 
-          body:
-            JSON.stringify(
-              payload
-            )
-        }
-      );
+        body:
+          JSON.stringify(payload)
+      });
 
 
     const text =
@@ -473,21 +192,17 @@ window.ROCK = (() => {
 
     let data;
 
-
     try {
 
       data =
-        JSON.parse(
-          text
-        );
+        JSON.parse(text);
 
-    } catch (error) {
+    } catch {
 
       console.error(
-        "API RAW RESPONSE:",
+        "API RAW:",
         text
       );
-
 
       throw new Error(
         "API ตอบกลับไม่ถูกต้อง"
@@ -500,20 +215,18 @@ window.ROCK = (() => {
       data?.success === false
     ) {
 
-      const apiError =
+      const error =
         new Error(
           data?.error ||
           data?.message ||
           "ดำเนินการไม่สำเร็จ"
         );
 
-
-      apiError.code =
+      error.code =
         data?.code ||
         response.status;
 
-
-      throw apiError;
+      throw error;
     }
 
 
@@ -521,273 +234,183 @@ window.ROCK = (() => {
   }
 
 
-  /* ======================================================
+  /* =========================================================
      DASHBOARD
-  ====================================================== */
+  ========================================================= */
 
   async function fetchDashboard() {
 
     return await postJSON(
       CFG.API.DASHBOARD,
       {
-        action:
-          "dashboard",
-
-        idToken:
-          getIdToken()
+        action: "dashboard",
+        idToken: getIdToken()
       }
     );
   }
 
 
-  /* ======================================================
+  /* =========================================================
      SAVE WEIGHT
-  ====================================================== */
+  ========================================================= */
 
-  async function saveWeight(
-    weight
-  ) {
+  async function saveWeight(weight) {
 
     const value =
-      Number(
-        weight
-      );
-
+      Number(weight);
 
     if (
-      !Number.isFinite(
-        value
-      ) ||
+      !Number.isFinite(value) ||
       value < 20 ||
       value > 400
     ) {
-
       throw new Error(
         "น้ำหนักต้องอยู่ระหว่าง 20 - 400 kg"
       );
     }
 
-
     return await postJSON(
       CFG.API.WEIGHT,
       {
-        action:
-          "saveWeight",
-
-        idToken:
-          getIdToken(),
-
-        weight:
-          value
+        action: "saveWeight",
+        idToken: getIdToken(),
+        weight: value
       }
     );
   }
 
 
-  /* ======================================================
+  /* =========================================================
      SET TARGET
-  ====================================================== */
+  ========================================================= */
 
-  async function setTarget(
-    targetWeight
-  ) {
+  async function setTarget(targetWeight) {
 
     const value =
-      Number(
-        targetWeight
-      );
-
+      Number(targetWeight);
 
     if (
-      !Number.isFinite(
-        value
-      ) ||
+      !Number.isFinite(value) ||
       value < 20 ||
       value > 400
     ) {
-
       throw new Error(
         "เป้าหมายต้องอยู่ระหว่าง 20 - 400 kg"
       );
     }
 
-
     return await postJSON(
       CFG.API.WEIGHT,
       {
-        action:
-          "setTarget",
-
-        idToken:
-          getIdToken(),
-
-        targetWeight:
-          value
+        action: "setTarget",
+        idToken: getIdToken(),
+        targetWeight: value
       }
     );
   }
 
 
-  /* ======================================================
-     FORMAT WEIGHT
-  ====================================================== */
+  /* =========================================================
+     FORMAT
+  ========================================================= */
 
-  function fmtWeight(
-    value
-  ) {
+  function fmtWeight(value) {
 
     if (
       value === null ||
       value === undefined ||
       value === ""
     ) {
-
       return "--.-";
     }
 
+    const n =
+      Number(value);
 
-    const number =
-      Number(
-        value
-      );
-
-
-    return Number.isFinite(
-      number
-    )
-      ? number.toFixed(1)
+    return Number.isFinite(n)
+      ? n.toFixed(1)
       : "--.-";
   }
 
 
-  /* ======================================================
-     FORMAT INTEGER
-  ====================================================== */
+  function fmtInt(value) {
 
-  function fmtInt(
-    value
-  ) {
+    const n =
+      Number(value);
 
-    const number =
-      Number(
-        value
-      );
-
-
-    return Number.isFinite(
-      number
-    )
-      ? Math.round(
-          number
-        )
-          .toLocaleString(
-            "en-US"
-          )
+    return Number.isFinite(n)
+      ? Math.round(n)
+          .toLocaleString("en-US")
       : "0";
   }
 
 
-  /* ======================================================
-     FORMAT DATE
-  ====================================================== */
-
-  function formatDate(
-    value
-  ) {
+  function formatDate(value) {
 
     if (!value) {
       return "-";
     }
 
-
-    const date =
-      new Date(
-        value
-      );
-
+    const d =
+      new Date(value);
 
     if (
       Number.isNaN(
-        date.getTime()
+        d.getTime()
       )
     ) {
-
       return "-";
     }
 
-
-    return date
-      .toLocaleString(
-        "th-TH",
-        {
-          dateStyle:
-            "short",
-
-          timeStyle:
-            "short"
-        }
-      );
+    return d.toLocaleString(
+      "th-TH",
+      {
+        dateStyle: "short",
+        timeStyle: "short"
+      }
+    );
   }
 
-
-  /* ======================================================
-     NUMBER
-  ====================================================== */
 
   function num(
     value,
     fallback = 0
   ) {
 
-    const number =
-      Number(
-        value
-      );
+    const n =
+      Number(value);
 
-
-    return Number.isFinite(
-      number
-    )
-      ? number
+    return Number.isFinite(n)
+      ? n
       : fallback;
   }
 
 
-  /* ======================================================
+  /* =========================================================
      TOKEN ERROR
-  ====================================================== */
+  ========================================================= */
 
-  function isTokenError(
-    error
-  ) {
+  function isTokenError(error) {
 
     const message =
       String(
         error?.message ||
         error ||
         ""
-      )
-        .toLowerCase();
-
+      ).toLowerCase();
 
     return (
-      message.includes(
-        "token"
-      ) ||
-      message.includes(
-        "authentication"
-      ) ||
-      message.includes(
-        "unauthorized"
-      ) ||
+      message.includes("token") ||
+      message.includes("authentication") ||
+      message.includes("unauthorized") ||
       error?.code === 401
     );
   }
 
 
-  /* ======================================================
+  /* =========================================================
      PUBLIC
-  ====================================================== */
+  ========================================================= */
 
   return {
 
@@ -796,12 +419,6 @@ window.ROCK = (() => {
     go,
 
     getLiffId,
-
-    getPagePath,
-
-    cleanLiffUrl,
-
-    login,
 
     initLiff,
 
