@@ -84,8 +84,8 @@ textarea{
 ========================================================= */
 
 #homeStage{
-  --profile-left:7.1%;
-  --profile-top:18.1%;
+  --profile-left:7.0%;
+  --profile-top:18.0%;
   --profile-size:22.0%;
 
   /* COIN */
@@ -125,7 +125,7 @@ textarea{
   --current-height:8%;
 
   /* UPDATED DATE */
-  --updated-left:42%;
+  --updated-left:42.5%;
   --updated-top:35.8%;
   --updated-width:15%;
   --updated-height:4%;
