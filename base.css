@@ -164,13 +164,6 @@ body{
 /* =========================================================
    HOME SPECIFIC SIZES
    ========================================================= */
-
-#currentWeight{
-  font-size:clamp(24px,3.3vw,52px);
-  font-weight:1000;
-  line-height:1;
-}
-
 #coin{
   font-size:
     clamp(
@@ -198,27 +191,13 @@ body{
     );
 }
 
-#expText,
-#updatedAt,
-#lost,
-#startDate{
-  font-size:
-    clamp(
-      7px,
-      1vw,
-      16px
-    );
+#expText{
+  font-size:clamp(
+     7px,
+     1vw,
+     16px
+  );
 }
-
-#remaining{
-  font-size:
-    clamp(
-      8px,
-      1.1vw,
-      18px
-    );
-}
-
 
 /* =========================================================
    PROGRESS BAR
@@ -497,11 +476,6 @@ body{
     font-size:clamp(7px,2vw,13px);
   }
 
-  #currentWeight{
-    font-size:clamp(24px,3.3vw,52px);
-    font-weight:1000;
-    line-height:1;
-  }
 
   #coin{
     font-size:clamp(9px,2.7vw,16px);
