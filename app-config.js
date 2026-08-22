@@ -16,16 +16,14 @@ window.APP_CONFIG = {
   PAGE: {
     HOME: "./dashboard.html",
     WEIGHT: "./weight-check.html",
-    MISSION: "./mission.html",
-    BATTLE: "./battle.html",
     PROGRESS: "./progress.html",
     RANKING: "./ranking.html",
-    REWARDS: "./rewards.html"
+    REWARDS: "./rewards.html",
+    MISSION: "./mission.html",
+    BATTLE: "./battle.html"
   },
 
-  MAX_ENERGY: 200,
-
   EXP_PER_LEVEL: 500,
-
+  MAX_ENERGY: 200,
   REFRESH_MS: 30000
 };
