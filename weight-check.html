@@ -14,26 +14,19 @@
     ROCK YOUR BODY 2026 - Weight Check
   </title>
 
-
-  <!-- LINE -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-
-  <!-- SHARED CSS -->
   <link
     rel="stylesheet"
     href="./base.css"
   >
 
-
-  <!-- CONFIG -->
   <script src="./app-config.js"></script>
 
 </head>
 
 
 <body>
-
 
 <div class="weight-page">
 
@@ -56,13 +49,11 @@
 
       </div>
 
-
       <div class="weight-tagline">
         MOVE • EAT • SLEEP • HEALTH
       </div>
 
     </section>
-
 
 
     <!-- HERO -->
@@ -73,14 +64,11 @@
         ⚖️ WEIGHT CHECK
       </div>
 
-
       <div class="weight-subtitle">
         บันทึกน้ำหนักและติดตามความก้าวหน้าของคุณ
       </div>
 
-
       <div class="weight-summary-grid">
-
 
         <div class="weight-summary">
 
@@ -89,17 +77,11 @@
           </div>
 
           <div class="weight-summary-value">
-
-            <span id="latestWeight">
-              --.-
-            </span>
-
+            <span id="latestWeight">--.-</span>
             kg
-
           </div>
 
         </div>
-
 
 
         <div class="weight-summary">
@@ -109,25 +91,18 @@
           </div>
 
           <div class="weight-summary-value">
-
-            <span id="targetWeight">
-              --.-
-            </span>
-
+            <span id="targetWeight">--.-</span>
             kg
-
           </div>
 
         </div>
-
 
       </div>
 
     </section>
 
 
-
-    <!-- SAVE WEIGHT -->
+    <!-- SAVE -->
 
     <section class="weight-card">
 
@@ -135,11 +110,9 @@
         น้ำหนักวันนี้
       </h2>
 
-
       <div class="weight-desc">
         กรอกน้ำหนักปัจจุบันของคุณ
       </div>
-
 
       <div class="weight-input-box">
 
@@ -178,7 +151,6 @@
     </section>
 
 
-
     <!-- PROGRESS -->
 
     <section class="weight-card">
@@ -187,9 +159,7 @@
         ความก้าวหน้า
       </h2>
 
-
       <div class="weight-progress-grid">
-
 
         <div class="weight-progress-box">
 
@@ -222,7 +192,6 @@
 
         </div>
 
-
       </div>
 
 
@@ -238,7 +207,6 @@
     </section>
 
 
-
     <!-- TARGET -->
 
     <section class="weight-card">
@@ -247,11 +215,9 @@
         🎯 เป้าหมายน้ำหนัก
       </h2>
 
-
       <div class="weight-desc">
         ตั้งหรือแก้ไขเป้าหมายน้ำหนักของคุณ
       </div>
-
 
       <button
         id="targetButton"
@@ -263,7 +229,6 @@
       </button>
 
     </section>
-
 
 
     <!-- HOME -->
@@ -282,7 +247,6 @@
 </div>
 
 
-
 <!-- TARGET MODAL -->
 
 <div
@@ -295,7 +259,6 @@
     <h2>
       🎯 ตั้งเป้าหมายน้ำหนัก
     </h2>
-
 
     <div class="weight-input-box">
 
@@ -326,7 +289,6 @@
         ยกเลิก
       </button>
 
-
       <button
         id="saveTargetButton"
         class="weight-confirm"
@@ -342,687 +304,669 @@
 </div>
 
 
-
-<!-- SHARED LOGIC -->
+<!-- สำคัญ: โหลด common.js ก่อนโค้ดของหน้า -->
 <script src="./common.js"></script>
 
 
 <script>
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+(function () {
 
-const $ =
-  id =>
-    document.getElementById(id);
+  if (!window.ROCK) {
 
-
-const latestWeight =
-  $("latestWeight");
-
-const targetWeight =
-  $("targetWeight");
-
-const weightInput =
-  $("weightInput");
-
-const saveWeightButton =
-  $("saveWeightButton");
-
-const weightStatus =
-  $("weightStatus");
-
-const startWeight =
-  $("startWeight");
-
-const weightChange =
-  $("weightChange");
-
-const progressFill =
-  $("progressFill");
-
-const targetButton =
-  $("targetButton");
-
-const targetModal =
-  $("targetModal");
-
-const targetInput =
-  $("targetInput");
-
-const saveTargetButton =
-  $("saveTargetButton");
-
-
-let dashboard =
-  null;
-
-
-let saving =
-  false;
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-function showStatus(
-  message,
-  type = "loading"
-) {
-
-  weightStatus.textContent =
-    message;
-
-
-  weightStatus.className =
-    "weight-status show " +
-    type;
-}
-
-
-function hideStatus() {
-
-  weightStatus.className =
-    "weight-status";
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function render(
-  data
-) {
-
-  dashboard =
-    data;
-
-
-  const weight =
-    data?.weight ||
-    {};
-
-
-  const current =
-    weight.current ??
-    null;
-
-
-  const target =
-    weight.target ??
-    null;
-
-
-  const start =
-    weight.start ??
-    null;
-
-
-  latestWeight.textContent =
-    ROCK.fmtWeight(
-      current
-    );
-
-
-  targetWeight.textContent =
-    ROCK.fmtWeight(
-      target
-    );
-
-
-  if (
-    current !== null &&
-    current !== undefined
-  ) {
-
-    weightInput.value =
-      Number(current)
-        .toFixed(1);
-  }
-
-
-  if (
-    target !== null &&
-    target !== undefined
-  ) {
-
-    targetInput.value =
-      Number(target)
-        .toFixed(1);
-  }
-
-
-  startWeight.textContent =
-    ROCK.fmtWeight(start) +
-    " kg";
-
-
-  const s =
-    Number(start);
-
-  const c =
-    Number(current);
-
-  const t =
-    Number(target);
-
-
-  if (
-    Number.isFinite(s) &&
-    Number.isFinite(c)
-  ) {
-
-    const diff =
-      s - c;
-
-
-    if (diff > 0) {
-
-      weightChange.textContent =
-        "ลด " +
-        Math.abs(diff)
-          .toFixed(1) +
-        " kg";
-
-    } else if (diff < 0) {
-
-      weightChange.textContent =
-        "เพิ่ม " +
-        Math.abs(diff)
-          .toFixed(1) +
-        " kg";
-
-    } else {
-
-      weightChange.textContent =
-        "0.0 kg";
-    }
-
-  } else {
-
-    weightChange.textContent =
-      "--.- kg";
-  }
-
-
-  let progress =
-    0;
-
-
-  if (
-    Number.isFinite(s) &&
-    Number.isFinite(c) &&
-    Number.isFinite(t) &&
-    s !== t
-  ) {
-
-    progress =
-      (
-        (s - c) /
-        (s - t)
-      ) * 100;
-  }
-
-
-  progress =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        progress
-      )
-    );
-
-
-  progressFill.style.width =
-    progress +
-    "%";
-}
-
-
-/* =========================================================
-   LOAD
-========================================================= */
-
-async function loadDashboard() {
-
-  const data =
-    await ROCK.fetchDashboard();
-
-
-  render(data);
-
-
-  return data;
-}
-
-
-/* =========================================================
-   SAVE WEIGHT
-========================================================= */
-
-async function saveWeight() {
-
-  if (saving) {
-    return;
-  }
-
-
-  const value =
-    Number(
-      weightInput.value
-    );
-
-
-  if (
-    !Number.isFinite(value) ||
-    value < 20 ||
-    value > 400
-  ) {
-
-    showStatus(
-      "กรุณากรอกน้ำหนักระหว่าง 20 - 400 kg",
-      "error"
-    );
+    document.body.innerHTML =
+      "<h2 style='padding:30px;color:red'>common.js โหลดไม่สำเร็จ</h2>";
 
     return;
   }
 
 
-  saving =
-    true;
+  const ROCK =
+    window.ROCK;
 
 
-  saveWeightButton.disabled =
-    true;
+  const $ =
+    id =>
+      document.getElementById(id);
 
 
-  saveWeightButton.textContent =
-    "กำลังบันทึก...";
+  const latestWeight =
+    $("latestWeight");
+
+  const targetWeight =
+    $("targetWeight");
+
+  const weightInput =
+    $("weightInput");
+
+  const saveWeightButton =
+    $("saveWeightButton");
+
+  const weightStatus =
+    $("weightStatus");
+
+  const startWeight =
+    $("startWeight");
+
+  const weightChange =
+    $("weightChange");
+
+  const progressFill =
+    $("progressFill");
+
+  const targetButton =
+    $("targetButton");
+
+  const targetModal =
+    $("targetModal");
+
+  const targetInput =
+    $("targetInput");
+
+  const saveTargetButton =
+    $("saveTargetButton");
 
 
-  showStatus(
-    "กำลังบันทึกน้ำหนัก...",
-    "loading"
-  );
+  let dashboardData =
+    null;
+
+  let saving =
+    false;
 
 
-  try {
+  /* =====================================================
+     STATUS
+  ====================================================== */
 
-    const previous =
-      Number(
-        dashboard
-          ?.weight
-          ?.current
-      );
+  function showStatus(
+    message,
+    type = "loading"
+  ) {
+
+    weightStatus.textContent =
+      message;
+
+    weightStatus.className =
+      "weight-status show " +
+      type;
+  }
 
 
-    const result =
-      await ROCK.saveWeight(
-        value
-      );
+  function hideStatus() {
+
+    weightStatus.className =
+      "weight-status";
+  }
 
 
-    /* ชั่งแล้ววันนี้ */
+  /* =====================================================
+     RENDER
+  ====================================================== */
+
+  function renderDashboard(
+    data
+  ) {
+
+    dashboardData =
+      data;
+
+
+    const weight =
+      data?.weight ||
+      {};
+
+
+    const current =
+      weight.current ??
+      null;
+
+
+    const target =
+      weight.target ??
+      null;
+
+
+    const start =
+      weight.start ??
+      null;
+
+
+    latestWeight.textContent =
+      ROCK.fmtWeight(current);
+
+
+    targetWeight.textContent =
+      ROCK.fmtWeight(target);
+
 
     if (
-      result.alreadyCheckedToday
+      current !== null &&
+      current !== undefined
     ) {
-
-      const today =
-        result?.weight?.current;
-
 
       weightInput.value =
-        ROCK.fmtWeight(
-          today
-        );
-
-
-      showStatus(
-        "✅ วันนี้คุณบันทึกน้ำหนักแล้ว\n" +
-        "น้ำหนักวันนี้ " +
-        ROCK.fmtWeight(today) +
-        " kg\n" +
-        "สามารถบันทึกใหม่ได้อีกครั้งพรุ่งนี้",
-        "success"
-      );
-
-
-      await loadDashboard();
-
-      return;
+        Number(current)
+          .toFixed(1);
     }
 
 
-    await loadDashboard();
+    if (
+      target !== null &&
+      target !== undefined
+    ) {
+
+      targetInput.value =
+        Number(target)
+          .toFixed(1);
+    }
 
 
-    const difference =
-      value -
-      previous;
+    startWeight.textContent =
+      ROCK.fmtWeight(start) +
+      " kg";
 
 
-    let changeText =
-      "";
+    const s =
+      Number(start);
+
+    const c =
+      Number(current);
+
+    const t =
+      Number(target);
 
 
     if (
-      Number.isFinite(previous)
+      Number.isFinite(s) &&
+      Number.isFinite(c)
     ) {
 
-      if (difference > 0) {
+      const diff =
+        s - c;
 
-        changeText =
-          "\nน้ำหนักเพิ่มขึ้น " +
-          difference.toFixed(1) +
+
+      if (diff > 0) {
+
+        weightChange.textContent =
+          "ลด " +
+          Math.abs(diff)
+            .toFixed(1) +
           " kg";
 
-      } else if (difference < 0) {
+      } else if (diff < 0) {
 
-        changeText =
-          "\nน้ำหนักลดลง " +
-          Math.abs(difference)
+        weightChange.textContent =
+          "เพิ่ม " +
+          Math.abs(diff)
             .toFixed(1) +
           " kg";
 
       } else {
 
-        changeText =
-          "\nน้ำหนักเท่ากับครั้งก่อน";
+        weightChange.textContent =
+          "0.0 kg";
       }
+
+    } else {
+
+      weightChange.textContent =
+        "--.- kg";
     }
 
 
-    const reward =
-      result.rewards ||
-      {};
-
-
-    showStatus(
-      "✅ บันทึกสำเร็จ" +
-      changeText +
-      "\n\n+" +
-      Number(reward.exp || 0) +
-      " EXP" +
-      "\n+" +
-      Number(reward.rockCoin || 0) +
-      " ROCK COIN" +
-      "\n+" +
-      Number(reward.energy || 0) +
-      " ENERGY",
-      "success"
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    const message =
-      error?.message ||
-      String(error);
+    let progress =
+      0;
 
 
     if (
-      message
-        .toLowerCase()
-        .includes("token") ||
-      message
-        .toLowerCase()
-        .includes("authentication")
+      Number.isFinite(s) &&
+      Number.isFinite(c) &&
+      Number.isFinite(t) &&
+      s !== t
     ) {
 
-      showStatus(
-        "LINE Session หมดอายุ กำลังเข้าสู่ระบบใหม่...",
-        "loading"
+      progress =
+        (
+          (s - c) /
+          (s - t)
+        ) * 100;
+    }
+
+
+    progress =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          progress
+        )
       );
 
 
-      setTimeout(
-        ROCK.loginAgain,
-        500
+    progressFill.style.width =
+      progress +
+      "%";
+  }
+
+
+  /* =====================================================
+     LOAD
+  ====================================================== */
+
+  async function loadDashboard() {
+
+    const data =
+      await ROCK.fetchDashboard();
+
+    renderDashboard(data);
+
+    return data;
+  }
+
+
+  /* =====================================================
+     SAVE WEIGHT
+  ====================================================== */
+
+  async function saveWeight() {
+
+    if (saving) {
+      return;
+    }
+
+
+    const value =
+      Number(
+        weightInput.value
+      );
+
+
+    if (
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
+    ) {
+
+      showStatus(
+        "กรุณากรอกน้ำหนักระหว่าง 20 - 400 kg",
+        "error"
       );
 
       return;
     }
 
 
-    showStatus(
-      "❌ " +
-      message,
-      "error"
-    );
-
-
-  } finally {
-
     saving =
-      false;
+      true;
 
 
     saveWeightButton.disabled =
-      false;
+      true;
 
 
     saveWeightButton.textContent =
-      "บันทึกน้ำหนัก";
-  }
-}
-
-
-/* =========================================================
-   TARGET
-========================================================= */
-
-function openTarget() {
-
-  targetModal
-    .classList
-    .add("show");
-
-
-  setTimeout(
-    () =>
-      targetInput.focus(),
-    100
-  );
-}
-
-
-function closeTarget() {
-
-  targetModal
-    .classList
-    .remove("show");
-}
-
-
-async function saveTarget() {
-
-  const value =
-    Number(
-      targetInput.value
-    );
-
-
-  if (
-    !Number.isFinite(value) ||
-    value < 20 ||
-    value > 400
-  ) {
-
-    alert(
-      "กรุณากรอกเป้าหมายน้ำหนักระหว่าง 20 - 400 kg"
-    );
-
-    return;
-  }
-
-
-  saveTargetButton.disabled =
-    true;
-
-
-  try {
-
-    await ROCK.setTarget(
-      value
-    );
-
-
-    closeTarget();
-
-
-    await loadDashboard();
+      "กำลังบันทึก...";
 
 
     showStatus(
-      "✅ บันทึกเป้าหมายน้ำหนักแล้ว",
-      "success"
-    );
-
-
-  } catch (error) {
-
-    alert(
-      error?.message ||
-      String(error)
-    );
-
-
-  } finally {
-
-    saveTargetButton.disabled =
-      false;
-  }
-}
-
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-saveWeightButton
-  .addEventListener(
-    "click",
-    saveWeight
-  );
-
-
-targetButton
-  .addEventListener(
-    "click",
-    openTarget
-  );
-
-
-$("cancelTargetButton")
-  .addEventListener(
-    "click",
-    closeTarget
-  );
-
-
-saveTargetButton
-  .addEventListener(
-    "click",
-    saveTarget
-  );
-
-
-$("homeButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      ROCK.go(
-        ROCK.CFG.PAGE.HOME
-      );
-    }
-  );
-
-
-targetModal
-  .addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target ===
-        targetModal
-      ) {
-        closeTarget();
-      }
-    }
-  );
-
-
-/* =========================================================
-   START
-========================================================= */
-
-(async () => {
-
-  try {
-
-    showStatus(
-      "กำลังเชื่อมต่อ LINE...",
+      "กำลังบันทึกน้ำหนัก...",
       "loading"
     );
 
 
-    const ok =
-      await ROCK.initLiff(
-        "WEIGHT"
+    try {
+
+      const previous =
+        Number(
+          dashboardData
+            ?.weight
+            ?.current
+        );
+
+
+      const result =
+        await ROCK.saveWeight(
+          value
+        );
+
+
+      if (
+        result.alreadyCheckedToday
+      ) {
+
+        const today =
+          result?.weight?.current;
+
+
+        showStatus(
+          "✅ วันนี้คุณบันทึกน้ำหนักแล้ว\n" +
+          "น้ำหนักวันนี้ " +
+          ROCK.fmtWeight(today) +
+          " kg\n" +
+          "สามารถบันทึกใหม่ได้อีกครั้งพรุ่งนี้",
+          "success"
+        );
+
+
+        await loadDashboard();
+
+        return;
+      }
+
+
+      await loadDashboard();
+
+
+      const difference =
+        value -
+        previous;
+
+
+      let changeText =
+        "";
+
+
+      if (
+        Number.isFinite(previous)
+      ) {
+
+        if (difference > 0) {
+
+          changeText =
+            "\nน้ำหนักเพิ่มขึ้น " +
+            difference.toFixed(1) +
+            " kg";
+
+        } else if (
+          difference < 0
+        ) {
+
+          changeText =
+            "\nน้ำหนักลดลง " +
+            Math.abs(difference)
+              .toFixed(1) +
+            " kg";
+
+        } else {
+
+          changeText =
+            "\nน้ำหนักเท่ากับครั้งก่อน";
+        }
+      }
+
+
+      const reward =
+        result.rewards ||
+        {};
+
+
+      showStatus(
+        "✅ บันทึกสำเร็จ" +
+        changeText +
+        "\n\n+" +
+        Number(
+          reward.exp || 0
+        ) +
+        " EXP" +
+        "\n+" +
+        Number(
+          reward.rockCoin || 0
+        ) +
+        " ROCK COIN" +
+        "\n+" +
+        Number(
+          reward.energy || 0
+        ) +
+        " ENERGY",
+        "success"
       );
 
 
-    if (!ok) {
+    } catch (error) {
+
+      console.error(error);
+
+
+      showStatus(
+        "❌ " +
+        (
+          error?.message ||
+          String(error)
+        ),
+        "error"
+      );
+
+
+    } finally {
+
+      saving =
+        false;
+
+
+      saveWeightButton.disabled =
+        false;
+
+
+      saveWeightButton.textContent =
+        "บันทึกน้ำหนัก";
+    }
+  }
+
+
+  /* =====================================================
+     TARGET
+  ====================================================== */
+
+  function openTarget() {
+
+    targetModal
+      .classList
+      .add("show");
+  }
+
+
+  function closeTarget() {
+
+    targetModal
+      .classList
+      .remove("show");
+  }
+
+
+  async function saveTarget() {
+
+    const value =
+      Number(
+        targetInput.value
+      );
+
+
+    if (
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
+    ) {
+
+      alert(
+        "กรุณากรอกเป้าหมายน้ำหนักระหว่าง 20 - 400 kg"
+      );
+
       return;
     }
 
 
-    await loadDashboard();
+    saveTargetButton.disabled =
+      true;
 
 
-    saveWeightButton.disabled =
-      false;
+    try {
+
+      await ROCK.setTarget(
+        value
+      );
 
 
-    saveWeightButton.textContent =
-      "บันทึกน้ำหนัก";
+      closeTarget();
 
 
-    targetButton.disabled =
-      false;
+      await loadDashboard();
 
 
-    hideStatus();
+      showStatus(
+        "✅ บันทึกเป้าหมายเรียบร้อยแล้ว",
+        "success"
+      );
 
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(error);
-
-
-    showStatus(
-      "❌ " +
-      (
+      alert(
         error?.message ||
         String(error)
-      ),
-      "error"
-    );
+      );
+
+
+    } finally {
+
+      saveTargetButton.disabled =
+        false;
+    }
   }
+
+
+  /* =====================================================
+     EVENTS
+  ====================================================== */
+
+  saveWeightButton
+    .addEventListener(
+      "click",
+      saveWeight
+    );
+
+
+  targetButton
+    .addEventListener(
+      "click",
+      openTarget
+    );
+
+
+  $("cancelTargetButton")
+    .addEventListener(
+      "click",
+      closeTarget
+    );
+
+
+  saveTargetButton
+    .addEventListener(
+      "click",
+      saveTarget
+    );
+
+
+  $("homeButton")
+    .addEventListener(
+      "click",
+      function () {
+
+        ROCK.go(
+          ROCK.CFG.PAGE.HOME
+        );
+      }
+    );
+
+
+  targetModal
+    .addEventListener(
+      "click",
+      function (event) {
+
+        if (
+          event.target ===
+          targetModal
+        ) {
+          closeTarget();
+        }
+      }
+    );
+
+
+  /* =====================================================
+     START
+  ====================================================== */
+
+  async function start() {
+
+    try {
+
+      showStatus(
+        "กำลังเชื่อมต่อ LINE...",
+        "loading"
+      );
+
+
+      const ok =
+        await ROCK.initLiff(
+          "WEIGHT"
+        );
+
+
+      if (!ok) {
+
+        showStatus(
+          "LINE Session ยังไม่พร้อม กรุณาเปิดใหม่อีกครั้ง",
+          "error"
+        );
+
+        return;
+      }
+
+
+      await loadDashboard();
+
+
+      saveWeightButton.disabled =
+        false;
+
+
+      saveWeightButton.textContent =
+        "บันทึกน้ำหนัก";
+
+
+      targetButton.disabled =
+        false;
+
+
+      hideStatus();
+
+
+    } catch (error) {
+
+      console.error(
+        "WEIGHT START ERROR:",
+        error
+      );
+
+
+      showStatus(
+        "❌ " +
+        (
+          error?.message ||
+          String(error)
+        ),
+        "error"
+      );
+    }
+  }
+
+
+  start();
 
 })();
 </script>
 
-
 </body>
+
 </html>
