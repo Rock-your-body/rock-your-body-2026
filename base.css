@@ -1328,3 +1328,70 @@ textarea{
   transition:
     width .6s ease;
 }
+/* =========================================================
+   PROFILE FRAME
+========================================================= */
+
+.profile-frame{
+  position:absolute;
+
+  /* ตำแหน่งของกรอบทั้งหมดบน HOME */
+  left:6.2%;
+  top:17.0%;
+
+  /* ขนาดสัมพันธ์กับ template */
+  width:26.5%;
+  aspect-ratio:1 / 1;
+
+  z-index:8;
+
+  border-radius:50%;
+
+  padding:3%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #7fc8ff,
+      #ffffff
+    );
+
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.95),
+    0 0 18px rgba(0,136,255,.75);
+
+  overflow:hidden;
+}
+
+
+/* รูป LINE */
+
+.profile-photo{
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  border-radius:50%;
+
+  object-fit:cover;
+  object-position:center center;
+
+  background:#dcecff;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+  .profile-frame{
+    left:6.2%;
+    top:17.0%;
+    width:26.5%;
+
+    padding:2.5%;
+  }
+
+}
