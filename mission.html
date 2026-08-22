@@ -1,40 +1,781 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ROCK YOUR BODY 2026 - MISSION</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><link rel="stylesheet" href="base.css"><script src="app-config.js"></script></head><body>
-<div class="stage">
-  <img class="template" src="assets/mission-template.png" alt="MISSION template">
-  <div id="coin" class="overlay cover" style="left:76.6%;top:4.1%;width:7.2%;height:4.8%;font-size:clamp(11px,1.5vw,27px)">--</div>
-  <div id="energy" class="overlay cover" style="left:88.8%;top:4.1%;width:9.3%;height:4.8%;font-size:clamp(10px,1.35vw,24px)">-- / --</div>
-  <div id="missionPoint" class="overlay" style="left:89.3%;top:17.2%;width:7%;height:3.7%;color:#fff;font-size:clamp(9px,1.3vw,22px)">--</div>
+<!doctype html>
+<html lang="th">
 
-  <div id="dailyCount" class="overlay" style="left:56.6%;top:27.3%;width:5.2%;height:4.4%;color:#fff;font-size:clamp(10px,1.45vw,24px)">--/--</div>
-  <div style="position:absolute;z-index:5;left:35.2%;top:36.1%;width:25.9%;height:1.3%;border-radius:999px;overflow:hidden"><div id="dailyBar" style="height:100%;width:0;background:#f4510b"></div></div>
-  <div id="dailyCoin" class="overlay cover" style="left:44.8%;top:41%;width:5.7%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
-  <div id="dailyEnergy" class="overlay cover" style="left:55.2%;top:41%;width:5.5%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
+<head>
+  <meta charset="utf-8">
 
-  <div id="weeklyCount" class="overlay" style="left:89.3%;top:27.3%;width:5.2%;height:4.4%;color:#fff;font-size:clamp(10px,1.45vw,24px)">--/--</div>
-  <div style="position:absolute;z-index:5;left:65.2%;top:36.1%;width:30.5%;height:1.3%;border-radius:999px;overflow:hidden"><div id="weeklyBar" style="height:100%;width:0;background:#0a63d8"></div></div>
-  <div id="weeklyCoin" class="overlay cover" style="left:75.5%;top:41%;width:5.7%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
-  <div id="weeklyEnergy" class="overlay cover" style="left:86.1%;top:41%;width:5.5%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
 
-  <div id="monthlyCount" class="overlay" style="left:56.6%;top:59%;width:5.2%;height:4.4%;color:#fff;font-size:clamp(10px,1.45vw,24px)">--/--</div>
-  <div style="position:absolute;z-index:5;left:35.2%;top:67%;width:25.9%;height:1.3%;border-radius:999px;overflow:hidden"><div id="monthlyBar" style="height:100%;width:0;background:#6c24c2"></div></div>
-  <div id="monthlyCoin" class="overlay cover" style="left:44.8%;top:71%;width:5.7%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
-  <div id="monthlyEnergy" class="overlay cover" style="left:55.2%;top:71%;width:5.5%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
+  <title>ROCK YOUR BODY 2026 - MISSION</title>
 
-  <div id="bonusCount" class="overlay" style="left:89.3%;top:59%;width:5.2%;height:4.4%;color:#fff;font-size:clamp(10px,1.45vw,24px)">--/--</div>
-  <div style="position:absolute;z-index:5;left:65.2%;top:67%;width:30.5%;height:1.3%;border-radius:999px;overflow:hidden"><div id="bonusBar" style="height:100%;width:0;background:#0e9a45"></div></div>
-  <div id="bonusCoin" class="overlay cover" style="left:75.5%;top:71%;width:5.7%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
-  <div id="bonusEnergy" class="overlay cover" style="left:86.1%;top:71%;width:5.5%;height:4.5%;font-size:clamp(9px,1.25vw,21px)">--</div>
+  <!-- LINE -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <button class="hotspot" style="left:34.5%;top:45.2%;width:26.9%;height:5.5%" onclick="go(CFG.PAGE.WEIGHT)" aria-label="Daily mission"></button>
-  <button class="hotspot" style="left:64.8%;top:45.2%;width:31%;height:5.5%" onclick="go(CFG.PAGE.FOOD)" aria-label="Weekly mission"></button>
-  <button class="hotspot" style="left:34.5%;top:74.8%;width:26.9%;height:5.5%" onclick="go(CFG.PAGE.STEPS)" aria-label="Monthly mission"></button>
-  <button class="hotspot" style="left:64.8%;top:74.8%;width:31%;height:5.5%" onclick="go(CFG.PAGE.MISSION)" aria-label="Bonus mission"></button>
-  <button class="hotspot" style="left:1.4%;top:83.2%;width:31.5%;height:14.5%" onclick="go(CFG.PAGE.HOME)"></button>
-  <button class="hotspot" style="left:33.7%;top:83.2%;width:32.2%;height:14.5%" onclick="go(CFG.PAGE.MISSION)"></button>
-  <button class="hotspot" style="left:66.5%;top:83.2%;width:32.1%;height:14.5%" onclick="go(CFG.PAGE.BATTLE)"></button>
-</div><div id="status" class="status"></div><script src="common.js"></script><script>
-function missionObj(m){return m&&typeof m==='object'?m:{}}
-function renderOne(k,m){m=missionObj(m);const pr=num(m.progress,0),tg=num(m.target,0);$(k+'Count').textContent=tg>0?`${pr}/${tg}`:'--/--';$(k+'Bar').style.width=tg>0?pct(pr,tg)+'%':'0%';$(k+'Coin').textContent=m.rewardCoin??m.reward_coin??'--';$(k+'Energy').textContent=m.rewardEnergy??m.reward_energy??'--'}
-function render(raw){const d=normalize(raw),p=d.player;$('coin').textContent=fmtInt(p.coin);$('energy').textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;$('missionPoint').textContent=raw.missionPoint??raw.mission_point??'--';renderOne('daily',d.missions.daily);renderOne('weekly',d.missions.weekly);renderOne('monthly',d.missions.monthly);renderOne('bonus',d.missions.bonus)}
-(async()=>{try{showStatus('กำลังเชื่อมต่อ LINE...');if(!await initLiff())return;render(await fetchDashboard());hideStatus()}catch(e){console.error(e);showStatus(e.message||String(e),true)}})();
-</script></body></html>
+  <!-- CSS -->
+  <link rel="stylesheet" href="./base.css">
+
+  <!-- CONFIG -->
+  <script src="./app-config.js"></script>
+</head>
+
+
+<body>
+
+<div
+  class="stage"
+  id="stage"
+>
+
+  <!-- TEMPLATE -->
+  <img
+    id="missionTemplate"
+    class="template"
+    src="./mission-template.png"
+    alt=""
+    draggable="false"
+  >
+
+
+  <!-- ==============================================
+       TOP COIN
+  =============================================== -->
+
+  <div
+    id="coin"
+    class="overlay live-number live-blue"
+    style="
+      left:76.7%;
+      top:3.2%;
+      width:7%;
+      height:5%;
+      font-size:clamp(10px,1.4vw,22px);
+    "
+  >
+    0
+  </div>
+
+
+  <!-- ==============================================
+       TOP ENERGY
+  =============================================== -->
+
+  <div
+    id="energy"
+    class="overlay live-number live-blue"
+    style="
+      left:88.7%;
+      top:3.2%;
+      width:9%;
+      height:5%;
+      font-size:clamp(9px,1.3vw,21px);
+    "
+  >
+    0 / 200
+  </div>
+
+
+  <!-- ==============================================
+       MISSION POINT
+  =============================================== -->
+
+  <div
+    id="missionPoint"
+    class="overlay live-white"
+    style="
+      left:89.5%;
+      top:11.7%;
+      width:7.5%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    0 PTS
+  </div>
+
+
+  <!-- ==============================================
+       DAILY
+  =============================================== -->
+
+  <div
+    id="dailyProgressText"
+    class="overlay live-white"
+    style="
+      left:54.2%;
+      top:20%;
+      width:7%;
+      height:4%;
+      font-size:clamp(8px,1.1vw,17px);
+    "
+  >
+    0 / 1
+  </div>
+
+  <div
+    class="live-track"
+    style="
+      left:34%;
+      top:33%;
+      width:26.8%;
+      height:1.2%;
+    "
+  >
+    <div
+      id="dailyBar"
+      class="live-fill mission-fill-daily"
+    ></div>
+  </div>
+
+  <div
+    id="dailyCoin"
+    class="overlay live-blue"
+    style="
+      left:44%;
+      top:39%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+  <div
+    id="dailyEnergy"
+    class="overlay live-blue"
+    style="
+      left:54%;
+      top:39%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+
+  <!-- ==============================================
+       WEEKLY
+  =============================================== -->
+
+  <div
+    id="weeklyProgressText"
+    class="overlay live-white"
+    style="
+      left:91%;
+      top:20%;
+      width:7%;
+      height:4%;
+      font-size:clamp(8px,1.1vw,17px);
+    "
+  >
+    0 / 1
+  </div>
+
+  <div
+    class="live-track"
+    style="
+      left:65%;
+      top:33%;
+      width:31%;
+      height:1.2%;
+    "
+  >
+    <div
+      id="weeklyBar"
+      class="live-fill mission-fill-weekly"
+    ></div>
+  </div>
+
+  <div
+    id="weeklyCoin"
+    class="overlay live-blue"
+    style="
+      left:76%;
+      top:39%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+  <div
+    id="weeklyEnergy"
+    class="overlay live-blue"
+    style="
+      left:87%;
+      top:39%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+
+  <!-- ==============================================
+       MONTHLY
+  =============================================== -->
+
+  <div
+    id="monthlyProgressText"
+    class="overlay live-white"
+    style="
+      left:54%;
+      top:51%;
+      width:7%;
+      height:4%;
+      font-size:clamp(8px,1.1vw,17px);
+    "
+  >
+    0 / 1
+  </div>
+
+  <div
+    class="live-track"
+    style="
+      left:34%;
+      top:63.5%;
+      width:26.8%;
+      height:1.2%;
+    "
+  >
+    <div
+      id="monthlyBar"
+      class="live-fill mission-fill-monthly"
+    ></div>
+  </div>
+
+  <div
+    id="monthlyCoin"
+    class="overlay live-blue"
+    style="
+      left:44%;
+      top:69%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+  <div
+    id="monthlyEnergy"
+    class="overlay live-blue"
+    style="
+      left:54%;
+      top:69%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+
+  <!-- ==============================================
+       BONUS
+  =============================================== -->
+
+  <div
+    id="bonusProgressText"
+    class="overlay live-white"
+    style="
+      left:91%;
+      top:51%;
+      width:7%;
+      height:4%;
+      font-size:clamp(8px,1.1vw,17px);
+    "
+  >
+    0 / 1
+  </div>
+
+  <div
+    class="live-track"
+    style="
+      left:65%;
+      top:63.5%;
+      width:31%;
+      height:1.2%;
+    "
+  >
+    <div
+      id="bonusBar"
+      class="live-fill mission-fill-bonus"
+    ></div>
+  </div>
+
+  <div
+    id="bonusCoin"
+    class="overlay live-blue"
+    style="
+      left:76%;
+      top:69%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+  <div
+    id="bonusEnergy"
+    class="overlay live-blue"
+    style="
+      left:87%;
+      top:69%;
+      width:6%;
+      height:4%;
+      font-size:clamp(8px,1vw,16px);
+    "
+  >
+    +0
+  </div>
+
+
+  <!-- ==============================================
+       NAVIGATION
+  =============================================== -->
+
+  <button
+    class="hotspot"
+    style="
+      left:1%;
+      top:82%;
+      width:31%;
+      height:14%;
+    "
+    onclick="goPage('HOME')"
+    aria-label="Home"
+  ></button>
+
+  <button
+    class="hotspot"
+    style="
+      left:33%;
+      top:82%;
+      width:32%;
+      height:14%;
+    "
+    onclick="window.location.reload()"
+    aria-label="Mission"
+  ></button>
+
+  <button
+    class="hotspot"
+    style="
+      left:66%;
+      top:82%;
+      width:32%;
+      height:14%;
+    "
+    onclick="goPage('BATTLE')"
+    aria-label="Battle"
+  ></button>
+
+</div>
+
+
+<div
+  id="status"
+  class="status"
+></div>
+
+
+<script src="./common.js"></script>
+
+
+<script>
+
+const ROCK = window.ROCK;
+
+const $ =
+  id =>
+    document.getElementById(id);
+
+
+function goPage(name){
+
+  const url =
+    ROCK.CFG.PAGE[name];
+
+  if(url){
+    ROCK.go(url);
+  }
+}
+
+
+function showStatus(
+  message,
+  error = false
+){
+
+  const el =
+    $("status");
+
+  el.textContent =
+    message;
+
+  el.className =
+    error
+      ? "status show error"
+      : "status show";
+}
+
+
+function hideStatus(){
+
+  $("status").className =
+    "status";
+}
+
+
+function percent(
+  current,
+  max
+){
+
+  const c =
+    Number(current) || 0;
+
+  const m =
+    Number(max) || 0;
+
+  if(m <= 0){
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      c / m * 100
+    )
+  );
+}
+
+
+function missionValue(
+  missions,
+  name
+){
+
+  return (
+    missions?.[name] ||
+    missions?.[
+      name.toLowerCase()
+    ] ||
+    {}
+  );
+}
+
+
+function renderMission(raw){
+
+  const user =
+    raw?.user ||
+    raw?.player ||
+    {};
+
+  const energy =
+    raw?.energy &&
+    typeof raw.energy === "object"
+      ? raw.energy
+      : {};
+
+  const missions =
+    raw?.missions ||
+    {};
+
+
+  /* TOP */
+
+  $("coin").textContent =
+    ROCK.fmtInt(
+      raw?.rockCoin ??
+      raw?.rock_coin ??
+      user?.rock_coin ??
+      0
+    );
+
+
+  const currentEnergy =
+    ROCK.num(
+      energy.current ??
+      user.energy,
+      0
+    );
+
+
+  const maxEnergy =
+    ROCK.num(
+      energy.max ??
+      user.max_energy,
+      ROCK.CFG.MAX_ENERGY
+    );
+
+
+  $("energy").textContent =
+    ROCK.fmtInt(currentEnergy) +
+    " / " +
+    ROCK.fmtInt(maxEnergy);
+
+
+  $("missionPoint").textContent =
+    ROCK.fmtInt(
+      raw?.missionPoint ??
+      raw?.mission_point ??
+      missions?.points ??
+      0
+    ) +
+    " PTS";
+
+
+  /* DAILY */
+
+  renderMissionBox(
+    "daily",
+    missionValue(
+      missions,
+      "daily"
+    )
+  );
+
+
+  /* WEEKLY */
+
+  renderMissionBox(
+    "weekly",
+    missionValue(
+      missions,
+      "weekly"
+    )
+  );
+
+
+  /* MONTHLY */
+
+  renderMissionBox(
+    "monthly",
+    missionValue(
+      missions,
+      "monthly"
+    )
+  );
+
+
+  /* BONUS */
+
+  renderMissionBox(
+    "bonus",
+    missionValue(
+      missions,
+      "bonus"
+    )
+  );
+}
+
+
+function renderMissionBox(
+  prefix,
+  data
+){
+
+  const current =
+    Number(
+      data.current ??
+      data.progress ??
+      data.completed ??
+      0
+    );
+
+
+  const max =
+    Number(
+      data.max ??
+      data.target ??
+      data.total ??
+      1
+    );
+
+
+  const coin =
+    Number(
+      data.rockCoin ??
+      data.rock_coin ??
+      data.coin ??
+      data.rewardCoin ??
+      0
+    );
+
+
+  const energy =
+    Number(
+      data.energy ??
+      data.rewardEnergy ??
+      0
+    );
+
+
+  $(
+    prefix +
+    "ProgressText"
+  ).textContent =
+    ROCK.fmtInt(current) +
+    " / " +
+    ROCK.fmtInt(max);
+
+
+  $(
+    prefix +
+    "Bar"
+  ).style.width =
+    percent(
+      current,
+      max
+    ) +
+    "%";
+
+
+  $(
+    prefix +
+    "Coin"
+  ).textContent =
+    "+" +
+    ROCK.fmtInt(coin);
+
+
+  $(
+    prefix +
+    "Energy"
+  ).textContent =
+    "+" +
+    ROCK.fmtInt(energy);
+}
+
+
+let loading =
+  false;
+
+
+async function loadMission(){
+
+  if(loading){
+    return;
+  }
+
+  loading =
+    true;
+
+  try{
+
+    const raw =
+      await ROCK.fetchDashboard();
+
+    console.log(
+      "MISSION DATA:",
+      raw
+    );
+
+    renderMission(raw);
+
+    hideStatus();
+
+  }catch(error){
+
+    console.error(
+      "MISSION LOAD ERROR:",
+      error
+    );
+
+    showStatus(
+      error?.message ||
+      String(error),
+      true
+    );
+
+  }finally{
+
+    loading =
+      false;
+  }
+}
+
+
+(async()=>{
+
+  try{
+
+    if(!ROCK){
+      throw new Error(
+        "common.js โหลดไม่สำเร็จ"
+      );
+    }
+
+    showStatus(
+      "กำลังโหลดภารกิจ..."
+    );
+
+
+    /*
+      Mission ใช้ Dashboard LIFF
+    */
+
+    const ok =
+      await ROCK.initLiff(
+        "DASHBOARD"
+      );
+
+
+    if(!ok){
+      return;
+    }
+
+
+    await loadMission();
+
+
+    setInterval(
+      ()=>{
+
+        if(
+          document.visibilityState ===
+          "visible"
+        ){
+          loadMission();
+        }
+
+      },
+      ROCK.CFG.REFRESH_MS ||
+      30000
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      error?.message ||
+      String(error),
+      true
+    );
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
