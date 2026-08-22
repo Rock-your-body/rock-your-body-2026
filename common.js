@@ -8,14 +8,12 @@ window.ROCK = (() => {
 
 
   /* ======================================================
-     PAGE NAVIGATION
+     NAVIGATION
   ====================================================== */
 
   function go(url) {
 
-    if (!url) {
-      return;
-    }
+    if (!url) return;
 
     window.location.href = url;
   }
@@ -43,51 +41,61 @@ window.ROCK = (() => {
 
 
   /* ======================================================
-     CLEAN LIFF CALLBACK URL
+     CLEAN CALLBACK URL
   ====================================================== */
 
   function cleanLiffUrl() {
 
-    const url =
-      new URL(window.location.href);
+    try {
 
-    const keys = [
-      "code",
-      "state",
-      "liff.state",
-      "liffClientId",
-      "liffRedirectUri"
-    ];
+      const url =
+        new URL(window.location.href);
 
-    let changed = false;
+      const removeKeys = [
+        "code",
+        "state",
+        "liff.state",
+        "liffClientId",
+        "liffRedirectUri"
+      ];
 
-    keys.forEach(key => {
+      let changed = false;
 
-      if (url.searchParams.has(key)) {
+      removeKeys.forEach(key => {
 
-        url.searchParams.delete(key);
+        if (
+          url.searchParams.has(key)
+        ) {
 
-        changed = true;
+          url.searchParams.delete(key);
+
+          changed = true;
+        }
+      });
+
+      if (changed) {
+
+        const cleanUrl =
+          url.pathname +
+          (
+            url.search
+              ? url.search
+              : ""
+          ) +
+          url.hash;
+
+        window.history.replaceState(
+          {},
+          document.title,
+          cleanUrl
+        );
       }
-    });
 
+    } catch (error) {
 
-    if (changed) {
-
-      const cleanUrl =
-        url.pathname +
-        (
-          url.search
-            ? url.search
-            : ""
-        ) +
-        url.hash;
-
-
-      window.history.replaceState(
-        {},
-        document.title,
-        cleanUrl
+      console.warn(
+        "CLEAN URL ERROR:",
+        error
       );
     }
   }
@@ -109,72 +117,35 @@ window.ROCK = (() => {
       );
     }
 
-
     const liffId =
       getLiffId(page);
 
+    await liff.init({
+      liffId
+    });
 
-    try {
+    cleanLiffUrl();
 
-      await liff.init({
-        liffId
+    if (!liff.isLoggedIn()) {
+
+      liff.login({
+        redirectUri:
+          window.location.origin +
+          window.location.pathname
       });
 
-
-      /*
-        หลัง LINE redirect กลับมา
-        ล้าง code/state ออกจาก URL
-      */
-
-      cleanLiffUrl();
-
-
-      /*
-        ยังไม่ได้ Login
-      */
-
-      if (!liff.isLoggedIn()) {
-
-        liff.login({
-          redirectUri:
-            window.location.origin +
-            window.location.pathname
-        });
-
-        return false;
-      }
-
-
-      /*
-        ต้องมี ID Token
-      */
-
-      const token =
-        liff.getIDToken();
-
-
-      if (!token) {
-
-        console.warn(
-          "LINE ID Token not available"
-        );
-
-        return false;
-      }
-
-
-      return true;
-
-
-    } catch (error) {
-
-      console.error(
-        "LIFF INIT ERROR:",
-        error
-      );
-
-      throw error;
+      return false;
     }
+
+    const token =
+      liff.getIDToken();
+
+    if (!token) {
+
+      return false;
+    }
+
+    return true;
   }
 
 
@@ -192,24 +163,20 @@ window.ROCK = (() => {
       );
     }
 
-
     if (!liff.isLoggedIn()) {
       throw new Error(
         "ยังไม่ได้เข้าสู่ระบบ LINE"
       );
     }
 
-
     const token =
       liff.getIDToken();
-
 
     if (!token) {
       throw new Error(
         "ไม่พบ LINE ID Token"
       );
     }
-
 
     return token;
   }
@@ -219,7 +186,9 @@ window.ROCK = (() => {
      LOGIN AGAIN
   ====================================================== */
 
-  function loginAgain() {
+  function loginAgain(
+    page = "DASHBOARD"
+  ) {
 
     try {
 
@@ -227,24 +196,21 @@ window.ROCK = (() => {
         typeof liff !== "undefined" &&
         liff.isLoggedIn()
       ) {
-
         liff.logout();
       }
 
     } catch (error) {
 
-      console.warn(
-        "LIFF LOGOUT ERROR:",
-        error
-      );
+      console.warn(error);
     }
 
+    const path =
+      page === "WEIGHT"
+        ? CFG.PAGE.WEIGHT
+        : CFG.PAGE.HOME;
 
-    liff.login({
-      redirectUri:
-        window.location.origin +
-        window.location.pathname
-    });
+    window.location.href =
+      path;
   }
 
 
@@ -263,7 +229,6 @@ window.ROCK = (() => {
       );
     }
 
-
     const response =
       await fetch(
         url,
@@ -276,37 +241,31 @@ window.ROCK = (() => {
           },
 
           body:
-            JSON.stringify(
-              payload
-            )
+            JSON.stringify(payload)
         }
       );
 
-
-    const text =
+    const raw =
       await response.text();
 
-
     let data;
-
 
     try {
 
       data =
-        JSON.parse(text);
+        JSON.parse(raw);
 
     } catch {
 
       console.error(
         "API RAW RESPONSE:",
-        text
+        raw
       );
 
       throw new Error(
         "API ตอบกลับไม่ถูกต้อง"
       );
     }
-
 
     if (
       !response.ok ||
@@ -320,14 +279,11 @@ window.ROCK = (() => {
           "ดำเนินการไม่สำเร็จ"
         );
 
-
       error.code =
         data.code;
 
-
       throw error;
     }
-
 
     return data;
   }
@@ -360,18 +316,15 @@ window.ROCK = (() => {
     const value =
       Number(weight);
 
-
     if (
       !Number.isFinite(value) ||
       value < 20 ||
       value > 400
     ) {
-
       throw new Error(
         "น้ำหนักต้องอยู่ระหว่าง 20 - 400 kg"
       );
     }
-
 
     return await postJSON(
       CFG.API.WEIGHT,
@@ -385,7 +338,7 @@ window.ROCK = (() => {
 
 
   /* ======================================================
-     TARGET WEIGHT
+     SET TARGET
   ====================================================== */
 
   async function setTarget(
@@ -395,18 +348,15 @@ window.ROCK = (() => {
     const value =
       Number(targetWeight);
 
-
     if (
       !Number.isFinite(value) ||
       value < 20 ||
       value > 400
     ) {
-
       throw new Error(
         "เป้าหมายต้องอยู่ระหว่าง 20 - 400 kg"
       );
     }
-
 
     return await postJSON(
       CFG.API.WEIGHT,
@@ -420,7 +370,7 @@ window.ROCK = (() => {
 
 
   /* ======================================================
-     FORMAT WEIGHT
+     FORMAT
   ====================================================== */
 
   function fmtWeight(value) {
@@ -433,10 +383,8 @@ window.ROCK = (() => {
       return "--.-";
     }
 
-
     const n =
       Number(value);
-
 
     return Number.isFinite(n)
       ? n.toFixed(1)
@@ -444,15 +392,10 @@ window.ROCK = (() => {
   }
 
 
-  /* ======================================================
-     FORMAT INTEGER
-  ====================================================== */
-
   function fmtInt(value) {
 
     const n =
       Number(value);
-
 
     return Number.isFinite(n)
       ? Math.round(n)
@@ -461,31 +404,24 @@ window.ROCK = (() => {
   }
 
 
-  /* ======================================================
-     FORMAT DATE
-  ====================================================== */
-
   function formatDate(value) {
 
     if (!value) {
       return "-";
     }
 
-
-    const date =
+    const d =
       new Date(value);
-
 
     if (
       Number.isNaN(
-        date.getTime()
+        d.getTime()
       )
     ) {
       return "-";
     }
 
-
-    return date.toLocaleString(
+    return d.toLocaleString(
       "th-TH",
       {
         dateStyle: "short",
@@ -495,10 +431,6 @@ window.ROCK = (() => {
   }
 
 
-  /* ======================================================
-     NUMBER
-  ====================================================== */
-
   function num(
     value,
     fallback = 0
@@ -507,16 +439,11 @@ window.ROCK = (() => {
     const n =
       Number(value);
 
-
     return Number.isFinite(n)
       ? n
       : fallback;
   }
 
-
-  /* ======================================================
-     PUBLIC
-  ====================================================== */
 
   return {
 
