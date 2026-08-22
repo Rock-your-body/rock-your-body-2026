@@ -799,56 +799,71 @@ function renderHome(
     );
 
 
-  /* =====================================================
-     LEVEL
-  ====================================================== */
+ /* =====================================================
+   LEVEL + EXP
+===================================================== */
 
-  $("level").textContent =
-    "Lv." +
-    ROCK.fmtInt(
-      p.level
-    );
+const EXP_PER_LEVEL =
+  Number(ROCK.CFG.EXP_PER_LEVEL || 500);
 
+const totalExp =
+  Math.max(
+    0,
+    Number(p.exp || 0)
+  );
 
-  /* =====================================================
-     EXP
-  ====================================================== */
+/*
+  0 - 499   = Lv.1
+  500 - 999 = Lv.2
+  1000-1499 = Lv.3
+*/
+const level =
+  Math.floor(
+    totalExp / EXP_PER_LEVEL
+  ) + 1;
 
-  const expInLevel =
-    p.exp %
-    p.expPerLevel;
+/*
+  EXP ภายใน Level ปัจจุบัน
+*/
+const expInLevel =
+  totalExp % EXP_PER_LEVEL;
 
-
-  $("expText").textContent =
-    ROCK.fmtInt(
-      expInLevel
-    ) +
-    " / " +
-    ROCK.fmtInt(
-      p.expPerLevel
-    );
-
-
-  const expPercent =
-    p.expPerLevel > 0
-      ? Math.max(
-          0,
-          Math.min(
-            100,
-            (
-              expInLevel /
-              p.expPerLevel
-            ) *
-            100
-          )
+/*
+  %
+*/
+const expPercent =
+  EXP_PER_LEVEL > 0
+    ? Math.max(
+        0,
+        Math.min(
+          100,
+          (
+            expInLevel /
+            EXP_PER_LEVEL
+          ) * 100
         )
-      : 0;
+      )
+    : 0;
 
 
-  $("expBar").style.width =
-    expPercent +
-    "%";
+/* LEVEL */
 
+$("level").textContent =
+  "Lv." + level;
+
+
+/* EXP TEXT */
+
+$("expText").textContent =
+  ROCK.fmtInt(expInLevel) +
+  " / " +
+  ROCK.fmtInt(EXP_PER_LEVEL);
+
+
+/* EXP BAR */
+
+$("expBar").style.width =
+  expPercent + "%";
 
   /* =====================================================
      CURRENT WEIGHT
