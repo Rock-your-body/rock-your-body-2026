@@ -84,7 +84,7 @@ textarea{
 ========================================================= */
 
 #homeStage{
-  --profile-left:6.0%;
+  --profile-left:5.8%;
   --profile-top:18.2%;
   --profile-size:24.4%;
 
@@ -108,7 +108,7 @@ textarea{
 
   /* EXP BAR */
   --expbar-left:8.6%;
-  --expbar-top:73.9%;
+  --expbar-top:74.2%;
   --expbar-width:14%;
   --expbar-height:1.8%;
 
@@ -126,7 +126,7 @@ textarea{
 
   /* UPDATED DATE */
   --updated-left:42.5%;
-  --updated-top:36.0%;
+  --updated-top:36.3%;
   --updated-width:15%;
   --updated-height:4%;
 
