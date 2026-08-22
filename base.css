@@ -372,18 +372,6 @@ textarea{
    PROFILE
 ========================================================= */
 
-.live-profile{
-  position:absolute;
-
-  z-index:8;
-
-  object-fit:cover;
-
-  border-radius:50%;
-
-  background:#d7e8ff;
-}
-
 
 /* =========================================================
    MONSTER
@@ -1329,209 +1317,8 @@ textarea{
     width .6s ease;
 }
 /* =========================================================
-   HOME PROFILE FRAME
-========================================================= */
-
-.profile-frame{
-  position:absolute;
-  z-index:20;
-
-  /*
-    ตำแหน่งบน template
-    ใช้ % เพื่อให้ responsive ตาม stage
-  */
-  left:7.0%;
-  top:18.2%;
-
-  /*
-    ขนาดกรอบ
-  */
-  width:24.8%;
-  aspect-ratio:1 / 1;
-
-  margin:0;
-  padding:0;
-
-  border-radius:50%;
-
-  overflow:hidden;
-
-  background:#dcecff;
-
-  /*
-    วงขอบสีขาว + ฟ้า
-  */
-  border:
-    clamp(2px,.45vw,7px)
-    solid
-    #ffffff;
-
-  outline:
-    clamp(1px,.22vw,4px)
-    solid
-    #63b5ff;
-
-  outline-offset:
-    clamp(1px,.12vw,3px);
-
-  box-shadow:
-    0 5px 16px
-    rgba(0,79,190,.28);
-
-  pointer-events:none;
-}
-
-
-/* =========================================================
-   LINE PROFILE IMAGE
-========================================================= */
-
-.profile-photo{
-  position:absolute;
-
-  inset:0;
-
-  display:block;
-
-  width:100%;
-  height:100%;
-
-  max-width:none;
-
-  margin:0;
-  padding:0;
-
-  border:0;
-  border-radius:50%;
-
-  /*
-    สำคัญที่สุด
-    ขยายภาพให้เต็มวงกลม
-  */
-  object-fit:cover;
-
-  /*
-    ให้ภาพอยู่กึ่งกลาง
-  */
-  object-position:50% 50%;
-
-  background:#dcecff;
-
-  transform:none;
-
-  opacity:1;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ไม่ต้องกำหนดขนาดใหม่ตามมือถือ
-   เพราะ stage/template ย่อพร้อมกัน
-========================================================= */
-
-@media(max-width:900px){
-
-  .profile-frame{
-    left:7.0%;
-    top:18.2%;
-    width:24.8%;
-  }
-
-}
-
-
-@media(max-width:600px){
-
-  .profile-frame{
-    left:7.0%;
-    top:18.2%;
-    width:24.8%;
-
-    border-width:
-      clamp(2px,.45vw,5px);
-  }
-
-}
-/* =========================================================
-   PROFILE POSITION
-   ปรับ 3 ค่านี้เป็นหลัก
-========================================================= */
-
-#homeStage{
-  --profile-left:7.65%;
-  --profile-top:18.25%;
-  --profile-size:23.70%;
-}
-
-
-/* =========================================================
-   PROFILE FRAME
-========================================================= */
-
-.profile-frame{
-  position:absolute;
-  z-index:10;
-
-  left:var(--profile-left);
-  top:var(--profile-top);
-
-  width:var(--profile-size);
-  aspect-ratio:1 / 1;
-
-  margin:0;
-  padding:0;
-
-  border:0;
-  border-radius:50%;
-
-  overflow:hidden;
-
-  background:transparent;
-
-  pointer-events:none;
-}
-
-
-/* =========================================================
-   LINE PROFILE IMAGE
-========================================================= */
-
-.profile-photo{
-  position:absolute;
-
-  inset:0;
-
-  display:block;
-
-  width:100%;
-  height:100%;
-
-  margin:0;
-  padding:0;
-
-  border:0;
-  border-radius:50%;
-
-  object-fit:cover;
-
-  /* กึ่งกลางรูป */
-  object-position:50% 50%;
-
-  transform:none;
-}
-/* =========================================================
-   ROCK YOUR BODY 2026
-   HOME PROFILE - FINAL CLEAN VERSION
-========================================================= */
-
-
-/* =========================================================
-   PROFILE SETTINGS
-   แก้ตำแหน่งจาก 3 ค่านี้เท่านั้น
-
-   LEFT เพิ่ม = ไปขวา
-   TOP เพิ่ม  = ลง
-   SIZE เพิ่ม = รูปใหญ่ขึ้น
+   HOME PROFILE
+   FINAL - ใช้ชุดนี้ชุดเดียว
 ========================================================= */
 
 #homeStage{
@@ -1541,34 +1328,24 @@ textarea{
 }
 
 
-/* =========================================================
-   PROFILE FRAME
-========================================================= */
-
+/* กรอบวงกลม */
 #homeStage .profile-frame{
   position:absolute;
-
   z-index:20;
 
   left:var(--profile-left);
   top:var(--profile-top);
 
   width:var(--profile-size);
-
-  /*
-    ทำให้กรอบเป็นสี่เหลี่ยมจัตุรัสเสมอ
-    ก่อนถูกตัดเป็นวงกลม
-  */
   aspect-ratio:1 / 1;
+
+  overflow:hidden;
 
   margin:0;
   padding:0;
 
   border:0;
-
   border-radius:50%;
-
-  overflow:hidden;
 
   background:transparent;
 
@@ -1576,13 +1353,9 @@ textarea{
 }
 
 
-/* =========================================================
-   LINE PROFILE IMAGE
-========================================================= */
-
+/* รูปโปรไฟล์ LINE */
 #homeStage .profile-photo{
   position:absolute;
-
   inset:0;
 
   display:block;
@@ -1590,55 +1363,14 @@ textarea{
   width:100%;
   height:100%;
 
-  max-width:none;
-
   margin:0;
   padding:0;
 
   border:0;
-
   border-radius:50%;
 
-  /*
-    ให้รูปเต็มวงกลม
-    ไม่ยืด ไม่บีบ
-  */
   object-fit:cover;
-
-  /*
-    จัดจุดกึ่งกลางของรูป
-  */
-  object-position:50% 50%;
-
-  transform:none;
+  object-position:center;
 
   background:transparent;
-}
-
-
-/* =========================================================
-   MOBILE / TABLET
-   ไม่ต้องปรับตำแหน่งใหม่
-   เพราะทุกอย่างใช้ % ตาม Template
-========================================================= */
-
-@media (max-width:900px){
-
-  #homeStage .profile-frame{
-    left:var(--profile-left);
-    top:var(--profile-top);
-    width:var(--profile-size);
-  }
-
-}
-
-
-@media (max-width:600px){
-
-  #homeStage .profile-frame{
-    left:var(--profile-left);
-    top:var(--profile-top);
-    width:var(--profile-size);
-  }
-
 }
