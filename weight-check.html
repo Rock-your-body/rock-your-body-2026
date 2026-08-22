@@ -2,6 +2,7 @@
 <html lang="th">
 
 <head>
+
   <meta charset="utf-8">
 
   <meta
@@ -9,776 +10,24 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <meta
-    name="theme-color"
-    content="#eef5ff"
-  >
-
   <title>
     ROCK YOUR BODY 2026 - Weight Check
   </title>
 
-  <!-- LINE LIFF -->
+
+  <!-- LINE -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 
-  <style>
-
-    /* =====================================================
-       RESET
-    ====================================================== */
-
-    *{
-      box-sizing:border-box;
-    }
-
-    html,
-    body{
-      margin:0;
-      padding:0;
-      min-height:100%;
-    }
-
-    body{
-      font-family:
-        Arial,
-        "Noto Sans Thai",
-        sans-serif;
-
-      color:#08245b;
-
-      background:
-        linear-gradient(
-          180deg,
-          #eaf3ff 0%,
-          #f7fbff 100%
-        );
-    }
-
-
-    button,
-    input{
-      font:inherit;
-    }
-
-
-    /* =====================================================
-       PAGE
-    ====================================================== */
-
-    .page{
-      width:100%;
-      min-height:100vh;
-
-      display:flex;
-      justify-content:center;
-
-      padding:
-        22px
-        14px
-        50px;
-    }
-
-
-    .app{
-      width:100%;
-      max-width:620px;
-    }
-
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
-
-    .header{
-      padding:
-        22px
-        18px;
-
-      background:#fff;
-
-      border-radius:24px;
-
-      text-align:center;
-
-      box-shadow:
-        0 10px 30px
-        rgba(15,53,103,.10);
-    }
-
-
-    .brand{
-      font-size:
-        clamp(
-          25px,
-          5vw,
-          38px
-        );
-
-      font-weight:900;
-
-      line-height:1.05;
-
-      color:#073b93;
-    }
-
-
-    .brand-red{
-      color:#d71920;
-    }
-
-
-    .tagline{
-      margin-top:9px;
-
-      color:#64748b;
-
-      font-size:14px;
-
-      font-weight:800;
-    }
-
-
-    /* =====================================================
-       HERO
-    ====================================================== */
-
-    .hero{
-      margin-top:18px;
-
-      padding:24px;
-
-      border-radius:25px;
-
-      color:#fff;
-
-      background:
-        linear-gradient(
-          135deg,
-          #073b93,
-          #0765d8 58%,
-          #148bf3
-        );
-
-      box-shadow:
-        0 14px 35px
-        rgba(7,59,147,.22);
-    }
-
-
-    .hero-title{
-      display:flex;
-      align-items:center;
-
-      gap:12px;
-
-      font-size:
-        clamp(
-          27px,
-          5vw,
-          38px
-        );
-
-      font-weight:900;
-    }
-
-
-    .hero-icon{
-      font-size:39px;
-    }
-
-
-    .hero-subtitle{
-      margin-top:8px;
-
-      font-size:15px;
-
-      font-weight:800;
-
-      opacity:.95;
-    }
-
-
-    /* =====================================================
-       SUMMARY
-    ====================================================== */
-
-    .summary-grid{
-      margin-top:20px;
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(
-          2,
-          minmax(0,1fr)
-        );
-
-      gap:12px;
-    }
-
-
-    .summary-card{
-      min-height:110px;
-
-      padding:18px;
-
-      border-radius:19px;
-
-      background:
-        rgba(
-          255,
-          255,
-          255,
-          .15
-        );
-
-      border:
-        1px solid
-        rgba(
-          255,
-          255,
-          255,
-          .25
-        );
-    }
-
-
-    .summary-label{
-      font-size:14px;
-
-      font-weight:800;
-
-      opacity:.92;
-    }
-
-
-    .summary-value{
-      margin-top:10px;
-
-      font-size:
-        clamp(
-          28px,
-          6vw,
-          40px
-        );
-
-      font-weight:900;
-
-      line-height:1;
-    }
-
-
-    .summary-unit{
-      font-size:18px;
-    }
-
-
-    /* =====================================================
-       CARD
-    ====================================================== */
-
-    .card{
-      margin-top:18px;
-
-      padding:22px;
-
-      border-radius:23px;
-
-      background:#fff;
-
-      box-shadow:
-        0 10px 30px
-        rgba(15,53,103,.10);
-    }
-
-
-    .card-title{
-      margin:0;
-
-      color:#08245b;
-
-      font-size:22px;
-
-      font-weight:900;
-    }
-
-
-    .card-desc{
-      margin-top:7px;
-
-      color:#64748b;
-
-      font-size:14px;
-    }
-
-
-    /* =====================================================
-       INPUT
-    ====================================================== */
-
-    .input-box{
-      margin-top:18px;
-
-      min-height:78px;
-
-      display:flex;
-      align-items:center;
-
-      padding:
-        0
-        20px;
-
-      border:
-        2px solid
-        #c9d9ef;
-
-      border-radius:18px;
-
-      background:#fbfdff;
-    }
-
-
-    .input-box:focus-within{
-      border-color:#0b67dd;
-
-      box-shadow:
-        0 0 0 4px
-        rgba(
-          11,
-          103,
-          221,
-          .08
-        );
-    }
-
-
-    .input-box input{
-      width:100%;
-      min-width:0;
-
-      border:0;
-      outline:0;
-
-      background:transparent;
-
-      color:#08245b;
-
-      font-size:
-        clamp(
-          30px,
-          7vw,
-          42px
-        );
-
-      font-weight:900;
-    }
-
-
-    .input-unit{
-      margin-left:12px;
-
-      color:#64748b;
-
-      font-size:20px;
-
-      font-weight:900;
-    }
-
-
-    /* =====================================================
-       BUTTON
-    ====================================================== */
-
-    .button{
-      width:100%;
-
-      min-height:60px;
-
-      border:0;
-
-      border-radius:16px;
-
-      cursor:pointer;
-
-      font-size:18px;
-
-      font-weight:900;
-    }
-
-
-    .button:disabled{
-      opacity:.55;
-
-      cursor:not-allowed;
-    }
-
-
-    .save-weight{
-      margin-top:18px;
-
-      color:#fff;
-
-      background:
-        linear-gradient(
-          90deg,
-          #00b84f,
-          #06c755
-        );
-
-      box-shadow:
-        0 8px 20px
-        rgba(
-          6,
-          199,
-          85,
-          .22
-        );
-    }
-
-
-    .target-button{
-      margin-top:14px;
-
-      color:#073b93;
-
-      background:#eaf3ff;
-    }
-
-
-    .home-button{
-      margin-top:18px;
-
-      color:#fff;
-
-      background:
-        linear-gradient(
-          90deg,
-          #073b93,
-          #075ac7
-        );
-    }
-
-
-    /* =====================================================
-       STATUS
-    ====================================================== */
-
-    .status{
-      display:none;
-
-      margin-top:16px;
-
-      padding:
-        15px
-        17px;
-
-      border-radius:15px;
-
-      line-height:1.5;
-
-      font-size:14px;
-
-      font-weight:800;
-
-      white-space:pre-line;
-    }
-
-
-    .status.show{
-      display:block;
-    }
-
-
-    .status.loading{
-      color:#174ea6;
-
-      background:#eef5ff;
-    }
-
-
-    .status.success{
-      color:#08783c;
-
-      background:#e9f8ef;
-    }
-
-
-    .status.error{
-      color:#a21e1e;
-
-      background:#fff0f0;
-    }
-
-
-    /* =====================================================
-       INFO
-    ====================================================== */
-
-    .info-row{
-      margin-top:18px;
-
-      padding-top:16px;
-
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-
-      gap:15px;
-
-      border-top:
-        1px solid
-        #e5edf8;
-    }
-
-
-    .info-label{
-      color:#64748b;
-
-      font-size:14px;
-
-      font-weight:800;
-    }
-
-
-    .info-value{
-      color:#08245b;
-
-      font-size:16px;
-
-      font-weight:900;
-
-      text-align:right;
-    }
-
-
-    /* =====================================================
-       PROGRESS
-    ====================================================== */
-
-    .progress-grid{
-      margin-top:18px;
-
-      display:grid;
-
-      grid-template-columns:
-        repeat(
-          2,
-          minmax(0,1fr)
-        );
-
-      gap:12px;
-    }
-
-
-    .progress-box{
-      padding:16px;
-
-      border-radius:16px;
-
-      background:#f5f8fd;
-    }
-
-
-    .progress-label{
-      color:#64748b;
-
-      font-size:12px;
-    }
-
-
-    .progress-value{
-      margin-top:7px;
-
-      color:#08245b;
-
-      font-size:21px;
-
-      font-weight:900;
-    }
-
-
-    .progress-track{
-      margin-top:16px;
-
-      width:100%;
-      height:10px;
-
-      overflow:hidden;
-
-      border-radius:999px;
-
-      background:#dbe8f7;
-    }
-
-
-    .progress-fill{
-      width:0%;
-      height:100%;
-
-      border-radius:999px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #168cff,
-          #06c755
-        );
-
-      transition:
-        width .45s ease;
-    }
-
-
-    /* =====================================================
-       MODAL
-    ====================================================== */
-
-    .modal-backdrop{
-      position:fixed;
-
-      inset:0;
-
-      z-index:999;
-
-      display:none;
-
-      align-items:center;
-      justify-content:center;
-
-      padding:18px;
-
-      background:
-        rgba(
-          0,
-          0,
-          0,
-          .48
-        );
-    }
-
-
-    .modal-backdrop.show{
-      display:flex;
-    }
-
-
-    .modal{
-      width:100%;
-      max-width:420px;
-
-      padding:22px;
-
-      border-radius:22px;
-
-      background:#fff;
-
-      box-shadow:
-        0 20px 60px
-        rgba(
-          0,
-          0,
-          0,
-          .28
-        );
-    }
-
-
-    .modal-title{
-      margin:0;
-
-      color:#073b93;
-
-      font-size:22px;
-
-      font-weight:900;
-    }
-
-
-    .modal-desc{
-      margin-top:8px;
-
-      color:#64748b;
-
-      font-size:14px;
-    }
-
-
-    .modal-actions{
-      margin-top:18px;
-
-      display:grid;
-
-      grid-template-columns:
-        1fr
-        1fr;
-
-      gap:10px;
-    }
-
-
-    .modal-actions button{
-      min-height:50px;
-
-      border:0;
-
-      border-radius:13px;
-
-      cursor:pointer;
-
-      font-weight:900;
-    }
-
-
-    .modal-cancel{
-      color:#334155;
-
-      background:#e9eef6;
-    }
-
-
-    .modal-save{
-      color:#fff;
-
-      background:#06c755;
-    }
-
-
-    /* =====================================================
-       MOBILE
-    ====================================================== */
-
-    @media(max-width:480px){
-
-      .page{
-        padding:
-          12px
-          10px
-          35px;
-      }
-
-      .summary-grid{
-        grid-template-columns:
-          1fr
-          1fr;
-      }
-
-      .summary-card{
-        min-height:95px;
-
-        padding:15px;
-      }
-
-      .hero{
-        padding:20px;
-      }
-
-      .card{
-        padding:18px;
-      }
-    }
-
-  </style>
+  <!-- SHARED CSS -->
+  <link
+    rel="stylesheet"
+    href="./base.css"
+  >
+
+
+  <!-- CONFIG -->
+  <script src="./app-config.js"></script>
 
 </head>
 
@@ -786,22 +35,20 @@
 <body>
 
 
-<div class="page">
+<div class="weight-page">
 
-  <main class="app">
+  <main class="weight-app">
 
 
-    <!-- ===================================================
-         HEADER
-    ==================================================== -->
+    <!-- HEADER -->
 
-    <section class="header">
+    <section class="weight-header">
 
-      <div class="brand">
+      <div class="weight-brand">
 
         ROCK
 
-        <span class="brand-red">
+        <span class="weight-brand-red">
           YOUR BODY
         </span>
 
@@ -810,7 +57,7 @@
       </div>
 
 
-      <div class="tagline">
+      <div class="weight-tagline">
         MOVE • EAT • SLEEP • HEALTH
       </div>
 
@@ -818,48 +65,36 @@
 
 
 
-    <!-- ===================================================
-         HERO
-    ==================================================== -->
+    <!-- HERO -->
 
-    <section class="hero">
+    <section class="weight-hero">
 
-      <div class="hero-title">
-
-        <span class="hero-icon">
-          ⚖️
-        </span>
-
-        <span>
-          WEIGHT CHECK
-        </span>
-
+      <div class="weight-title">
+        ⚖️ WEIGHT CHECK
       </div>
 
 
-      <div class="hero-subtitle">
+      <div class="weight-subtitle">
         บันทึกน้ำหนักและติดตามความก้าวหน้าของคุณ
       </div>
 
 
-      <div class="summary-grid">
+      <div class="weight-summary-grid">
 
 
-        <div class="summary-card">
+        <div class="weight-summary">
 
-          <div class="summary-label">
+          <div class="weight-summary-label">
             น้ำหนักล่าสุด
           </div>
 
-          <div class="summary-value">
+          <div class="weight-summary-value">
 
             <span id="latestWeight">
-              --
+              --.-
             </span>
 
-            <span class="summary-unit">
-              kg
-            </span>
+            kg
 
           </div>
 
@@ -867,21 +102,19 @@
 
 
 
-        <div class="summary-card">
+        <div class="weight-summary">
 
-          <div class="summary-label">
+          <div class="weight-summary-label">
             เป้าหมาย
           </div>
 
-          <div class="summary-value">
+          <div class="weight-summary-value">
 
             <span id="targetWeight">
-              --
+              --.-
             </span>
 
-            <span class="summary-unit">
-              kg
-            </span>
+            kg
 
           </div>
 
@@ -894,23 +127,21 @@
 
 
 
-    <!-- ===================================================
-         WEIGHT
-    ==================================================== -->
+    <!-- SAVE WEIGHT -->
 
-    <section class="card">
+    <section class="weight-card">
 
-      <h2 class="card-title">
+      <h2>
         น้ำหนักวันนี้
       </h2>
 
 
-      <div class="card-desc">
+      <div class="weight-desc">
         กรอกน้ำหนักปัจจุบันของคุณ
       </div>
 
 
-      <div class="input-box">
+      <div class="weight-input-box">
 
         <input
           id="weightInput"
@@ -922,7 +153,7 @@
           placeholder="0.0"
         >
 
-        <span class="input-unit">
+        <span class="weight-unit">
           kg
         </span>
 
@@ -931,7 +162,7 @@
 
       <button
         id="saveWeightButton"
-        class="button save-weight"
+        class="weight-button weight-save"
         type="button"
         disabled
       >
@@ -940,72 +171,53 @@
 
 
       <div
-        id="status"
-        class="status"
+        id="weightStatus"
+        class="weight-status"
       ></div>
-
-
-      <div class="info-row">
-
-        <div class="info-label">
-          บันทึกล่าสุด
-        </div>
-
-        <div
-          id="lastUpdated"
-          class="info-value"
-        >
-          -
-        </div>
-
-      </div>
 
     </section>
 
 
 
-    <!-- ===================================================
-         PROGRESS
-    ==================================================== -->
+    <!-- PROGRESS -->
 
-    <section class="card">
+    <section class="weight-card">
 
-      <h2 class="card-title">
+      <h2>
         ความก้าวหน้า
       </h2>
 
 
-      <div class="progress-grid">
+      <div class="weight-progress-grid">
 
 
-        <div class="progress-box">
+        <div class="weight-progress-box">
 
-          <div class="progress-label">
+          <div class="weight-progress-label">
             น้ำหนักเริ่มต้น
           </div>
 
           <div
             id="startWeight"
-            class="progress-value"
+            class="weight-progress-value"
           >
-            -- kg
+            --.- kg
           </div>
 
         </div>
 
 
+        <div class="weight-progress-box">
 
-        <div class="progress-box">
-
-          <div class="progress-label">
+          <div class="weight-progress-label">
             เปลี่ยนแปลงแล้ว
           </div>
 
           <div
             id="weightChange"
-            class="progress-value"
+            class="weight-progress-value"
           >
-            -- kg
+            --.- kg
           </div>
 
         </div>
@@ -1014,11 +226,11 @@
       </div>
 
 
-      <div class="progress-track">
+      <div class="weight-progress-track">
 
         <div
-          id="weightProgress"
-          class="progress-fill"
+          id="progressFill"
+          class="weight-progress-fill"
         ></div>
 
       </div>
@@ -1027,25 +239,23 @@
 
 
 
-    <!-- ===================================================
-         TARGET
-    ==================================================== -->
+    <!-- TARGET -->
 
-    <section class="card">
+    <section class="weight-card">
 
-      <h2 class="card-title">
+      <h2>
         🎯 เป้าหมายน้ำหนัก
       </h2>
 
 
-      <div class="card-desc">
+      <div class="weight-desc">
         ตั้งหรือแก้ไขเป้าหมายน้ำหนักของคุณ
       </div>
 
 
       <button
         id="targetButton"
-        class="button target-button"
+        class="weight-button weight-target"
         type="button"
         disabled
       >
@@ -1056,13 +266,11 @@
 
 
 
-    <!-- ===================================================
-         HOME
-    ==================================================== -->
+    <!-- HOME -->
 
     <button
       id="homeButton"
-      class="button home-button"
+      class="weight-button weight-home"
       type="button"
     >
       🏠 กลับหน้า HOME
@@ -1075,28 +283,21 @@
 
 
 
-<!-- =======================================================
-     TARGET MODAL
-======================================================== -->
+<!-- TARGET MODAL -->
 
 <div
   id="targetModal"
-  class="modal-backdrop"
+  class="weight-modal-bg"
 >
 
-  <div class="modal">
+  <div class="weight-modal">
 
-    <h2 class="modal-title">
+    <h2>
       🎯 ตั้งเป้าหมายน้ำหนัก
     </h2>
 
 
-    <div class="modal-desc">
-      ระบุน้ำหนักที่ต้องการ
-    </div>
-
-
-    <div class="input-box">
+    <div class="weight-input-box">
 
       <input
         id="targetInput"
@@ -1108,18 +309,18 @@
         placeholder="0.0"
       >
 
-      <span class="input-unit">
+      <span class="weight-unit">
         kg
       </span>
 
     </div>
 
 
-    <div class="modal-actions">
+    <div class="weight-modal-actions">
 
       <button
         id="cancelTargetButton"
-        class="modal-cancel"
+        class="weight-cancel"
         type="button"
       >
         ยกเลิก
@@ -1128,7 +329,7 @@
 
       <button
         id="saveTargetButton"
-        class="modal-save"
+        class="weight-confirm"
         type="button"
       >
         บันทึก
@@ -1142,198 +343,64 @@
 
 
 
+<!-- SHARED LOGIC -->
+<script src="./common.js"></script>
+
+
 <script>
-
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const LIFF_ID =
-  "2011201679-uN62Coga";
-
-
-const DASHBOARD_API =
-  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
-
-
-const WEIGHT_API =
-  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/weight-check";
-
-
-const HOME_LIFF_URL =
-  "https://liff.line.me/2011201679-uNWz5yqF";
-
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let dashboardData =
-  null;
-
-
-let requestRunning =
-  false;
-
-
-let lineReady =
-  false;
-
-
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
 
-const latestWeight =
-  document.getElementById(
-    "latestWeight"
-  );
+const $ =
+  id =>
+    document.getElementById(id);
 
+
+const latestWeight =
+  $("latestWeight");
 
 const targetWeight =
-  document.getElementById(
-    "targetWeight"
-  );
-
+  $("targetWeight");
 
 const weightInput =
-  document.getElementById(
-    "weightInput"
-  );
-
+  $("weightInput");
 
 const saveWeightButton =
-  document.getElementById(
-    "saveWeightButton"
-  );
+  $("saveWeightButton");
 
-
-const statusBox =
-  document.getElementById(
-    "status"
-  );
-
-
-const lastUpdated =
-  document.getElementById(
-    "lastUpdated"
-  );
-
+const weightStatus =
+  $("weightStatus");
 
 const startWeight =
-  document.getElementById(
-    "startWeight"
-  );
-
+  $("startWeight");
 
 const weightChange =
-  document.getElementById(
-    "weightChange"
-  );
+  $("weightChange");
 
-
-const weightProgress =
-  document.getElementById(
-    "weightProgress"
-  );
-
+const progressFill =
+  $("progressFill");
 
 const targetButton =
-  document.getElementById(
-    "targetButton"
-  );
-
+  $("targetButton");
 
 const targetModal =
-  document.getElementById(
-    "targetModal"
-  );
-
+  $("targetModal");
 
 const targetInput =
-  document.getElementById(
-    "targetInput"
-  );
-
+  $("targetInput");
 
 const saveTargetButton =
-  document.getElementById(
-    "saveTargetButton"
-  );
+  $("saveTargetButton");
 
 
-
-/* =========================================================
-   FORMAT
-========================================================= */
-
-function fmtWeight(
-  value
-) {
-
-  if (
-    value === null ||
-    value === undefined ||
-    value === ""
-  ) {
-
-    return "--";
-  }
+let dashboard =
+  null;
 
 
-  const n =
-    Number(
-      value
-    );
-
-
-  return Number.isFinite(n)
-    ? n.toFixed(1)
-    : "--";
-}
-
-
-
-function fmtDate(
-  value
-) {
-
-  if (!value) {
-
-    return "-";
-  }
-
-
-  const d =
-    new Date(
-      value
-    );
-
-
-  if (
-    Number.isNaN(
-      d.getTime()
-    )
-  ) {
-
-    return "-";
-  }
-
-
-  return d.toLocaleString(
-    "th-TH",
-    {
-      dateStyle:
-        "short",
-
-      timeStyle:
-        "short"
-    }
-  );
-}
-
+let saving =
+  false;
 
 
 /* =========================================================
@@ -1345,240 +412,34 @@ function showStatus(
   type = "loading"
 ) {
 
-  statusBox.textContent =
+  weightStatus.textContent =
     message;
 
 
-  statusBox.className =
-    "status show " +
+  weightStatus.className =
+    "weight-status show " +
     type;
 }
 
 
-
 function hideStatus() {
 
-  statusBox.className =
-    "status";
+  weightStatus.className =
+    "weight-status";
 }
-
-
-
-/* =========================================================
-   API
-========================================================= */
-
-async function postJSON(
-  url,
-  payload
-) {
-
-  const response =
-    await fetch(
-      url,
-      {
-        method:
-          "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(
-            payload
-          )
-      }
-    );
-
-
-  const raw =
-    await response.text();
-
-
-  let data;
-
-
-  try {
-
-    data =
-      JSON.parse(
-        raw
-      );
-
-  } catch {
-
-    console.error(
-      "API RAW RESPONSE:",
-      raw
-    );
-
-
-    throw new Error(
-      "Server ตอบกลับไม่ถูกต้อง"
-    );
-  }
-
-
-  if (
-    !response.ok ||
-    data.success === false
-  ) {
-
-    const error =
-      new Error(
-        data.error ||
-        data.message ||
-        "ดำเนินการไม่สำเร็จ"
-      );
-
-
-    error.code =
-      data.code;
-
-
-    throw error;
-  }
-
-
-  return data;
-}
-
-
-
-/* =========================================================
-   ID TOKEN
-========================================================= */
-
-function getIdToken() {
-
-  if (
-    typeof liff ===
-      "undefined"
-  ) {
-
-    throw new Error(
-      "LINE LIFF SDK ไม่พร้อม"
-    );
-  }
-
-
-  if (
-    !liff.isLoggedIn()
-  ) {
-
-    throw new Error(
-      "ยังไม่ได้เข้าสู่ระบบ LINE"
-    );
-  }
-
-
-  const token =
-    liff.getIDToken();
-
-
-  if (!token) {
-
-    throw new Error(
-      "ไม่พบ LINE ID Token"
-    );
-  }
-
-
-  return token;
-}
-
-
-
-/* =========================================================
-   LOGIN AGAIN
-========================================================= */
-
-function loginAgain() {
-
-  lineReady =
-    false;
-
-
-  saveWeightButton.disabled =
-    true;
-
-
-  targetButton.disabled =
-    true;
-
-
-  try {
-
-    if (
-      liff.isLoggedIn()
-    ) {
-
-      liff.logout();
-    }
-
-  } catch (
-    error
-  ) {
-
-    console.warn(
-      error
-    );
-  }
-
-
-  liff.login({
-    redirectUri:
-      window.location.href
-  });
-}
-
-
-
-/* =========================================================
-   DASHBOARD DATA
-========================================================= */
-
-async function loadDashboard() {
-
-  const idToken =
-    getIdToken();
-
-
-  const data =
-    await postJSON(
-      DASHBOARD_API,
-      {
-        action:
-          "dashboard",
-
-        idToken
-      }
-    );
-
-
-  dashboardData =
-    data;
-
-
-  renderDashboard(
-    data
-  );
-
-
-  return data;
-}
-
 
 
 /* =========================================================
    RENDER
 ========================================================= */
 
-function renderDashboard(
+function render(
   data
 ) {
+
+  dashboard =
+    data;
+
 
   const weight =
     data?.weight ||
@@ -1601,34 +462,14 @@ function renderDashboard(
 
 
   latestWeight.textContent =
-    fmtWeight(
+    ROCK.fmtWeight(
       current
     );
 
 
   targetWeight.textContent =
-    fmtWeight(
+    ROCK.fmtWeight(
       target
-    );
-
-
-  lastUpdated.textContent =
-    fmtDate(
-      weight.updatedAt ??
-      weight.lastRecordedAt ??
-      data.updatedAt
-    );
-
-
-  startWeight.textContent =
-    fmtWeight(
-      start
-    ) +
-    (
-      start !== null &&
-      start !== undefined
-        ? " kg"
-        : ""
     );
 
 
@@ -1638,9 +479,8 @@ function renderDashboard(
   ) {
 
     weightInput.value =
-      Number(
-        current
-      ).toFixed(1);
+      Number(current)
+        .toFixed(1);
   }
 
 
@@ -1650,64 +490,49 @@ function renderDashboard(
   ) {
 
     targetInput.value =
-      Number(
-        target
-      ).toFixed(1);
+      Number(target)
+        .toFixed(1);
   }
 
 
-  const startNum =
-    Number(
-      start
-    );
+  startWeight.textContent =
+    ROCK.fmtWeight(start) +
+    " kg";
 
 
-  const currentNum =
-    Number(
-      current
-    );
+  const s =
+    Number(start);
 
+  const c =
+    Number(current);
 
-  const targetNum =
-    Number(
-      target
-    );
+  const t =
+    Number(target);
 
 
   if (
-    Number.isFinite(
-      startNum
-    ) &&
-    Number.isFinite(
-      currentNum
-    )
+    Number.isFinite(s) &&
+    Number.isFinite(c)
   ) {
 
     const diff =
-      startNum -
-      currentNum;
+      s - c;
 
 
-    if (
-      diff > 0
-    ) {
+    if (diff > 0) {
 
       weightChange.textContent =
         "ลด " +
-        Math.abs(
-          diff
-        ).toFixed(1) +
+        Math.abs(diff)
+          .toFixed(1) +
         " kg";
 
-    } else if (
-      diff < 0
-    ) {
+    } else if (diff < 0) {
 
       weightChange.textContent =
         "เพิ่ม " +
-        Math.abs(
-          diff
-        ).toFixed(1) +
+        Math.abs(diff)
+          .toFixed(1) +
         " kg";
 
     } else {
@@ -1719,53 +544,26 @@ function renderDashboard(
   } else {
 
     weightChange.textContent =
-      "-- kg";
+      "--.- kg";
   }
 
 
   let progress =
-    Number(
-      weight.progress
-    );
+    0;
 
 
   if (
-    !Number.isFinite(
-      progress
-    )
+    Number.isFinite(s) &&
+    Number.isFinite(c) &&
+    Number.isFinite(t) &&
+    s !== t
   ) {
 
     progress =
-      0;
-
-
-    if (
-      Number.isFinite(
-        startNum
-      ) &&
-      Number.isFinite(
-        currentNum
-      ) &&
-      Number.isFinite(
-        targetNum
-      ) &&
-      startNum !==
-        targetNum
-    ) {
-
-      progress =
-        (
-          (
-            startNum -
-            currentNum
-          ) /
-          (
-            startNum -
-            targetNum
-          )
-        ) *
-        100;
-    }
+      (
+        (s - c) /
+        (s - t)
+      ) * 100;
   }
 
 
@@ -1779,11 +577,27 @@ function renderDashboard(
     );
 
 
-  weightProgress.style.width =
+  progressFill.style.width =
     progress +
     "%";
 }
 
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function loadDashboard() {
+
+  const data =
+    await ROCK.fetchDashboard();
+
+
+  render(data);
+
+
+  return data;
+}
 
 
 /* =========================================================
@@ -1792,39 +606,21 @@ function renderDashboard(
 
 async function saveWeight() {
 
-  if (
-    requestRunning
-  ) {
-
+  if (saving) {
     return;
   }
 
 
-  if (
-    !lineReady
-  ) {
-
-    showStatus(
-      "LINE ยังไม่พร้อม กรุณาเข้าสู่ระบบใหม่",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const weight =
+  const value =
     Number(
       weightInput.value
     );
 
 
   if (
-    !Number.isFinite(
-      weight
-    ) ||
-    weight < 20 ||
-    weight > 400
+    !Number.isFinite(value) ||
+    value < 20 ||
+    value > 400
   ) {
 
     showStatus(
@@ -1836,7 +632,7 @@ async function saveWeight() {
   }
 
 
-  requestRunning =
+  saving =
     true;
 
 
@@ -1856,62 +652,40 @@ async function saveWeight() {
 
   try {
 
-    const idToken =
-      getIdToken();
-
-
-    const previousWeight =
+    const previous =
       Number(
-        dashboardData
+        dashboard
           ?.weight
           ?.current
       );
 
 
     const result =
-      await postJSON(
-        WEIGHT_API,
-        {
-          action:
-            "saveWeight",
-
-          idToken,
-
-          weight
-        }
+      await ROCK.saveWeight(
+        value
       );
 
 
-    /*
-      ชั่งไปแล้ววันนี้
-    */
+    /* ชั่งแล้ววันนี้ */
 
     if (
       result.alreadyCheckedToday
     ) {
 
-      const todayWeight =
+      const today =
         result?.weight?.current;
 
 
-      if (
-        todayWeight !== null &&
-        todayWeight !== undefined
-      ) {
-
-        weightInput.value =
-          Number(
-            todayWeight
-          ).toFixed(1);
-      }
+      weightInput.value =
+        ROCK.fmtWeight(
+          today
+        );
 
 
       showStatus(
         "✅ วันนี้คุณบันทึกน้ำหนักแล้ว\n" +
         "น้ำหนักวันนี้ " +
-        fmtWeight(
-          todayWeight
-        ) +
+        ROCK.fmtWeight(today) +
         " kg\n" +
         "สามารถบันทึกใหม่ได้อีกครั้งพรุ่งนี้",
         "success"
@@ -1920,154 +694,87 @@ async function saveWeight() {
 
       await loadDashboard();
 
-
       return;
     }
 
 
-    /*
-      บันทึกสำเร็จ
-    */
-
     await loadDashboard();
 
 
-    const newWeight =
-      Number(
-        dashboardData
-          ?.weight
-          ?.current
-      );
+    const difference =
+      value -
+      previous;
 
 
-    weightInput.value =
-      Number.isFinite(
-        newWeight
-      )
-        ? newWeight
-            .toFixed(1)
-        : weight.toFixed(1);
-
-
-    let changeMessage =
+    let changeText =
       "";
 
 
     if (
-      Number.isFinite(
-        previousWeight
-      )
+      Number.isFinite(previous)
     ) {
 
-      const difference =
-        weight -
-        previousWeight;
+      if (difference > 0) {
 
-
-      if (
-        difference > 0
-      ) {
-
-        changeMessage =
+        changeText =
           "\nน้ำหนักเพิ่มขึ้น " +
-          difference
-            .toFixed(1) +
-          " kg จากครั้งก่อน";
+          difference.toFixed(1) +
+          " kg";
 
-      } else if (
-        difference < 0
-      ) {
+      } else if (difference < 0) {
 
-        changeMessage =
+        changeText =
           "\nน้ำหนักลดลง " +
-          Math.abs(
-            difference
-          )
+          Math.abs(difference)
             .toFixed(1) +
-          " kg จากครั้งก่อน";
+          " kg";
 
       } else {
 
-        changeMessage =
+        changeText =
           "\nน้ำหนักเท่ากับครั้งก่อน";
       }
     }
 
 
-    const rewards =
+    const reward =
       result.rewards ||
       {};
 
 
-    let rewardText =
-      "";
-
-
-    if (
-      Number(
-        rewards.exp
-      ) > 0 ||
-      Number(
-        rewards.rockCoin
-      ) > 0 ||
-      Number(
-        rewards.energy
-      ) > 0
-    ) {
-
-      rewardText =
-        "\n\nรางวัลวันนี้" +
-        "\n+" +
-        Number(
-          rewards.exp || 0
-        ) +
-        " EXP" +
-
-        "\n+" +
-        Number(
-          rewards.rockCoin || 0
-        ) +
-        " ROCK COIN" +
-
-        "\n+" +
-        Number(
-          rewards.energy || 0
-        ) +
-        " ENERGY";
-    }
-
-
     showStatus(
       "✅ บันทึกสำเร็จ" +
-      changeMessage +
-      rewardText,
+      changeText +
+      "\n\n+" +
+      Number(reward.exp || 0) +
+      " EXP" +
+      "\n+" +
+      Number(reward.rockCoin || 0) +
+      " ROCK COIN" +
+      "\n+" +
+      Number(reward.energy || 0) +
+      " ENERGY",
       "success"
     );
 
 
-  } catch (
-    error
-  ) {
+  } catch (error) {
 
-    console.error(
-      "SAVE WEIGHT ERROR:",
-      error
-    );
+    console.error(error);
 
 
     const message =
       error?.message ||
-      String(
-        error
-      );
+      String(error);
 
 
     if (
       message
         .toLowerCase()
-        .includes(
-          "token"
-        )
+        .includes("token") ||
+      message
+        .toLowerCase()
+        .includes("authentication")
     ) {
 
       showStatus(
@@ -2077,10 +784,9 @@ async function saveWeight() {
 
 
       setTimeout(
-        loginAgain,
+        ROCK.loginAgain,
         500
       );
-
 
       return;
     }
@@ -2095,88 +801,46 @@ async function saveWeight() {
 
   } finally {
 
-    requestRunning =
+    saving =
       false;
 
 
-    if (
-      lineReady
-    ) {
-
-      saveWeightButton.disabled =
-        false;
+    saveWeightButton.disabled =
+      false;
 
 
-      saveWeightButton.textContent =
-        "บันทึกน้ำหนัก";
-    }
+    saveWeightButton.textContent =
+      "บันทึกน้ำหนัก";
   }
 }
 
 
-
 /* =========================================================
-   TARGET MODAL
+   TARGET
 ========================================================= */
 
-function openTargetModal() {
-
-  const currentTarget =
-    dashboardData
-      ?.weight
-      ?.target;
-
-
-  if (
-    currentTarget !== null &&
-    currentTarget !== undefined
-  ) {
-
-    targetInput.value =
-      Number(
-        currentTarget
-      ).toFixed(1);
-
-  } else {
-
-    targetInput.value =
-      "";
-  }
-
+function openTarget() {
 
   targetModal
     .classList
-    .add(
-      "show"
-    );
+    .add("show");
 
 
   setTimeout(
-    function () {
-
-      targetInput.focus();
-
-    },
+    () =>
+      targetInput.focus(),
     100
   );
 }
 
 
-
-function closeTargetModal() {
+function closeTarget() {
 
   targetModal
     .classList
-    .remove(
-      "show"
-    );
+    .remove("show");
 }
 
-
-
-/* =========================================================
-   SAVE TARGET
-========================================================= */
 
 async function saveTarget() {
 
@@ -2187,9 +851,7 @@ async function saveTarget() {
 
 
   if (
-    !Number.isFinite(
-      value
-    ) ||
+    !Number.isFinite(value) ||
     value < 20 ||
     value > 400
   ) {
@@ -2206,75 +868,30 @@ async function saveTarget() {
     true;
 
 
-  saveTargetButton.textContent =
-    "กำลังบันทึก...";
-
-
   try {
 
-    const idToken =
-      getIdToken();
-
-
-    await postJSON(
-      WEIGHT_API,
-      {
-        action:
-          "setTarget",
-
-        idToken,
-
-        targetWeight:
-          value
-      }
+    await ROCK.setTarget(
+      value
     );
 
 
-    closeTargetModal();
+    closeTarget();
 
 
     await loadDashboard();
 
 
     showStatus(
-      "✅ บันทึกเป้าหมายน้ำหนักเรียบร้อยแล้ว",
+      "✅ บันทึกเป้าหมายน้ำหนักแล้ว",
       "success"
     );
 
 
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "SAVE TARGET ERROR:",
-      error
-    );
-
-
-    const message =
-      error?.message ||
-      String(
-        error
-      );
-
-
-    if (
-      message
-        .toLowerCase()
-        .includes(
-          "token"
-        )
-    ) {
-
-      loginAgain();
-
-      return;
-    }
-
+  } catch (error) {
 
     alert(
-      message
+      error?.message ||
+      String(error)
     );
 
 
@@ -2282,103 +899,95 @@ async function saveTarget() {
 
     saveTargetButton.disabled =
       false;
-
-
-    saveTargetButton.textContent =
-      "บันทึก";
   }
 }
 
 
-
 /* =========================================================
-   LIFF INIT
+   EVENTS
 ========================================================= */
 
-async function initLIFF() {
-
-  showStatus(
-    "กำลังเชื่อมต่อ LINE...",
-    "loading"
+saveWeightButton
+  .addEventListener(
+    "click",
+    saveWeight
   );
 
 
-  saveWeightButton.disabled =
-    true;
+targetButton
+  .addEventListener(
+    "click",
+    openTarget
+  );
 
 
-  targetButton.disabled =
-    true;
+$("cancelTargetButton")
+  .addEventListener(
+    "click",
+    closeTarget
+  );
 
+
+saveTargetButton
+  .addEventListener(
+    "click",
+    saveTarget
+  );
+
+
+$("homeButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      ROCK.go(
+        ROCK.CFG.PAGE.HOME
+      );
+    }
+  );
+
+
+targetModal
+  .addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target ===
+        targetModal
+      ) {
+        closeTarget();
+      }
+    }
+  );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+(async () => {
 
   try {
 
-    if (
-      typeof liff ===
-        "undefined"
-    ) {
-
-      throw new Error(
-        "ไม่สามารถโหลด LINE LIFF SDK"
-      );
-    }
+    showStatus(
+      "กำลังเชื่อมต่อ LINE...",
+      "loading"
+    );
 
 
-    await liff.init({
-      liffId:
-        LIFF_ID
-    });
-
-
-    /*
-      ยังไม่ได้ Login
-    */
-
-    if (
-      !liff.isLoggedIn()
-    ) {
-
-      liff.login({
-        redirectUri:
-          window.location.href
-      });
-
-      return;
-    }
-
-
-    /*
-      มี Login แล้ว
-      แต่ต้องมี ID Token
-    */
-
-    const idToken =
-      liff.getIDToken();
-
-
-    if (!idToken) {
-
-      showStatus(
-        "กำลังขอ LINE Session ใหม่...",
-        "loading"
+    const ok =
+      await ROCK.initLiff(
+        "WEIGHT"
       );
 
 
-      loginAgain();
-
+    if (!ok) {
       return;
     }
 
-
-    /*
-      ทดลองใช้ token จริงกับ backend
-    */
 
     await loadDashboard();
-
-
-    lineReady =
-      true;
 
 
     saveWeightButton.disabled =
@@ -2396,161 +1005,24 @@ async function initLIFF() {
     hideStatus();
 
 
-  } catch (
-    error
-  ) {
+  } catch (error) {
 
-    console.error(
-      "LIFF INIT ERROR:",
-      error
-    );
-
-
-    lineReady =
-      false;
-
-
-    const message =
-      error?.message ||
-      String(
-        error
-      );
-
-
-    if (
-      message
-        .toLowerCase()
-        .includes(
-          "token"
-        ) ||
-      message
-        .toLowerCase()
-        .includes(
-          "authentication"
-        )
-    ) {
-
-      showStatus(
-        "LINE Session ไม่พร้อม กำลังเข้าสู่ระบบใหม่...",
-        "loading"
-      );
-
-
-      setTimeout(
-        loginAgain,
-        500
-      );
-
-
-      return;
-    }
+    console.error(error);
 
 
     showStatus(
-      "❌ เชื่อมต่อ LINE ไม่สำเร็จ: " +
-      message,
+      "❌ " +
+      (
+        error?.message ||
+        String(error)
+      ),
       "error"
     );
   }
-}
 
-
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-saveWeightButton
-  .addEventListener(
-    "click",
-    saveWeight
-  );
-
-
-weightInput
-  .addEventListener(
-    "keydown",
-    function (
-      event
-    ) {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        saveWeight();
-      }
-    }
-  );
-
-
-targetButton
-  .addEventListener(
-    "click",
-    openTargetModal
-  );
-
-
-document
-  .getElementById(
-    "cancelTargetButton"
-  )
-  .addEventListener(
-    "click",
-    closeTargetModal
-  );
-
-
-saveTargetButton
-  .addEventListener(
-    "click",
-    saveTarget
-  );
-
-
-document
-  .getElementById(
-    "homeButton"
-  )
-  .addEventListener(
-    "click",
-    function () {
-
-      window.location.href =
-        HOME_LIFF_URL;
-    }
-  );
-
-
-targetModal
-  .addEventListener(
-    "click",
-    function (
-      event
-    ) {
-
-      if (
-        event.target ===
-        targetModal
-      ) {
-
-        closeTargetModal();
-      }
-    }
-  );
-
-
-
-/* =========================================================
-   START
-========================================================= */
-
-initLIFF();
-
+})();
 </script>
 
 
 </body>
-
 </html>
