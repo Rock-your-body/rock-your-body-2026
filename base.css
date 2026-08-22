@@ -1,6 +1,13 @@
 /* =========================================================
-   ROCK YOUR BODY - LIVE DATA OVERLAY V3
-   ========================================================= */
+   ROCK YOUR BODY 2026
+   BASE CSS - CLEAN VERSION
+   HOME + MISSION + BATTLE + WEIGHT CHECK
+========================================================= */
+
+
+/* =========================================================
+   RESET
+========================================================= */
 
 *{
   box-sizing:border-box;
@@ -9,14 +16,34 @@
 html,
 body{
   margin:0;
+  padding:0;
+
+  width:100%;
   min-height:100%;
+
   background:#eef5ff;
+
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
 }
 
 
 /* =========================================================
    TEMPLATE STAGE
-   ========================================================= */
+========================================================= */
 
 .stage{
   position:relative;
@@ -30,6 +57,9 @@ body{
   background:#eef5ff;
 }
 
+
+/* Template image */
+
 .template{
   position:relative;
 
@@ -39,12 +69,17 @@ body{
 
   width:100%;
   height:auto;
+
+  margin:0;
+  padding:0;
+
+  border:0;
 }
 
 
 /* =========================================================
-   LIVE DATA
-   ========================================================= */
+   LIVE DATA OVERLAY
+========================================================= */
 
 .overlay{
   position:absolute;
@@ -86,15 +121,16 @@ body{
 }
 
 
-/* ไม่สร้างพื้นขาว */
+/* ไม่สร้างพื้นหลังปิด Template */
+
 .cover{
   background:transparent !important;
 }
 
 
 /* =========================================================
-   NUMBER STYLES
-   ========================================================= */
+   LIVE NUMBER
+========================================================= */
 
 .live-number{
   font-variant-numeric:
@@ -103,12 +139,19 @@ body{
   letter-spacing:-0.02em;
 }
 
+
+/* COLORS */
+
 .live-blue{
   color:#06276c;
 }
 
 .live-red{
   color:#d20d0d;
+}
+
+.live-green{
+  color:#07833d;
 }
 
 .live-white{
@@ -122,7 +165,7 @@ body{
 
 /* =========================================================
    FONT SIZE
-   ========================================================= */
+========================================================= */
 
 .live-xl{
   font-size:
@@ -162,8 +205,9 @@ body{
 
 
 /* =========================================================
-   HOME SPECIFIC SIZES
-   ========================================================= */
+   HOME SPECIFIC
+========================================================= */
+
 #coin{
   font-size:
     clamp(
@@ -192,16 +236,25 @@ body{
 }
 
 #expText{
-  font-size:clamp(
-     7px,
-     1vw,
-     16px
-  );
+  font-size:
+    clamp(
+      7px,
+      1vw,
+      16px
+    );
 }
 
+#currentWeight,
+#targetWeight{
+  font-weight:1000;
+
+  line-height:1;
+}
+
+
 /* =========================================================
-   PROGRESS BAR
-   ========================================================= */
+   PROGRESS TRACK
+========================================================= */
 
 .live-track{
   position:absolute;
@@ -232,7 +285,9 @@ body{
 }
 
 
-/* EXP */
+/* =========================================================
+   EXP
+========================================================= */
 
 .exp-fill{
   background:
@@ -244,7 +299,9 @@ body{
 }
 
 
-/* DAILY MISSION */
+/* =========================================================
+   MISSION
+========================================================= */
 
 .mission-fill-daily{
   background:
@@ -255,9 +312,6 @@ body{
     );
 }
 
-
-/* WEEKLY */
-
 .mission-fill-weekly{
   background:
     linear-gradient(
@@ -267,9 +321,6 @@ body{
     );
 }
 
-
-/* MONTHLY */
-
 .mission-fill-monthly{
   background:
     linear-gradient(
@@ -278,9 +329,6 @@ body{
       #6120b6
     );
 }
-
-
-/* BONUS */
 
 .mission-fill-bonus{
   background:
@@ -292,7 +340,9 @@ body{
 }
 
 
-/* BATTLE HP */
+/* =========================================================
+   BATTLE HP
+========================================================= */
 
 .hp-fill{
   background:
@@ -304,7 +354,9 @@ body{
 }
 
 
-/* ENERGY */
+/* =========================================================
+   ENERGY
+========================================================= */
 
 .energy-fill{
   background:
@@ -318,7 +370,7 @@ body{
 
 /* =========================================================
    PROFILE
-   ========================================================= */
+========================================================= */
 
 .live-profile{
   position:absolute;
@@ -335,7 +387,7 @@ body{
 
 /* =========================================================
    MONSTER
-   ========================================================= */
+========================================================= */
 
 .live-monster{
   position:absolute;
@@ -353,8 +405,8 @@ body{
 
 
 /* =========================================================
-   HOTSPOT BUTTONS
-   ========================================================= */
+   HOTSPOT
+========================================================= */
 
 .hotspot{
   position:absolute;
@@ -371,6 +423,8 @@ body{
   background:transparent;
 
   cursor:pointer;
+
+  touch-action:manipulation;
 
   -webkit-tap-highlight-color:
     transparent;
@@ -389,7 +443,7 @@ body{
 
 /* =========================================================
    EMPTY DATA
-   ========================================================= */
+========================================================= */
 
 .is-empty{
   opacity:.55;
@@ -397,8 +451,8 @@ body{
 
 
 /* =========================================================
-   STATUS
-   ========================================================= */
+   GLOBAL STATUS
+========================================================= */
 
 .status{
   display:none;
@@ -407,7 +461,7 @@ body{
 .status.show{
   position:fixed;
 
-  z-index:9999;
+  z-index:99999;
 
   left:50%;
   bottom:18px;
@@ -451,79 +505,48 @@ body{
 
 
 /* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media(max-width:600px){
-
-  .overlay{
-    text-shadow:none;
-  }
-
-  .live-xl{
-    font-size:clamp(17px,6vw,35px);
-  }
-
-  .live-lg{
-    font-size:clamp(13px,4vw,25px);
-  }
-
-  .live-md{
-    font-size:clamp(9px,2.6vw,17px);
-  }
-
-  .live-sm{
-    font-size:clamp(7px,2vw,13px);
-  }
-
-
-  #coin{
-    font-size:clamp(9px,2.7vw,16px);
-  }
-
-  #energy{
-    font-size:clamp(8px,2.5vw,15px);
-  }
-
-}
-/* =========================================================
    WEIGHT CHECK PAGE
 ========================================================= */
 
 .weight-page{
+  width:100%;
   min-height:100vh;
-  padding:22px 14px 50px;
 
-  font-family:
-    Arial,
-    "Noto Sans Thai",
-    sans-serif;
+  padding:
+    22px
+    14px
+    50px;
 
   color:#08245b;
 
   background:
     linear-gradient(
       180deg,
-      #eaf3ff,
-      #f7fbff
+      #eaf3ff 0%,
+      #f7fbff 100%
     );
 }
 
 .weight-app{
   width:100%;
   max-width:620px;
+
   margin:0 auto;
 }
 
 
-/* HEADER */
+/* =========================================================
+   WEIGHT HEADER
+========================================================= */
 
 .weight-header{
-  padding:22px 18px;
-
-  background:#fff;
+  padding:
+    22px
+    18px;
 
   border-radius:24px;
+
+  background:#fff;
 
   text-align:center;
 
@@ -536,9 +559,15 @@ body{
   color:#073b93;
 
   font-size:
-    clamp(25px,5vw,38px);
+    clamp(
+      25px,
+      5vw,
+      38px
+    );
 
   font-weight:900;
+
+  line-height:1.1;
 }
 
 .weight-brand-red{
@@ -556,10 +585,13 @@ body{
 }
 
 
-/* HERO */
+/* =========================================================
+   WEIGHT HERO
+========================================================= */
 
 .weight-hero{
   margin-top:18px;
+
   padding:24px;
 
   border-radius:25px;
@@ -569,9 +601,9 @@ body{
   background:
     linear-gradient(
       135deg,
-      #073b93,
+      #073b93 0%,
       #0765d8 60%,
-      #148bf3
+      #148bf3 100%
     );
 
   box-shadow:
@@ -581,28 +613,44 @@ body{
 
 .weight-title{
   display:flex;
+
   align-items:center;
+
   gap:12px;
 
   font-size:
-    clamp(26px,5vw,38px);
+    clamp(
+      26px,
+      5vw,
+      38px
+    );
 
   font-weight:900;
+
+  line-height:1.1;
 }
 
 .weight-subtitle{
   margin-top:8px;
+
+  font-size:15px;
+
   font-weight:800;
 }
 
 
-/* SUMMARY */
+/* =========================================================
+   WEIGHT SUMMARY
+========================================================= */
 
 .weight-summary-grid{
   display:grid;
 
   grid-template-columns:
-    1fr 1fr;
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
 
   gap:12px;
 
@@ -614,11 +662,11 @@ body{
 
   padding:18px;
 
-  border-radius:19px;
-
   border:
     1px solid
     rgba(255,255,255,.25);
+
+  border-radius:19px;
 
   background:
     rgba(255,255,255,.15);
@@ -626,6 +674,7 @@ body{
 
 .weight-summary-label{
   font-size:14px;
+
   font-weight:800;
 }
 
@@ -633,16 +682,25 @@ body{
   margin-top:10px;
 
   font-size:
-    clamp(27px,6vw,40px);
+    clamp(
+      27px,
+      6vw,
+      40px
+    );
 
   font-weight:900;
+
+  line-height:1;
 }
 
 
-/* CARD */
+/* =========================================================
+   WEIGHT CARD
+========================================================= */
 
 .weight-card{
   margin-top:18px;
+
   padding:22px;
 
   border-radius:23px;
@@ -657,7 +715,11 @@ body{
 .weight-card h2{
   margin:0;
 
+  color:#08245b;
+
   font-size:22px;
+
+  font-weight:900;
 }
 
 .weight-desc{
@@ -669,33 +731,55 @@ body{
 }
 
 
-/* INPUT */
+/* =========================================================
+   WEIGHT INPUT
+========================================================= */
 
 .weight-input-box{
   display:flex;
+
   align-items:center;
 
+  width:100%;
   min-height:78px;
 
   margin-top:18px;
-  padding:0 20px;
+
+  padding:
+    0
+    20px;
 
   border:
-    2px solid #c9d9ef;
+    2px solid
+    #c9d9ef;
 
   border-radius:18px;
 
   background:#fbfdff;
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
 .weight-input-box:focus-within{
   border-color:#0b67dd;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(11,103,221,.08);
 }
 
 .weight-input-box input{
+  display:block;
+
   width:100%;
+  min-width:0;
+
+  padding:0;
 
   border:0;
+
   outline:0;
 
   background:transparent;
@@ -703,12 +787,26 @@ body{
   color:#08245b;
 
   font-size:
-    clamp(30px,7vw,42px);
+    clamp(
+      30px,
+      7vw,
+      42px
+    );
 
   font-weight:900;
+
+  line-height:1;
+}
+
+.weight-input-box input::placeholder{
+  color:#7a7a7a;
+
+  opacity:1;
 }
 
 .weight-unit{
+  flex:0 0 auto;
+
   margin-left:10px;
 
   color:#64748b;
@@ -719,25 +817,63 @@ body{
 }
 
 
-/* BUTTON */
+/* ลบ spinner input number */
+
+.weight-input-box input[type="number"]{
+  appearance:textfield;
+  -moz-appearance:textfield;
+}
+
+.weight-input-box input[type="number"]::-webkit-inner-spin-button,
+.weight-input-box input[type="number"]::-webkit-outer-spin-button{
+  margin:0;
+
+  -webkit-appearance:none;
+}
+
+
+/* =========================================================
+   WEIGHT BUTTON
+========================================================= */
 
 .weight-button{
   width:100%;
   min-height:60px;
 
   border:0;
+
   border-radius:16px;
 
   cursor:pointer;
 
   font-size:18px;
+
   font-weight:900;
+
+  transition:
+    transform .12s ease,
+    opacity .2s ease,
+    box-shadow .2s ease;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+.weight-button:active{
+  transform:
+    scale(.99);
 }
 
 .weight-button:disabled{
   opacity:.55;
+
   cursor:not-allowed;
+
+  transform:none;
 }
+
+
+/* SAVE */
 
 .weight-save{
   margin-top:18px;
@@ -750,7 +886,14 @@ body{
       #00b84f,
       #06c755
     );
+
+  box-shadow:
+    0 8px 20px
+    rgba(6,199,85,.20);
 }
+
+
+/* TARGET */
 
 .weight-target{
   margin-top:15px;
@@ -759,6 +902,9 @@ body{
 
   background:#eaf3ff;
 }
+
+
+/* HOME */
 
 .weight-home{
   margin-top:18px;
@@ -771,25 +917,35 @@ body{
       #073b93,
       #075ac7
     );
+
+  box-shadow:
+    0 8px 20px
+    rgba(7,59,147,.18);
 }
 
 
-/* STATUS */
+/* =========================================================
+   WEIGHT STATUS
+========================================================= */
 
 .weight-status{
   display:none;
 
   margin-top:16px;
-  padding:15px 17px;
+
+  padding:
+    15px
+    17px;
 
   border-radius:15px;
 
-  white-space:pre-line;
-
   font-size:14px;
+
   font-weight:800;
 
   line-height:1.5;
+
+  white-space:pre-line;
 }
 
 .weight-status.show{
@@ -798,27 +954,35 @@ body{
 
 .weight-status.loading{
   color:#174ea6;
+
   background:#eef5ff;
 }
 
 .weight-status.success{
   color:#08783c;
+
   background:#e9f8ef;
 }
 
 .weight-status.error{
   color:#a21e1e;
+
   background:#fff0f0;
 }
 
 
-/* PROGRESS */
+/* =========================================================
+   WEIGHT PROGRESS
+========================================================= */
 
 .weight-progress-grid{
   display:grid;
 
   grid-template-columns:
-    1fr 1fr;
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
 
   gap:12px;
 
@@ -842,12 +1006,15 @@ body{
 .weight-progress-value{
   margin-top:7px;
 
+  color:#08245b;
+
   font-size:21px;
 
   font-weight:900;
 }
 
 .weight-progress-track{
+  width:100%;
   height:10px;
 
   margin-top:16px;
@@ -873,18 +1040,20 @@ body{
     );
 
   transition:
-    width .4s ease;
+    width .45s ease;
 }
 
 
-/* MODAL */
+/* =========================================================
+   WEIGHT MODAL
+========================================================= */
 
 .weight-modal-bg{
   position:fixed;
 
   inset:0;
 
-  z-index:9999;
+  z-index:99999;
 
   display:none;
 
@@ -894,7 +1063,12 @@ body{
   padding:18px;
 
   background:
-    rgba(0,0,0,.48);
+    rgba(
+      0,
+      0,
+      0,
+      .48
+    );
 }
 
 .weight-modal-bg.show{
@@ -910,13 +1084,31 @@ body{
   border-radius:22px;
 
   background:#fff;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.28);
+}
+
+.weight-modal h2{
+  margin:
+    0
+    0
+    8px;
+
+  color:#073b93;
+
+  font-size:22px;
+
+  font-weight:900;
 }
 
 .weight-modal-actions{
   display:grid;
 
   grid-template-columns:
-    1fr 1fr;
+    1fr
+    1fr;
 
   gap:10px;
 
@@ -927,322 +1119,197 @@ body{
   min-height:50px;
 
   border:0;
+
   border-radius:13px;
 
-  font-weight:900;
-
   cursor:pointer;
+
+  font-weight:900;
 }
 
 .weight-cancel{
+  color:#334155;
+
   background:#e9eef6;
 }
 
 .weight-confirm{
   color:#fff;
+
   background:#06c755;
 }
+
+
 /* =========================================================
-   WEIGHT CHECK
+   RESPONSIVE TABLET
 ========================================================= */
 
-.weight-page{
-  min-height:100vh;
-  padding:22px 14px 50px;
-  background:
-    linear-gradient(
-      180deg,
-      #eaf3ff,
-      #f7fbff
-    );
+@media(max-width:900px){
+
+  .stage{
+    width:100%;
+  }
+
 }
 
-.weight-app{
-  width:100%;
-  max-width:620px;
-  margin:0 auto;
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+  .overlay{
+    text-shadow:none;
+  }
+
+
+  .live-xl{
+    font-size:
+      clamp(
+        17px,
+        6vw,
+        35px
+      );
+  }
+
+
+  .live-lg{
+    font-size:
+      clamp(
+        13px,
+        4vw,
+        25px
+      );
+  }
+
+
+  .live-md{
+    font-size:
+      clamp(
+        9px,
+        2.6vw,
+        17px
+      );
+  }
+
+
+  .live-sm{
+    font-size:
+      clamp(
+        7px,
+        2vw,
+        13px
+      );
+  }
+
+
+  #coin{
+    font-size:
+      clamp(
+        9px,
+        2.7vw,
+        16px
+      );
+  }
+
+
+  #energy{
+    font-size:
+      clamp(
+        8px,
+        2.5vw,
+        15px
+      );
+  }
+
+
+  .weight-page{
+    padding:
+      12px
+      10px
+      35px;
+  }
+
+
+  .weight-header{
+    padding:
+      20px
+      14px;
+  }
+
+
+  .weight-hero{
+    padding:20px;
+  }
+
+
+  .weight-card{
+    padding:18px;
+  }
+
+
+  .weight-summary{
+    min-height:95px;
+
+    padding:15px;
+  }
+
+
+  .weight-input-box{
+    min-height:70px;
+
+    padding:
+      0
+      16px;
+  }
+
+
+  .weight-button{
+    min-height:56px;
+  }
+
 }
 
-.weight-header{
-  padding:22px 18px;
-  border-radius:24px;
-  background:#fff;
-  text-align:center;
-  box-shadow:
-    0 10px 30px
-    rgba(15,53,103,.10);
-}
 
-.weight-brand{
-  font-size:clamp(25px,5vw,38px);
-  font-weight:900;
-  color:#073b93;
-}
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
 
-.weight-brand-red{
-  color:#d71920;
-}
+@media(max-width:390px){
 
-.weight-tagline{
-  margin-top:8px;
-  font-size:14px;
-  font-weight:800;
-  color:#64748b;
-}
+  .weight-title{
+    font-size:25px;
+  }
 
-.weight-hero{
-  margin-top:18px;
-  padding:24px;
-  border-radius:25px;
-  color:#fff;
-  background:
-    linear-gradient(
-      135deg,
-      #073b93,
-      #0765d8 60%,
-      #148bf3
-    );
-}
 
-.weight-title{
-  font-size:clamp(27px,5vw,38px);
-  font-weight:900;
-}
+  .weight-summary-grid{
+    gap:8px;
+  }
 
-.weight-subtitle{
-  margin-top:8px;
-  font-size:15px;
-  font-weight:800;
-}
 
-.weight-summary-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:20px;
-}
+  .weight-summary{
+    padding:13px;
+  }
 
-.weight-summary{
-  min-height:110px;
-  padding:18px;
-  border-radius:19px;
-  background:
-    rgba(255,255,255,.15);
-  border:
-    1px solid
-    rgba(255,255,255,.25);
-}
 
-.weight-summary-label{
-  font-size:14px;
-  font-weight:800;
-}
+  .weight-summary-label{
+    font-size:12px;
+  }
 
-.weight-summary-value{
-  margin-top:10px;
-  font-size:clamp(28px,6vw,40px);
-  font-weight:900;
-}
 
-.weight-card{
-  margin-top:18px;
-  padding:22px;
-  border-radius:23px;
-  background:#fff;
-  box-shadow:
-    0 10px 30px
-    rgba(15,53,103,.10);
-}
+  .weight-summary-value{
+    font-size:25px;
+  }
 
-.weight-card h2{
-  margin:0;
-  color:#08245b;
-  font-size:22px;
-}
 
-.weight-desc{
-  margin-top:7px;
-  color:#64748b;
-  font-size:14px;
-}
+  .weight-progress-grid{
+    gap:8px;
+  }
 
-.weight-input-box{
-  display:flex;
-  align-items:center;
-  min-height:78px;
-  margin-top:18px;
-  padding:0 20px;
-  border:2px solid #c9d9ef;
-  border-radius:18px;
-  background:#fbfdff;
-}
 
-.weight-input-box input{
-  width:100%;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:#08245b;
-  font-size:clamp(30px,7vw,42px);
-  font-weight:900;
-}
+  .weight-progress-box{
+    padding:13px;
+  }
 
-.weight-unit{
-  margin-left:10px;
-  color:#64748b;
-  font-size:19px;
-  font-weight:900;
-}
-
-.weight-button{
-  width:100%;
-  min-height:60px;
-  border:0;
-  border-radius:16px;
-  cursor:pointer;
-  font-size:18px;
-  font-weight:900;
-}
-
-.weight-button:disabled{
-  opacity:.55;
-}
-
-.weight-save{
-  margin-top:18px;
-  color:#fff;
-  background:#06c755;
-}
-
-.weight-target{
-  margin-top:15px;
-  color:#073b93;
-  background:#eaf3ff;
-}
-
-.weight-home{
-  margin-top:18px;
-  color:#fff;
-  background:#073b93;
-}
-
-.weight-status{
-  display:none;
-  margin-top:16px;
-  padding:15px 17px;
-  border-radius:15px;
-  font-size:14px;
-  font-weight:800;
-  line-height:1.5;
-  white-space:pre-line;
-}
-
-.weight-status.show{
-  display:block;
-}
-
-.weight-status.loading{
-  color:#174ea6;
-  background:#eef5ff;
-}
-
-.weight-status.success{
-  color:#08783c;
-  background:#e9f8ef;
-}
-
-.weight-status.error{
-  color:#a21e1e;
-  background:#fff0f0;
-}
-
-.weight-progress-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:18px;
-}
-
-.weight-progress-box{
-  padding:16px;
-  border-radius:16px;
-  background:#f5f8fd;
-}
-
-.weight-progress-label{
-  font-size:12px;
-  color:#64748b;
-}
-
-.weight-progress-value{
-  margin-top:7px;
-  font-size:21px;
-  font-weight:900;
-}
-
-.weight-progress-track{
-  height:10px;
-  margin-top:16px;
-  overflow:hidden;
-  border-radius:999px;
-  background:#dbe8f7;
-}
-
-.weight-progress-fill{
-  width:0%;
-  height:100%;
-  border-radius:999px;
-  background:
-    linear-gradient(
-      90deg,
-      #168cff,
-      #06c755
-    );
-}
-
-.weight-modal-bg{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  background:rgba(0,0,0,.48);
-}
-
-.weight-modal-bg.show{
-  display:flex;
-}
-
-.weight-modal{
-  width:100%;
-  max-width:420px;
-  padding:22px;
-  border-radius:22px;
-  background:#fff;
-}
-
-.weight-modal-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:18px;
-}
-
-.weight-modal-actions button{
-  min-height:50px;
-  border:0;
-  border-radius:13px;
-  cursor:pointer;
-  font-weight:900;
-}
-
-.weight-cancel{
-  background:#e9eef6;
-}
-
-.weight-confirm{
-  color:#fff;
-  background:#06c755;
 }
