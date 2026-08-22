@@ -3,33 +3,78 @@ window.ROCK = (() => {
   const CFG =
     window.APP_CONFIG;
 
-  function go(url) {
-    window.location.href = url;
+  if (!CFG) {
+    throw new Error(
+      "APP_CONFIG ไม่ถูกโหลด"
+    );
   }
 
-  function getPageLiffId(pageName) {
 
-    if (pageName === "WEIGHT") {
+  /* ======================================================
+     PAGE
+  ====================================================== */
+
+  function go(url) {
+
+    if (!url) {
+      return;
+    }
+
+    window.location.href =
+      url;
+  }
+
+
+  /* ======================================================
+     LIFF ID
+  ====================================================== */
+
+  function getLiffId(page) {
+
+    if (page === "WEIGHT") {
       return CFG.LIFF_ID.WEIGHT;
     }
 
     return CFG.LIFF_ID.DASHBOARD;
   }
 
-  async function initLiff(pageName = "DASHBOARD") {
 
-    if (typeof liff === "undefined") {
-      throw new Error("ไม่สามารถโหลด LINE LIFF SDK");
+  /* ======================================================
+     INIT LIFF
+  ====================================================== */
+
+  async function initLiff(
+    page = "DASHBOARD"
+  ) {
+
+    if (
+      typeof liff === "undefined"
+    ) {
+      throw new Error(
+        "ไม่สามารถโหลด LINE LIFF SDK"
+      );
     }
 
+
     const liffId =
-      getPageLiffId(pageName);
+      getLiffId(page);
+
+
+    if (!liffId) {
+      throw new Error(
+        "ไม่พบ LIFF ID"
+      );
+    }
+
 
     await liff.init({
       liffId
     });
 
-    if (!liff.isLoggedIn()) {
+
+    if (
+      !liff.isLoggedIn()
+    ) {
 
       liff.login({
         redirectUri:
@@ -39,14 +84,19 @@ window.ROCK = (() => {
       return false;
     }
 
-    const idToken =
+
+    const token =
       liff.getIDToken();
 
-    if (!idToken) {
+
+    if (!token) {
 
       try {
         liff.logout();
-      } catch {}
+      } catch (error) {
+        console.warn(error);
+      }
+
 
       liff.login({
         redirectUri:
@@ -55,23 +105,39 @@ window.ROCK = (() => {
 
       return false;
     }
+
 
     return true;
   }
 
+
+  /* ======================================================
+     TOKEN
+  ====================================================== */
+
   function getIdToken() {
 
     if (
-      typeof liff === "undefined" ||
-      !liff.isLoggedIn()
+      typeof liff === "undefined"
     ) {
       throw new Error(
-        "LINE ยังไม่ได้เข้าสู่ระบบ"
+        "LINE LIFF SDK ไม่พร้อม"
       );
     }
 
+
+    if (
+      !liff.isLoggedIn()
+    ) {
+      throw new Error(
+        "ยังไม่ได้เข้าสู่ระบบ LINE"
+      );
+    }
+
+
     const token =
       liff.getIDToken();
+
 
     if (!token) {
       throw new Error(
@@ -79,8 +145,42 @@ window.ROCK = (() => {
       );
     }
 
+
     return token;
   }
+
+
+  /* ======================================================
+     LOGIN AGAIN
+  ====================================================== */
+
+  function loginAgain() {
+
+    try {
+
+      if (
+        typeof liff !== "undefined" &&
+        liff.isLoggedIn()
+      ) {
+        liff.logout();
+      }
+
+    } catch (error) {
+
+      console.warn(error);
+    }
+
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+  }
+
+
+  /* ======================================================
+     POST JSON
+  ====================================================== */
 
   async function postJSON(
     url,
@@ -99,47 +199,85 @@ window.ROCK = (() => {
           },
 
           body:
-            JSON.stringify(payload)
+            JSON.stringify(
+              payload
+            )
         }
       );
+
 
     const text =
       await response.text();
 
+
     let data;
 
+
     try {
-      data = JSON.parse(text);
+
+      data =
+        JSON.parse(text);
+
     } catch {
+
+      console.error(
+        "API RAW:",
+        text
+      );
+
       throw new Error(
         "API ตอบกลับไม่ถูกต้อง"
       );
     }
 
+
     if (
       !response.ok ||
       data.success === false
     ) {
-      throw new Error(
-        data.error ||
-        data.message ||
-        "ดำเนินการไม่สำเร็จ"
-      );
+
+      const error =
+        new Error(
+          data.error ||
+          data.message ||
+          "ดำเนินการไม่สำเร็จ"
+        );
+
+
+      error.code =
+        data.code;
+
+
+      throw error;
     }
+
 
     return data;
   }
+
+
+  /* ======================================================
+     DASHBOARD
+  ====================================================== */
 
   async function fetchDashboard() {
 
     return await postJSON(
       CFG.API.DASHBOARD,
       {
-        action: "dashboard",
-        idToken: getIdToken()
+        action:
+          "dashboard",
+
+        idToken:
+          getIdToken()
       }
     );
   }
+
+
+  /* ======================================================
+     SAVE WEIGHT
+  ====================================================== */
 
   async function saveWeight(
     weight
@@ -148,12 +286,22 @@ window.ROCK = (() => {
     return await postJSON(
       CFG.API.WEIGHT,
       {
-        action: "saveWeight",
-        idToken: getIdToken(),
-        weight
+        action:
+          "saveWeight",
+
+        idToken:
+          getIdToken(),
+
+        weight:
+          Number(weight)
       }
     );
   }
+
+
+  /* ======================================================
+     TARGET
+  ====================================================== */
 
   async function setTarget(
     targetWeight
@@ -162,33 +310,49 @@ window.ROCK = (() => {
     return await postJSON(
       CFG.API.WEIGHT,
       {
-        action: "setTarget",
-        idToken: getIdToken(),
-        targetWeight
+        action:
+          "setTarget",
+
+        idToken:
+          getIdToken(),
+
+        targetWeight:
+          Number(targetWeight)
       }
     );
   }
 
-  function fmtWeight(v) {
+
+  /* ======================================================
+     FORMAT
+  ====================================================== */
+
+  function fmtWeight(value) {
 
     if (
-      v === null ||
-      v === undefined ||
-      v === ""
+      value === null ||
+      value === undefined ||
+      value === ""
     ) {
       return "--.-";
     }
 
-    const n = Number(v);
+
+    const n =
+      Number(value);
+
 
     return Number.isFinite(n)
       ? n.toFixed(1)
       : "--.-";
   }
 
-  function fmtInt(v) {
 
-    const n = Number(v);
+  function fmtInt(value) {
+
+    const n =
+      Number(value);
+
 
     return Number.isFinite(n)
       ? Math.round(n)
@@ -196,44 +360,82 @@ window.ROCK = (() => {
       : "0";
   }
 
-  function formatDate(v) {
 
-    if (!v) {
-      return "--/--/----";
+  function formatDate(value) {
+
+    if (!value) {
+      return "-";
     }
 
-    const d = new Date(v);
+
+    const date =
+      new Date(value);
+
 
     if (
       Number.isNaN(
-        d.getTime()
+        date.getTime()
       )
     ) {
-      return "--/--/----";
+      return "-";
     }
 
-    return d.toLocaleDateString(
+
+    return date.toLocaleString(
       "th-TH",
       {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
+        dateStyle:
+          "short",
+
+        timeStyle:
+          "short"
       }
     );
   }
 
+
+  function num(
+    value,
+    fallback = 0
+  ) {
+
+    const n =
+      Number(value);
+
+
+    return Number.isFinite(n)
+      ? n
+      : fallback;
+  }
+
+
   return {
+
     CFG,
+
     go,
+
     initLiff,
+
     getIdToken,
+
+    loginAgain,
+
     postJSON,
+
     fetchDashboard,
+
     saveWeight,
+
     setTarget,
+
     fmtWeight,
+
     fmtInt,
-    formatDate
+
+    formatDate,
+
+    num
   };
 
 })();
