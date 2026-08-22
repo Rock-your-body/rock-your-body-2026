@@ -1,1 +1,262 @@
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,"Noto Sans Thai",sans-serif;background:#eef5ff;color:#08245b}button{font:inherit}.stage{position:relative;width:min(100vw,1536px);margin:auto;aspect-ratio:1536/1024;overflow:hidden;background:#fff}.template{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;user-select:none;pointer-events:none}.overlay{position:absolute;z-index:5;display:flex;align-items:center;justify-content:center;font-weight:900;line-height:1;white-space:nowrap}.cover{background:rgba(255,255,255,.96);border-radius:12px}.hotspot{position:absolute;z-index:20;border:0;background:transparent;cursor:pointer}.status{position:fixed;z-index:999;left:50%;bottom:16px;transform:translateX(-50%);max-width:90vw;padding:10px 16px;border-radius:999px;background:#0754bd;color:white;font-weight:900;display:none}.status.show{display:block}.status.error{background:#b91c1c}@media(max-width:700px){.stage{width:100vw}.status{font-size:12px}}
+/* =========================================================
+   ROCK YOUR BODY - LIVE DATA OVERLAY V2
+   ========================================================= */
+
+.stage{
+  position:relative;
+  width:min(100%,1536px);
+  margin:0 auto;
+  overflow:hidden;
+  background:#eef5ff;
+}
+
+.template{
+  width:100%;
+  height:auto;
+  display:block;
+  position:relative;
+  z-index:1;
+}
+
+/* ข้อมูลวางบน Template */
+.overlay{
+  position:absolute;
+  z-index:10;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin:0;
+  padding:0;
+
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+
+  font-family:
+    Arial,
+    "Noto Sans Thai",
+    sans-serif;
+
+  font-weight:900;
+  line-height:1;
+
+  white-space:nowrap;
+
+  pointer-events:none;
+
+  text-shadow:
+    0 1px 1px rgba(255,255,255,.45);
+}
+
+/* ห้ามสร้างกล่องขาวปิด template */
+.cover{
+  background:transparent !important;
+}
+
+/* ตัวเลขทั่วไป */
+.live-number{
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-0.02em;
+}
+
+/* ตัวเลขสีน้ำเงิน */
+.live-blue{
+  color:#06276c;
+}
+
+/* ตัวเลขสีแดง */
+.live-red{
+  color:#d20d0d;
+}
+
+/* ตัวเลขสีขาว */
+.live-white{
+  color:#fff;
+  text-shadow:
+    0 2px 5px rgba(0,0,0,.35);
+}
+
+/* ตัวเลขขนาดใหญ่ */
+.live-xl{
+  font-size:clamp(18px,4.2vw,64px);
+}
+
+/* ขนาดกลาง */
+.live-lg{
+  font-size:clamp(14px,2.7vw,42px);
+}
+
+/* ขนาดทั่วไป */
+.live-md{
+  font-size:clamp(10px,1.65vw,26px);
+}
+
+/* ขนาดเล็ก */
+.live-sm{
+  font-size:clamp(8px,1.15vw,18px);
+}
+
+/* Progress bar */
+.live-track{
+  position:absolute;
+  z-index:11;
+
+  overflow:hidden;
+
+  border-radius:999px;
+
+  background:rgba(18,68,132,.13);
+}
+
+.live-fill{
+  width:0%;
+  height:100%;
+
+  border-radius:inherit;
+
+  transition:width .45s ease;
+}
+
+.exp-fill{
+  background:
+    linear-gradient(
+      90deg,
+      #0878f5,
+      #0649ba
+    );
+}
+
+.mission-fill-daily{
+  background:
+    linear-gradient(
+      90deg,
+      #ffb21a,
+      #ff5700
+    );
+}
+
+.mission-fill-weekly{
+  background:
+    linear-gradient(
+      90deg,
+      #1684ff,
+      #074fc8
+    );
+}
+
+.mission-fill-monthly{
+  background:
+    linear-gradient(
+      90deg,
+      #a634eb,
+      #6120b6
+    );
+}
+
+.mission-fill-bonus{
+  background:
+    linear-gradient(
+      90deg,
+      #24bd66,
+      #07823b
+    );
+}
+
+.hp-fill{
+  background:
+    linear-gradient(
+      90deg,
+      #ff4242,
+      #be0717
+    );
+}
+
+.energy-fill{
+  background:
+    linear-gradient(
+      90deg,
+      #ffd528,
+      #ff8d00
+    );
+}
+
+/* รูปโปรไฟล์ */
+.live-profile{
+  position:absolute;
+  z-index:8;
+
+  object-fit:cover;
+
+  border-radius:50%;
+
+  background:#d7e8ff;
+}
+
+/* รูปมอนสเตอร์จริง */
+.live-monster{
+  position:absolute;
+  z-index:8;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 8px 12px
+      rgba(0,0,0,.28)
+    );
+}
+
+/* ปุ่มพื้นที่กดทับ Template */
+.hotspot{
+  position:absolute;
+  z-index:30;
+
+  padding:0;
+  margin:0;
+
+  border:0;
+  outline:0;
+
+  background:transparent;
+
+  cursor:pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+.hotspot:active{
+  background:
+    rgba(255,255,255,.08);
+}
+
+/* ไม่แสดง -- ใหญ่เกินไป */
+.is-empty{
+  opacity:.55;
+}
+
+/* Mobile */
+@media(max-width:600px){
+
+  .overlay{
+    text-shadow:none;
+  }
+
+  .live-xl{
+    font-size:clamp(17px,6vw,35px);
+  }
+
+  .live-lg{
+    font-size:clamp(13px,4vw,25px);
+  }
+
+  .live-md{
+    font-size:clamp(9px,2.6vw,17px);
+  }
+
+  .live-sm{
+    font-size:clamp(7px,2vw,13px);
+  }
+}
