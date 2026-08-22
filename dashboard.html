@@ -2,6 +2,7 @@
 <html lang="th">
 
 <head>
+
   <meta charset="utf-8">
 
   <meta
@@ -9,579 +10,24 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>ROCK YOUR BODY 2026 - HOME</title>
+  <title>
+    ROCK YOUR BODY 2026 - HOME
+  </title>
+
 
   <!-- LINE LIFF -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <!-- APP CONFIG -->
+
+  <!-- CONFIG -->
   <script src="./app-config.js"></script>
 
-  <style>
 
-    /* =========================================================
-       RESET
-    ========================================================= */
-
-    *{
-      box-sizing:border-box;
-    }
-
-    html,
-    body{
-      margin:0;
-      padding:0;
-      width:100%;
-      min-height:100%;
-      background:#eef5ff;
-
-      font-family:
-        Arial,
-        "Noto Sans Thai",
-        sans-serif;
-    }
-
-    body{
-      overflow-x:hidden;
-    }
-
-
-    /* =========================================================
-       STAGE + POSITION CONFIG
-       ปรับตำแหน่งทั้งหมดจากตรงนี้
-    ========================================================= */
-
-    #homeStage{
-      position:relative;
-
-      width:100%;
-      max-width:1536px;
-
-      margin:0 auto;
-
-      overflow:hidden;
-
-      background:#eef5ff;
-
-
-      /* ================= PROFILE ================= */
-
-      --profile-left:1.5%;
-      --profile-top:18.2%;
-      --profile-size:24.2%;
-
-
-      /* ================= COIN ================= */
-
-      --coin-left:76.4%;
-      --coin-top:4.2%;
-      --coin-width:7.7%;
-      --coin-height:5.0%;
-
-
-      /* ================= ENERGY ================= */
-
-      --energy-left:88.4%;
-      --energy-top:4.2%;
-      --energy-width:9.7%;
-      --energy-height:5.0%;
-
-
-      /* ================= LEVEL ================= */
-
-      --level-left:23.2%;
-      --level-top:54.8%;
-      --level-width:6.7%;
-      --level-height:4.5%;
-
-
-      /* ================= EXP BAR ================= */
-
-      --expbar-left:8.6%;
-      --expbar-top:75.0%;
-      --expbar-width:14.0%;
-      --expbar-height:1.8%;
-
-
-      /* ================= EXP TEXT ================= */
-
-      --exptext-left:22.0%;
-      --exptext-top:75.2%;
-      --exptext-width:9.0%;
-      --exptext-height:4.5%;
-
-
-      /* ================= CURRENT WEIGHT ================= */
-
-      --current-left:41.5%;
-      --current-top:24.4%;
-      --current-width:15.0%;
-      --current-height:8.0%;
-
-
-      /* ================= UPDATED DATE ================= */
-
-      --updated-left:42.0%;
-      --updated-top:35.8%;
-      --updated-width:14.0%;
-      --updated-height:4.0%;
-
-
-      /* ================= TARGET WEIGHT ================= */
-
-      --target-left:41.5%;
-      --target-top:51.2%;
-      --target-width:15.0%;
-      --target-height:8.0%;
-
-
-      /* ================= REMAINING ================= */
-
-      --remaining-left:42.0%;
-      --remaining-top:63.2%;
-      --remaining-width:14.0%;
-      --remaining-height:4.0%;
-
-
-      /* ================= LOST ================= */
-
-      --lost-left:35.5%;
-      --lost-top:75.8%;
-      --lost-width:10.0%;
-      --lost-height:4.5%;
-
-
-      /* ================= START DATE ================= */
-
-      --startdate-left:47.8%;
-      --startdate-top:75.8%;
-      --startdate-width:9.5%;
-      --startdate-height:4.5%;
-    }
-
-
-    /* =========================================================
-       TEMPLATE
-    ========================================================= */
-
-    .template{
-      position:relative;
-      z-index:1;
-
-      display:block;
-
-      width:100%;
-      height:auto;
-
-      margin:0;
-      padding:0;
-
-      border:0;
-
-      user-select:none;
-
-      pointer-events:none;
-    }
-
-
-    /* =========================================================
-       PROFILE FRAME
-    ========================================================= */
-
-    .profile-frame{
-      position:absolute;
-      z-index:10;
-
-      left:var(--profile-left);
-      top:var(--profile-top);
-
-      width:var(--profile-size);
-      aspect-ratio:1 / 1;
-
-      margin:0;
-      padding:0;
-
-      border-radius:50%;
-
-      overflow:hidden;
-
-      background:#dcecff;
-
-      pointer-events:none;
-    }
-
-
-    .profile-photo{
-      position:absolute;
-
-      inset:0;
-
-      display:block;
-
-      width:100%;
-      height:100%;
-
-      margin:0;
-      padding:0;
-
-      border:0;
-      border-radius:50%;
-
-      object-fit:cover;
-      object-position:50% 50%;
-
-      background:#dcecff;
-    }
-
-
-    /* =========================================================
-       DATA BOX
-       ทุกข้อมูลจะอยู่กึ่งกลางกรอบเสมอ
-    ========================================================= */
-
-    .data-box{
-      position:absolute;
-      z-index:15;
-
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
-
-      margin:0;
-      padding:0;
-
-      overflow:hidden;
-
-      background:transparent;
-
-      pointer-events:none;
-
-      container-type:inline-size;
-    }
-
-
-    .data-value{
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
-
-      width:100%;
-      height:100%;
-
-      margin:0;
-      padding:0 2%;
-
-      color:#06276c;
-
-      font-family:
-        Arial,
-        "Noto Sans Thai",
-        sans-serif;
-
-      font-weight:900;
-
-      line-height:1;
-
-      text-align:center;
-
-      white-space:nowrap;
-
-      font-variant-numeric:
-        tabular-nums;
-
-      font-size:
-        clamp(
-          6px,
-          11cqw,
-          28px
-        );
-    }
-
-
-    /* =========================================================
-       LARGE VALUE
-    ========================================================= */
-
-    .data-weight{
-      font-size:
-        clamp(
-          13px,
-          16cqw,
-          44px
-        );
-
-      letter-spacing:-0.03em;
-    }
-
-
-    /* =========================================================
-       SMALL VALUE
-    ========================================================= */
-
-    .data-small{
-      font-size:
-        clamp(
-          6px,
-          10cqw,
-          16px
-        );
-    }
-
-
-    /* =========================================================
-       COLOR
-    ========================================================= */
-
-    .red{
-      color:#d20d0d;
-    }
-
-    .white{
-      color:#fff;
-
-      text-shadow:
-        0 2px 4px
-        rgba(0,0,0,.35);
-    }
-
-
-    /* =========================================================
-       DATA POSITIONS
-    ========================================================= */
-
-    .coin-box{
-      left:var(--coin-left);
-      top:var(--coin-top);
-
-      width:var(--coin-width);
-      height:var(--coin-height);
-    }
-
-
-    .energy-box{
-      left:var(--energy-left);
-      top:var(--energy-top);
-
-      width:var(--energy-width);
-      height:var(--energy-height);
-    }
-
-
-    .level-box{
-      left:var(--level-left);
-      top:var(--level-top);
-
-      width:var(--level-width);
-      height:var(--level-height);
-    }
-
-
-    .exptext-box{
-      left:var(--exptext-left);
-      top:var(--exptext-top);
-
-      width:var(--exptext-width);
-      height:var(--exptext-height);
-    }
-
-
-    .current-box{
-      left:var(--current-left);
-      top:var(--current-top);
-
-      width:var(--current-width);
-      height:var(--current-height);
-    }
-
-
-    .updated-box{
-      left:var(--updated-left);
-      top:var(--updated-top);
-
-      width:var(--updated-width);
-      height:var(--updated-height);
-    }
-
-
-    .target-box{
-      left:var(--target-left);
-      top:var(--target-top);
-
-      width:var(--target-width);
-      height:var(--target-height);
-    }
-
-
-    .remaining-box{
-      left:var(--remaining-left);
-      top:var(--remaining-top);
-
-      width:var(--remaining-width);
-      height:var(--remaining-height);
-    }
-
-
-    .lost-box{
-      left:var(--lost-left);
-      top:var(--lost-top);
-
-      width:var(--lost-width);
-      height:var(--lost-height);
-    }
-
-
-    .startdate-box{
-      left:var(--startdate-left);
-      top:var(--startdate-top);
-
-      width:var(--startdate-width);
-      height:var(--startdate-height);
-    }
-
-
-    /* =========================================================
-       EXP BAR
-    ========================================================= */
-
-    .exp-track{
-      position:absolute;
-      z-index:15;
-
-      left:var(--expbar-left);
-      top:var(--expbar-top);
-
-      width:var(--expbar-width);
-      height:var(--expbar-height);
-
-      overflow:hidden;
-
-      border-radius:999px;
-
-      background:#d7e5f6;
-
-      pointer-events:none;
-    }
-
-
-    #expBar{
-      width:0%;
-      height:100%;
-
-      border-radius:inherit;
-
-      background:
-        linear-gradient(
-          90deg,
-          #15a2ff,
-          #0b52d1
-        );
-
-      transition:
-        width .6s ease;
-    }
-
-
-    /* =========================================================
-       HOTSPOT
-    ========================================================= */
-
-    .hotspot{
-      position:absolute;
-      z-index:30;
-
-      margin:0;
-      padding:0;
-
-      border:0;
-
-      outline:0;
-
-      background:transparent;
-
-      cursor:pointer;
-
-      touch-action:manipulation;
-
-      -webkit-tap-highlight-color:
-        transparent;
-    }
-
-
-    .hotspot:active{
-      background:
-        rgba(
-          255,
-          255,
-          255,
-          .08
-        );
-    }
-
-
-    /* =========================================================
-       STATUS
-    ========================================================= */
-
-    #status{
-      display:none;
-    }
-
-
-    #status.show{
-      position:fixed;
-      z-index:99999;
-
-      left:50%;
-      bottom:18px;
-
-      transform:
-        translateX(-50%);
-
-      display:block;
-
-      max-width:90vw;
-
-      padding:
-        10px
-        18px;
-
-      border-radius:999px;
-
-      background:#0755b7;
-
-      color:#fff;
-
-      font-size:14px;
-      font-weight:800;
-
-      text-align:center;
-
-      box-shadow:
-        0 6px 18px
-        rgba(0,0,0,.18);
-    }
-
-
-    #status.error{
-      background:#c62828;
-    }
-
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media(max-width:600px){
-
-      .data-value{
-        text-shadow:none;
-      }
-
-    }
-
-  </style>
+  <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="./base.css"
+  >
 
 </head>
 
@@ -608,14 +54,17 @@
        PROFILE
   ====================================================== -->
 
- <div class="profile-frame">
-  <img
-    id="profileImage"
-    class="profile-photo"
-    alt="LINE Profile"
-    draggable="false"
-  >
-</div>
+  <div class="profile-frame">
+
+    <img
+      id="profileImage"
+      class="profile-photo"
+      alt="LINE Profile"
+      draggable="false"
+    >
+
+  </div>
+
 
   <!-- =====================================================
        COIN
@@ -709,7 +158,7 @@
 
 
   <!-- =====================================================
-       UPDATED DATE
+       UPDATE DATE
   ====================================================== -->
 
   <div class="data-box updated-box">
@@ -725,7 +174,7 @@
 
 
   <!-- =====================================================
-       TARGET WEIGHT
+       TARGET
   ====================================================== -->
 
   <div class="data-box target-box">
@@ -932,23 +381,17 @@ const $ =
 
 
 /* =========================================================
-   PAGE NAVIGATION
+   NAVIGATION
 ========================================================= */
 
-function goPage(
-  pageName
-){
+function goPage(name){
 
   const url =
-    ROCK?.CFG?.PAGE?.[
-      pageName
-    ];
-
+    ROCK?.CFG?.PAGE?.[name];
 
   if(!url){
     return;
   }
-
 
   ROCK.go(url);
 }
@@ -963,20 +406,17 @@ function showStatus(
   error = false
 ){
 
-  const status =
+  const el =
     $("status");
 
-
-  if(!status){
+  if(!el){
     return;
   }
 
-
-  status.textContent =
+  el.textContent =
     message;
 
-
-  status.className =
+  el.className =
     error
       ? "show error"
       : "show";
@@ -985,13 +425,11 @@ function showStatus(
 
 function hideStatus(){
 
-  const status =
+  const el =
     $("status");
 
-
-  if(status){
-    status.className =
-      "";
+  if(el){
+    el.className = "";
   }
 }
 
@@ -1008,7 +446,6 @@ function num(
   const n =
     Number(value);
 
-
   return Number.isFinite(n)
     ? n
     : fallback;
@@ -1019,37 +456,31 @@ function num(
    DATE
 ========================================================= */
 
-function formatDateOnly(
-  value
-){
+function formatDateOnly(value){
 
   if(!value){
     return "--/--/----";
   }
 
-
-  const date =
+  const d =
     new Date(value);
-
 
   if(
     Number.isNaN(
-      date.getTime()
+      d.getTime()
     )
   ){
     return "--/--/----";
   }
 
-
-  return date
-    .toLocaleDateString(
-      "th-TH",
-      {
-        day:"2-digit",
-        month:"2-digit",
-        year:"numeric"
-      }
-    );
+  return d.toLocaleDateString(
+    "th-TH",
+    {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric"
+    }
+  );
 }
 
 
@@ -1057,68 +488,46 @@ function formatDateOnly(
    NORMALIZE
 ========================================================= */
 
-function normalizeDashboard(
-  raw
-){
+function normalizeDashboard(raw){
 
   raw =
     raw || {};
-
 
   const user =
     raw.user ||
     raw.player ||
     {};
 
-
   const weight =
     raw.weight &&
-    typeof raw.weight ===
-      "object"
+    typeof raw.weight === "object"
       ? raw.weight
       : {};
 
-
   const energy =
     raw.energy &&
-    typeof raw.energy ===
-      "object"
+    typeof raw.energy === "object"
       ? raw.energy
       : {};
 
 
-  /* =====================================================
-     EXP
-  ====================================================== */
-
-  let totalExp =
-    raw.exp;
+  let exp =
+    raw.exp ??
+    user.exp ??
+    0;
 
 
   if(
-    totalExp &&
-    typeof totalExp ===
-      "object"
+    exp &&
+    typeof exp === "object"
   ){
 
-    totalExp =
-      totalExp.total ??
-      totalExp.current ??
+    exp =
+      exp.total ??
+      exp.current ??
       0;
   }
 
-
-  totalExp =
-    num(
-      totalExp ??
-      user.exp,
-      0
-    );
-
-
-  /* =====================================================
-     RETURN
-  ====================================================== */
 
   return {
 
@@ -1131,7 +540,10 @@ function normalizeDashboard(
 
 
     exp:
-      totalExp,
+      num(
+        exp,
+        0
+      ),
 
 
     coin:
@@ -1206,8 +618,6 @@ function normalizeDashboard(
       raw.weight_updated_at ??
       raw.updatedAt ??
       raw.updated_at ??
-      user.weightUpdatedAt ??
-      user.weight_updated_at ??
       user.updatedAt ??
       user.updated_at ??
       null,
@@ -1221,7 +631,6 @@ function normalizeDashboard(
       user.startDate ??
       user.start_date ??
       null
-
   };
 }
 
@@ -1230,13 +639,10 @@ function normalizeDashboard(
    PROFILE
 ========================================================= */
 
-function renderProfile(
-  url
-){
+function renderProfile(url){
 
   const image =
     $("profileImage");
-
 
   if(!image){
     return;
@@ -1244,6 +650,10 @@ function renderProfile(
 
 
   if(!url){
+
+    image.removeAttribute(
+      "src"
+    );
 
     image.style.display =
       "none";
@@ -1277,9 +687,7 @@ function renderProfile(
    RENDER HOME
 ========================================================= */
 
-function renderHome(
-  raw
-){
+function renderHome(raw){
 
   const p =
     normalizeDashboard(
@@ -1287,18 +695,14 @@ function renderHome(
     );
 
 
-  /* =====================================================
-     PROFILE
-  ====================================================== */
+  /* PROFILE */
 
   renderProfile(
     p.picture
   );
 
 
-  /* =====================================================
-     COIN
-  ====================================================== */
+  /* COIN */
 
   $("coin").textContent =
     ROCK.fmtInt(
@@ -1306,9 +710,7 @@ function renderHome(
     );
 
 
-  /* =====================================================
-     ENERGY
-  ====================================================== */
+  /* ENERGY */
 
   $("energy").textContent =
     ROCK.fmtInt(
@@ -1323,9 +725,9 @@ function renderHome(
   /* =====================================================
      LEVEL + EXP
 
-     0 - 499      = Lv.1
-     500 - 999    = Lv.2
-     1000 - 1499  = Lv.3
+     0 - 499 = Lv.1
+     500 - 999 = Lv.2
+     1000 - 1499 = Lv.3
   ====================================================== */
 
   const expPerLevel =
@@ -1363,10 +765,8 @@ function renderHome(
           0,
           Math.min(
             100,
-            (
-              expInLevel /
-              expPerLevel
-            ) *
+            expInLevel /
+            expPerLevel *
             100
           )
         )
@@ -1393,9 +793,7 @@ function renderHome(
     "%";
 
 
-  /* =====================================================
-     CURRENT WEIGHT
-  ====================================================== */
+  /* CURRENT */
 
   $("currentWeight")
     .textContent =
@@ -1405,9 +803,7 @@ function renderHome(
       " kg";
 
 
-  /* =====================================================
-     TARGET WEIGHT
-  ====================================================== */
+  /* TARGET */
 
   $("targetWeight")
     .textContent =
@@ -1417,9 +813,7 @@ function renderHome(
       " kg";
 
 
-  /* =====================================================
-     DATES
-  ====================================================== */
+  /* DATES */
 
   $("updatedAt")
     .textContent =
@@ -1435,15 +829,12 @@ function renderHome(
       );
 
 
-  /* =====================================================
-     REMAINING
-  ====================================================== */
+  /* REMAINING */
 
   const current =
     Number(
       p.currentWeight
     );
-
 
   const target =
     Number(
@@ -1452,12 +843,8 @@ function renderHome(
 
 
   if(
-    Number.isFinite(
-      current
-    ) &&
-    Number.isFinite(
-      target
-    )
+    Number.isFinite(current) &&
+    Number.isFinite(target)
   ){
 
     $("remaining")
@@ -1478,9 +865,7 @@ function renderHome(
   }
 
 
-  /* =====================================================
-     LOST
-  ====================================================== */
+  /* LOST */
 
   const start =
     Number(
@@ -1489,12 +874,8 @@ function renderHome(
 
 
   if(
-    Number.isFinite(
-      start
-    ) &&
-    Number.isFinite(
-      current
-    )
+    Number.isFinite(start) &&
+    Number.isFinite(current)
   ){
 
     $("lost")
@@ -1530,10 +911,8 @@ async function loadHome(){
     return;
   }
 
-
   loading =
     true;
-
 
   try{
 
@@ -1554,7 +933,6 @@ async function loadHome(){
 
     hideStatus();
 
-
   }catch(error){
 
     console.error(
@@ -1568,7 +946,6 @@ async function loadHome(){
       String(error),
       true
     );
-
 
   }finally{
 
@@ -1651,7 +1028,7 @@ async function loadHome(){
 
 
 /* =========================================================
-   RETURN FROM OTHER PAGE
+   RETURN TO PAGE
 ========================================================= */
 
 document.addEventListener(
