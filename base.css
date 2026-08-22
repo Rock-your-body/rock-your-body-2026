@@ -1452,3 +1452,70 @@ textarea{
   }
 
 }
+/* =========================================================
+   PROFILE POSITION
+   ปรับ 3 ค่านี้เป็นหลัก
+========================================================= */
+
+#homeStage{
+  --profile-left:7.65%;
+  --profile-top:18.25%;
+  --profile-size:23.70%;
+}
+
+
+/* =========================================================
+   PROFILE FRAME
+========================================================= */
+
+.profile-frame{
+  position:absolute;
+  z-index:10;
+
+  left:var(--profile-left);
+  top:var(--profile-top);
+
+  width:var(--profile-size);
+  aspect-ratio:1 / 1;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  overflow:hidden;
+
+  background:transparent;
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   LINE PROFILE IMAGE
+========================================================= */
+
+.profile-photo{
+  position:absolute;
+
+  inset:0;
+
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  object-fit:cover;
+
+  /* กึ่งกลางรูป */
+  object-position:50% 50%;
+
+  transform:none;
+}
