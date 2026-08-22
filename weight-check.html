@@ -1207,21 +1207,70 @@ async function postJSON(
 
 function getIDToken() {
 
-  const idToken =
-    liff.getIDToken();
-
+  const idToken = liff.getIDToken();
 
   if (!idToken) {
+    throw new Error("ไม่พบ LINE ID Token");
+  }
 
-    throw new Error(
-      "ไม่พบ LINE ID Token"
+  try {
+
+    const parts = idToken.split(".");
+
+    if (parts.length !== 3) {
+      throw new Error("LINE ID Token ไม่ถูกต้อง");
+    }
+
+    let payloadBase64 = parts[1]
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+    while (payloadBase64.length % 4) {
+      payloadBase64 += "=";
+    }
+
+    const payload = JSON.parse(
+      decodeURIComponent(
+        Array.prototype.map.call(
+          atob(payloadBase64),
+          function(c) {
+            return "%" +
+              ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          }
+        ).join("")
+      )
+    );
+
+    const now = Math.floor(Date.now() / 1000);
+
+    if (payload.exp && payload.exp <= now + 30) {
+
+      console.warn(
+        "LINE ID Token expired:",
+        payload.exp,
+        "now:",
+        now
+      );
+
+      throw new Error("IdToken expired.");
+    }
+
+  } catch (error) {
+
+    if (
+      error.message === "IdToken expired."
+    ) {
+      throw error;
+    }
+
+    console.warn(
+      "ตรวจสอบ ID Token ไม่สำเร็จ:",
+      error
     );
   }
 
-
   return idToken;
 }
-
 
 /* =========================================
    LOAD DASHBOARD DATA
@@ -1707,40 +1756,42 @@ async function initLIFF() {
     "loading"
   );
 
-
   try {
 
     await liff.init({
-      liffId:
-        LIFF_ID
+      liffId: LIFF_ID
     });
 
-
-    if (
-      !liff.isLoggedIn()
-    ) {
+    // ยังไม่ได้ Login
+    if (!liff.isLoggedIn()) {
 
       liff.login({
-        redirectUri:
-          window.location.href
+        redirectUri: window.location.href
       });
 
       return;
     }
 
+    // ตรวจ ID Token
+    const idToken = liff.getIDToken();
 
-    /*
-      บังคับตรวจว่ามี ID Token จริง
-    */
+    if (!idToken) {
 
-    getIDToken();
+      // ล้าง session เดิม
+      liff.logout();
 
+      // Login ใหม่เพื่อขอ Token ใหม่
+      liff.login({
+        redirectUri: window.location.href
+      });
 
+      return;
+    }
+
+    // โหลดข้อมูล
     await loadPlayerData();
 
-
     hideWeightStatus();
-
 
   } catch (error) {
 
@@ -1749,13 +1800,45 @@ async function initLIFF() {
       error
     );
 
+    const message =
+      error?.message ||
+      String(error);
+
+    // ถ้า Token หมดอายุ ให้ Login ใหม่
+    if (
+      message.toLowerCase().includes("idtoken expired") ||
+      message.toLowerCase().includes("token expired")
+    ) {
+
+      showWeightStatus(
+        "LINE Session หมดอายุ กำลังเข้าสู่ระบบใหม่...",
+        "loading"
+      );
+
+      try {
+
+        if (liff.isLoggedIn()) {
+          liff.logout();
+        }
+
+      } catch (e) {
+        console.warn(e);
+      }
+
+      setTimeout(() => {
+
+        liff.login({
+          redirectUri: window.location.href
+        });
+
+      }, 500);
+
+      return;
+    }
 
     showWeightStatus(
       "❌ เชื่อมต่อ LINE ไม่สำเร็จ: " +
-      (
-        error.message ||
-        error
-      ),
+      message,
       "error"
     );
   }
