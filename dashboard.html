@@ -1,27 +1,598 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ROCK YOUR BODY 2026 - HOME</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><link rel="stylesheet" href="base.css"><script src="app-config.js"></script></head><body>
-<div class="stage" id="stage">
-  <img class="template" src="./home-template.png" alt="HOME template">
-  <img id="profileImage" alt="profile" style="position:absolute;z-index:4;left:6.7%;top:18.7%;width:25.8%;height:34%;object-fit:cover;border-radius:50%;display:none">
-  <div id="coin" class="overlay cover" style="left:76.6%;top:4.4%;width:7.4%;height:5.1%;font-size:clamp(11px,1.6vw,28px)">--</div>
-  <div id="energy" class="overlay cover" style="left:88.9%;top:4.4%;width:9.1%;height:5.1%;font-size:clamp(10px,1.4vw,25px)">-- / --</div>
-  <div id="level" class="overlay" style="left:24.1%;top:55.8%;width:5.4%;height:4.5%;color:#fff;font-size:clamp(10px,1.4vw,24px)">--</div>
-  <div id="expText" class="overlay cover" style="left:22.2%;top:76.1%;width:8.5%;height:4.1%;font-size:clamp(8px,1.05vw,18px)">-- / --</div>
-  <div style="position:absolute;z-index:5;left:8.8%;top:75.2%;width:13.7%;height:1.7%;background:#d9e5f4;border-radius:999px;overflow:hidden"><div id="expBar" style="height:100%;width:0;background:linear-gradient(90deg,#15a2ff,#0b52d1)"></div></div>
-  <div id="currentWeight" class="overlay cover" style="left:43.6%;top:28.0%;width:11.4%;height:8.8%;font-size:clamp(20px,3.5vw,58px)">--.-</div>
-  <div id="updatedAt" class="overlay cover" style="left:36.7%;top:37.1%;width:18.7%;height:3.9%;font-size:clamp(7px,1.05vw,17px)">--/--/----</div>
-  <div id="targetWeight" class="overlay cover" style="left:43.9%;top:53.2%;width:11.4%;height:8.8%;color:#c91818;font-size:clamp(20px,3.5vw,58px)">--.-</div>
-  <div id="remaining" class="overlay cover" style="left:39%;top:64.3%;width:14.5%;height:4.2%;color:#b91c1c;font-size:clamp(8px,1.1vw,18px)">--.- kg</div>
-  <div id="lost" class="overlay cover" style="left:36.7%;top:74.5%;width:8.8%;height:5.4%;font-size:clamp(8px,1.1vw,18px)">--.- kg</div>
-  <div id="startDate" class="overlay cover" style="left:48.2%;top:74.5%;width:9%;height:5.4%;font-size:clamp(7px,1vw,16px)">--/--/----</div>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
 
-  <button class="hotspot" style="left:59.4%;top:16.1%;width:18.7%;height:30.9%" onclick="go(CFG.PAGE.WEIGHT)" aria-label="Weight Check"></button>
-  <button class="hotspot" style="left:79.1%;top:16.1%;width:19.4%;height:30.9%" onclick="go(CFG.PAGE.PROGRESS)" aria-label="My Progress"></button>
-  <button class="hotspot" style="left:59.4%;top:49.4%;width:18.7%;height:31.1%" onclick="go(CFG.PAGE.RANKING)" aria-label="Ranking"></button>
-  <button class="hotspot" style="left:79.1%;top:49.4%;width:19.4%;height:31.1%" onclick="go(CFG.PAGE.REWARDS)" aria-label="Rewards"></button>
-  <button class="hotspot" style="left:1.4%;top:83.2%;width:31.5%;height:14.5%" onclick="go(CFG.PAGE.HOME)" aria-label="Home"></button>
-  <button class="hotspot" style="left:33.7%;top:83.2%;width:32.2%;height:14.5%" onclick="go(CFG.PAGE.MISSION)" aria-label="Mission"></button>
-  <button class="hotspot" style="left:66.5%;top:83.2%;width:32.1%;height:14.5%" onclick="go(CFG.PAGE.BATTLE)" aria-label="Battle"></button>
-</div><div id="status" class="status"></div><script src="common.js"></script><script>
-function renderHome(raw){const d=normalize(raw),p=d.player;$('coin').textContent=fmtInt(p.coin);$('energy').textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;$('level').textContent=p.level;const e=p.exp%CFG.EXP_PER_LEVEL;$('expText').textContent=`${fmtInt(e)} / ${CFG.EXP_PER_LEVEL}`;$('expBar').style.width=pct(e,CFG.EXP_PER_LEVEL)+'%';$('currentWeight').textContent=fmtWeight(p.currentWeight);$('targetWeight').textContent=fmtWeight(p.targetWeight);$('updatedAt').textContent=formatDate(p.updatedAt);$('startDate').textContent=formatDate(p.startDate);const current=num(p.currentWeight,NaN),target=num(p.targetWeight,NaN),start=num(p.startWeight,NaN);$('remaining').textContent=Number.isFinite(current)&&Number.isFinite(target)?Math.max(0,current-target).toFixed(1)+' kg':'--.- kg';$('lost').textContent=Number.isFinite(start)&&Number.isFinite(current)?Math.max(0,start-current).toFixed(1)+' kg':'--.- kg';if(p.picture){$('profileImage').src=p.picture;$('profileImage').style.display='block'}}
-(async()=>{try{showStatus('กำลังเชื่อมต่อ LINE...');if(!await initLiff())return;renderHome(await fetchDashboard());hideStatus();setInterval(async()=>{if(document.visibilityState==='visible'){try{renderHome(await fetchDashboard())}catch(e){console.error(e)}}},CFG.REFRESH_MS)}catch(e){console.error(e);showStatus(e.message||String(e),true)}})();
-</script></body></html>
+  <title>
+    ROCK YOUR BODY 2026 - HOME
+  </title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="base.css"
+  >
+
+  <script src="app-config.js"></script>
+</head>
+
+<body>
+
+<div
+  class="stage"
+  id="stage"
+>
+
+  <!-- TEMPLATE -->
+  <img
+    class="template"
+    src="./home-template.png"
+    alt="HOME template"
+  >
+
+
+  <!-- =====================================================
+       PROFILE IMAGE
+  ====================================================== -->
+
+  <img
+    id="profileImage"
+    class="live-profile"
+    alt="profile"
+    style="
+      left:7.0%;
+      top:18.5%;
+      width:25.0%;
+      height:34.0%;
+      display:none;
+    "
+  >
+
+
+  <!-- =====================================================
+       TOP STATS
+  ====================================================== -->
+
+  <div
+    id="coin"
+    class="overlay live-number live-blue live-md"
+    style="
+      left:77.1%;
+      top:3.4%;
+      width:5.5%;
+      height:4.7%;
+    "
+  >
+    --
+  </div>
+
+
+  <div
+    id="energy"
+    class="overlay live-number live-blue live-md"
+    style="
+      left:89.1%;
+      top:3.4%;
+      width:8.2%;
+      height:4.7%;
+    "
+  >
+    -- / --
+  </div>
+
+
+  <!-- =====================================================
+       LEVEL
+  ====================================================== -->
+
+  <div
+    id="level"
+    class="overlay live-white live-md"
+    style="
+      left:23.2%;
+      top:54.2%;
+      width:6.3%;
+      height:4.6%;
+    "
+  >
+    Lv.--
+  </div>
+
+
+  <!-- =====================================================
+       EXP
+  ====================================================== -->
+
+  <div
+    class="live-track"
+    style="
+      left:8.1%;
+      top:75.1%;
+      width:13.8%;
+      height:1.6%;
+    "
+  >
+    <div
+      id="expBar"
+      class="live-fill exp-fill"
+    ></div>
+  </div>
+
+
+  <div
+    id="expText"
+    class="overlay live-number live-blue live-sm"
+    style="
+      left:22.0%;
+      top:73.9%;
+      width:8.5%;
+      height:4.4%;
+    "
+  >
+    -- / 500
+  </div>
+
+
+  <!-- =====================================================
+       CURRENT WEIGHT
+  ====================================================== -->
+
+  <div
+    id="currentWeight"
+    class="overlay live-number live-blue live-xl"
+    style="
+      left:43.1%;
+      top:20.3%;
+      width:11.7%;
+      height:10.5%;
+    "
+  >
+    --.-
+  </div>
+
+
+  <!-- UPDATED DATE -->
+
+  <div
+    id="updatedAt"
+    class="overlay live-white live-sm"
+    style="
+      left:39.5%;
+      top:35.3%;
+      width:13.0%;
+      height:3.5%;
+    "
+  >
+    --/--/----
+  </div>
+
+
+  <!-- =====================================================
+       TARGET WEIGHT
+  ====================================================== -->
+
+  <div
+    id="targetWeight"
+    class="overlay live-number live-red live-xl"
+    style="
+      left:43.1%;
+      top:47.5%;
+      width:11.7%;
+      height:10.5%;
+    "
+  >
+    --.-
+  </div>
+
+
+  <!-- REMAINING -->
+
+  <div
+    id="remaining"
+    class="overlay live-white live-md"
+    style="
+      left:39.8%;
+      top:63.1%;
+      width:13.5%;
+      height:3.8%;
+    "
+  >
+    --.- kg
+  </div>
+
+
+  <!-- =====================================================
+       LOST WEIGHT
+  ====================================================== -->
+
+  <div
+    id="lost"
+    class="overlay live-number live-blue live-sm"
+    style="
+      left:36.7%;
+      top:74.0%;
+      width:8.0%;
+      height:3.8%;
+    "
+  >
+    --.- kg
+  </div>
+
+
+  <!-- START DATE -->
+
+  <div
+    id="startDate"
+    class="overlay live-number live-blue live-sm"
+    style="
+      left:48.4%;
+      top:74.0%;
+      width:8.7%;
+      height:3.8%;
+    "
+  >
+    --/--/----
+  </div>
+
+
+  <!-- =====================================================
+       HOTSPOTS
+  ====================================================== -->
+
+  <button
+    class="hotspot"
+    style="
+      left:59.4%;
+      top:16.1%;
+      width:18.7%;
+      height:30.9%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.WEIGHT)"
+    aria-label="Weight Check"
+  ></button>
+
+
+  <button
+    class="hotspot"
+    style="
+      left:79.1%;
+      top:16.1%;
+      width:19.4%;
+      height:30.9%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.PROGRESS)"
+    aria-label="My Progress"
+  ></button>
+
+
+  <button
+    class="hotspot"
+    style="
+      left:59.4%;
+      top:49.4%;
+      width:18.7%;
+      height:31.1%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.RANKING)"
+    aria-label="Ranking"
+  ></button>
+
+
+  <button
+    class="hotspot"
+    style="
+      left:79.1%;
+      top:49.4%;
+      width:19.4%;
+      height:31.1%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.REWARDS)"
+    aria-label="Rewards"
+  ></button>
+
+
+  <button
+    class="hotspot"
+    style="
+      left:1.4%;
+      top:83.2%;
+      width:31.5%;
+      height:14.5%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.HOME)"
+    aria-label="Home"
+  ></button>
+
+
+  <button
+    class="hotspot"
+    style="
+      left:33.7%;
+      top:83.2%;
+      width:32.2%;
+      height:14.5%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.MISSION)"
+    aria-label="Mission"
+  ></button>
+
+
+  <button
+    class="hotspot"
+    style="
+      left:66.5%;
+      top:83.2%;
+      width:32.1%;
+      height:14.5%;
+    "
+    onclick="ROCK.go(ROCK.CFG.PAGE.BATTLE)"
+    aria-label="Battle"
+  ></button>
+
+</div>
+
+
+<div
+  id="status"
+  class="status"
+></div>
+
+
+<script src="common.js"></script>
+
+<script>
+
+/* =========================================================
+   RENDER HOME
+========================================================= */
+
+function renderHome(raw){
+
+  const data =
+    ROCK.normalize(raw);
+
+  const p =
+    data.player;
+
+
+  /* COIN */
+
+  ROCK.setText(
+    "coin",
+    ROCK.fmtInt(
+      p.coin
+    )
+  );
+
+
+  /* ENERGY */
+
+  ROCK.setText(
+    "energy",
+    ROCK.fmtInt(
+      p.energy
+    ) +
+    " / " +
+    ROCK.fmtInt(
+      p.maxEnergy
+    )
+  );
+
+
+  /* PROFILE */
+
+  ROCK.setImage(
+    "profileImage",
+    p.picture
+  );
+
+
+  /* LEVEL */
+
+  ROCK.setText(
+    "level",
+    "Lv." +
+    ROCK.fmtInt(
+      p.level
+    )
+  );
+
+
+  /* EXP */
+
+  const expInLevel =
+    p.exp %
+    p.expPerLevel;
+
+
+  ROCK.setText(
+    "expText",
+    ROCK.fmtInt(
+      expInLevel
+    ) +
+    " / " +
+    ROCK.fmtInt(
+      p.expPerLevel
+    )
+  );
+
+
+  ROCK.setBar(
+    "expBar",
+    expInLevel,
+    p.expPerLevel
+  );
+
+
+  /* CURRENT WEIGHT */
+
+  ROCK.setText(
+    "currentWeight",
+    ROCK.fmtWeight(
+      p.currentWeight
+    )
+  );
+
+
+  /* UPDATE DATE */
+
+  ROCK.setText(
+    "updatedAt",
+    ROCK.formatDate(
+      p.updatedAt
+    )
+  );
+
+
+  /* TARGET */
+
+  ROCK.setText(
+    "targetWeight",
+    ROCK.fmtWeight(
+      p.targetWeight
+    )
+  );
+
+
+  /* REMAINING */
+
+  ROCK.setText(
+    "remaining",
+    p.remaining === null
+      ? "--.- kg"
+      : ROCK.fmtWeight(
+          p.remaining
+        ) +
+        " kg"
+  );
+
+
+  /* LOST */
+
+  ROCK.setText(
+    "lost",
+    p.lostWeight === null
+      ? "--.- kg"
+      : ROCK.fmtWeight(
+          p.lostWeight
+        ) +
+        " kg"
+  );
+
+
+  /* START DATE */
+
+  ROCK.setText(
+    "startDate",
+    ROCK.formatDate(
+      p.startDate
+    )
+  );
+
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+let loading = false;
+
+
+async function loadHome(){
+
+  if(loading){
+    return;
+  }
+
+  loading = true;
+
+
+  try{
+
+    const raw =
+      await ROCK.fetchDashboard();
+
+    renderHome(raw);
+
+    ROCK.hideStatus();
+
+  }catch(error){
+
+    console.error(error);
+
+    ROCK.showStatus(
+      error.message ||
+      String(error),
+      true
+    );
+
+  }finally{
+
+    loading = false;
+  }
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+(async()=>{
+
+  try{
+
+    ROCK.showStatus(
+      "กำลังเชื่อมต่อ LINE..."
+    );
+
+
+    const ok =
+      await ROCK.initLIFF();
+
+
+    if(!ok){
+      return;
+    }
+
+
+    await loadHome();
+
+
+    setInterval(
+      ()=>{
+
+        if(
+          document.visibilityState ===
+          "visible"
+        ){
+          loadHome();
+        }
+
+      },
+      ROCK.CFG.REFRESH_MS
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    ROCK.showStatus(
+      error.message ||
+      String(error),
+      true
+    );
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
