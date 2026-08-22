@@ -1,36 +1,95 @@
 window.ROCK = (() => {
 
-  const CFG =
-    window.APP_CONFIG;
+  const CFG = window.APP_CONFIG;
 
   if (!CFG) {
-    throw new Error(
-      "APP_CONFIG ไม่ถูกโหลด"
-    );
+    throw new Error("APP_CONFIG ไม่ถูกโหลด");
   }
 
 
   /* ======================================================
-     PAGE
+     PAGE NAVIGATION
   ====================================================== */
 
   function go(url) {
-  if (!url) return;
-  window.location.href = url;
-}
+
+    if (!url) {
+      return;
+    }
+
+    window.location.href = url;
+  }
 
 
   /* ======================================================
      LIFF ID
   ====================================================== */
 
-  function getLiffId(page) {
+  function getLiffId(page = "DASHBOARD") {
 
-    if (page === "WEIGHT") {
+    if (
+      page === "WEIGHT" &&
+      CFG.LIFF_ID?.WEIGHT
+    ) {
       return CFG.LIFF_ID.WEIGHT;
     }
 
-    return CFG.LIFF_ID.DASHBOARD;
+    if (CFG.LIFF_ID?.DASHBOARD) {
+      return CFG.LIFF_ID.DASHBOARD;
+    }
+
+    throw new Error("ไม่พบ LIFF ID");
+  }
+
+
+  /* ======================================================
+     CLEAN LIFF CALLBACK URL
+  ====================================================== */
+
+  function cleanLiffUrl() {
+
+    const url =
+      new URL(window.location.href);
+
+    const keys = [
+      "code",
+      "state",
+      "liff.state",
+      "liffClientId",
+      "liffRedirectUri"
+    ];
+
+    let changed = false;
+
+    keys.forEach(key => {
+
+      if (url.searchParams.has(key)) {
+
+        url.searchParams.delete(key);
+
+        changed = true;
+      }
+    });
+
+
+    if (changed) {
+
+      const cleanUrl =
+        url.pathname +
+        (
+          url.search
+            ? url.search
+            : ""
+        ) +
+        url.hash;
+
+
+      window.history.replaceState(
+        {},
+        document.title,
+        cleanUrl
+      );
+    }
   }
 
 
@@ -55,54 +114,67 @@ window.ROCK = (() => {
       getLiffId(page);
 
 
-    if (!liffId) {
-      throw new Error(
-        "ไม่พบ LIFF ID"
-      );
-    }
+    try {
 
-
-    await liff.init({
-      liffId
-    });
-
-
-    if (
-      !liff.isLoggedIn()
-    ) {
-
-      liff.login({
-        redirectUri:
-          window.location.href
+      await liff.init({
+        liffId
       });
 
-      return false;
-    }
+
+      /*
+        หลัง LINE redirect กลับมา
+        ล้าง code/state ออกจาก URL
+      */
+
+      cleanLiffUrl();
 
 
-    const token =
-      liff.getIDToken();
+      /*
+        ยังไม่ได้ Login
+      */
 
+      if (!liff.isLoggedIn()) {
 
-    if (!token) {
+        liff.login({
+          redirectUri:
+            window.location.origin +
+            window.location.pathname
+        });
 
-      try {
-        liff.logout();
-      } catch (error) {
-        console.warn(error);
+        return false;
       }
 
 
-      liff.login({
-        redirectUri:
-          window.location.href
-      });
+      /*
+        ต้องมี ID Token
+      */
 
-      return false;
+      const token =
+        liff.getIDToken();
+
+
+      if (!token) {
+
+        console.warn(
+          "LINE ID Token not available"
+        );
+
+        return false;
+      }
+
+
+      return true;
+
+
+    } catch (error) {
+
+      console.error(
+        "LIFF INIT ERROR:",
+        error
+      );
+
+      throw error;
     }
-
-
-    return true;
   }
 
 
@@ -121,9 +193,7 @@ window.ROCK = (() => {
     }
 
 
-    if (
-      !liff.isLoggedIn()
-    ) {
+    if (!liff.isLoggedIn()) {
       throw new Error(
         "ยังไม่ได้เข้าสู่ระบบ LINE"
       );
@@ -157,18 +227,23 @@ window.ROCK = (() => {
         typeof liff !== "undefined" &&
         liff.isLoggedIn()
       ) {
+
         liff.logout();
       }
 
     } catch (error) {
 
-      console.warn(error);
+      console.warn(
+        "LIFF LOGOUT ERROR:",
+        error
+      );
     }
 
 
     liff.login({
       redirectUri:
-        window.location.href
+        window.location.origin +
+        window.location.pathname
     });
   }
 
@@ -181,6 +256,13 @@ window.ROCK = (() => {
     url,
     payload
   ) {
+
+    if (!url) {
+      throw new Error(
+        "ไม่พบ API URL"
+      );
+    }
+
 
     const response =
       await fetch(
@@ -216,7 +298,7 @@ window.ROCK = (() => {
     } catch {
 
       console.error(
-        "API RAW:",
+        "API RAW RESPONSE:",
         text
       );
 
@@ -260,11 +342,8 @@ window.ROCK = (() => {
     return await postJSON(
       CFG.API.DASHBOARD,
       {
-        action:
-          "dashboard",
-
-        idToken:
-          getIdToken()
+        action: "dashboard",
+        idToken: getIdToken()
       }
     );
   }
@@ -278,48 +357,70 @@ window.ROCK = (() => {
     weight
   ) {
 
+    const value =
+      Number(weight);
+
+
+    if (
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
+    ) {
+
+      throw new Error(
+        "น้ำหนักต้องอยู่ระหว่าง 20 - 400 kg"
+      );
+    }
+
+
     return await postJSON(
       CFG.API.WEIGHT,
       {
-        action:
-          "saveWeight",
-
-        idToken:
-          getIdToken(),
-
-        weight:
-          Number(weight)
+        action: "saveWeight",
+        idToken: getIdToken(),
+        weight: value
       }
     );
   }
 
 
   /* ======================================================
-     TARGET
+     TARGET WEIGHT
   ====================================================== */
 
   async function setTarget(
     targetWeight
   ) {
 
+    const value =
+      Number(targetWeight);
+
+
+    if (
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
+    ) {
+
+      throw new Error(
+        "เป้าหมายต้องอยู่ระหว่าง 20 - 400 kg"
+      );
+    }
+
+
     return await postJSON(
       CFG.API.WEIGHT,
       {
-        action:
-          "setTarget",
-
-        idToken:
-          getIdToken(),
-
-        targetWeight:
-          Number(targetWeight)
+        action: "setTarget",
+        idToken: getIdToken(),
+        targetWeight: value
       }
     );
   }
 
 
   /* ======================================================
-     FORMAT
+     FORMAT WEIGHT
   ====================================================== */
 
   function fmtWeight(value) {
@@ -343,6 +444,10 @@ window.ROCK = (() => {
   }
 
 
+  /* ======================================================
+     FORMAT INTEGER
+  ====================================================== */
+
   function fmtInt(value) {
 
     const n =
@@ -355,6 +460,10 @@ window.ROCK = (() => {
       : "0";
   }
 
+
+  /* ======================================================
+     FORMAT DATE
+  ====================================================== */
 
   function formatDate(value) {
 
@@ -379,15 +488,16 @@ window.ROCK = (() => {
     return date.toLocaleString(
       "th-TH",
       {
-        dateStyle:
-          "short",
-
-        timeStyle:
-          "short"
+        dateStyle: "short",
+        timeStyle: "short"
       }
     );
   }
 
+
+  /* ======================================================
+     NUMBER
+  ====================================================== */
 
   function num(
     value,
@@ -404,13 +514,21 @@ window.ROCK = (() => {
   }
 
 
+  /* ======================================================
+     PUBLIC
+  ====================================================== */
+
   return {
 
     CFG,
 
     go,
 
+    getLiffId,
+
     initLiff,
+
+    cleanLiffUrl,
 
     getIdToken,
 
