@@ -1313,3 +1313,18 @@ textarea{
   }
 
 }
+#expBar{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #15a2ff,
+      #0b52d1
+    );
+
+  transition:
+    width .6s ease;
+}
