@@ -108,7 +108,7 @@ textarea{
 
   /* EXP BAR */
   --expbar-left:8.6%;
-  --expbar-top:75.1%;
+  --expbar-top:74.8%;
   --expbar-width:14%;
   --expbar-height:1.8%;
 
@@ -125,9 +125,9 @@ textarea{
   --current-height:8%;
 
   /* UPDATED DATE */
-  --updated-left:42.5%;
+  --updated-left:41.5%;
   --updated-top:36.5%;
-  --updated-width:14%;
+  --updated-width:13%;
   --updated-height:4%;
 
   /* TARGET */
