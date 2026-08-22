@@ -171,11 +171,6 @@ body{
   line-height:1;
 }
 
-  font-weight:1000;
-
-  line-height:1;
-}
-
 #coin{
   font-size:
     clamp(
@@ -487,63 +482,33 @@ body{
   }
 
   .live-xl{
-    font-size:
-      clamp(
-        17px,
-        6vw,
-        35px
-      );
+    font-size:clamp(17px,6vw,35px);
   }
 
   .live-lg{
-    font-size:
-      clamp(
-        13px,
-        4vw,
-        25px
-      );
+    font-size:clamp(13px,4vw,25px);
   }
 
   .live-md{
-    font-size:
-      clamp(
-        9px,
-        2.6vw,
-        17px
-      );
+    font-size:clamp(9px,2.6vw,17px);
   }
 
   .live-sm{
-    font-size:
-      clamp(
-        7px,
-        2vw,
-        13px
-      );
+    font-size:clamp(7px,2vw,13px);
   }
 
   #currentWeight{
-  font-size:clamp(24px,3.3vw,52px);
-  font-weight:1000;
-  line-height:1;
-}
+    font-size:clamp(24px,3.3vw,52px);
+    font-weight:1000;
+    line-height:1;
   }
 
   #coin{
-    font-size:
-      clamp(
-        9px,
-        2.7vw,
-        16px
-      );
+    font-size:clamp(9px,2.7vw,16px);
   }
 
   #energy{
-    font-size:
-      clamp(
-        8px,
-        2.5vw,
-        15px
-      );
+    font-size:clamp(8px,2.5vw,15px);
   }
+
 }
