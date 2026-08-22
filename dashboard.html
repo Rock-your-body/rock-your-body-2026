@@ -167,19 +167,19 @@
   ====================================================== -->
 
   <div
-    id="currentWeight"
-    class="overlay live-number live-blue"
-    style="
-      left:44.6%;
-      top:24.0%;
-      width:8.2%;
-      height:5.5%;
-      font-size:clamp(22px,3vw,46px);
-      font-weight:1000;
-    "
-  >
-    --.-
-  </div>
+  id="currentWeight"
+  class="overlay live-number live-blue"
+  style="
+    left:43.0%;
+    top:25.4%;
+    width:12.0%;
+    height:5.5%;
+    font-size:clamp(20px,2.8vw,43px);
+    font-weight:1000;
+  "
+>
+  --.- kg
+</div>
 
 
   <!-- =====================================================
@@ -206,19 +206,19 @@
   ====================================================== -->
 
   <div
-    id="targetWeight"
-    class="overlay live-number live-red"
-    style="
-      left:44.6%;
-      top:51.2%;
-      width:8.2%;
-      height:5.5%;
-      font-size:clamp(22px,3vw,46px);
-      font-weight:1000;
-    "
-  >
-    --.-
-  </div>
+  id="targetWeight"
+  class="overlay live-number live-red"
+  style="
+    left:43.0%;
+    top:52.3%;
+    width:12.0%;
+    height:5.5%;
+    font-size:clamp(20px,2.8vw,43px);
+    font-weight:1000;
+  "
+>
+  --.- kg
+</div>
 
 
   <!-- =====================================================
@@ -245,19 +245,18 @@
   ====================================================== -->
 
   <div
-    id="lost"
-    class="overlay live-number live-blue"
-    style="
-      left:37.7%;
-      top:76.7%;
-      width:6.2%;
-      height:2.4%;
-      font-size:clamp(7px,.9vw,14px);
-    "
-  >
-    --.- kg
-  </div>
-
+  id="lost"
+  class="overlay live-number live-blue"
+  style="
+    left:36.3%;
+    top:77.7%;
+    width:8.2%;
+    height:2.6%;
+    font-size:clamp(7px,.95vw,15px);
+  "
+>
+  --.- kg
+</div>
 
   <!-- =====================================================
        START DATE
@@ -848,23 +847,19 @@ function renderHome(
      CURRENT WEIGHT
   ====================================================== */
 
-  $("currentWeight")
-    .textContent =
-      ROCK.fmtWeight(
-        p.currentWeight
-      );
-
+  $("currentWeight").textContent =
+  ROCK.fmtWeight(
+    p.currentWeight
+  ) + " kg";
 
   /* =====================================================
      TARGET
   ====================================================== */
 
-  $("targetWeight")
-    .textContent =
-      ROCK.fmtWeight(
-        p.targetWeight
-      );
-
+ $("targetWeight").textContent =
+  ROCK.fmtWeight(
+    p.targetWeight
+  ) + " kg";
 
   /* =====================================================
      UPDATED DATE
