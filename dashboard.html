@@ -752,23 +752,21 @@ function renderHome(
   ====================================================== */
 
   const profile =
-    $("profileImage");
+  document.getElementById("profileImage");
 
+if (profile) {
 
-  if (
-    profile &&
-    p.picture
-  ) {
+  if (p.picture) {
 
     profile.src =
       p.picture;
 
+  } else {
 
-    profile.style.display =
-      "block";
+    profile.src =
+      "./default-profile.png";
   }
-
-
+}
   /* =====================================================
      COIN
   ====================================================== */
