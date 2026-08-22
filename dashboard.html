@@ -1,49 +1,51 @@
 <!doctype html>
 <html lang="th">
+
 <head>
   <meta charset="utf-8">
+
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>
-    ROCK YOUR BODY 2026 - HOME
-  </title>
+  <title>ROCK YOUR BODY 2026 - HOME</title>
 
+  <!-- LINE LIFF -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <link
-    rel="stylesheet"
-    href="base.css"
-  >
+  <!-- APP CSS -->
+  <link rel="stylesheet" href="./base.css">
 
-  <script src="app-config.js"></script>
+  <!-- CONFIG -->
+  <script src="./app-config.js"></script>
 </head>
+
 
 <body>
 
-<div
-  class="stage"
-  id="stage"
->
+<!-- =====================================================
+     HOME STAGE
+====================================================== -->
+
+<div class="stage" id="stage">
 
   <!-- TEMPLATE -->
   <img
     class="template"
     src="./home-template.png"
-    alt="HOME template"
+    alt="ROCK YOUR BODY HOME"
   >
 
 
-  <!-- =====================================================
+  <!-- ===================================================
        PROFILE IMAGE
-  ====================================================== -->
+  ==================================================== -->
 
   <img
     id="profileImage"
     class="live-profile"
-    alt="profile"
+    alt="LINE Profile"
     style="
       left:7.0%;
       top:18.5%;
@@ -54,59 +56,66 @@
   >
 
 
-  <!-- =====================================================
-       TOP STATS
-  ====================================================== -->
+  <!-- ===================================================
+       ROCK COIN
+  ==================================================== -->
 
   <div
     id="coin"
-    class="overlay live-number live-blue live-md"
+    class="overlay live-number live-blue"
     style="
-      left:77.1%;
+      left:77.0%;
       top:3.4%;
-      width:5.5%;
+      width:5.7%;
       height:4.7%;
+      font-size:clamp(10px,1.5vw,24px);
     "
   >
     --
   </div>
 
 
+  <!-- ===================================================
+       ENERGY
+  ==================================================== -->
+
   <div
     id="energy"
-    class="overlay live-number live-blue live-md"
+    class="overlay live-number live-blue"
     style="
-      left:89.1%;
+      left:89.0%;
       top:3.4%;
-      width:8.2%;
+      width:8.4%;
       height:4.7%;
+      font-size:clamp(9px,1.35vw,22px);
     "
   >
     -- / --
   </div>
 
 
-  <!-- =====================================================
+  <!-- ===================================================
        LEVEL
-  ====================================================== -->
+  ==================================================== -->
 
   <div
     id="level"
-    class="overlay live-white live-md"
+    class="overlay live-white"
     style="
       left:23.2%;
       top:54.2%;
       width:6.3%;
       height:4.6%;
+      font-size:clamp(9px,1.35vw,22px);
     "
   >
     Lv.--
   </div>
 
 
-  <!-- =====================================================
-       EXP
-  ====================================================== -->
+  <!-- ===================================================
+       EXP BAR
+  ==================================================== -->
 
   <div
     class="live-track"
@@ -117,446 +126,1227 @@
       height:1.6%;
     "
   >
+
     <div
       id="expBar"
       class="live-fill exp-fill"
     ></div>
+
   </div>
 
 
+  <!-- EXP TEXT -->
+
   <div
     id="expText"
-    class="overlay live-number live-blue live-sm"
+    class="overlay live-number live-blue"
     style="
       left:22.0%;
       top:73.9%;
       width:8.5%;
       height:4.4%;
+      font-size:clamp(7px,1vw,16px);
     "
   >
     -- / 500
   </div>
 
 
-  <!-- =====================================================
+  <!-- ===================================================
        CURRENT WEIGHT
-  ====================================================== -->
+  ==================================================== -->
 
   <div
-  id="currentWeight"
-  class="overlay live-number live-blue live-xl"
-  style="
-    left:43.6%;
-    top:21.0%;
-    width:11.2%;
-    height:8.2%;
-  "
->
-  --.-
-</div>
-
-
-  <!-- UPDATED DATE -->
-
-  <div
-    id="updatedAt"
-    class="overlay live-white live-sm"
-    style="
-      left:39.5%;
-      top:35.3%;
-      width:13.0%;
-      height:3.5%;
-    "
-  >
-    --/--/----
-  </div>
-
-
-  <!-- =====================================================
-       TARGET WEIGHT
-  ====================================================== -->
-
-  <div
-    id="targetWeight"
-    class="overlay live-number live-red live-xl"
+    id="currentWeight"
+    class="overlay live-number live-blue"
     style="
       left:43.1%;
-      top:47.5%;
+      top:20.3%;
       width:11.7%;
       height:10.5%;
+      font-size:clamp(24px,3.3vw,52px);
+      font-weight:1000;
     "
   >
     --.-
   </div>
 
 
-  <!-- REMAINING -->
+  <!-- ===================================================
+       LAST WEIGHT UPDATE
+  ==================================================== -->
 
   <div
-    id="remaining"
-    class="overlay live-white live-md"
+    id="updatedAt"
+    class="overlay live-blue"
     style="
-      left:39.8%;
-      top:63.1%;
-      width:13.5%;
-      height:3.8%;
-    "
-  >
-    --.- kg
-  </div>
-
-
-  <!-- =====================================================
-       LOST WEIGHT
-  ====================================================== -->
-
-  <div
-    id="lost"
-    class="overlay live-number live-blue live-sm"
-    style="
-      left:36.7%;
-      top:74.0%;
-      width:8.0%;
-      height:3.8%;
-    "
-  >
-    --.- kg
-  </div>
-
-
-  <!-- START DATE -->
-
-  <div
-    id="startDate"
-    class="overlay live-number live-blue live-sm"
-    style="
-      left:48.4%;
-      top:74.0%;
-      width:8.7%;
-      height:3.8%;
+      left:39.5%;
+      top:35.3%;
+      width:13%;
+      height:3.5%;
+      font-size:clamp(7px,1vw,16px);
     "
   >
     --/--/----
   </div>
 
 
-  <!-- =====================================================
-       HOTSPOTS
-  ====================================================== -->
+  <!-- ===================================================
+       TARGET WEIGHT
+  ==================================================== -->
+
+  <div
+    id="targetWeight"
+    class="overlay live-number live-red"
+    style="
+      left:43.1%;
+      top:47.5%;
+      width:11.7%;
+      height:10.5%;
+      font-size:clamp(24px,3.3vw,52px);
+      font-weight:1000;
+    "
+  >
+    --.-
+  </div>
+
+
+  <!-- ===================================================
+       REMAINING
+  ==================================================== -->
+
+  <div
+    id="remaining"
+    class="overlay live-red"
+    style="
+      left:39.8%;
+      top:63.1%;
+      width:13.5%;
+      height:3.8%;
+      font-size:clamp(8px,1.1vw,18px);
+    "
+  >
+    --.- kg
+  </div>
+
+
+  <!-- ===================================================
+       LOST WEIGHT
+  ==================================================== -->
+
+  <div
+    id="lost"
+    class="overlay live-number live-blue"
+    style="
+      left:36.7%;
+      top:74%;
+      width:8%;
+      height:3.8%;
+      font-size:clamp(7px,1vw,16px);
+    "
+  >
+    --.- kg
+  </div>
+
+
+  <!-- ===================================================
+       START DATE
+  ==================================================== -->
+
+  <div
+    id="startDate"
+    class="overlay live-number live-blue"
+    style="
+      left:48.4%;
+      top:74%;
+      width:8.7%;
+      height:3.8%;
+      font-size:clamp(7px,1vw,16px);
+    "
+  >
+    --/--/----
+  </div>
+
+
+
+  <!-- ===================================================
+       WEIGHT CHECK BUTTON
+  ==================================================== -->
 
   <button
     class="hotspot"
+    type="button"
     style="
       left:59.4%;
       top:16.1%;
       width:18.7%;
       height:30.9%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.WEIGHT)"
+    onclick="goPage('WEIGHT')"
     aria-label="Weight Check"
   ></button>
 
 
+
+  <!-- ===================================================
+       MY PROGRESS
+  ==================================================== -->
+
   <button
     class="hotspot"
+    type="button"
     style="
       left:79.1%;
       top:16.1%;
       width:19.4%;
       height:30.9%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.PROGRESS)"
+    onclick="goPage('PROGRESS')"
     aria-label="My Progress"
   ></button>
 
 
+
+  <!-- ===================================================
+       RANKING
+  ==================================================== -->
+
   <button
     class="hotspot"
+    type="button"
     style="
       left:59.4%;
       top:49.4%;
       width:18.7%;
       height:31.1%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.RANKING)"
+    onclick="goPage('RANKING')"
     aria-label="Ranking"
   ></button>
 
 
+
+  <!-- ===================================================
+       REWARDS
+  ==================================================== -->
+
   <button
     class="hotspot"
+    type="button"
     style="
       left:79.1%;
       top:49.4%;
       width:19.4%;
       height:31.1%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.REWARDS)"
+    onclick="goPage('REWARDS')"
     aria-label="Rewards"
   ></button>
 
 
+
+  <!-- ===================================================
+       HOME
+  ==================================================== -->
+
   <button
     class="hotspot"
+    type="button"
     style="
       left:1.4%;
       top:83.2%;
       width:31.5%;
       height:14.5%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.HOME)"
+    onclick="goPage('HOME')"
     aria-label="Home"
   ></button>
 
 
+
+  <!-- ===================================================
+       MISSION
+  ==================================================== -->
+
   <button
     class="hotspot"
+    type="button"
     style="
       left:33.7%;
       top:83.2%;
       width:32.2%;
       height:14.5%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.MISSION)"
+    onclick="goPage('MISSION')"
     aria-label="Mission"
   ></button>
 
 
+
+  <!-- ===================================================
+       BATTLE
+  ==================================================== -->
+
   <button
     class="hotspot"
+    type="button"
     style="
       left:66.5%;
       top:83.2%;
       width:32.1%;
       height:14.5%;
     "
-    onclick="ROCK.go(ROCK.CFG.PAGE.BATTLE)"
+    onclick="goPage('BATTLE')"
     aria-label="Battle"
   ></button>
 
 </div>
 
 
-<div
-  id="status"
-  class="status"
-></div>
+<!-- =====================================================
+     STATUS
+====================================================== -->
+
+<div id="status" class="status"></div>
 
 
-<script src="common.js"></script>
+<!-- COMMON -->
+<script src="./common.js"></script>
+
 
 <script>
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function el(id) {
+  return document.getElementById(id);
+}
+
+
+function setText(id, value) {
+
+  const node = el(id);
+
+  if (!node) return;
+
+  node.textContent = value;
+}
+
+
+function numberValue(value, fallback = 0) {
+
+  const n = Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : fallback;
+}
+
+
+function formatInteger(value) {
+
+  return Math.round(
+    numberValue(value, 0)
+  ).toLocaleString("en-US");
+}
+
+
+function formatWeight(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "--.-";
+  }
+
+  const n = Number(value);
+
+  if (!Number.isFinite(n)) {
+    return "--.-";
+  }
+
+  return n.toFixed(1);
+}
+
+
+function formatDate(value) {
+
+  if (!value) {
+    return "--/--/----";
+  }
+
+  const date = new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return "--/--/----";
+  }
+
+  return date.toLocaleDateString(
+    "th-TH",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  );
+}
+
+
+function percent(value, max) {
+
+  const v =
+    numberValue(value, 0);
+
+  const m =
+    numberValue(max, 0);
+
+  if (m <= 0) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      (v / m) * 100
+    )
+  );
+}
+
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function goPage(name) {
+
+  const pages =
+    window.ROCK?.CFG?.PAGE ||
+    window.APP_CONFIG?.PAGE ||
+    {};
+
+  const fallback = {
+
+    HOME:
+      "./dashboard.html",
+
+    WEIGHT:
+      "./weight-check.html",
+
+    PROGRESS:
+      "./progress.html",
+
+    RANKING:
+      "./ranking.html",
+
+    REWARDS:
+      "./rewards.html",
+
+    MISSION:
+      "./mission.html",
+
+    BATTLE:
+      "./battle.html"
+
+  };
+
+
+  const url =
+    pages[name] ||
+    fallback[name];
+
+
+  if (url) {
+    window.location.href = url;
+  }
+}
+
+
+
+/* =========================================================
+   NORMALIZE DASHBOARD DATA
+========================================================= */
+
+function normalizeDashboard(raw) {
+
+  raw = raw || {};
+
+
+  const sourcePlayer =
+    raw.player ||
+    raw.user ||
+    {};
+
+
+  const sourceWeight =
+    raw.weight ||
+    {};
+
+
+  const sourceEnergy =
+    raw.energy &&
+    typeof raw.energy === "object"
+      ? raw.energy
+      : {};
+
+
+  /* -------------------------
+     EXP
+  ------------------------- */
+
+  let exp =
+    raw.exp ??
+    sourcePlayer.exp ??
+    0;
+
+
+  if (
+    exp &&
+    typeof exp === "object"
+  ) {
+
+    exp =
+      exp.current ??
+      exp.total ??
+      0;
+  }
+
+
+  exp =
+    numberValue(
+      exp,
+      0
+    );
+
+
+  /* -------------------------
+     EXP PER LEVEL
+  ------------------------- */
+
+  const expPerLevel =
+    numberValue(
+      sourcePlayer.expPerLevel ??
+      sourcePlayer.exp_per_level ??
+      raw.expPerLevel ??
+      window.ROCK?.CFG?.EXP_PER_LEVEL ??
+      window.APP_CONFIG?.EXP_PER_LEVEL ??
+      500,
+      500
+    );
+
+
+  /* -------------------------
+     LEVEL
+  ------------------------- */
+
+  const calculatedLevel =
+    Math.floor(
+      exp /
+      expPerLevel
+    ) + 1;
+
+
+  const level =
+    Math.max(
+      calculatedLevel,
+      numberValue(
+        raw.level ??
+        sourcePlayer.level,
+        calculatedLevel
+      )
+    );
+
+
+  /* -------------------------
+     CURRENT WEIGHT
+  ------------------------- */
+
+  const currentWeight =
+    sourceWeight.current ??
+    sourceWeight.currentWeight ??
+    sourcePlayer.current_weight ??
+    sourcePlayer.currentWeight ??
+    raw.currentWeight ??
+    null;
+
+
+  /* -------------------------
+     TARGET WEIGHT
+  ------------------------- */
+
+  const targetWeight =
+    sourceWeight.target ??
+    sourceWeight.targetWeight ??
+    sourcePlayer.target_weight ??
+    sourcePlayer.targetWeight ??
+    raw.targetWeight ??
+    null;
+
+
+  /* -------------------------
+     START WEIGHT
+  ------------------------- */
+
+  const startWeight =
+    sourceWeight.start ??
+    sourceWeight.startWeight ??
+    sourcePlayer.start_weight ??
+    sourcePlayer.startWeight ??
+    raw.startWeight ??
+    null;
+
+
+  /* -------------------------
+     DATES
+  ------------------------- */
+
+  const startDate =
+    sourceWeight.startDate ??
+    sourceWeight.start_date ??
+    sourcePlayer.start_date ??
+    sourcePlayer.startDate ??
+    raw.startDate ??
+    null;
+
+
+  const updatedAt =
+    sourceWeight.updatedAt ??
+    sourceWeight.updated_at ??
+    sourcePlayer.weight_updated_at ??
+    sourcePlayer.weightUpdatedAt ??
+    sourcePlayer.updated_at ??
+    raw.weightUpdatedAt ??
+    null;
+
+
+  return {
+
+    picture:
+      sourcePlayer.pictureUrl ??
+      sourcePlayer.picture_url ??
+      raw.pictureUrl ??
+      "",
+
+    coin:
+      numberValue(
+        raw.rockCoin ??
+        raw.rock_coin ??
+        sourcePlayer.rockCoin ??
+        sourcePlayer.rock_coin,
+        0
+      ),
+
+    energy:
+      numberValue(
+        sourceEnergy.current ??
+        raw.energyCurrent ??
+        sourcePlayer.energy,
+        0
+      ),
+
+    maxEnergy:
+      numberValue(
+        sourceEnergy.max ??
+        raw.maxEnergy ??
+        sourcePlayer.max_energy ??
+        sourcePlayer.maxEnergy,
+        200
+      ),
+
+    exp,
+
+    expPerLevel,
+
+    level,
+
+    currentWeight,
+
+    targetWeight,
+
+    startWeight,
+
+    startDate,
+
+    updatedAt
+  };
+}
+
+
 
 /* =========================================================
    RENDER HOME
 ========================================================= */
 
-function renderHome(raw){
-
-  const data =
-    ROCK.normalize(raw);
+function renderHome(raw) {
 
   const p =
-    data.player;
+    normalizeDashboard(raw);
 
 
-  /* COIN */
+  /* =====================================================
+     COIN
+  ====================================================== */
 
-  ROCK.setText(
+  setText(
     "coin",
-    ROCK.fmtInt(
+    formatInteger(
       p.coin
     )
   );
 
 
-  /* ENERGY */
+  /* =====================================================
+     ENERGY
+  ====================================================== */
 
-  ROCK.setText(
+  setText(
     "energy",
-    ROCK.fmtInt(
+    formatInteger(
       p.energy
     ) +
     " / " +
-    ROCK.fmtInt(
+    formatInteger(
       p.maxEnergy
     )
   );
 
 
-  /* PROFILE */
+  /* =====================================================
+     PROFILE IMAGE
+  ====================================================== */
 
-  ROCK.setImage(
-    "profileImage",
+  const profile =
+    el("profileImage");
+
+
+  if (
+    profile &&
     p.picture
-  );
+  ) {
+
+    profile.src =
+      p.picture;
+
+    profile.style.display =
+      "block";
+  }
 
 
-  /* LEVEL */
+  /* =====================================================
+     LEVEL
+  ====================================================== */
 
-  ROCK.setText(
+  setText(
     "level",
     "Lv." +
-    ROCK.fmtInt(
+    formatInteger(
       p.level
     )
   );
 
 
-  /* EXP */
+  /* =====================================================
+     EXP
+  ====================================================== */
 
   const expInLevel =
     p.exp %
     p.expPerLevel;
 
 
-  ROCK.setText(
+  setText(
     "expText",
-    ROCK.fmtInt(
+
+    formatInteger(
       expInLevel
     ) +
     " / " +
-    ROCK.fmtInt(
+    formatInteger(
       p.expPerLevel
     )
   );
 
 
-  ROCK.setBar(
-    "expBar",
-    expInLevel,
-    p.expPerLevel
-  );
+  const expBar =
+    el("expBar");
 
 
-  /* CURRENT WEIGHT */
+  if (expBar) {
 
-  ROCK.setText(
+    expBar.style.width =
+      percent(
+        expInLevel,
+        p.expPerLevel
+      ) + "%";
+  }
+
+
+  /* =====================================================
+     CURRENT WEIGHT
+  ====================================================== */
+
+  setText(
     "currentWeight",
-    ROCK.fmtWeight(
+    formatWeight(
       p.currentWeight
     )
   );
 
 
-  /* UPDATE DATE */
+  /* =====================================================
+     UPDATED DATE
+  ====================================================== */
 
-  ROCK.setText(
+  setText(
     "updatedAt",
-    ROCK.formatDate(
+    formatDate(
       p.updatedAt
     )
   );
 
 
-  /* TARGET */
+  /* =====================================================
+     TARGET WEIGHT
+  ====================================================== */
 
-  ROCK.setText(
+  setText(
     "targetWeight",
-    ROCK.fmtWeight(
+    formatWeight(
       p.targetWeight
     )
   );
 
 
-  /* REMAINING */
+  /* =====================================================
+     REMAINING
+  ====================================================== */
 
-  ROCK.setText(
+  const current =
+    Number(
+      p.currentWeight
+    );
+
+
+  const target =
+    Number(
+      p.targetWeight
+    );
+
+
+  let remainingText =
+    "--.- kg";
+
+
+  if (
+    Number.isFinite(current) &&
+    Number.isFinite(target)
+  ) {
+
+    /*
+      รองรับทั้งเป้าหมายลดน้ำหนัก
+      และเพิ่มน้ำหนัก
+    */
+
+    const remaining =
+      Math.abs(
+        current -
+        target
+      );
+
+
+    remainingText =
+      remaining.toFixed(1) +
+      " kg";
+  }
+
+
+  setText(
     "remaining",
-    p.remaining === null
-      ? "--.- kg"
-      : ROCK.fmtWeight(
-          p.remaining
-        ) +
-        " kg"
+    remainingText
   );
 
 
-  /* LOST */
+  /* =====================================================
+     LOST / CHANGE
+  ====================================================== */
 
-  ROCK.setText(
+  const start =
+    Number(
+      p.startWeight
+    );
+
+
+  let lostText =
+    "--.- kg";
+
+
+  if (
+    Number.isFinite(start) &&
+    Number.isFinite(current)
+  ) {
+
+    const change =
+      start -
+      current;
+
+
+    lostText =
+      Math.abs(change)
+        .toFixed(1) +
+      " kg";
+  }
+
+
+  setText(
     "lost",
-    p.lostWeight === null
-      ? "--.- kg"
-      : ROCK.fmtWeight(
-          p.lostWeight
-        ) +
-        " kg"
+    lostText
   );
 
 
-  /* START DATE */
+  /* =====================================================
+     START DATE
+  ====================================================== */
 
-  ROCK.setText(
+  setText(
     "startDate",
-    ROCK.formatDate(
+    formatDate(
       p.startDate
     )
   );
-
 }
 
 
+
 /* =========================================================
-   LOAD
+   STATUS
 ========================================================= */
 
-let loading = false;
+function showStatus(
+  message,
+  error = false
+) {
+
+  const status =
+    el("status");
 
 
-async function loadHome(){
-
-  if(loading){
+  if (!status) {
     return;
   }
 
-  loading = true;
+
+  status.textContent =
+    message;
 
 
-  try{
+  status.className =
+    "status show" +
+    (
+      error
+        ? " error"
+        : ""
+    );
+}
+
+
+function hideStatus() {
+
+  const status =
+    el("status");
+
+
+  if (status) {
+    status.className =
+      "status";
+  }
+}
+
+
+
+/* =========================================================
+   INITIALIZE LIFF
+========================================================= */
+
+async function initializeLine() {
+
+  /*
+    ใช้ common.js รุ่นใหม่ก่อน
+  */
+
+  if (
+    window.ROCK &&
+    typeof ROCK.initLiff ===
+      "function"
+  ) {
+
+    return await ROCK.initLiff();
+  }
+
+
+  /*
+    fallback สำหรับ app-config.js
+  */
+
+  const cfg =
+    window.APP_CONFIG ||
+    window.ROCK?.CFG ||
+    {};
+
+
+  const liffId =
+    cfg.LIFF_ID;
+
+
+  if (!liffId) {
+
+    throw new Error(
+      "ไม่พบ LIFF_ID"
+    );
+  }
+
+
+  if (
+    typeof liff ===
+      "undefined"
+  ) {
+
+    throw new Error(
+      "ไม่สามารถโหลด LINE LIFF SDK"
+    );
+  }
+
+
+  await liff.init({
+    liffId
+  });
+
+
+  if (
+    !liff.isLoggedIn()
+  ) {
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
+    return false;
+  }
+
+
+  return true;
+}
+
+
+
+/* =========================================================
+   FETCH DASHBOARD
+========================================================= */
+
+async function getDashboard() {
+
+  /*
+    ใช้ common.js ก่อน
+  */
+
+  if (
+    window.ROCK &&
+    typeof ROCK.fetchDashboard ===
+      "function"
+  ) {
+
+    return await ROCK.fetchDashboard();
+  }
+
+
+  const cfg =
+    window.APP_CONFIG ||
+    window.ROCK?.CFG ||
+    {};
+
+
+  const api =
+    cfg.PLAYER_API;
+
+
+  if (!api) {
+
+    throw new Error(
+      "ไม่พบ PLAYER_API"
+    );
+  }
+
+
+  const idToken =
+    liff.getIDToken();
+
+
+  if (!idToken) {
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+
+  const response =
+    await fetch(
+      api,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              "dashboard",
+
+            idToken:
+              idToken
+          })
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+
+  let data;
+
+
+  try {
+
+    data =
+      JSON.parse(text);
+
+  } catch {
+
+    console.error(
+      "Dashboard raw response:",
+      text
+    );
+
+    throw new Error(
+      "Dashboard API ตอบกลับไม่ถูกต้อง"
+    );
+  }
+
+
+  if (
+    !response.ok ||
+    data.success === false
+  ) {
+
+    throw new Error(
+      data.error ||
+      "โหลดข้อมูล HOME ไม่สำเร็จ"
+    );
+  }
+
+
+  return data;
+}
+
+
+
+/* =========================================================
+   LOAD HOME
+========================================================= */
+
+let homeLoading =
+  false;
+
+
+async function loadHome() {
+
+  if (homeLoading) {
+    return;
+  }
+
+
+  homeLoading =
+    true;
+
+
+  try {
 
     const raw =
-      await ROCK.fetchDashboard();
+      await getDashboard();
 
-    renderHome(raw);
 
-    ROCK.hideStatus();
+    console.log(
+      "HOME DASHBOARD:",
+      raw
+    );
 
-  }catch(error){
 
-    console.error(error);
+    renderHome(
+      raw
+    );
 
-    ROCK.showStatus(
-      error.message ||
+
+    hideStatus();
+
+
+  } catch (error) {
+
+    console.error(
+      "HOME ERROR:",
+      error
+    );
+
+
+    showStatus(
+      error?.message ||
       String(error),
       true
     );
 
-  }finally{
 
-    loading = false;
+  } finally {
+
+    homeLoading =
+      false;
   }
 }
 
 
+
 /* =========================================================
-   START
+   APP START
 ========================================================= */
 
-(async()=>{
+(async function startHome() {
 
-  try{
+  try {
 
-    ROCK.showStatus(
+    showStatus(
       "กำลังเชื่อมต่อ LINE..."
     );
 
 
-    const ok =
-  await ROCK.initLiff();
+    const loggedIn =
+      await initializeLine();
 
 
-    if(!ok){
+    if (!loggedIn) {
       return;
     }
 
@@ -564,33 +1354,103 @@ async function loadHome(){
     await loadHome();
 
 
-    setInterval(
-      ()=>{
+    /* -----------------------------------------------
+       REFRESH
+    ------------------------------------------------ */
 
-        if(
+    const cfg =
+      window.ROCK?.CFG ||
+      window.APP_CONFIG ||
+      {};
+
+
+    const refreshMs =
+      Number(
+        cfg.REFRESH_MS
+      ) || 30000;
+
+
+    setInterval(
+      function () {
+
+        if (
           document.visibilityState ===
           "visible"
-        ){
+        ) {
+
           loadHome();
         }
 
       },
-      ROCK.CFG.REFRESH_MS
+      refreshMs
     );
 
 
-  }catch(error){
+  } catch (error) {
 
-    console.error(error);
+    console.error(
+      "HOME START ERROR:",
+      error
+    );
 
-    ROCK.showStatus(
-      error.message ||
+
+    showStatus(
+      error?.message ||
       String(error),
       true
     );
   }
 
 })();
+
+
+
+/* =========================================================
+   REFRESH WHEN RETURNING TO HOME
+
+   สำคัญ:
+   หลังชั่งน้ำหนักแล้วกลับ HOME
+   ให้โหลด current_weight / EXP / Coin / Energy ใหม่
+========================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  function () {
+
+    if (
+      document.visibilityState ===
+      "visible"
+    ) {
+
+      if (
+        typeof liff !==
+          "undefined" &&
+        liff.isLoggedIn()
+      ) {
+
+        loadHome();
+      }
+    }
+  }
+);
+
+
+/* =========================================================
+   REFRESH WHEN PAGE RESTORED FROM CACHE
+========================================================= */
+
+window.addEventListener(
+  "pageshow",
+  function (event) {
+
+    if (
+      event.persisted
+    ) {
+
+      loadHome();
+    }
+  }
+);
 
 </script>
 
