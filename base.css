@@ -165,14 +165,11 @@ body{
    HOME SPECIFIC SIZES
    ========================================================= */
 
-#currentWeight,
-#targetWeight{
-  font-size:
-    clamp(
-      22px,
-      3.6vw,
-      58px
-    );
+#currentWeight{
+  font-size:clamp(24px,3.3vw,52px);
+  font-weight:1000;
+  line-height:1;
+}
 
   font-weight:1000;
 
@@ -525,14 +522,11 @@ body{
       );
   }
 
-  #currentWeight,
-  #targetWeight{
-    font-size:
-      clamp(
-        18px,
-        6vw,
-        34px
-      );
+  #currentWeight{
+  font-size:clamp(24px,3.3vw,52px);
+  font-weight:1000;
+  line-height:1;
+}
   }
 
   #coin{
