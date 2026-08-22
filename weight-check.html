@@ -1,706 +1,814 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
+
 <head>
-<meta charset="UTF-8">
+  <meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
 
-<meta name="theme-color" content="#eef5ff">
+  <meta
+    name="theme-color"
+    content="#eef5ff"
+  >
 
-<title>ROCK YOUR BODY 2026 - Weight Check</title>
+  <title>
+    ROCK YOUR BODY 2026 - Weight Check
+  </title>
 
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-<style>
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-}
-
-body {
-  font-family:
-    Arial,
-    "Noto Sans Thai",
-    sans-serif;
-
-  background:
-    linear-gradient(
-      180deg,
-      #eaf3ff 0%,
-      #f8fbff 100%
-    );
-
-  color: #08245b;
-}
+  <!-- LINE LIFF -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 
-/* =========================================
-   PAGE
-========================================= */
+  <style>
 
-.page {
-  min-height: 100vh;
+    /* =====================================================
+       RESET
+    ====================================================== */
 
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+    *{
+      box-sizing:border-box;
+    }
 
-  padding:
-    22px
-    14px
-    50px;
-}
+    html,
+    body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+    }
 
+    body{
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
 
-/* =========================================
-   APP
-========================================= */
+      color:#08245b;
 
-.app {
-  width: 100%;
-  max-width: 620px;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-.header {
-  background: #fff;
-
-  border-radius: 22px;
-
-  padding:
-    22px
-    20px;
-
-  text-align: center;
-
-  box-shadow:
-    0 10px 30px
-    rgba(15,53,103,.10);
-}
+      background:
+        linear-gradient(
+          180deg,
+          #eaf3ff 0%,
+          #f7fbff 100%
+        );
+    }
 
 
-.brand {
-  font-size:
-    clamp(
-      25px,
-      5vw,
-      38px
-    );
-
-  font-weight: 900;
-
-  color: #073b93;
-
-  line-height: 1.1;
-}
+    button,
+    input{
+      font:inherit;
+    }
 
 
-.brand .red {
-  color: #d71920;
-}
+    /* =====================================================
+       PAGE
+    ====================================================== */
+
+    .page{
+      width:100%;
+      min-height:100vh;
+
+      display:flex;
+      justify-content:center;
+
+      padding:
+        22px
+        14px
+        50px;
+    }
 
 
-.tagline {
-  margin-top: 8px;
-
-  font-size: 14px;
-
-  font-weight: 700;
-
-  color: #64748b;
-}
+    .app{
+      width:100%;
+      max-width:620px;
+    }
 
 
-/* =========================================
-   HERO
-========================================= */
+    /* =====================================================
+       HEADER
+    ====================================================== */
 
-.hero {
-  margin-top: 18px;
+    .header{
+      padding:
+        22px
+        18px;
 
-  padding: 24px;
+      background:#fff;
 
-  border-radius: 24px;
+      border-radius:24px;
 
-  color: #fff;
+      text-align:center;
 
-  background:
-    linear-gradient(
-      135deg,
-      #073b93 0%,
-      #0765d8 55%,
-      #148bf3 100%
-    );
-
-  box-shadow:
-    0 14px 35px
-    rgba(7,59,147,.22);
-}
+      box-shadow:
+        0 10px 30px
+        rgba(15,53,103,.10);
+    }
 
 
-.hero-title {
-  display: flex;
-  align-items: center;
+    .brand{
+      font-size:
+        clamp(
+          25px,
+          5vw,
+          38px
+        );
 
-  gap: 12px;
+      font-weight:900;
 
-  font-size:
-    clamp(
-      26px,
-      5vw,
-      36px
-    );
+      line-height:1.05;
 
-  font-weight: 900;
-}
-
-
-.hero-icon {
-  font-size: 38px;
-}
+      color:#073b93;
+    }
 
 
-.hero-subtitle {
-  margin-top: 8px;
-
-  font-size: 15px;
-
-  font-weight: 700;
-
-  opacity: .94;
-}
+    .brand-red{
+      color:#d71920;
+    }
 
 
-/* =========================================
-   SUMMARY
-========================================= */
+    .tagline{
+      margin-top:9px;
 
-.summary-grid {
-  margin-top: 20px;
+      color:#64748b;
 
-  display: grid;
+      font-size:14px;
 
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(
-        0,
+      font-weight:800;
+    }
+
+
+    /* =====================================================
+       HERO
+    ====================================================== */
+
+    .hero{
+      margin-top:18px;
+
+      padding:24px;
+
+      border-radius:25px;
+
+      color:#fff;
+
+      background:
+        linear-gradient(
+          135deg,
+          #073b93,
+          #0765d8 58%,
+          #148bf3
+        );
+
+      box-shadow:
+        0 14px 35px
+        rgba(7,59,147,.22);
+    }
+
+
+    .hero-title{
+      display:flex;
+      align-items:center;
+
+      gap:12px;
+
+      font-size:
+        clamp(
+          27px,
+          5vw,
+          38px
+        );
+
+      font-weight:900;
+    }
+
+
+    .hero-icon{
+      font-size:39px;
+    }
+
+
+    .hero-subtitle{
+      margin-top:8px;
+
+      font-size:15px;
+
+      font-weight:800;
+
+      opacity:.95;
+    }
+
+
+    /* =====================================================
+       SUMMARY
+    ====================================================== */
+
+    .summary-grid{
+      margin-top:20px;
+
+      display:grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0,1fr)
+        );
+
+      gap:12px;
+    }
+
+
+    .summary-card{
+      min-height:110px;
+
+      padding:18px;
+
+      border-radius:19px;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .15
+        );
+
+      border:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          .25
+        );
+    }
+
+
+    .summary-label{
+      font-size:14px;
+
+      font-weight:800;
+
+      opacity:.92;
+    }
+
+
+    .summary-value{
+      margin-top:10px;
+
+      font-size:
+        clamp(
+          28px,
+          6vw,
+          40px
+        );
+
+      font-weight:900;
+
+      line-height:1;
+    }
+
+
+    .summary-unit{
+      font-size:18px;
+    }
+
+
+    /* =====================================================
+       CARD
+    ====================================================== */
+
+    .card{
+      margin-top:18px;
+
+      padding:22px;
+
+      border-radius:23px;
+
+      background:#fff;
+
+      box-shadow:
+        0 10px 30px
+        rgba(15,53,103,.10);
+    }
+
+
+    .card-title{
+      margin:0;
+
+      color:#08245b;
+
+      font-size:22px;
+
+      font-weight:900;
+    }
+
+
+    .card-desc{
+      margin-top:7px;
+
+      color:#64748b;
+
+      font-size:14px;
+    }
+
+
+    /* =====================================================
+       INPUT
+    ====================================================== */
+
+    .input-box{
+      margin-top:18px;
+
+      min-height:78px;
+
+      display:flex;
+      align-items:center;
+
+      padding:
+        0
+        20px;
+
+      border:
+        2px solid
+        #c9d9ef;
+
+      border-radius:18px;
+
+      background:#fbfdff;
+    }
+
+
+    .input-box:focus-within{
+      border-color:#0b67dd;
+
+      box-shadow:
+        0 0 0 4px
+        rgba(
+          11,
+          103,
+          221,
+          .08
+        );
+    }
+
+
+    .input-box input{
+      width:100%;
+      min-width:0;
+
+      border:0;
+      outline:0;
+
+      background:transparent;
+
+      color:#08245b;
+
+      font-size:
+        clamp(
+          30px,
+          7vw,
+          42px
+        );
+
+      font-weight:900;
+    }
+
+
+    .input-unit{
+      margin-left:12px;
+
+      color:#64748b;
+
+      font-size:20px;
+
+      font-weight:900;
+    }
+
+
+    /* =====================================================
+       BUTTON
+    ====================================================== */
+
+    .button{
+      width:100%;
+
+      min-height:60px;
+
+      border:0;
+
+      border-radius:16px;
+
+      cursor:pointer;
+
+      font-size:18px;
+
+      font-weight:900;
+    }
+
+
+    .button:disabled{
+      opacity:.55;
+
+      cursor:not-allowed;
+    }
+
+
+    .save-weight{
+      margin-top:18px;
+
+      color:#fff;
+
+      background:
+        linear-gradient(
+          90deg,
+          #00b84f,
+          #06c755
+        );
+
+      box-shadow:
+        0 8px 20px
+        rgba(
+          6,
+          199,
+          85,
+          .22
+        );
+    }
+
+
+    .target-button{
+      margin-top:14px;
+
+      color:#073b93;
+
+      background:#eaf3ff;
+    }
+
+
+    .home-button{
+      margin-top:18px;
+
+      color:#fff;
+
+      background:
+        linear-gradient(
+          90deg,
+          #073b93,
+          #075ac7
+        );
+    }
+
+
+    /* =====================================================
+       STATUS
+    ====================================================== */
+
+    .status{
+      display:none;
+
+      margin-top:16px;
+
+      padding:
+        15px
+        17px;
+
+      border-radius:15px;
+
+      line-height:1.5;
+
+      font-size:14px;
+
+      font-weight:800;
+
+      white-space:pre-line;
+    }
+
+
+    .status.show{
+      display:block;
+    }
+
+
+    .status.loading{
+      color:#174ea6;
+
+      background:#eef5ff;
+    }
+
+
+    .status.success{
+      color:#08783c;
+
+      background:#e9f8ef;
+    }
+
+
+    .status.error{
+      color:#a21e1e;
+
+      background:#fff0f0;
+    }
+
+
+    /* =====================================================
+       INFO
+    ====================================================== */
+
+    .info-row{
+      margin-top:18px;
+
+      padding-top:16px;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      gap:15px;
+
+      border-top:
+        1px solid
+        #e5edf8;
+    }
+
+
+    .info-label{
+      color:#64748b;
+
+      font-size:14px;
+
+      font-weight:800;
+    }
+
+
+    .info-value{
+      color:#08245b;
+
+      font-size:16px;
+
+      font-weight:900;
+
+      text-align:right;
+    }
+
+
+    /* =====================================================
+       PROGRESS
+    ====================================================== */
+
+    .progress-grid{
+      margin-top:18px;
+
+      display:grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0,1fr)
+        );
+
+      gap:12px;
+    }
+
+
+    .progress-box{
+      padding:16px;
+
+      border-radius:16px;
+
+      background:#f5f8fd;
+    }
+
+
+    .progress-label{
+      color:#64748b;
+
+      font-size:12px;
+    }
+
+
+    .progress-value{
+      margin-top:7px;
+
+      color:#08245b;
+
+      font-size:21px;
+
+      font-weight:900;
+    }
+
+
+    .progress-track{
+      margin-top:16px;
+
+      width:100%;
+      height:10px;
+
+      overflow:hidden;
+
+      border-radius:999px;
+
+      background:#dbe8f7;
+    }
+
+
+    .progress-fill{
+      width:0%;
+      height:100%;
+
+      border-radius:999px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #168cff,
+          #06c755
+        );
+
+      transition:
+        width .45s ease;
+    }
+
+
+    /* =====================================================
+       MODAL
+    ====================================================== */
+
+    .modal-backdrop{
+      position:fixed;
+
+      inset:0;
+
+      z-index:999;
+
+      display:none;
+
+      align-items:center;
+      justify-content:center;
+
+      padding:18px;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          .48
+        );
+    }
+
+
+    .modal-backdrop.show{
+      display:flex;
+    }
+
+
+    .modal{
+      width:100%;
+      max-width:420px;
+
+      padding:22px;
+
+      border-radius:22px;
+
+      background:#fff;
+
+      box-shadow:
+        0 20px 60px
+        rgba(
+          0,
+          0,
+          0,
+          .28
+        );
+    }
+
+
+    .modal-title{
+      margin:0;
+
+      color:#073b93;
+
+      font-size:22px;
+
+      font-weight:900;
+    }
+
+
+    .modal-desc{
+      margin-top:8px;
+
+      color:#64748b;
+
+      font-size:14px;
+    }
+
+
+    .modal-actions{
+      margin-top:18px;
+
+      display:grid;
+
+      grid-template-columns:
         1fr
-      )
-    );
+        1fr;
 
-  gap: 12px;
-}
+      gap:10px;
+    }
 
 
-.summary-card {
-  min-height: 110px;
+    .modal-actions button{
+      min-height:50px;
 
-  padding: 18px;
+      border:0;
 
-  border-radius: 18px;
+      border-radius:13px;
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .15
-    );
+      cursor:pointer;
 
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      .24
-    );
-}
+      font-weight:900;
+    }
 
 
-.summary-label {
-  font-size: 14px;
+    .modal-cancel{
+      color:#334155;
 
-  font-weight: 700;
+      background:#e9eef6;
+    }
 
-  opacity: .9;
-}
 
+    .modal-save{
+      color:#fff;
 
-.summary-value {
-  margin-top: 10px;
+      background:#06c755;
+    }
 
-  font-size:
-    clamp(
-      26px,
-      6vw,
-      38px
-    );
 
-  font-weight: 900;
-}
+    /* =====================================================
+       MOBILE
+    ====================================================== */
 
+    @media(max-width:480px){
 
-.summary-unit {
-  font-size: 18px;
+      .page{
+        padding:
+          12px
+          10px
+          35px;
+      }
 
-  font-weight: 800;
-}
+      .summary-grid{
+        grid-template-columns:
+          1fr
+          1fr;
+      }
 
+      .summary-card{
+        min-height:95px;
 
-/* =========================================
-   CARD
-========================================= */
+        padding:15px;
+      }
 
-.card {
-  margin-top: 18px;
+      .hero{
+        padding:20px;
+      }
 
-  padding: 22px;
+      .card{
+        padding:18px;
+      }
+    }
 
-  border-radius: 22px;
+  </style>
 
-  background: #fff;
-
-  box-shadow:
-    0 10px 30px
-    rgba(15,53,103,.10);
-}
-
-
-.card-title {
-  margin: 0;
-
-  font-size: 21px;
-
-  font-weight: 900;
-
-  color: #08245b;
-}
-
-
-.card-desc {
-  margin-top: 6px;
-
-  font-size: 14px;
-
-  color: #64748b;
-}
-
-
-/* =========================================
-   INPUT
-========================================= */
-
-.input-box {
-  margin-top: 18px;
-
-  display: flex;
-  align-items: center;
-
-  min-height: 76px;
-
-  padding:
-    0
-    18px;
-
-  border:
-    2px solid
-    #c9d9ef;
-
-  border-radius: 17px;
-
-  background: #fbfdff;
-}
-
-
-.input-box:focus-within {
-  border-color: #0b67dd;
-
-  box-shadow:
-    0 0 0 4px
-    rgba(
-      11,
-      103,
-      221,
-      .08
-    );
-}
-
-
-.input-box input {
-  width: 100%;
-
-  min-width: 0;
-
-  border: 0;
-  outline: 0;
-
-  background: transparent;
-
-  color: #08245b;
-
-  font-size:
-    clamp(
-      28px,
-      7vw,
-      40px
-    );
-
-  font-weight: 900;
-}
-
-
-.input-box span {
-  margin-left: 10px;
-
-  color: #64748b;
-
-  font-size: 20px;
-
-  font-weight: 900;
-}
-
-
-/* =========================================
-   BUTTON
-========================================= */
-
-.primary-button,
-.secondary-button,
-.home-button {
-  width: 100%;
-
-  min-height: 58px;
-
-  border: 0;
-
-  border-radius: 15px;
-
-  cursor: pointer;
-
-  font-size: 18px;
-
-  font-weight: 900;
-}
-
-
-.primary-button {
-  margin-top: 18px;
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      90deg,
-      #00b84f,
-      #06c755
-    );
-
-  box-shadow:
-    0 8px 20px
-    rgba(
-      6,
-      199,
-      85,
-      .22
-    );
-}
-
-
-.primary-button:disabled {
-  opacity: .55;
-
-  cursor: not-allowed;
-}
-
-
-.secondary-button {
-  margin-top: 14px;
-
-  color: #073b93;
-
-  background: #eaf3ff;
-}
-
-
-.home-button {
-  margin-top: 18px;
-
-  color: #fff;
-
-  background:
-    linear-gradient(
-      90deg,
-      #073b93,
-      #075ac7
-    );
-}
-
-
-/* =========================================
-   CURRENT INFO
-========================================= */
-
-.info-row {
-  margin-top: 18px;
-
-  padding:
-    16px
-    0;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 16px;
-
-  border-top:
-    1px solid
-    #e5edf8;
-}
-
-
-.info-label {
-  color: #64748b;
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-
-.info-value {
-  color: #08245b;
-
-  font-size: 18px;
-
-  font-weight: 900;
-
-  text-align: right;
-}
-
-
-/* =========================================
-   STATUS
-========================================= */
-
-.status {
-  margin-top: 16px;
-
-  padding: 14px 16px;
-
-  border-radius: 14px;
-
-  display: none;
-
-  line-height: 1.5;
-
-  font-size: 14px;
-
-  font-weight: 800;
-}
-
-
-.status.show {
-  display: block;
-}
-
-
-.status.loading {
-  background: #eef5ff;
-
-  color: #174ea6;
-}
-
-
-.status.success {
-  background: #e9f8ef;
-
-  color: #08783c;
-}
-
-
-.status.error {
-  background: #fff0f0;
-
-  color: #a21e1e;
-}
-
-
-/* =========================================
-   MODAL
-========================================= */
-
-.modal-backdrop {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 500;
-
-  display: none;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 18px;
-
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      .48
-    );
-}
-
-
-.modal-backdrop.show {
-  display: flex;
-}
-
-
-.modal {
-  width: 100%;
-  max-width: 420px;
-
-  padding: 22px;
-
-  border-radius: 22px;
-
-  background: #fff;
-
-  box-shadow:
-    0 20px 60px
-    rgba(
-      0,
-      0,
-      0,
-      .28
-    );
-}
-
-
-.modal-title {
-  margin: 0;
-
-  color: #073b93;
-
-  font-size: 22px;
-
-  font-weight: 900;
-}
-
-
-.modal-desc {
-  margin-top: 8px;
-
-  color: #64748b;
-
-  font-size: 14px;
-}
-
-
-.modal-actions {
-  margin-top: 18px;
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 10px;
-}
-
-
-.modal-actions button {
-  min-height: 48px;
-
-  border: 0;
-
-  border-radius: 12px;
-
-  cursor: pointer;
-
-  font-size: 16px;
-
-  font-weight: 900;
-}
-
-
-.cancel-button {
-  background: #e9eef6;
-
-  color: #334155;
-}
-
-
-.save-button {
-  background: #06c755;
-
-  color: #fff;
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media
-(max-width: 480px) {
-
-  .page {
-    padding:
-      12px
-      10px
-      35px;
-  }
-
-
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-
-
-  .summary-card {
-    min-height: 88px;
-  }
-}
-
-</style>
 </head>
 
+
 <body>
+
 
 <div class="page">
 
   <main class="app">
 
-    <!-- HEADER -->
+
+    <!-- ===================================================
+         HEADER
+    ==================================================== -->
 
     <section class="header">
 
       <div class="brand">
+
         ROCK
-        <span class="red">
+
+        <span class="brand-red">
           YOUR BODY
         </span>
+
         2026
+
       </div>
+
 
       <div class="tagline">
         MOVE • EAT • SLEEP • HEALTH
@@ -709,7 +817,10 @@ body {
     </section>
 
 
-    <!-- HERO -->
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
 
     <section class="hero">
 
@@ -725,12 +836,14 @@ body {
 
       </div>
 
+
       <div class="hero-subtitle">
         บันทึกน้ำหนักและติดตามความก้าวหน้าของคุณ
       </div>
 
 
       <div class="summary-grid">
+
 
         <div class="summary-card">
 
@@ -740,9 +853,7 @@ body {
 
           <div class="summary-value">
 
-            <span
-              id="latestWeightValue"
-            >
+            <span id="latestWeight">
               --
             </span>
 
@@ -753,6 +864,7 @@ body {
           </div>
 
         </div>
+
 
 
         <div class="summary-card">
@@ -763,9 +875,7 @@ body {
 
           <div class="summary-value">
 
-            <span
-              id="targetWeightValue"
-            >
+            <span id="targetWeight">
               --
             </span>
 
@@ -777,18 +887,23 @@ body {
 
         </div>
 
+
       </div>
 
     </section>
 
 
-    <!-- WEIGHT INPUT -->
+
+    <!-- ===================================================
+         WEIGHT
+    ==================================================== -->
 
     <section class="card">
 
       <h2 class="card-title">
         น้ำหนักวันนี้
       </h2>
+
 
       <div class="card-desc">
         กรอกน้ำหนักปัจจุบันของคุณ
@@ -807,7 +922,7 @@ body {
           placeholder="0.0"
         >
 
-        <span>
+        <span class="input-unit">
           kg
         </span>
 
@@ -816,15 +931,16 @@ body {
 
       <button
         id="saveWeightButton"
-        class="primary-button"
+        class="button save-weight"
         type="button"
+        disabled
       >
-        บันทึกน้ำหนัก
+        กำลังเชื่อมต่อ LINE...
       </button>
 
 
       <div
-        id="weightStatus"
+        id="status"
         class="status"
       ></div>
 
@@ -836,7 +952,7 @@ body {
         </div>
 
         <div
-          id="lastUpdatedValue"
+          id="lastUpdated"
           class="info-value"
         >
           -
@@ -847,7 +963,73 @@ body {
     </section>
 
 
-    <!-- TARGET -->
+
+    <!-- ===================================================
+         PROGRESS
+    ==================================================== -->
+
+    <section class="card">
+
+      <h2 class="card-title">
+        ความก้าวหน้า
+      </h2>
+
+
+      <div class="progress-grid">
+
+
+        <div class="progress-box">
+
+          <div class="progress-label">
+            น้ำหนักเริ่มต้น
+          </div>
+
+          <div
+            id="startWeight"
+            class="progress-value"
+          >
+            -- kg
+          </div>
+
+        </div>
+
+
+
+        <div class="progress-box">
+
+          <div class="progress-label">
+            เปลี่ยนแปลงแล้ว
+          </div>
+
+          <div
+            id="weightChange"
+            class="progress-value"
+          >
+            -- kg
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="progress-track">
+
+        <div
+          id="weightProgress"
+          class="progress-fill"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         TARGET
+    ==================================================== -->
 
     <section class="card">
 
@@ -855,15 +1037,17 @@ body {
         🎯 เป้าหมายน้ำหนัก
       </h2>
 
+
       <div class="card-desc">
-        ตั้งเป้าหมายเพื่อใช้แสดงบนหน้า HOME
+        ตั้งหรือแก้ไขเป้าหมายน้ำหนักของคุณ
       </div>
 
 
       <button
-        id="setTargetButton"
-        class="secondary-button"
+        id="targetButton"
+        class="button target-button"
         type="button"
+        disabled
       >
         ตั้ง / แก้ไขเป้าหมาย
       </button>
@@ -871,22 +1055,29 @@ body {
     </section>
 
 
-    <!-- HOME -->
+
+    <!-- ===================================================
+         HOME
+    ==================================================== -->
 
     <button
       id="homeButton"
-      class="home-button"
+      class="button home-button"
       type="button"
     >
       🏠 กลับหน้า HOME
     </button>
+
 
   </main>
 
 </div>
 
 
-<!-- TARGET MODAL -->
+
+<!-- =======================================================
+     TARGET MODAL
+======================================================== -->
 
 <div
   id="targetModal"
@@ -899,8 +1090,9 @@ body {
       🎯 ตั้งเป้าหมายน้ำหนัก
     </h2>
 
+
     <div class="modal-desc">
-      ระบุน้ำหนักเป้าหมายของคุณ
+      ระบุน้ำหนักที่ต้องการ
     </div>
 
 
@@ -916,7 +1108,7 @@ body {
         placeholder="0.0"
       >
 
-      <span>
+      <span class="input-unit">
         kg
       </span>
 
@@ -927,7 +1119,7 @@ body {
 
       <button
         id="cancelTargetButton"
-        class="cancel-button"
+        class="modal-cancel"
         type="button"
       >
         ยกเลิก
@@ -936,7 +1128,7 @@ body {
 
       <button
         id="saveTargetButton"
-        class="save-button"
+        class="modal-save"
         type="button"
       >
         บันทึก
@@ -949,14 +1141,16 @@ body {
 </div>
 
 
+
 <script>
 
-/* =========================================
+/* =========================================================
    CONFIG
-========================================= */
+========================================================= */
 
 const LIFF_ID =
   "2011201679-uN62Coga";
+
 
 const DASHBOARD_API =
   "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard";
@@ -966,13 +1160,14 @@ const WEIGHT_API =
   "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/weight-check";
 
 
-const HOME_URL =
-  "dashboard.html";
+const HOME_LIFF_URL =
+  "https://liff.line.me/2011201679-uNWz5yqF";
 
 
-/* =========================================
+
+/* =========================================================
    STATE
-========================================= */
+========================================================= */
 
 let dashboardData =
   null;
@@ -982,19 +1177,24 @@ let requestRunning =
   false;
 
 
-/* =========================================
-   ELEMENTS
-========================================= */
+let lineReady =
+  false;
 
-const latestWeightValue =
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const latestWeight =
   document.getElementById(
-    "latestWeightValue"
+    "latestWeight"
   );
 
 
-const targetWeightValue =
+const targetWeight =
   document.getElementById(
-    "targetWeightValue"
+    "targetWeight"
   );
 
 
@@ -1010,15 +1210,39 @@ const saveWeightButton =
   );
 
 
-const weightStatus =
+const statusBox =
   document.getElementById(
-    "weightStatus"
+    "status"
   );
 
 
-const lastUpdatedValue =
+const lastUpdated =
   document.getElementById(
-    "lastUpdatedValue"
+    "lastUpdated"
+  );
+
+
+const startWeight =
+  document.getElementById(
+    "startWeight"
+  );
+
+
+const weightChange =
+  document.getElementById(
+    "weightChange"
+  );
+
+
+const weightProgress =
+  document.getElementById(
+    "weightProgress"
+  );
+
+
+const targetButton =
+  document.getElementById(
+    "targetButton"
   );
 
 
@@ -1034,11 +1258,18 @@ const targetInput =
   );
 
 
-/* =========================================
-   FORMAT
-========================================= */
+const saveTargetButton =
+  document.getElementById(
+    "saveTargetButton"
+  );
 
-function formatWeight(
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function fmtWeight(
   value
 ) {
 
@@ -1052,24 +1283,20 @@ function formatWeight(
   }
 
 
-  const number =
-    Number(value);
+  const n =
+    Number(
+      value
+    );
 
 
-  if (
-    !Number.isFinite(number)
-  ) {
-
-    return "--";
-  }
-
-
-  return number
-    .toFixed(1);
+  return Number.isFinite(n)
+    ? n.toFixed(1)
+    : "--";
 }
 
 
-function formatDateTime(
+
+function fmtDate(
   value
 ) {
 
@@ -1079,13 +1306,15 @@ function formatDateTime(
   }
 
 
-  const date =
-    new Date(value);
+  const d =
+    new Date(
+      value
+    );
 
 
   if (
     Number.isNaN(
-      date.getTime()
+      d.getTime()
     )
   ) {
 
@@ -1093,49 +1322,51 @@ function formatDateTime(
   }
 
 
-  return date
-    .toLocaleString(
-      "th-TH",
-      {
-        dateStyle:
-          "short",
+  return d.toLocaleString(
+    "th-TH",
+    {
+      dateStyle:
+        "short",
 
-        timeStyle:
-          "short"
-      }
-    );
+      timeStyle:
+        "short"
+    }
+  );
 }
 
 
-/* =========================================
-   STATUS
-========================================= */
 
-function showWeightStatus(
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
   message,
-  type
+  type = "loading"
 ) {
 
-  weightStatus.textContent =
+  statusBox.textContent =
     message;
 
 
-  weightStatus.className =
+  statusBox.className =
     "status show " +
     type;
 }
 
 
-function hideWeightStatus() {
 
-  weightStatus.className =
+function hideStatus() {
+
+  statusBox.className =
     "status";
 }
 
 
-/* =========================================
-   GENERIC API
-========================================= */
+
+/* =========================================================
+   API
+========================================================= */
 
 async function postJSON(
   url,
@@ -1162,7 +1393,7 @@ async function postJSON(
     );
 
 
-  const text =
+  const raw =
     await response.text();
 
 
@@ -1173,10 +1404,16 @@ async function postJSON(
 
     data =
       JSON.parse(
-        text
+        raw
       );
 
   } catch {
+
+    console.error(
+      "API RAW RESPONSE:",
+      raw
+    );
+
 
     throw new Error(
       "Server ตอบกลับไม่ถูกต้อง"
@@ -1189,10 +1426,19 @@ async function postJSON(
     data.success === false
   ) {
 
-    throw new Error(
-      data.error ||
-      "ดำเนินการไม่สำเร็จ"
-    );
+    const error =
+      new Error(
+        data.error ||
+        data.message ||
+        "ดำเนินการไม่สำเร็จ"
+      );
+
+
+    error.code =
+      data.code;
+
+
+    throw error;
   }
 
 
@@ -1200,85 +1446,104 @@ async function postJSON(
 }
 
 
-/* =========================================
+
+/* =========================================================
    ID TOKEN
-========================================= */
+========================================================= */
 
-function getIDToken() {
+function getIdToken() {
 
-  const idToken = liff.getIDToken();
+  if (
+    typeof liff ===
+      "undefined"
+  ) {
 
-  if (!idToken) {
-    throw new Error("ไม่พบ LINE ID Token");
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
+    );
   }
+
+
+  if (
+    !liff.isLoggedIn()
+  ) {
+
+    throw new Error(
+      "ยังไม่ได้เข้าสู่ระบบ LINE"
+    );
+  }
+
+
+  const token =
+    liff.getIDToken();
+
+
+  if (!token) {
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+
+  return token;
+}
+
+
+
+/* =========================================================
+   LOGIN AGAIN
+========================================================= */
+
+function loginAgain() {
+
+  lineReady =
+    false;
+
+
+  saveWeightButton.disabled =
+    true;
+
+
+  targetButton.disabled =
+    true;
+
 
   try {
 
-    const parts = idToken.split(".");
-
-    if (parts.length !== 3) {
-      throw new Error("LINE ID Token ไม่ถูกต้อง");
-    }
-
-    let payloadBase64 = parts[1]
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
-
-    while (payloadBase64.length % 4) {
-      payloadBase64 += "=";
-    }
-
-    const payload = JSON.parse(
-      decodeURIComponent(
-        Array.prototype.map.call(
-          atob(payloadBase64),
-          function(c) {
-            return "%" +
-              ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          }
-        ).join("")
-      )
-    );
-
-    const now = Math.floor(Date.now() / 1000);
-
-    if (payload.exp && payload.exp <= now + 30) {
-
-      console.warn(
-        "LINE ID Token expired:",
-        payload.exp,
-        "now:",
-        now
-      );
-
-      throw new Error("IdToken expired.");
-    }
-
-  } catch (error) {
-
     if (
-      error.message === "IdToken expired."
+      liff.isLoggedIn()
     ) {
-      throw error;
+
+      liff.logout();
     }
+
+  } catch (
+    error
+  ) {
 
     console.warn(
-      "ตรวจสอบ ID Token ไม่สำเร็จ:",
       error
     );
   }
 
-  return idToken;
+
+  liff.login({
+    redirectUri:
+      window.location.href
+  });
 }
 
-/* =========================================
-   LOAD DASHBOARD DATA
-========================================= */
 
-async function loadPlayerData() {
+
+/* =========================================================
+   DASHBOARD DATA
+========================================================= */
+
+async function loadDashboard() {
 
   const idToken =
-    getIDToken();
+    getIdToken();
 
 
   const data =
@@ -1297,61 +1562,252 @@ async function loadPlayerData() {
     data;
 
 
-  latestWeightValue.textContent =
-    formatWeight(
-      data.weight?.current
+  renderDashboard(
+    data
+  );
+
+
+  return data;
+}
+
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderDashboard(
+  data
+) {
+
+  const weight =
+    data?.weight ||
+    {};
+
+
+  const current =
+    weight.current ??
+    null;
+
+
+  const target =
+    weight.target ??
+    null;
+
+
+  const start =
+    weight.start ??
+    null;
+
+
+  latestWeight.textContent =
+    fmtWeight(
+      current
     );
 
 
-  targetWeightValue.textContent =
-    formatWeight(
-      data.weight?.target
+  targetWeight.textContent =
+    fmtWeight(
+      target
+    );
+
+
+  lastUpdated.textContent =
+    fmtDate(
+      weight.updatedAt ??
+      weight.lastRecordedAt ??
+      data.updatedAt
+    );
+
+
+  startWeight.textContent =
+    fmtWeight(
+      start
+    ) +
+    (
+      start !== null &&
+      start !== undefined
+        ? " kg"
+        : ""
     );
 
 
   if (
-    data.weight?.current !== null &&
-    data.weight?.current !== undefined
+    current !== null &&
+    current !== undefined
   ) {
 
     weightInput.value =
       Number(
-        data.weight.current
+        current
       ).toFixed(1);
-
   }
 
 
   if (
-    data.weight?.target !== null &&
-    data.weight?.target !== undefined
+    target !== null &&
+    target !== undefined
   ) {
 
     targetInput.value =
       Number(
-        data.weight.target
+        target
       ).toFixed(1);
-
   }
 
 
-  lastUpdatedValue.textContent =
-    formatDateTime(
-      data.weight?.updatedAt ||
-      data.weight?.createdAt
+  const startNum =
+    Number(
+      start
     );
+
+
+  const currentNum =
+    Number(
+      current
+    );
+
+
+  const targetNum =
+    Number(
+      target
+    );
+
+
+  if (
+    Number.isFinite(
+      startNum
+    ) &&
+    Number.isFinite(
+      currentNum
+    )
+  ) {
+
+    const diff =
+      startNum -
+      currentNum;
+
+
+    if (
+      diff > 0
+    ) {
+
+      weightChange.textContent =
+        "ลด " +
+        Math.abs(
+          diff
+        ).toFixed(1) +
+        " kg";
+
+    } else if (
+      diff < 0
+    ) {
+
+      weightChange.textContent =
+        "เพิ่ม " +
+        Math.abs(
+          diff
+        ).toFixed(1) +
+        " kg";
+
+    } else {
+
+      weightChange.textContent =
+        "0.0 kg";
+    }
+
+  } else {
+
+    weightChange.textContent =
+      "-- kg";
+  }
+
+
+  let progress =
+    Number(
+      weight.progress
+    );
+
+
+  if (
+    !Number.isFinite(
+      progress
+    )
+  ) {
+
+    progress =
+      0;
+
+
+    if (
+      Number.isFinite(
+        startNum
+      ) &&
+      Number.isFinite(
+        currentNum
+      ) &&
+      Number.isFinite(
+        targetNum
+      ) &&
+      startNum !==
+        targetNum
+    ) {
+
+      progress =
+        (
+          (
+            startNum -
+            currentNum
+          ) /
+          (
+            startNum -
+            targetNum
+          )
+        ) *
+        100;
+    }
+  }
+
+
+  progress =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        progress
+      )
+    );
+
+
+  weightProgress.style.width =
+    progress +
+    "%";
 }
 
 
-/* =========================================
+
+/* =========================================================
    SAVE WEIGHT
-========================================= */
+========================================================= */
 
 async function saveWeight() {
 
   if (
     requestRunning
   ) {
+
+    return;
+  }
+
+
+  if (
+    !lineReady
+  ) {
+
+    showStatus(
+      "LINE ยังไม่พร้อม กรุณาเข้าสู่ระบบใหม่",
+      "error"
+    );
 
     return;
   }
@@ -1364,12 +1820,14 @@ async function saveWeight() {
 
 
   if (
-    !Number.isFinite(weight) ||
+    !Number.isFinite(
+      weight
+    ) ||
     weight < 20 ||
     weight > 400
   ) {
 
-    showWeightStatus(
+    showStatus(
       "กรุณากรอกน้ำหนักระหว่าง 20 - 400 kg",
       "error"
     );
@@ -1390,7 +1848,7 @@ async function saveWeight() {
     "กำลังบันทึก...";
 
 
-  showWeightStatus(
+  showStatus(
     "กำลังบันทึกน้ำหนัก...",
     "loading"
   );
@@ -1399,15 +1857,18 @@ async function saveWeight() {
   try {
 
     const idToken =
-      getIDToken();
+      getIdToken();
 
 
-    /*
-      ส่งหลายชื่อ field ไว้เพื่อรองรับ
-      Edge Function รูปแบบต่าง ๆ
-    */
+    const previousWeight =
+      Number(
+        dashboardData
+          ?.weight
+          ?.current
+      );
 
-    const data =
+
+    const result =
       await postJSON(
         WEIGHT_API,
         {
@@ -1416,47 +1877,177 @@ async function saveWeight() {
 
           idToken,
 
-          weight,
-
-          currentWeight:
-            weight
+          weight
         }
       );
 
 
-    showWeightStatus(
-      "✅ บันทึกน้ำหนักเรียบร้อยแล้ว",
+    /*
+      ชั่งไปแล้ววันนี้
+    */
+
+    if (
+      result.alreadyCheckedToday
+    ) {
+
+      const todayWeight =
+        result?.weight?.current;
+
+
+      if (
+        todayWeight !== null &&
+        todayWeight !== undefined
+      ) {
+
+        weightInput.value =
+          Number(
+            todayWeight
+          ).toFixed(1);
+      }
+
+
+      showStatus(
+        "✅ วันนี้คุณบันทึกน้ำหนักแล้ว\n" +
+        "น้ำหนักวันนี้ " +
+        fmtWeight(
+          todayWeight
+        ) +
+        " kg\n" +
+        "สามารถบันทึกใหม่ได้อีกครั้งพรุ่งนี้",
+        "success"
+      );
+
+
+      await loadDashboard();
+
+
+      return;
+    }
+
+
+    /*
+      บันทึกสำเร็จ
+    */
+
+    await loadDashboard();
+
+
+    const newWeight =
+      Number(
+        dashboardData
+          ?.weight
+          ?.current
+      );
+
+
+    weightInput.value =
+      Number.isFinite(
+        newWeight
+      )
+        ? newWeight
+            .toFixed(1)
+        : weight.toFixed(1);
+
+
+    let changeMessage =
+      "";
+
+
+    if (
+      Number.isFinite(
+        previousWeight
+      )
+    ) {
+
+      const difference =
+        weight -
+        previousWeight;
+
+
+      if (
+        difference > 0
+      ) {
+
+        changeMessage =
+          "\nน้ำหนักเพิ่มขึ้น " +
+          difference
+            .toFixed(1) +
+          " kg จากครั้งก่อน";
+
+      } else if (
+        difference < 0
+      ) {
+
+        changeMessage =
+          "\nน้ำหนักลดลง " +
+          Math.abs(
+            difference
+          )
+            .toFixed(1) +
+          " kg จากครั้งก่อน";
+
+      } else {
+
+        changeMessage =
+          "\nน้ำหนักเท่ากับครั้งก่อน";
+      }
+    }
+
+
+    const rewards =
+      result.rewards ||
+      {};
+
+
+    let rewardText =
+      "";
+
+
+    if (
+      Number(
+        rewards.exp
+      ) > 0 ||
+      Number(
+        rewards.rockCoin
+      ) > 0 ||
+      Number(
+        rewards.energy
+      ) > 0
+    ) {
+
+      rewardText =
+        "\n\nรางวัลวันนี้" +
+        "\n+" +
+        Number(
+          rewards.exp || 0
+        ) +
+        " EXP" +
+
+        "\n+" +
+        Number(
+          rewards.rockCoin || 0
+        ) +
+        " ROCK COIN" +
+
+        "\n+" +
+        Number(
+          rewards.energy || 0
+        ) +
+        " ENERGY";
+    }
+
+
+    showStatus(
+      "✅ บันทึกสำเร็จ" +
+      changeMessage +
+      rewardText,
       "success"
     );
 
 
-    await loadPlayerData();
-
-
-    /*
-      ถ้า backend คืนค่าล่าสุดมาโดยตรง
-      ใช้ค่าจาก response ได้ด้วย
-    */
-
-    if (
-      data.weight !== undefined &&
-      data.weight !== null
-    ) {
-
-      latestWeightValue.textContent =
-        formatWeight(
-          typeof data.weight ===
-            "object"
-            ? (
-                data.weight.current ??
-                data.weight.value
-              )
-            : data.weight
-        );
-    }
-
-
-  } catch (error) {
+  } catch (
+    error
+  ) {
 
     console.error(
       "SAVE WEIGHT ERROR:",
@@ -1464,12 +2055,40 @@ async function saveWeight() {
     );
 
 
-    showWeightStatus(
+    const message =
+      error?.message ||
+      String(
+        error
+      );
+
+
+    if (
+      message
+        .toLowerCase()
+        .includes(
+          "token"
+        )
+    ) {
+
+      showStatus(
+        "LINE Session หมดอายุ กำลังเข้าสู่ระบบใหม่...",
+        "loading"
+      );
+
+
+      setTimeout(
+        loginAgain,
+        500
+      );
+
+
+      return;
+    }
+
+
+    showStatus(
       "❌ " +
-      (
-        error.message ||
-        "บันทึกน้ำหนักไม่สำเร็จ"
-      ),
+      message,
       "error"
     );
 
@@ -1480,36 +2099,42 @@ async function saveWeight() {
       false;
 
 
-    saveWeightButton.disabled =
-      false;
+    if (
+      lineReady
+    ) {
+
+      saveWeightButton.disabled =
+        false;
 
 
-    saveWeightButton.textContent =
-      "บันทึกน้ำหนัก";
+      saveWeightButton.textContent =
+        "บันทึกน้ำหนัก";
+    }
   }
 }
 
 
-/* =========================================
+
+/* =========================================================
    TARGET MODAL
-========================================= */
+========================================================= */
 
 function openTargetModal() {
 
-  const target =
+  const currentTarget =
     dashboardData
       ?.weight
       ?.target;
 
 
   if (
-    target !== null &&
-    target !== undefined
+    currentTarget !== null &&
+    currentTarget !== undefined
   ) {
 
     targetInput.value =
       Number(
-        target
+        currentTarget
       ).toFixed(1);
 
   } else {
@@ -1537,6 +2162,7 @@ function openTargetModal() {
 }
 
 
+
 function closeTargetModal() {
 
   targetModal
@@ -1547,13 +2173,14 @@ function closeTargetModal() {
 }
 
 
-/* =========================================
+
+/* =========================================================
    SAVE TARGET
-========================================= */
+========================================================= */
 
 async function saveTarget() {
 
-  const targetWeight =
+  const value =
     Number(
       targetInput.value
     );
@@ -1561,10 +2188,10 @@ async function saveTarget() {
 
   if (
     !Number.isFinite(
-      targetWeight
+      value
     ) ||
-    targetWeight < 20 ||
-    targetWeight > 400
+    value < 20 ||
+    value > 400
   ) {
 
     alert(
@@ -1575,21 +2202,30 @@ async function saveTarget() {
   }
 
 
+  saveTargetButton.disabled =
+    true;
+
+
+  saveTargetButton.textContent =
+    "กำลังบันทึก...";
+
+
   try {
 
     const idToken =
-      getIDToken();
+      getIdToken();
 
 
     await postJSON(
-      DASHBOARD_API,
+      WEIGHT_API,
       {
         action:
           "setTarget",
 
         idToken,
 
-        targetWeight
+        targetWeight:
+          value
       }
     );
 
@@ -1597,16 +2233,18 @@ async function saveTarget() {
     closeTargetModal();
 
 
-    await loadPlayerData();
+    await loadDashboard();
 
 
-    showWeightStatus(
+    showStatus(
       "✅ บันทึกเป้าหมายน้ำหนักเรียบร้อยแล้ว",
       "success"
     );
 
 
-  } catch (error) {
+  } catch (
+    error
+  ) {
 
     console.error(
       "SAVE TARGET ERROR:",
@@ -1614,28 +2252,213 @@ async function saveTarget() {
     );
 
 
+    const message =
+      error?.message ||
+      String(
+        error
+      );
+
+
+    if (
+      message
+        .toLowerCase()
+        .includes(
+          "token"
+        )
+    ) {
+
+      loginAgain();
+
+      return;
+    }
+
+
     alert(
-      error.message ||
-      "บันทึกเป้าหมายไม่สำเร็จ"
+      message
+    );
+
+
+  } finally {
+
+    saveTargetButton.disabled =
+      false;
+
+
+    saveTargetButton.textContent =
+      "บันทึก";
+  }
+}
+
+
+
+/* =========================================================
+   LIFF INIT
+========================================================= */
+
+async function initLIFF() {
+
+  showStatus(
+    "กำลังเชื่อมต่อ LINE...",
+    "loading"
+  );
+
+
+  saveWeightButton.disabled =
+    true;
+
+
+  targetButton.disabled =
+    true;
+
+
+  try {
+
+    if (
+      typeof liff ===
+        "undefined"
+    ) {
+
+      throw new Error(
+        "ไม่สามารถโหลด LINE LIFF SDK"
+      );
+    }
+
+
+    await liff.init({
+      liffId:
+        LIFF_ID
+    });
+
+
+    /*
+      ยังไม่ได้ Login
+    */
+
+    if (
+      !liff.isLoggedIn()
+    ) {
+
+      liff.login({
+        redirectUri:
+          window.location.href
+      });
+
+      return;
+    }
+
+
+    /*
+      มี Login แล้ว
+      แต่ต้องมี ID Token
+    */
+
+    const idToken =
+      liff.getIDToken();
+
+
+    if (!idToken) {
+
+      showStatus(
+        "กำลังขอ LINE Session ใหม่...",
+        "loading"
+      );
+
+
+      loginAgain();
+
+      return;
+    }
+
+
+    /*
+      ทดลองใช้ token จริงกับ backend
+    */
+
+    await loadDashboard();
+
+
+    lineReady =
+      true;
+
+
+    saveWeightButton.disabled =
+      false;
+
+
+    saveWeightButton.textContent =
+      "บันทึกน้ำหนัก";
+
+
+    targetButton.disabled =
+      false;
+
+
+    hideStatus();
+
+
+  } catch (
+    error
+  ) {
+
+    console.error(
+      "LIFF INIT ERROR:",
+      error
+    );
+
+
+    lineReady =
+      false;
+
+
+    const message =
+      error?.message ||
+      String(
+        error
+      );
+
+
+    if (
+      message
+        .toLowerCase()
+        .includes(
+          "token"
+        ) ||
+      message
+        .toLowerCase()
+        .includes(
+          "authentication"
+        )
+    ) {
+
+      showStatus(
+        "LINE Session ไม่พร้อม กำลังเข้าสู่ระบบใหม่...",
+        "loading"
+      );
+
+
+      setTimeout(
+        loginAgain,
+        500
+      );
+
+
+      return;
+    }
+
+
+    showStatus(
+      "❌ เชื่อมต่อ LINE ไม่สำเร็จ: " +
+      message,
+      "error"
     );
   }
 }
 
 
-/* =========================================
-   NAVIGATION
-========================================= */
 
-function goHome() {
-
-  window.location.href =
-    HOME_URL;
-}
-
-
-/* =========================================
+/* =========================================================
    EVENTS
-========================================= */
+========================================================= */
 
 saveWeightButton
   .addEventListener(
@@ -1662,10 +2485,7 @@ weightInput
   );
 
 
-document
-  .getElementById(
-    "setTargetButton"
-  )
+targetButton
   .addEventListener(
     "click",
     openTargetModal
@@ -1682,10 +2502,7 @@ document
   );
 
 
-document
-  .getElementById(
-    "saveTargetButton"
-  )
+saveTargetButton
   .addEventListener(
     "click",
     saveTarget
@@ -1698,7 +2515,11 @@ document
   )
   .addEventListener(
     "click",
-    goHome
+    function () {
+
+      window.location.href =
+        HOME_LIFF_URL;
+    }
   );
 
 
@@ -1720,137 +2541,16 @@ targetModal
   );
 
 
-/* =========================================
-   VISIBILITY
-========================================= */
 
-document
-  .addEventListener(
-    "visibilitychange",
-    function () {
-
-      if (
-        document.visibilityState ===
-          "visible" &&
-        liff.isLoggedIn()
-      ) {
-
-        loadPlayerData()
-          .catch(
-            console.error
-          );
-      }
-    }
-  );
-
-
-/* =========================================
-   LIFF
-========================================= */
-
-async function initLIFF() {
-
-  showWeightStatus(
-    "กำลังเชื่อมต่อ LINE...",
-    "loading"
-  );
-
-  try {
-
-    await liff.init({
-      liffId: LIFF_ID
-    });
-
-    // ยังไม่ได้ Login
-    if (!liff.isLoggedIn()) {
-
-      liff.login({
-        redirectUri: window.location.href
-      });
-
-      return;
-    }
-
-    // ตรวจ ID Token
-    const idToken = liff.getIDToken();
-
-    if (!idToken) {
-
-      // ล้าง session เดิม
-      liff.logout();
-
-      // Login ใหม่เพื่อขอ Token ใหม่
-      liff.login({
-        redirectUri: window.location.href
-      });
-
-      return;
-    }
-
-    // โหลดข้อมูล
-    await loadPlayerData();
-
-    hideWeightStatus();
-
-  } catch (error) {
-
-    console.error(
-      "LIFF INIT ERROR:",
-      error
-    );
-
-    const message =
-      error?.message ||
-      String(error);
-
-    // ถ้า Token หมดอายุ ให้ Login ใหม่
-    if (
-      message.toLowerCase().includes("idtoken expired") ||
-      message.toLowerCase().includes("token expired")
-    ) {
-
-      showWeightStatus(
-        "LINE Session หมดอายุ กำลังเข้าสู่ระบบใหม่...",
-        "loading"
-      );
-
-      try {
-
-        if (liff.isLoggedIn()) {
-          liff.logout();
-        }
-
-      } catch (e) {
-        console.warn(e);
-      }
-
-      setTimeout(() => {
-
-        liff.login({
-          redirectUri: window.location.href
-        });
-
-      }, 500);
-
-      return;
-    }
-
-    showWeightStatus(
-      "❌ เชื่อมต่อ LINE ไม่สำเร็จ: " +
-      message,
-      "error"
-    );
-  }
-}
-
-
-/* =========================================
+/* =========================================================
    START
-========================================= */
+========================================================= */
 
 initLIFF();
 
 </script>
 
+
 </body>
+
 </html>
