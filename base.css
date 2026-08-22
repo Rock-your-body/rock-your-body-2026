@@ -84,9 +84,9 @@ textarea{
 ========================================================= */
 
 #homeStage{
-  --profile-left:6.2%;
-  --profile-top:18.1%;
-  --profile-size:24.2%;
+  --profile-left:6.0%;
+  --profile-top:18.2%;
+  --profile-size:24.4%;
 
   /* COIN */
   --coin-left:76.4%;
@@ -108,7 +108,7 @@ textarea{
 
   /* EXP BAR */
   --expbar-left:8.6%;
-  --expbar-top:73.5%;
+  --expbar-top:73.9%;
   --expbar-width:14%;
   --expbar-height:1.8%;
 
@@ -126,7 +126,7 @@ textarea{
 
   /* UPDATED DATE */
   --updated-left:42.5%;
-  --updated-top:35.9%;
+  --updated-top:36.0%;
   --updated-width:15%;
   --updated-height:4%;
 
@@ -143,14 +143,14 @@ textarea{
   --remaining-height:4%;
 
   /* LOST */
-  --lost-left:35.5%;
-  --lost-top:75.8%;
+  --lost-left:35.0%;
+  --lost-top:74.8%;
   --lost-width:10%;
   --lost-height:4.5%;
 
   /* START DATE */
   --startdate-left:47.8%;
-  --startdate-top:75.8%;
+  --startdate-top:74.8%;
   --startdate-width:9.5%;
   --startdate-height:4.5%;
 }
