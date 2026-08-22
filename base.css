@@ -942,3 +942,307 @@ body{
   color:#fff;
   background:#06c755;
 }
+/* =========================================================
+   WEIGHT CHECK
+========================================================= */
+
+.weight-page{
+  min-height:100vh;
+  padding:22px 14px 50px;
+  background:
+    linear-gradient(
+      180deg,
+      #eaf3ff,
+      #f7fbff
+    );
+}
+
+.weight-app{
+  width:100%;
+  max-width:620px;
+  margin:0 auto;
+}
+
+.weight-header{
+  padding:22px 18px;
+  border-radius:24px;
+  background:#fff;
+  text-align:center;
+  box-shadow:
+    0 10px 30px
+    rgba(15,53,103,.10);
+}
+
+.weight-brand{
+  font-size:clamp(25px,5vw,38px);
+  font-weight:900;
+  color:#073b93;
+}
+
+.weight-brand-red{
+  color:#d71920;
+}
+
+.weight-tagline{
+  margin-top:8px;
+  font-size:14px;
+  font-weight:800;
+  color:#64748b;
+}
+
+.weight-hero{
+  margin-top:18px;
+  padding:24px;
+  border-radius:25px;
+  color:#fff;
+  background:
+    linear-gradient(
+      135deg,
+      #073b93,
+      #0765d8 60%,
+      #148bf3
+    );
+}
+
+.weight-title{
+  font-size:clamp(27px,5vw,38px);
+  font-weight:900;
+}
+
+.weight-subtitle{
+  margin-top:8px;
+  font-size:15px;
+  font-weight:800;
+}
+
+.weight-summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+
+.weight-summary{
+  min-height:110px;
+  padding:18px;
+  border-radius:19px;
+  background:
+    rgba(255,255,255,.15);
+  border:
+    1px solid
+    rgba(255,255,255,.25);
+}
+
+.weight-summary-label{
+  font-size:14px;
+  font-weight:800;
+}
+
+.weight-summary-value{
+  margin-top:10px;
+  font-size:clamp(28px,6vw,40px);
+  font-weight:900;
+}
+
+.weight-card{
+  margin-top:18px;
+  padding:22px;
+  border-radius:23px;
+  background:#fff;
+  box-shadow:
+    0 10px 30px
+    rgba(15,53,103,.10);
+}
+
+.weight-card h2{
+  margin:0;
+  color:#08245b;
+  font-size:22px;
+}
+
+.weight-desc{
+  margin-top:7px;
+  color:#64748b;
+  font-size:14px;
+}
+
+.weight-input-box{
+  display:flex;
+  align-items:center;
+  min-height:78px;
+  margin-top:18px;
+  padding:0 20px;
+  border:2px solid #c9d9ef;
+  border-radius:18px;
+  background:#fbfdff;
+}
+
+.weight-input-box input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#08245b;
+  font-size:clamp(30px,7vw,42px);
+  font-weight:900;
+}
+
+.weight-unit{
+  margin-left:10px;
+  color:#64748b;
+  font-size:19px;
+  font-weight:900;
+}
+
+.weight-button{
+  width:100%;
+  min-height:60px;
+  border:0;
+  border-radius:16px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:900;
+}
+
+.weight-button:disabled{
+  opacity:.55;
+}
+
+.weight-save{
+  margin-top:18px;
+  color:#fff;
+  background:#06c755;
+}
+
+.weight-target{
+  margin-top:15px;
+  color:#073b93;
+  background:#eaf3ff;
+}
+
+.weight-home{
+  margin-top:18px;
+  color:#fff;
+  background:#073b93;
+}
+
+.weight-status{
+  display:none;
+  margin-top:16px;
+  padding:15px 17px;
+  border-radius:15px;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.5;
+  white-space:pre-line;
+}
+
+.weight-status.show{
+  display:block;
+}
+
+.weight-status.loading{
+  color:#174ea6;
+  background:#eef5ff;
+}
+
+.weight-status.success{
+  color:#08783c;
+  background:#e9f8ef;
+}
+
+.weight-status.error{
+  color:#a21e1e;
+  background:#fff0f0;
+}
+
+.weight-progress-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+}
+
+.weight-progress-box{
+  padding:16px;
+  border-radius:16px;
+  background:#f5f8fd;
+}
+
+.weight-progress-label{
+  font-size:12px;
+  color:#64748b;
+}
+
+.weight-progress-value{
+  margin-top:7px;
+  font-size:21px;
+  font-weight:900;
+}
+
+.weight-progress-track{
+  height:10px;
+  margin-top:16px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#dbe8f7;
+}
+
+.weight-progress-fill{
+  width:0%;
+  height:100%;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      90deg,
+      #168cff,
+      #06c755
+    );
+}
+
+.weight-modal-bg{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.48);
+}
+
+.weight-modal-bg.show{
+  display:flex;
+}
+
+.weight-modal{
+  width:100%;
+  max-width:420px;
+  padding:22px;
+  border-radius:22px;
+  background:#fff;
+}
+
+.weight-modal-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:18px;
+}
+
+.weight-modal-actions button{
+  min-height:50px;
+  border:0;
+  border-radius:13px;
+  cursor:pointer;
+  font-weight:900;
+}
+
+.weight-cancel{
+  background:#e9eef6;
+}
+
+.weight-confirm{
+  color:#fff;
+  background:#06c755;
+}
