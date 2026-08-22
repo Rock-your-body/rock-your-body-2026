@@ -96,7 +96,7 @@ textarea{
 
   /* ENERGY */
   --energy-left:88.4%;
-  --energy-top:3.9%;
+  --energy-top:3.5%;
   --energy-width:9.7%;
   --energy-height:5%;
 
@@ -104,7 +104,7 @@ textarea{
   --level-left:23.2%;
   --level-top:54.8%;
   --level-width:6.7%;
-  --level-height:4.5%;
+  --level-height:4.0%;
 
   /* EXP BAR */
   --expbar-left:8.6%;
