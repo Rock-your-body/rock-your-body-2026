@@ -594,40 +594,67 @@ function normalizeDashboard(
     ) + 1;
 
 
-  /* -----------------------------------------------------
-     WEIGHT
-  ------------------------------------------------------ */
+ /* -----------------------------------------------------
+   WEIGHT
+------------------------------------------------------ */
 
-  const currentWeight =
-    weight.current ??
-    user.current_weight ??
-    null;
-
-
-  const targetWeight =
-    weight.target ??
-    user.target_weight ??
-    null;
-
-
-  const startWeight =
-    weight.start ??
-    user.start_weight ??
-    null;
+const currentWeight =
+  weight.current ??
+  weight.currentWeight ??
+  weight.current_weight ??
+  raw?.currentWeight ??
+  raw?.current_weight ??
+  user?.currentWeight ??
+  user?.current_weight ??
+  null;
 
 
-  const updatedAt =
-    weight.updatedAt ??
-    weight.lastRecordedAt ??
-    user.weight_updated_at ??
-    raw?.updatedAt ??
-    null;
+const targetWeight =
+  weight.target ??
+  weight.targetWeight ??
+  weight.target_weight ??
+  raw?.targetWeight ??
+  raw?.target_weight ??
+  user?.targetWeight ??
+  user?.target_weight ??
+  null;
 
 
-  const startDate =
-    weight.startDate ??
-    user.start_date ??
-    null;
+const startWeight =
+  weight.start ??
+  weight.startWeight ??
+  weight.start_weight ??
+  raw?.startWeight ??
+  raw?.start_weight ??
+  user?.startWeight ??
+  user?.start_weight ??
+  null;
+
+
+const updatedAt =
+  weight.updatedAt ??
+  weight.updated_at ??
+  weight.lastRecordedAt ??
+  weight.last_recorded_at ??
+  raw?.weightUpdatedAt ??
+  raw?.weight_updated_at ??
+  raw?.updatedAt ??
+  raw?.updated_at ??
+  user?.weightUpdatedAt ??
+  user?.weight_updated_at ??
+  user?.updatedAt ??
+  user?.updated_at ??
+  null;
+
+
+const startDate =
+  weight.startDate ??
+  weight.start_date ??
+  raw?.startDate ??
+  raw?.start_date ??
+  user?.startDate ??
+  user?.start_date ??
+  null;
 
 
   /* -----------------------------------------------------
@@ -635,9 +662,11 @@ function normalizeDashboard(
   ------------------------------------------------------ */
 
   const picture =
-    user.pictureUrl ??
-    user.picture_url ??
-    "";
+  user?.pictureUrl ??
+  user?.picture_url ??
+  raw?.pictureUrl ??
+  raw?.picture_url ??
+  "";
 
 
   /* -----------------------------------------------------
