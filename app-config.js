@@ -18,10 +18,11 @@ window.APP_CONFIG = {
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
     MISSION:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission"
-      
-BATTLE:
-    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
+
+    BATTLE:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
+
   },
 
 
@@ -47,10 +48,10 @@ BATTLE:
       "./rewards.html",
 
     MISSION:
-      "./mission.html?v=20260823-01",
+      "./mission.html?v=20260824-01",
 
     BATTLE:
-      "./battle.html"
+      "./battle.html?v=20260824-01"
 
   },
 
