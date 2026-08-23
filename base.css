@@ -1325,8 +1325,7 @@ textarea{
   );
 }
 /* =========================================================
-   THAI FONT - ไม่มีหัว
-   ใช้ Prompt ทั้งระบบ
+   FONT THAI - PROMPT ไม่มีหัว
 ========================================================= */
 
 html,
@@ -1334,13 +1333,32 @@ body,
 button,
 input,
 select,
-textarea,
-div,
-span,
-p,
-label,
-a{
-  font-family:
-    "Prompt",
-    sans-serif !important;
+textarea{
+  font-family:"Prompt", sans-serif;
+}
+
+/* ข้อความทั้งหมดที่วางทับบน Template */
+#homeStage,
+#homeStage div,
+#homeStage span,
+#homeStage button{
+  font-family:"Prompt", sans-serif !important;
+}
+
+/* อัปเดตล่าสุด */
+.update-label,
+.update-date{
+  font-family:"Prompt", sans-serif !important;
+}
+
+/* เหลืออีก / ลดลงแล้ว / เริ่มเมื่อ */
+.summary-label,
+.summary-value{
+  font-family:"Prompt", sans-serif !important;
+}
+
+/* ROCK COIN / ENERGY */
+.top-data-label,
+.top-data-value{
+  font-family:"Prompt", sans-serif !important;
 }
