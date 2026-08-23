@@ -97,13 +97,13 @@ textarea{
 
   /* COIN */
   --coin-left:74.4%;
-  --coin-top:3.0%;
+  --coin-top:5%;
   --coin-width:6.7%;
   --coin-height:7%;
 
   /* ENERGY */
   --energy-left:88.4%;
-  --energy-top:2.4%;
+  --energy-top:5%;
   --energy-width:9.7%;
   --energy-height:8%;
 
@@ -144,7 +144,7 @@ textarea{
   --target-height:8%;
 
   /* REMAINING */
-  --remaining-left:35%;
+  --remaining-left:41.5%;
   --remaining-top:65%;
   --remaining-width:10%;
   --remaining-height:4%;
@@ -1300,9 +1300,9 @@ textarea{
   display:block;
 
   font-size:clamp(
-    5px,
-    7cqw,
-    11px
+    4px,
+    6cqw,
+    10px
   );
 
   font-weight:700;
@@ -1317,9 +1317,9 @@ textarea{
   display:block;
 
   font-size:clamp(
-    7px,
-    12cqw,
-    20px
+    6px,
+    11cqw,
+    18px
   );
 
   font-weight:900;
@@ -1329,9 +1329,9 @@ textarea{
 
 .startdate-box .date-value{
   font-size:clamp(
-    6px,
-    9cqw,
-    17px
+    5px,
+    8cqw,
+    11px
   );
 }
 /* =========================================================
