@@ -16,7 +16,9 @@
   </title>
 
 
-  <!-- PROMPT FONT -->
+  <!-- =====================================================
+       FONT
+  ====================================================== -->
 
   <link
     rel="preconnect"
@@ -35,50 +37,45 @@
   >
 
 
-  <!-- LINE LIFF -->
+  <!-- =====================================================
+       LINE LIFF
+  ====================================================== -->
 
   <script
     src="https://static.line-scdn.net/liff/edge/2/sdk.js"
   ></script>
 
 
-  <!-- CONFIG -->
+  <!-- =====================================================
+       CONFIG
+  ====================================================== -->
 
   <script
     src="./app-config.js"
   ></script>
 
 
-  <!-- BASE CSS -->
+  <!-- =====================================================
+       BASE CSS
+  ====================================================== -->
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260823-20"
+    href="./base.css?v=20260823-30"
   >
 
 
   <style>
 
     /* =====================================================
-       MISSION PAGE EXTRA
+       MISSION CLICK AREA
     ====================================================== */
 
-    body{
-      background:#eef5ff;
-    }
+    .mission-card-button{
 
-
-    /* =====================================================
-       CLICKABLE MISSION CARD
-    ====================================================== */
-
-    .mission-hotspot{
       position:absolute;
 
       z-index:40;
-
-      margin:0;
-      padding:0;
 
       border:0;
 
@@ -88,67 +85,60 @@
 
       -webkit-tap-highlight-color:
         transparent;
+
     }
 
 
-    /*
-      ตำแหน่งปุ่มกดบน Template
+    .mission-card-button.daily{
 
-      หากต้องการขยับ:
-      left เพิ่ม = ขวา
-      top เพิ่ม = ลง
-    */
+      left:33%;
+      top:29%;
 
+      width:28%;
+      height:28%;
 
-    /* DAILY */
-
-    .mission-hotspot.daily{
-      left:33.2%;
-      top:29.5%;
-
-      width:27.4%;
-      height:27.5%;
     }
 
 
-    /* WEEKLY */
+    .mission-card-button.weekly{
 
-    .mission-hotspot.weekly{
-      left:63.0%;
-      top:29.5%;
+      left:62%;
+      top:29%;
 
-      width:31.0%;
-      height:27.5%;
+      width:33%;
+      height:28%;
+
     }
 
 
-    /* MONTHLY */
+    .mission-card-button.monthly{
 
-    .mission-hotspot.monthly{
-      left:33.2%;
+      left:33%;
       top:58%;
 
-      width:27.4%;
-      height:27.5%;
+      width:28%;
+      height:28%;
+
     }
 
 
-    /* BONUS */
+    .mission-card-button.bonus{
 
-    .mission-hotspot.bonus{
-      left:63.0%;
+      left:62%;
       top:58%;
 
-      width:31.0%;
-      height:27.5%;
+      width:33%;
+      height:28%;
+
     }
 
 
     /* =====================================================
-       MODAL BACKDROP
+       MODAL
     ====================================================== */
 
     .mission-modal{
+
       position:fixed;
 
       inset:0;
@@ -158,83 +148,71 @@
       display:none;
 
       align-items:flex-end;
+
       justify-content:center;
 
       background:
-        rgba(0,20,55,.55);
+        rgba(0,25,65,.62);
 
       backdrop-filter:
         blur(3px);
+
     }
 
 
     .mission-modal.show{
+
       display:flex;
+
     }
 
 
     /* =====================================================
-       MODAL PANEL
+       PANEL
     ====================================================== */
 
     .mission-panel{
+
       width:min(
         100%,
-        720px
+        760px
       );
 
-      max-height:88vh;
+      max-height:92vh;
 
       overflow-y:auto;
-
-      border-radius:
-        28px 28px 0 0;
-
-      background:#f5f9ff;
-
-      box-shadow:
-        0 -10px 40px
-        rgba(0,35,90,.25);
 
       padding:
         0
         14px
         max(
-          24px,
+          26px,
           env(safe-area-inset-bottom)
         );
 
-      animation:
-        missionPanelUp
-        .25s ease;
-    }
+      border-radius:
+        28px 28px 0 0;
 
+      background:#f3f8ff;
 
-    @keyframes missionPanelUp{
-
-      from{
-        transform:
-          translateY(100%);
-      }
-
-      to{
-        transform:
-          translateY(0);
-      }
+      box-shadow:
+        0 -12px 40px
+        rgba(0,35,90,.30);
 
     }
 
 
     /* =====================================================
-       PANEL HEADER
+       HEADER
     ====================================================== */
 
-    .mission-panel-header{
+    .panel-header{
+
       position:sticky;
 
       top:0;
 
-      z-index:20;
+      z-index:30;
 
       display:flex;
 
@@ -243,45 +221,52 @@
       gap:12px;
 
       padding:
-        18px
-        4px
+        16px
+        2px
         14px;
 
       background:
-        rgba(245,249,255,.97);
+        rgba(243,248,255,.97);
 
       backdrop-filter:
-        blur(8px);
+        blur(10px);
+
     }
 
 
-    .mission-panel-icon{
-      width:54px;
-      height:54px;
+    .panel-icon{
 
-      flex:0 0 54px;
+      width:52px;
+      height:52px;
+
+      flex:
+        0 0 52px;
 
       display:flex;
 
       align-items:center;
       justify-content:center;
 
-      border-radius:18px;
+      border-radius:17px;
 
-      font-size:28px;
+      background:#dcecff;
 
-      background:#e1edff;
+      font-size:27px;
+
     }
 
 
-    .mission-panel-title-wrap{
-      min-width:0;
+    .panel-title-wrap{
 
       flex:1;
+
+      min-width:0;
+
     }
 
 
-    .mission-panel-title{
+    .panel-title{
+
       margin:0;
 
       color:#073b93;
@@ -290,63 +275,65 @@
         clamp(
           20px,
           5vw,
-          30px
+          29px
         );
 
       font-weight:900;
 
       line-height:1.1;
+
     }
 
 
-    .mission-panel-subtitle{
+    .panel-subtitle{
+
       margin-top:4px;
 
-      color:#667895;
+      color:#687c9b;
 
       font-size:
         clamp(
           11px,
-          3vw,
+          2.8vw,
           14px
         );
 
       font-weight:600;
+
     }
 
 
-    .mission-close{
+    .panel-close{
+
       width:42px;
       height:42px;
 
-      flex:0 0 42px;
-
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
+      flex:
+        0 0 42px;
 
       border:0;
 
       border-radius:50%;
 
-      background:#e7eef9;
+      background:#e0e9f6;
 
-      color:#173b78;
+      color:#153d79;
 
-      font-size:24px;
+      font-size:25px;
 
       font-weight:900;
 
       cursor:pointer;
+
     }
 
 
     /* =====================================================
-       CATEGORY SUMMARY
+       CATEGORY INFO
     ====================================================== */
 
-    .category-summary{
+    .category-info{
+
       display:grid;
 
       grid-template-columns:
@@ -358,15 +345,15 @@
       gap:8px;
 
       margin-bottom:14px;
+
     }
 
 
-    .summary-chip{
-      min-width:0;
+    .category-stat{
 
       padding:
         10px
-        8px;
+        5px;
 
       border-radius:15px;
 
@@ -377,36 +364,56 @@
       box-shadow:
         0 4px 14px
         rgba(20,60,110,.07);
+
     }
 
 
-    .summary-chip-label{
-      color:#6f7f9b;
+    .category-stat-label{
 
-      font-size:
-        clamp(
-          9px,
-          2.5vw,
-          12px
-        );
+      color:#74839c;
+
+      font-size:11px;
 
       font-weight:700;
+
     }
 
 
-    .summary-chip-value{
+    .category-stat-value{
+
       margin-top:2px;
 
       color:#073b93;
 
       font-size:
         clamp(
-          15px,
+          16px,
           4vw,
-          21px
+          22px
         );
 
       font-weight:900;
+
+    }
+
+
+    /* =====================================================
+       SECTION TITLE
+    ====================================================== */
+
+    .mission-section-title{
+
+      margin:
+        18px
+        2px
+        8px;
+
+      color:#073b93;
+
+      font-size:16px;
+
+      font-weight:900;
+
     }
 
 
@@ -414,10 +421,12 @@
        MISSION LIST
     ====================================================== */
 
-    #missionList{
+    .mission-list{
+
       display:grid;
 
       gap:11px;
+
     }
 
 
@@ -426,10 +435,11 @@
     ====================================================== */
 
     .mission-item{
+
       overflow:hidden;
 
       border:
-        1px solid #dfe9f7;
+        1px solid #dce7f5;
 
       border-radius:20px;
 
@@ -438,28 +448,39 @@
       box-shadow:
         0 5px 16px
         rgba(20,60,110,.07);
+
     }
 
 
-    .mission-item.complete{
-      border-color:
-        #9bddb5;
+    .mission-item.pending{
 
-      background:
-        linear-gradient(
-          135deg,
-          #f8fffa,
-          #effcf4
-        );
+      border-color:#ffd574;
+
+      background:#fffdf6;
+
     }
 
 
-    .mission-item.claimed{
-      opacity:.65;
+    .mission-item.approved{
+
+      border-color:#87d6a5;
+
+      background:#f4fff8;
+
     }
 
 
-    .mission-item-main{
+    .mission-item.rejected{
+
+      border-color:#ef9b9b;
+
+      background:#fff7f7;
+
+    }
+
+
+    .mission-main{
+
       display:grid;
 
       grid-template-columns:
@@ -468,11 +489,13 @@
 
       gap:12px;
 
-      padding:15px;
+      padding:14px;
+
     }
 
 
     .mission-icon{
+
       width:50px;
       height:50px;
 
@@ -483,107 +506,48 @@
 
       border-radius:16px;
 
-      background:#eaf2ff;
+      background:#e6f0ff;
 
       font-size:25px;
+
     }
 
 
     .mission-name{
+
       color:#082f73;
 
       font-size:
         clamp(
           14px,
-          3.5vw,
+          3.4vw,
           18px
         );
 
-      font-weight:800;
+      font-weight:900;
 
-      line-height:1.35;
+      line-height:1.3;
+
     }
 
 
     .mission-description{
-      margin-top:3px;
 
-      color:#71809b;
+      margin-top:4px;
+
+      color:#6f809d;
 
       font-size:
         clamp(
           10px,
-          2.7vw,
+          2.6vw,
           13px
         );
 
       font-weight:500;
 
-      line-height:1.4;
-    }
+      line-height:1.45;
 
-
-    /* =====================================================
-       MISSION PROGRESS
-    ====================================================== */
-
-    .mission-progress-row{
-      display:flex;
-
-      align-items:center;
-
-      gap:10px;
-
-      margin-top:10px;
-    }
-
-
-    .mission-progress-track{
-      flex:1;
-
-      height:9px;
-
-      overflow:hidden;
-
-      border-radius:999px;
-
-      background:#dde8f6;
-    }
-
-
-    .mission-progress-fill{
-      width:0%;
-      height:100%;
-
-      border-radius:inherit;
-
-      background:
-        linear-gradient(
-          90deg,
-          #087bf0,
-          #10b7ff
-        );
-
-      transition:
-        width .35s ease;
-    }
-
-
-    .mission-progress-text{
-      min-width:48px;
-
-      color:#073b93;
-
-      font-size:
-        clamp(
-          10px,
-          2.7vw,
-          13px
-        );
-
-      font-weight:900;
-
-      text-align:right;
     }
 
 
@@ -591,7 +555,55 @@
        REWARD
     ====================================================== */
 
-    .mission-bottom{
+    .reward-row{
+
+      display:flex;
+
+      flex-wrap:wrap;
+
+      gap:5px;
+
+      margin-top:9px;
+
+    }
+
+
+    .reward-badge{
+
+      display:inline-flex;
+
+      align-items:center;
+
+      gap:3px;
+
+      padding:
+        4px
+        7px;
+
+      border-radius:999px;
+
+      background:#edf4fd;
+
+      color:#173d78;
+
+      font-size:
+        clamp(
+          9px,
+          2.3vw,
+          12px
+        );
+
+      font-weight:800;
+
+    }
+
+
+    /* =====================================================
+       STATUS BADGE
+    ====================================================== */
+
+    .mission-status-row{
+
       display:flex;
 
       align-items:center;
@@ -601,87 +613,98 @@
 
       gap:10px;
 
-      padding:
-        10px
-        15px
-        14px;
+      margin-top:9px;
 
-      border-top:
-        1px solid #edf2f9;
     }
 
 
-    .reward-list{
-      display:flex;
+    .status-badge{
 
-      align-items:center;
-
-      flex-wrap:wrap;
-
-      gap:6px;
-    }
-
-
-    .reward{
       display:inline-flex;
 
       align-items:center;
 
-      gap:3px;
+      min-height:25px;
 
       padding:
-        5px
-        8px;
+        4px
+        9px;
 
       border-radius:999px;
-
-      background:#f0f5fc;
-
-      color:#153a76;
 
       font-size:
         clamp(
           9px,
-          2.5vw,
+          2.3vw,
           12px
         );
 
       font-weight:800;
+
+    }
+
+
+    .status-not-submitted{
+
+      color:#60718d;
+
+      background:#edf2f8;
+
+    }
+
+
+    .status-pending{
+
+      color:#996200;
+
+      background:#fff1bd;
+
+    }
+
+
+    .status-approved{
+
+      color:#08733a;
+
+      background:#dff8e9;
+
+    }
+
+
+    .status-rejected{
+
+      color:#a51c1c;
+
+      background:#ffe1e1;
+
     }
 
 
     /* =====================================================
-       BUTTONS
+       SUBMIT BUTTON
     ====================================================== */
 
-    .mission-actions{
-      display:flex;
+    .mission-submit-button{
 
-      align-items:center;
-
-      gap:6px;
-
-      flex-shrink:0;
-    }
-
-
-    .test-button,
-    .claim-button{
-      min-height:36px;
+      min-height:37px;
 
       padding:
         7px
-        11px;
+        12px;
 
       border:0;
 
-      border-radius:11px;
+      border-radius:12px;
+
+      color:#fff;
+
+      background:#0878e8;
 
       font-size:
         clamp(
-          9px,
-          2.5vw,
-          12px
+          10px,
+          2.4vw,
+          13px
         );
 
       font-weight:900;
@@ -689,55 +712,442 @@
       cursor:pointer;
 
       white-space:nowrap;
+
     }
 
 
-    .test-button{
-      color:#0755b7;
+    .mission-submit-button:disabled{
 
-      background:#e2efff;
-    }
-
-
-    .claim-button{
-      color:#fff;
-
-      background:#06c755;
-    }
-
-
-    .claim-button:disabled{
       cursor:default;
 
-      background:#c7d3e2;
+      background:#bdc9d8;
 
-      color:#6c7c92;
     }
 
 
     /* =====================================================
-       RESET TEST
+       EVIDENCE MODAL
     ====================================================== */
 
-    .mission-test-reset{
-      width:100%;
+    .evidence-modal{
 
-      margin-top:14px;
+      position:fixed;
 
-      min-height:46px;
+      inset:0;
 
-      border:
-        1px solid #c9d8ec;
+      z-index:100000;
 
-      border-radius:14px;
+      display:none;
+
+      align-items:flex-end;
+
+      justify-content:center;
+
+      background:
+        rgba(0,20,55,.68);
+
+    }
+
+
+    .evidence-modal.show{
+
+      display:flex;
+
+    }
+
+
+    .evidence-panel{
+
+      width:min(
+        100%,
+        650px
+      );
+
+      max-height:90vh;
+
+      overflow-y:auto;
+
+      padding:
+        18px
+        16px
+        max(
+          25px,
+          env(safe-area-inset-bottom)
+        );
+
+      border-radius:
+        26px 26px 0 0;
 
       background:#fff;
 
-      color:#49617f;
+    }
+
+
+    .evidence-header{
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:
+        space-between;
+
+      gap:10px;
+
+    }
+
+
+    .evidence-title{
+
+      color:#073b93;
+
+      font-size:
+        clamp(
+          19px,
+          4.8vw,
+          27px
+        );
+
+      font-weight:900;
+
+    }
+
+
+    .evidence-close{
+
+      width:40px;
+      height:40px;
+
+      border:0;
+
+      border-radius:50%;
+
+      background:#e7eef7;
+
+      color:#173b78;
+
+      font-size:23px;
+
+      cursor:pointer;
+
+    }
+
+
+    .evidence-mission-name{
+
+      margin-top:7px;
+
+      color:#183f7e;
+
+      font-size:15px;
 
       font-weight:800;
 
+    }
+
+
+    .form-group{
+
+      margin-top:16px;
+
+    }
+
+
+    .form-label{
+
+      display:block;
+
+      margin-bottom:6px;
+
+      color:#324f7d;
+
+      font-size:13px;
+
+      font-weight:800;
+
+    }
+
+
+    .form-note{
+
+      margin-top:5px;
+
+      color:#7d899b;
+
+      font-size:11px;
+
+      line-height:1.4;
+
+    }
+
+
+    .evidence-input,
+    .evidence-textarea{
+
+      width:100%;
+
+      border:
+        1px solid #cbd9eb;
+
+      border-radius:13px;
+
+      background:#f9fbfe;
+
+      color:#17365f;
+
+    }
+
+
+    .evidence-input{
+
+      min-height:48px;
+
+      padding:
+        10px
+        12px;
+
+    }
+
+
+    .evidence-textarea{
+
+      min-height:90px;
+
+      padding:12px;
+
+      resize:vertical;
+
+    }
+
+
+    .file-input{
+
+      width:100%;
+
+      padding:12px;
+
+      border:
+        1px dashed #95b5dc;
+
+      border-radius:14px;
+
+      background:#f4f9ff;
+
+    }
+
+
+    .submit-evidence-button{
+
+      width:100%;
+
+      min-height:52px;
+
+      margin-top:18px;
+
+      border:0;
+
+      border-radius:15px;
+
+      background:#06c755;
+
+      color:#fff;
+
+      font-size:16px;
+
+      font-weight:900;
+
       cursor:pointer;
+
+    }
+
+
+    .submit-evidence-button:disabled{
+
+      background:#b7c4d3;
+
+    }
+
+
+    /* =====================================================
+       APPROVED MESSAGE
+    ====================================================== */
+
+    .success-modal{
+
+      position:fixed;
+
+      inset:0;
+
+      z-index:100001;
+
+      display:none;
+
+      align-items:center;
+
+      justify-content:center;
+
+      padding:18px;
+
+      background:
+        rgba(0,20,50,.68);
+
+    }
+
+
+    .success-modal.show{
+
+      display:flex;
+
+    }
+
+
+    .success-card{
+
+      width:min(
+        100%,
+        430px
+      );
+
+      padding:
+        27px
+        20px;
+
+      border-radius:25px;
+
+      background:#fff;
+
+      text-align:center;
+
+      box-shadow:
+        0 15px 50px
+        rgba(0,25,70,.30);
+
+    }
+
+
+    .success-icon{
+
+      font-size:55px;
+
+    }
+
+
+    .success-title{
+
+      margin-top:10px;
+
+      color:#07934b;
+
+      font-size:25px;
+
+      font-weight:900;
+
+    }
+
+
+    .success-name{
+
+      margin-top:7px;
+
+      color:#073b93;
+
+      font-size:16px;
+
+      font-weight:800;
+
+    }
+
+
+    .success-reward{
+
+      margin-top:14px;
+
+      padding:12px;
+
+      border-radius:14px;
+
+      background:#eef7ff;
+
+      color:#173b78;
+
+      font-weight:800;
+
+      line-height:1.7;
+
+    }
+
+
+    .success-close{
+
+      width:100%;
+
+      min-height:47px;
+
+      margin-top:17px;
+
+      border:0;
+
+      border-radius:13px;
+
+      background:#0877e7;
+
+      color:#fff;
+
+      font-weight:900;
+
+      cursor:pointer;
+
+    }
+
+
+    /* =====================================================
+       TOP MESSAGE
+    ====================================================== */
+
+    #missionStatus{
+
+      position:fixed;
+
+      z-index:120000;
+
+      left:50%;
+
+      bottom:
+        max(
+          20px,
+          env(safe-area-inset-bottom)
+        );
+
+      transform:
+        translateX(-50%);
+
+      display:none;
+
+      max-width:90vw;
+
+      padding:
+        10px
+        16px;
+
+      border-radius:999px;
+
+      background:#0755b7;
+
+      color:#fff;
+
+      font-size:13px;
+
+      font-weight:800;
+
+      text-align:center;
+
+    }
+
+
+    #missionStatus.show{
+
+      display:block;
+
     }
 
 
@@ -748,57 +1158,38 @@
     @media(max-width:480px){
 
       .mission-panel{
+
         border-radius:
-          23px 23px 0 0;
+          22px 22px 0 0;
 
         padding-left:10px;
         padding-right:10px;
+
       }
 
 
-      .mission-panel-header{
-        padding-top:14px;
-      }
+      .mission-main{
 
-
-      .mission-panel-icon{
-        width:46px;
-        height:46px;
-
-        flex-basis:46px;
-
-        border-radius:14px;
-
-        font-size:23px;
-      }
-
-
-      .mission-item-main{
         grid-template-columns:
           42px
           minmax(0,1fr);
 
-        gap:10px;
-
         padding:12px;
+
+        gap:9px;
+
       }
 
 
       .mission-icon{
+
         width:42px;
         height:42px;
 
         border-radius:13px;
 
         font-size:21px;
-      }
 
-
-      .mission-bottom{
-        padding:
-          9px
-          12px
-          12px;
       }
 
     }
@@ -812,7 +1203,7 @@
 
 
 <!-- =========================================================
-     MISSION TEMPLATE STAGE
+     MISSION STAGE
 ========================================================= -->
 
 <div
@@ -831,43 +1222,44 @@
   >
 
 
-  <!-- =====================================================
-       TOP ROCK COIN
-  ====================================================== -->
+  <!-- TOP COIN -->
 
   <div
+    id="missionCoin"
     class="
       overlay
       mission-coin-box
       live-blue
     "
-    id="missionCoin"
   >
     0
   </div>
 
 
-  <!-- =====================================================
-       TOP ENERGY
-  ====================================================== -->
+  <!-- TOP ENERGY -->
 
   <div
+    id="missionEnergy"
     class="
       overlay
       mission-energy-box
       live-blue
     "
-    id="missionEnergy"
   >
     0 / 200
   </div>
 
 
   <!-- =====================================================
-       DAILY PROGRESS
+       DAILY
   ====================================================== -->
 
-  <div class="live-track daily-track">
+  <div
+    class="
+      live-track
+      daily-track
+    "
+  >
 
     <div
       id="dailyProgress"
@@ -889,10 +1281,15 @@
 
 
   <!-- =====================================================
-       WEEKLY PROGRESS
+       WEEKLY
   ====================================================== -->
 
-  <div class="live-track weekly-track">
+  <div
+    class="
+      live-track
+      weekly-track
+    "
+  >
 
     <div
       id="weeklyProgress"
@@ -909,15 +1306,20 @@
     id="weeklyCount"
     class="weekly-count"
   >
-    0 / 4
+    0 / 6
   </div>
 
 
   <!-- =====================================================
-       MONTHLY PROGRESS
+       MONTHLY
   ====================================================== -->
 
-  <div class="live-track monthly-track">
+  <div
+    class="
+      live-track
+      monthly-track
+    "
+  >
 
     <div
       id="monthlyProgress"
@@ -934,15 +1336,20 @@
     id="monthlyCount"
     class="monthly-count"
   >
-    0 / 4
+    0 / 1
   </div>
 
 
   <!-- =====================================================
-       BONUS PROGRESS
+       BONUS
   ====================================================== -->
 
-  <div class="live-track bonus-track">
+  <div
+    class="
+      live-track
+      bonus-track
+    "
+  >
 
     <div
       id="bonusProgress"
@@ -959,74 +1366,59 @@
     id="bonusCount"
     class="bonus-count"
   >
-    0 / 4
+    0 / 9
   </div>
 
 
   <!-- =====================================================
-       CLICK DAILY
+       CLICK AREAS
   ====================================================== -->
 
   <button
     type="button"
     class="
-      mission-hotspot
+      mission-card-button
       daily
     "
-    onclick="openMission('daily')"
+    onclick="openCategory('daily')"
     aria-label="Daily Mission"
   ></button>
 
 
-  <!-- =====================================================
-       CLICK WEEKLY
-  ====================================================== -->
-
   <button
     type="button"
     class="
-      mission-hotspot
+      mission-card-button
       weekly
     "
-    onclick="openMission('weekly')"
+    onclick="openCategory('weekly')"
     aria-label="Weekly Mission"
   ></button>
 
 
-  <!-- =====================================================
-       CLICK MONTHLY
-  ====================================================== -->
-
   <button
     type="button"
     class="
-      mission-hotspot
+      mission-card-button
       monthly
     "
-    onclick="openMission('monthly')"
+    onclick="openCategory('monthly')"
     aria-label="Monthly Mission"
   ></button>
 
 
-  <!-- =====================================================
-       CLICK BONUS
-  ====================================================== -->
-
   <button
     type="button"
     class="
-      mission-hotspot
+      mission-card-button
       bonus
     "
-    onclick="openMission('bonus')"
+    onclick="openCategory('bonus')"
     aria-label="Bonus Mission"
   ></button>
 
 
-  <!-- =====================================================
-       HOME BUTTON
-       ปรับตำแหน่งให้ตรง Template ได้ภายหลัง
-  ====================================================== -->
+  <!-- HOME -->
 
   <button
     type="button"
@@ -1046,51 +1438,47 @@
 
 
 <!-- =========================================================
-     MISSION MODAL
+     CATEGORY MODAL
 ========================================================= -->
 
 <div
   id="missionModal"
   class="mission-modal"
-  onclick="modalBackdrop(event)"
+  onclick="closeCategoryBackdrop(event)"
 >
 
   <section
     class="mission-panel"
   >
 
-
-    <!-- HEADER -->
-
     <header
-      class="mission-panel-header"
+      class="panel-header"
     >
 
       <div
         id="panelIcon"
-        class="mission-panel-icon"
+        class="panel-icon"
       >
         🎯
       </div>
 
 
       <div
-        class="mission-panel-title-wrap"
+        class="panel-title-wrap"
       >
 
         <h2
           id="panelTitle"
-          class="mission-panel-title"
+          class="panel-title"
         >
-          DAILY MISSION
+          MISSION
         </h2>
 
 
         <div
           id="panelSubtitle"
-          class="mission-panel-subtitle"
+          class="panel-subtitle"
         >
-          ภารกิจประจำวัน
         </div>
 
       </div>
@@ -1098,9 +1486,8 @@
 
       <button
         type="button"
-        class="mission-close"
-        onclick="closeMission()"
-        aria-label="Close"
+        class="panel-close"
+        onclick="closeCategory()"
       >
         ×
       </button>
@@ -1108,25 +1495,23 @@
     </header>
 
 
-    <!-- CATEGORY SUMMARY -->
-
     <section
-      class="category-summary"
+      class="category-info"
     >
 
       <div
-        class="summary-chip"
+        class="category-stat"
       >
 
         <div
-          class="summary-chip-label"
+          class="category-stat-label"
         >
-          สำเร็จ
+          อนุมัติแล้ว
         </div>
 
         <div
-          id="summaryComplete"
-          class="summary-chip-value"
+          id="statApproved"
+          class="category-stat-value"
         >
           0
         </div>
@@ -1135,18 +1520,18 @@
 
 
       <div
-        class="summary-chip"
+        class="category-stat"
       >
 
         <div
-          class="summary-chip-label"
+          class="category-stat-label"
         >
           ทั้งหมด
         </div>
 
         <div
-          id="summaryTotal"
-          class="summary-chip-value"
+          id="statTotal"
+          class="category-stat-value"
         >
           0
         </div>
@@ -1155,18 +1540,18 @@
 
 
       <div
-        class="summary-chip"
+        class="category-stat"
       >
 
         <div
-          class="summary-chip-label"
+          class="category-stat-label"
         >
-          %
+          ความสำเร็จ
         </div>
 
         <div
-          id="summaryPercent"
-          class="summary-chip-value"
+          id="statPercent"
+          class="category-stat-value"
         >
           0%
         </div>
@@ -1176,21 +1561,195 @@
     </section>
 
 
-    <!-- LIST -->
-
     <section
       id="missionList"
+      class="mission-list"
     ></section>
 
+  </section>
 
-    <!-- TEST RESET -->
+</div>
+
+
+<!-- =========================================================
+     EVIDENCE MODAL
+========================================================= -->
+
+<div
+  id="evidenceModal"
+  class="evidence-modal"
+>
+
+  <section
+    class="evidence-panel"
+  >
+
+    <header
+      class="evidence-header"
+    >
+
+      <div
+        class="evidence-title"
+      >
+        ส่งหลักฐาน
+      </div>
+
+
+      <button
+        type="button"
+        class="evidence-close"
+        onclick="closeEvidence()"
+      >
+        ×
+      </button>
+
+    </header>
+
+
+    <div
+      id="evidenceMissionName"
+      class="evidence-mission-name"
+    ></div>
+
+
+    <!-- FILE -->
+
+    <div
+      class="form-group"
+    >
+
+      <label
+        class="form-label"
+      >
+        รูปภาพ / VDO
+      </label>
+
+
+      <input
+        id="evidenceFile"
+        class="file-input"
+        type="file"
+        accept="
+          image/*,
+          video/*
+        "
+      >
+
+
+      <div
+        class="form-note"
+      >
+        เลือกรูปหรือวิดีโอที่ใช้เป็นหลักฐานตามเงื่อนไขของภารกิจ
+      </div>
+
+    </div>
+
+
+    <!-- LINK -->
+
+    <div
+      class="form-group"
+    >
+
+      <label
+        class="form-label"
+      >
+        Link
+      </label>
+
+
+      <input
+        id="evidenceLink"
+        class="evidence-input"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <!-- NOTE -->
+
+    <div
+      class="form-group"
+    >
+
+      <label
+        class="form-label"
+      >
+        รายละเอียดเพิ่มเติม
+      </label>
+
+
+      <textarea
+        id="evidenceNote"
+        class="evidence-textarea"
+        placeholder="อธิบายกิจกรรมที่ทำ..."
+      ></textarea>
+
+    </div>
+
+
+    <button
+      id="submitEvidenceButton"
+      type="button"
+      class="submit-evidence-button"
+      onclick="submitEvidence()"
+    >
+      ส่งหลักฐานให้ Admin ตรวจสอบ
+    </button>
+
+
+  </section>
+
+</div>
+
+
+<!-- =========================================================
+     SUCCESS
+========================================================= -->
+
+<div
+  id="successModal"
+  class="success-modal"
+>
+
+  <section
+    class="success-card"
+  >
+
+    <div
+      class="success-icon"
+    >
+      🎉
+    </div>
+
+
+    <div
+      class="success-title"
+    >
+      ภารกิจสำเร็จ!
+    </div>
+
+
+    <div
+      id="successMissionName"
+      class="success-name"
+    ></div>
+
+
+    <div
+      id="successReward"
+      class="success-reward"
+    ></div>
+
 
     <button
       type="button"
-      class="mission-test-reset"
-      onclick="resetMissionTest()"
+      class="success-close"
+      onclick="closeSuccess()"
     >
-      รีเซ็ตข้อมูลภารกิจสำหรับ TEST
+      เยี่ยมมาก!
     </button>
 
   </section>
@@ -1198,12 +1757,12 @@
 </div>
 
 
-<!-- STATUS -->
-
-<div id="status"></div>
+<div id="missionStatus"></div>
 
 
-<!-- COMMON -->
+<!-- =========================================================
+     COMMON
+========================================================= -->
 
 <script
   src="./common.js"
@@ -1220,149 +1779,328 @@ const ROCK =
   window.ROCK;
 
 
-const STORAGE_KEY =
-  "rock_mission_test_v1";
+const MISSION_API =
+  ROCK?.CFG?.API?.MISSION ||
+  "";
+
+
+const LOCAL_KEY =
+  "rock_mission_submissions_v3";
 
 
 let activeCategory =
   "daily";
 
 
+let activeMissionId =
+  null;
+
+
 /* =========================================================
-   MISSION CONFIG
+   EXTRA DAILY
 ========================================================= */
 
-const missionConfig = {
+const dailyExtraPool = [
+
+  {
+    id:
+      "daily_extra_stair",
+
+    icon:
+      "🪜",
+
+    name:
+      "STAIR CHALLENGE",
+
+    description:
+      "ถ่ายรูปบริเวณบันได พร้อมทำกิจกรรมเดินขึ้น–ลงอย่างน้อย 3 ชั้น",
+
+    evidence:
+      "photo",
+
+    reward:{
+      coin:10,
+      energy:10,
+      exp:10
+    }
+  },
+
+
+  {
+    id:
+      "daily_extra_meal",
+
+    icon:
+      "🥗",
+
+    name:
+      "HEALTHY MEAL",
+
+    description:
+      "ถ่ายรูปมื้ออาหารที่มีผัก โปรตีน และแป้งในสัดส่วนเหมาะสม",
+
+    evidence:
+      "photo",
+
+    reward:{
+      coin:10,
+      energy:10,
+      exp:10
+    }
+  },
+
+
+  {
+    id:
+      "daily_extra_stretch",
+
+    icon:
+      "🤸",
+
+    name:
+      "STRETCH & MOVE",
+
+    description:
+      "ถ่ายรูปขณะยืดเหยียดหรือทำท่าออกกำลังกาย 5–10 นาที",
+
+    evidence:
+      "photo",
+
+    reward:{
+      coin:10,
+      energy:10,
+      exp:10
+    }
+  },
+
+
+  {
+    id:
+      "daily_extra_break",
+
+    icon:
+      "🚶",
+
+    name:
+      "DESK BREAK",
+
+    description:
+      "ถ่ายรูปขณะลุกจากโต๊ะมายืดเส้นหรือเดินพัก",
+
+    evidence:
+      "photo",
+
+    reward:{
+      coin:10,
+      energy:10,
+      exp:10
+    }
+  },
+
+
+  {
+    id:
+      "daily_extra_snack",
+
+    icon:
+      "🍎",
+
+    name:
+      "HEALTHY SNACK",
+
+    description:
+      "ถ่ายรูปของว่าง เช่น ผลไม้ ไข่ นม โยเกิร์ต หรือถั่ว",
+
+    evidence:
+      "photo",
+
+    reward:{
+      coin:10,
+      energy:10,
+      exp:10
+    }
+  },
+
+
+  {
+    id:
+      "daily_extra_team",
+
+    icon:
+      "👥",
+
+    name:
+      "TEAM HEALTH CHALLENGE",
+
+    description:
+      "ถ่ายรูปร่วมกับเพื่อนร่วมงานขณะทำกิจกรรมสุขภาพ",
+
+    evidence:
+      "photo",
+
+    reward:{
+      coin:10,
+      energy:10,
+      exp:10
+    }
+  }
+
+];
+
+
+/* =========================================================
+   RANDOM EXTRA OF DAY
+========================================================= */
+
+function getDailyExtra(){
+
+  const today =
+    new Date();
+
+
+  const seed =
+    Number(
+      String(
+        today.getFullYear()
+      ) +
+      String(
+        today.getMonth() + 1
+      ).padStart(2,"0") +
+      String(
+        today.getDate()
+      ).padStart(2,"0")
+    );
+
+
+  const index =
+    seed %
+    dailyExtraPool.length;
+
+
+  return dailyExtraPool[
+    index
+  ];
+}
+
+
+/* =========================================================
+   MISSION DATA
+========================================================= */
+
+const missionData = {
 
 
   /* =====================================================
      DAILY
   ====================================================== */
 
-  daily: {
+  daily:{
 
     title:
       "DAILY MISSION",
 
     subtitle:
-      "ภารกิจประจำวัน",
+      "Core 3 ภารกิจ + Extra สุ่มวันละ 1 ภารกิจ",
 
     icon:
       "☀️",
 
-    missions: [
+    get missions(){
 
-      {
-        id:
-          "daily_weight",
+      return [
 
-        icon:
-          "⚖️",
+        {
+          section:
+            "CORE DAILY",
 
-        name:
-          "บันทึกน้ำหนัก",
+          id:
+            "daily_move_more",
 
-        description:
-          "บันทึกน้ำหนักของวันนี้",
+          icon:
+            "🚶",
 
-        target:
-          1,
+          name:
+            "MOVE MORE",
 
-        unit:
-          "ครั้ง",
+          description:
+            "เดินให้ได้ 8,000 ก้าว หรือออกกำลังกายเผาผลาญ 300 kcal",
 
-        reward: {
-          coin:10,
-          energy:5,
-          exp:20
+          evidence:
+            "photo_or_video",
+
+          reward:{
+            coin:10,
+            energy:10,
+            exp:10
+          }
+        },
+
+
+        {
+          section:
+            "CORE DAILY",
+
+          id:
+            "daily_eat_smart",
+
+          icon:
+            "🥗",
+
+          name:
+            "EAT SMART",
+
+          description:
+            "รับประทานอาหารเหมาะสม และส่งรูปอาหารเป็นหลักฐาน",
+
+          evidence:
+            "photo",
+
+          reward:{
+            coin:10,
+            energy:10,
+            exp:10
+          }
+        },
+
+
+        {
+          section:
+            "CORE DAILY",
+
+          id:
+            "daily_exercise_30",
+
+          icon:
+            "🏃",
+
+          name:
+            "EXERCISE 30 MIN",
+
+          description:
+            "ออกกำลังกายอย่างน้อย 30 นาที พร้อมคลิป VDO",
+
+          evidence:
+            "video",
+
+          reward:{
+            coin:20,
+            energy:20,
+            exp:20
+          }
+        },
+
+
+        {
+          section:
+            "DAILY EXTRA",
+
+          ...getDailyExtra()
         }
-      },
 
+      ];
 
-      {
-        id:
-          "daily_walk",
+    }
 
-        icon:
-          "🚶",
-
-        name:
-          "เดิน 6,000 ก้าว",
-
-        description:
-          "สะสมการเดินให้ครบ 6,000 ก้าว",
-
-        target:
-          6000,
-
-        step:
-          1000,
-
-        unit:
-          "ก้าว",
-
-        reward: {
-          coin:15,
-          energy:5,
-          exp:25
-        }
-      },
-
-
-      {
-        id:
-          "daily_water",
-
-        icon:
-          "💧",
-
-        name:
-          "ดื่มน้ำ 8 แก้ว",
-
-        description:
-          "ดื่มน้ำให้ครบตามเป้าหมาย",
-
-        target:
-          8,
-
-        unit:
-          "แก้ว",
-
-        reward: {
-          coin:10,
-          energy:5,
-          exp:20
-        }
-      },
-
-
-      {
-        id:
-          "daily_activity",
-
-        icon:
-          "🏃",
-
-        name:
-          "ออกกำลังกาย",
-
-        description:
-          "ทำกิจกรรมออกกำลังกายอย่างน้อย 1 ครั้ง",
-
-        target:
-          1,
-
-        unit:
-          "ครั้ง",
-
-        reward: {
-          coin:20,
-          energy:10,
-          exp:30
-        }
-      }
-
-    ]
   },
 
 
@@ -1370,127 +2108,164 @@ const missionConfig = {
      WEEKLY
   ====================================================== */
 
-  weekly: {
+  weekly:{
 
     title:
       "WEEKLY MISSION",
 
     subtitle:
-      "ภารกิจประจำสัปดาห์",
+      "กิจกรรมสุขภาพประจำสัปดาห์",
 
     icon:
       "📅",
 
-    missions: [
+    missions:[
 
       {
         id:
-          "weekly_weight",
+          "weekly_aerobic",
 
         icon:
-          "⚖️",
+          "🎵",
 
         name:
-          "บันทึกน้ำหนัก 5 วัน",
+          "AEROBIC",
 
         description:
-          "บันทึกน้ำหนักอย่างน้อย 5 วันในสัปดาห์",
+          "แอโรบิก 3 วัน/สัปดาห์ จันทร์ พุธ ศุกร์ เวลา 17.00 น. รับรางวัลต่อครั้ง",
 
-        target:
-          5,
+        evidence:
+          "photo_or_video",
 
-        unit:
-          "วัน",
-
-        reward: {
-          coin:50,
-          energy:15,
-          exp:80
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
         }
       },
 
 
       {
         id:
-          "weekly_exercise",
+          "weekly_weight_training",
 
         icon:
           "🏋️",
 
         name:
-          "ออกกำลังกาย 3 ครั้ง",
+          "WEIGHT TRAINING",
 
         description:
-          "ทำกิจกรรมออกกำลังกายอย่างน้อย 3 ครั้ง",
+          "เวท / เทรนนิ่ง อย่างน้อย 1 วันต่อสัปดาห์",
 
-        target:
-          3,
+        evidence:
+          "photo_or_video",
 
-        unit:
-          "ครั้ง",
-
-        reward: {
-          coin:60,
-          energy:20,
-          exp:100
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
         }
       },
 
 
       {
         id:
-          "weekly_daily",
+          "weekly_yoga",
 
         icon:
-          "✅",
+          "🧘",
 
         name:
-          "ผ่าน Daily 5 ภารกิจ",
+          "YOGA",
 
         description:
-          "ทำ Daily Mission สำเร็จสะสม 5 ภารกิจ",
+          "เข้าร่วมโยคะ 1 ครั้ง/เดือน",
 
-        target:
-          5,
+        evidence:
+          "photo",
 
-        unit:
-          "ภารกิจ",
-
-        reward: {
-          coin:40,
-          energy:15,
-          exp:70
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
         }
       },
 
 
       {
         id:
-          "weekly_streak",
+          "weekly_badminton",
 
         icon:
-          "🔥",
+          "🏸",
 
         name:
-          "เข้าแอปต่อเนื่อง 7 วัน",
+          "BADMINTON CLUB",
 
         description:
-          "เข้าใช้งาน ROCK YOUR BODY ต่อเนื่อง",
+          "เข้าร่วมชมรมแบดมินตัน ทุกวันพฤหัสบดี เวลา 19.00 น.",
 
-        target:
-          7,
+        evidence:
+          "photo",
 
-        unit:
-          "วัน",
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
+        }
+      },
 
-        reward: {
-          coin:80,
-          energy:20,
-          exp:120
+
+      {
+        id:
+          "weekly_running_club",
+
+        icon:
+          "🏃‍♂️",
+
+        name:
+          "RUNNING CLUB",
+
+        description:
+          "เข้าร่วมชมรมวิ่งของโรงพยาบาล และชวนเพื่อนวิ่งมากกว่า 3 คนขึ้นไป",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
+        }
+      },
+
+
+      {
+        id:
+          "weekly_nutrition",
+
+        icon:
+          "🍽️",
+
+        name:
+          "NUTRITION ACTIVITY",
+
+        description:
+          "เข้าร่วมกิจกรรมโภชนาการ 1 ครั้ง/สัปดาห์",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
         }
       }
 
     ]
+
   },
 
 
@@ -1498,130 +2273,47 @@ const missionConfig = {
      MONTHLY
   ====================================================== */
 
-  monthly: {
+  monthly:{
 
     title:
       "MONTHLY MISSION",
 
     subtitle:
-      "ภารกิจประจำเดือน",
+      "HEALTHY TIKTOK CHALLENGE",
 
     icon:
-      "🏆",
+      "📱",
 
-    missions: [
-
-      {
-        id:
-          "monthly_weight",
-
-        icon:
-          "⚖️",
-
-        name:
-          "บันทึกน้ำหนัก 20 วัน",
-
-        description:
-          "บันทึกน้ำหนักสะสมอย่างน้อย 20 วัน",
-
-        target:
-          20,
-
-        unit:
-          "วัน",
-
-        reward: {
-          coin:150,
-          energy:40,
-          exp:250
-        }
-      },
-
+    missions:[
 
       {
         id:
-          "monthly_exercise",
+          "monthly_tiktok",
 
         icon:
-          "🏃",
+          "🎬",
 
         name:
-          "ออกกำลังกาย 12 ครั้ง",
+          "HEALTHY TIKTOK CHALLENGE",
 
         description:
-          "ทำกิจกรรมออกกำลังกายสะสม 12 ครั้ง",
+          "สร้างคลิป TikTok 15–60 วินาที เนื้อหาส่งเสริมสุขภาพ ใช้ #RockYourBody2026 ส่ง Screenshot + Link คลิปเป็นหลักฐาน เลือกหัวข้อ START YOUR MOVE / EAT SMART / HEALTHY LIFESTYLE",
 
-        target:
-          12,
+        evidence:
+          "photo_link",
 
-        unit:
-          "ครั้ง",
+        requireLink:
+          true,
 
-        reward: {
-          coin:180,
-          energy:50,
-          exp:300
-        }
-      },
-
-
-      {
-        id:
-          "monthly_daily",
-
-        icon:
-          "⭐",
-
-        name:
-          "ผ่าน Daily 20 ภารกิจ",
-
-        description:
-          "ทำ Daily Mission สำเร็จสะสม 20 ภารกิจ",
-
-        target:
-          20,
-
-        unit:
-          "ภารกิจ",
-
-        reward: {
-          coin:150,
-          energy:40,
-          exp:250
-        }
-      },
-
-
-      {
-        id:
-          "monthly_weightloss",
-
-        icon:
-          "📉",
-
-        name:
-          "ลดน้ำหนัก 2 กิโลกรัม",
-
-        description:
-          "ลดจากน้ำหนักเริ่มต้นของเดือน 2 กิโลกรัม",
-
-        target:
-          2,
-
-        step:
-          .5,
-
-        unit:
-          "kg",
-
-        reward: {
-          coin:250,
-          energy:60,
-          exp:400
+        reward:{
+          coin:100,
+          energy:100,
+          exp:150
         }
       }
 
     ]
+
   },
 
 
@@ -1629,269 +2321,431 @@ const missionConfig = {
      BONUS
   ====================================================== */
 
-  bonus: {
+  bonus:{
 
     title:
       "BONUS MISSION",
 
     subtitle:
-      "ภารกิจพิเศษ",
+      "ภารกิจพิเศษและ Achievement",
 
     icon:
       "🎁",
 
-    missions: [
+    missions:[
 
       {
         id:
-          "bonus_streak",
+          "bonus_core_daily",
 
         icon:
-          "🔥",
+          "⭐",
 
         name:
-          "Perfect Week",
+          "CORE DAILY 3/3",
 
         description:
-          "ทำ Daily Mission ครบทุกวันติดต่อกัน 7 วัน",
+          "ทำ Core DAILY MISSION ครบทั้ง 3 ภารกิจ",
 
-        target:
-          7,
+        auto:
+          true,
 
-        unit:
-          "วัน",
-
-        reward: {
-          coin:300,
-          energy:80,
-          exp:500
+        reward:{
+          coin:20,
+          energy:20,
+          exp:20
         }
       },
 
 
       {
         id:
-          "bonus_level",
+          "bonus_perfect_day",
 
         icon:
-          "⬆️",
+          "🌟",
 
         name:
-          "เพิ่ม Level",
+          "PERFECT DAY",
 
         description:
-          "เพิ่ม Level จาก EXP อย่างน้อย 1 Level",
+          "ทำ Core Daily 3 ภารกิจ + Daily Extra ครบทั้งหมด",
 
-        target:
-          1,
+        auto:
+          true,
 
-        unit:
-          "Level",
+        reward:{
+          coin:30,
+          energy:30,
+          exp:30
+        }
+      },
 
-        reward: {
-          coin:200,
+
+      {
+        id:
+          "bonus_weekly_four",
+
+        icon:
+          "🏆",
+
+        name:
+          "WEEKLY 4 MISSIONS",
+
+        description:
+          "ทำ WEEKLY MISSION สำเร็จอย่างน้อย 4 กิจกรรมในสัปดาห์",
+
+        auto:
+          true,
+
+        reward:{
+          coin:50,
           energy:50,
-          exp:300
+          exp:50
         }
       },
 
 
       {
         id:
-          "bonus_target",
+          "bonus_walk_50k",
 
         icon:
-          "🎯",
+          "👟",
 
         name:
-          "เข้าใกล้เป้าหมาย",
+          "WALK 50K",
 
         description:
-          "ทำความก้าวหน้าสู่เป้าหมายครบ 50%",
+          "เดินสะสม 50,000 ก้าวต่อสัปดาห์",
 
-        target:
-          50,
+        evidence:
+          "photo",
 
-        step:
-          10,
-
-        unit:
-          "%",
-
-        reward: {
-          coin:250,
-          energy:60,
-          exp:400
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
         }
       },
 
 
       {
         id:
-          "bonus_all",
+          "bonus_exercise_150",
+
+        icon:
+          "🏃",
+
+        name:
+          "EXERCISE 150 MIN",
+
+        description:
+          "ออกกำลังกายรวม 150 นาทีต่อสัปดาห์",
+
+        evidence:
+          "photo_or_video",
+
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
+        }
+      },
+
+
+      {
+        id:
+          "bonus_stair_master",
+
+        icon:
+          "🪜",
+
+        name:
+          "STAIR MASTER",
+
+        description:
+          "เดินขึ้น–ลงบันไดสะสม 30 ชั้นต่อสัปดาห์",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
+        }
+      },
+
+
+      {
+        id:
+          "bonus_healthy_meal",
+
+        icon:
+          "🥗",
+
+        name:
+          "HEALTHY MEAL WEEK",
+
+        description:
+          "ส่งรูปอาหารสุขภาพอย่างน้อย 5 มื้อต่อสัปดาห์",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
+        }
+      },
+
+
+      {
+        id:
+          "bonus_sleep",
+
+        icon:
+          "😴",
+
+        name:
+          "SLEEP WELL",
+
+        description:
+          "นอนอย่างน้อย 7 ชั่วโมง จำนวน 5 คืนต่อสัปดาห์",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
+        }
+      },
+
+
+      {
+        id:
+          "bonus_active_break",
+
+        icon:
+          "🧍",
+
+        name:
+          "ACTIVE BREAK",
+
+        description:
+          "ลุกเดินหรือยืดตัวระหว่างงานอย่างน้อย 5 วัน",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
+        }
+      },
+
+
+      {
+        id:
+          "bonus_team_move",
+
+        icon:
+          "👥",
+
+        name:
+          "TEAM MOVE",
+
+        description:
+          "ทำกิจกรรมสุขภาพร่วมกับเพื่อนร่วมงานอย่างน้อย 3 ครั้ง/สัปดาห์ พร้อมรูปกลุ่ม",
+
+        evidence:
+          "photo",
+
+        reward:{
+          coin:50,
+          energy:50,
+          exp:50
+        }
+      },
+
+
+      {
+        id:
+          "bonus_tiktok",
 
         icon:
           "👑",
 
         name:
-          "Mission Master",
+          "TIKTOK SPECIAL BONUS",
 
         description:
-          "ทำภารกิจในระบบสำเร็จสะสม 10 ภารกิจ",
+          "คลิปสร้างสรรค์ยอดเยี่ยม / Team Challenge / Popular Choice",
 
-        target:
-          10,
+        adminOnly:
+          true,
 
-        unit:
-          "ภารกิจ",
-
-        reward: {
-          coin:500,
-          energy:100,
-          exp:700
+        reward:{
+          coin:200,
+          energy:200,
+          exp:50
         }
       }
 
     ]
+
   }
 
 };
 
 
 /* =========================================================
-   STORAGE
+   LOCAL TEST STORAGE
 ========================================================= */
 
-function loadMissionState(){
+function readLocal(){
 
   try{
 
-    const raw =
+    return JSON.parse(
       localStorage.getItem(
-        STORAGE_KEY
-      );
-
-
-    if(!raw){
-      return {};
-    }
-
-
-    return (
-      JSON.parse(raw) ||
-      {}
+        LOCAL_KEY
+      ) ||
+      "{}"
     );
 
-
-  }catch(error){
-
-    console.warn(
-      "MISSION STORAGE READ:",
-      error
-    );
+  }catch{
 
     return {};
+
   }
+
 }
 
 
-function saveMissionState(
-  state
+function writeLocal(
+  value
 ){
 
   localStorage.setItem(
-    STORAGE_KEY,
+    LOCAL_KEY,
     JSON.stringify(
-      state
+      value
     )
   );
+
 }
 
 
 /* =========================================================
-   GET STATE
+   STATUS
 ========================================================= */
 
-function getMissionState(
+function getMissionStatus(
   id
 ){
 
-  const state =
-    loadMissionState();
+  const local =
+    readLocal();
 
 
   return (
-    state[id] ||
+    local[id] ||
     {
-      progress:0,
-      claimed:false
+      status:
+        "not_submitted",
+
+      approvedNotified:
+        false
     }
   );
+
 }
 
 
 /* =========================================================
-   SET STATE
+   FIND MISSION
 ========================================================= */
 
-function setMissionState(
-  id,
-  value
+function findMission(
+  id
 ){
 
-  const state =
-    loadMissionState();
+  for(
+    const categoryName
+    of Object.keys(
+      missionData
+    )
+  ){
+
+    const config =
+      missionData[
+        categoryName
+      ];
 
 
-  state[id] = value;
+    const missions =
+      Array.isArray(
+        config.missions
+      )
+        ? config.missions
+        : config.missions;
 
 
-  saveMissionState(
-    state
+    const found =
+      missions.find(
+        item =>
+          item.id === id
+      );
+
+
+    if(found){
+      return found;
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+function getCategoryMissions(
+  category
+){
+
+  return (
+    missionData[
+      category
+    ]?.missions ||
+    []
   );
+
 }
 
 
 /* =========================================================
-   FORMAT
+   OPEN CATEGORY
 ========================================================= */
 
-function formatNumber(
-  value
-){
-
-  const n =
-    Number(value);
-
-
-  if(
-    !Number.isFinite(n)
-  ){
-    return "0";
-  }
-
-
-  if(
-    Number.isInteger(n)
-  ){
-    return String(n);
-  }
-
-
-  return n.toFixed(1);
-}
-
-
-/* =========================================================
-   OPEN MISSION
-========================================================= */
-
-function openMission(
+function openCategory(
   category
 ){
 
   if(
-    !missionConfig[category]
+    !missionData[
+      category
+    ]
   ){
     return;
   }
@@ -1901,7 +2755,7 @@ function openMission(
     category;
 
 
-  renderMissionPanel();
+  renderCategory();
 
 
   document
@@ -1916,14 +2770,15 @@ function openMission(
 
   document.body.style.overflow =
     "hidden";
+
 }
 
 
 /* =========================================================
-   CLOSE
+   CLOSE CATEGORY
 ========================================================= */
 
-function closeMission(){
+function closeCategory(){
 
   document
     .getElementById(
@@ -1937,14 +2792,11 @@ function closeMission(){
 
   document.body.style.overflow =
     "";
+
 }
 
 
-/* =========================================================
-   BACKDROP
-========================================================= */
-
-function modalBackdrop(
+function closeCategoryBackdrop(
   event
 ){
 
@@ -1952,21 +2804,30 @@ function modalBackdrop(
     event.target.id ===
     "missionModal"
   ){
-    closeMission();
+
+    closeCategory();
+
   }
+
 }
 
 
 /* =========================================================
-   RENDER PANEL
+   RENDER
 ========================================================= */
 
-function renderMissionPanel(){
+function renderCategory(){
 
   const config =
-    missionConfig[
+    missionData[
       activeCategory
     ];
+
+
+  const missions =
+    getCategoryMissions(
+      activeCategory
+    );
 
 
   document
@@ -1993,238 +2854,277 @@ function renderMissionPanel(){
       config.subtitle;
 
 
-  const container =
+  const list =
     document
       .getElementById(
         "missionList"
       );
 
 
-  container.innerHTML =
+  list.innerHTML =
     "";
 
 
-  let completed =
+  let approvedCount =
     0;
 
 
-  config.missions
-    .forEach(
-      mission => {
+  let lastSection =
+    "";
 
 
-        const state =
-          getMissionState(
-            mission.id
-          );
+  missions.forEach(
+    mission => {
 
 
-        const progress =
-          Math.max(
-            0,
-            Math.min(
-              mission.target,
-              Number(
-                state.progress
-              ) || 0
-            )
-          );
+      const state =
+        getMissionStatus(
+          mission.id
+        );
 
 
-        const isComplete =
-          progress >=
-          mission.target;
+      if(
+        state.status ===
+        "approved"
+      ){
+
+        approvedCount++;
+
+      }
 
 
-        if(isComplete){
-          completed++;
-        }
+      if(
+        mission.section &&
+        mission.section !==
+        lastSection
+      ){
+
+        lastSection =
+          mission.section;
 
 
-        const percent =
-          mission.target > 0
-
-            ? Math.min(
-                100,
-                (
-                  progress /
-                  mission.target
-                ) * 100
-              )
-
-            : 0;
+        const section =
+          document
+            .createElement(
+              "div"
+            );
 
 
-        const item =
-          document.createElement(
+        section.className =
+          "mission-section-title";
+
+
+        section.textContent =
+          mission.section;
+
+
+        list.appendChild(
+          section
+        );
+
+      }
+
+
+      const item =
+        document
+          .createElement(
             "article"
           );
 
 
-        item.className =
-          "mission-item";
+      item.className =
+        `mission-item ${state.status}`;
 
 
-        if(isComplete){
-          item.classList.add(
-            "complete"
-          );
-        }
+      let statusText =
+        "ยังไม่ได้ส่งหลักฐาน";
 
 
-        if(state.claimed){
-          item.classList.add(
-            "claimed"
-          );
-        }
+      let statusClass =
+        "status-not-submitted";
 
 
-        item.innerHTML = `
+      if(
+        state.status ===
+        "pending"
+      ){
 
-          <div class="mission-item-main">
+        statusText =
+          "⏳ รอ Admin ตรวจสอบ";
 
-            <div class="mission-icon">
-              ${mission.icon}
-            </div>
-
-
-            <div>
-
-              <div class="mission-name">
-                ${mission.name}
-              </div>
-
-
-              <div class="mission-description">
-                ${mission.description}
-              </div>
-
-
-              <div class="mission-progress-row">
-
-                <div class="mission-progress-track">
-
-                  <div
-                    class="mission-progress-fill"
-                    style="
-                      width:${percent}%;
-                    "
-                  ></div>
-
-                </div>
-
-
-                <div class="mission-progress-text">
-
-                  ${formatNumber(progress)}
-                  /
-                  ${formatNumber(mission.target)}
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="mission-bottom">
-
-            <div class="reward-list">
-
-              <span class="reward">
-                🪙 +${mission.reward.coin}
-              </span>
-
-              <span class="reward">
-                ⚡ +${mission.reward.energy}
-              </span>
-
-              <span class="reward">
-                ⭐ +${mission.reward.exp}
-              </span>
-
-            </div>
-
-
-            <div class="mission-actions">
-
-              <button
-                type="button"
-                class="test-button"
-                onclick="
-                  addMissionTest(
-                    '${mission.id}'
-                  )
-                "
-              >
-                + TEST
-              </button>
-
-
-              <button
-                type="button"
-                class="claim-button"
-                onclick="
-                  claimMission(
-                    '${mission.id}'
-                  )
-                "
-                ${
-                  !isComplete ||
-                  state.claimed
-                    ? "disabled"
-                    : ""
-                }
-              >
-
-                ${
-                  state.claimed
-                    ? "รับแล้ว"
-                    : "รับรางวัล"
-                }
-
-              </button>
-
-            </div>
-
-          </div>
-
-        `;
-
-
-        container.appendChild(
-          item
-        );
+        statusClass =
+          "status-pending";
 
       }
-    );
 
 
-  document
-    .getElementById(
-      "summaryComplete"
-    )
-    .textContent =
-      completed;
+      if(
+        state.status ===
+        "approved"
+      ){
+
+        statusText =
+          "✅ Admin อนุมัติแล้ว";
+
+        statusClass =
+          "status-approved";
+
+      }
 
 
-  document
-    .getElementById(
-      "summaryTotal"
-    )
-    .textContent =
-      config.missions.length;
+      if(
+        state.status ===
+        "rejected"
+      ){
+
+        statusText =
+          "❌ ไม่ผ่าน กรุณาส่งใหม่";
+
+        statusClass =
+          "status-rejected";
+
+      }
+
+
+      if(
+        mission.auto
+      ){
+
+        statusText =
+          state.status ===
+          "approved"
+            ? "✅ สำเร็จแล้ว"
+            : "ตรวจสำเร็จอัตโนมัติ";
+
+      }
+
+
+      if(
+        mission.adminOnly
+      ){
+
+        statusText =
+          state.status ===
+          "approved"
+            ? "✅ Admin มอบ Bonus แล้ว"
+            : "รอการคัดเลือกจาก Admin";
+
+      }
+
+
+      const canSubmit =
+
+        !mission.auto &&
+        !mission.adminOnly &&
+        state.status !==
+          "pending" &&
+        state.status !==
+          "approved";
+
+
+      item.innerHTML = `
+
+        <div class="mission-main">
+
+          <div class="mission-icon">
+            ${mission.icon}
+          </div>
+
+
+          <div>
+
+            <div class="mission-name">
+              ${mission.name}
+            </div>
+
+
+            <div class="mission-description">
+              ${mission.description}
+            </div>
+
+
+            <div class="reward-row">
+
+              <span class="reward-badge">
+                ⭐ +${mission.reward.coin}
+                ROCK COIN
+              </span>
+
+
+              <span class="reward-badge">
+                ⚡ +${mission.reward.energy}
+                ENERGY
+              </span>
+
+
+              <span class="reward-badge">
+                🏆 +${mission.reward.exp}
+                EXP
+              </span>
+
+            </div>
+
+
+            <div class="mission-status-row">
+
+              <span
+                class="
+                  status-badge
+                  ${statusClass}
+                "
+              >
+                ${statusText}
+              </span>
+
+
+              ${
+                canSubmit
+                  ? `
+
+                    <button
+                      type="button"
+                      class="mission-submit-button"
+                      onclick="
+                        openEvidence(
+                          '${mission.id}'
+                        )
+                      "
+                    >
+                      ส่งหลักฐาน
+                    </button>
+
+                  `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      list.appendChild(
+        item
+      );
+
+    }
+  );
+
+
+  const total =
+    missions.length;
 
 
   const percent =
-    config.missions.length > 0
+    total > 0
 
       ? Math.round(
           (
-            completed /
-            config.missions.length
+            approvedCount /
+            total
           ) * 100
         )
 
@@ -2233,27 +3133,48 @@ function renderMissionPanel(){
 
   document
     .getElementById(
-      "summaryPercent"
+      "statApproved"
+    )
+    .textContent =
+      approvedCount;
+
+
+  document
+    .getElementById(
+      "statTotal"
+    )
+    .textContent =
+      total;
+
+
+  document
+    .getElementById(
+      "statPercent"
     )
     .textContent =
       `${percent}%`;
 
 
-  updateMissionStage();
+  updateTemplate();
+
 }
 
 
 /* =========================================================
-   TEST PROGRESS
+   EVIDENCE
 ========================================================= */
 
-function addMissionTest(
-  id
+function openEvidence(
+  missionId
 ){
+
+  activeMissionId =
+    missionId;
+
 
   const mission =
     findMission(
-      id
+      missionId
     );
 
 
@@ -2262,402 +3183,943 @@ function addMissionTest(
   }
 
 
-  const state =
-    getMissionState(
-      id
+  document
+    .getElementById(
+      "evidenceMissionName"
+    )
+    .textContent =
+      mission.name;
+
+
+  document
+    .getElementById(
+      "evidenceFile"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "evidenceLink"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "evidenceNote"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "evidenceModal"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+function closeEvidence(){
+
+  document
+    .getElementById(
+      "evidenceModal"
+    )
+    .classList
+    .remove(
+      "show"
     );
 
 
-  if(state.claimed){
-    return;
-  }
+  activeMissionId =
+    null;
 
-
-  const step =
-    Number(
-      mission.step ??
-      1
-    );
-
-
-  state.progress =
-    Math.min(
-      mission.target,
-      (
-        Number(
-          state.progress
-        ) || 0
-      ) + step
-    );
-
-
-  setMissionState(
-    id,
-    state
-  );
-
-
-  renderMissionPanel();
 }
 
 
 /* =========================================================
-   FIND MISSION
+   SUBMIT EVIDENCE
 ========================================================= */
 
-function findMission(
-  id
-){
+async function submitEvidence(){
 
-  for(
-    const category
-    of Object.values(
-      missionConfig
-    )
+  const mission =
+    findMission(
+      activeMissionId
+    );
+
+
+  if(!mission){
+    return;
+  }
+
+
+  const fileInput =
+    document
+      .getElementById(
+        "evidenceFile"
+      );
+
+
+  const file =
+    fileInput.files?.[0] ||
+    null;
+
+
+  const link =
+    document
+      .getElementById(
+        "evidenceLink"
+      )
+      .value
+      .trim();
+
+
+  const note =
+    document
+      .getElementById(
+        "evidenceNote"
+      )
+      .value
+      .trim();
+
+
+  if(
+    mission.requireLink &&
+    !link
   ){
 
-    const mission =
-      category.missions
-        .find(
-          item =>
-            item.id === id
+    showMissionStatus(
+      "กรุณาใส่ Link TikTok"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !file &&
+    !link
+  ){
+
+    showMissionStatus(
+      "กรุณาเลือกรูป / VDO หรือใส่ Link"
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document
+      .getElementById(
+        "submitEvidenceButton"
+      );
+
+
+  button.disabled =
+    true;
+
+
+  button.textContent =
+    "กำลังส่งหลักฐาน...";
+
+
+  try{
+
+
+    /* =====================================================
+       REAL API MODE
+    ====================================================== */
+
+    if(
+      MISSION_API
+    ){
+
+      const form =
+        new FormData();
+
+
+      form.append(
+        "action",
+        "submitEvidence"
+      );
+
+
+      form.append(
+        "idToken",
+        ROCK.getIdToken()
+      );
+
+
+      form.append(
+        "missionId",
+        mission.id
+      );
+
+
+      form.append(
+        "category",
+        activeCategory
+      );
+
+
+      form.append(
+        "note",
+        note
+      );
+
+
+      form.append(
+        "link",
+        link
+      );
+
+
+      if(file){
+
+        form.append(
+          "file",
+          file
+        );
+
+      }
+
+
+      const response =
+        await fetch(
+          MISSION_API,
+          {
+            method:
+              "POST",
+
+            body:
+              form
+          }
         );
 
 
-    if(mission){
-      return mission;
+      const result =
+        await response.json();
+
+
+      if(
+        !response.ok ||
+        result?.success === false
+      ){
+
+        throw new Error(
+          result?.error ||
+          "ส่งหลักฐานไม่สำเร็จ"
+        );
+
+      }
+
     }
+
+
+    /* =====================================================
+       LOCAL TEST MODE
+    ====================================================== */
+
+    else{
+
+      const local =
+        readLocal();
+
+
+      local[
+        mission.id
+      ] = {
+
+        status:
+          "pending",
+
+        submittedAt:
+          new Date()
+            .toISOString(),
+
+        fileName:
+          file?.name ||
+          "",
+
+        link,
+
+        note,
+
+        approvedNotified:
+          false
+
+      };
+
+
+      writeLocal(
+        local
+      );
+
+    }
+
+
+    closeEvidence();
+
+
+    renderCategory();
+
+
+    showMissionStatus(
+      "ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "MISSION SUBMIT ERROR:",
+      error
+    );
+
+
+    showMissionStatus(
+      error?.message ||
+      "ส่งหลักฐานไม่สำเร็จ"
+    );
+
+
+  }finally{
+
+    button.disabled =
+      false;
+
+
+    button.textContent =
+      "ส่งหลักฐานให้ Admin ตรวจสอบ";
 
   }
 
-
-  return null;
 }
 
 
 /* =========================================================
-   CLAIM
+   LOAD STATUS FROM API
 ========================================================= */
 
-function claimMission(
-  id
-){
+async function refreshMissionStatus(){
 
-  const mission =
-    findMission(
-      id
-    );
+  if(
+    !MISSION_API
+  ){
 
+    updateAutoBonus();
 
-  if(!mission){
+    checkApprovedMessage();
+
+    updateTemplate();
+
     return;
+
   }
 
 
-  const state =
-    getMissionState(
-      id
+  try{
+
+    const response =
+      await fetch(
+        MISSION_API,
+        {
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              action:
+                "myMissionStatus",
+
+              idToken:
+                ROCK.getIdToken()
+
+            })
+
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      result?.success === false
+    ){
+
+      throw new Error(
+        result?.error ||
+        "โหลด Mission ไม่สำเร็จ"
+      );
+
+    }
+
+
+    const local =
+      readLocal();
+
+
+    (
+      result.submissions ||
+      []
+    )
+      .forEach(
+        item => {
+
+          local[
+            item.mission_id
+          ] = {
+
+            ...local[
+              item.mission_id
+            ],
+
+            status:
+              item.status,
+
+            approvedAt:
+              item.approved_at,
+
+            rejectReason:
+              item.reject_reason,
+
+            rewardGranted:
+              item.reward_granted ===
+              true
+
+          };
+
+        }
+      );
+
+
+    writeLocal(
+      local
+    );
+
+
+    updateAutoBonus();
+
+    checkApprovedMessage();
+
+    updateTemplate();
+
+
+    if(
+      document
+        .getElementById(
+          "missionModal"
+        )
+        .classList
+        .contains(
+          "show"
+        )
+    ){
+
+      renderCategory();
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "MISSION STATUS ERROR:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTO BONUS
+========================================================= */
+
+function updateAutoBonus(){
+
+  const local =
+    readLocal();
+
+
+  const approved = id =>
+
+    local[id]?.status ===
+    "approved";
+
+
+  /* Core Daily 3/3 */
+
+  const coreComplete =
+
+    approved(
+      "daily_move_more"
+    ) &&
+
+    approved(
+      "daily_eat_smart"
+    ) &&
+
+    approved(
+      "daily_exercise_30"
     );
 
 
   if(
-    state.claimed ||
-    Number(
-      state.progress
-    ) <
-    mission.target
+    coreComplete &&
+    !local[
+      "bonus_core_daily"
+    ]
   ){
-    return;
+
+    local[
+      "bonus_core_daily"
+    ] = {
+
+      status:
+        "approved",
+
+      approvedAt:
+        new Date()
+          .toISOString(),
+
+      approvedNotified:
+        false
+
+    };
+
   }
 
 
-  state.claimed =
-    true;
+  /* Perfect Day */
+
+  const dailyExtra =
+    getDailyExtra();
 
 
-  setMissionState(
-    id,
-    state
+  if(
+    coreComplete &&
+    approved(
+      dailyExtra.id
+    ) &&
+    !local[
+      "bonus_perfect_day"
+    ]
+  ){
+
+    local[
+      "bonus_perfect_day"
+    ] = {
+
+      status:
+        "approved",
+
+      approvedAt:
+        new Date()
+          .toISOString(),
+
+      approvedNotified:
+        false
+
+    };
+
+  }
+
+
+  /* Weekly 4 missions */
+
+  const weeklyApproved =
+    missionData.weekly
+      .missions
+      .filter(
+        mission =>
+          approved(
+            mission.id
+          )
+      )
+      .length;
+
+
+  if(
+    weeklyApproved >= 4 &&
+    !local[
+      "bonus_weekly_four"
+    ]
+  ){
+
+    local[
+      "bonus_weekly_four"
+    ] = {
+
+      status:
+        "approved",
+
+      approvedAt:
+        new Date()
+          .toISOString(),
+
+      approvedNotified:
+        false
+
+    };
+
+  }
+
+
+  writeLocal(
+    local
   );
 
-
-  /*
-    TEST MODE
-
-    ตอนต่อ Supabase จริง
-    ตรงนี้จะส่ง:
-      rock_coin
-      energy
-      exp
-  */
-
-
-  renderMissionPanel();
-
-
-  showStatus(
-    `รับรางวัล ${mission.name} สำเร็จ`
-  );
 }
 
 
 /* =========================================================
-   CATEGORY PROGRESS
+   TEMPLATE COUNTERS
 ========================================================= */
 
-function categoryProgress(
+function categoryStats(
   category
 ){
 
-  const config =
-    missionConfig[
+  const local =
+    readLocal();
+
+
+  const missions =
+    getCategoryMissions(
       category
-    ];
-
-
-  let complete =
-    0;
-
-
-  config.missions
-    .forEach(
-      mission => {
-
-        const state =
-          getMissionState(
-            mission.id
-          );
-
-
-        if(
-          Number(
-            state.progress
-          ) >=
-          mission.target
-        ){
-          complete++;
-        }
-
-      }
     );
 
 
+  const approved =
+    missions.filter(
+      mission =>
+        local[
+          mission.id
+        ]?.status ===
+        "approved"
+    )
+    .length;
+
+
   const total =
-    config.missions.length;
-
-
-  const percent =
-    total > 0
-
-      ? (
-          complete /
-          total
-        ) * 100
-
-      : 0;
+    missions.length;
 
 
   return {
-    complete,
+
+    approved,
+
     total,
-    percent
+
+    percent:
+
+      total > 0
+
+        ? (
+            approved /
+            total
+          ) * 100
+
+        : 0
+
   };
+
 }
 
 
 /* =========================================================
-   UPDATE TEMPLATE DATA
+   UPDATE TEMPLATE
 ========================================================= */
 
-function updateMissionStage(){
+function updateTemplate(){
 
   const daily =
-    categoryProgress(
+    categoryStats(
       "daily"
     );
 
 
   const weekly =
-    categoryProgress(
+    categoryStats(
       "weekly"
     );
 
 
   const monthly =
-    categoryProgress(
+    categoryStats(
       "monthly"
     );
 
 
   const bonus =
-    categoryProgress(
+    categoryStats(
       "bonus"
     );
 
 
-  /* DAILY */
-
-  document
-    .getElementById(
-      "dailyCount"
-    )
-    .textContent =
-      `${daily.complete} / ${daily.total}`;
-
-
-  document
-    .getElementById(
-      "dailyProgress"
-    )
-    .style.width =
-      `${daily.percent}%`;
-
-
-  /* WEEKLY */
-
-  document
-    .getElementById(
-      "weeklyCount"
-    )
-    .textContent =
-      `${weekly.complete} / ${weekly.total}`;
-
-
-  document
-    .getElementById(
-      "weeklyProgress"
-    )
-    .style.width =
-      `${weekly.percent}%`;
-
-
-  /* MONTHLY */
-
-  document
-    .getElementById(
-      "monthlyCount"
-    )
-    .textContent =
-      `${monthly.complete} / ${monthly.total}`;
-
-
-  document
-    .getElementById(
-      "monthlyProgress"
-    )
-    .style.width =
-      `${monthly.percent}%`;
-
-
-  /* BONUS */
-
-  document
-    .getElementById(
-      "bonusCount"
-    )
-    .textContent =
-      `${bonus.complete} / ${bonus.total}`;
-
-
-  document
-    .getElementById(
-      "bonusProgress"
-    )
-    .style.width =
-      `${bonus.percent}%`;
-}
-
-
-/* =========================================================
-   RESET TEST
-========================================================= */
-
-function resetMissionTest(){
-
-  const ok =
-    confirm(
-      "รีเซ็ตความคืบหน้าภารกิจสำหรับการทดสอบ?"
-    );
-
-
-  if(!ok){
-    return;
-  }
-
-
-  localStorage.removeItem(
-    STORAGE_KEY
+  setCategoryTemplate(
+    "daily",
+    daily
   );
 
 
-  renderMissionPanel();
+  setCategoryTemplate(
+    "weekly",
+    weekly
+  );
 
-  updateMissionStage();
+
+  setCategoryTemplate(
+    "monthly",
+    monthly
+  );
+
+
+  setCategoryTemplate(
+    "bonus",
+    bonus
+  );
+
+}
+
+
+function setCategoryTemplate(
+  category,
+  stats
+){
+
+  const count =
+    document
+      .getElementById(
+        `${category}Count`
+      );
+
+
+  const progress =
+    document
+      .getElementById(
+        `${category}Progress`
+      );
+
+
+  if(count){
+
+    count.textContent =
+      `${stats.approved} / ${stats.total}`;
+
+  }
+
+
+  if(progress){
+
+    progress.style.width =
+      `${stats.percent}%`;
+
+  }
+
 }
 
 
 /* =========================================================
-   STATUS
+   CONGRATULATION MESSAGE
 ========================================================= */
 
-function showStatus(
+function checkApprovedMessage(){
+
+  const local =
+    readLocal();
+
+
+  for(
+    const [
+      missionId,
+      state
+    ]
+    of Object.entries(
+      local
+    )
+  ){
+
+    if(
+      state.status !==
+      "approved" ||
+      state.approvedNotified ===
+      true
+    ){
+
+      continue;
+
+    }
+
+
+    const mission =
+      findMission(
+        missionId
+      );
+
+
+    if(!mission){
+      continue;
+    }
+
+
+    state.approvedNotified =
+      true;
+
+
+    local[
+      missionId
+    ] =
+      state;
+
+
+    writeLocal(
+      local
+    );
+
+
+    showSuccess(
+      mission
+    );
+
+
+    break;
+
+  }
+
+}
+
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+function showSuccess(
+  mission
+){
+
+  document
+    .getElementById(
+      "successMissionName"
+    )
+    .textContent =
+      mission.name;
+
+
+  document
+    .getElementById(
+      "successReward"
+    )
+    .innerHTML = `
+
+      ⭐ +${mission.reward.coin}
+      ROCK COIN
+
+      <br>
+
+      ⚡ +${mission.reward.energy}
+      ENERGY
+
+      <br>
+
+      🏆 +${mission.reward.exp}
+      EXP
+
+    `;
+
+
+  document
+    .getElementById(
+      "successModal"
+    )
+    .classList
+    .add(
+      "show"
+    );
+
+}
+
+
+function closeSuccess(){
+
+  document
+    .getElementById(
+      "successModal"
+    )
+    .classList
+    .remove(
+      "show"
+    );
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMissionStatus(
   message
 ){
 
   const el =
     document
       .getElementById(
-        "status"
+        "missionStatus"
       );
-
-
-  if(!el){
-    return;
-  }
 
 
   el.textContent =
     message;
 
 
-  el.className =
-    "show";
+  el.classList.add(
+    "show"
+  );
 
 
   setTimeout(
     () => {
 
-      el.className =
-        "";
+      el.classList.remove(
+        "show"
+      );
 
     },
-    2200
+    2800
   );
+
 }
 
 
 /* =========================================================
-   HOME
+   TOP COIN / ENERGY
 ========================================================= */
 
-function goHome(){
-
-  const url =
-    ROCK?.CFG?.PAGE?.HOME ||
-    "./dashboard.html";
-
-
-  ROCK.go(
-    url
-  );
-}
-
-
-/* =========================================================
-   LOAD USER DATA
-========================================================= */
-
-async function loadMissionUser(){
+async function loadPlayer(){
 
   try{
 
@@ -2667,25 +4129,41 @@ async function loadMissionUser(){
 
     const coin =
       Number(
+
         raw?.rockCoin ??
+
         raw?.rock_coin ??
+
+        raw?.user?.rock_coin ??
+
         0
+
       );
 
 
-    const energy =
+    const currentEnergy =
       Number(
+
         raw?.energy?.current ??
-        raw?.energy ??
+
+        raw?.user?.energy ??
+
         0
+
       );
 
 
     const maxEnergy =
       Number(
+
         raw?.energy?.max ??
+
+        raw?.user?.max_energy ??
+
         ROCK.CFG.MAX_ENERGY ??
+
         200
+
       );
 
 
@@ -2704,17 +4182,35 @@ async function loadMissionUser(){
         "missionEnergy"
       )
       .textContent =
-        `${ROCK.fmtInt(energy)} / ${ROCK.fmtInt(maxEnergy)}`;
+        `${ROCK.fmtInt(currentEnergy)} / ${ROCK.fmtInt(maxEnergy)}`;
 
 
   }catch(error){
 
     console.error(
-      "MISSION USER ERROR:",
+      "PLAYER MISSION ERROR:",
       error
     );
 
   }
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function goHome(){
+
+  ROCK.go(
+
+    ROCK?.CFG?.PAGE?.HOME ||
+
+    "./dashboard.html"
+
+  );
+
 }
 
 
@@ -2744,10 +4240,30 @@ async function startMission(){
     }
 
 
-    updateMissionStage();
+    updateAutoBonus();
+
+    updateTemplate();
 
 
-    await loadMissionUser();
+    await Promise.all([
+
+      loadPlayer(),
+
+      refreshMissionStatus()
+
+    ]);
+
+
+    /*
+      เช็กผลอนุมัติทุก 30 วินาที
+      ถ้า Admin อนุมัติระหว่างเปิดหน้าอยู่
+      ผู้เล่นจะได้รับข้อความแสดงความยินดี
+    */
+
+    setInterval(
+      refreshMissionStatus,
+      30000
+    );
 
 
   }catch(error){
@@ -2758,12 +4274,13 @@ async function startMission(){
     );
 
 
-    showStatus(
+    showMissionStatus(
       error?.message ||
       String(error)
     );
 
   }
+
 }
 
 
