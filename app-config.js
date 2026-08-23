@@ -10,15 +10,13 @@ window.APP_CONFIG = {
 
   /* =========================================================
      API
+     ใช้ player-dashboard ตัวเดียว
   ========================================================= */
 
   API: {
 
     DASHBOARD:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
-
-    WEIGHT:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/weight-check"
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard"
 
   },
 
