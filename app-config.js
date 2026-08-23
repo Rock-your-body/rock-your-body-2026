@@ -4,11 +4,14 @@ window.APP_CONFIG = {
     "2011201679-uNWz5yqF",
 
   API: {
+
     DASHBOARD:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard"
+
   },
 
   PAGE: {
+
     HOME:
       "./dashboard.html",
 
@@ -29,6 +32,7 @@ window.APP_CONFIG = {
 
     BATTLE:
       "./battle.html"
+
   },
 
   EXP_PER_LEVEL:
@@ -39,4 +43,5 @@ window.APP_CONFIG = {
 
   REFRESH_MS:
     30000
+
 };
