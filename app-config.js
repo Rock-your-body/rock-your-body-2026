@@ -45,3 +45,11 @@ window.APP_CONFIG = {
     30000
 
 };
+API: {
+
+  DASHBOARD:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
+
+  MISSION:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission"
+},
