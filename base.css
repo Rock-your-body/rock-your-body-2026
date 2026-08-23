@@ -439,7 +439,7 @@ button,input,select,textarea{font:inherit}
   --mission-energy-height:8%;
 
   --daily-progress-left:34%;
-  --daily-progress-top:59%;
+  --daily-progress-top:30%;
   --daily-progress-width:25.7%;
   --daily-progress-height:2.1%;
   --daily-count-left:53.6%;
@@ -456,7 +456,7 @@ button,input,select,textarea{font:inherit}
   --daily-energy-height:5%;
 
   --weekly-progress-left:63.6%;
-  --weekly-progress-top:59%;
+  --weekly-progress-top:30%;
   --weekly-progress-width:30.1%;
   --weekly-progress-height:2.1%;
   --weekly-count-left:89.6%;
