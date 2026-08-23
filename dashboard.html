@@ -2,13 +2,7 @@
 <html lang="th">
 
 <head>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&display=swap"
-  rel="stylesheet"
->
   <meta charset="utf-8">
 
   <meta
@@ -21,20 +15,47 @@
   </title>
 
 
- <!-- LINE LIFF -->
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <!-- FONT -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-<!-- CONFIG -->
-<script src="./app-config.js?v=20260823-06"></script>
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
-<!-- CSS -->
-<link rel="stylesheet" href="./base.css?v=20260823-06">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- LINE LIFF -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+
+  <!-- CONFIG -->
+  <script src="./app-config.js?v=20260823-09"></script>
+
+
+  <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="./base.css?v=20260823-09"
+  >
 
 </head>
 
 
 <body>
 
+
+<!-- =========================================================
+     HOME STAGE
+========================================================= -->
 
 <div id="homeStage">
 
@@ -68,7 +89,7 @@
 
 
   <!-- =====================================================
-       COIN
+       ROCK COIN
   ====================================================== -->
 
   <div class="data-box coin-box">
@@ -158,29 +179,30 @@
   </div>
 
 
-<!-- =====================================================
-     UPDATE DATE
-     แสดงคำว่า "อัปเดตล่าสุด" + วันที่
-====================================================== -->
+  <!-- =====================================================
+       UPDATE DATE
+  ====================================================== -->
 
-<div class="data-box updated-box">
+  <div class="data-box updated-box">
 
-  <div class="update-content">
+    <div class="update-content">
 
-    <span class="update-label">
-      อัปเดตล่าสุด
-    </span>
+      <span class="update-label">
+        อัปเดตล่าสุด
+      </span>
 
-    <span
-      id="updatedAt"
-      class="update-date"
-    >
-      --/--/----
-    </span>
+      <span
+        id="updatedAt"
+        class="update-date"
+      >
+        --/--/----
+      </span>
+
+    </div>
 
   </div>
 
-</div>
+
   <!-- =====================================================
        TARGET
   ====================================================== -->
@@ -325,7 +347,7 @@
       width:31.5%;
       height:14.5%;
     "
-    onclick="window.location.reload()"
+    onclick="reloadHome()"
     aria-label="Home"
   ></button>
 
@@ -367,16 +389,26 @@
 </div>
 
 
+<!-- =========================================================
+     STATUS
+========================================================= -->
+
 <div id="status"></div>
 
 
 <!-- =========================================================
      COMMON
+     โหลดครั้งเดียว
 ========================================================= -->
 
-<script src="./common.js?v=20260823-07"></script>
+<script src="./common.js?v=20260823-09"></script>
+
 
 <script>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
 
 const ROCK =
   window.ROCK;
@@ -387,20 +419,34 @@ const $ =
     document.getElementById(id);
 
 
+let loading =
+  false;
+
+
+let refreshTimer =
+  null;
+
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
 
-function goPage(name){
+function goPage(name) {
 
   const url =
     ROCK?.CFG?.PAGE?.[name];
 
-  if(!url){
+  if (!url) {
     return;
   }
 
   ROCK.go(url);
+}
+
+
+function reloadHome() {
+
+  loadHome();
 }
 
 
@@ -411,12 +457,12 @@ function goPage(name){
 function showStatus(
   message,
   error = false
-){
+) {
 
   const el =
     $("status");
 
-  if(!el){
+  if (!el) {
     return;
   }
 
@@ -430,14 +476,17 @@ function showStatus(
 }
 
 
-function hideStatus(){
+function hideStatus() {
 
   const el =
     $("status");
 
-  if(el){
-    el.className = "";
+  if (!el) {
+    return;
   }
+
+  el.className =
+    "";
 }
 
 
@@ -448,7 +497,7 @@ function hideStatus(){
 function num(
   value,
   fallback = 0
-){
+) {
 
   const n =
     Number(value);
@@ -463,53 +512,56 @@ function num(
    DATE
 ========================================================= */
 
-function formatDateOnly(value){
+function formatDateOnly(value) {
 
-  if(!value){
+  if (!value) {
     return "--/--/----";
   }
 
-  const d =
+  const date =
     new Date(value);
 
-  if(
+  if (
     Number.isNaN(
-      d.getTime()
+      date.getTime()
     )
-  ){
+  ) {
     return "--/--/----";
   }
 
-  return d.toLocaleDateString(
+  return date.toLocaleDateString(
     "th-TH",
     {
-      day:"2-digit",
-      month:"2-digit",
-      year:"numeric"
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
     }
   );
 }
 
 
 /* =========================================================
-   NORMALIZE
+   NORMALIZE DASHBOARD
 ========================================================= */
 
-function normalizeDashboard(raw){
+function normalizeDashboard(raw) {
 
   raw =
     raw || {};
+
 
   const user =
     raw.user ||
     raw.player ||
     {};
 
+
   const weight =
     raw.weight &&
     typeof raw.weight === "object"
       ? raw.weight
       : {};
+
 
   const energy =
     raw.energy &&
@@ -518,27 +570,24 @@ function normalizeDashboard(raw){
       : {};
 
 
-  let exp =
+  const expObject =
+    raw.exp &&
+    typeof raw.exp === "object"
+      ? raw.exp
+      : {};
+
+
+  const totalExp =
+    expObject.total ??
     raw.exp ??
     user.exp ??
     0;
 
 
-  if(
-    exp &&
-    typeof exp === "object"
-  ){
-
-    exp =
-      exp.total ??
-      exp.current ??
-      0;
-  }
-
-
   return {
 
     picture:
+
       user.pictureUrl ??
       user.picture_url ??
       raw.pictureUrl ??
@@ -546,14 +595,8 @@ function normalizeDashboard(raw){
       "",
 
 
-    exp:
-      num(
-        exp,
-        0
-      ),
-
-
     coin:
+
       num(
         raw.rockCoin ??
         raw.rock_coin ??
@@ -564,6 +607,7 @@ function normalizeDashboard(raw){
 
 
     energy:
+
       num(
         energy.current ??
         raw.energyCurrent ??
@@ -573,6 +617,7 @@ function normalizeDashboard(raw){
 
 
     maxEnergy:
+
       num(
         energy.max ??
         raw.maxEnergy ??
@@ -584,6 +629,7 @@ function normalizeDashboard(raw){
 
 
     currentWeight:
+
       weight.current ??
       weight.currentWeight ??
       weight.current_weight ??
@@ -595,6 +641,7 @@ function normalizeDashboard(raw){
 
 
     targetWeight:
+
       weight.target ??
       weight.targetWeight ??
       weight.target_weight ??
@@ -606,6 +653,7 @@ function normalizeDashboard(raw){
 
 
     startWeight:
+
       weight.start ??
       weight.startWeight ??
       weight.start_weight ??
@@ -617,27 +665,40 @@ function normalizeDashboard(raw){
 
 
     updatedAt:
+
+      weight.lastRecordedAt ??
       weight.updatedAt ??
       weight.updated_at ??
-      weight.lastRecordedAt ??
-      weight.last_recorded_at ??
-      raw.weightUpdatedAt ??
-      raw.weight_updated_at ??
       raw.updatedAt ??
       raw.updated_at ??
-      user.updatedAt ??
-      user.updated_at ??
       null,
 
 
     startDate:
+
       weight.startDate ??
       weight.start_date ??
       raw.startDate ??
       raw.start_date ??
-      user.startDate ??
-      user.start_date ??
-      null
+      null,
+
+
+    totalExp:
+
+      num(
+        totalExp,
+        0
+      ),
+
+
+    level:
+
+      num(
+        raw.level ??
+        user.level,
+        1
+      )
+
   };
 }
 
@@ -646,17 +707,18 @@ function normalizeDashboard(raw){
    PROFILE
 ========================================================= */
 
-function renderProfile(url){
+function renderProfile(url) {
 
   const image =
     $("profileImage");
 
-  if(!image){
+
+  if (!image) {
     return;
   }
 
 
-  if(!url){
+  if (!url) {
 
     image.removeAttribute(
       "src"
@@ -670,7 +732,7 @@ function renderProfile(url){
 
 
   image.onload =
-    function(){
+    function() {
 
       image.style.display =
         "block";
@@ -678,7 +740,7 @@ function renderProfile(url){
 
 
   image.onerror =
-    function(){
+    function() {
 
       image.style.display =
         "none";
@@ -694,7 +756,13 @@ function renderProfile(url){
    RENDER HOME
 ========================================================= */
 
-function renderHome(raw){
+function renderHome(raw) {
+
+  console.log(
+    "RENDER HOME RAW:",
+    raw
+  );
+
 
   const p =
     normalizeDashboard(
@@ -702,14 +770,24 @@ function renderHome(raw){
     );
 
 
-  /* PROFILE */
+  console.log(
+    "RENDER HOME NORMALIZED:",
+    p
+  );
+
+
+  /* =====================================================
+     PROFILE
+  ====================================================== */
 
   renderProfile(
     p.picture
   );
 
 
-  /* COIN */
+  /* =====================================================
+     COIN
+  ====================================================== */
 
   $("coin").textContent =
     ROCK.fmtInt(
@@ -717,7 +795,9 @@ function renderHome(raw){
     );
 
 
-  /* ENERGY */
+  /* =====================================================
+     ENERGY
+  ====================================================== */
 
   $("energy").textContent =
     ROCK.fmtInt(
@@ -731,10 +811,6 @@ function renderHome(raw){
 
   /* =====================================================
      LEVEL + EXP
-
-     0 - 499 = Lv.1
-     500 - 999 = Lv.2
-     1000 - 1499 = Lv.3
   ====================================================== */
 
   const expPerLevel =
@@ -748,17 +824,25 @@ function renderHome(raw){
     Math.max(
       0,
       num(
-        p.exp,
+        p.totalExp,
         0
       )
     );
 
 
-  const level =
+  const calculatedLevel =
     Math.floor(
       totalExp /
       expPerLevel
     ) + 1;
+
+
+  const level =
+    Math.max(
+      1,
+      p.level,
+      calculatedLevel
+    );
 
 
   const expInLevel =
@@ -768,15 +852,18 @@ function renderHome(raw){
 
   const expPercent =
     expPerLevel > 0
+
       ? Math.max(
           0,
           Math.min(
             100,
-            expInLevel /
-            expPerLevel *
-            100
+            (
+              expInLevel /
+              expPerLevel
+            ) * 100
           )
         )
+
       : 0;
 
 
@@ -800,7 +887,9 @@ function renderHome(raw){
     "%";
 
 
-  /* CURRENT */
+  /* =====================================================
+     CURRENT WEIGHT
+  ====================================================== */
 
   $("currentWeight")
     .textContent =
@@ -810,7 +899,9 @@ function renderHome(raw){
       " kg";
 
 
-  /* TARGET */
+  /* =====================================================
+     TARGET
+  ====================================================== */
 
   $("targetWeight")
     .textContent =
@@ -820,7 +911,9 @@ function renderHome(raw){
       " kg";
 
 
-  /* DATES */
+  /* =====================================================
+     UPDATE DATE
+  ====================================================== */
 
   $("updatedAt")
     .textContent =
@@ -829,6 +922,10 @@ function renderHome(raw){
       );
 
 
+  /* =====================================================
+     START DATE
+  ====================================================== */
+
   $("startDate")
     .textContent =
       formatDateOnly(
@@ -836,12 +933,15 @@ function renderHome(raw){
       );
 
 
-  /* REMAINING */
+  /* =====================================================
+     REMAINING
+  ====================================================== */
 
   const current =
     Number(
       p.currentWeight
     );
+
 
   const target =
     Number(
@@ -849,10 +949,10 @@ function renderHome(raw){
     );
 
 
-  if(
+  if (
     Number.isFinite(current) &&
     Number.isFinite(target)
-  ){
+  ) {
 
     $("remaining")
       .textContent =
@@ -861,10 +961,10 @@ function renderHome(raw){
           current -
           target
         )
-        .toFixed(1) +
+          .toFixed(1) +
         " kg";
 
-  }else{
+  } else {
 
     $("remaining")
       .textContent =
@@ -872,7 +972,9 @@ function renderHome(raw){
   }
 
 
-  /* LOST */
+  /* =====================================================
+     LOST
+  ====================================================== */
 
   const start =
     Number(
@@ -880,10 +982,10 @@ function renderHome(raw){
     );
 
 
-  if(
+  if (
     Number.isFinite(start) &&
     Number.isFinite(current)
-  ){
+  ) {
 
     $("lost")
       .textContent =
@@ -892,10 +994,10 @@ function renderHome(raw){
           start -
           current
         )
-        .toFixed(1) +
+          .toFixed(1) +
         " kg";
 
-  }else{
+  } else {
 
     $("lost")
       .textContent =
@@ -908,20 +1010,23 @@ function renderHome(raw){
    LOAD HOME
 ========================================================= */
 
-let loading =
-  false;
+async function loadHome() {
 
-
-async function loadHome(){
-
-  if(loading){
+  if (loading) {
     return;
   }
+
 
   loading =
     true;
 
-  try{
+
+  try {
+
+    showStatus(
+      "กำลังโหลดข้อมูล..."
+    );
+
 
     const raw =
       await ROCK.fetchDashboard();
@@ -940,7 +1045,8 @@ async function loadHome(){
 
     hideStatus();
 
-  }catch(error){
+
+  } catch (error) {
 
     console.error(
       "HOME LOAD ERROR:",
@@ -954,7 +1060,8 @@ async function loadHome(){
       true
     );
 
-  }finally{
+
+  } finally {
 
     loading =
       false;
@@ -963,14 +1070,14 @@ async function loadHome(){
 
 
 /* =========================================================
-   START
+   START HOME
 ========================================================= */
 
-(async()=>{
+async function startHome() {
 
-  try{
+  try {
 
-    if(!ROCK){
+    if (!ROCK) {
 
       throw new Error(
         "common.js โหลดไม่สำเร็จ"
@@ -983,13 +1090,11 @@ async function loadHome(){
     );
 
 
-    const ok =
-      await ROCK.initLiff(
-        "DASHBOARD"
-      );
+    const ready =
+      await ROCK.initLiff();
 
 
-    if(!ok){
+    if (!ready) {
       return;
     }
 
@@ -997,26 +1102,51 @@ async function loadHome(){
     await loadHome();
 
 
-    setInterval(
-      function(){
+    /* =====================================================
+       AUTO REFRESH
+    ====================================================== */
 
-        if(
-          document.visibilityState ===
-          "visible"
-        ){
+    if (refreshTimer) {
 
-          loadHome();
-        }
-
-      },
-      num(
-        ROCK.CFG.REFRESH_MS,
-        30000
-      )
-    );
+      clearInterval(
+        refreshTimer
+      );
+    }
 
 
-  }catch(error){
+    refreshTimer =
+      setInterval(
+        async () => {
+
+          if (
+            document.visibilityState !==
+            "visible"
+          ) {
+            return;
+          }
+
+
+          try {
+
+            await loadHome();
+
+          } catch (error) {
+
+            console.error(
+              "AUTO REFRESH ERROR:",
+              error
+            );
+          }
+
+        },
+        num(
+          ROCK.CFG.REFRESH_MS,
+          30000
+        )
+      );
+
+
+  } catch (error) {
 
     console.error(
       "HOME START ERROR:",
@@ -1030,8 +1160,7 @@ async function loadHome(){
       true
     );
   }
-
-})();
+}
 
 
 /* =========================================================
@@ -1040,17 +1169,36 @@ async function loadHome(){
 
 document.addEventListener(
   "visibilitychange",
-  function(){
+  async function() {
 
-    if(
-      document.visibilityState ===
-        "visible" &&
-      typeof liff !==
-        "undefined" &&
-      liff.isLoggedIn()
-    ){
+    if (
+      document.visibilityState !==
+      "visible"
+    ) {
+      return;
+    }
 
-      loadHome();
+
+    try {
+
+      const ready =
+        await ROCK.initLiff();
+
+
+      if (!ready) {
+        return;
+      }
+
+
+      await loadHome();
+
+
+    } catch (error) {
+
+      console.error(
+        "VISIBILITY REFRESH ERROR:",
+        error
+      );
     }
   }
 );
@@ -1058,15 +1206,41 @@ document.addEventListener(
 
 window.addEventListener(
   "pageshow",
-  function(){
+  async function() {
 
-    if(
-      typeof liff !==
-        "undefined" &&
-      liff.isLoggedIn()
-    ){
+    try {
 
-      loadHome();
+      const ready =
+        await ROCK.initLiff();
+
+
+      if (!ready) {
+        return;
+      }
+
+
+      await loadHome();
+
+
+    } catch (error) {
+
+      console.error(
+        "PAGESHOW REFRESH ERROR:",
+        error
+      );
     }
   }
 );
+
+
+/* =========================================================
+   START ONCE
+========================================================= */
+
+startHome();
+
+</script>
+
+
+</body>
+</html>
