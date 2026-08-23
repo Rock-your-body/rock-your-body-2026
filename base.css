@@ -1324,3 +1324,23 @@ textarea{
     17px
   );
 }
+/* =========================================================
+   THAI FONT - ไม่มีหัว
+   ใช้ Prompt ทั้งระบบ
+========================================================= */
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+div,
+span,
+p,
+label,
+a{
+  font-family:
+    "Prompt",
+    sans-serif !important;
+}
