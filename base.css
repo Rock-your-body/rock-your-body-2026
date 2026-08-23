@@ -92,13 +92,13 @@ textarea{
   --coin-left:76.4%;
   --coin-top:3.9%;
   --coin-width:7.7%;
-  --coin-height:5%;
+  --coin-height:8%;
 
   /* ENERGY */
   --energy-left:88.4%;
   --energy-top:3.4%;
   --energy-width:9.7%;
-  --energy-height:5%;
+  --energy-height:8%;
 
   /* LEVEL */
   --level-left:23.2%;
@@ -125,7 +125,7 @@ textarea{
   --current-height:8%;
 
   /* UPDATED DATE */
-  --updated-left:45.5%;
+  --updated-left:44.5%;
   --updated-top:36.5%;
   --updated-width:14%;
   --updated-height:4%;
