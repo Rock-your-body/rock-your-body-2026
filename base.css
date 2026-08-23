@@ -83,7 +83,14 @@ textarea{
    ปรับตำแหน่งหน้า HOME จากตรงนี้จุดเดียว
 ========================================================= */
 
+/* =========================================================
+   HOME POSITION SETTINGS
+   ปรับตำแหน่งหน้า HOME จากตรงนี้จุดเดียว
+========================================================= */
+
 #homeStage{
+
+  /* PROFILE */
   --profile-left:4.5%;
   --profile-top:17.0%;
   --profile-size:25.0%;
@@ -104,7 +111,7 @@ textarea{
   --level-left:23.2%;
   --level-top:54.8%;
   --level-width:6.7%;
-  --level-height:4.0%;
+  --level-height:4%;
 
   /* EXP BAR */
   --expbar-left:8.6%;
@@ -114,11 +121,9 @@ textarea{
 
   /* EXP TEXT */
   --exptext-left:22%;
-  --exptext-top:73.0%;
+  --exptext-top:73%;
   --exptext-width:9%;
   --exptext-height:4.5%;
-
- #homeStage{
 
   /* CURRENT WEIGHT */
   --current-left:43.5%;
@@ -139,8 +144,8 @@ textarea{
   --target-height:8%;
 
   /* REMAINING */
-  --remaining-left:41.0%;
-  --remaining-top:63.0%;
+  --remaining-left:41%;
+  --remaining-top:63%;
   --remaining-width:16%;
   --remaining-height:3.4%;
 
@@ -1370,207 +1375,4 @@ textarea{
 .top-data-label,
 .top-data-value{
   font-family:"Prompt", sans-serif !important;
-}
-/* =========================================================
-   DASHBOARD - UPDATE / REMAINING FIX
-========================================================= */
-
-
-/* ---------------------------------------------------------
-   อัปเดตล่าสุด + วันที่
-   ให้อยู่ช่องเดียว บรรทัดเดียว กึ่งกลาง
---------------------------------------------------------- */
-
-.updated-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  min-height: 38px;
-
-  padding: 0 10px;
-
-  box-sizing: border-box;
-
-  text-align: center;
-
-  overflow: hidden;
-}
-
-
-.update-inline {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 6px;
-
-  white-space: nowrap;
-
-  line-height: 1;
-}
-
-
-.update-label,
-.update-date {
-  display: inline-block;
-
-  font-family: "Prompt", sans-serif;
-
-  font-size: clamp(8px, 1.15vw, 13px);
-
-  font-weight: 600;
-
-  color: #06337a;
-
-  line-height: 1;
-}
-
-
-.update-date {
-  font-weight: 700;
-}
-
-
-/* ---------------------------------------------------------
-   เหลืออีก + ตัวเลข + kg
-   ให้อยู่ช่องเดียว บรรทัดเดียว กึ่งกลาง
---------------------------------------------------------- */
-
-.remaining-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-  min-height: 44px;
-
-  padding: 0 10px;
-
-  box-sizing: border-box;
-
-  overflow: hidden;
-}
-
-
-.remaining-inline {
-  width: 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  white-space: nowrap;
-
-  text-align: center;
-
-  line-height: 1;
-}
-
-
-.remaining-label {
-  font-family: "Prompt", sans-serif;
-
-  font-size: clamp(9px, 1.4vw, 15px);
-
-  font-weight: 700;
-
-  color: #d60000;
-
-  line-height: 1;
-}
-
-
-.remaining-number {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-
-  gap: 3px;
-
-  font-family: "Prompt", sans-serif;
-
-  font-size: clamp(10px, 1.55vw, 17px);
-
-  font-weight: 800;
-
-  color: #d60000;
-
-  line-height: 1;
-}
-
-
-#remaining {
-  display: inline;
-  color: #d60000;
-  font-weight: 800;
-}
-
-
-.remaining-unit {
-  display: inline;
-
-  font-size: 0.8em;
-
-  font-weight: 700;
-
-  color: #d60000;
-}
-
-
-/* ---------------------------------------------------------
-   ป้องกันข้อความแตกบรรทัดบนมือถือ
---------------------------------------------------------- */
-
-.update-inline,
-.remaining-inline,
-.remaining-number {
-  flex-wrap: nowrap;
-}
-
-
-/* ---------------------------------------------------------
-   มือถือ
---------------------------------------------------------- */
-
-@media (max-width: 600px) {
-
-  .updated-box {
-    min-height: 30px;
-    padding: 0 5px;
-  }
-
-  .update-inline {
-    gap: 4px;
-  }
-
-  .update-label,
-  .update-date {
-    font-size: clamp(7px, 2.2vw, 11px);
-  }
-
-
-  .remaining-box {
-    min-height: 36px;
-    padding: 0 5px;
-  }
-
-  .remaining-inline {
-    gap: 5px;
-  }
-
-  .remaining-label {
-    font-size: clamp(8px, 2.4vw, 12px);
-  }
-
-  .remaining-number {
-    gap: 2px;
-
-    font-size: clamp(9px, 2.7vw, 14px);
-  }
 }
