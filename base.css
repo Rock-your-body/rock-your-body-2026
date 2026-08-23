@@ -135,7 +135,7 @@ textarea{
   --updated-left:41.5%;
   --updated-top:35.4%;
   --updated-width:10%;
-  --updated-height:4%;
+  --updated-height:8%;
    
   /* TARGET */
   --target-left:41.5%;
@@ -147,19 +147,19 @@ textarea{
   --remaining-left:41.5%;
   --remaining-top:65%;
   --remaining-width:10%;
-  --remaining-height:4%;
+  --remaining-height:8%;
 
   /* LOST */
   --lost-left:35.0%;
   --lost-top:73.0%;
   --lost-width:10.5%;
-  --lost-height:5%;
+  --lost-height:8%;
 
   /* START DATE */
   --startdate-left:47.5%;
   --startdate-top:73.0%;
   --startdate-width:10.5%;
-  --startdate-height:5%;
+  --startdate-height:8%;
 }
    .updated-box .data-value,
 .remaining-box .data-value,
