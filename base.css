@@ -1287,8 +1287,8 @@ textarea{
   display:inline-block;
   margin:0;
   padding:0;
-  font-size:clamp(4px,5cqw,8px);
-  font-weight:700;
+  font-size:clamp(5px,7cqw,11px);
+  font-weight:600;
   color:#d20d0d;
   line-height:1;
   white-space:nowrap;
@@ -1298,8 +1298,8 @@ textarea{
   display:inline-block;
   margin:0;
   padding:0;
-  font-size:clamp(5px,6cqw,10px);
-  font-weight:900;
+  font-size:clamp(5px,7cqw,11px);
+  font-weight:600;
   color:#d20d0d;
   line-height:1;
   white-space:nowrap;
