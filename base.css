@@ -455,7 +455,7 @@ button,input,select,textarea{font:inherit}
   --daily-energy-width:7%;
   --daily-energy-height:5%;
 
-  --weekly-progress-left:67.6%;
+  --weekly-progress-left:66.6%;
   --weekly-progress-top:35.5%;
   --weekly-progress-width:28.7%;
   --weekly-progress-height:2.1%;
@@ -473,11 +473,11 @@ button,input,select,textarea{font:inherit}
   --weekly-energy-height:5%;
 
   --monthly-progress-left:36%;
-  --monthly-progress-top:75%;
+  --monthly-progress-top:66.6%;
   --monthly-progress-width:25.7%;
   --monthly-progress-height:2.1%;
   --monthly-count-left:53.6%;
-  --monthly-count-top:91.7%;
+  --monthly-count-top:58.7%;
   --monthly-count-width:5.5%;
   --monthly-count-height:5%;
   --monthly-coin-left:42%;
@@ -489,12 +489,12 @@ button,input,select,textarea{font:inherit}
   --monthly-energy-width:7%;
   --monthly-energy-height:5%;
 
-  --bonus-progress-left:65.6%;
-  --bonus-progress-top:65.0%;
-  --bonus-progress-width:25.7%;
+  --bonus-progress-left:66.6%;
+  --bonus-progress-top:66.6%;
+  --bonus-progress-width:28.7%;
   --bonus-progress-height:2.1%;
-  --bonus-count-left:89.6%;
-  --bonus-count-top:60%;
+  --bonus-count-left:90.6%;
+  --bonus-count-top:58.5%;
   --bonus-count-width:5.5%;
   --bonus-count-height:5%;
   --bonus-coin-left:73%;
