@@ -79,12 +79,6 @@ textarea{
 
 /* =========================================================
    HOME POSITION SETTINGS
-
-   ปรับตำแหน่งหน้า HOME จากตรงนี้จุดเดียว
-========================================================= */
-
-/* =========================================================
-   HOME POSITION SETTINGS
    ปรับตำแหน่งหน้า HOME จากตรงนี้จุดเดียว
 ========================================================= */
 
@@ -131,7 +125,7 @@ textarea{
   --current-width:15%;
   --current-height:8%;
 
-   /* UPDATED DATE */
+  /* UPDATED DATE */
   --updated-left:41.5%;
   --updated-top:35.4%;
   --updated-width:10%;
@@ -160,14 +154,6 @@ textarea{
   --startdate-top:73.0%;
   --startdate-width:10.5%;
   --startdate-height:8%;
-}
-   .updated-box .data-value,
-.remaining-box .data-value,
-.lost-box .data-value,
-.startdate-box .data-value{
-  font-size:clamp(2px, 5cqw, 9px);
-  line-height:1;
-  white-space:nowrap;
 }
 /* =========================================================
    PROFILE FRAME
@@ -1278,19 +1264,56 @@ textarea{
   align-items:center;
   justify-content:center;
   text-align:center;
+  padding:0;
+  overflow:hidden;
 }
 
+/* เหลืออีก: แสดงบรรทัดเดียวให้พอดีกับแถบสีชมพู */
+.remaining-box .summary-content{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  margin:0;
+  padding:0 2%;
+  white-space:nowrap;
+  line-height:1;
+}
+
+.remaining-box .summary-label{
+  display:inline-block;
+  margin:0;
+  padding:0;
+  font-size:clamp(4px,5cqw,8px);
+  font-weight:700;
+  color:#d20d0d;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.remaining-box .summary-value{
+  display:inline-block;
+  margin:0;
+  padding:0;
+  font-size:clamp(5px,6cqw,10px);
+  font-weight:900;
+  color:#d20d0d;
+  line-height:1;
+  white-space:nowrap;
+}
+
+/* น้ำหนักลดลง + เริ่มเมื่อ: คงรูปแบบเดิม ชื่อด้านบน ค่าอยู่ด้านล่าง */
 .lost-box .summary-content,
 .startdate-box .summary-content{
   width:100%;
   height:100%;
-
   display:flex;
   flex-direction:column;
-
   align-items:center;
   justify-content:center;
-
   text-align:center;
   line-height:1.05;
 }
@@ -1298,42 +1321,29 @@ textarea{
 .lost-box .summary-label,
 .startdate-box .summary-label{
   display:block;
-
-  font-size:clamp(
-    4px,
-    6cqw,
-    10px
-  );
-
+  margin:0 0 2px;
+  padding:0;
+  font-size:clamp(4px,6cqw,10px);
   font-weight:700;
   color:#06337a;
   white-space:nowrap;
-
-  margin-bottom:2px;
 }
 
 .lost-box .summary-value,
 .startdate-box .summary-value{
   display:block;
-
-  font-size:clamp(
-    6px,
-    11cqw,
-    18px
-  );
-
+  margin:0;
+  padding:0;
+  font-size:clamp(6px,11cqw,18px);
   font-weight:900;
   color:#06337a;
   white-space:nowrap;
 }
 
 .startdate-box .date-value{
-  font-size:clamp(
-    5px,
-    8cqw,
-    11px
-  );
+  font-size:clamp(5px,8cqw,11px);
 }
+
 /* =========================================================
    FONT THAI - PROMPT ไม่มีหัว
 ========================================================= */
@@ -1371,26 +1381,4 @@ textarea{
 .top-data-label,
 .top-data-value{
   font-family:"Prompt", sans-serif !important;
-}
-/* =========================================================
-   SUMMARY SIZE FIX
-   เหลืออีก / ลดลงแล้ว / เริ่มเมื่อ
-========================================================= */
-
-.summary-label{
-  font-size:clamp(5px, 7cqw, 10px);
-  font-weight:700;
-  line-height:1;
-  white-space:nowrap;
-}
-
-.summary-value{
-  font-size:clamp(5px, 8cqw, 12px);
-  font-weight:900;
-  line-height:1;
-  white-space:nowrap;
-}
-
-.date-value{
-  font-size:clamp(5px, 7cqw, 10px);
 }
