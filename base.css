@@ -1165,7 +1165,7 @@ textarea{
   white-space:nowrap;
 
   /* ปรับตำแหน่งทั้งชุดตรงนี้ */
-  transform:translateX(0);
+  transform:translateX(-30);
 }
 
 .update-label,
