@@ -473,11 +473,11 @@ button,input,select,textarea{font:inherit}
   --weekly-energy-height:5%;
 
   --monthly-progress-left:36%;
-  --monthly-progress-top:64.6%;
+  --monthly-progress-top:66.6%;
   --monthly-progress-width:25.7%;
   --monthly-progress-height:2.1%;
   --monthly-count-left:55.6%;
-  --monthly-count-top:58.7%;
+  --monthly-count-top:56.7%;
   --monthly-count-width:5.5%;
   --monthly-count-height:5%;
   --monthly-coin-left:42%;
@@ -490,11 +490,11 @@ button,input,select,textarea{font:inherit}
   --monthly-energy-height:5%;
 
   --bonus-progress-left:66.6%;
-  --bonus-progress-top:64.6%;
+  --bonus-progress-top:66.6%;
   --bonus-progress-width:28.7%;
   --bonus-progress-height:2.1%;
   --bonus-count-left:90.6%;
-  --bonus-count-top:58.5%;
+  --bonus-count-top:56.5%;
   --bonus-count-width:5.5%;
   --bonus-count-height:5%;
   --bonus-coin-left:73%;
