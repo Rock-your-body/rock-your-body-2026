@@ -125,9 +125,9 @@ textarea{
   --current-height:8%;
 
   /* UPDATED DATE */
-  --updated-left:41.5%;
+  --updated-left:36%;
   --updated-top:36.5%;
-  --updated-width:15%;
+  --updated-width:18%;
   --updated-height:4%;
 
   /* TARGET */
@@ -137,9 +137,9 @@ textarea{
   --target-height:8%;
 
   /* REMAINING */
-  --remaining-left:41.5%;
+  --remaining-left:36%;
   --remaining-top:63.2%;
-  --remaining-width:15%;
+  --remaining-width:18%;
   --remaining-height:4%;
 
   /* LOST */
