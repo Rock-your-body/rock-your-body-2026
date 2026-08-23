@@ -125,7 +125,7 @@ textarea{
   --current-height:8%;
 
   /* UPDATED DATE */
-  --updated-left:43.5%;
+  --updated-left:45.5%;
   --updated-top:36.5%;
   --updated-width:14%;
   --updated-height:4%;
@@ -937,4 +937,15 @@ textarea{
     min-height:56px;
   }
 
+}
+/* =========================================================
+   ROCK COIN + ENERGY NUMBER SIZE
+========================================================= */
+
+.coin-box .data-value{
+  font-size:clamp(8px, 16cqw, 30px);
+}
+
+.energy-box .data-value{
+  font-size:clamp(8px, 14cqw, 28px);
 }
