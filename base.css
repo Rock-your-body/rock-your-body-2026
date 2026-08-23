@@ -1382,3 +1382,10 @@ textarea{
 .top-data-value{
   font-family:"Prompt", sans-serif !important;
 }
+
+#homeStage .remaining-inline,
+#homeStage .remaining-label,
+#homeStage .remaining-number,
+#homeStage .remaining-unit{
+  font-size:9px;
+}
