@@ -118,6 +118,8 @@ textarea{
   --exptext-width:9%;
   --exptext-height:4.5%;
 
+ #homeStage{
+
   /* CURRENT WEIGHT */
   --current-left:43.5%;
   --current-top:24.4%;
@@ -125,10 +127,10 @@ textarea{
   --current-height:8%;
 
   /* UPDATED DATE */
-  --updated-left:43%;
-  --updated-top:36.5%;
-  --updated-width:19%;
-  --updated-height:4%;
+  --updated-left:41.2%;
+  --updated-top:36.2%;
+  --updated-width:16.5%;
+  --updated-height:3.4%;
 
   /* TARGET */
   --target-left:41.5%;
@@ -137,24 +139,31 @@ textarea{
   --target-height:8%;
 
   /* REMAINING */
- --remaining-left:36.8%;
-  --remaining-top:69.0%;
-  --remaining-width:14%;
-  --remaining-height:6%;
+  --remaining-left:41.0%;
+  --remaining-top:63.0%;
+  --remaining-width:16%;
+  --remaining-height:3.4%;
 
   /* LOST */
-   --lost-left:34.0%;
-  --lost-top:77.0%;
-  --lost-width:10%;
-  --lost-height:7%;
+  --lost-left:35.8%;
+  --lost-top:73.7%;
+  --lost-width:9.5%;
+  --lost-height:4%;
 
   /* START DATE */
- --startdate-left:44.5%;
-  --startdate-top:77.0%;
-  --startdate-width:12%;
-  --startdate-height:7%;
+  --startdate-left:47.8%;
+  --startdate-top:73.7%;
+  --startdate-width:9.8%;
+  --startdate-height:4%;
 }
-
+   .updated-box .data-value,
+.remaining-box .data-value,
+.lost-box .data-value,
+.startdate-box .data-value{
+  font-size:clamp(5px, 7cqw, 11px);
+  line-height:1;
+  white-space:nowrap;
+}
 /* =========================================================
    PROFILE FRAME
 ========================================================= */
