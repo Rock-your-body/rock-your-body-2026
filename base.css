@@ -165,7 +165,7 @@ textarea{
 .remaining-box .data-value,
 .lost-box .data-value,
 .startdate-box .data-value{
-  font-size:clamp(5px, 7cqw, 11px);
+  font-size:clamp(2px, 5cqw, 9px);
   line-height:1;
   white-space:nowrap;
 }
