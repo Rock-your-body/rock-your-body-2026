@@ -1694,7 +1694,7 @@
       id="submitEvidenceButton"
       type="button"
       class="submit-evidence-button"
-      onclick="submitEvidence()"
+        onclick="submitEvidence()"}
     >
       ส่งหลักฐานให้ Admin ตรวจสอบ
     </button>
@@ -3256,47 +3256,75 @@ async function submitEvidence(){
       activeMissionId
     );
 
+
   if(!mission){
+
     showMissionStatus(
       "ไม่พบข้อมูลภารกิจ"
     );
+
     return;
   }
 
+
+  /* =====================================================
+     INPUT
+  ====================================================== */
 
   const fileInput =
     document.getElementById(
       "evidenceFile"
     );
 
+
+  const linkInput =
+    document.getElementById(
+      "evidenceLink"
+    );
+
+
+  const noteInput =
+    document.getElementById(
+      "evidenceNote"
+    );
+
+
+  const button =
+    document.getElementById(
+      "submitEvidenceButton"
+    );
+
+
   const file =
     fileInput?.files?.[0] ||
     null;
 
+
   const link =
-    document
-      .getElementById(
-        "evidenceLink"
-      )
-      .value
-      .trim();
+    linkInput?.value
+      ?.trim() ||
+    "";
+
 
   const note =
-    document
-      .getElementById(
-        "evidenceNote"
-      )
-      .value
-      .trim();
+    noteInput?.value
+      ?.trim() ||
+    "";
 
+
+  /* =====================================================
+     VALIDATE
+  ====================================================== */
 
   if(
     mission.requireLink &&
     !link
   ){
+
     showMissionStatus(
       "กรุณาใส่ Link TikTok"
     );
+
     return;
   }
 
@@ -3305,42 +3333,94 @@ async function submitEvidence(){
     !file &&
     !link
   ){
+
     showMissionStatus(
       "กรุณาเลือกรูป / VDO หรือใส่ Link"
     );
+
     return;
   }
 
 
   if(!MISSION_API){
+
     showMissionStatus(
       "ไม่พบ MISSION API"
     );
+
     return;
   }
 
 
-  const button =
-    document.getElementById(
-      "submitEvidenceButton"
+  if(!button){
+
+    showMissionStatus(
+      "ไม่พบปุ่มส่งหลักฐาน"
     );
 
-  button.disabled = true;
+    return;
+  }
+
+
+  /* =====================================================
+     FILE VALIDATION
+  ====================================================== */
+
+  if(file){
+
+    const MAX_FILE_SIZE =
+      50 * 1024 * 1024;
+
+
+    if(
+      file.size >
+      MAX_FILE_SIZE
+    ){
+
+      showMissionStatus(
+        "ไฟล์ต้องมีขนาดไม่เกิน 50 MB"
+      );
+
+      return;
+    }
+
+  }
+
+
+  /* =====================================================
+     BUTTON LOADING
+  ====================================================== */
+
+  button.disabled =
+    true;
+
+
   button.textContent =
     "กำลังส่งหลักฐาน...";
 
 
   try{
 
+    /* =====================================================
+       LINE TOKEN
+    ====================================================== */
+
     const idToken =
       ROCK.getIdToken();
 
+
     if(!idToken){
+
       throw new Error(
         "ไม่พบ LINE ID Token"
       );
+
     }
 
+
+    /* =====================================================
+       FORM DATA
+    ====================================================== */
 
     const form =
       new FormData();
@@ -3351,25 +3431,34 @@ async function submitEvidence(){
       "submitEvidence"
     );
 
+
     form.append(
       "idToken",
       idToken
     );
 
+
     form.append(
       "missionId",
-      mission.id
+      String(
+        mission.id
+      )
     );
+
 
     form.append(
       "category",
-      activeCategory
+      String(
+        activeCategory
+      )
     );
+
 
     form.append(
       "note",
       note
     );
+
 
     form.append(
       "link",
@@ -3388,9 +3477,17 @@ async function submitEvidence(){
     }
 
 
+    /* =====================================================
+       DEBUG
+    ====================================================== */
+
     console.log(
-      "MISSION SUBMIT",
+      "MISSION SUBMIT:",
       {
+
+        action:
+          "submitEvidence",
+
         missionId:
           mission.id,
 
@@ -3398,41 +3495,53 @@ async function submitEvidence(){
           activeCategory,
 
         fileName:
-          file?.name || "",
+          file?.name ||
+          "",
 
         fileType:
-          file?.type || "",
+          file?.type ||
+          "",
 
         fileSize:
-          file?.size || 0
+          file?.size ||
+          0,
+
+        hasLink:
+          Boolean(link),
+
+        hasNote:
+          Boolean(note)
+
       }
     );
 
 
-    /*
-      สำคัญ
-      ห้ามใส่ Content-Type เอง
-      Browser จะสร้าง multipart/form-data ให้
-    */
+    /* =====================================================
+       SEND API
+
+       สำคัญ:
+       ห้ามใส่ Content-Type เอง
+       Browser จะสร้าง multipart/form-data
+    ====================================================== */
 
     const response =
       await fetch(
         MISSION_API,
         {
+
           method:
             "POST",
 
           body:
             form
+
         }
       );
 
 
-    /*
-      อ่านเป็น text ก่อน
-      เพื่อให้เห็น Error จริงแม้ Server
-      จะไม่ได้ส่ง JSON สมบูรณ์
-    */
+    /* =====================================================
+       READ RESPONSE
+    ====================================================== */
 
     const raw =
       await response.text();
@@ -3443,6 +3552,7 @@ async function submitEvidence(){
       response.status
     );
 
+
     console.log(
       "MISSION RAW RESPONSE:",
       raw
@@ -3450,6 +3560,7 @@ async function submitEvidence(){
 
 
     let result = {};
+
 
     try{
 
@@ -3461,9 +3572,10 @@ async function submitEvidence(){
     }catch(error){
 
       console.error(
-        "MISSION JSON ERROR:",
+        "MISSION JSON PARSE ERROR:",
         error
       );
+
 
       throw new Error(
         `Server ตอบกลับไม่ถูกต้อง HTTP ${response.status}`
@@ -3472,220 +3584,78 @@ async function submitEvidence(){
     }
 
 
+    /* =====================================================
+       API ERROR
+    ====================================================== */
+
     if(
       !response.ok ||
       result?.success === false
     ){
 
-      const errorMessage =
+      const message =
 
         result?.error ||
+
         result?.message ||
+
         result?.details ||
+
         `HTTP ${response.status}`;
 
 
       throw new Error(
-        errorMessage
+        message
       );
-
-    }
-
-
-    /*
-      สำเร็จ
-    */
-
-    closeEvidence();
-
-
-    showMissionStatus(
-      "✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
-    );
-
-
-    /*
-      โหลดสถานะใหม่ทันที
-    */
-
-    await refreshMissionStatus();
-
-
-    if(
-      document
-        .getElementById(
-          "missionModal"
-        )
-        .classList
-        .contains(
-          "show"
-        )
-    ){
-
-      renderCategory();
-
-    }
-
-
-  }catch(error){
-
-    console.error(
-      "MISSION SUBMIT ERROR:",
-      error
-    );
-
-
-    /*
-      รอบนี้จะแสดง Error จริงจาก Backend
-    */
-
-    showMissionStatus(
-      error?.message ||
-      "ส่งหลักฐานไม่สำเร็จ"
-    );
-
-  }finally{
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "ส่งหลักฐานให้ Admin ตรวจสอบ";
-
-  }
-
-}
-    /* =====================================================
-       REAL API MODE
-    ====================================================== */
-
-    if(
-      MISSION_API
-    ){
-
-      const form =
-        new FormData();
-
-
-      form.append(
-        "action",
-        "submitEvidence"
-      );
-
-
-      form.append(
-        "idToken",
-        ROCK.getIdToken()
-      );
-
-
-      form.append(
-        "missionId",
-        mission.id
-      );
-
-
-      form.append(
-        "category",
-        activeCategory
-      );
-
-
-      form.append(
-        "note",
-        note
-      );
-
-
-      form.append(
-        "link",
-        link
-      );
-
-
-      if(file){
-
-        form.append(
-          "file",
-          file
-        );
-
-      }
-
-
-      const response =
-        await fetch(
-          MISSION_API,
-          {
-            method:
-              "POST",
-
-            body:
-              form
-          }
-        );
-
-
-      const result =
-        await response.json();
-
-
-      if(
-        !response.ok ||
-        result?.success === false
-      ){
-
-        throw new Error(
-          result?.error ||
-          "ส่งหลักฐานไม่สำเร็จ"
-        );
-
-      }
 
     }
 
 
     /* =====================================================
-       LOCAL TEST MODE
+       SAVE LOCAL PENDING
     ====================================================== */
 
-    else{
-
-      const local =
-        readLocal();
+    const local =
+      readLocal();
 
 
-      local[
+    local[
+      mission.id
+    ] = {
+
+      ...local[
         mission.id
-      ] = {
+      ],
 
-        status:
-          "pending",
+      status:
+        "pending",
 
-        submittedAt:
-          new Date()
-            .toISOString(),
+      submittedAt:
+        new Date()
+          .toISOString(),
 
-        fileName:
-          file?.name ||
-          "",
+      fileName:
+        file?.name ||
+        "",
 
-        link,
+      link,
 
-        note,
+      note,
 
-        approvedNotified:
-          false
+      approvedNotified:
+        false
 
-      };
+    };
 
 
-      writeLocal(
-        local
-      );
+    writeLocal(
+      local
+    );
 
-    }
 
+    /* =====================================================
+       SUCCESS
+    ====================================================== */
 
     closeEvidence();
 
@@ -3693,12 +3663,37 @@ async function submitEvidence(){
     renderCategory();
 
 
+    updateTemplate();
+
+
     showMissionStatus(
-      "ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
+      "✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
     );
 
 
+    /* =====================================================
+       GET LATEST STATUS
+    ====================================================== */
+
+    try{
+
+      await refreshMissionStatus();
+
+    }catch(error){
+
+      console.warn(
+        "REFRESH AFTER SUBMIT:",
+        error
+      );
+
+    }
+
+
   }catch(error){
+
+    /* =====================================================
+       ERROR
+    ====================================================== */
 
     console.error(
       "MISSION SUBMIT ERROR:",
@@ -3707,12 +3702,20 @@ async function submitEvidence(){
 
 
     showMissionStatus(
-      error?.message ||
-      "ส่งหลักฐานไม่สำเร็จ"
+      "ERROR: " +
+      (
+        error?.message ||
+        String(error) ||
+        "UNKNOWN ERROR"
+      )
     );
 
 
   }finally{
+
+    /* =====================================================
+       RESTORE BUTTON
+    ====================================================== */
 
     button.disabled =
       false;
@@ -3732,9 +3735,11 @@ async function submitEvidence(){
 
 async function refreshMissionStatus(){
 
-  if(
-    !MISSION_API
-  ){
+  /* =====================================================
+     NO API
+  ====================================================== */
+
+  if(!MISSION_API){
 
     updateAutoBonus();
 
@@ -3743,16 +3748,37 @@ async function refreshMissionStatus(){
     updateTemplate();
 
     return;
-
   }
 
 
   try{
 
+    /* =====================================================
+       TOKEN
+    ====================================================== */
+
+    const idToken =
+      ROCK.getIdToken();
+
+
+    if(!idToken){
+
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+
+    }
+
+
+    /* =====================================================
+       REQUEST
+    ====================================================== */
+
     const response =
       await fetch(
         MISSION_API,
         {
+
           method:
             "POST",
 
@@ -3768,7 +3794,7 @@ async function refreshMissionStatus(){
                 "myMissionStatus",
 
               idToken:
-                ROCK.getIdToken()
+                idToken
 
             })
 
@@ -3776,8 +3802,43 @@ async function refreshMissionStatus(){
       );
 
 
-    const result =
-      await response.json();
+    /* =====================================================
+       RESPONSE
+    ====================================================== */
+
+    const raw =
+      await response.text();
+
+
+    console.log(
+      "MISSION STATUS HTTP:",
+      response.status
+    );
+
+
+    console.log(
+      "MISSION STATUS RAW:",
+      raw
+    );
+
+
+    let result = {};
+
+
+    try{
+
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    }catch(error){
+
+      throw new Error(
+        `Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`
+      );
+
+    }
 
 
     if(
@@ -3786,44 +3847,88 @@ async function refreshMissionStatus(){
     ){
 
       throw new Error(
+
         result?.error ||
-        "โหลด Mission ไม่สำเร็จ"
+
+        result?.message ||
+
+        `โหลด Mission ไม่สำเร็จ HTTP ${response.status}`
+
       );
 
     }
 
 
+    /* =====================================================
+       UPDATE LOCAL STATUS
+    ====================================================== */
+
     const local =
       readLocal();
 
 
-    (
-      result.submissions ||
-      []
-    )
+    const submissions =
+      Array.isArray(
+        result?.submissions
+      )
+        ? result.submissions
+        : [];
+
+
+    submissions
       .forEach(
         item => {
 
+          const missionId =
+
+            item?.mission_id ||
+
+            item?.missionId;
+
+
+          if(!missionId){
+            return;
+          }
+
+
           local[
-            item.mission_id
+            missionId
           ] = {
 
             ...local[
-              item.mission_id
+              missionId
             ],
 
             status:
-              item.status,
+              item?.status ||
+              "pending",
 
             approvedAt:
-              item.approved_at,
+              item?.approved_at ||
+              item?.approvedAt ||
+              null,
+
+            reviewedAt:
+              item?.reviewed_at ||
+              item?.reviewedAt ||
+              null,
 
             rejectReason:
-              item.reject_reason,
+              item?.reject_reason ||
+              item?.rejected_reason ||
+              item?.rejectReason ||
+              "",
 
             rewardGranted:
-              item.reward_granted ===
-              true
+              item?.reward_granted ===
+              true,
+
+            submittedAt:
+              item?.submitted_at ||
+              local[
+                missionId
+              ]?.submittedAt ||
+              null
 
           };
 
@@ -3836,27 +3941,50 @@ async function refreshMissionStatus(){
     );
 
 
+    /* =====================================================
+       AUTO BONUS
+    ====================================================== */
+
     updateAutoBonus();
 
+
+    /* =====================================================
+       CONGRATULATION
+    ====================================================== */
+
     checkApprovedMessage();
+
+
+    /* =====================================================
+       UPDATE TEMPLATE
+    ====================================================== */
 
     updateTemplate();
 
 
+    /* =====================================================
+       REFRESH OPEN CATEGORY
+    ====================================================== */
+
+    const modal =
+      document.getElementById(
+        "missionModal"
+      );
+
+
     if(
-      document
-        .getElementById(
-          "missionModal"
-        )
-        .classList
-        .contains(
-          "show"
-        )
+      modal &&
+      modal.classList.contains(
+        "show"
+      )
     ){
 
       renderCategory();
 
     }
+
+
+    return result;
 
 
   }catch(error){
@@ -3866,646 +3994,14 @@ async function refreshMissionStatus(){
       error
     );
 
-  }
-
-}
-
-
-/* =========================================================
-   AUTO BONUS
-========================================================= */
-
-function updateAutoBonus(){
-
-  const local =
-    readLocal();
-
-
-  const approved = id =>
-
-    local[id]?.status ===
-    "approved";
-
-
-  /* Core Daily 3/3 */
-
-  const coreComplete =
-
-    approved(
-      "daily_move_more"
-    ) &&
-
-    approved(
-      "daily_eat_smart"
-    ) &&
-
-    approved(
-      "daily_exercise_30"
-    );
-
-
-  if(
-    coreComplete &&
-    !local[
-      "bonus_core_daily"
-    ]
-  ){
-
-    local[
-      "bonus_core_daily"
-    ] = {
-
-      status:
-        "approved",
-
-      approvedAt:
-        new Date()
-          .toISOString(),
-
-      approvedNotified:
-        false
-
-    };
-
-  }
-
-
-  /* Perfect Day */
-
-  const dailyExtra =
-    getDailyExtra();
-
-
-  if(
-    coreComplete &&
-    approved(
-      dailyExtra.id
-    ) &&
-    !local[
-      "bonus_perfect_day"
-    ]
-  ){
-
-    local[
-      "bonus_perfect_day"
-    ] = {
-
-      status:
-        "approved",
-
-      approvedAt:
-        new Date()
-          .toISOString(),
-
-      approvedNotified:
-        false
-
-    };
-
-  }
-
-
-  /* Weekly 4 missions */
-
-  const weeklyApproved =
-    missionData.weekly
-      .missions
-      .filter(
-        mission =>
-          approved(
-            mission.id
-          )
-      )
-      .length;
-
-
-  if(
-    weeklyApproved >= 4 &&
-    !local[
-      "bonus_weekly_four"
-    ]
-  ){
-
-    local[
-      "bonus_weekly_four"
-    ] = {
-
-      status:
-        "approved",
-
-      approvedAt:
-        new Date()
-          .toISOString(),
-
-      approvedNotified:
-        false
-
-    };
-
-  }
-
-
-  writeLocal(
-    local
-  );
-
-}
-
-
-/* =========================================================
-   TEMPLATE COUNTERS
-========================================================= */
-
-function categoryStats(
-  category
-){
-
-  const local =
-    readLocal();
-
-
-  const missions =
-    getCategoryMissions(
-      category
-    );
-
-
-  const approved =
-    missions.filter(
-      mission =>
-        local[
-          mission.id
-        ]?.status ===
-        "approved"
-    )
-    .length;
-
-
-  const total =
-    missions.length;
-
-
-  return {
-
-    approved,
-
-    total,
-
-    percent:
-
-      total > 0
-
-        ? (
-            approved /
-            total
-          ) * 100
-
-        : 0
-
-  };
-
-}
-
-
-/* =========================================================
-   UPDATE TEMPLATE
-========================================================= */
-
-function updateTemplate(){
-
-  const daily =
-    categoryStats(
-      "daily"
-    );
-
-
-  const weekly =
-    categoryStats(
-      "weekly"
-    );
-
-
-  const monthly =
-    categoryStats(
-      "monthly"
-    );
-
-
-  const bonus =
-    categoryStats(
-      "bonus"
-    );
-
-
-  setCategoryTemplate(
-    "daily",
-    daily
-  );
-
-
-  setCategoryTemplate(
-    "weekly",
-    weekly
-  );
-
-
-  setCategoryTemplate(
-    "monthly",
-    monthly
-  );
-
-
-  setCategoryTemplate(
-    "bonus",
-    bonus
-  );
-
-}
-
-
-function setCategoryTemplate(
-  category,
-  stats
-){
-
-  const count =
-    document
-      .getElementById(
-        `${category}Count`
-      );
-
-
-  const progress =
-    document
-      .getElementById(
-        `${category}Progress`
-      );
-
-
-  if(count){
-
-    count.textContent =
-      `${stats.approved} / ${stats.total}`;
-
-  }
-
-
-  if(progress){
-
-    progress.style.width =
-      `${stats.percent}%`;
-
-  }
-
-}
-
-
-/* =========================================================
-   CONGRATULATION MESSAGE
-========================================================= */
-
-function checkApprovedMessage(){
-
-  const local =
-    readLocal();
-
-
-  for(
-    const [
-      missionId,
-      state
-    ]
-    of Object.entries(
-      local
-    )
-  ){
-
-    if(
-      state.status !==
-      "approved" ||
-      state.approvedNotified ===
-      true
-    ){
-
-      continue;
-
-    }
-
-
-    const mission =
-      findMission(
-        missionId
-      );
-
-
-    if(!mission){
-      continue;
-    }
-
-
-    state.approvedNotified =
-      true;
-
-
-    local[
-      missionId
-    ] =
-      state;
-
-
-    writeLocal(
-      local
-    );
-
-
-    showSuccess(
-      mission
-    );
-
-
-    break;
-
-  }
-
-}
-
-
-/* =========================================================
-   SUCCESS
-========================================================= */
-
-function showSuccess(
-  mission
-){
-
-  document
-    .getElementById(
-      "successMissionName"
-    )
-    .textContent =
-      mission.name;
-
-
-  document
-    .getElementById(
-      "successReward"
-    )
-    .innerHTML = `
-
-      ⭐ +${mission.reward.coin}
-      ROCK COIN
-
-      <br>
-
-      ⚡ +${mission.reward.energy}
-      ENERGY
-
-      <br>
-
-      🏆 +${mission.reward.exp}
-      EXP
-
-    `;
-
-
-  document
-    .getElementById(
-      "successModal"
-    )
-    .classList
-    .add(
-      "show"
-    );
-
-}
-
-
-function closeSuccess(){
-
-  document
-    .getElementById(
-      "successModal"
-    )
-    .classList
-    .remove(
-      "show"
-    );
-
-}
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function showMissionStatus(
-  message
-){
-
-  const el =
-    document
-      .getElementById(
-        "missionStatus"
-      );
-
-
-  el.textContent =
-    message;
-
-
-  el.classList.add(
-    "show"
-  );
-
-
-  setTimeout(
-    () => {
-
-      el.classList.remove(
-        "show"
-      );
-
-    },
-    2800
-  );
-
-}
-
-
-/* =========================================================
-   TOP COIN / ENERGY
-========================================================= */
-
-async function loadPlayer(){
-
-  try{
-
-    const raw =
-      await ROCK.fetchDashboard();
-
-
-    const coin =
-      Number(
-
-        raw?.rockCoin ??
-
-        raw?.rock_coin ??
-
-        raw?.user?.rock_coin ??
-
-        0
-
-      );
-
-
-    const currentEnergy =
-      Number(
-
-        raw?.energy?.current ??
-
-        raw?.user?.energy ??
-
-        0
-
-      );
-
-
-    const maxEnergy =
-      Number(
-
-        raw?.energy?.max ??
-
-        raw?.user?.max_energy ??
-
-        ROCK.CFG.MAX_ENERGY ??
-
-        200
-
-      );
-
-
-    document
-      .getElementById(
-        "missionCoin"
-      )
-      .textContent =
-        ROCK.fmtInt(
-          coin
-        );
-
-
-    document
-      .getElementById(
-        "missionEnergy"
-      )
-      .textContent =
-        `${ROCK.fmtInt(currentEnergy)} / ${ROCK.fmtInt(maxEnergy)}`;
-
-
-  }catch(error){
-
-    console.error(
-      "PLAYER MISSION ERROR:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   HOME
-========================================================= */
-
-function goHome(){
-
-  ROCK.go(
-
-    ROCK?.CFG?.PAGE?.HOME ||
-
-    "./dashboard.html"
-
-  );
-
-}
-
-
-/* =========================================================
-   START
-========================================================= */
-
-async function startMission(){
-
-  try{
-
-    if(!ROCK){
-
-      throw new Error(
-        "common.js โหลดไม่สำเร็จ"
-      );
-
-    }
-
-
-    const ready =
-      await ROCK.initLiff();
-
-
-    if(!ready){
-      return;
-    }
-
-
-    updateAutoBonus();
-
-    updateTemplate();
-
-
-    await Promise.all([
-
-      loadPlayer(),
-
-      refreshMissionStatus()
-
-    ]);
-
 
     /*
-      เช็กผลอนุมัติทุก 30 วินาที
-      ถ้า Admin อนุมัติระหว่างเปิดหน้าอยู่
-      ผู้เล่นจะได้รับข้อความแสดงความยินดี
+      ไม่แสดง Toast ทุก 30 วินาที
+      เพื่อไม่รบกวนผู้เล่น
     */
 
-    setInterval(
-      refreshMissionStatus,
-      30000
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "MISSION START ERROR:",
-      error
-    );
-
-
-    showMissionStatus(
-      error?.message ||
-      String(error)
-    );
+    return null;
 
   }
 
 }
-
-
-startMission();
-
-</script>
-
-
-</body>
-
-</html>
