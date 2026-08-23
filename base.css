@@ -289,9 +289,9 @@ textarea{
 .data-small{
   font-size:
     clamp(
-      5px,
-      8cqw,
-      13px
+      6px,
+      9cqw,
+      14px
     );
 }
 
@@ -943,9 +943,9 @@ textarea{
 ========================================================= */
 
 .coin-box .data-value{
-  font-size:clamp(8px, 16cqw, 30px);
+  font-size:clamp(9px, 17cqw, 32px);
 }
 
 .energy-box .data-value{
-  font-size:clamp(8px, 14cqw, 28px);
+  font-size:clamp(9px, 17cqw, 32px);
 }
