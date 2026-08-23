@@ -13,9 +13,7 @@ window.ROCK = (() => {
 
   function go(url) {
 
-    if (!url) {
-      return;
-    }
+    if (!url) return;
 
     window.location.href = url;
   }
@@ -23,7 +21,7 @@ window.ROCK = (() => {
 
   /* =========================================================
      INIT LIFF
-     ใช้ LIFF ตัวเดียวทั้งระบบ
+     LIFF ตัวเดียวทั้งระบบ
   ========================================================= */
 
   async function initLiff() {
@@ -36,17 +34,21 @@ window.ROCK = (() => {
       throw new Error("ไม่พบ LIFF ID");
     }
 
+
     console.log("LIFF INIT:", {
       liffId: CFG.LIFF_ID,
       url: window.location.href
     });
+
 
     await liff.init({
       liffId: CFG.LIFF_ID
     });
 
 
-    /* ยังไม่ได้ Login */
+    /* =====================================================
+       LOGIN
+    ====================================================== */
 
     if (!liff.isLoggedIn()) {
 
@@ -60,21 +62,25 @@ window.ROCK = (() => {
     }
 
 
-    /* ตรวจ Token */
+    /* =====================================================
+       ID TOKEN
+    ====================================================== */
 
     const idToken =
       liff.getIDToken();
 
-    if (!idToken) {
-      throw new Error(
-        "ไม่พบ LINE ID Token"
-      );
-    }
-
 
     console.log(
-      "LIFF READY:",
+      "LIFF TOKEN CHECK:",
       {
+        hasToken:
+          Boolean(idToken),
+
+        tokenLength:
+          idToken
+            ? idToken.length
+            : 0,
+
         loggedIn:
           liff.isLoggedIn(),
 
@@ -83,12 +89,20 @@ window.ROCK = (() => {
       }
     );
 
+
+    if (!idToken) {
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+    }
+
+
     return true;
   }
 
 
   /* =========================================================
-     TOKEN
+     GET ID TOKEN
   ========================================================= */
 
   function getIdToken() {
@@ -99,20 +113,38 @@ window.ROCK = (() => {
       );
     }
 
+
     if (!liff.isLoggedIn()) {
       throw new Error(
         "ยังไม่ได้เข้าสู่ระบบ LINE"
       );
     }
 
+
     const token =
       liff.getIDToken();
+
+
+    console.log(
+      "GET ID TOKEN:",
+      {
+        hasToken:
+          Boolean(token),
+
+        tokenLength:
+          token
+            ? token.length
+            : 0
+      }
+    );
+
 
     if (!token) {
       throw new Error(
         "ไม่พบ LINE ID Token"
       );
     }
+
 
     return token;
   }
@@ -164,7 +196,41 @@ window.ROCK = (() => {
     }
 
 
+    console.log(
+      "POST API:",
+      url
+    );
+
+
+    console.log(
+      "POST PAYLOAD:",
+      {
+        action:
+          payload?.action,
+
+        hasIdToken:
+          Boolean(
+            payload?.idToken
+          ),
+
+        tokenLength:
+          payload?.idToken
+            ? payload.idToken.length
+            : 0,
+
+        hasWeight:
+          payload?.weight !==
+            undefined,
+
+        hasTargetWeight:
+          payload?.targetWeight !==
+            undefined
+      }
+    );
+
+
     let response;
+
 
     try {
 
@@ -205,6 +271,7 @@ window.ROCK = (() => {
 
     let data;
 
+
     try {
 
       data =
@@ -225,6 +292,27 @@ window.ROCK = (() => {
     }
 
 
+    console.log(
+      "API RESPONSE:",
+      {
+        status:
+          response.status,
+
+        ok:
+          response.ok,
+
+        success:
+          data?.success,
+
+        code:
+          data?.code,
+
+        error:
+          data?.error
+      }
+    );
+
+
     if (
       !response.ok ||
       data?.success === false
@@ -237,9 +325,11 @@ window.ROCK = (() => {
           `ดำเนินการไม่สำเร็จ (${response.status})`
         );
 
+
       error.code =
         data?.code ||
         response.status;
+
 
       throw error;
     }
@@ -255,11 +345,15 @@ window.ROCK = (() => {
 
   async function fetchDashboard() {
 
+    const idToken =
+      getIdToken();
+
+
     return await postJSON(
       CFG.API.DASHBOARD,
       {
         action: "dashboard",
-        idToken: getIdToken()
+        idToken
       }
     );
   }
@@ -267,7 +361,7 @@ window.ROCK = (() => {
 
   /* =========================================================
      SAVE WEIGHT
-     TEST MODE:
+     TEST MODE
      บันทึกได้หลายครั้งต่อวัน
   ========================================================= */
 
@@ -291,16 +385,15 @@ window.ROCK = (() => {
     }
 
 
-    /*
-      ใช้ player-dashboard
-      เพราะรองรับ action saveWeight อยู่แล้ว
-    */
+    const idToken =
+      getIdToken();
+
 
     return await postJSON(
       CFG.API.DASHBOARD,
       {
         action: "saveWeight",
-        idToken: getIdToken(),
+        idToken,
         weight: value
       }
     );
@@ -331,16 +424,15 @@ window.ROCK = (() => {
     }
 
 
-    /*
-      ใช้ player-dashboard
-      เพราะรองรับ action setTarget อยู่แล้ว
-    */
+    const idToken =
+      getIdToken();
+
 
     return await postJSON(
       CFG.API.DASHBOARD,
       {
         action: "setTarget",
-        idToken: getIdToken(),
+        idToken,
         targetWeight: value
       }
     );
@@ -351,9 +443,7 @@ window.ROCK = (() => {
      FORMAT WEIGHT
   ========================================================= */
 
-  function fmtWeight(
-    value
-  ) {
+  function fmtWeight(value) {
 
     if (
       value === null ||
@@ -363,8 +453,10 @@ window.ROCK = (() => {
       return "--.-";
     }
 
+
     const n =
       Number(value);
+
 
     return Number.isFinite(n)
       ? n.toFixed(1)
@@ -376,16 +468,17 @@ window.ROCK = (() => {
      FORMAT INTEGER
   ========================================================= */
 
-  function fmtInt(
-    value
-  ) {
+  function fmtInt(value) {
 
     const n =
       Number(value);
 
+
     return Number.isFinite(n)
       ? Math.round(n)
-          .toLocaleString("en-US")
+          .toLocaleString(
+            "en-US"
+          )
       : "0";
   }
 
@@ -394,16 +487,16 @@ window.ROCK = (() => {
      FORMAT DATE
   ========================================================= */
 
-  function formatDate(
-    value
-  ) {
+  function formatDate(value) {
 
     if (!value) {
       return "-";
     }
 
+
     const date =
       new Date(value);
+
 
     if (
       Number.isNaN(
@@ -413,11 +506,15 @@ window.ROCK = (() => {
       return "-";
     }
 
+
     return date.toLocaleString(
       "th-TH",
       {
-        dateStyle: "short",
-        timeStyle: "short"
+        dateStyle:
+          "short",
+
+        timeStyle:
+          "short"
       }
     );
   }
@@ -427,16 +524,16 @@ window.ROCK = (() => {
      FORMAT DATE ONLY
   ========================================================= */
 
-  function formatDateOnly(
-    value
-  ) {
+  function formatDateOnly(value) {
 
     if (!value) {
       return "--/--/----";
     }
 
+
     const date =
       new Date(value);
+
 
     if (
       Number.isNaN(
@@ -445,6 +542,7 @@ window.ROCK = (() => {
     ) {
       return "--/--/----";
     }
+
 
     return date.toLocaleDateString(
       "th-TH",
@@ -469,6 +567,7 @@ window.ROCK = (() => {
     const n =
       Number(value);
 
+
     return Number.isFinite(n)
       ? n
       : fallback;
@@ -479,9 +578,7 @@ window.ROCK = (() => {
      TOKEN ERROR
   ========================================================= */
 
-  function isTokenError(
-    error
-  ) {
+  function isTokenError(error) {
 
     const message =
       String(
@@ -493,11 +590,27 @@ window.ROCK = (() => {
 
 
     return (
-      message.includes("token") ||
-      message.includes("authentication") ||
-      message.includes("unauthorized") ||
-      message.includes("401") ||
-      error?.code === 401
+      message.includes(
+        "token"
+      ) ||
+
+      message.includes(
+        "authentication"
+      ) ||
+
+      message.includes(
+        "unauthorized"
+      ) ||
+
+      message.includes(
+        "401"
+      ) ||
+
+      error?.code ===
+        401 ||
+
+      error?.code ===
+        "LINE_AUTH_FAILED"
     );
   }
 
@@ -507,6 +620,7 @@ window.ROCK = (() => {
   ========================================================= */
 
   function goHome() {
+
     go(
       CFG.PAGE?.HOME ||
       "./dashboard.html"
@@ -515,6 +629,7 @@ window.ROCK = (() => {
 
 
   function goWeight() {
+
     go(
       CFG.PAGE?.WEIGHT ||
       "./weight-check.html"
@@ -523,6 +638,7 @@ window.ROCK = (() => {
 
 
   function goProgress() {
+
     go(
       CFG.PAGE?.PROGRESS ||
       "./progress.html"
@@ -531,6 +647,7 @@ window.ROCK = (() => {
 
 
   function goMission() {
+
     go(
       CFG.PAGE?.MISSION ||
       "./mission.html"
@@ -539,6 +656,7 @@ window.ROCK = (() => {
 
 
   function goBattle() {
+
     go(
       CFG.PAGE?.BATTLE ||
       "./battle.html"
@@ -547,6 +665,7 @@ window.ROCK = (() => {
 
 
   function goRanking() {
+
     go(
       CFG.PAGE?.RANKING ||
       "./ranking.html"
@@ -555,6 +674,7 @@ window.ROCK = (() => {
 
 
   function goRewards() {
+
     go(
       CFG.PAGE?.REWARDS ||
       "./rewards.html"
