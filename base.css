@@ -131,12 +131,12 @@ textarea{
   --current-width:15%;
   --current-height:8%;
 
-  /* UPDATED DATE */
-  --updated-left:41.2%;
-  --updated-top:36.2%;
-  --updated-width:16.5%;
-  --updated-height:3.4%;
-
+   /* UPDATED DATE */
+  --updated-left:41.5%;
+  --updated-top:35.4%;
+  --updated-width:15%;
+  --updated-height:5%;
+   
   /* TARGET */
   --target-left:41.5%;
   --target-top:51.2%;
@@ -144,22 +144,22 @@ textarea{
   --target-height:8%;
 
   /* REMAINING */
-  --remaining-left:41%;
-  --remaining-top:63%;
-  --remaining-width:16%;
-  --remaining-height:3.4%;
+  --remaining-left:41.5%;
+  --remaining-top:62.1%;
+  --remaining-width:15%;
+  --remaining-height:5%;
 
   /* LOST */
-  --lost-left:35.8%;
-  --lost-top:73.7%;
-  --lost-width:9.5%;
-  --lost-height:4%;
+  --lost-left:35.0%;
+  --lost-top:73.0%;
+  --lost-width:10.5%;
+  --lost-height:5%;
 
   /* START DATE */
-  --startdate-left:47.8%;
-  --startdate-top:73.7%;
-  --startdate-width:9.8%;
-  --startdate-height:4%;
+  --startdate-left:47.5%;
+  --startdate-top:73.0%;
+  --startdate-width:10.5%;
+  --startdate-height:5%;
 }
    .updated-box .data-value,
 .remaining-box .data-value,
@@ -1154,16 +1154,20 @@ textarea{
 }
 /* =========================================================
    UPDATE DATE
-   อัปเดตล่าสุด + วันที่
 ========================================================= */
 
 .updated-box{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
+  left:var(--updated-left);
+  top:var(--updated-top);
+  width:var(--updated-width);
+  height:var(--updated-height);
 
-  padding:0 !important;
-  overflow:visible;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+  overflow:hidden;
 }
 
 .update-content{
@@ -1174,32 +1178,34 @@ textarea{
   align-items:center;
   justify-content:center;
 
-  gap:6px;
+  gap:3px;
 
-  white-space:nowrap;
-
-  /* ปรับตำแหน่งทั้งชุดตรงนี้ */
-  transform:translateX(-30);
-}
-
-.update-label,
-.update-date{
-  font-family:"Prompt",sans-serif !important;
-  line-height:1;
   margin:0;
   padding:0;
+
+  white-space:nowrap;
 }
 
 .update-label{
-  font-size:clamp(9px,2vw,15px);
-  font-weight:600;
+  margin:0;
+  padding:0;
+
   color:#173b78;
+
+  font-size:clamp(5px, 7cqw, 11px);
+  font-weight:600;
+  line-height:1;
 }
 
 .update-date{
-  font-size:clamp(8px,1.05vw,14px);
-  font-weight:700;
+  margin:0;
+  padding:0;
+
   color:#002f7d;
+
+  font-size:clamp(5px, 7cqw, 11px);
+  font-weight:800;
+  line-height:1;
 }
 /* =========================================================
    TOP ROCK COIN / ENERGY
@@ -1269,9 +1275,11 @@ textarea{
 .lost-box,
 .startdate-box{
   display:flex;
-
   align-items:center;
   justify-content:center;
+
+  padding:0;
+  overflow:hidden;
 
   text-align:center;
 }
@@ -1281,47 +1289,41 @@ textarea{
   height:100%;
 
   display:flex;
-
-  flex-direction:column;
+  flex-direction:row;
 
   align-items:center;
   justify-content:center;
 
-  text-align:center;
+  gap:3px;
 
-  line-height:1.05;
+  margin:0;
+  padding:0;
+
+  white-space:nowrap;
 }
 
 .summary-label{
-  display:block;
-
-  font-size:clamp(
-    6px,
-    10cqw,
-    16px
-  );
-
-  font-weight:700;
+  margin:0;
+  padding:0;
 
   color:#06337a;
 
-  white-space:nowrap;
+  font-size:clamp(5px, 7cqw, 10px);
+  font-weight:700;
+  line-height:1;
 
-  margin-bottom:2px;
+  white-space:nowrap;
 }
 
 .summary-value{
-  display:block;
-
-  font-size:clamp(
-    7px,
-    12cqw,
-    20px
-  );
-
-  font-weight:900;
+  margin:0;
+  padding:0;
 
   color:#06337a;
+
+  font-size:clamp(5px, 8cqw, 11px);
+  font-weight:900;
+  line-height:1;
 
   white-space:nowrap;
 }
@@ -1332,11 +1334,7 @@ textarea{
 }
 
 .date-value{
-  font-size:clamp(
-    6px,
-    9cqw,
-    17px
-  );
+  font-size:clamp(5px, 7cqw, 10px);
 }
 /* =========================================================
    FONT THAI - PROMPT ไม่มีหัว
