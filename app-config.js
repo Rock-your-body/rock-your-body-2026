@@ -19,7 +19,9 @@ window.APP_CONFIG = {
 
     MISSION:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission"
-
+      
+BATTLE:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
   },
 
 
