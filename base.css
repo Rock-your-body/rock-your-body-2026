@@ -137,22 +137,22 @@ textarea{
   --target-height:8%;
 
   /* REMAINING */
-  --remaining-left:43%;
-  --remaining-top:63.2%;
-  --remaining-width:19%;
-  --remaining-height:4%;
+ --remaining-left:36.8%;
+  --remaining-top:69.0%;
+  --remaining-width:14%;
+  --remaining-height:6%;
 
   /* LOST */
-  --lost-left:35.5%;
-  --lost-top:73.8%;
+   --lost-left:34.0%;
+  --lost-top:77.0%;
   --lost-width:10%;
-  --lost-height:4.5%;
+  --lost-height:7%;
 
   /* START DATE */
-  --startdate-left:47.8%;
-  --startdate-top:73.8%;
-  --startdate-width:9.5%;
-  --startdate-height:4.5%;
+ --startdate-left:44.5%;
+  --startdate-top:77.0%;
+  --startdate-width:12%;
+  --startdate-height:7%;
 }
 
 /* =========================================================
@@ -1186,4 +1186,141 @@ textarea{
   font-size:clamp(8px,1.05vw,14px);
   font-weight:700;
   color:#002f7d;
+}
+/* =========================================================
+   TOP ROCK COIN / ENERGY
+========================================================= */
+
+.coin-box,
+.energy-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.top-data-content{
+  width:100%;
+  height:100%;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  line-height:1.05;
+}
+
+.top-data-value{
+  display:block;
+
+  font-size:clamp(
+    8px,
+    15cqw,
+    32px
+  );
+
+  font-weight:900;
+
+  color:#052d73;
+
+  white-space:nowrap;
+}
+
+.top-data-label{
+  display:block;
+
+  margin-top:2px;
+
+  font-size:clamp(
+    5px,
+    7cqw,
+    15px
+  );
+
+  font-weight:800;
+
+  color:#052d73;
+
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   REMAINING / LOST / START DATE
+========================================================= */
+
+.remaining-box,
+.lost-box,
+.startdate-box{
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+}
+
+.summary-content{
+  width:100%;
+  height:100%;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  line-height:1.05;
+}
+
+.summary-label{
+  display:block;
+
+  font-size:clamp(
+    6px,
+    10cqw,
+    16px
+  );
+
+  font-weight:700;
+
+  color:#06337a;
+
+  white-space:nowrap;
+
+  margin-bottom:2px;
+}
+
+.summary-value{
+  display:block;
+
+  font-size:clamp(
+    7px,
+    12cqw,
+    20px
+  );
+
+  font-weight:900;
+
+  color:#06337a;
+
+  white-space:nowrap;
+}
+
+.summary-label.red,
+.summary-value.red{
+  color:#d60000;
+}
+
+.date-value{
+  font-size:clamp(
+    6px,
+    9cqw,
+    17px
+  );
 }
