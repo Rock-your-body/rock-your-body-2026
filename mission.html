@@ -1,7 +1,9 @@
 <!doctype html>
+
 <html lang="th">
 
 <head>
+
   <meta charset="utf-8">
 
   <meta
@@ -9,29 +11,819 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>ROCK YOUR BODY 2026 - MISSION</title>
+  <title>
+    ROCK YOUR BODY 2026 - MISSION
+  </title>
 
-  <!-- LINE -->
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="./base.css">
+  <!-- PROMPT FONT -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <!-- LINE LIFF -->
+
+  <script
+    src="https://static.line-scdn.net/liff/edge/2/sdk.js"
+  ></script>
+
 
   <!-- CONFIG -->
-  <script src="./app-config.js"></script>
+
+  <script
+    src="./app-config.js"
+  ></script>
+
+
+  <!-- BASE CSS -->
+
+  <link
+    rel="stylesheet"
+    href="./base.css?v=20260823-20"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       MISSION PAGE EXTRA
+    ====================================================== */
+
+    body{
+      background:#eef5ff;
+    }
+
+
+    /* =====================================================
+       CLICKABLE MISSION CARD
+    ====================================================== */
+
+    .mission-hotspot{
+      position:absolute;
+
+      z-index:40;
+
+      margin:0;
+      padding:0;
+
+      border:0;
+
+      background:transparent;
+
+      cursor:pointer;
+
+      -webkit-tap-highlight-color:
+        transparent;
+    }
+
+
+    /*
+      ตำแหน่งปุ่มกดบน Template
+
+      หากต้องการขยับ:
+      left เพิ่ม = ขวา
+      top เพิ่ม = ลง
+    */
+
+
+    /* DAILY */
+
+    .mission-hotspot.daily{
+      left:33.2%;
+      top:29.5%;
+
+      width:27.4%;
+      height:27.5%;
+    }
+
+
+    /* WEEKLY */
+
+    .mission-hotspot.weekly{
+      left:63.0%;
+      top:29.5%;
+
+      width:31.0%;
+      height:27.5%;
+    }
+
+
+    /* MONTHLY */
+
+    .mission-hotspot.monthly{
+      left:33.2%;
+      top:58%;
+
+      width:27.4%;
+      height:27.5%;
+    }
+
+
+    /* BONUS */
+
+    .mission-hotspot.bonus{
+      left:63.0%;
+      top:58%;
+
+      width:31.0%;
+      height:27.5%;
+    }
+
+
+    /* =====================================================
+       MODAL BACKDROP
+    ====================================================== */
+
+    .mission-modal{
+      position:fixed;
+
+      inset:0;
+
+      z-index:99999;
+
+      display:none;
+
+      align-items:flex-end;
+      justify-content:center;
+
+      background:
+        rgba(0,20,55,.55);
+
+      backdrop-filter:
+        blur(3px);
+    }
+
+
+    .mission-modal.show{
+      display:flex;
+    }
+
+
+    /* =====================================================
+       MODAL PANEL
+    ====================================================== */
+
+    .mission-panel{
+      width:min(
+        100%,
+        720px
+      );
+
+      max-height:88vh;
+
+      overflow-y:auto;
+
+      border-radius:
+        28px 28px 0 0;
+
+      background:#f5f9ff;
+
+      box-shadow:
+        0 -10px 40px
+        rgba(0,35,90,.25);
+
+      padding:
+        0
+        14px
+        max(
+          24px,
+          env(safe-area-inset-bottom)
+        );
+
+      animation:
+        missionPanelUp
+        .25s ease;
+    }
+
+
+    @keyframes missionPanelUp{
+
+      from{
+        transform:
+          translateY(100%);
+      }
+
+      to{
+        transform:
+          translateY(0);
+      }
+
+    }
+
+
+    /* =====================================================
+       PANEL HEADER
+    ====================================================== */
+
+    .mission-panel-header{
+      position:sticky;
+
+      top:0;
+
+      z-index:20;
+
+      display:flex;
+
+      align-items:center;
+
+      gap:12px;
+
+      padding:
+        18px
+        4px
+        14px;
+
+      background:
+        rgba(245,249,255,.97);
+
+      backdrop-filter:
+        blur(8px);
+    }
+
+
+    .mission-panel-icon{
+      width:54px;
+      height:54px;
+
+      flex:0 0 54px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border-radius:18px;
+
+      font-size:28px;
+
+      background:#e1edff;
+    }
+
+
+    .mission-panel-title-wrap{
+      min-width:0;
+
+      flex:1;
+    }
+
+
+    .mission-panel-title{
+      margin:0;
+
+      color:#073b93;
+
+      font-size:
+        clamp(
+          20px,
+          5vw,
+          30px
+        );
+
+      font-weight:900;
+
+      line-height:1.1;
+    }
+
+
+    .mission-panel-subtitle{
+      margin-top:4px;
+
+      color:#667895;
+
+      font-size:
+        clamp(
+          11px,
+          3vw,
+          14px
+        );
+
+      font-weight:600;
+    }
+
+
+    .mission-close{
+      width:42px;
+      height:42px;
+
+      flex:0 0 42px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border:0;
+
+      border-radius:50%;
+
+      background:#e7eef9;
+
+      color:#173b78;
+
+      font-size:24px;
+
+      font-weight:900;
+
+      cursor:pointer;
+    }
+
+
+    /* =====================================================
+       CATEGORY SUMMARY
+    ====================================================== */
+
+    .category-summary{
+      display:grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap:8px;
+
+      margin-bottom:14px;
+    }
+
+
+    .summary-chip{
+      min-width:0;
+
+      padding:
+        10px
+        8px;
+
+      border-radius:15px;
+
+      background:#fff;
+
+      text-align:center;
+
+      box-shadow:
+        0 4px 14px
+        rgba(20,60,110,.07);
+    }
+
+
+    .summary-chip-label{
+      color:#6f7f9b;
+
+      font-size:
+        clamp(
+          9px,
+          2.5vw,
+          12px
+        );
+
+      font-weight:700;
+    }
+
+
+    .summary-chip-value{
+      margin-top:2px;
+
+      color:#073b93;
+
+      font-size:
+        clamp(
+          15px,
+          4vw,
+          21px
+        );
+
+      font-weight:900;
+    }
+
+
+    /* =====================================================
+       MISSION LIST
+    ====================================================== */
+
+    #missionList{
+      display:grid;
+
+      gap:11px;
+    }
+
+
+    /* =====================================================
+       MISSION ITEM
+    ====================================================== */
+
+    .mission-item{
+      overflow:hidden;
+
+      border:
+        1px solid #dfe9f7;
+
+      border-radius:20px;
+
+      background:#fff;
+
+      box-shadow:
+        0 5px 16px
+        rgba(20,60,110,.07);
+    }
+
+
+    .mission-item.complete{
+      border-color:
+        #9bddb5;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f8fffa,
+          #effcf4
+        );
+    }
+
+
+    .mission-item.claimed{
+      opacity:.65;
+    }
+
+
+    .mission-item-main{
+      display:grid;
+
+      grid-template-columns:
+        50px
+        minmax(0,1fr);
+
+      gap:12px;
+
+      padding:15px;
+    }
+
+
+    .mission-icon{
+      width:50px;
+      height:50px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border-radius:16px;
+
+      background:#eaf2ff;
+
+      font-size:25px;
+    }
+
+
+    .mission-name{
+      color:#082f73;
+
+      font-size:
+        clamp(
+          14px,
+          3.5vw,
+          18px
+        );
+
+      font-weight:800;
+
+      line-height:1.35;
+    }
+
+
+    .mission-description{
+      margin-top:3px;
+
+      color:#71809b;
+
+      font-size:
+        clamp(
+          10px,
+          2.7vw,
+          13px
+        );
+
+      font-weight:500;
+
+      line-height:1.4;
+    }
+
+
+    /* =====================================================
+       MISSION PROGRESS
+    ====================================================== */
+
+    .mission-progress-row{
+      display:flex;
+
+      align-items:center;
+
+      gap:10px;
+
+      margin-top:10px;
+    }
+
+
+    .mission-progress-track{
+      flex:1;
+
+      height:9px;
+
+      overflow:hidden;
+
+      border-radius:999px;
+
+      background:#dde8f6;
+    }
+
+
+    .mission-progress-fill{
+      width:0%;
+      height:100%;
+
+      border-radius:inherit;
+
+      background:
+        linear-gradient(
+          90deg,
+          #087bf0,
+          #10b7ff
+        );
+
+      transition:
+        width .35s ease;
+    }
+
+
+    .mission-progress-text{
+      min-width:48px;
+
+      color:#073b93;
+
+      font-size:
+        clamp(
+          10px,
+          2.7vw,
+          13px
+        );
+
+      font-weight:900;
+
+      text-align:right;
+    }
+
+
+    /* =====================================================
+       REWARD
+    ====================================================== */
+
+    .mission-bottom{
+      display:flex;
+
+      align-items:center;
+
+      justify-content:
+        space-between;
+
+      gap:10px;
+
+      padding:
+        10px
+        15px
+        14px;
+
+      border-top:
+        1px solid #edf2f9;
+    }
+
+
+    .reward-list{
+      display:flex;
+
+      align-items:center;
+
+      flex-wrap:wrap;
+
+      gap:6px;
+    }
+
+
+    .reward{
+      display:inline-flex;
+
+      align-items:center;
+
+      gap:3px;
+
+      padding:
+        5px
+        8px;
+
+      border-radius:999px;
+
+      background:#f0f5fc;
+
+      color:#153a76;
+
+      font-size:
+        clamp(
+          9px,
+          2.5vw,
+          12px
+        );
+
+      font-weight:800;
+    }
+
+
+    /* =====================================================
+       BUTTONS
+    ====================================================== */
+
+    .mission-actions{
+      display:flex;
+
+      align-items:center;
+
+      gap:6px;
+
+      flex-shrink:0;
+    }
+
+
+    .test-button,
+    .claim-button{
+      min-height:36px;
+
+      padding:
+        7px
+        11px;
+
+      border:0;
+
+      border-radius:11px;
+
+      font-size:
+        clamp(
+          9px,
+          2.5vw,
+          12px
+        );
+
+      font-weight:900;
+
+      cursor:pointer;
+
+      white-space:nowrap;
+    }
+
+
+    .test-button{
+      color:#0755b7;
+
+      background:#e2efff;
+    }
+
+
+    .claim-button{
+      color:#fff;
+
+      background:#06c755;
+    }
+
+
+    .claim-button:disabled{
+      cursor:default;
+
+      background:#c7d3e2;
+
+      color:#6c7c92;
+    }
+
+
+    /* =====================================================
+       RESET TEST
+    ====================================================== */
+
+    .mission-test-reset{
+      width:100%;
+
+      margin-top:14px;
+
+      min-height:46px;
+
+      border:
+        1px solid #c9d8ec;
+
+      border-radius:14px;
+
+      background:#fff;
+
+      color:#49617f;
+
+      font-weight:800;
+
+      cursor:pointer;
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ====================================================== */
+
+    @media(max-width:480px){
+
+      .mission-panel{
+        border-radius:
+          23px 23px 0 0;
+
+        padding-left:10px;
+        padding-right:10px;
+      }
+
+
+      .mission-panel-header{
+        padding-top:14px;
+      }
+
+
+      .mission-panel-icon{
+        width:46px;
+        height:46px;
+
+        flex-basis:46px;
+
+        border-radius:14px;
+
+        font-size:23px;
+      }
+
+
+      .mission-item-main{
+        grid-template-columns:
+          42px
+          minmax(0,1fr);
+
+        gap:10px;
+
+        padding:12px;
+      }
+
+
+      .mission-icon{
+        width:42px;
+        height:42px;
+
+        border-radius:13px;
+
+        font-size:21px;
+      }
+
+
+      .mission-bottom{
+        padding:
+          9px
+          12px
+          12px;
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
 <body>
 
+
+<!-- =========================================================
+     MISSION TEMPLATE STAGE
+========================================================= -->
+
 <div
+  id="missionStage"
   class="stage"
-  id="stage"
 >
 
+
   <!-- TEMPLATE -->
+
   <img
-    id="missionTemplate"
     class="template"
     src="./mission-template.png"
     alt=""
@@ -39,743 +831,1947 @@
   >
 
 
-  <!-- ==============================================
-       TOP COIN
-  =============================================== -->
+  <!-- =====================================================
+       TOP ROCK COIN
+  ====================================================== -->
 
   <div
-    id="coin"
-    class="overlay live-number live-blue"
-    style="
-      left:76.7%;
-      top:3.2%;
-      width:7%;
-      height:5%;
-      font-size:clamp(10px,1.4vw,22px);
+    class="
+      overlay
+      mission-coin-box
+      live-blue
     "
+    id="missionCoin"
   >
     0
   </div>
 
 
-  <!-- ==============================================
+  <!-- =====================================================
        TOP ENERGY
-  =============================================== -->
+  ====================================================== -->
 
   <div
-    id="energy"
-    class="overlay live-number live-blue"
-    style="
-      left:88.7%;
-      top:3.2%;
-      width:9%;
-      height:5%;
-      font-size:clamp(9px,1.3vw,21px);
+    class="
+      overlay
+      mission-energy-box
+      live-blue
     "
+    id="missionEnergy"
   >
     0 / 200
   </div>
 
 
-  <!-- ==============================================
-       MISSION POINT
-  =============================================== -->
+  <!-- =====================================================
+       DAILY PROGRESS
+  ====================================================== -->
 
-  <div
-    id="missionPoint"
-    class="overlay live-white"
-    style="
-      left:89.5%;
-      top:11.7%;
-      width:7.5%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    0 PTS
-  </div>
+  <div class="live-track daily-track">
 
-
-  <!-- ==============================================
-       DAILY
-  =============================================== -->
-
-  <div
-    id="dailyProgressText"
-    class="overlay live-white"
-    style="
-      left:54.2%;
-      top:20%;
-      width:7%;
-      height:4%;
-      font-size:clamp(8px,1.1vw,17px);
-    "
-  >
-    0 / 1
-  </div>
-
-  <div
-    class="live-track"
-    style="
-      left:34%;
-      top:33%;
-      width:26.8%;
-      height:1.2%;
-    "
-  >
     <div
-      id="dailyBar"
-      class="live-fill mission-fill-daily"
+      id="dailyProgress"
+      class="
+        live-fill
+        mission-fill-daily
+      "
     ></div>
-  </div>
 
-  <div
-    id="dailyCoin"
-    class="overlay live-blue"
-    style="
-      left:44%;
-      top:39%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
-  </div>
-
-  <div
-    id="dailyEnergy"
-    class="overlay live-blue"
-    style="
-      left:54%;
-      top:39%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
   </div>
 
 
-  <!-- ==============================================
-       WEEKLY
-  =============================================== -->
-
   <div
-    id="weeklyProgressText"
-    class="overlay live-white"
-    style="
-      left:91%;
-      top:20%;
-      width:7%;
-      height:4%;
-      font-size:clamp(8px,1.1vw,17px);
-    "
+    id="dailyCount"
+    class="daily-count"
   >
-    0 / 1
+    0 / 4
   </div>
 
-  <div
-    class="live-track"
-    style="
-      left:65%;
-      top:33%;
-      width:31%;
-      height:1.2%;
-    "
-  >
+
+  <!-- =====================================================
+       WEEKLY PROGRESS
+  ====================================================== -->
+
+  <div class="live-track weekly-track">
+
     <div
-      id="weeklyBar"
-      class="live-fill mission-fill-weekly"
+      id="weeklyProgress"
+      class="
+        live-fill
+        mission-fill-weekly
+      "
     ></div>
-  </div>
 
-  <div
-    id="weeklyCoin"
-    class="overlay live-blue"
-    style="
-      left:76%;
-      top:39%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
-  </div>
-
-  <div
-    id="weeklyEnergy"
-    class="overlay live-blue"
-    style="
-      left:87%;
-      top:39%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
   </div>
 
 
-  <!-- ==============================================
-       MONTHLY
-  =============================================== -->
-
   <div
-    id="monthlyProgressText"
-    class="overlay live-white"
-    style="
-      left:54%;
-      top:51%;
-      width:7%;
-      height:4%;
-      font-size:clamp(8px,1.1vw,17px);
-    "
+    id="weeklyCount"
+    class="weekly-count"
   >
-    0 / 1
+    0 / 4
   </div>
 
-  <div
-    class="live-track"
-    style="
-      left:34%;
-      top:63.5%;
-      width:26.8%;
-      height:1.2%;
-    "
-  >
+
+  <!-- =====================================================
+       MONTHLY PROGRESS
+  ====================================================== -->
+
+  <div class="live-track monthly-track">
+
     <div
-      id="monthlyBar"
-      class="live-fill mission-fill-monthly"
+      id="monthlyProgress"
+      class="
+        live-fill
+        mission-fill-monthly
+      "
     ></div>
-  </div>
 
-  <div
-    id="monthlyCoin"
-    class="overlay live-blue"
-    style="
-      left:44%;
-      top:69%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
-  </div>
-
-  <div
-    id="monthlyEnergy"
-    class="overlay live-blue"
-    style="
-      left:54%;
-      top:69%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
   </div>
 
 
-  <!-- ==============================================
-       BONUS
-  =============================================== -->
-
   <div
-    id="bonusProgressText"
-    class="overlay live-white"
-    style="
-      left:91%;
-      top:51%;
-      width:7%;
-      height:4%;
-      font-size:clamp(8px,1.1vw,17px);
-    "
+    id="monthlyCount"
+    class="monthly-count"
   >
-    0 / 1
+    0 / 4
   </div>
 
-  <div
-    class="live-track"
-    style="
-      left:65%;
-      top:63.5%;
-      width:31%;
-      height:1.2%;
-    "
-  >
+
+  <!-- =====================================================
+       BONUS PROGRESS
+  ====================================================== -->
+
+  <div class="live-track bonus-track">
+
     <div
-      id="bonusBar"
-      class="live-fill mission-fill-bonus"
+      id="bonusProgress"
+      class="
+        live-fill
+        mission-fill-bonus
+      "
     ></div>
+
   </div>
+
 
   <div
-    id="bonusCoin"
-    class="overlay live-blue"
-    style="
-      left:76%;
-      top:69%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
+    id="bonusCount"
+    class="bonus-count"
   >
-    +0
-  </div>
-
-  <div
-    id="bonusEnergy"
-    class="overlay live-blue"
-    style="
-      left:87%;
-      top:69%;
-      width:6%;
-      height:4%;
-      font-size:clamp(8px,1vw,16px);
-    "
-  >
-    +0
+    0 / 4
   </div>
 
 
-  <!-- ==============================================
-       NAVIGATION
-  =============================================== -->
+  <!-- =====================================================
+       CLICK DAILY
+  ====================================================== -->
 
   <button
+    type="button"
+    class="
+      mission-hotspot
+      daily
+    "
+    onclick="openMission('daily')"
+    aria-label="Daily Mission"
+  ></button>
+
+
+  <!-- =====================================================
+       CLICK WEEKLY
+  ====================================================== -->
+
+  <button
+    type="button"
+    class="
+      mission-hotspot
+      weekly
+    "
+    onclick="openMission('weekly')"
+    aria-label="Weekly Mission"
+  ></button>
+
+
+  <!-- =====================================================
+       CLICK MONTHLY
+  ====================================================== -->
+
+  <button
+    type="button"
+    class="
+      mission-hotspot
+      monthly
+    "
+    onclick="openMission('monthly')"
+    aria-label="Monthly Mission"
+  ></button>
+
+
+  <!-- =====================================================
+       CLICK BONUS
+  ====================================================== -->
+
+  <button
+    type="button"
+    class="
+      mission-hotspot
+      bonus
+    "
+    onclick="openMission('bonus')"
+    aria-label="Bonus Mission"
+  ></button>
+
+
+  <!-- =====================================================
+       HOME BUTTON
+       ปรับตำแหน่งให้ตรง Template ได้ภายหลัง
+  ====================================================== -->
+
+  <button
+    type="button"
     class="hotspot"
     style="
       left:1%;
-      top:82%;
+      top:88%;
       width:31%;
-      height:14%;
+      height:11%;
     "
-    onclick="goPage('HOME')"
+    onclick="goHome()"
     aria-label="Home"
   ></button>
 
-  <button
-    class="hotspot"
-    style="
-      left:33%;
-      top:82%;
-      width:32%;
-      height:14%;
-    "
-    onclick="window.location.reload()"
-    aria-label="Mission"
-  ></button>
-
-  <button
-    class="hotspot"
-    style="
-      left:66%;
-      top:82%;
-      width:32%;
-      height:14%;
-    "
-    onclick="goPage('BATTLE')"
-    aria-label="Battle"
-  ></button>
 
 </div>
 
 
+<!-- =========================================================
+     MISSION MODAL
+========================================================= -->
+
 <div
-  id="status"
-  class="status"
-></div>
+  id="missionModal"
+  class="mission-modal"
+  onclick="modalBackdrop(event)"
+>
+
+  <section
+    class="mission-panel"
+  >
 
 
-<script src="./common.js"></script>
+    <!-- HEADER -->
+
+    <header
+      class="mission-panel-header"
+    >
+
+      <div
+        id="panelIcon"
+        class="mission-panel-icon"
+      >
+        🎯
+      </div>
+
+
+      <div
+        class="mission-panel-title-wrap"
+      >
+
+        <h2
+          id="panelTitle"
+          class="mission-panel-title"
+        >
+          DAILY MISSION
+        </h2>
+
+
+        <div
+          id="panelSubtitle"
+          class="mission-panel-subtitle"
+        >
+          ภารกิจประจำวัน
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="mission-close"
+        onclick="closeMission()"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+    </header>
+
+
+    <!-- CATEGORY SUMMARY -->
+
+    <section
+      class="category-summary"
+    >
+
+      <div
+        class="summary-chip"
+      >
+
+        <div
+          class="summary-chip-label"
+        >
+          สำเร็จ
+        </div>
+
+        <div
+          id="summaryComplete"
+          class="summary-chip-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div
+        class="summary-chip"
+      >
+
+        <div
+          class="summary-chip-label"
+        >
+          ทั้งหมด
+        </div>
+
+        <div
+          id="summaryTotal"
+          class="summary-chip-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div
+        class="summary-chip"
+      >
+
+        <div
+          class="summary-chip-label"
+        >
+          %
+        </div>
+
+        <div
+          id="summaryPercent"
+          class="summary-chip-value"
+        >
+          0%
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- LIST -->
+
+    <section
+      id="missionList"
+    ></section>
+
+
+    <!-- TEST RESET -->
+
+    <button
+      type="button"
+      class="mission-test-reset"
+      onclick="resetMissionTest()"
+    >
+      รีเซ็ตข้อมูลภารกิจสำหรับ TEST
+    </button>
+
+  </section>
+
+</div>
+
+
+<!-- STATUS -->
+
+<div id="status"></div>
+
+
+<!-- COMMON -->
+
+<script
+  src="./common.js"
+></script>
 
 
 <script>
 
-const ROCK = window.ROCK;
+/* =========================================================
+   GLOBAL
+========================================================= */
 
-const $ =
-  id =>
-    document.getElementById(id);
+const ROCK =
+  window.ROCK;
 
 
-function goPage(name){
+const STORAGE_KEY =
+  "rock_mission_test_v1";
 
-  const url =
-    ROCK.CFG.PAGE[name];
 
-  if(url){
-    ROCK.go(url);
+let activeCategory =
+  "daily";
+
+
+/* =========================================================
+   MISSION CONFIG
+========================================================= */
+
+const missionConfig = {
+
+
+  /* =====================================================
+     DAILY
+  ====================================================== */
+
+  daily: {
+
+    title:
+      "DAILY MISSION",
+
+    subtitle:
+      "ภารกิจประจำวัน",
+
+    icon:
+      "☀️",
+
+    missions: [
+
+      {
+        id:
+          "daily_weight",
+
+        icon:
+          "⚖️",
+
+        name:
+          "บันทึกน้ำหนัก",
+
+        description:
+          "บันทึกน้ำหนักของวันนี้",
+
+        target:
+          1,
+
+        unit:
+          "ครั้ง",
+
+        reward: {
+          coin:10,
+          energy:5,
+          exp:20
+        }
+      },
+
+
+      {
+        id:
+          "daily_walk",
+
+        icon:
+          "🚶",
+
+        name:
+          "เดิน 6,000 ก้าว",
+
+        description:
+          "สะสมการเดินให้ครบ 6,000 ก้าว",
+
+        target:
+          6000,
+
+        step:
+          1000,
+
+        unit:
+          "ก้าว",
+
+        reward: {
+          coin:15,
+          energy:5,
+          exp:25
+        }
+      },
+
+
+      {
+        id:
+          "daily_water",
+
+        icon:
+          "💧",
+
+        name:
+          "ดื่มน้ำ 8 แก้ว",
+
+        description:
+          "ดื่มน้ำให้ครบตามเป้าหมาย",
+
+        target:
+          8,
+
+        unit:
+          "แก้ว",
+
+        reward: {
+          coin:10,
+          energy:5,
+          exp:20
+        }
+      },
+
+
+      {
+        id:
+          "daily_activity",
+
+        icon:
+          "🏃",
+
+        name:
+          "ออกกำลังกาย",
+
+        description:
+          "ทำกิจกรรมออกกำลังกายอย่างน้อย 1 ครั้ง",
+
+        target:
+          1,
+
+        unit:
+          "ครั้ง",
+
+        reward: {
+          coin:20,
+          energy:10,
+          exp:30
+        }
+      }
+
+    ]
+  },
+
+
+  /* =====================================================
+     WEEKLY
+  ====================================================== */
+
+  weekly: {
+
+    title:
+      "WEEKLY MISSION",
+
+    subtitle:
+      "ภารกิจประจำสัปดาห์",
+
+    icon:
+      "📅",
+
+    missions: [
+
+      {
+        id:
+          "weekly_weight",
+
+        icon:
+          "⚖️",
+
+        name:
+          "บันทึกน้ำหนัก 5 วัน",
+
+        description:
+          "บันทึกน้ำหนักอย่างน้อย 5 วันในสัปดาห์",
+
+        target:
+          5,
+
+        unit:
+          "วัน",
+
+        reward: {
+          coin:50,
+          energy:15,
+          exp:80
+        }
+      },
+
+
+      {
+        id:
+          "weekly_exercise",
+
+        icon:
+          "🏋️",
+
+        name:
+          "ออกกำลังกาย 3 ครั้ง",
+
+        description:
+          "ทำกิจกรรมออกกำลังกายอย่างน้อย 3 ครั้ง",
+
+        target:
+          3,
+
+        unit:
+          "ครั้ง",
+
+        reward: {
+          coin:60,
+          energy:20,
+          exp:100
+        }
+      },
+
+
+      {
+        id:
+          "weekly_daily",
+
+        icon:
+          "✅",
+
+        name:
+          "ผ่าน Daily 5 ภารกิจ",
+
+        description:
+          "ทำ Daily Mission สำเร็จสะสม 5 ภารกิจ",
+
+        target:
+          5,
+
+        unit:
+          "ภารกิจ",
+
+        reward: {
+          coin:40,
+          energy:15,
+          exp:70
+        }
+      },
+
+
+      {
+        id:
+          "weekly_streak",
+
+        icon:
+          "🔥",
+
+        name:
+          "เข้าแอปต่อเนื่อง 7 วัน",
+
+        description:
+          "เข้าใช้งาน ROCK YOUR BODY ต่อเนื่อง",
+
+        target:
+          7,
+
+        unit:
+          "วัน",
+
+        reward: {
+          coin:80,
+          energy:20,
+          exp:120
+        }
+      }
+
+    ]
+  },
+
+
+  /* =====================================================
+     MONTHLY
+  ====================================================== */
+
+  monthly: {
+
+    title:
+      "MONTHLY MISSION",
+
+    subtitle:
+      "ภารกิจประจำเดือน",
+
+    icon:
+      "🏆",
+
+    missions: [
+
+      {
+        id:
+          "monthly_weight",
+
+        icon:
+          "⚖️",
+
+        name:
+          "บันทึกน้ำหนัก 20 วัน",
+
+        description:
+          "บันทึกน้ำหนักสะสมอย่างน้อย 20 วัน",
+
+        target:
+          20,
+
+        unit:
+          "วัน",
+
+        reward: {
+          coin:150,
+          energy:40,
+          exp:250
+        }
+      },
+
+
+      {
+        id:
+          "monthly_exercise",
+
+        icon:
+          "🏃",
+
+        name:
+          "ออกกำลังกาย 12 ครั้ง",
+
+        description:
+          "ทำกิจกรรมออกกำลังกายสะสม 12 ครั้ง",
+
+        target:
+          12,
+
+        unit:
+          "ครั้ง",
+
+        reward: {
+          coin:180,
+          energy:50,
+          exp:300
+        }
+      },
+
+
+      {
+        id:
+          "monthly_daily",
+
+        icon:
+          "⭐",
+
+        name:
+          "ผ่าน Daily 20 ภารกิจ",
+
+        description:
+          "ทำ Daily Mission สำเร็จสะสม 20 ภารกิจ",
+
+        target:
+          20,
+
+        unit:
+          "ภารกิจ",
+
+        reward: {
+          coin:150,
+          energy:40,
+          exp:250
+        }
+      },
+
+
+      {
+        id:
+          "monthly_weightloss",
+
+        icon:
+          "📉",
+
+        name:
+          "ลดน้ำหนัก 2 กิโลกรัม",
+
+        description:
+          "ลดจากน้ำหนักเริ่มต้นของเดือน 2 กิโลกรัม",
+
+        target:
+          2,
+
+        step:
+          .5,
+
+        unit:
+          "kg",
+
+        reward: {
+          coin:250,
+          energy:60,
+          exp:400
+        }
+      }
+
+    ]
+  },
+
+
+  /* =====================================================
+     BONUS
+  ====================================================== */
+
+  bonus: {
+
+    title:
+      "BONUS MISSION",
+
+    subtitle:
+      "ภารกิจพิเศษ",
+
+    icon:
+      "🎁",
+
+    missions: [
+
+      {
+        id:
+          "bonus_streak",
+
+        icon:
+          "🔥",
+
+        name:
+          "Perfect Week",
+
+        description:
+          "ทำ Daily Mission ครบทุกวันติดต่อกัน 7 วัน",
+
+        target:
+          7,
+
+        unit:
+          "วัน",
+
+        reward: {
+          coin:300,
+          energy:80,
+          exp:500
+        }
+      },
+
+
+      {
+        id:
+          "bonus_level",
+
+        icon:
+          "⬆️",
+
+        name:
+          "เพิ่ม Level",
+
+        description:
+          "เพิ่ม Level จาก EXP อย่างน้อย 1 Level",
+
+        target:
+          1,
+
+        unit:
+          "Level",
+
+        reward: {
+          coin:200,
+          energy:50,
+          exp:300
+        }
+      },
+
+
+      {
+        id:
+          "bonus_target",
+
+        icon:
+          "🎯",
+
+        name:
+          "เข้าใกล้เป้าหมาย",
+
+        description:
+          "ทำความก้าวหน้าสู่เป้าหมายครบ 50%",
+
+        target:
+          50,
+
+        step:
+          10,
+
+        unit:
+          "%",
+
+        reward: {
+          coin:250,
+          energy:60,
+          exp:400
+        }
+      },
+
+
+      {
+        id:
+          "bonus_all",
+
+        icon:
+          "👑",
+
+        name:
+          "Mission Master",
+
+        description:
+          "ทำภารกิจในระบบสำเร็จสะสม 10 ภารกิจ",
+
+        target:
+          10,
+
+        unit:
+          "ภารกิจ",
+
+        reward: {
+          coin:500,
+          energy:100,
+          exp:700
+        }
+      }
+
+    ]
+  }
+
+};
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadMissionState(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
+
+
+    if(!raw){
+      return {};
+    }
+
+
+    return (
+      JSON.parse(raw) ||
+      {}
+    );
+
+
+  }catch(error){
+
+    console.warn(
+      "MISSION STORAGE READ:",
+      error
+    );
+
+    return {};
   }
 }
 
 
-function showStatus(
-  message,
-  error = false
+function saveMissionState(
+  state
 ){
 
-  const el =
-    $("status");
-
-  el.textContent =
-    message;
-
-  el.className =
-    error
-      ? "status show error"
-      : "status show";
-}
-
-
-function hideStatus(){
-
-  $("status").className =
-    "status";
-}
-
-
-function percent(
-  current,
-  max
-){
-
-  const c =
-    Number(current) || 0;
-
-  const m =
-    Number(max) || 0;
-
-  if(m <= 0){
-    return 0;
-  }
-
-  return Math.max(
-    0,
-    Math.min(
-      100,
-      c / m * 100
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      state
     )
   );
 }
 
 
-function missionValue(
-  missions,
-  name
+/* =========================================================
+   GET STATE
+========================================================= */
+
+function getMissionState(
+  id
 ){
+
+  const state =
+    loadMissionState();
+
 
   return (
-    missions?.[name] ||
-    missions?.[
-      name.toLowerCase()
-    ] ||
-    {}
+    state[id] ||
+    {
+      progress:0,
+      claimed:false
+    }
   );
 }
 
 
-function renderMission(raw){
+/* =========================================================
+   SET STATE
+========================================================= */
 
-  const user =
-    raw?.user ||
-    raw?.player ||
-    {};
-
-  const energy =
-    raw?.energy &&
-    typeof raw.energy === "object"
-      ? raw.energy
-      : {};
-
-  const missions =
-    raw?.missions ||
-    {};
-
-
-  /* TOP */
-
-  $("coin").textContent =
-    ROCK.fmtInt(
-      raw?.rockCoin ??
-      raw?.rock_coin ??
-      user?.rock_coin ??
-      0
-    );
-
-
-  const currentEnergy =
-    ROCK.num(
-      energy.current ??
-      user.energy,
-      0
-    );
-
-
-  const maxEnergy =
-    ROCK.num(
-      energy.max ??
-      user.max_energy,
-      ROCK.CFG.MAX_ENERGY
-    );
-
-
-  $("energy").textContent =
-    ROCK.fmtInt(currentEnergy) +
-    " / " +
-    ROCK.fmtInt(maxEnergy);
-
-
-  $("missionPoint").textContent =
-    ROCK.fmtInt(
-      raw?.missionPoint ??
-      raw?.mission_point ??
-      missions?.points ??
-      0
-    ) +
-    " PTS";
-
-
-  /* DAILY */
-
-  renderMissionBox(
-    "daily",
-    missionValue(
-      missions,
-      "daily"
-    )
-  );
-
-
-  /* WEEKLY */
-
-  renderMissionBox(
-    "weekly",
-    missionValue(
-      missions,
-      "weekly"
-    )
-  );
-
-
-  /* MONTHLY */
-
-  renderMissionBox(
-    "monthly",
-    missionValue(
-      missions,
-      "monthly"
-    )
-  );
-
-
-  /* BONUS */
-
-  renderMissionBox(
-    "bonus",
-    missionValue(
-      missions,
-      "bonus"
-    )
-  );
-}
-
-
-function renderMissionBox(
-  prefix,
-  data
+function setMissionState(
+  id,
+  value
 ){
 
-  const current =
-    Number(
-      data.current ??
-      data.progress ??
-      data.completed ??
-      0
+  const state =
+    loadMissionState();
+
+
+  state[id] = value;
+
+
+  saveMissionState(
+    state
+  );
+}
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function formatNumber(
+  value
+){
+
+  const n =
+    Number(value);
+
+
+  if(
+    !Number.isFinite(n)
+  ){
+    return "0";
+  }
+
+
+  if(
+    Number.isInteger(n)
+  ){
+    return String(n);
+  }
+
+
+  return n.toFixed(1);
+}
+
+
+/* =========================================================
+   OPEN MISSION
+========================================================= */
+
+function openMission(
+  category
+){
+
+  if(
+    !missionConfig[category]
+  ){
+    return;
+  }
+
+
+  activeCategory =
+    category;
+
+
+  renderMissionPanel();
+
+
+  document
+    .getElementById(
+      "missionModal"
+    )
+    .classList
+    .add(
+      "show"
     );
 
 
-  const max =
+  document.body.style.overflow =
+    "hidden";
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+function closeMission(){
+
+  document
+    .getElementById(
+      "missionModal"
+    )
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  document.body.style.overflow =
+    "";
+}
+
+
+/* =========================================================
+   BACKDROP
+========================================================= */
+
+function modalBackdrop(
+  event
+){
+
+  if(
+    event.target.id ===
+    "missionModal"
+  ){
+    closeMission();
+  }
+}
+
+
+/* =========================================================
+   RENDER PANEL
+========================================================= */
+
+function renderMissionPanel(){
+
+  const config =
+    missionConfig[
+      activeCategory
+    ];
+
+
+  document
+    .getElementById(
+      "panelIcon"
+    )
+    .textContent =
+      config.icon;
+
+
+  document
+    .getElementById(
+      "panelTitle"
+    )
+    .textContent =
+      config.title;
+
+
+  document
+    .getElementById(
+      "panelSubtitle"
+    )
+    .textContent =
+      config.subtitle;
+
+
+  const container =
+    document
+      .getElementById(
+        "missionList"
+      );
+
+
+  container.innerHTML =
+    "";
+
+
+  let completed =
+    0;
+
+
+  config.missions
+    .forEach(
+      mission => {
+
+
+        const state =
+          getMissionState(
+            mission.id
+          );
+
+
+        const progress =
+          Math.max(
+            0,
+            Math.min(
+              mission.target,
+              Number(
+                state.progress
+              ) || 0
+            )
+          );
+
+
+        const isComplete =
+          progress >=
+          mission.target;
+
+
+        if(isComplete){
+          completed++;
+        }
+
+
+        const percent =
+          mission.target > 0
+
+            ? Math.min(
+                100,
+                (
+                  progress /
+                  mission.target
+                ) * 100
+              )
+
+            : 0;
+
+
+        const item =
+          document.createElement(
+            "article"
+          );
+
+
+        item.className =
+          "mission-item";
+
+
+        if(isComplete){
+          item.classList.add(
+            "complete"
+          );
+        }
+
+
+        if(state.claimed){
+          item.classList.add(
+            "claimed"
+          );
+        }
+
+
+        item.innerHTML = `
+
+          <div class="mission-item-main">
+
+            <div class="mission-icon">
+              ${mission.icon}
+            </div>
+
+
+            <div>
+
+              <div class="mission-name">
+                ${mission.name}
+              </div>
+
+
+              <div class="mission-description">
+                ${mission.description}
+              </div>
+
+
+              <div class="mission-progress-row">
+
+                <div class="mission-progress-track">
+
+                  <div
+                    class="mission-progress-fill"
+                    style="
+                      width:${percent}%;
+                    "
+                  ></div>
+
+                </div>
+
+
+                <div class="mission-progress-text">
+
+                  ${formatNumber(progress)}
+                  /
+                  ${formatNumber(mission.target)}
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="mission-bottom">
+
+            <div class="reward-list">
+
+              <span class="reward">
+                🪙 +${mission.reward.coin}
+              </span>
+
+              <span class="reward">
+                ⚡ +${mission.reward.energy}
+              </span>
+
+              <span class="reward">
+                ⭐ +${mission.reward.exp}
+              </span>
+
+            </div>
+
+
+            <div class="mission-actions">
+
+              <button
+                type="button"
+                class="test-button"
+                onclick="
+                  addMissionTest(
+                    '${mission.id}'
+                  )
+                "
+              >
+                + TEST
+              </button>
+
+
+              <button
+                type="button"
+                class="claim-button"
+                onclick="
+                  claimMission(
+                    '${mission.id}'
+                  )
+                "
+                ${
+                  !isComplete ||
+                  state.claimed
+                    ? "disabled"
+                    : ""
+                }
+              >
+
+                ${
+                  state.claimed
+                    ? "รับแล้ว"
+                    : "รับรางวัล"
+                }
+
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        container.appendChild(
+          item
+        );
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "summaryComplete"
+    )
+    .textContent =
+      completed;
+
+
+  document
+    .getElementById(
+      "summaryTotal"
+    )
+    .textContent =
+      config.missions.length;
+
+
+  const percent =
+    config.missions.length > 0
+
+      ? Math.round(
+          (
+            completed /
+            config.missions.length
+          ) * 100
+        )
+
+      : 0;
+
+
+  document
+    .getElementById(
+      "summaryPercent"
+    )
+    .textContent =
+      `${percent}%`;
+
+
+  updateMissionStage();
+}
+
+
+/* =========================================================
+   TEST PROGRESS
+========================================================= */
+
+function addMissionTest(
+  id
+){
+
+  const mission =
+    findMission(
+      id
+    );
+
+
+  if(!mission){
+    return;
+  }
+
+
+  const state =
+    getMissionState(
+      id
+    );
+
+
+  if(state.claimed){
+    return;
+  }
+
+
+  const step =
     Number(
-      data.max ??
-      data.target ??
-      data.total ??
+      mission.step ??
       1
     );
 
 
-  const coin =
-    Number(
-      data.rockCoin ??
-      data.rock_coin ??
-      data.coin ??
-      data.rewardCoin ??
-      0
+  state.progress =
+    Math.min(
+      mission.target,
+      (
+        Number(
+          state.progress
+        ) || 0
+      ) + step
     );
 
 
-  const energy =
-    Number(
-      data.energy ??
-      data.rewardEnergy ??
-      0
-    );
+  setMissionState(
+    id,
+    state
+  );
 
 
-  $(
-    prefix +
-    "ProgressText"
-  ).textContent =
-    ROCK.fmtInt(current) +
-    " / " +
-    ROCK.fmtInt(max);
-
-
-  $(
-    prefix +
-    "Bar"
-  ).style.width =
-    percent(
-      current,
-      max
-    ) +
-    "%";
-
-
-  $(
-    prefix +
-    "Coin"
-  ).textContent =
-    "+" +
-    ROCK.fmtInt(coin);
-
-
-  $(
-    prefix +
-    "Energy"
-  ).textContent =
-    "+" +
-    ROCK.fmtInt(energy);
+  renderMissionPanel();
 }
 
 
-let loading =
-  false;
+/* =========================================================
+   FIND MISSION
+========================================================= */
+
+function findMission(
+  id
+){
+
+  for(
+    const category
+    of Object.values(
+      missionConfig
+    )
+  ){
+
+    const mission =
+      category.missions
+        .find(
+          item =>
+            item.id === id
+        );
 
 
-async function loadMission(){
+    if(mission){
+      return mission;
+    }
 
-  if(loading){
+  }
+
+
+  return null;
+}
+
+
+/* =========================================================
+   CLAIM
+========================================================= */
+
+function claimMission(
+  id
+){
+
+  const mission =
+    findMission(
+      id
+    );
+
+
+  if(!mission){
     return;
   }
 
-  loading =
+
+  const state =
+    getMissionState(
+      id
+    );
+
+
+  if(
+    state.claimed ||
+    Number(
+      state.progress
+    ) <
+    mission.target
+  ){
+    return;
+  }
+
+
+  state.claimed =
     true;
+
+
+  setMissionState(
+    id,
+    state
+  );
+
+
+  /*
+    TEST MODE
+
+    ตอนต่อ Supabase จริง
+    ตรงนี้จะส่ง:
+      rock_coin
+      energy
+      exp
+  */
+
+
+  renderMissionPanel();
+
+
+  showStatus(
+    `รับรางวัล ${mission.name} สำเร็จ`
+  );
+}
+
+
+/* =========================================================
+   CATEGORY PROGRESS
+========================================================= */
+
+function categoryProgress(
+  category
+){
+
+  const config =
+    missionConfig[
+      category
+    ];
+
+
+  let complete =
+    0;
+
+
+  config.missions
+    .forEach(
+      mission => {
+
+        const state =
+          getMissionState(
+            mission.id
+          );
+
+
+        if(
+          Number(
+            state.progress
+          ) >=
+          mission.target
+        ){
+          complete++;
+        }
+
+      }
+    );
+
+
+  const total =
+    config.missions.length;
+
+
+  const percent =
+    total > 0
+
+      ? (
+          complete /
+          total
+        ) * 100
+
+      : 0;
+
+
+  return {
+    complete,
+    total,
+    percent
+  };
+}
+
+
+/* =========================================================
+   UPDATE TEMPLATE DATA
+========================================================= */
+
+function updateMissionStage(){
+
+  const daily =
+    categoryProgress(
+      "daily"
+    );
+
+
+  const weekly =
+    categoryProgress(
+      "weekly"
+    );
+
+
+  const monthly =
+    categoryProgress(
+      "monthly"
+    );
+
+
+  const bonus =
+    categoryProgress(
+      "bonus"
+    );
+
+
+  /* DAILY */
+
+  document
+    .getElementById(
+      "dailyCount"
+    )
+    .textContent =
+      `${daily.complete} / ${daily.total}`;
+
+
+  document
+    .getElementById(
+      "dailyProgress"
+    )
+    .style.width =
+      `${daily.percent}%`;
+
+
+  /* WEEKLY */
+
+  document
+    .getElementById(
+      "weeklyCount"
+    )
+    .textContent =
+      `${weekly.complete} / ${weekly.total}`;
+
+
+  document
+    .getElementById(
+      "weeklyProgress"
+    )
+    .style.width =
+      `${weekly.percent}%`;
+
+
+  /* MONTHLY */
+
+  document
+    .getElementById(
+      "monthlyCount"
+    )
+    .textContent =
+      `${monthly.complete} / ${monthly.total}`;
+
+
+  document
+    .getElementById(
+      "monthlyProgress"
+    )
+    .style.width =
+      `${monthly.percent}%`;
+
+
+  /* BONUS */
+
+  document
+    .getElementById(
+      "bonusCount"
+    )
+    .textContent =
+      `${bonus.complete} / ${bonus.total}`;
+
+
+  document
+    .getElementById(
+      "bonusProgress"
+    )
+    .style.width =
+      `${bonus.percent}%`;
+}
+
+
+/* =========================================================
+   RESET TEST
+========================================================= */
+
+function resetMissionTest(){
+
+  const ok =
+    confirm(
+      "รีเซ็ตความคืบหน้าภารกิจสำหรับการทดสอบ?"
+    );
+
+
+  if(!ok){
+    return;
+  }
+
+
+  localStorage.removeItem(
+    STORAGE_KEY
+  );
+
+
+  renderMissionPanel();
+
+  updateMissionStage();
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+  message
+){
+
+  const el =
+    document
+      .getElementById(
+        "status"
+      );
+
+
+  if(!el){
+    return;
+  }
+
+
+  el.textContent =
+    message;
+
+
+  el.className =
+    "show";
+
+
+  setTimeout(
+    () => {
+
+      el.className =
+        "";
+
+    },
+    2200
+  );
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function goHome(){
+
+  const url =
+    ROCK?.CFG?.PAGE?.HOME ||
+    "./dashboard.html";
+
+
+  ROCK.go(
+    url
+  );
+}
+
+
+/* =========================================================
+   LOAD USER DATA
+========================================================= */
+
+async function loadMissionUser(){
 
   try{
 
     const raw =
       await ROCK.fetchDashboard();
 
-    console.log(
-      "MISSION DATA:",
-      raw
-    );
 
-    renderMission(raw);
+    const coin =
+      Number(
+        raw?.rockCoin ??
+        raw?.rock_coin ??
+        0
+      );
 
-    hideStatus();
+
+    const energy =
+      Number(
+        raw?.energy?.current ??
+        raw?.energy ??
+        0
+      );
+
+
+    const maxEnergy =
+      Number(
+        raw?.energy?.max ??
+        ROCK.CFG.MAX_ENERGY ??
+        200
+      );
+
+
+    document
+      .getElementById(
+        "missionCoin"
+      )
+      .textContent =
+        ROCK.fmtInt(
+          coin
+        );
+
+
+    document
+      .getElementById(
+        "missionEnergy"
+      )
+      .textContent =
+        `${ROCK.fmtInt(energy)} / ${ROCK.fmtInt(maxEnergy)}`;
+
 
   }catch(error){
 
     console.error(
-      "MISSION LOAD ERROR:",
+      "MISSION USER ERROR:",
       error
     );
 
-    showStatus(
-      error?.message ||
-      String(error),
-      true
-    );
-
-  }finally{
-
-    loading =
-      false;
   }
 }
 
 
-(async()=>{
+/* =========================================================
+   START
+========================================================= */
+
+async function startMission(){
 
   try{
 
     if(!ROCK){
+
       throw new Error(
         "common.js โหลดไม่สำเร็จ"
       );
+
     }
 
-    showStatus(
-      "กำลังโหลดภารกิจ..."
-    );
+
+    const ready =
+      await ROCK.initLiff();
 
 
-    /*
-      Mission ใช้ Dashboard LIFF
-    */
-
-    const ok =
-      await ROCK.initLiff(
-        "DASHBOARD"
-      );
-
-
-    if(!ok){
+    if(!ready){
       return;
     }
 
 
-    await loadMission();
+    updateMissionStage();
 
 
-    setInterval(
-      ()=>{
-
-        if(
-          document.visibilityState ===
-          "visible"
-        ){
-          loadMission();
-        }
-
-      },
-      ROCK.CFG.REFRESH_MS ||
-      30000
-    );
+    await loadMissionUser();
 
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "MISSION START ERROR:",
+      error
+    );
+
 
     showStatus(
       error?.message ||
-      String(error),
-      true
+      String(error)
     );
-  }
 
-})();
+  }
+}
+
+
+startMission();
 
 </script>
 
+
 </body>
+
 </html>
