@@ -132,8 +132,8 @@ textarea{
   --current-height:8%;
 
    /* UPDATED DATE */
-  --updated-left:20%;
-  --updated-top:30.4%;
+  --updated-left:41.5%;
+  --updated-top:35.4%;
   --updated-width:10%;
   --updated-height:4%;
    
@@ -145,7 +145,7 @@ textarea{
 
   /* REMAINING */
   --remaining-left:35%;
-  --remaining-top:50%;
+  --remaining-top:65%;
   --remaining-width:10%;
   --remaining-height:4%;
 
@@ -1300,9 +1300,9 @@ textarea{
   display:block;
 
   font-size:clamp(
-    6px,
-    10cqw,
-    16px
+    5px,
+    7cqw,
+    11px
   );
 
   font-weight:700;
