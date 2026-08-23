@@ -966,21 +966,18 @@ function renderHome(raw) {
     Number.isFinite(target)
   ) {
 
-    $("remaining")
-      .textContent =
-        Math.max(
-          0,
-          current -
-          target
-        )
-          .toFixed(1) +
-        " kg";
-
+   $("remaining")
+  .textContent =
+    Math.max(
+      0,
+      current - target
+    )
+      .toFixed(1);
   } else {
 
-    $("remaining")
-      .textContent =
-        "--.- kg";
+  $("remaining")
+  .textContent =
+    "--.-";
   }
 
 
