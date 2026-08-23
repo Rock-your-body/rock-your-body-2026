@@ -3256,23 +3256,22 @@ async function submitEvidence(){
       activeMissionId
     );
 
-
   if(!mission){
+    showMissionStatus(
+      "ไม่พบข้อมูลภารกิจ"
+    );
     return;
   }
 
 
   const fileInput =
-    document
-      .getElementById(
-        "evidenceFile"
-      );
-
+    document.getElementById(
+      "evidenceFile"
+    );
 
   const file =
-    fileInput.files?.[0] ||
+    fileInput?.files?.[0] ||
     null;
-
 
   const link =
     document
@@ -3281,7 +3280,6 @@ async function submitEvidence(){
       )
       .value
       .trim();
-
 
   const note =
     document
@@ -3296,13 +3294,10 @@ async function submitEvidence(){
     mission.requireLink &&
     !link
   ){
-
     showMissionStatus(
       "กรุณาใส่ Link TikTok"
     );
-
     return;
-
   }
 
 
@@ -3310,34 +3305,256 @@ async function submitEvidence(){
     !file &&
     !link
   ){
-
     showMissionStatus(
       "กรุณาเลือกรูป / VDO หรือใส่ Link"
     );
-
     return;
+  }
 
+
+  if(!MISSION_API){
+    showMissionStatus(
+      "ไม่พบ MISSION API"
+    );
+    return;
   }
 
 
   const button =
-    document
-      .getElementById(
-        "submitEvidenceButton"
-      );
+    document.getElementById(
+      "submitEvidenceButton"
+    );
 
-
-  button.disabled =
-    true;
-
-
+  button.disabled = true;
   button.textContent =
     "กำลังส่งหลักฐาน...";
 
 
   try{
 
+    const idToken =
+      ROCK.getIdToken();
 
+    if(!idToken){
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+    }
+
+
+    const form =
+      new FormData();
+
+
+    form.append(
+      "action",
+      "submitEvidence"
+    );
+
+    form.append(
+      "idToken",
+      idToken
+    );
+
+    form.append(
+      "missionId",
+      mission.id
+    );
+
+    form.append(
+      "category",
+      activeCategory
+    );
+
+    form.append(
+      "note",
+      note
+    );
+
+    form.append(
+      "link",
+      link
+    );
+
+
+    if(file){
+
+      form.append(
+        "file",
+        file,
+        file.name
+      );
+
+    }
+
+
+    console.log(
+      "MISSION SUBMIT",
+      {
+        missionId:
+          mission.id,
+
+        category:
+          activeCategory,
+
+        fileName:
+          file?.name || "",
+
+        fileType:
+          file?.type || "",
+
+        fileSize:
+          file?.size || 0
+      }
+    );
+
+
+    /*
+      สำคัญ
+      ห้ามใส่ Content-Type เอง
+      Browser จะสร้าง multipart/form-data ให้
+    */
+
+    const response =
+      await fetch(
+        MISSION_API,
+        {
+          method:
+            "POST",
+
+          body:
+            form
+        }
+      );
+
+
+    /*
+      อ่านเป็น text ก่อน
+      เพื่อให้เห็น Error จริงแม้ Server
+      จะไม่ได้ส่ง JSON สมบูรณ์
+    */
+
+    const raw =
+      await response.text();
+
+
+    console.log(
+      "MISSION HTTP:",
+      response.status
+    );
+
+    console.log(
+      "MISSION RAW RESPONSE:",
+      raw
+    );
+
+
+    let result = {};
+
+    try{
+
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    }catch(error){
+
+      console.error(
+        "MISSION JSON ERROR:",
+        error
+      );
+
+      throw new Error(
+        `Server ตอบกลับไม่ถูกต้อง HTTP ${response.status}`
+      );
+
+    }
+
+
+    if(
+      !response.ok ||
+      result?.success === false
+    ){
+
+      const errorMessage =
+
+        result?.error ||
+        result?.message ||
+        result?.details ||
+        `HTTP ${response.status}`;
+
+
+      throw new Error(
+        errorMessage
+      );
+
+    }
+
+
+    /*
+      สำเร็จ
+    */
+
+    closeEvidence();
+
+
+    showMissionStatus(
+      "✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
+    );
+
+
+    /*
+      โหลดสถานะใหม่ทันที
+    */
+
+    await refreshMissionStatus();
+
+
+    if(
+      document
+        .getElementById(
+          "missionModal"
+        )
+        .classList
+        .contains(
+          "show"
+        )
+    ){
+
+      renderCategory();
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "MISSION SUBMIT ERROR:",
+      error
+    );
+
+
+    /*
+      รอบนี้จะแสดง Error จริงจาก Backend
+    */
+
+    showMissionStatus(
+      error?.message ||
+      "ส่งหลักฐานไม่สำเร็จ"
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "ส่งหลักฐานให้ Admin ตรวจสอบ";
+
+  }
+
+}
     /* =====================================================
        REAL API MODE
     ====================================================== */
