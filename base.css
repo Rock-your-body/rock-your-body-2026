@@ -183,17 +183,17 @@ button,input,select,textarea{font:inherit}
   --target-height:8%;
 
   --remaining-left:41.5%;
-  --remaining-top:61%;
+  --remaining-top:59%;
   --remaining-width:10%;
   --remaining-height:8%;
 
   --lost-left:35%;
-  --lost-top:73%;
+  --lost-top:71%;
   --lost-width:10.5%;
   --lost-height:8%;
 
   --startdate-left:47.5%;
-  --startdate-top:73%;
+  --startdate-top:71%;
   --startdate-width:10.5%;
   --startdate-height:8%;
 }
