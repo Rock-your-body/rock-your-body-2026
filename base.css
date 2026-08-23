@@ -1277,64 +1277,62 @@ textarea{
   display:flex;
   align-items:center;
   justify-content:center;
-
-  padding:0;
-  overflow:hidden;
-
   text-align:center;
 }
 
-.summary-content{
+.lost-box .summary-content,
+.startdate-box .summary-content{
   width:100%;
   height:100%;
 
   display:flex;
-  flex-direction:row;
+  flex-direction:column;
 
   align-items:center;
   justify-content:center;
 
-  gap:3px;
-
-  margin:0;
-  padding:0;
-
-  white-space:nowrap;
+  text-align:center;
+  line-height:1.05;
 }
 
-.summary-label{
-  margin:0;
-  padding:0;
+.lost-box .summary-label,
+.startdate-box .summary-label{
+  display:block;
 
-  color:#06337a;
+  font-size:clamp(
+    6px,
+    10cqw,
+    16px
+  );
 
-  font-size:clamp(5px, 7cqw, 10px);
   font-weight:700;
-  line-height:1;
-
-  white-space:nowrap;
-}
-
-.summary-value{
-  margin:0;
-  padding:0;
-
   color:#06337a;
+  white-space:nowrap;
 
-  font-size:clamp(5px, 8cqw, 11px);
+  margin-bottom:2px;
+}
+
+.lost-box .summary-value,
+.startdate-box .summary-value{
+  display:block;
+
+  font-size:clamp(
+    7px,
+    12cqw,
+    20px
+  );
+
   font-weight:900;
-  line-height:1;
-
+  color:#06337a;
   white-space:nowrap;
 }
 
-.summary-label.red,
-.summary-value.red{
-  color:#d60000;
-}
-
-.date-value{
-  font-size:clamp(5px, 7cqw, 10px);
+.startdate-box .date-value{
+  font-size:clamp(
+    6px,
+    9cqw,
+    17px
+  );
 }
 /* =========================================================
    FONT THAI - PROMPT ไม่มีหัว
