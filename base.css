@@ -949,3 +949,192 @@ textarea{
 .energy-box .data-value{
   font-size:clamp(9px, 17cqw, 32px);
 }
+/* =========================================================
+   MISSION POSITION SETTINGS
+   ปรับตำแหน่งหน้า MISSION จากตรงนี้จุดเดียว
+========================================================= */
+
+#missionStage{
+
+  /* =========================
+     TOP
+  ========================= */
+
+  /* ROCK COIN */
+  --mission-coin-left:76.4%;
+  --mission-coin-top:3.9%;
+  --mission-coin-width:7.7%;
+  --mission-coin-height:8%;
+
+  /* ENERGY */
+  --mission-energy-left:88.4%;
+  --mission-energy-top:3.4%;
+  --mission-energy-width:9.7%;
+  --mission-energy-height:8%;
+
+
+  /* =========================
+     DAILY MISSION
+  ========================= */
+
+  --daily-progress-left:35%;
+  --daily-progress-top:43%;
+  --daily-progress-width:24%;
+  --daily-progress-height:1.5%;
+
+  --daily-coin-left:42%;
+  --daily-coin-top:48%;
+  --daily-coin-width:7%;
+  --daily-coin-height:4%;
+
+  --daily-energy-left:53%;
+  --daily-energy-top:48%;
+  --daily-energy-width:7%;
+  --daily-energy-height:4%;
+
+
+  /* =========================
+     WEEKLY MISSION
+  ========================= */
+
+  --weekly-progress-left:67%;
+  --weekly-progress-top:43%;
+  --weekly-progress-width:24%;
+  --weekly-progress-height:1.5%;
+
+  --weekly-coin-left:74%;
+  --weekly-coin-top:48%;
+  --weekly-coin-width:7%;
+  --weekly-coin-height:4%;
+
+  --weekly-energy-left:85%;
+  --weekly-energy-top:48%;
+  --weekly-energy-width:7%;
+  --weekly-energy-height:4%;
+
+
+  /* =========================
+     MONTHLY MISSION
+  ========================= */
+
+  --monthly-progress-left:35%;
+  --monthly-progress-top:67%;
+  --monthly-progress-width:24%;
+  --monthly-progress-height:1.5%;
+
+  --monthly-coin-left:42%;
+  --monthly-coin-top:72%;
+  --monthly-coin-width:7%;
+  --monthly-coin-height:4%;
+
+  --monthly-energy-left:53%;
+  --monthly-energy-top:72%;
+  --monthly-energy-width:7%;
+  --monthly-energy-height:4%;
+
+
+  /* =========================
+     BONUS MISSION
+  ========================= */
+
+  --bonus-progress-left:67%;
+  --bonus-progress-top:67%;
+  --bonus-progress-width:24%;
+  --bonus-progress-height:1.5%;
+
+  --bonus-coin-left:74%;
+  --bonus-coin-top:72%;
+  --bonus-coin-width:7%;
+  --bonus-coin-height:4%;
+
+  --bonus-energy-left:85%;
+  --bonus-energy-top:72%;
+  --bonus-energy-width:7%;
+  --bonus-energy-height:4%;
+}
+
+/* =========================================================
+   MISSION DATA POSITION
+========================================================= */
+
+.mission-coin-box{
+  left:var(--mission-coin-left);
+  top:var(--mission-coin-top);
+  width:var(--mission-coin-width);
+  height:var(--mission-coin-height);
+}
+
+.mission-energy-box{
+  left:var(--mission-energy-left);
+  top:var(--mission-energy-top);
+  width:var(--mission-energy-width);
+  height:var(--mission-energy-height);
+}
+
+
+/* DAILY */
+
+.daily-coin{
+  left:var(--daily-coin-left);
+  top:var(--daily-coin-top);
+  width:var(--daily-coin-width);
+  height:var(--daily-coin-height);
+}
+
+.daily-energy{
+  left:var(--daily-energy-left);
+  top:var(--daily-energy-top);
+  width:var(--daily-energy-width);
+  height:var(--daily-energy-height);
+}
+
+
+/* WEEKLY */
+
+.weekly-coin{
+  left:var(--weekly-coin-left);
+  top:var(--weekly-coin-top);
+  width:var(--weekly-coin-width);
+  height:var(--weekly-coin-height);
+}
+
+.weekly-energy{
+  left:var(--weekly-energy-left);
+  top:var(--weekly-energy-top);
+  width:var(--weekly-energy-width);
+  height:var(--weekly-energy-height);
+}
+
+
+/* MONTHLY */
+
+.monthly-coin{
+  left:var(--monthly-coin-left);
+  top:var(--monthly-coin-top);
+  width:var(--monthly-coin-width);
+  height:var(--monthly-coin-height);
+}
+
+.monthly-energy{
+  left:var(--monthly-energy-left);
+  top:var(--monthly-energy-top);
+  width:var(--monthly-energy-width);
+  height:var(--monthly-energy-height);
+}
+
+
+/* BONUS */
+
+.bonus-coin{
+  left:var(--bonus-coin-left);
+  top:var(--bonus-coin-top);
+  width:var(--bonus-coin-width);
+  height:var(--bonus-coin-height);
+}
+
+.bonus-energy{
+  left:var(--bonus-energy-left);
+  top:var(--bonus-energy-top);
+  width:var(--bonus-energy-width);
+  height:var(--bonus-energy-height);
+}
