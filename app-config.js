@@ -45,7 +45,7 @@ window.APP_CONFIG = {
       "./rewards.html",
 
     MISSION:
-      "./mission.html",
+      "./mission.html?v=20260823-01",
 
     BATTLE:
       "./battle.html"
