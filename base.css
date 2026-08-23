@@ -1139,13 +1139,17 @@ textarea{
   height:var(--bonus-energy-height);
 }
 /* =========================================================
-   UPDATE LAST DATE
+   UPDATE DATE
+   อัปเดตล่าสุด + วันที่
 ========================================================= */
 
 .updated-box{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  padding:0 !important;
+  overflow:visible;
 }
 
 .update-content{
@@ -1156,21 +1160,30 @@ textarea{
   align-items:center;
   justify-content:center;
 
-  gap:8%;
+  gap:6px;
 
   white-space:nowrap;
+
+  /* ปรับตำแหน่งทั้งชุดตรงนี้ */
+  transform:translateX(0);
+}
+
+.update-label,
+.update-date{
+  font-family:"Prompt",sans-serif !important;
+  line-height:1;
+  margin:0;
+  padding:0;
 }
 
 .update-label{
-  font-size:clamp(8px, 1.15vw, 17px);
-  font-weight:700;
+  font-size:clamp(8px,1.05vw,14px);
+  font-weight:600;
   color:#173b78;
-  line-height:1;
 }
 
 .update-date{
-  font-size:clamp(8px, 1.15vw, 17px);
-  font-weight:900;
+  font-size:clamp(8px,1.05vw,14px);
+  font-weight:700;
   color:#002f7d;
-  line-height:1;
 }
