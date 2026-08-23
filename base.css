@@ -1372,3 +1372,25 @@ textarea{
 .top-data-value{
   font-family:"Prompt", sans-serif !important;
 }
+/* =========================================================
+   SUMMARY SIZE FIX
+   เหลืออีก / ลดลงแล้ว / เริ่มเมื่อ
+========================================================= */
+
+.summary-label{
+  font-size:clamp(5px, 7cqw, 10px);
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.summary-value{
+  font-size:clamp(5px, 8cqw, 12px);
+  font-weight:900;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.date-value{
+  font-size:clamp(5px, 7cqw, 10px);
+}
