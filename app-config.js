@@ -1,7 +1,7 @@
 window.APP_CONFIG = {
 
   LIFF_ID: {
-    DASHBOARD: "2011201679-uN62Coga",
+    DASHBOARD: "2011201679-uNWz5yqF",
     WEIGHT: "2011201679-uN62Coga"
   },
 
