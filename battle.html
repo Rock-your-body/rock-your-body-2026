@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
 
-  <script src="./app-config.js?v=20260824-09"></script>
-  <script src="./common.js?v=20260824-09"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <script src="./app-config.js?v=20260824-10"></script>
+  <script src="./common.js?v=20260824-10"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -403,7 +405,7 @@
 
     <img
       class="template-image"
-      src="./battle-template.png?v=20260824-09"
+      src="./battle-template.png?v=20260824-10"
       alt="Battle Template"
       draggable="false"
     >
@@ -450,7 +452,7 @@
 
     <img
       class="fight-image"
-      src="./battle%20map.jpeg?v=20260824-09"
+      src="./battle%20map.jpeg?v=20260824-10"
       alt="Fight Monster Battle Map"
       draggable="false"
     >
@@ -734,86 +736,81 @@ function openStage(stageNumber){
 
 async function prepareBattleApp(){
 
-  if(!window.ROCK){
+  if(
+    typeof liff === "undefined"
+  ){
     throw new Error(
-      "common.js โหลดไม่สำเร็จ"
+      "LINE LIFF SDK ไม่พร้อม"
     );
   }
 
+  const liffId =
+    window.APP_CONFIG?.LIFF_ID ||
+    window.ROCK?.CFG?.LIFF_ID ||
+    window.ROCK?.CFG?.LIFF?.HOME ||
+    undefined;
+
+  if(!liffId){
+    throw new Error(
+      "ไม่พบ LIFF_ID"
+    );
+  }
+
+  await liff.init({
+    liffId
+  });
+
   if(
-    typeof ROCK.initLiff ===
-    "function"
+    !liff.isLoggedIn()
   ){
 
-    const liffId =
-      window.APP_CONFIG?.LIFF_ID ||
-      ROCK?.CFG?.LIFF_ID ||
-      ROCK?.CFG?.LIFF?.HOME ||
-      undefined;
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
 
-    if(!liffId){
-      throw new Error(
-        "ไม่พบ LIFF_ID"
-      );
-    }
+    return false;
+  }
 
-    const ready =
-      await ROCK.initLiff(
-        liffId
-      );
+  const token =
+    liff.getIDToken();
 
-    if(ready === false){
-      return false;
-    }
+  if(!token){
+    throw new Error(
+      "ไม่พบ LINE ID Token หลัง LIFF Login"
+    );
   }
 
   return true;
 }
-
-
 function getBattleIdToken(){
 
-  try{
-
-    if(
-      window.ROCK &&
-      typeof ROCK.getIdToken ===
-      "function"
-    ){
-      const token =
-        ROCK.getIdToken();
-
-      if(token){
-        return token;
-      }
-    }
-
-  }catch(error){
-
-    console.warn(
-      "ROCK TOKEN:",
-      error
+  if(
+    typeof liff === "undefined"
+  ){
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
     );
   }
 
-
   if(
-    typeof liff !== "undefined" &&
-    liff.isLoggedIn()
+    !liff.isLoggedIn()
   ){
-
-    const token =
-      liff.getIDToken();
-
-    if(token){
-      return token;
-    }
+    throw new Error(
+      "LINE ยังไม่ได้ Login"
+    );
   }
 
+  const token =
+    liff.getIDToken();
 
-  throw new Error(
-    "ไม่พบ LINE ID Token"
-  );
+  if(!token){
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+  return token;
 }
 
 
@@ -1036,7 +1033,7 @@ function renderCurrentMonster(){
     };
 
   image.src =
-    `${stage.monster}?v=20260824-09`;
+    `${stage.monster}?v=20260824-10`;
 }
 
 
@@ -1395,11 +1392,7 @@ async function loadBattleStatus(){
   const api =
     window.APP_CONFIG?.API?.BATTLE;
 
-  if(
-    !api ||
-    !window.ROCK ||
-    typeof ROCK.getIdToken !== "function"
-  ){
+  if(!api){
     return null;
   }
 
@@ -1755,6 +1748,7 @@ function showToast(message){
 /* =========================================================
    START
 ========================================================= */
+
 let battleRefreshTimer =
   null;
 
@@ -1779,7 +1773,6 @@ async function refreshBattleData(){
 function startBattleRefresh(){
 
   if(battleRefreshTimer){
-
     clearInterval(
       battleRefreshTimer
     );
@@ -1799,7 +1792,6 @@ function startBattleRefresh(){
           document.visibilityState ===
           "visible"
         ){
-
           refreshBattleData();
         }
       },
@@ -1811,18 +1803,14 @@ function startBattleRefresh(){
 async function startBattle(){
 
   loadCache();
-
   startTimer();
-
   renderCurrentMonster();
-
 
   if(
     OPEN_FIGHT_ON_LOAD
   ){
     showFightMonster();
   }
-
 
   if(TEST_MODE){
 
@@ -1831,7 +1819,6 @@ async function startBattle(){
 
     updateUI();
   }
-
 
   try{
 
@@ -1844,11 +1831,9 @@ async function startBattle(){
       return;
     }
 
-
     await refreshBattleData();
 
     startBattleRefresh();
-
 
   }catch(error){
 
@@ -1858,8 +1843,11 @@ async function startBattle(){
     );
 
     showToast(
-      error?.message ||
-      "โหลด Battle ไม่สำเร็จ"
+      "เปิด Battle ไม่สำเร็จ: " +
+      (
+        error?.message ||
+        String(error)
+      )
     );
   }
 }
@@ -1867,14 +1855,15 @@ async function startBattle(){
 
 document.addEventListener(
   "visibilitychange",
-  () => {
+  async () => {
 
     if(
       document.visibilityState ===
-      "visible"
+      "visible" &&
+      typeof liff !== "undefined" &&
+      liff.isLoggedIn()
     ){
-
-      refreshBattleData();
+      await refreshBattleData();
     }
   }
 );
@@ -1882,13 +1871,13 @@ document.addEventListener(
 
 window.addEventListener(
   "pageshow",
-  () => {
+  async () => {
 
     if(
-      window.ROCK
+      typeof liff !== "undefined" &&
+      liff.isLoggedIn()
     ){
-
-      refreshBattleData();
+      await refreshBattleData();
     }
   }
 );
