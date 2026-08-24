@@ -3569,7 +3569,139 @@ if(document.readyState === 'loading'){
 }else{
   initMissionPage().then(startMissionRefresh);
 }
+/* =========================================================
+   MISSION MODAL - BIGGER TEXT
+========================================================= */
 
+.mission-modal,
+.mission-modal *{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+
+/* หัวข้อ DAILY MISSION / WEEKLY MISSION */
+.mission-modal h1,
+.mission-modal h2,
+.mission-modal .modal-title,
+.mission-modal .category-title{
+  font-size:clamp(24px,4vw,34px) !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+}
+
+
+/* คำอธิบายใต้หัวข้อ */
+.mission-modal .modal-subtitle,
+.mission-modal .category-subtitle{
+  font-size:clamp(13px,2vw,18px) !important;
+  line-height:1.45 !important;
+}
+
+
+/* ตัวเลขสรุปด้านบน */
+.mission-modal .summary-value,
+.mission-modal .stat-value,
+.mission-modal .mission-summary strong{
+  font-size:clamp(22px,3vw,30px) !important;
+  font-weight:900 !important;
+}
+
+
+/* คำใต้ตัวเลข เช่น อนุมัติแล้ว / ทั้งหมด / ความสำเร็จ */
+.mission-modal .summary-label,
+.mission-modal .stat-label{
+  font-size:clamp(12px,1.8vw,16px) !important;
+  font-weight:700 !important;
+}
+
+
+/* CORE DAILY / DAILY EXTRA */
+.mission-modal .section-title,
+.mission-modal .mission-section-title{
+  font-size:clamp(17px,2.5vw,22px) !important;
+  font-weight:900 !important;
+}
+
+
+/* ชื่อ Mission เช่น MOVE MORE */
+.mission-modal .mission-name,
+.mission-modal .mission-card strong,
+.mission-modal .mission-title{
+  font-size:clamp(18px,2.8vw,24px) !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+}
+
+
+/* รายละเอียดภารกิจ */
+.mission-modal .mission-description,
+.mission-modal .mission-card p,
+.mission-modal .mission-desc{
+  font-size:clamp(14px,2vw,18px) !important;
+  line-height:1.5 !important;
+}
+
+
+/* Reward badge */
+.mission-modal .reward-chip,
+.mission-modal .reward-badge,
+.mission-modal .mission-reward{
+  font-size:clamp(12px,1.8vw,16px) !important;
+  font-weight:800 !important;
+}
+
+
+/* สถานะ ยังไม่ได้ส่งหลักฐาน */
+.mission-modal .status-badge,
+.mission-modal .mission-status-badge{
+  font-size:clamp(12px,1.8vw,16px) !important;
+  font-weight:800 !important;
+}
+
+
+/* ปุ่มส่งหลักฐาน */
+.mission-modal button,
+.mission-modal .submit-button,
+.mission-modal .evidence-button{
+  font-size:clamp(14px,2vw,18px) !important;
+  font-weight:900 !important;
+}
+
+
+/* เพิ่มความสูง Card ให้รองรับตัวหนังสือใหญ่ */
+.mission-modal .mission-card{
+  padding:18px !important;
+  min-height:120px !important;
+}
+
+
+/* มือถือ */
+@media (max-width:600px){
+
+  .mission-modal{
+    width:96vw !important;
+  }
+
+  .mission-modal .mission-card{
+    padding:16px !important;
+  }
+
+  .mission-modal .mission-name,
+  .mission-modal .mission-title{
+    font-size:18px !important;
+  }
+
+  .mission-modal .mission-description,
+  .mission-modal .mission-desc{
+    font-size:14px !important;
+  }
+
+  .mission-modal button{
+    font-size:14px !important;
+    min-height:40px !important;
+  }
+}
 </script>
 </body>
 </html>
