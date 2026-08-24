@@ -1418,8 +1418,12 @@
   ></button>
 
 
-  <!-- HOME -->
+  <!-- =====================================================
+       BOTTOM NAVIGATION HOTSPOTS
+       กดตรงปุ่ม HOME / MISSION / BATTLE บน Template ได้จริง
+  ====================================================== -->
 
+  <!-- HOME -->
   <button
     type="button"
     class="hotspot"
@@ -1431,6 +1435,36 @@
     "
     onclick="goHome()"
     aria-label="Home"
+  ></button>
+
+
+  <!-- MISSION -->
+  <button
+    type="button"
+    class="hotspot"
+    style="
+      left:33%;
+      top:88%;
+      width:32%;
+      height:11%;
+    "
+    onclick="openCategory('daily')"
+    aria-label="Mission"
+  ></button>
+
+
+  <!-- BATTLE -->
+  <button
+    type="button"
+    class="hotspot"
+    style="
+      left:66%;
+      top:88%;
+      width:33%;
+      height:11%;
+    "
+    onclick="goBattle()"
+    aria-label="Battle"
   ></button>
 
 
@@ -3448,12 +3482,33 @@ async function loadMissionDashboard(){
    NAVIGATION
 ========================================================= */
 function goHome(){
-  if(typeof ROCK?.go === 'function') return ROCK.go('HOME');
-  window.location.href = window.APP_CONFIG?.PAGE?.HOME || './dashboard.html';
+
+  const url =
+    window.APP_CONFIG?.PAGE?.HOME ||
+    "./dashboard.html";
+
+  /*
+    ใช้ location.href ตรง ๆ
+    ไม่ส่งคำว่า "HOME" เข้า ROCK.go()
+    เพราะ ROCK.go() ควรได้รับ URL จริง ไม่ใช่ key
+  */
+  window.location.href =
+    url;
 }
+
+
 function goBattle(){
-  if(typeof ROCK?.go === 'function') return ROCK.go('BATTLE');
-  window.location.href = window.APP_CONFIG?.PAGE?.BATTLE || './battle.html';
+
+  const url =
+    window.APP_CONFIG?.PAGE?.BATTLE ||
+    "./battle.html";
+
+  /*
+    ใช้ location.href ตรง ๆ เพื่อให้ทำงานได้
+    แม้ common.js / ROCK navigation มีปัญหา
+  */
+  window.location.href =
+    url;
 }
 
 /* =========================================================
