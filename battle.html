@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
 
-  <script src="./app-config.js?v=20260824-04"></script>
-  <script src="./common.js?v=20260824-04"></script>
+  <script src="./app-config.js?v=20260824-05"></script>
+  <script src="./common.js?v=20260824-05"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -625,6 +625,7 @@ function updateUI(){
 
   const maxEnergy =
     Number(
+      localStorage.getItem("rockMaxEnergy") ||
       window.APP_CONFIG?.MAX_ENERGY
     ) || 200;
 
@@ -703,35 +704,62 @@ function updateStageLocks(){
 ========================================================= */
 function loadCache(){
 
-  const energy =
-    Number(
-      localStorage.getItem("rockEnergy")
+  const energyRaw =
+    localStorage.getItem(
+      "rockEnergy"
     );
 
-  const coin =
-    Number(
-      localStorage.getItem("rockCoin")
+  const coinRaw =
+    localStorage.getItem(
+      "rockCoin"
     );
 
-  const stage =
-    Number(
-      localStorage.getItem("rockUnlockedStage")
+  const stageRaw =
+    localStorage.getItem(
+      "rockUnlockedStage"
     );
 
-  if(Number.isFinite(energy)){
-    playerEnergy = energy;
+  if(energyRaw !== null){
+
+    const energy =
+      Number(energyRaw);
+
+    if(Number.isFinite(energy)){
+      playerEnergy = energy;
+    }
   }
 
-  if(Number.isFinite(coin)){
-    playerCoin = coin;
+  if(coinRaw !== null){
+
+    const coin =
+      Number(coinRaw);
+
+    if(Number.isFinite(coin)){
+      playerCoin = coin;
+    }
   }
 
-  if(Number.isFinite(stage)){
-    unlockedStage =
-      Math.max(
-        1,
-        Math.min(10,stage)
+  if(stageRaw !== null){
+
+    const stage =
+      Number(stageRaw);
+
+    if(Number.isFinite(coin)){
+      playerCoin = coin;
+
+      localStorage.setItem(
+        "rockCoin",
+        String(coin)
       );
+    }
+
+    if(Number.isFinite(stage)){
+      unlockedStage =
+        Math.max(
+          1,
+          Math.min(10,stage)
+        );
+    }
   }
 
   updateUI();
@@ -749,27 +777,67 @@ async function loadDashboard(){
       !window.ROCK ||
       typeof ROCK.fetchDashboard !== "function"
     ){
-      return;
+      throw new Error("common.js / ROCK.fetchDashboard ไม่พร้อม");
     }
 
-    const result =
+    const raw =
       await ROCK.fetchDashboard();
+
+    /*
+      player-dashboard อาจตอบได้หลายรูปแบบ:
+      {data:{...}}
+      {dashboard:{...}}
+      {...}
+      จึง normalize ก่อนอ่านค่า
+    */
+    const result =
+      raw?.data ??
+      raw?.dashboard ??
+      raw ??
+      {};
+
+    const user =
+      result?.user ??
+      result?.player ??
+      {};
+
+    const energyObject =
+      result?.energy &&
+      typeof result.energy === "object"
+        ? result.energy
+        : {};
 
     const energy =
       Number(
-        result?.energy?.current ??
-        result?.energy ??
-        result?.player?.energy ??
-        result?.user?.energy
+        energyObject?.current ??
+        result?.currentEnergy ??
+        result?.current_energy ??
+        user?.energy ??
+        (
+          typeof result?.energy === "number"
+            ? result.energy
+            : undefined
+        )
       );
 
     const coin =
       Number(
-        result?.coin ??
         result?.rockCoin ??
         result?.rock_coin ??
-        result?.player?.coin ??
-        result?.user?.coin
+        result?.coin ??
+        user?.rock_coin ??
+        user?.rockCoin ??
+        user?.coin
+      );
+
+    const maxEnergy =
+      Number(
+        energyObject?.max ??
+        result?.maxEnergy ??
+        result?.max_energy ??
+        user?.max_energy ??
+        window.APP_CONFIG?.MAX_ENERGY ??
+        200
       );
 
     if(Number.isFinite(energy)){
@@ -788,14 +856,42 @@ async function loadDashboard(){
       );
     }
 
+    if(Number.isFinite(maxEnergy) && maxEnergy > 0){
+      localStorage.setItem(
+        "rockMaxEnergy",
+        String(maxEnergy)
+      );
+    }
+
+    console.log(
+      "BATTLE DASHBOARD OK:",
+      {
+        coin:playerCoin,
+        energy:playerEnergy,
+        maxEnergy
+      }
+    );
+
     updateUI();
+
+    return raw;
 
   }catch(error){
 
-    console.warn(
-      "BATTLE DASHBOARD:",
+    console.error(
+      "BATTLE DASHBOARD ERROR:",
       error
     );
+
+    showToast(
+      "โหลดข้อมูลผู้เล่นไม่สำเร็จ: " +
+      (
+        error?.message ||
+        String(error)
+      )
+    );
+
+    return null;
   }
 }
 
@@ -853,14 +949,39 @@ async function loadBattleStatus(){
       );
     }
 
+    const payload =
+      result?.data ??
+      result ??
+      {};
+
+    const player =
+      payload?.player ??
+      payload?.user ??
+      {};
+
     const energy =
       Number(
-        result?.player?.energy
+        player?.energy ??
+        payload?.energy?.current ??
+        payload?.energy
       );
 
     const stage =
       Number(
-        result?.player?.unlockedStage
+        player?.unlockedStage ??
+        player?.unlocked_stage ??
+        payload?.unlockedStage ??
+        payload?.unlocked_stage
+      );
+
+    const coin =
+      Number(
+        player?.rock_coin ??
+        player?.rockCoin ??
+        player?.coin ??
+        payload?.rockCoin ??
+        payload?.rock_coin ??
+        payload?.coin
       );
 
     if(Number.isFinite(energy)){
@@ -1088,9 +1209,64 @@ async function startBattle(){
 }
 
 
+let battleRefreshTimer = null;
+
+function startBattleRefresh(){
+
+  if(battleRefreshTimer){
+    clearInterval(
+      battleRefreshTimer
+    );
+  }
+
+  const ms =
+    Number(
+      window.APP_CONFIG?.REFRESH_MS
+    ) || 30000;
+
+  battleRefreshTimer =
+    setInterval(
+      async () => {
+
+        if(
+          document.visibilityState !==
+          "visible"
+        ){
+          return;
+        }
+
+        await Promise.allSettled([
+          loadDashboard(),
+          loadBattleStatus()
+        ]);
+
+      },
+      ms
+    );
+}
+
+document.addEventListener(
+  "visibilitychange",
+  async () => {
+
+    if(
+      document.visibilityState ===
+      "visible"
+    ){
+      await Promise.allSettled([
+        loadDashboard(),
+        loadBattleStatus()
+      ]);
+    }
+  }
+);
+
 document.addEventListener(
   "DOMContentLoaded",
-  startBattle
+  async () => {
+    await startBattle();
+    startBattleRefresh();
+  }
 );
 </script>
 
