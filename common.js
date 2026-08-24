@@ -2,8 +2,12 @@ window.ROCK = (() => {
 
   const CFG = window.APP_CONFIG;
 
+
   if (!CFG) {
-    throw new Error("APP_CONFIG ไม่ถูกโหลด");
+
+    throw new Error(
+      "APP_CONFIG ไม่ถูกโหลด"
+    );
   }
 
 
@@ -11,9 +15,17 @@ window.ROCK = (() => {
      NAVIGATION
   ========================================================= */
 
-  function go(url) {
-    if (!url) return;
-    window.location.href = url;
+  function go(
+    url
+  ) {
+
+    if (!url) {
+      return;
+    }
+
+
+    window.location.href =
+      url;
   }
 
 
@@ -21,57 +33,100 @@ window.ROCK = (() => {
      JWT
   ========================================================= */
 
-  function decodeJwtPayload(token) {
+  function decodeJwtPayload(
+    token
+  ) {
 
     try {
 
-      if (!token) return null;
-
-      const parts =
-        String(token).split(".");
-
-      if (parts.length !== 3) {
+      if (!token) {
         return null;
       }
 
+
+      const parts =
+        String(
+          token
+        ).split(
+          "."
+        );
+
+
+      if (
+        parts.length !== 3
+      ) {
+
+        return null;
+      }
+
+
       let base64 =
         parts[1]
-          .replace(/-/g, "+")
-          .replace(/_/g, "/");
+          .replace(
+            /-/g,
+            "+"
+          )
+          .replace(
+            /_/g,
+            "/"
+          );
+
 
       while (
         base64.length % 4 !== 0
       ) {
+
         base64 += "=";
       }
 
+
       const binary =
-        atob(base64);
+        atob(
+          base64
+        );
+
 
       const bytes =
         Uint8Array.from(
           binary,
-          c => c.charCodeAt(0)
+          c =>
+            c.charCodeAt(
+              0
+            )
         );
+
 
       const text =
         new TextDecoder(
           "utf-8"
-        ).decode(bytes);
+        ).decode(
+          bytes
+        );
 
-      return JSON.parse(text);
 
-    } catch (error) {
+      return JSON.parse(
+        text
+      );
+
+
+    } catch (
+      error
+    ) {
 
       console.warn(
         "JWT DECODE ERROR:",
         error
       );
 
+
       return null;
     }
   }
 
+
+  /* =========================================================
+     TOKEN EXPIRED
+  ========================================================= */
 
   function tokenExpired(
     token,
@@ -79,76 +134,126 @@ window.ROCK = (() => {
   ) {
 
     const payload =
-      decodeJwtPayload(token);
+      decodeJwtPayload(
+        token
+      );
+
 
     if (!payload) {
+
       return false;
     }
+
 
     const exp =
-      Number(payload.exp);
+      Number(
+        payload.exp
+      );
+
 
     if (
-      !Number.isFinite(exp)
+      !Number.isFinite(
+        exp
+      )
     ) {
+
       return false;
     }
+
 
     const now =
       Math.floor(
-        Date.now() / 1000
+        Date.now() /
+        1000
       );
+
 
     return (
       exp <=
-      now + bufferSeconds
+      now +
+      bufferSeconds
     );
   }
 
 
   /* =========================================================
-     LIFF LOGIN REFRESH
+     LIFF RELOGIN
+
+     สำคัญ:
+     - ถ้า Token หมดอายุ
+     - logout
+     - login ใหม่
+     - กลับมาหน้าปัจจุบัน
+     - กัน login loop 10 วินาที
   ========================================================= */
 
-  function relogin() {
+  function relogin(
+    reason =
+      "TOKEN_EXPIRED"
+  ) {
 
     const key =
-      "rock_liff_relogin";
+      "rock_liff_relogin_at";
 
-    const count =
+
+    const now =
+      Date.now();
+
+
+    const last =
       Number(
-        sessionStorage.getItem(key) ||
+        sessionStorage.getItem(
+          key
+        ) ||
         "0"
       );
 
-    if (count >= 1) {
 
-      sessionStorage.removeItem(
-        key
-      );
+    /*
+      ป้องกัน login loop
+      แต่ไม่ล็อกทั้ง session
+    */
+    if (
+      last > 0 &&
+      now - last <
+      10000
+    ) {
 
       throw new Error(
-        "LINE session หมดอายุ กรุณาปิดหน้านี้แล้วเปิดใหม่จาก LINE"
+        "LINE session ยังไม่พร้อม กรุณาปิดหน้านี้แล้วเปิดใหม่จาก LINE"
       );
     }
 
 
     sessionStorage.setItem(
       key,
-      String(count + 1)
+      String(
+        now
+      )
+    );
+
+
+    console.warn(
+      "LIFF RELOGIN:",
+      reason
     );
 
 
     try {
 
       if (
-        typeof liff !== "undefined" &&
+        typeof liff !==
+          "undefined" &&
         liff.isLoggedIn()
       ) {
+
         liff.logout();
       }
 
-    } catch (error) {
+
+    } catch (
+      error
+    ) {
 
       console.warn(
         "LIFF LOGOUT ERROR:",
@@ -157,13 +262,31 @@ window.ROCK = (() => {
     }
 
 
-    liff.login();
+    if (
+      typeof liff ===
+      "undefined"
+    ) {
+
+      throw new Error(
+        "LINE LIFF SDK ไม่พร้อม"
+      );
+    }
+
+
+    /*
+      Login ใหม่
+      แล้วกลับมาหน้าเดิม
+    */
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
   }
 
 
   /* =========================================================
      INIT LIFF
-     LIFF ตัวเดียวทั้งระบบ
+     ใช้ LIFF ตัวเดียวทั้งระบบ
   ========================================================= */
 
   async function initLiff() {
@@ -179,7 +302,9 @@ window.ROCK = (() => {
     }
 
 
-    if (!CFG.LIFF_ID) {
+    if (
+      !CFG.LIFF_ID
+    ) {
 
       throw new Error(
         "ไม่พบ LIFF ID"
@@ -206,12 +331,16 @@ window.ROCK = (() => {
           CFG.LIFF_ID
       });
 
-    } catch (error) {
+
+    } catch (
+      error
+    ) {
 
       console.error(
         "LIFF INIT ERROR:",
         error
       );
+
 
       throw new Error(
         "ไม่สามารถเริ่มต้น LINE LIFF ได้"
@@ -219,6 +348,9 @@ window.ROCK = (() => {
     }
 
 
+    /*
+      ยังไม่ได้ Login
+    */
     if (
       !liff.isLoggedIn()
     ) {
@@ -227,7 +359,12 @@ window.ROCK = (() => {
         "LINE LOGIN REQUIRED"
       );
 
-      liff.login();
+
+      liff.login({
+        redirectUri:
+          window.location.href
+      });
+
 
       return false;
     }
@@ -241,7 +378,9 @@ window.ROCK = (() => {
       "LIFF TOKEN CHECK:",
       {
         hasToken:
-          Boolean(token),
+          Boolean(
+            token
+          ),
 
         tokenLength:
           token
@@ -257,14 +396,23 @@ window.ROCK = (() => {
     );
 
 
+    /*
+      ไม่มี Token
+    */
     if (!token) {
 
-      relogin();
+      relogin(
+        "TOKEN_MISSING"
+      );
+
 
       return false;
     }
 
 
+    /*
+      Token ใกล้หมดอายุ
+    */
     if (
       tokenExpired(
         token,
@@ -276,14 +424,22 @@ window.ROCK = (() => {
         "LINE ID TOKEN EXPIRED"
       );
 
-      relogin();
+
+      relogin(
+        "TOKEN_EXPIRED_CLIENT"
+      );
+
 
       return false;
     }
 
 
+    /*
+      Login สำเร็จ
+      clear loop guard
+    */
     sessionStorage.removeItem(
-      "rock_liff_relogin"
+      "rock_liff_relogin_at"
     );
 
 
@@ -292,7 +448,7 @@ window.ROCK = (() => {
 
 
   /* =========================================================
-     GET TOKEN
+     GET ID TOKEN
   ========================================================= */
 
   function getIdToken() {
@@ -330,6 +486,9 @@ window.ROCK = (() => {
     }
 
 
+    /*
+      ตรวจหมดอายุฝั่ง client
+    */
     if (
       tokenExpired(
         token,
@@ -342,8 +501,10 @@ window.ROCK = (() => {
           "LINE ID Token หมดอายุ"
         );
 
+
       error.code =
         "TOKEN_EXPIRED";
+
 
       throw error;
     }
@@ -391,6 +552,7 @@ window.ROCK = (() => {
 
     let response;
 
+
     try {
 
       response =
@@ -412,12 +574,16 @@ window.ROCK = (() => {
           }
         );
 
-    } catch (error) {
+
+    } catch (
+      error
+    ) {
 
       console.error(
         "NETWORK ERROR:",
         error
       );
+
 
       throw new Error(
         "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"
@@ -431,12 +597,16 @@ window.ROCK = (() => {
 
     let data;
 
+
     try {
 
       data =
         raw
-          ? JSON.parse(raw)
+          ? JSON.parse(
+              raw
+            )
           : {};
+
 
     } catch {
 
@@ -444,6 +614,7 @@ window.ROCK = (() => {
         "API RAW:",
         raw
       );
+
 
       throw new Error(
         "API ตอบกลับไม่ถูกต้อง"
@@ -481,9 +652,15 @@ window.ROCK = (() => {
           `ดำเนินการไม่สำเร็จ (${response.status})`
         );
 
+
       error.code =
         data?.code ||
         response.status;
+
+
+      error.data =
+        data;
+
 
       throw error;
     }
@@ -494,7 +671,7 @@ window.ROCK = (() => {
 
 
   /* =========================================================
-     TOKEN ERROR
+     TOKEN ERROR CHECK
   ========================================================= */
 
   function isTokenError(
@@ -515,21 +692,136 @@ window.ROCK = (() => {
 
 
     return (
-      message.includes("token") ||
-      message.includes("idtoken") ||
-      message.includes("expired") ||
-      message.includes("หมดอายุ") ||
-      message.includes("authentication") ||
-      message.includes("unauthorized") ||
-      message.includes("401") ||
-      code === 401 ||
+      message.includes(
+        "token"
+      ) ||
+
+      message.includes(
+        "idtoken"
+      ) ||
+
+      message.includes(
+        "expired"
+      ) ||
+
+      message.includes(
+        "หมดอายุ"
+      ) ||
+
+      message.includes(
+        "authentication"
+      ) ||
+
+      message.includes(
+        "unauthorized"
+      ) ||
+
+      message.includes(
+        "401"
+      ) ||
+
+      code ===
+        401 ||
+
       code ===
         "LINE_AUTH_FAILED" ||
+
       code ===
         "LINE_TOKEN_MISSING" ||
+
       code ===
         "TOKEN_EXPIRED"
     );
+  }
+
+
+  /* =========================================================
+     AUTHENTICATED POST
+     ใช้กับ BATTLE / MISSION / API อื่น
+  ========================================================= */
+
+  async function postWithFreshToken(
+    url,
+    payload
+  ) {
+
+    let idToken;
+
+
+    try {
+
+      idToken =
+        getIdToken();
+
+
+    } catch (
+      error
+    ) {
+
+      if (
+        isTokenError(
+          error
+        )
+      ) {
+
+        relogin(
+          "TOKEN_EXPIRED_CLIENT_API"
+        );
+
+
+        return await new Promise(
+          () => {}
+        );
+      }
+
+
+      throw error;
+    }
+
+
+    try {
+
+      return await postJSON(
+        url,
+        {
+          ...payload,
+          idToken
+        }
+      );
+
+
+    } catch (
+      error
+    ) {
+
+      if (
+        isTokenError(
+          error
+        )
+      ) {
+
+        console.warn(
+          "AUTH API TOKEN ERROR:",
+          error
+        );
+
+
+        /*
+          Server แจ้ง Token หมดอายุ
+        */
+        relogin(
+          "TOKEN_EXPIRED_SERVER_API"
+        );
+
+
+        return await new Promise(
+          () => {}
+        );
+      }
+
+
+      throw error;
+    }
   }
 
 
@@ -541,8 +833,38 @@ window.ROCK = (() => {
     payload
   ) {
 
-    const idToken =
-      getIdToken();
+    let idToken;
+
+
+    try {
+
+      idToken =
+        getIdToken();
+
+
+    } catch (
+      error
+    ) {
+
+      if (
+        isTokenError(
+          error
+        )
+      ) {
+
+        relogin(
+          "TOKEN_EXPIRED_CLIENT_PLAYER"
+        );
+
+
+        return await new Promise(
+          () => {}
+        );
+      }
+
+
+      throw error;
+    }
 
 
     try {
@@ -555,10 +877,15 @@ window.ROCK = (() => {
         }
       );
 
-    } catch (error) {
+
+    } catch (
+      error
+    ) {
 
       if (
-        isTokenError(error)
+        isTokenError(
+          error
+        )
       ) {
 
         const message =
@@ -570,17 +897,40 @@ window.ROCK = (() => {
 
 
         if (
-          message.includes("expired") ||
-          message.includes("หมดอายุ")
+          message.includes(
+            "expired"
+          ) ||
+
+          message.includes(
+            "หมดอายุ"
+          ) ||
+
+          message.includes(
+            "authentication"
+          ) ||
+
+          error?.code ===
+            "TOKEN_EXPIRED" ||
+
+          error?.code ===
+            "LINE_AUTH_FAILED" ||
+
+          error?.code ===
+            401
         ) {
 
           console.warn(
-            "TOKEN EXPIRED FROM SERVER"
+            "TOKEN INVALID FROM SERVER:",
+            error
           );
 
-          relogin();
 
-          return new Promise(
+          relogin(
+            "TOKEN_EXPIRED_SERVER_PLAYER"
+          );
+
+
+          return await new Promise(
             () => {}
           );
         }
@@ -607,7 +957,6 @@ window.ROCK = (() => {
 
   /* =========================================================
      SAVE WEIGHT
-     TEST MODE: หลายครั้งต่อวัน
   ========================================================= */
 
   async function saveWeight(
@@ -615,13 +964,21 @@ window.ROCK = (() => {
   ) {
 
     const value =
-      Number(weight);
+      Number(
+        weight
+      );
 
 
     if (
-      !Number.isFinite(value) ||
-      value < 20 ||
-      value > 400
+      !Number.isFinite(
+        value
+      ) ||
+
+      value <
+        20 ||
+
+      value >
+        400
     ) {
 
       throw new Error(
@@ -656,9 +1013,15 @@ window.ROCK = (() => {
 
 
     if (
-      !Number.isFinite(value) ||
-      value < 20 ||
-      value > 400
+      !Number.isFinite(
+        value
+      ) ||
+
+      value <
+        20 ||
+
+      value >
+        400
     ) {
 
       throw new Error(
@@ -679,15 +1042,22 @@ window.ROCK = (() => {
 
 
   /* =========================================================
-     FORMAT
+     FORMAT WEIGHT
   ========================================================= */
 
-  function fmtWeight(value) {
+  function fmtWeight(
+    value
+  ) {
 
     if (
-      value === null ||
-      value === undefined ||
-      value === ""
+      value ===
+        null ||
+
+      value ===
+        undefined ||
+
+      value ===
+        ""
     ) {
 
       return "--.-";
@@ -695,39 +1065,65 @@ window.ROCK = (() => {
 
 
     const n =
-      Number(value);
+      Number(
+        value
+      );
 
 
-    return Number.isFinite(n)
-      ? n.toFixed(1)
+    return Number.isFinite(
+      n
+    )
+      ? n.toFixed(
+          1
+        )
       : "--.-";
   }
 
 
-  function fmtInt(value) {
+  /* =========================================================
+     FORMAT INTEGER
+  ========================================================= */
+
+  function fmtInt(
+    value
+  ) {
 
     const n =
-      Number(value);
+      Number(
+        value
+      );
 
 
-    return Number.isFinite(n)
-      ? Math.round(n)
-          .toLocaleString(
-            "en-US"
-          )
+    return Number.isFinite(
+      n
+    )
+      ? Math.round(
+          n
+        ).toLocaleString(
+          "en-US"
+        )
       : "0";
   }
 
 
-  function formatDate(value) {
+  /* =========================================================
+     FORMAT DATE
+  ========================================================= */
+
+  function formatDate(
+    value
+  ) {
 
     if (!value) {
+
       return "-";
     }
 
 
     const date =
-      new Date(value);
+      new Date(
+        value
+      );
 
 
     if (
@@ -735,6 +1131,7 @@ window.ROCK = (() => {
         date.getTime()
       )
     ) {
+
       return "-";
     }
 
@@ -752,15 +1149,24 @@ window.ROCK = (() => {
   }
 
 
-  function formatDateOnly(value) {
+  /* =========================================================
+     FORMAT DATE ONLY
+  ========================================================= */
+
+  function formatDateOnly(
+    value
+  ) {
 
     if (!value) {
+
       return "--/--/----";
     }
 
 
     const date =
-      new Date(value);
+      new Date(
+        value
+      );
 
 
     if (
@@ -768,6 +1174,7 @@ window.ROCK = (() => {
         date.getTime()
       )
     ) {
+
       return "--/--/----";
     }
 
@@ -788,16 +1195,24 @@ window.ROCK = (() => {
   }
 
 
+  /* =========================================================
+     NUMBER
+  ========================================================= */
+
   function num(
     value,
     fallback = 0
   ) {
 
     const n =
-      Number(value);
+      Number(
+        value
+      );
 
 
-    return Number.isFinite(n)
+    return Number.isFinite(
+      n
+    )
       ? n
       : fallback;
   }
@@ -808,6 +1223,7 @@ window.ROCK = (() => {
   ========================================================= */
 
   function goHome() {
+
     go(
       CFG.PAGE?.HOME ||
       "./dashboard.html"
@@ -816,6 +1232,7 @@ window.ROCK = (() => {
 
 
   function goWeight() {
+
     go(
       CFG.PAGE?.WEIGHT ||
       "./weight-check.html"
@@ -824,6 +1241,7 @@ window.ROCK = (() => {
 
 
   function goProgress() {
+
     go(
       CFG.PAGE?.PROGRESS ||
       "./progress.html"
@@ -832,6 +1250,7 @@ window.ROCK = (() => {
 
 
   function goRanking() {
+
     go(
       CFG.PAGE?.RANKING ||
       "./ranking.html"
@@ -840,6 +1259,7 @@ window.ROCK = (() => {
 
 
   function goRewards() {
+
     go(
       CFG.PAGE?.REWARDS ||
       "./rewards.html"
@@ -848,6 +1268,7 @@ window.ROCK = (() => {
 
 
   function goMission() {
+
     go(
       CFG.PAGE?.MISSION ||
       "./mission.html"
@@ -856,6 +1277,7 @@ window.ROCK = (() => {
 
 
   function goBattle() {
+
     go(
       CFG.PAGE?.BATTLE ||
       "./battle.html"
@@ -892,6 +1314,10 @@ window.ROCK = (() => {
     getIdToken,
 
     postJSON,
+
+    postWithFreshToken,
+
+    relogin,
 
     callPlayerApi,
 
