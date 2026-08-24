@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - BATTLE STAGE</title>
 
-  <script src="./app-config.js?v=20260824-06"></script>
-  <script src="./common.js?v=20260824-06"></script>
+  <script src="./app-config.js?v=20260824-07"></script>
+  <script src="./common.js?v=20260824-07"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -1198,6 +1198,109 @@ async function callBattleApi(
 
 
 /* =========================================================
+   ENERGY FAILED
+   ถ้าพลังไม่พอ -> แสดง mission_failed_stage_XX.png
+========================================================= */
+
+function isEnergyNotEnoughError(error){
+
+  const values = [
+    error?.message,
+    error?.data?.error,
+    error?.data?.code,
+    error?.data?.message
+  ]
+    .map(value =>
+      String(value || "")
+        .trim()
+        .toUpperCase()
+    );
+
+  return values.some(value =>
+    value === "ENERGY_NOT_ENOUGH" ||
+    value.includes("ENERGY_NOT_ENOUGH") ||
+    value.includes("ENERGY NOT ENOUGH") ||
+    value.includes("พลังงานไม่เพียงพอ") ||
+    value.includes("ENERGY ไม่เพียงพอ")
+  );
+}
+
+
+function syncEnergyFromError(error){
+
+  const serverEnergy =
+    Number(
+      error?.data?.player?.energy ??
+      error?.data?.user?.energy ??
+      error?.data?.energy?.current ??
+      error?.data?.energy
+    );
+
+  if(
+    Number.isFinite(serverEnergy)
+  ){
+
+    playerEnergy =
+      Math.max(
+        0,
+        serverEnergy
+      );
+
+    localStorage.setItem(
+      "rockEnergy",
+      String(playerEnergy)
+    );
+
+    updateEnergyUI();
+  }
+}
+
+
+function showEnergyFailed(error){
+
+  syncEnergyFromError(
+    error
+  );
+
+  battleFinished =
+    true;
+
+
+  const button =
+    document.getElementById(
+      "attackButton"
+    );
+
+  if(button){
+    button.disabled = true;
+  }
+
+
+  document
+    .getElementById(
+      "battleStatus"
+    )
+    .textContent =
+      playerEnergy <= 0
+        ? "⚡ Energy หมดก่อนกำจัด Monster สำเร็จ"
+        : `⚡ Energy ไม่เพียงพอ ต้องใช้ ${CURRENT_STAGE.energy.toLocaleString("en-US")}`;
+
+
+  /*
+    showResult(false) จะเปลี่ยนตัวละครเป็น lose
+    และเปิดรูป:
+      mission_failed_stage_01.png
+      ...
+      mission_failed_stage_10.png
+  */
+  showResult(
+    false,
+    `Energy ไม่เพียงพอ มี ⚡ ${Math.max(0,playerEnergy).toLocaleString("en-US")} / ต้องใช้ ⚡ ${CURRENT_STAGE.energy.toLocaleString("en-US")}`
+  );
+}
+
+
+/* =========================================================
    START BATTLE
 ========================================================= */
 
@@ -1326,15 +1429,13 @@ async function ensureBattleStarted(){
 
 
     if(
-      error?.message ===
-        "ENERGY_NOT_ENOUGH" ||
-      error?.data?.error ===
-        "ENERGY_NOT_ENOUGH"
+      isEnergyNotEnoughError(
+        error
+      )
     ){
 
-      showResult(
-        false,
-        `Energy ไม่เพียงพอ ต้องใช้ ⚡ ${CURRENT_STAGE.energy.toLocaleString("en-US")}`
+      showEnergyFailed(
+        error
       );
 
       return false;
@@ -1392,6 +1493,49 @@ function playPlayerAttack(){
       480
     );
   }
+}
+
+
+/* =========================================================
+   ENERGY FROM ATTACK RESULT
+   ใช้ค่า Energy จาก Server เป็นตัวจริง
+========================================================= */
+
+function syncEnergyFromAttackResult(result){
+
+  const energy =
+    Number(
+      result?.player?.energy ??
+      result?.user?.energy ??
+      result?.energy?.current ??
+      result?.energy
+    );
+
+  if(
+    Number.isFinite(
+      energy
+    )
+  ){
+
+    playerEnergy =
+      Math.max(
+        0,
+        energy
+      );
+
+    localStorage.setItem(
+      "rockEnergy",
+      String(
+        playerEnergy
+      )
+    );
+
+    updateEnergyUI();
+
+    return playerEnergy;
+  }
+
+  return null;
 }
 
 
@@ -1477,6 +1621,14 @@ async function attackMonster(){
         });
 
 
+      /*
+        อัปเดต Energy หลังโจมตีจาก Server
+      */
+      syncEnergyFromAttackResult(
+        result
+      );
+
+
       damage =
         Number(
           result?.damage
@@ -1528,6 +1680,35 @@ async function attackMonster(){
         `⚔️ Damage ${damage.toLocaleString("en-US")}`;
 
 
+    /*
+      ถ้า Monster ยังไม่ตาย แต่ Energy หมด
+      = แพ้ทันที และแสดง mission_failed_stage_XX.png
+    */
+    if(
+      !TEST_MODE &&
+      monsterHp > 0 &&
+      playerEnergy <= 0
+    ){
+
+      showEnergyFailed({
+        message:
+          "ENERGY_NOT_ENOUGH",
+
+        data:{
+          error:
+            "ENERGY_NOT_ENOUGH",
+
+          player:{
+            energy:
+              playerEnergy
+          }
+        }
+      });
+
+      return;
+    }
+
+
     if(
       result?.win === true ||
       monsterHp <= 0
@@ -1546,6 +1727,24 @@ async function attackMonster(){
       "ATTACK:",
       error
     );
+
+
+    /*
+      ถ้าระหว่างโจมตี Server แจ้ง Energy ไม่พอ
+      ให้ขึ้นรูป Mission Failed ของ Stage ปัจจุบันทันที
+    */
+    if(
+      isEnergyNotEnoughError(
+        error
+      )
+    ){
+
+      showEnergyFailed(
+        error
+      );
+
+      return;
+    }
 
 
     document
@@ -1677,6 +1876,20 @@ function showResult(
     imageLayer &&
     resultImage
   ){
+
+    resultImage.onerror =
+      () => {
+
+        console.error(
+          "RESULT IMAGE NOT FOUND:",
+          resultImage.src
+        );
+
+        imageLayer.classList.remove(
+          "show"
+        );
+      };
+
 
     resultImage.src =
       resultImagePath(win);
