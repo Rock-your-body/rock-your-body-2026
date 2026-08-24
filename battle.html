@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
 
-  <script src="./app-config.js?v=20260824-08"></script>
-  <script src="./common.js?v=20260824-08"></script>
+  <script src="./app-config.js?v=20260824-09"></script>
+  <script src="./common.js?v=20260824-09"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -403,7 +403,7 @@
 
     <img
       class="template-image"
-      src="./battle-template.png?v=20260824-08"
+      src="./battle-template.png?v=20260824-09"
       alt="Battle Template"
       draggable="false"
     >
@@ -450,7 +450,7 @@
 
     <img
       class="fight-image"
-      src="./battle%20map.jpeg?v=20260824-08"
+      src="./battle%20map.jpeg?v=20260824-09"
       alt="Fight Monster Battle Map"
       draggable="false"
     >
@@ -728,6 +728,186 @@ function openStage(stageNumber){
 
 
 /* =========================================================
+   LIFF / TOKEN
+   ใช้ LIFF ID จริงเหมือนหน้า HOME / MISSION
+========================================================= */
+
+async function prepareBattleApp(){
+
+  if(!window.ROCK){
+    throw new Error(
+      "common.js โหลดไม่สำเร็จ"
+    );
+  }
+
+  if(
+    typeof ROCK.initLiff ===
+    "function"
+  ){
+
+    const liffId =
+      window.APP_CONFIG?.LIFF_ID ||
+      ROCK?.CFG?.LIFF_ID ||
+      ROCK?.CFG?.LIFF?.HOME ||
+      undefined;
+
+    if(!liffId){
+      throw new Error(
+        "ไม่พบ LIFF_ID"
+      );
+    }
+
+    const ready =
+      await ROCK.initLiff(
+        liffId
+      );
+
+    if(ready === false){
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+function getBattleIdToken(){
+
+  try{
+
+    if(
+      window.ROCK &&
+      typeof ROCK.getIdToken ===
+      "function"
+    ){
+      const token =
+        ROCK.getIdToken();
+
+      if(token){
+        return token;
+      }
+    }
+
+  }catch(error){
+
+    console.warn(
+      "ROCK TOKEN:",
+      error
+    );
+  }
+
+
+  if(
+    typeof liff !== "undefined" &&
+    liff.isLoggedIn()
+  ){
+
+    const token =
+      liff.getIDToken();
+
+    if(token){
+      return token;
+    }
+  }
+
+
+  throw new Error(
+    "ไม่พบ LINE ID Token"
+  );
+}
+
+
+/* =========================================================
+   DIRECT DASHBOARD FALLBACK
+   ถ้า helper ใน common.js ใช้งานไม่ได้
+   ให้ Battle เรียก player-dashboard โดยตรง
+========================================================= */
+
+async function fetchBattleDashboardDirect(){
+
+  const api =
+    window.APP_CONFIG
+      ?.API
+      ?.DASHBOARD;
+
+  if(!api){
+    throw new Error(
+      "ไม่พบ Dashboard API"
+    );
+  }
+
+
+  const idToken =
+    getBattleIdToken();
+
+
+  const response =
+    await fetch(
+      api,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+            action:
+              "dashboard",
+
+            idToken
+          })
+      }
+    );
+
+
+  const rawText =
+    await response.text();
+
+
+  let data =
+    {};
+
+  try{
+
+    data =
+      rawText
+        ? JSON.parse(
+            rawText
+          )
+        : {};
+
+  }catch{
+
+    throw new Error(
+      "Dashboard API ตอบกลับไม่ถูกต้อง"
+    );
+  }
+
+
+  if(
+    !response.ok ||
+    data?.success === false
+  ){
+
+    const message =
+      data?.error ||
+      data?.message ||
+      `Dashboard HTTP ${response.status}`;
+
+    throw new Error(
+      message
+    );
+  }
+
+
+  return data;
+}
+
+
+/* =========================================================
    DASHBOARD NORMALIZER
    ใช้โครงสร้างเดียวกับหน้า HOME / MISSION
 ========================================================= */
@@ -856,7 +1036,7 @@ function renderCurrentMonster(){
     };
 
   image.src =
-    `${stage.monster}?v=20260824-08`;
+    `${stage.monster}?v=20260824-09`;
 }
 
 
@@ -1029,51 +1209,68 @@ function loadCache(){
 ========================================================= */
 async function loadDashboard(){
 
-  try{
+  let firstError =
+    null;
 
-    if(
-      !window.ROCK
-    ){
-      throw new Error(
-        "common.js / ROCK ไม่พร้อม"
-      );
-    }
+  try{
 
     let raw =
       null;
 
+
     /*
-      รองรับชื่อ function ที่ใช้ในหน้า HOME / MISSION
+      วิธีที่ 1:
+      ใช้ helper เหมือนหน้า HOME / MISSION
     */
-    if(
-      typeof ROCK.dashboard ===
-      "function"
-    ){
+    try{
 
-      raw =
-        await ROCK.dashboard();
+      if(
+        typeof ROCK?.dashboard ===
+        "function"
+      ){
 
-    }else if(
-      typeof ROCK.fetchDashboard ===
-      "function"
-    ){
+        raw =
+          await ROCK.dashboard();
 
-      raw =
-        await ROCK.fetchDashboard();
+      }else if(
+        typeof ROCK?.fetchDashboard ===
+        "function"
+      ){
 
-    }else if(
-      typeof ROCK.getDashboard ===
-      "function"
-    ){
+        raw =
+          await ROCK.fetchDashboard();
 
-      raw =
-        await ROCK.getDashboard();
+      }else if(
+        typeof ROCK?.getDashboard ===
+        "function"
+      ){
 
-    }else{
+        raw =
+          await ROCK.getDashboard();
 
-      throw new Error(
-        "ไม่พบ Dashboard function"
+      }
+
+    }catch(error){
+
+      firstError =
+        error;
+
+      console.warn(
+        "BATTLE DASHBOARD HELPER ERROR:",
+        error
       );
+    }
+
+
+    /*
+      วิธีที่ 2:
+      ถ้า common.js มีปัญหา
+      ให้ยิง player-dashboard โดยตรง
+    */
+    if(!raw){
+
+      raw =
+        await fetchBattleDashboardDirect();
     }
 
 
@@ -1139,14 +1336,17 @@ async function loadDashboard(){
 
 
     console.log(
-      "BATTLE DASHBOARD:",
+      "BATTLE DASHBOARD OK:",
       {
         coin:
           playerCoin,
+
         energy:
           playerEnergy,
+
         maxEnergy:
           playerMaxEnergy,
+
         raw
       }
     );
@@ -1161,12 +1361,26 @@ async function loadDashboard(){
 
     console.error(
       "BATTLE DASHBOARD ERROR:",
-      error
+      error,
+      firstError
     );
 
+
+    /*
+      อย่าล้างค่าที่มีอยู่ใน cache
+      แค่แจ้งเตือนเท่านั้น
+    */
+    updateUI();
+
+
     showToast(
-      "โหลดเหรียญ/พลังไม่สำเร็จ"
+      "โหลดเหรียญ/พลังไม่สำเร็จ: " +
+      (
+        error?.message ||
+        String(error)
+      )
     );
+
 
     return null;
   }
@@ -1192,11 +1406,7 @@ async function loadBattleStatus(){
   try{
 
     const idToken =
-      ROCK.getIdToken();
-
-    if(!idToken){
-      return null;
-    }
+      getBattleIdToken();
 
     const response =
       await fetch(
@@ -1537,7 +1747,7 @@ function showToast(message){
           "show"
         );
       },
-      2400
+      4200
     );
 }
 
@@ -1625,28 +1835,13 @@ async function startBattle(){
 
   try{
 
-    if(
-      !window.ROCK
-    ){
-      throw new Error(
-        "common.js โหลดไม่สำเร็จ"
-      );
-    }
-
+    const ready =
+      await prepareBattleApp();
 
     if(
-      typeof ROCK.initLiff ===
-      "function"
+      ready === false
     ){
-
-      const ready =
-        await ROCK.initLiff(
-          "BATTLE"
-        );
-
-      if(!ready){
-        return;
-      }
+      return;
     }
 
 
