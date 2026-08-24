@@ -1196,172 +1196,93 @@
 
   
     /* =====================================================
-       MISSION CARD COLOR SEPARATION
-       แยกสีแต่ละช่องเพื่อให้อ่านง่ายและไม่ลายตา
+       CATEGORY REWARD NUMBERS
+       แสดงเหรียญ + พลังงานบนการ์ด DAILY/WEEKLY/MONTHLY/BONUS
     ====================================================== */
 
-    .mission-list{
-      gap:14px !important;
-    }
-
-    .mission-item{
-      position:relative;
-      border-width:1px !important;
-      border-style:solid !important;
-      box-shadow:
-        0 6px 16px rgba(20,60,110,.08) !important;
-      transition:
-        transform .18s ease,
-        box-shadow .18s ease;
-    }
-
-    .mission-item::before{
-      content:"";
+    .category-reward-number{
       position:absolute;
-      left:0;
-      top:14px;
-      bottom:14px;
-      width:5px;
-      border-radius:0 999px 999px 0;
-      background:#2f80ed;
+      z-index:45;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+      white-space:nowrap;
+      font-family:"Prompt",sans-serif;
+      font-size:clamp(12px,1.55vw,22px);
+      font-weight:900;
+      line-height:1;
+      color:#082f87;
+      text-shadow:
+        0 1px 0 #fff,
+        0 0 4px rgba(255,255,255,.95);
     }
 
-    /* สีช่องที่ 1 - ฟ้า */
-    .mission-list article:nth-of-type(4n+1){
-      background:#f1f7ff !important;
-      border-color:#b9d5ff !important;
+    .category-reward-number.daily{
+      color:#e84b00;
     }
 
-    .mission-list article:nth-of-type(4n+1)::before{
-      background:#2f80ed;
+    .category-reward-number.weekly{
+      color:#064fd0;
     }
 
-    .mission-list article:nth-of-type(4n+1) .mission-icon{
-      background:#dcecff !important;
+    .category-reward-number.monthly{
+      color:#5a20b7;
     }
 
-
-    /* สีช่องที่ 2 - เขียว */
-    .mission-list article:nth-of-type(4n+2){
-      background:#f1fbf5 !important;
-      border-color:#b9e5c8 !important;
+    .category-reward-number.bonus{
+      color:#087b31;
     }
 
-    .mission-list article:nth-of-type(4n+2)::before{
-      background:#20a45b;
+    /* DAILY */
+    .daily-reward-coin{
+      left:48.9%;
+      top:47.1%;
     }
 
-    .mission-list article:nth-of-type(4n+2) .mission-icon{
-      background:#ddf6e6 !important;
+    .daily-reward-energy{
+      left:58.7%;
+      top:47.1%;
     }
 
-
-    /* สีช่องที่ 3 - ส้มอ่อน */
-    .mission-list article:nth-of-type(4n+3){
-      background:#fff8ee !important;
-      border-color:#ffd7a1 !important;
+    /* WEEKLY */
+    .weekly-reward-coin{
+      left:76.8%;
+      top:47.1%;
     }
 
-    .mission-list article:nth-of-type(4n+3)::before{
-      background:#f28c28;
+    .weekly-reward-energy{
+      left:88.5%;
+      top:47.1%;
     }
 
-    .mission-list article:nth-of-type(4n+3) .mission-icon{
-      background:#fff0d8 !important;
+    /* MONTHLY */
+    .monthly-reward-coin{
+      left:48.9%;
+      top:75.8%;
     }
 
-
-    /* สีช่องที่ 4 - ม่วงอ่อน */
-    .mission-list article:nth-of-type(4n+4){
-      background:#f8f3ff !important;
-      border-color:#d8c2f6 !important;
+    .monthly-reward-energy{
+      left:58.7%;
+      top:75.8%;
     }
 
-    .mission-list article:nth-of-type(4n+4)::before{
-      background:#7c4bc8;
+    /* BONUS */
+    .bonus-reward-coin{
+      left:76.8%;
+      top:75.8%;
     }
 
-    .mission-list article:nth-of-type(4n+4) .mission-icon{
-      background:#eee2ff !important;
+    .bonus-reward-energy{
+      left:88.5%;
+      top:75.8%;
     }
 
-
-    /* Reward แยกเป็นช่องเล็กให้มองง่าย */
-    .reward-row{
-      gap:7px !important;
-      margin-top:10px !important;
-    }
-
-    .reward-badge{
-      background:#ffffff !important;
-      border:1px solid rgba(25,66,125,.12);
-      box-shadow:0 2px 5px rgba(20,60,110,.05);
-    }
-
-
-    /* สถานะยังเห็นชัด */
-    .mission-item.pending{
-      border-color:#f1c65d !important;
-      box-shadow:
-        inset 0 0 0 1px rgba(241,198,93,.25),
-        0 6px 16px rgba(20,60,110,.08) !important;
-    }
-
-    .mission-item.approved{
-      border-color:#66c88a !important;
-      box-shadow:
-        inset 0 0 0 1px rgba(102,200,138,.24),
-        0 6px 16px rgba(20,60,110,.08) !important;
-    }
-
-    .mission-item.rejected{
-      border-color:#e98a8a !important;
-      box-shadow:
-        inset 0 0 0 1px rgba(233,138,138,.24),
-        0 6px 16px rgba(20,60,110,.08) !important;
-    }
-
-
-    /* หัวข้อ CORE DAILY / DAILY EXTRA ให้เป็นแถบ */
-    .mission-section-title{
-      display:inline-flex;
-      align-items:center;
-      min-height:34px;
-      padding:6px 12px;
-      margin-top:20px !important;
-      margin-bottom:4px !important;
-      border-radius:10px;
-      background:#e5efff;
-      color:#073b93 !important;
-      border-left:5px solid #1769d1;
-    }
-
-
-    /* มือถือ */
-    @media(max-width:480px){
-
-      .mission-list{
-        gap:11px !important;
-      }
-
-      .mission-item::before{
-        top:10px;
-        bottom:10px;
-        width:4px;
-      }
-
-      .mission-main{
-        padding-left:16px !important;
-      }
-
-      .mission-section-title{
-        min-height:31px;
-        padding:5px 10px;
-        border-radius:9px;
+    @media(max-width:600px){
+      .category-reward-number{
+        font-size:clamp(10px,2.1vw,15px);
       }
     }
 
-</style>
+  </style>
 
 </head>
 
@@ -1535,6 +1456,60 @@
   >
     0 / 9
   </div>
+
+
+
+  <!-- =====================================================
+       CATEGORY REWARD NUMBERS
+       ตัวเลขรางวัลบนหน้า Template
+  ====================================================== -->
+
+  <!-- DAILY -->
+  <div
+    id="dailyRewardCoin"
+    class="category-reward-number daily daily-reward-coin"
+  >0</div>
+
+  <div
+    id="dailyRewardEnergy"
+    class="category-reward-number daily daily-reward-energy"
+  >0</div>
+
+
+  <!-- WEEKLY -->
+  <div
+    id="weeklyRewardCoin"
+    class="category-reward-number weekly weekly-reward-coin"
+  >0</div>
+
+  <div
+    id="weeklyRewardEnergy"
+    class="category-reward-number weekly weekly-reward-energy"
+  >0</div>
+
+
+  <!-- MONTHLY -->
+  <div
+    id="monthlyRewardCoin"
+    class="category-reward-number monthly monthly-reward-coin"
+  >0</div>
+
+  <div
+    id="monthlyRewardEnergy"
+    class="category-reward-number monthly monthly-reward-energy"
+  >0</div>
+
+
+  <!-- BONUS -->
+  <div
+    id="bonusRewardCoin"
+    class="category-reward-number bonus bonus-reward-coin"
+  >0</div>
+
+  <div
+    id="bonusRewardEnergy"
+    class="category-reward-number bonus bonus-reward-energy"
+  >0</div>
 
 
   <!-- =====================================================
@@ -3570,15 +3545,157 @@ function countApprovedMission(category){
   return getCategoryMissions(category).filter(m=>getMissionStatus(m.id)?.status === 'approved').length;
 }
 
+function getCategoryRewardTotal(category){
+
+  const missions =
+    getCategoryMissions(
+      category
+    );
+
+
+  return missions.reduce(
+    (sum, mission) => {
+
+      sum.coin +=
+        Number(
+          mission?.reward?.coin ||
+          0
+        );
+
+      sum.energy +=
+        Number(
+          mission?.reward?.energy ||
+          0
+        );
+
+      sum.exp +=
+        Number(
+          mission?.reward?.exp ||
+          0
+        );
+
+
+      return sum;
+
+    },
+    {
+      coin:0,
+      energy:0,
+      exp:0
+    }
+  );
+}
+
+
 function updateTemplate(){
-  ['daily','weekly','monthly','bonus'].forEach(category=>{
-    const total = getCategoryMissions(category).length;
-    const approved = countApprovedMission(category);
-    const count = document.getElementById(`${category}Count`);
-    const progress = document.getElementById(`${category}Progress`);
-    if(count) count.textContent = `${approved} / ${total}`;
-    if(progress) progress.style.width = `${total ? Math.min(100,(approved/total)*100) : 0}%`;
-  });
+
+  [
+    'daily',
+    'weekly',
+    'monthly',
+    'bonus'
+  ].forEach(
+    category => {
+
+      const missions =
+        getCategoryMissions(
+          category
+        );
+
+      const total =
+        missions.length;
+
+      const approved =
+        countApprovedMission(
+          category
+        );
+
+
+      const count =
+        document.getElementById(
+          `${category}Count`
+        );
+
+      const progress =
+        document.getElementById(
+          `${category}Progress`
+        );
+
+
+      if(count){
+
+        count.textContent =
+          `${approved} / ${total}`;
+      }
+
+
+      if(progress){
+
+        progress.style.width =
+          `${
+            total
+              ? Math.min(
+                  100,
+                  (
+                    approved /
+                    total
+                  ) * 100
+                )
+              : 0
+          }%`;
+      }
+
+
+      /*
+        รวม Reward ของ Mission ทั้งหมวด
+        DAILY   = Core + Extra ของวันนั้น
+        WEEKLY  = Mission ทั้งสัปดาห์
+        MONTHLY = Mission ประจำเดือน
+        BONUS   = Bonus ทั้งหมด
+      */
+
+      const reward =
+        getCategoryRewardTotal(
+          category
+        );
+
+
+      const coinEl =
+        document.getElementById(
+          `${category}RewardCoin`
+        );
+
+      const energyEl =
+        document.getElementById(
+          `${category}RewardEnergy`
+        );
+
+
+      if(coinEl){
+
+        coinEl.textContent =
+          Number(
+            reward.coin || 0
+          )
+            .toLocaleString(
+              'en-US'
+            );
+      }
+
+
+      if(energyEl){
+
+        energyEl.textContent =
+          Number(
+            reward.energy || 0
+          )
+            .toLocaleString(
+              'en-US'
+            );
+      }
+
+    }
+  );
 }
 
 /* =========================================================
