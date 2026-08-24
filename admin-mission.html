@@ -2,34 +2,775 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ROCK YOUR BODY 2026 - MISSION ADMIN</title>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MISSION ADMIN</title>
+
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<script src="./app-config.js?v=20260824-admin-01"></script>
+<script src="./app-config.js?v=20260824-admin-02"></script>
+
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Prompt,sans-serif;background:#eef5ff;color:#102d5e}.app{width:min(100%,1100px);margin:auto;padding:18px}.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:18px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#073b93,#0d6ae8);box-shadow:0 10px 28px rgba(16,55,120,.18)}.title{font-size:clamp(22px,4vw,34px);font-weight:900}.sub{opacity:.9;font-size:13px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tab{border:0;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer;background:#fff;color:#16477f}.tab.active{background:#ffcf35;color:#532d00}#status{margin:10px 0;font-size:13px;font-weight:700}.list{display:grid;gap:14px}.card{overflow:hidden;border:1px solid #d7e4f5;border-radius:20px;background:#fff;box-shadow:0 7px 20px rgba(20,60,110,.08)}.card-main{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:16px;padding:16px}.mission{font-size:19px;font-weight:900;color:#073b93}.meta{margin-top:5px;color:#71829c;font-size:12px}.player{margin-top:10px;padding:10px;border-radius:13px;background:#f4f8ff}.note{margin-top:10px;padding:10px;border-radius:12px;background:#fff8e7;font-size:13px}.reward{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chip{padding:5px 8px;border-radius:999px;background:#edf4ff;font-size:12px;font-weight:800}.evidence{min-height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:15px;background:#091f45}.evidence img,.evidence video{width:100%;max-height:260px;object-fit:contain;display:block}.evidence a{color:#fff;font-weight:800;padding:20px;text-align:center}.actions{display:flex;gap:10px;padding:0 16px 16px}.btn{flex:1;min-height:48px;border:0;border-radius:13px;color:#fff;font-weight:900;cursor:pointer}.approve{background:#09a84b}.reject{background:#df3131}.btn:disabled{opacity:.5;cursor:default}.empty{padding:40px 20px;text-align:center;color:#74839d;background:#fff;border-radius:20px}@media(max-width:720px){.app{padding:10px}.card-main{grid-template-columns:1fr}.evidence{min-height:140px}}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+  background:#eef5ff;
+  color:#12356f;
+}
+.app{
+  width:min(1100px,100%);
+  margin:auto;
+  padding:14px;
+}
+.header{
+  padding:18px;
+  border-radius:20px;
+  color:#fff;
+  background:linear-gradient(135deg,#073b93,#096ee8);
+  box-shadow:0 10px 25px rgba(10,50,110,.18);
+}
+.header h1{
+  margin:0;
+  font-size:28px;
+}
+.header p{
+  margin:6px 0 0;
+  opacity:.9;
+}
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:14px 0;
+}
+.tab{
+  border:0;
+  border-radius:12px;
+  padding:10px 14px;
+  background:#fff;
+  color:#16477f;
+  font-weight:800;
+  cursor:pointer;
+}
+.tab.active{
+  background:#ffcc32;
+  color:#4b2b00;
+}
+.status{
+  margin:10px 0;
+  font-weight:700;
+}
+.list{
+  display:grid;
+  gap:14px;
+}
+.card{
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid #d9e5f5;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(15,55,110,.08);
+}
+.main{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 250px;
+  gap:14px;
+  padding:15px;
+}
+.mission{
+  font-size:20px;
+  font-weight:900;
+  color:#073b93;
+}
+.meta{
+  margin-top:5px;
+  font-size:12px;
+  color:#7788a3;
+}
+.player,
+.note{
+  margin-top:10px;
+  padding:10px;
+  border-radius:12px;
+}
+.player{
+  background:#f2f7ff;
+}
+.note{
+  background:#fff7df;
+}
+.rewards{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.chip{
+  padding:6px 9px;
+  border-radius:999px;
+  background:#edf4ff;
+  font-size:12px;
+  font-weight:800;
+}
+.evidence{
+  min-height:180px;
+  border-radius:14px;
+  overflow:hidden;
+  background:#071c42;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.evidence img,
+.evidence video{
+  width:100%;
+  max-height:280px;
+  object-fit:contain;
+}
+.evidence a{
+  color:#fff;
+  padding:20px;
+  text-align:center;
+  font-weight:800;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  padding:0 15px 15px;
+}
+.btn{
+  flex:1;
+  border:0;
+  min-height:48px;
+  border-radius:13px;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.approve{background:#08a84a}
+.reject{background:#df3434}
+.btn:disabled{opacity:.5}
+.empty{
+  padding:40px 20px;
+  border-radius:18px;
+  background:#fff;
+  text-align:center;
+  color:#7888a1;
+}
+@media(max-width:720px){
+  .main{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
+
 <body>
 <div class="app">
-<header class="top"><div><div class="title">🛡️ MISSION ADMIN</div><div class="sub">ตรวจหลักฐาน • อนุมัติ/ไม่อนุมัติ • แจก Reward อัตโนมัติ</div></div><div id="adminName">กำลังตรวจสอบสิทธิ์...</div></header>
-<nav class="tabs"><button class="tab active" data-status="pending">รอตรวจ</button><button class="tab" data-status="approved">อนุมัติแล้ว</button><button class="tab" data-status="rejected">ไม่ผ่าน</button><button class="tab" data-status="all">ทั้งหมด</button></nav>
-<div id="status"></div><main id="list" class="list"></main>
+
+  <header class="header">
+    <h1>🛡️ MISSION ADMIN</h1>
+    <p>ตรวจหลักฐาน • อนุมัติ • ไม่อนุมัติ • แจก Reward อัตโนมัติ</p>
+    <div id="adminName">กำลังตรวจสอบสิทธิ์...</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active"
+            data-status="pending">รอตรวจ</button>
+    <button class="tab"
+            data-status="approved">อนุมัติแล้ว</button>
+    <button class="tab"
+            data-status="rejected">ไม่ผ่าน</button>
+    <button class="tab"
+            data-status="all">ทั้งหมด</button>
+  </nav>
+
+  <div id="status"
+       class="status"></div>
+
+  <main id="list"
+        class="list"></main>
+
 </div>
+
 <script>
-const LIFF_ID=window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF";
-const ADMIN_API=window.APP_CONFIG?.API?.MISSION_ADMIN||"https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission-admin";
-let currentStatus="pending",idToken="";
-function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
-function setStatus(m){document.getElementById("status").textContent=m||""}
-async function api(payload){const r=await fetch(ADMIN_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...payload,idToken})});const raw=await r.text();let d={};try{d=raw?JSON.parse(raw):{}}catch{throw new Error(`Server response invalid HTTP ${r.status}`)}if(!r.ok||d?.success===false)throw new Error(d?.error||`HTTP ${r.status}`);return d}
-function evidenceHtml(i){const u=i.evidenceSignedUrl,t=String(i.evidence_type||"");if(u&&t.startsWith("image/"))return `<img src="${esc(u)}" alt="หลักฐาน">`;if(u&&t.startsWith("video/"))return `<video src="${esc(u)}" controls playsinline></video>`;if(i.evidence_link)return `<a href="${esc(i.evidence_link)}" target="_blank" rel="noopener">เปิด Link หลักฐาน</a>`;return `<div style="color:#fff">ไม่มี Preview</div>`}
-function cardHtml(i){const p=i.player||{},pending=i.status==="pending";return `<article class="card"><div class="card-main"><div><div class="mission">${esc(i.mission_id)}</div><div class="meta">${esc(i.category)} • ${esc(i.period_key)} • Attempt ${esc(i.attempt_no)}</div><div class="player">👤 <strong>${esc(p.display_name||"ไม่พบชื่อ")}</strong><br><small>${esc(i.line_user_id)}</small></div>${i.note?`<div class="note">📝 ${esc(i.note)}</div>`:""}<div class="reward"><span class="chip">⭐ +${esc(i.reward_coin)} COIN</span><span class="chip">⚡ +${esc(i.reward_energy)} ENERGY</span><span class="chip">🏆 +${esc(i.reward_exp)} EXP</span></div>${i.evidence_link?`<div style="margin-top:10px">🔗 <a href="${esc(i.evidence_link)}" target="_blank" rel="noopener">${esc(i.evidence_link)}</a></div>`:""}${i.reject_reason?`<div class="note">เหตุผลไม่ผ่าน: ${esc(i.reject_reason)}</div>`:""}</div><div class="evidence">${evidenceHtml(i)}</div></div>${pending?`<div class="actions"><button class="btn approve" onclick="review('${esc(i.id)}','approve',this)">✅ อนุมัติ + แจก Reward</button><button class="btn reject" onclick="review('${esc(i.id)}','reject',this)">❌ ไม่อนุมัติ</button></div>`:""}</article>`}
-async function loadList(){setStatus("กำลังโหลด...");document.getElementById("list").innerHTML="";try{const r=await api({action:"adminListSubmissions",status:currentStatus,limit:100});const rows=Array.isArray(r.submissions)?r.submissions:[];document.getElementById("list").innerHTML=rows.length?rows.map(cardHtml).join(""):`<div class="empty">ไม่มีรายการในหมวดนี้</div>`;setStatus(`พบ ${rows.length} รายการ`)}catch(e){console.error(e);setStatus("ERROR: "+(e?.message||e))}}
-async function review(id,decision,button){let reason="";if(decision==="reject"){reason=prompt("กรอกเหตุผลที่ไม่อนุมัติ")||"";if(!reason.trim())return}else if(!confirm("ยืนยันอนุมัติหลักฐานและแจก ROCK COIN + ENERGY + EXP ?"))return;const buttons=button.closest(".actions")?.querySelectorAll("button")||[];buttons.forEach(b=>b.disabled=true);try{const r=await api({action:"adminReviewSubmission",submissionId:id,decision,reason});if(decision==="approve"&&r?.alreadyProcessed)alert("รายการนี้เคยแจก Reward แล้ว ระบบไม่แจกซ้ำ");else if(decision==="approve")alert("✅ อนุมัติและแจก Reward สำเร็จ");else alert("❌ บันทึกไม่อนุมัติแล้ว");await loadList()}catch(e){console.error(e);alert("ERROR: "+(e?.message||e));buttons.forEach(b=>b.disabled=false)}}
-async function start(){try{await liff.init({liffId:LIFF_ID});if(!liff.isLoggedIn()){liff.login();return}idToken=liff.getIDToken();if(!idToken)throw new Error("ไม่พบ LINE ID Token");const who=await api({action:"adminWhoAmI"});document.getElementById("adminName").textContent="Admin: "+(who?.admin?.displayName||"Authorized");await loadList()}catch(e){console.error(e);document.getElementById("adminName").textContent="ไม่มีสิทธิ์";setStatus("ERROR: "+(e?.message||e))}}
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",async()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));t.classList.add("active");currentStatus=t.dataset.status||"pending";await loadList()}));start();
+const LIFF_ID =
+  window.APP_CONFIG?.LIFF_ID ||
+  "2011201679-uNWz5yqF";
+
+const MISSION_API =
+  window.APP_CONFIG?.API?.MISSION ||
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission";
+
+let idToken = "";
+let currentStatus = "pending";
+
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
+
+function message(value){
+  document.getElementById("status")
+    .textContent =
+      value || "";
+}
+
+async function api(payload){
+
+  const response =
+    await fetch(
+      MISSION_API,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+            ...payload,
+            idToken
+          })
+      }
+    );
+
+  const raw =
+    await response.text();
+
+  let result = {};
+
+  try{
+    result =
+      raw
+        ? JSON.parse(raw)
+        : {};
+  }catch{
+    throw new Error(
+      "Server response ไม่ถูกต้อง"
+    );
+  }
+
+  if(
+    !response.ok ||
+    result?.success === false
+  ){
+    throw new Error(
+      result?.error ||
+      `HTTP ${response.status}`
+    );
+  }
+
+  return result;
+}
+
+function evidenceHTML(item){
+
+  const url =
+    item.evidenceSignedUrl;
+
+  const type =
+    String(
+      item.evidence_type ||
+      ""
+    );
+
+  if(
+    url &&
+    type.startsWith("image/")
+  ){
+    return `
+      <img
+        src="${esc(url)}"
+        alt="หลักฐาน"
+      >
+    `;
+  }
+
+  if(
+    url &&
+    type.startsWith("video/")
+  ){
+    return `
+      <video
+        src="${esc(url)}"
+        controls
+        playsinline
+      ></video>
+    `;
+  }
+
+  if(item.evidence_link){
+    return `
+      <a
+        href="${esc(item.evidence_link)}"
+        target="_blank"
+        rel="noopener"
+      >
+        เปิด Link หลักฐาน
+      </a>
+    `;
+  }
+
+  return `
+    <span style="color:white">
+      ไม่มี Preview
+    </span>
+  `;
+}
+
+function cardHTML(item){
+
+  const player =
+    item.player || {};
+
+  const isPending =
+    item.status === "pending";
+
+  return `
+    <article class="card">
+
+      <div class="main">
+
+        <div>
+
+          <div class="mission">
+            ${esc(item.mission_id)}
+          </div>
+
+          <div class="meta">
+            ${esc(item.category)}
+            • ${esc(item.period_key)}
+            • Attempt ${esc(item.attempt_no)}
+          </div>
+
+          <div class="player">
+            👤 <strong>
+              ${esc(
+                player.display_name ||
+                "ไม่พบชื่อ"
+              )}
+            </strong>
+            <br>
+            <small>
+              ${esc(item.line_user_id)}
+            </small>
+          </div>
+
+          ${
+            item.note
+              ? `
+                <div class="note">
+                  📝 ${esc(item.note)}
+                </div>
+              `
+              : ""
+          }
+
+          <div class="rewards">
+            <span class="chip">
+              ⭐ +${esc(item.reward_coin)} ROCK COIN
+            </span>
+
+            <span class="chip">
+              ⚡ +${esc(item.reward_energy)} ENERGY
+            </span>
+
+            <span class="chip">
+              🏆 +${esc(item.reward_exp)} EXP
+            </span>
+          </div>
+
+          ${
+            item.evidence_link
+              ? `
+                <div style="margin-top:10px">
+                  🔗
+                  <a
+                    href="${esc(item.evidence_link)}"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    เปิด Link
+                  </a>
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            item.reject_reason
+              ? `
+                <div class="note">
+                  เหตุผลไม่ผ่าน:
+                  ${esc(item.reject_reason)}
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+
+        <div class="evidence">
+          ${evidenceHTML(item)}
+        </div>
+
+      </div>
+
+      ${
+        isPending
+          ? `
+            <div class="actions">
+
+              <button
+                class="btn approve"
+                onclick="
+                  reviewMission(
+                    '${esc(item.id)}',
+                    'approve',
+                    this
+                  )
+                "
+              >
+                ✅ อนุมัติ + แจก Reward
+              </button>
+
+              <button
+                class="btn reject"
+                onclick="
+                  reviewMission(
+                    '${esc(item.id)}',
+                    'reject',
+                    this
+                  )
+                "
+              >
+                ❌ ไม่อนุมัติ
+              </button>
+
+            </div>
+          `
+          : ""
+      }
+
+    </article>
+  `;
+}
+
+async function loadList(){
+
+  message(
+    "กำลังโหลด..."
+  );
+
+  document
+    .getElementById(
+      "list"
+    )
+    .innerHTML =
+      "";
+
+  try{
+
+    const result =
+      await api({
+        action:
+          "adminListSubmissions",
+
+        status:
+          currentStatus,
+
+        limit:
+          100
+      });
+
+
+    const rows =
+      Array.isArray(
+        result?.submissions
+      )
+        ? result.submissions
+        : [];
+
+
+    document
+      .getElementById(
+        "list"
+      )
+      .innerHTML =
+        rows.length
+          ? rows
+              .map(
+                cardHTML
+              )
+              .join("")
+          : `
+              <div class="empty">
+                ไม่มีรายการในหมวดนี้
+              </div>
+            `;
+
+
+    message(
+      `พบ ${rows.length} รายการ`
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    message(
+      "ERROR: " +
+      (
+        error?.message ||
+        error
+      )
+    );
+  }
+}
+
+async function reviewMission(
+  submissionId,
+  decision,
+  button
+){
+
+  let reason =
+    "";
+
+  if(
+    decision === "reject"
+  ){
+
+    reason =
+      prompt(
+        "กรอกเหตุผลที่ไม่อนุมัติ"
+      ) || "";
+
+    if(!reason.trim()){
+      return;
+    }
+
+  }else{
+
+    const ok =
+      confirm(
+        "ยืนยันอนุมัติและแจก ROCK COIN + ENERGY + EXP ?"
+      );
+
+    if(!ok){
+      return;
+    }
+  }
+
+
+  const buttons =
+    button
+      .closest(
+        ".actions"
+      )
+      ?.querySelectorAll(
+        "button"
+      ) ||
+    [];
+
+
+  buttons.forEach(
+    item =>
+      item.disabled =
+        true
+  );
+
+
+  try{
+
+    const result =
+      await api({
+        action:
+          "adminReviewSubmission",
+
+        submissionId,
+
+        decision,
+
+        reason
+      });
+
+
+    if(
+      decision === "approve"
+    ){
+
+      if(
+        result?.alreadyProcessed
+      ){
+
+        alert(
+          "รายการนี้เคยแจก Reward แล้ว ระบบไม่แจกซ้ำ"
+        );
+
+      }else{
+
+        alert(
+          "✅ อนุมัติและแจก Reward สำเร็จ"
+        );
+      }
+
+    }else{
+
+      alert(
+        "❌ บันทึกไม่อนุมัติแล้ว"
+      );
+    }
+
+
+    await loadList();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "ERROR: " +
+      (
+        error?.message ||
+        error
+      )
+    );
+
+
+    buttons.forEach(
+      item =>
+        item.disabled =
+          false
+    );
+  }
+}
+
+async function startAdmin(){
+
+  try{
+
+    await liff.init({
+      liffId:
+        LIFF_ID
+    });
+
+
+    if(
+      !liff.isLoggedIn()
+    ){
+
+      liff.login();
+
+      return;
+    }
+
+
+    idToken =
+      liff.getIDToken();
+
+
+    if(!idToken){
+
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+    }
+
+
+    const who =
+      await api({
+        action:
+          "adminWhoAmI"
+      });
+
+
+    document
+      .getElementById(
+        "adminName"
+      )
+      .textContent =
+        "Admin: " +
+        (
+          who?.admin?.displayName ||
+          "Authorized"
+        );
+
+
+    await loadList();
+
+  }catch(error){
+
+    console.error(error);
+
+    document
+      .getElementById(
+        "adminName"
+      )
+      .textContent =
+        "ไม่มีสิทธิ์";
+
+    message(
+      "ERROR: " +
+      (
+        error?.message ||
+        error
+      )
+    );
+  }
+}
+
+document
+  .querySelectorAll(
+    ".tab"
+  )
+  .forEach(
+    tab => {
+
+      tab.addEventListener(
+        "click",
+        async () => {
+
+          document
+            .querySelectorAll(
+              ".tab"
+            )
+            .forEach(
+              item =>
+                item
+                  .classList
+                  .remove(
+                    "active"
+                  )
+            );
+
+
+          tab
+            .classList
+            .add(
+              "active"
+            );
+
+
+          currentStatus =
+            tab.dataset.status ||
+            "pending";
+
+
+          await loadList();
+        }
+      );
+    }
+  );
+
+
+startAdmin();
 </script>
 </body>
 </html>
