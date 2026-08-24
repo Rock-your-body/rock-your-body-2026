@@ -14,19 +14,19 @@ window.APP_CONFIG = {
 
   API: {
 
-    DASHBOARD:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
+  DASHBOARD:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
-    MISSION:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
+  MISSION:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
 
-    BATTLE:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
+  BATTLE:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
 
-    MISSION_ADMIN:
-  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission-admin"
-  },
+  MISSION_ADMIN:
+    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission"
 
+},
 
   /* =========================================================
      PAGE
