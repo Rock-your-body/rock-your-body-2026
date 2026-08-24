@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
 
-  <script src="./app-config.js?v=20260824-05"></script>
-  <script src="./common.js?v=20260824-05"></script>
+  <script src="./app-config.js?v=20260824-08"></script>
+  <script src="./common.js?v=20260824-08"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -49,6 +49,47 @@
       object-fit:fill;
       pointer-events:none;
       z-index:1;
+    }
+
+    /* =========================================================
+       CURRENT STAGE MONSTER
+       แสดง Monster ของ Stage ที่ปลดล็อกล่าสุดบนหน้า Battle
+    ========================================================= */
+    .boss-monster-live{
+      position:absolute;
+      z-index:12;
+      left:20.0%;
+      top:24.0%;
+      width:31.0%;
+      height:38.0%;
+      display:block;
+      object-fit:contain;
+      object-position:center bottom;
+      pointer-events:none;
+      filter:drop-shadow(0 10px 12px rgba(0,0,0,.35));
+      opacity:0;
+      transition:opacity .18s ease;
+    }
+
+    .boss-monster-live.show{
+      opacity:1;
+    }
+
+    .boss-stage-live{
+      position:absolute;
+      z-index:21;
+      left:31.0%;
+      top:57.0%;
+      width:13.0%;
+      min-height:4%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-weight:900;
+      font-size:clamp(8px,.9vw,16px);
+      text-shadow:0 2px 5px rgba(0,0,0,.9);
+      pointer-events:none;
     }
 
     /* =========================================================
@@ -362,10 +403,19 @@
 
     <img
       class="template-image"
-      src="./battle-template.png?v=20260824-04"
+      src="./battle-template.png?v=20260824-08"
       alt="Battle Template"
       draggable="false"
     >
+
+    <img
+      id="bossMonsterLive"
+      class="boss-monster-live"
+      src=""
+      alt="Current Stage Monster"
+      draggable="false"
+    >
+    <div id="bossStageLive" class="boss-stage-live">STAGE 1</div>
 
     <div id="coinValue" class="live coin-live">0</div>
     <div id="energyValue" class="live energy-live">0 / 200</div>
@@ -400,7 +450,7 @@
 
     <img
       class="fight-image"
-      src="./battle%20map.jpeg?v=20260824-04"
+      src="./battle%20map.jpeg?v=20260824-08"
       alt="Fight Monster Battle Map"
       draggable="false"
     >
@@ -451,17 +501,71 @@
 /* =========================================================
    STAGES
 ========================================================= */
+const SUPABASE_BATTLE_BASE =
+  "https://nztvqdzatdpauufpvdaa.supabase.co/storage/v1/object/public/rock-assets/%20battle";
+
 const STAGES = [
-  {id:1,name:"เจ้าจอมเอื่อย",energy:300},
-  {id:2,name:"จอมหวาน",energy:900},
-  {id:3,name:"ปีศาจของทอด",energy:1500},
-  {id:4,name:"จอมเค็ม",energy:2100},
-  {id:5,name:"ราชาอาหารไร้ประโยชน์",energy:2700},
-  {id:6,name:"ปีศาจพักผ่อนน้อย",energy:3300},
-  {id:7,name:"จอมเนื่อยนิ่ง",energy:3900},
-  {id:8,name:"ปีศาจพฤติกรรมเสี่ยง",energy:4500},
-  {id:9,name:"ราชาความเสี่ยงสุขภาพ",energy:5100},
-  {id:10,name:"จอมมารโรคร้าย",energy:5700,boss:true}
+  {
+    id:1,
+    name:"เจ้าจอมเอื่อย",
+    energy:300,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-001-germ.png`
+  },
+  {
+    id:2,
+    name:"จอมหวาน",
+    energy:900,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-002-donut.png`
+  },
+  {
+    id:3,
+    name:"ปีศาจของทอด",
+    energy:1500,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-003-fries.png`
+  },
+  {
+    id:4,
+    name:"จอมเค็ม",
+    energy:2100,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-004-salt.png`
+  },
+  {
+    id:5,
+    name:"ราชาอาหารไร้ประโยชน์",
+    energy:2700,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-005-burger-king.png`
+  },
+  {
+    id:6,
+    name:"ปีศาจพักผ่อนน้อย",
+    energy:3300,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-006-rest.png`
+  },
+  {
+    id:7,
+    name:"จอมเนื่อยนิ่ง",
+    energy:3900,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-007-sedentary.png`
+  },
+  {
+    id:8,
+    name:"ปีศาจพฤติกรรมเสี่ยง",
+    energy:4500,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-008-risk.png`
+  },
+  {
+    id:9,
+    name:"ราชาความเสี่ยงสุขภาพ",
+    energy:5100,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-009-risk-king.png`
+  },
+  {
+    id:10,
+    name:"จอมมารโรคร้าย",
+    energy:5700,
+    monster:`${SUPABASE_BATTLE_BASE}/monster/stage-010-boss.png`,
+    boss:true
+  }
 ];
 
 
@@ -486,6 +590,11 @@ const OPEN_FIGHT_ON_LOAD =
 ========================================================= */
 let playerEnergy = 0;
 let playerCoin = 0;
+let playerMaxEnergy =
+  Number(
+    window.APP_CONFIG?.MAX_ENERGY
+  ) || 200;
+
 let unlockedStage = 1;
 
 
@@ -619,15 +728,154 @@ function openStage(stageNumber){
 
 
 /* =========================================================
+   DASHBOARD NORMALIZER
+   ใช้โครงสร้างเดียวกับหน้า HOME / MISSION
+========================================================= */
+
+function normalizeBattleDashboard(raw){
+
+  const d =
+    raw?.data ??
+    raw?.dashboard ??
+    raw ??
+    {};
+
+  const user =
+    d?.user ??
+    d?.player ??
+    {};
+
+  const energyObject =
+    d?.energy &&
+    typeof d.energy === "object"
+      ? d.energy
+      : {};
+
+  const coin =
+    Number(
+      d?.rockCoin ??
+      d?.rock_coin ??
+      d?.coin ??
+      user?.rock_coin ??
+      user?.rockCoin ??
+      user?.coin
+    );
+
+  const energy =
+    Number(
+      energyObject?.current ??
+      d?.currentEnergy ??
+      d?.current_energy ??
+      user?.energy ??
+      (
+        typeof d?.energy === "number"
+          ? d.energy
+          : undefined
+      )
+    );
+
+  const maxEnergy =
+    Number(
+      energyObject?.max ??
+      d?.maxEnergy ??
+      d?.max_energy ??
+      user?.max_energy ??
+      window.APP_CONFIG?.MAX_ENERGY ??
+      200
+    );
+
+  return {
+    coin,
+    energy,
+    maxEnergy
+  };
+}
+
+
+/* =========================================================
+   CURRENT MONSTER
+========================================================= */
+
+function renderCurrentMonster(){
+
+  const stageNumber =
+    Math.max(
+      1,
+      Math.min(
+        10,
+        Number(unlockedStage) || 1
+      )
+    );
+
+  const stage =
+    STAGES.find(
+      item =>
+        item.id === stageNumber
+    ) || STAGES[0];
+
+  const image =
+    document.getElementById(
+      "bossMonsterLive"
+    );
+
+  const label =
+    document.getElementById(
+      "bossStageLive"
+    );
+
+  if(label){
+    label.textContent =
+      `STAGE ${stage.id}`;
+  }
+
+  if(!image){
+    return;
+  }
+
+  image.classList.remove(
+    "show"
+  );
+
+  image.onload =
+    () => {
+      image.classList.add(
+        "show"
+      );
+    };
+
+  image.onerror =
+    () => {
+      console.error(
+        "MONSTER IMAGE LOAD ERROR:",
+        stage.monster
+      );
+
+      image.classList.remove(
+        "show"
+      );
+    };
+
+  image.src =
+    `${stage.monster}?v=20260824-08`;
+}
+
+
+/* =========================================================
    UI
 ========================================================= */
 function updateUI(){
 
   const maxEnergy =
-    Number(
-      localStorage.getItem("rockMaxEnergy") ||
-      window.APP_CONFIG?.MAX_ENERGY
-    ) || 200;
+    Number.isFinite(
+      playerMaxEnergy
+    ) &&
+    playerMaxEnergy > 0
+      ? playerMaxEnergy
+      : (
+          Number(
+            window.APP_CONFIG?.MAX_ENERGY
+          ) || 200
+        );
 
   const energyText =
     `${Math.max(0,playerEnergy).toLocaleString("en-US")} / ${maxEnergy.toLocaleString("en-US")}`;
@@ -667,6 +915,7 @@ function updateUI(){
   }
 
   updateStageLocks();
+  renderCurrentMonster();
 }
 
 
@@ -714,6 +963,11 @@ function loadCache(){
       "rockCoin"
     );
 
+  const maxRaw =
+    localStorage.getItem(
+      "rockMaxEnergy"
+    );
+
   const stageRaw =
     localStorage.getItem(
       "rockUnlockedStage"
@@ -739,19 +993,23 @@ function loadCache(){
     }
   }
 
+  if(maxRaw !== null){
+
+    const max =
+      Number(maxRaw);
+
+    if(
+      Number.isFinite(max) &&
+      max > 0
+    ){
+      playerMaxEnergy = max;
+    }
+  }
+
   if(stageRaw !== null){
 
     const stage =
       Number(stageRaw);
-
-    if(Number.isFinite(coin)){
-      playerCoin = coin;
-
-      localStorage.setItem(
-        "rockCoin",
-        String(coin)
-      );
-    }
 
     if(Number.isFinite(stage)){
       unlockedStage =
@@ -774,107 +1032,130 @@ async function loadDashboard(){
   try{
 
     if(
-      !window.ROCK ||
-      typeof ROCK.fetchDashboard !== "function"
+      !window.ROCK
     ){
-      throw new Error("common.js / ROCK.fetchDashboard ไม่พร้อม");
+      throw new Error(
+        "common.js / ROCK ไม่พร้อม"
+      );
     }
 
-    const raw =
-      await ROCK.fetchDashboard();
+    let raw =
+      null;
 
     /*
-      player-dashboard อาจตอบได้หลายรูปแบบ:
-      {data:{...}}
-      {dashboard:{...}}
-      {...}
-      จึง normalize ก่อนอ่านค่า
+      รองรับชื่อ function ที่ใช้ในหน้า HOME / MISSION
     */
-    const result =
-      raw?.data ??
-      raw?.dashboard ??
-      raw ??
-      {};
+    if(
+      typeof ROCK.dashboard ===
+      "function"
+    ){
 
-    const user =
-      result?.user ??
-      result?.player ??
-      {};
+      raw =
+        await ROCK.dashboard();
 
-    const energyObject =
-      result?.energy &&
-      typeof result.energy === "object"
-        ? result.energy
-        : {};
+    }else if(
+      typeof ROCK.fetchDashboard ===
+      "function"
+    ){
 
-    const energy =
-      Number(
-        energyObject?.current ??
-        result?.currentEnergy ??
-        result?.current_energy ??
-        user?.energy ??
-        (
-          typeof result?.energy === "number"
-            ? result.energy
-            : undefined
-        )
+      raw =
+        await ROCK.fetchDashboard();
+
+    }else if(
+      typeof ROCK.getDashboard ===
+      "function"
+    ){
+
+      raw =
+        await ROCK.getDashboard();
+
+    }else{
+
+      throw new Error(
+        "ไม่พบ Dashboard function"
+      );
+    }
+
+
+    const data =
+      normalizeBattleDashboard(
+        raw
       );
 
-    const coin =
-      Number(
-        result?.rockCoin ??
-        result?.rock_coin ??
-        result?.coin ??
-        user?.rock_coin ??
-        user?.rockCoin ??
-        user?.coin
-      );
 
-    const maxEnergy =
-      Number(
-        energyObject?.max ??
-        result?.maxEnergy ??
-        result?.max_energy ??
-        user?.max_energy ??
-        window.APP_CONFIG?.MAX_ENERGY ??
-        200
-      );
+    if(
+      Number.isFinite(
+        data.energy
+      )
+    ){
 
-    if(Number.isFinite(energy)){
-      playerEnergy = energy;
+      playerEnergy =
+        Math.max(
+          0,
+          data.energy
+        );
+
       localStorage.setItem(
         "rockEnergy",
-        String(energy)
+        String(playerEnergy)
       );
     }
 
-    if(Number.isFinite(coin)){
-      playerCoin = coin;
+
+    if(
+      Number.isFinite(
+        data.coin
+      )
+    ){
+
+      playerCoin =
+        Math.max(
+          0,
+          data.coin
+        );
+
       localStorage.setItem(
         "rockCoin",
-        String(coin)
+        String(playerCoin)
       );
     }
 
-    if(Number.isFinite(maxEnergy) && maxEnergy > 0){
+
+    if(
+      Number.isFinite(
+        data.maxEnergy
+      ) &&
+      data.maxEnergy > 0
+    ){
+
+      playerMaxEnergy =
+        data.maxEnergy;
+
       localStorage.setItem(
         "rockMaxEnergy",
-        String(maxEnergy)
+        String(playerMaxEnergy)
       );
     }
 
+
     console.log(
-      "BATTLE DASHBOARD OK:",
+      "BATTLE DASHBOARD:",
       {
-        coin:playerCoin,
-        energy:playerEnergy,
-        maxEnergy
+        coin:
+          playerCoin,
+        energy:
+          playerEnergy,
+        maxEnergy:
+          playerMaxEnergy,
+        raw
       }
     );
+
 
     updateUI();
 
     return raw;
+
 
   }catch(error){
 
@@ -884,11 +1165,7 @@ async function loadDashboard(){
     );
 
     showToast(
-      "โหลดข้อมูลผู้เล่นไม่สำเร็จ: " +
-      (
-        error?.message ||
-        String(error)
-      )
+      "โหลดเหรียญ/พลังไม่สำเร็จ"
     );
 
     return null;
@@ -909,7 +1186,7 @@ async function loadBattleStatus(){
     !window.ROCK ||
     typeof ROCK.getIdToken !== "function"
   ){
-    return;
+    return null;
   }
 
   try{
@@ -918,7 +1195,7 @@ async function loadBattleStatus(){
       ROCK.getIdToken();
 
     if(!idToken){
-      return;
+      return null;
     }
 
     const response =
@@ -927,27 +1204,34 @@ async function loadBattleStatus(){
         {
           method:"POST",
           headers:{
-            "Content-Type":"application/json"
+            "Content-Type":
+              "application/json"
           },
-          body:JSON.stringify({
-            action:"battleStatus",
-            idToken
-          })
+          body:
+            JSON.stringify({
+              action:
+                "battleStatus",
+              idToken
+            })
         }
       );
 
     const result =
       await response.json();
 
+
     if(
       !response.ok ||
       result?.success === false
     ){
+
       throw new Error(
         result?.error ||
+        result?.message ||
         "โหลด Battle Status ไม่สำเร็จ"
       );
     }
+
 
     const payload =
       result?.data ??
@@ -959,20 +1243,19 @@ async function loadBattleStatus(){
       payload?.user ??
       {};
 
+
     const energy =
       Number(
         player?.energy ??
         payload?.energy?.current ??
-        payload?.energy
+        (
+          typeof payload?.energy ===
+          "number"
+            ? payload.energy
+            : undefined
+        )
       );
 
-    const stage =
-      Number(
-        player?.unlockedStage ??
-        player?.unlocked_stage ??
-        payload?.unlockedStage ??
-        payload?.unlocked_stage
-      );
 
     const coin =
       Number(
@@ -984,20 +1267,95 @@ async function loadBattleStatus(){
         payload?.coin
       );
 
-    if(Number.isFinite(energy)){
-      playerEnergy = energy;
+
+    const maxEnergy =
+      Number(
+        player?.max_energy ??
+        payload?.energy?.max ??
+        payload?.maxEnergy ??
+        payload?.max_energy
+      );
+
+
+    const stage =
+      Number(
+        player?.unlockedStage ??
+        player?.unlocked_stage ??
+        player?.currentStage ??
+        player?.current_stage ??
+        payload?.unlockedStage ??
+        payload?.unlocked_stage ??
+        payload?.currentStage ??
+        payload?.current_stage ??
+        payload?.stage
+      );
+
+
+    if(
+      Number.isFinite(energy)
+    ){
+
+      playerEnergy =
+        Math.max(
+          0,
+          energy
+        );
 
       localStorage.setItem(
         "rockEnergy",
-        String(energy)
+        String(playerEnergy)
       );
     }
 
-    if(Number.isFinite(stage)){
+
+    /*
+      Battle API มี coin ส่งมาก็ใช้
+      ถ้าไม่มี จะคง coin จาก player-dashboard
+    */
+    if(
+      Number.isFinite(coin)
+    ){
+
+      playerCoin =
+        Math.max(
+          0,
+          coin
+        );
+
+      localStorage.setItem(
+        "rockCoin",
+        String(playerCoin)
+      );
+    }
+
+
+    if(
+      Number.isFinite(maxEnergy) &&
+      maxEnergy > 0
+    ){
+
+      playerMaxEnergy =
+        maxEnergy;
+
+      localStorage.setItem(
+        "rockMaxEnergy",
+        String(playerMaxEnergy)
+      );
+    }
+
+
+    if(
+      Number.isFinite(stage) &&
+      stage >= 1
+    ){
+
       unlockedStage =
         Math.max(
           1,
-          Math.min(10,stage)
+          Math.min(
+            10,
+            stage
+          )
         );
 
       localStorage.setItem(
@@ -1006,14 +1364,40 @@ async function loadBattleStatus(){
       );
     }
 
+
+    console.log(
+      "BATTLE STATUS:",
+      {
+        coin:
+          playerCoin,
+        energy:
+          playerEnergy,
+        maxEnergy:
+          playerMaxEnergy,
+        unlockedStage,
+        result
+      }
+    );
+
+
     updateUI();
+
+    return result;
+
 
   }catch(error){
 
-    console.warn(
-      "BATTLE STATUS:",
+    console.error(
+      "BATTLE STATUS ERROR:",
       error
     );
+
+    /*
+      Battle Status ล้ม ไม่ล้างค่า Dashboard
+    */
+    updateUI();
+
+    return null;
   }
 }
 
@@ -1161,59 +1545,31 @@ function showToast(message){
 /* =========================================================
    START
 ========================================================= */
-async function startBattle(){
+let battleRefreshTimer =
+  null;
 
-  loadCache();
 
-  startTimer();
+async function refreshBattleData(){
 
-  if(OPEN_FIGHT_ON_LOAD){
-    showFightMonster();
-  }
+  const results =
+    await Promise.allSettled([
+      loadDashboard(),
+      loadBattleStatus()
+    ]);
 
-  if(TEST_MODE){
+  console.log(
+    "BATTLE REFRESH:",
+    results
+  );
 
-    unlockedStage =
-      10;
-
-    updateStageLocks();
-  }
-
-  try{
-
-    if(
-      window.ROCK &&
-      typeof ROCK.initLiff === "function"
-    ){
-
-      const ready =
-        await ROCK.initLiff();
-
-      if(!ready){
-        return;
-      }
-
-      await Promise.allSettled([
-        loadDashboard(),
-        loadBattleStatus()
-      ]);
-    }
-
-  }catch(error){
-
-    console.warn(
-      "BATTLE INIT:",
-      error
-    );
-  }
+  updateUI();
 }
 
-
-let battleRefreshTimer = null;
 
 function startBattleRefresh(){
 
   if(battleRefreshTimer){
+
     clearInterval(
       battleRefreshTimer
     );
@@ -1221,52 +1577,131 @@ function startBattleRefresh(){
 
   const ms =
     Number(
-      window.APP_CONFIG?.REFRESH_MS
+      window.APP_CONFIG
+        ?.REFRESH_MS
     ) || 30000;
 
   battleRefreshTimer =
     setInterval(
-      async () => {
+      () => {
 
         if(
-          document.visibilityState !==
+          document.visibilityState ===
           "visible"
         ){
-          return;
+
+          refreshBattleData();
         }
-
-        await Promise.allSettled([
-          loadDashboard(),
-          loadBattleStatus()
-        ]);
-
       },
       ms
     );
 }
 
+
+async function startBattle(){
+
+  loadCache();
+
+  startTimer();
+
+  renderCurrentMonster();
+
+
+  if(
+    OPEN_FIGHT_ON_LOAD
+  ){
+    showFightMonster();
+  }
+
+
+  if(TEST_MODE){
+
+    unlockedStage =
+      10;
+
+    updateUI();
+  }
+
+
+  try{
+
+    if(
+      !window.ROCK
+    ){
+      throw new Error(
+        "common.js โหลดไม่สำเร็จ"
+      );
+    }
+
+
+    if(
+      typeof ROCK.initLiff ===
+      "function"
+    ){
+
+      const ready =
+        await ROCK.initLiff(
+          "BATTLE"
+        );
+
+      if(!ready){
+        return;
+      }
+    }
+
+
+    await refreshBattleData();
+
+    startBattleRefresh();
+
+
+  }catch(error){
+
+    console.error(
+      "BATTLE INIT ERROR:",
+      error
+    );
+
+    showToast(
+      error?.message ||
+      "โหลด Battle ไม่สำเร็จ"
+    );
+  }
+}
+
+
 document.addEventListener(
   "visibilitychange",
-  async () => {
+  () => {
 
     if(
       document.visibilityState ===
       "visible"
     ){
-      await Promise.allSettled([
-        loadDashboard(),
-        loadBattleStatus()
-      ]);
+
+      refreshBattleData();
     }
   }
 );
 
+
+window.addEventListener(
+  "pageshow",
+  () => {
+
+    if(
+      window.ROCK
+    ){
+
+      refreshBattleData();
+    }
+  }
+);
+
+
 document.addEventListener(
   "DOMContentLoaded",
-  async () => {
-    await startBattle();
-    startBattleRefresh();
-  }
+  startBattle
 );
 </script>
 
