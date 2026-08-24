@@ -1,776 +1,230 @@
-<!doctype html>
-<html lang="th">
-<head>
-<meta charset="utf-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MISSION ADMIN</title>
+window.APP_CONFIG = {
 
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<script src="./app-config.js?v=20260824-admin-02"></script>
+  /* =========================================================
+     LIFF
+  ========================================================= */
 
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,"Noto Sans Thai",sans-serif;
-  background:#eef5ff;
-  color:#12356f;
-}
-.app{
-  width:min(1100px,100%);
-  margin:auto;
-  padding:14px;
-}
-.header{
-  padding:18px;
-  border-radius:20px;
-  color:#fff;
-  background:linear-gradient(135deg,#073b93,#096ee8);
-  box-shadow:0 10px 25px rgba(10,50,110,.18);
-}
-.header h1{
-  margin:0;
-  font-size:28px;
-}
-.header p{
-  margin:6px 0 0;
-  opacity:.9;
-}
-.tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:14px 0;
-}
-.tab{
-  border:0;
-  border-radius:12px;
-  padding:10px 14px;
-  background:#fff;
-  color:#16477f;
-  font-weight:800;
-  cursor:pointer;
-}
-.tab.active{
-  background:#ffcc32;
-  color:#4b2b00;
-}
-.status{
-  margin:10px 0;
-  font-weight:700;
-}
-.list{
-  display:grid;
-  gap:14px;
-}
-.card{
-  overflow:hidden;
-  border-radius:18px;
-  border:1px solid #d9e5f5;
-  background:#fff;
-  box-shadow:0 6px 18px rgba(15,55,110,.08);
-}
-.main{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 250px;
-  gap:14px;
-  padding:15px;
-}
-.mission{
-  font-size:20px;
-  font-weight:900;
-  color:#073b93;
-}
-.meta{
-  margin-top:5px;
-  font-size:12px;
-  color:#7788a3;
-}
-.player,
-.note{
-  margin-top:10px;
-  padding:10px;
-  border-radius:12px;
-}
-.player{
-  background:#f2f7ff;
-}
-.note{
-  background:#fff7df;
-}
-.rewards{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.chip{
-  padding:6px 9px;
-  border-radius:999px;
-  background:#edf4ff;
-  font-size:12px;
-  font-weight:800;
-}
-.evidence{
-  min-height:180px;
-  border-radius:14px;
-  overflow:hidden;
-  background:#071c42;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.evidence img,
-.evidence video{
-  width:100%;
-  max-height:280px;
-  object-fit:contain;
-}
-.evidence a{
-  color:#fff;
-  padding:20px;
-  text-align:center;
-  font-weight:800;
-}
-.actions{
-  display:flex;
-  gap:10px;
-  padding:0 15px 15px;
-}
-.btn{
-  flex:1;
-  border:0;
-  min-height:48px;
-  border-radius:13px;
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-.approve{background:#08a84a}
-.reject{background:#df3434}
-.btn:disabled{opacity:.5}
-.empty{
-  padding:40px 20px;
-  border-radius:18px;
-  background:#fff;
-  text-align:center;
-  color:#7888a1;
-}
-@media(max-width:720px){
-  .main{
-    grid-template-columns:1fr;
-  }
-}
-</style>
-</head>
+  LIFF_ID:
+    "2011201679-uNWz5yqF",
 
-<body>
-<div class="app">
 
-  <header class="header">
-    <h1>🛡️ MISSION ADMIN</h1>
-    <p>ตรวจหลักฐาน • อนุมัติ • ไม่อนุมัติ • แจก Reward อัตโนมัติ</p>
-    <div id="adminName">กำลังตรวจสอบสิทธิ์...</div>
-  </header>
+  /* =========================================================
+     API
+  ========================================================= */
 
-  <nav class="tabs">
-    <button class="tab active"
-            data-status="pending">รอตรวจ</button>
-    <button class="tab"
-            data-status="approved">อนุมัติแล้ว</button>
-    <button class="tab"
-            data-status="rejected">ไม่ผ่าน</button>
-    <button class="tab"
-            data-status="all">ทั้งหมด</button>
-  </nav>
+  API: {
 
-  <div id="status"
-       class="status"></div>
+    DASHBOARD:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
-  <main id="list"
-        class="list"></main>
+    MISSION:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
 
-</div>
+    BATTLE:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
 
-<script>
-const LIFF_ID =
-  window.APP_CONFIG?.LIFF_ID ||
-  "2011201679-uNWz5yqF";
+    /*
+      Admin ใช้ mission Edge Function ตัวเดียวกัน
+      เพราะ mission_with_admin.ts รองรับ:
+      - adminWhoAmI
+      - adminListSubmissions
+      - adminReviewSubmission
+    */
+    MISSION_ADMIN:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission"
 
-const MISSION_API =
-  window.APP_CONFIG?.API?.MISSION ||
-  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission";
+  },
 
-let idToken = "";
-let currentStatus = "pending";
 
-function esc(value){
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;");
-}
+  /* =========================================================
+     PAGE
+  ========================================================= */
 
-function message(value){
-  document.getElementById("status")
-    .textContent =
-      value || "";
-}
+  PAGE: {
 
-async function api(payload){
+    HOME:
+      "./dashboard.html",
 
-  const response =
-    await fetch(
-      MISSION_API,
-      {
-        method:"POST",
+    WEIGHT:
+      "./weight-check.html",
 
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
+    PROGRESS:
+      "./progress.html",
 
-        body:
-          JSON.stringify({
-            ...payload,
-            idToken
-          })
-      }
-    );
+    RANKING:
+      "./ranking.html",
 
-  const raw =
-    await response.text();
+    REWARDS:
+      "./rewards.html",
 
-  let result = {};
+    MISSION:
+      "./mission.html?v=20260824-03",
 
-  try{
-    result =
-      raw
-        ? JSON.parse(raw)
-        : {};
-  }catch{
-    throw new Error(
-      "Server response ไม่ถูกต้อง"
-    );
-  }
+    BATTLE:
+      "./battle.html?v=20260824-03",
 
-  if(
-    !response.ok ||
-    result?.success === false
-  ){
-    throw new Error(
-      result?.error ||
-      `HTTP ${response.status}`
-    );
-  }
+    MISSION_ADMIN:
+      "./mission-admin.html?v=20260824-03"
 
-  return result;
-}
+  },
 
-function evidenceHTML(item){
+
+  /* =========================================================
+     GAME SETTINGS
+  ========================================================= */
+
+  EXP_PER_LEVEL:
+    500,
+
+  MAX_ENERGY:
+    200,
+
+  REFRESH_MS:
+    30000
+
+};
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+window.goHome = function () {
 
   const url =
-    item.evidenceSignedUrl;
+    window.APP_CONFIG?.PAGE?.HOME ||
+    "./dashboard.html";
 
-  const type =
-    String(
-      item.evidence_type ||
-      ""
-    );
+  window.location.href =
+    url;
 
-  if(
-    url &&
-    type.startsWith("image/")
-  ){
-    return `
-      <img
-        src="${esc(url)}"
-        alt="หลักฐาน"
-      >
-    `;
-  }
-
-  if(
-    url &&
-    type.startsWith("video/")
-  ){
-    return `
-      <video
-        src="${esc(url)}"
-        controls
-        playsinline
-      ></video>
-    `;
-  }
-
-  if(item.evidence_link){
-    return `
-      <a
-        href="${esc(item.evidence_link)}"
-        target="_blank"
-        rel="noopener"
-      >
-        เปิด Link หลักฐาน
-      </a>
-    `;
-  }
-
-  return `
-    <span style="color:white">
-      ไม่มี Preview
-    </span>
-  `;
-}
-
-function cardHTML(item){
-
-  const player =
-    item.player || {};
-
-  const isPending =
-    item.status === "pending";
-
-  return `
-    <article class="card">
-
-      <div class="main">
-
-        <div>
-
-          <div class="mission">
-            ${esc(item.mission_id)}
-          </div>
-
-          <div class="meta">
-            ${esc(item.category)}
-            • ${esc(item.period_key)}
-            • Attempt ${esc(item.attempt_no)}
-          </div>
-
-          <div class="player">
-            👤 <strong>
-              ${esc(
-                player.display_name ||
-                "ไม่พบชื่อ"
-              )}
-            </strong>
-            <br>
-            <small>
-              ${esc(item.line_user_id)}
-            </small>
-          </div>
-
-          ${
-            item.note
-              ? `
-                <div class="note">
-                  📝 ${esc(item.note)}
-                </div>
-              `
-              : ""
-          }
-
-          <div class="rewards">
-            <span class="chip">
-              ⭐ +${esc(item.reward_coin)} ROCK COIN
-            </span>
-
-            <span class="chip">
-              ⚡ +${esc(item.reward_energy)} ENERGY
-            </span>
-
-            <span class="chip">
-              🏆 +${esc(item.reward_exp)} EXP
-            </span>
-          </div>
-
-          ${
-            item.evidence_link
-              ? `
-                <div style="margin-top:10px">
-                  🔗
-                  <a
-                    href="${esc(item.evidence_link)}"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    เปิด Link
-                  </a>
-                </div>
-              `
-              : ""
-          }
-
-          ${
-            item.reject_reason
-              ? `
-                <div class="note">
-                  เหตุผลไม่ผ่าน:
-                  ${esc(item.reject_reason)}
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-
-        <div class="evidence">
-          ${evidenceHTML(item)}
-        </div>
-
-      </div>
-
-      ${
-        isPending
-          ? `
-            <div class="actions">
-
-              <button
-                class="btn approve"
-                onclick="
-                  reviewMission(
-                    '${esc(item.id)}',
-                    'approve',
-                    this
-                  )
-                "
-              >
-                ✅ อนุมัติ + แจก Reward
-              </button>
-
-              <button
-                class="btn reject"
-                onclick="
-                  reviewMission(
-                    '${esc(item.id)}',
-                    'reject',
-                    this
-                  )
-                "
-              >
-                ❌ ไม่อนุมัติ
-              </button>
-
-            </div>
-          `
-          : ""
-      }
-
-    </article>
-  `;
-}
-
-async function loadList(){
-
-  message(
-    "กำลังโหลด..."
-  );
-
-  document
-    .getElementById(
-      "list"
-    )
-    .innerHTML =
-      "";
-
-  try{
-
-    const result =
-      await api({
-        action:
-          "adminListSubmissions",
-
-        status:
-          currentStatus,
-
-        limit:
-          100
-      });
+};
 
 
-    const rows =
-      Array.isArray(
-        result?.submissions
+window.goWeight = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.WEIGHT ||
+    "./weight-check.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goProgress = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.PROGRESS ||
+    "./progress.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goRanking = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.RANKING ||
+    "./ranking.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goRewards = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.REWARDS ||
+    "./rewards.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goMission = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.MISSION ||
+    "./mission.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goBattle = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.BATTLE ||
+    "./battle.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goMissionAdmin = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.MISSION_ADMIN ||
+    "./mission-admin.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+/* =========================================================
+   GENERIC NAVIGATION
+========================================================= */
+
+window.APP_NAV = {
+
+  go(pageName) {
+
+    const key =
+      String(
+        pageName || ""
       )
-        ? result.submissions
-        : [];
+        .trim()
+        .toUpperCase();
 
 
-    document
-      .getElementById(
-        "list"
-      )
-      .innerHTML =
-        rows.length
-          ? rows
-              .map(
-                cardHTML
-              )
-              .join("")
-          : `
-              <div class="empty">
-                ไม่มีรายการในหมวดนี้
-              </div>
-            `;
+    const url =
+      window.APP_CONFIG
+        ?.PAGE
+        ?.[key];
 
 
-    message(
-      `พบ ${rows.length} รายการ`
-    );
+    if (!url) {
 
-  }catch(error){
-
-    console.error(error);
-
-    message(
-      "ERROR: " +
-      (
-        error?.message ||
-        error
-      )
-    );
-  }
-}
-
-async function reviewMission(
-  submissionId,
-  decision,
-  button
-){
-
-  let reason =
-    "";
-
-  if(
-    decision === "reject"
-  ){
-
-    reason =
-      prompt(
-        "กรอกเหตุผลที่ไม่อนุมัติ"
-      ) || "";
-
-    if(!reason.trim()){
-      return;
-    }
-
-  }else{
-
-    const ok =
-      confirm(
-        "ยืนยันอนุมัติและแจก ROCK COIN + ENERGY + EXP ?"
+      console.error(
+        "PAGE_NOT_FOUND:",
+        key
       );
 
-    if(!ok){
-      return;
+      return false;
+
     }
+
+
+    window.location.href =
+      url;
+
+
+    return true;
+
   }
 
-
-  const buttons =
-    button
-      .closest(
-        ".actions"
-      )
-      ?.querySelectorAll(
-        "button"
-      ) ||
-    [];
-
-
-  buttons.forEach(
-    item =>
-      item.disabled =
-        true
-  );
-
-
-  try{
-
-    const result =
-      await api({
-        action:
-          "adminReviewSubmission",
-
-        submissionId,
-
-        decision,
-
-        reason
-      });
-
-
-    if(
-      decision === "approve"
-    ){
-
-      if(
-        result?.alreadyProcessed
-      ){
-
-        alert(
-          "รายการนี้เคยแจก Reward แล้ว ระบบไม่แจกซ้ำ"
-        );
-
-      }else{
-
-        alert(
-          "✅ อนุมัติและแจก Reward สำเร็จ"
-        );
-      }
-
-    }else{
-
-      alert(
-        "❌ บันทึกไม่อนุมัติแล้ว"
-      );
-    }
-
-
-    await loadList();
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "ERROR: " +
-      (
-        error?.message ||
-        error
-      )
-    );
-
-
-    buttons.forEach(
-      item =>
-        item.disabled =
-          false
-    );
-  }
-}
-
-async function startAdmin(){
-
-  try{
-
-    await liff.init({
-      liffId:
-        LIFF_ID
-    });
-
-
-    if(
-      !liff.isLoggedIn()
-    ){
-
-      liff.login();
-
-      return;
-    }
-
-
-    idToken =
-      liff.getIDToken();
-
-
-    if(!idToken){
-
-      throw new Error(
-        "ไม่พบ LINE ID Token"
-      );
-    }
-
-
-    const who =
-      await api({
-        action:
-          "adminWhoAmI"
-      });
-
-
-    document
-      .getElementById(
-        "adminName"
-      )
-      .textContent =
-        "Admin: " +
-        (
-          who?.admin?.displayName ||
-          "Authorized"
-        );
-
-
-    await loadList();
-
-  }catch(error){
-
-    console.error(error);
-
-    document
-      .getElementById(
-        "adminName"
-      )
-      .textContent =
-        "ไม่มีสิทธิ์";
-
-    message(
-      "ERROR: " +
-      (
-        error?.message ||
-        error
-      )
-    );
-  }
-}
-
-document
-  .querySelectorAll(
-    ".tab"
-  )
-  .forEach(
-    tab => {
-
-      tab.addEventListener(
-        "click",
-        async () => {
-
-          document
-            .querySelectorAll(
-              ".tab"
-            )
-            .forEach(
-              item =>
-                item
-                  .classList
-                  .remove(
-                    "active"
-                  )
-            );
-
-
-          tab
-            .classList
-            .add(
-              "active"
-            );
-
-
-          currentStatus =
-            tab.dataset.status ||
-            "pending";
-
-
-          await loadList();
-        }
-      );
-    }
-  );
-
-
-startAdmin();
-</script>
-</body>
-</html>
+};
