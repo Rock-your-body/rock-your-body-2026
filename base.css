@@ -428,13 +428,13 @@ button,input,select,textarea{font:inherit}
    MISSION SETTINGS
 ========================================================= */
 #missionStage{
-  --mission-coin-left:76.4%;
-  --mission-coin-top:3.9%;
+  --mission-coin-left:78.4%;
+  --mission-coin-top:3.1%;
   --mission-coin-width:7.7%;
   --mission-coin-height:8%;
 
-  --mission-energy-left:88.4%;
-  --mission-energy-top:3.4%;
+  --mission-energy-left:88.8%;
+  --mission-energy-top:2.8%;
   --mission-energy-width:9.7%;
   --mission-energy-height:8%;
 
