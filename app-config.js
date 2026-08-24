@@ -23,6 +23,8 @@ window.APP_CONFIG = {
     BATTLE:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
 
+    MISSION_ADMIN:
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission-admin"
   },
 
 
