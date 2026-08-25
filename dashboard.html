@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="th">
 
 <head>
@@ -11,78 +12,391 @@
   >
 
   <title>
-    ROCK YOUR BODY 2026 - HOME
+    ROCK YOUR BODY 2026
   </title>
 
 
- <!-- FONT -->
-<link
-  rel="preconnect"
-  href="https://fonts.googleapis.com"
->
+  <!-- =====================================================
+       FONT
+  ====================================================== -->
 
-<link
-  rel="preconnect"
-  href="https://fonts.gstatic.com"
-  crossorigin
->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
-  rel="stylesheet"
->
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
-  <!-- LINE LIFF -->
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
 
-<script src="./config.js"></script>
 
-<script src="./common.js"></script>
+  <!-- =====================================================
+       LIFF
+  ====================================================== -->
 
-<script>
-document.addEventListener("DOMContentLoaded", async function () {
+  <script
+    src="https://static.line-scdn.net/liff/edge/2/sdk.js">
+  </script>
 
-    try {
 
-        const ready =
-            await ROCK.initLiff();
+  <!-- =====================================================
+       CONFIG
+  ====================================================== -->
 
-        if (!ready) {
-            return;
-        }
+  <script src="./app-config.js"></script>
 
-        console.log("LINE READY");
 
-        const data =
-            await ROCK.fetchDashboard();
+  <!-- =====================================================
+       COMMON
+  ====================================================== -->
 
-        console.log(
-            "DASHBOARD DATA:",
-            data
-        );
+  <script src="./common.js"></script>
 
-    } catch (error) {
 
-        console.error(
-            "APP ERROR:",
-            error
-        );
+  <style>
+
+    html,
+    body {
+
+      margin: 0;
+
+      padding: 0;
+
+      width: 100%;
+
+      min-height: 100%;
+
+      background: #c9c9c9;
+
+      font-family:
+        "Prompt",
+        sans-serif;
 
     }
 
-});
-</script>
+
+    body {
+
+      overflow-x: hidden;
+
+    }
+
+
+    #homeStage {
+
+      position: relative;
+
+      width: 100%;
+
+      max-width: 1200px;
+
+      margin: 0 auto;
+
+    }
+
+
+    .template {
+
+      display: block;
+
+      width: 100%;
+
+      height: auto;
+
+      user-select: none;
+
+      pointer-events: none;
+
+    }
+
+
+    .profile-frame {
+
+      position: absolute;
+
+      left: 8%;
+
+      top: 8%;
+
+      width: 16%;
+
+      aspect-ratio: 1 / 1;
+
+      border-radius: 50%;
+
+      overflow: hidden;
+
+      background: #ffffff;
+
+    }
+
+
+    .profile-photo {
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+      display: none;
+
+    }
+
+
+    .data-box {
+
+      position: absolute;
+
+      z-index: 5;
+
+    }
+
+
+    .top-data-content {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+
+    .top-data-value {
+
+      font-size: 28px;
+
+      font-weight: 800;
+
+      line-height: 1;
+
+    }
+
+
+    .top-data-label {
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      margin-top: 4px;
+
+    }
+
+
+    .coin-box {
+
+      left: 25%;
+
+      top: 5%;
+
+    }
+
+
+    .energy-box {
+
+      left: 38%;
+
+      top: 5%;
+
+    }
+
+
+    .level-box {
+
+      left: 52%;
+
+      top: 5%;
+
+    }
+
+
+    .exptext-box {
+
+      left: 52%;
+
+      top: 9%;
+
+    }
+
+
+    .current-box {
+
+      left: 10%;
+
+      top: 35%;
+
+    }
+
+
+    .updated-box {
+
+      left: 10%;
+
+      top: 40%;
+
+    }
+
+
+    .target-box {
+
+      left: 10%;
+
+      top: 45%;
+
+    }
+
+
+    .remaining-box {
+
+      left: 10%;
+
+      top: 50%;
+
+    }
+
+
+    .lost-box {
+
+      left: 10%;
+
+      top: 55%;
+
+    }
+
+
+    .startdate-box {
+
+      left: 10%;
+
+      top: 60%;
+
+    }
+
+
+    .exp-track {
+
+      position: absolute;
+
+      left: 50%;
+
+      top: 8%;
+
+      width: 35%;
+
+      height: 12px;
+
+      background: #eeeeee;
+
+      border-radius: 20px;
+
+      overflow: hidden;
+
+    }
+
+
+    #expBar {
+
+      width: 0%;
+
+      height: 100%;
+
+      background: #f5c400;
+
+      transition:
+        width .3s ease;
+
+    }
+
+
+    .hotspot {
+
+      position: absolute;
+
+      border: 0;
+
+      background: transparent;
+
+      padding: 0;
+
+      cursor: pointer;
+
+      z-index: 20;
+
+    }
+
+
+    #status {
+
+      position: fixed;
+
+      left: 50%;
+
+      bottom: 20px;
+
+      transform: translateX(-50%);
+
+      z-index: 999;
+
+      padding: 8px 16px;
+
+      border-radius: 20px;
+
+      background: rgba(
+        0,
+        0,
+        0,
+        .75
+      );
+
+      color: white;
+
+      font-size: 13px;
+
+      display: none;
+
+    }
+
+
+    #status.show {
+
+      display: block;
+
+    }
+
+
+    #status.error {
+
+      background: #b00020;
+
+    }
+
+
+  </style>
+
+</head>
+
+
+<body>
+
 
 <!-- =========================================================
-     HOME STAGE
+     HOME
 ========================================================= -->
 
 <div id="homeStage">
 
-
-  <!-- =====================================================
-       TEMPLATE
-  ====================================================== -->
 
   <img
     class="template"
@@ -92,9 +406,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   >
 
 
-  <!-- =====================================================
-       PROFILE
-  ====================================================== -->
+  <!-- PROFILE -->
 
   <div class="profile-frame">
 
@@ -108,55 +420,57 @@ document.addEventListener("DOMContentLoaded", async function () {
   </div>
 
 
-  <!-- =====================================================
-       ROCK COIN
-  ====================================================== -->
+  <!-- COIN -->
 
   <div class="data-box coin-box">
 
-  <div class="top-data-content">
+    <div class="top-data-content">
 
-    <span class="top-data-value" id="coin">
-      0
-    </span>
+      <span
+        id="coin"
+        class="top-data-value"
+      >
+        0
+      </span>
 
-    <span class="top-data-label">
-      ROCK COIN
-    </span>
+      <span class="top-data-label">
+        ROCK COIN
+      </span>
 
-  </div>
-
-</div>
-
-  <!-- =====================================================
-       ENERGY
-  ====================================================== -->
-
- <div class="data-box energy-box">
-
-  <div class="top-data-content">
-
-    <span class="top-data-value" id="energy">
-      0 / 200
-    </span>
-
-    <span class="top-data-label">
-      ENERGY
-    </span>
+    </div>
 
   </div>
 
-</div>
 
-  <!-- =====================================================
-       LEVEL
-  ====================================================== -->
+  <!-- ENERGY -->
+
+  <div class="data-box energy-box">
+
+    <div class="top-data-content">
+
+      <span
+        id="energy"
+        class="top-data-value"
+      >
+        0 / 200
+      </span>
+
+      <span class="top-data-label">
+        ENERGY
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- LEVEL -->
 
   <div class="data-box level-box">
 
     <span
       id="level"
-      class="data-value white"
+      class="top-data-value"
     >
       Lv.1
     </span>
@@ -164,9 +478,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   </div>
 
 
-  <!-- =====================================================
-       EXP BAR
-  ====================================================== -->
+  <!-- EXP -->
 
   <div class="exp-track">
 
@@ -175,15 +487,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   </div>
 
 
-  <!-- =====================================================
-       EXP TEXT
-  ====================================================== -->
-
   <div class="data-box exptext-box">
 
     <span
       id="expText"
-      class="data-value"
+      class="top-data-label"
     >
       0 / 500
     </span>
@@ -191,117 +499,116 @@ document.addEventListener("DOMContentLoaded", async function () {
   </div>
 
 
-  <!-- =====================================================
-       CURRENT WEIGHT
-  ====================================================== -->
+  <!-- CURRENT WEIGHT -->
 
   <div class="data-box current-box">
 
-    <span
-      id="currentWeight"
-      class="data-value data-weight"
-    >
+    <span id="currentWeight">
+
       --.- kg
+
     </span>
 
   </div>
 
 
-  <!-- =====================================================
-       UPDATE DATE
-  ====================================================== -->
+  <!-- UPDATE -->
 
-  <!-- อัปเดตล่าสุด -->
-<div class="data-box updated-box">
-  <div class="update-inline">
-    <span class="update-label">อัปเดตล่าสุด</span>
-    <span id="updatedAt" class="update-date">--/--/----</span>
+  <div class="data-box updated-box">
+
+    <div>
+
+      <span>
+        อัปเดตล่าสุด
+      </span>
+
+      <span
+        id="updatedAt"
+      >
+        --/--/----
+      </span>
+
+    </div>
+
   </div>
-</div>
 
 
-  <!-- =====================================================
-       TARGET
-  ====================================================== -->
+  <!-- TARGET -->
 
   <div class="data-box target-box">
 
-    <span
-      id="targetWeight"
-      class="data-value data-weight red"
-    >
+    <span id="targetWeight">
+
       --.- kg
+
     </span>
 
   </div>
 
 
-  <!-- =====================================================
-       REMAINING
-  ====================================================== -->
+  <!-- REMAINING -->
 
-<!-- เหลืออีก -->
-<div class="data-box remaining-box">
-  <div class="remaining-inline">
-    <span class="remaining-label">เหลืออีก</span>
+  <div class="data-box remaining-box">
 
-    <span class="remaining-number">
-      <span id="remaining">--.-</span>
-      <span class="remaining-unit">kg</span>
-    </span>
-  </div>
-</div>
+    <div>
 
-  <!-- =====================================================
-       LOST
-  ====================================================== -->
+      <span>
+        เหลืออีก
+      </span>
 
- <div class="data-box lost-box">
+      <span id="remaining">
+        --.-
+      </span>
 
-  <div class="summary-content">
+      <span>
+        kg
+      </span>
 
-    <span class="summary-label">
-      ลดลงแล้ว
-    </span>
-
-    <span
-      id="lost"
-      class="summary-value"
-    >
-      --.- kg
-    </span>
+    </div>
 
   </div>
 
-</div>
+
+  <!-- LOST -->
+
+  <div class="data-box lost-box">
+
+    <div>
+
+      <span>
+        ลดลงแล้ว
+      </span>
+
+      <span id="lost">
+        --.- kg
+      </span>
+
+    </div>
+
+  </div>
 
 
-  <!-- =====================================================
-       START DATE
-  ====================================================== -->
+  <!-- START DATE -->
 
   <div class="data-box startdate-box">
 
-  <div class="summary-content">
+    <div>
 
-    <span class="summary-label">
-      เริ่มเมื่อ
-    </span>
+      <span>
+        เริ่มเมื่อ
+      </span>
 
-    <span
-      id="startDate"
-      class="summary-value date-value"
-    >
-      --/--/----
-    </span>
+      <span id="startDate">
+        --/--/----
+      </span>
+
+    </div>
 
   </div>
 
-</div>
-
 
   <!-- =====================================================
-       WEIGHT CHECK
+       WEIGHT
   ====================================================== -->
 
   <button
@@ -313,7 +620,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       height:30.9%;
     "
     onclick="goPage('WEIGHT')"
-    aria-label="Weight Check"
   ></button>
 
 
@@ -330,7 +636,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       height:30.9%;
     "
     onclick="goPage('PROGRESS')"
-    aria-label="My Progress"
   ></button>
 
 
@@ -347,7 +652,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       height:31.1%;
     "
     onclick="goPage('RANKING')"
-    aria-label="Ranking"
   ></button>
 
 
@@ -364,7 +668,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       height:31.1%;
     "
     onclick="goPage('REWARDS')"
-    aria-label="Rewards"
   ></button>
 
 
@@ -381,25 +684,23 @@ document.addEventListener("DOMContentLoaded", async function () {
       height:14.5%;
     "
     onclick="reloadHome()"
-    aria-label="Home"
   ></button>
 
 
- <!-- =====================================================
-     MISSION
-====================================================== -->
+  <!-- =====================================================
+       MISSION
+  ====================================================== -->
 
-<button
-  class="hotspot"
-  style="
-    left:33.7%;
-    top:83.2%;
-    width:32.2%;
-    height:14.5%;
-  "
-  onclick="window.location.href='./mission.html?v=20260824-01'"
-  aria-label="Mission"
-></button>
+  <button
+    class="hotspot"
+    style="
+      left:33.7%;
+      top:83.2%;
+      width:32.2%;
+      height:14.5%;
+    "
+    onclick="goPage('MISSION')"
+  ></button>
 
 
   <!-- =====================================================
@@ -407,16 +708,19 @@ document.addEventListener("DOMContentLoaded", async function () {
   ====================================================== -->
 
   <button
-  class="hotspot"
-  style="
-    left:66.5%;
-    top:83.2%;
-    width:32.1%;
-    height:14.5%;
-  "
-  onclick="window.location.href='./battle.html?v=20260824-01'"
-  aria-label="Battle"
-></button>
+    class="hotspot"
+    style="
+      left:66.5%;
+      top:83.2%;
+      width:32.1%;
+      height:14.5%;
+    "
+    onclick="goPage('BATTLE')"
+  ></button>
+
+
+</div>
+
 
 <!-- =========================================================
      STATUS
@@ -425,55 +729,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 <div id="status"></div>
 
 
-<!-- =========================================================
-     COMMON
-     โหลดครั้งเดียว
-========================================================= -->
-
-<script src="./common.js?v=20260825-02"></script>
 <script>
 
 /* =========================================================
-   GLOBAL
+   ELEMENT
 ========================================================= */
 
-const ROCK =
-  window.ROCK;
+function $(id) {
 
+  return document.getElementById(id);
 
-const $ =
-  id =>
-    document.getElementById(id);
-
-
-let loading =
-  false;
-
-
-let refreshTimer =
-  null;
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function goPage(name) {
-
-  const url =
-    ROCK?.CFG?.PAGE?.[name];
-
-  if (!url) {
-    return;
-  }
-
-  ROCK.go(url);
-}
-
-
-function reloadHome() {
-
-  loadHome();
 }
 
 
@@ -489,17 +754,21 @@ function showStatus(
   const el =
     $("status");
 
+
   if (!el) {
     return;
   }
 
+
   el.textContent =
     message;
+
 
   el.className =
     error
       ? "show error"
       : "show";
+
 }
 
 
@@ -508,70 +777,105 @@ function hideStatus() {
   const el =
     $("status");
 
+
   if (!el) {
     return;
   }
 
+
   el.className =
     "";
+
 }
 
 
 /* =========================================================
-   NUMBER
+   NAVIGATION
 ========================================================= */
 
-function num(
-  value,
-  fallback = 0
-) {
+function goPage(name) {
 
-  const n =
-    Number(value);
+  const url =
+    ROCK.CFG.PAGE[name];
 
-  return Number.isFinite(n)
-    ? n
-    : fallback;
+
+  if (!url) {
+
+    console.error(
+      "PAGE NOT FOUND:",
+      name
+    );
+
+    return;
+
+  }
+
+
+  ROCK.go(url);
+
+}
+
+
+function reloadHome() {
+
+  loadHome();
+
 }
 
 
 /* =========================================================
-   DATE
+   PROFILE
 ========================================================= */
 
-function formatDateOnly(value) {
+async function loadProfile() {
 
-  if (!value) {
-    return "--/--/----";
-  }
+  try {
 
-  const date =
-    new Date(value);
+    const profile =
+      await ROCK.getProfile();
 
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-    return "--/--/----";
-  }
 
-  return date.toLocaleDateString(
-    "th-TH",
-    {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
+    if (
+      !profile ||
+      !profile.pictureUrl
+    ) {
+
+      return;
+
     }
-  );
+
+
+    const image =
+      $("profileImage");
+
+
+    image.src =
+      profile.pictureUrl;
+
+
+    image.style.display =
+      "block";
+
+
+  } catch (error) {
+
+    console.warn(
+      "PROFILE ERROR:",
+      error
+    );
+
+  }
+
 }
 
 
 /* =========================================================
-   NORMALIZE DASHBOARD
+   NORMALIZE
 ========================================================= */
 
-function normalizeDashboard(raw) {
+function normalizeDashboard(
+  raw
+) {
 
   raw =
     raw || {};
@@ -584,74 +888,67 @@ function normalizeDashboard(raw) {
 
 
   const weight =
-    raw.weight &&
-    typeof raw.weight === "object"
-      ? raw.weight
-      : {};
+    raw.weight || {};
 
 
   const energy =
-    raw.energy &&
-    typeof raw.energy === "object"
-      ? raw.energy
-      : {};
+    raw.energy || {};
 
 
-  const expObject =
-    raw.exp &&
-    typeof raw.exp === "object"
-      ? raw.exp
-      : {};
-
-
-  const totalExp =
-    expObject.total ??
-    raw.exp ??
-    user.exp ??
-    0;
+  const exp =
+    raw.exp || {};
 
 
   return {
 
-    picture:
-
-      user.pictureUrl ??
-      user.picture_url ??
-      raw.pictureUrl ??
-      raw.picture_url ??
-      "",
-
-
     coin:
 
-      num(
+      Number(
         raw.rockCoin ??
         raw.rock_coin ??
         user.rockCoin ??
-        user.rock_coin,
+        user.rock_coin ??
         0
       ),
 
 
     energy:
 
-      num(
+      Number(
         energy.current ??
         raw.energyCurrent ??
-        user.energy,
+        user.energy ??
         0
       ),
 
 
     maxEnergy:
 
-      num(
+      Number(
         energy.max ??
         raw.maxEnergy ??
+        user.maxEnergy ??
         user.max_energy ??
-        user.maxEnergy,
-        ROCK.CFG.MAX_ENERGY ||
-        200
+        ROCK.CFG.MAX_ENERGY
+      ),
+
+
+    level:
+
+      Number(
+        raw.level ??
+        user.level ??
+        1
+      ),
+
+
+    totalExp:
+
+      Number(
+        exp.total ??
+        raw.totalExp ??
+        user.exp ??
+        0
       ),
 
 
@@ -663,7 +960,6 @@ function normalizeDashboard(raw) {
       raw.currentWeight ??
       raw.current_weight ??
       user.currentWeight ??
-      user.current_weight ??
       null,
 
 
@@ -675,7 +971,6 @@ function normalizeDashboard(raw) {
       raw.targetWeight ??
       raw.target_weight ??
       user.targetWeight ??
-      user.target_weight ??
       null,
 
 
@@ -687,7 +982,6 @@ function normalizeDashboard(raw) {
       raw.startWeight ??
       raw.start_weight ??
       user.startWeight ??
-      user.start_weight ??
       null,
 
 
@@ -707,86 +1001,23 @@ function normalizeDashboard(raw) {
       weight.start_date ??
       raw.startDate ??
       raw.start_date ??
-      null,
-
-
-    totalExp:
-
-      num(
-        totalExp,
-        0
-      ),
-
-
-    level:
-
-      num(
-        raw.level ??
-        user.level,
-        1
-      )
+      null
 
   };
+
 }
 
 
 /* =========================================================
-   PROFILE
+   RENDER
 ========================================================= */
 
-function renderProfile(url) {
-
-  const image =
-    $("profileImage");
-
-
-  if (!image) {
-    return;
-  }
-
-
-  if (!url) {
-
-    image.removeAttribute(
-      "src"
-    );
-
-    image.style.display =
-      "none";
-
-    return;
-  }
-
-
-  image.onload =
-    function() {
-
-      image.style.display =
-        "block";
-    };
-
-
-  image.onerror =
-    function() {
-
-      image.style.display =
-        "none";
-    };
-
-
-  image.src =
-    url;
-}
-
-
-/* =========================================================
-   RENDER HOME
-========================================================= */
-
-function renderHome(raw) {
+function renderHome(
+  raw
+) {
 
   console.log(
-    "RENDER HOME RAW:",
+    "DASHBOARD RAW:",
     raw
   );
 
@@ -797,24 +1028,7 @@ function renderHome(raw) {
     );
 
 
-  console.log(
-    "RENDER HOME NORMALIZED:",
-    p
-  );
-
-
-  /* =====================================================
-     PROFILE
-  ====================================================== */
-
-  renderProfile(
-    p.picture
-  );
-
-
-  /* =====================================================
-     COIN
-  ====================================================== */
+  /* COIN */
 
   $("coin").textContent =
     ROCK.fmtInt(
@@ -822,27 +1036,26 @@ function renderHome(raw) {
     );
 
 
-  /* =====================================================
-     ENERGY
-  ====================================================== */
+  /* ENERGY */
 
   $("energy").textContent =
+
     ROCK.fmtInt(
       p.energy
     ) +
+
     " / " +
+
     ROCK.fmtInt(
       p.maxEnergy
     );
 
 
-  /* =====================================================
-     LEVEL + EXP
-  ====================================================== */
+  /* LEVEL */
 
   const expPerLevel =
-    num(
-      ROCK.CFG.EXP_PER_LEVEL,
+    Number(
+      ROCK.CFG.EXP_PER_LEVEL ||
       500
     );
 
@@ -850,10 +1063,9 @@ function renderHome(raw) {
   const totalExp =
     Math.max(
       0,
-      num(
-        p.totalExp,
-        0
-      )
+      Number(
+        p.totalExp
+      ) || 0
     );
 
 
@@ -867,7 +1079,7 @@ function renderHome(raw) {
   const level =
     Math.max(
       1,
-      p.level,
+      Number(p.level) || 1,
       calculatedLevel
     );
 
@@ -877,19 +1089,13 @@ function renderHome(raw) {
     expPerLevel;
 
 
-  const expPercent =
+  const percent =
     expPerLevel > 0
 
-      ? Math.max(
-          0,
-          Math.min(
-            100,
-            (
-              expInLevel /
-              expPerLevel
-            ) * 100
-          )
-        )
+      ? (
+          expInLevel /
+          expPerLevel
+        ) * 100
 
       : 0;
 
@@ -900,69 +1106,63 @@ function renderHome(raw) {
 
 
   $("expText").textContent =
+
     ROCK.fmtInt(
       expInLevel
     ) +
+
     " / " +
+
     ROCK.fmtInt(
       expPerLevel
     );
 
 
   $("expBar").style.width =
-    expPercent +
+    Math.min(
+      100,
+      percent
+    ) +
     "%";
 
 
-  /* =====================================================
-     CURRENT WEIGHT
-  ====================================================== */
+  /* CURRENT */
 
-  $("currentWeight")
-    .textContent =
-      ROCK.fmtWeight(
-        p.currentWeight
-      ) +
-      " kg";
+  $("currentWeight").textContent =
+
+    ROCK.fmtWeight(
+      p.currentWeight
+    ) +
+    " kg";
 
 
-  /* =====================================================
-     TARGET
-  ====================================================== */
+  /* TARGET */
 
-  $("targetWeight")
-    .textContent =
-      ROCK.fmtWeight(
-        p.targetWeight
-      ) +
-      " kg";
+  $("targetWeight").textContent =
+
+    ROCK.fmtWeight(
+      p.targetWeight
+    ) +
+    " kg";
 
 
-  /* =====================================================
-     UPDATE DATE
-  ====================================================== */
+  /* UPDATE */
 
-  $("updatedAt")
-    .textContent =
-      formatDateOnly(
-        p.updatedAt
-      );
+  $("updatedAt").textContent =
+    ROCK.formatDateOnly(
+      p.updatedAt
+    );
 
 
-  /* =====================================================
-     START DATE
-  ====================================================== */
+  /* START DATE */
 
-  $("startDate")
-    .textContent =
-      formatDateOnly(
-        p.startDate
-      );
+  $("startDate").textContent =
+    ROCK.formatDateOnly(
+      p.startDate
+    );
 
 
-  /* =====================================================
-     REMAINING
-  ====================================================== */
+  /* REMAINING */
 
   const current =
     Number(
@@ -981,24 +1181,23 @@ function renderHome(raw) {
     Number.isFinite(target)
   ) {
 
-   $("remaining")
-  .textContent =
-    Math.max(
-      0,
-      current - target
-    )
-      .toFixed(1);
+    $("remaining").textContent =
+
+      Math.max(
+        0,
+        current -
+        target
+      ).toFixed(1);
+
   } else {
 
-  $("remaining")
-  .textContent =
-    "--.-";
+    $("remaining").textContent =
+      "--.-";
+
   }
 
 
-  /* =====================================================
-     LOST
-  ====================================================== */
+  /* LOST */
 
   const start =
     Number(
@@ -1011,22 +1210,23 @@ function renderHome(raw) {
     Number.isFinite(current)
   ) {
 
-    $("lost")
-      .textContent =
-        Math.max(
-          0,
-          start -
-          current
-        )
-          .toFixed(1) +
-        " kg";
+    $("lost").textContent =
+
+      Math.max(
+        0,
+        start -
+        current
+      ).toFixed(1) +
+
+      " kg";
 
   } else {
 
-    $("lost")
-      .textContent =
-        "--.- kg";
+    $("lost").textContent =
+      "--.- kg";
+
   }
+
 }
 
 
@@ -1034,10 +1234,16 @@ function renderHome(raw) {
    LOAD HOME
 ========================================================= */
 
+let loading =
+  false;
+
+
 async function loadHome() {
 
   if (loading) {
+
     return;
+
   }
 
 
@@ -1052,18 +1258,15 @@ async function loadHome() {
     );
 
 
-    const raw =
+    await loadProfile();
+
+
+    const data =
       await ROCK.fetchDashboard();
 
 
-    console.log(
-      "HOME DATA:",
-      raw
-    );
-
-
     renderHome(
-      raw
+      data
     );
 
 
@@ -1073,7 +1276,7 @@ async function loadHome() {
   } catch (error) {
 
     console.error(
-      "HOME LOAD ERROR:",
+      "LOAD HOME ERROR:",
       error
     );
 
@@ -1089,25 +1292,19 @@ async function loadHome() {
 
     loading =
       false;
+
   }
+
 }
 
 
 /* =========================================================
-   START HOME
+   START
 ========================================================= */
 
-async function startHome() {
+(async function () {
 
   try {
-
-    if (!ROCK) {
-
-      throw new Error(
-        "common.js โหลดไม่สำเร็จ"
-      );
-    }
-
 
     showStatus(
       "กำลังเชื่อมต่อ LINE..."
@@ -1119,61 +1316,24 @@ async function startHome() {
 
 
     if (!ready) {
+
+      console.log(
+        "LIFF authentication กำลังดำเนินการ"
+      );
+
+
       return;
+
     }
 
 
     await loadHome();
 
 
-    /* =====================================================
-       AUTO REFRESH
-    ====================================================== */
-
-    if (refreshTimer) {
-
-      clearInterval(
-        refreshTimer
-      );
-    }
-
-
-    refreshTimer =
-      setInterval(
-        async () => {
-
-          if (
-            document.visibilityState !==
-            "visible"
-          ) {
-            return;
-          }
-
-
-          try {
-
-            await loadHome();
-
-          } catch (error) {
-
-            console.error(
-              "AUTO REFRESH ERROR:",
-              error
-            );
-          }
-
-        },
-        num(
-          ROCK.CFG.REFRESH_MS,
-          30000
-        )
-      );
-
-
   } catch (error) {
 
     console.error(
-      "HOME START ERROR:",
+      "DASHBOARD START ERROR:",
       error
     );
 
@@ -1183,23 +1343,27 @@ async function startHome() {
       String(error),
       true
     );
+
   }
-}
+
+})();
 
 
 /* =========================================================
-   RETURN TO PAGE
+   VISIBILITY
 ========================================================= */
 
 document.addEventListener(
   "visibilitychange",
-  async function() {
+  async function () {
 
     if (
       document.visibilityState !==
       "visible"
     ) {
+
       return;
+
     }
 
 
@@ -1209,62 +1373,28 @@ document.addEventListener(
         await ROCK.initLiff();
 
 
-      if (!ready) {
-        return;
+      if (ready) {
+
+        await loadHome();
+
       }
-
-
-      await loadHome();
-
 
     } catch (error) {
 
-      console.error(
-        "VISIBILITY REFRESH ERROR:",
+      console.warn(
+        "VISIBILITY ERROR:",
         error
       );
+
     }
+
   }
 );
 
-
-window.addEventListener(
-  "pageshow",
-  async function() {
-
-    try {
-
-      const ready =
-        await ROCK.initLiff();
-
-
-      if (!ready) {
-        return;
-      }
-
-
-      await loadHome();
-
-
-    } catch (error) {
-
-      console.error(
-        "PAGESHOW REFRESH ERROR:",
-        error
-      );
-    }
-  }
-);
-
-
-/* =========================================================
-   START ONCE
-========================================================= */
-
-startHome();
 
 </script>
 
 
 </body>
+
 </html>
