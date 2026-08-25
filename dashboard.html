@@ -35,21 +35,43 @@
   <!-- LINE LIFF -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
+<script src="./config.js"></script>
 
-  <!-- CONFIG -->
-<script src="./app-config.js?v=20260825-02"></script>
+<script src="./common.js"></script>
 
-  <!-- CSS -->
-  <link
-    rel="stylesheet"
-    href="./base.css?v=20260823-09"
-  >
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
 
-</head>
+    try {
 
+        const ready =
+            await ROCK.initLiff();
 
-<body>
+        if (!ready) {
+            return;
+        }
 
+        console.log("LINE READY");
+
+        const data =
+            await ROCK.fetchDashboard();
+
+        console.log(
+            "DASHBOARD DATA:",
+            data
+        );
+
+    } catch (error) {
+
+        console.error(
+            "APP ERROR:",
+            error
+        );
+
+    }
+
+});
+</script>
 
 <!-- =========================================================
      HOME STAGE
