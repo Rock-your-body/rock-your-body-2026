@@ -227,7 +227,15 @@ window.APP_NAV = {
 
 
     return true;
-
+    
   }
 
 };
+/* =========================================================
+   ROCK CONFIG BRIDGE
+========================================================= */
+
+window.ROCK = window.ROCK || {};
+
+window.ROCK.CFG =
+  window.APP_CONFIG;
