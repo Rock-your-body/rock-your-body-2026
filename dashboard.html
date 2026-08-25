@@ -90,15 +90,11 @@
 
 
     #homeStage {
-
       position: relative;
-
       width: 100%;
-
       max-width: 1200px;
-
       margin: 0 auto;
-
+      line-height: 1.2;
     }
 
 
@@ -118,23 +114,15 @@
 
 
     .profile-frame {
-
       position: absolute;
-
-      left: 8%;
-
-      top: 8%;
-
-      width: 16%;
-
+      left: 8.2%;
+      top: 8.0%;
+      width: 15.6%;
       aspect-ratio: 1 / 1;
-
       border-radius: 50%;
-
       overflow: hidden;
-
       background: #ffffff;
-
+      z-index: 4;
     }
 
 
@@ -152,11 +140,9 @@
 
 
     .data-box {
-
       position: absolute;
-
-      z-index: 5;
-
+      z-index: 8;
+      box-sizing: border-box;
     }
 
 
@@ -174,135 +160,84 @@
 
 
     .top-data-value {
-
-      font-size: 28px;
-
+      font-size: clamp(14px, 2.0vw, 22px);
       font-weight: 800;
-
       line-height: 1;
-
+      white-space: nowrap;
     }
 
 
     .top-data-label {
-
-      font-size: 11px;
-
+      font-size: clamp(8px, 1vw, 11px);
       font-weight: 700;
-
-      margin-top: 4px;
-
+      margin-top: 3px;
+      white-space: nowrap;
     }
 
 
     .coin-box {
-
-      left: 25%;
-
-      top: 5%;
-
+      left: 77.0%;
+      top: 4.2%;
+      width: 8.0%;
+      text-align: center;
     }
-
 
     .energy-box {
-
-      left: 38%;
-
-      top: 5%;
-
+      left: 88.0%;
+      top: 4.2%;
+      width: 9.0%;
+      text-align: center;
     }
-
 
     .level-box {
-
-      left: 52%;
-
-      top: 5%;
-
+      left: 8.0%;
+      top: 67.0%;
+      width: 15.5%;
+      text-align: center;
+      font-size: clamp(13px, 1.6vw, 19px);
     }
-
 
     .exptext-box {
-
-      left: 52%;
-
-      top: 9%;
-
+      left: 7.0%;
+      top: 91.0%;
+      width: 24%;
+      text-align: center;
     }
 
 
-    .current-box {
-
-      left: 10%;
-
-      top: 35%;
-
-    }
-
-
-    .updated-box {
-
-      left: 10%;
-
-      top: 40%;
-
-    }
-
-
-    .target-box {
-
-      left: 10%;
-
-      top: 45%;
-
-    }
-
-
-    .remaining-box {
-
-      left: 10%;
-
-      top: 50%;
-
-    }
-
-
-    .lost-box {
-
-      left: 10%;
-
-      top: 55%;
-
-    }
-
-
+    .current-box,
+    .updated-box,
+    .target-box,
+    .remaining-box,
+    .lost-box,
     .startdate-box {
-
-      left: 10%;
-
-      top: 60%;
-
+      left: 6.5%;
+      width: 19%;
+      text-align: center;
+      font-size: clamp(10px, 1.35vw, 15px);
+      line-height: 1.25;
     }
+
+    .current-box { top: 29%; font-weight: 800; }
+    .updated-box { top: 35%; font-size: clamp(8px, 1.05vw, 12px); }
+    .target-box { top: 41%; font-weight: 800; }
+    .remaining-box { top: 47%; }
+    .lost-box { top: 53%; }
+    .startdate-box { top: 59%; font-size: clamp(8px, 1.05vw, 12px); }
 
 
     .exp-track {
-
       position: absolute;
-
-      left: 50%;
-
-      top: 8%;
-
-      width: 35%;
-
-      height: 12px;
-
+      left: 7.0%;
+      top: 86.7%;
+      width: 24%;
+      height: 1.5%;
+      min-height: 7px;
+      max-height: 12px;
       background: #eeeeee;
-
       border-radius: 20px;
-
       overflow: hidden;
-
+      z-index: 7;
     }
 
 
@@ -338,34 +273,21 @@
 
 
     #status {
-
       position: fixed;
-
       left: 50%;
-
-      bottom: 20px;
-
+      top: 12px;
+      bottom: auto;
       transform: translateX(-50%);
-
       z-index: 999;
-
-      padding: 8px 16px;
-
-      border-radius: 20px;
-
-      background: rgba(
-        0,
-        0,
-        0,
-        .75
-      );
-
+      max-width: calc(100vw - 32px);
+      padding: 7px 14px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.78);
       color: white;
-
-      font-size: 13px;
-
+      font-size: 12px;
+      text-align: center;
       display: none;
-
+      box-sizing: border-box;
     }
 
 
@@ -1261,15 +1183,21 @@ async function loadHome() {
     await loadProfile();
 
 
-    const data =
-      await ROCK.fetchDashboard();
+    let data;
 
+    try {
+      data = await ROCK.fetchDashboard();
+    } catch (apiError) {
+      console.error("DASHBOARD API ERROR:", apiError);
 
-    renderHome(
-      data
-    );
+      // Keep the dashboard usable even when the API is temporarily unavailable.
+      // The exact API error is shown briefly instead of breaking the layout.
+      renderHome({});
+      showStatus("ไม่สามารถโหลดข้อมูล Dashboard ได้ กรุณาลองใหม่", true);
+      return;
+    }
 
-
+    renderHome(data);
     hideStatus();
 
 
