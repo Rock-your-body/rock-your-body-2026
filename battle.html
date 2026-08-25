@@ -7,8 +7,8 @@
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <script src="./app-config.js?v=20260824-10"></script>
-  <script src="./common.js?v=20260824-10"></script>
+  <script src="./app-config.js?v=20260825-01"></script>
+  <script src="./common.js?v=20260825-01"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -142,6 +142,166 @@
       height:4.4%;
       color:#173c77;
       font-size:clamp(6px,.75vw,13px);
+    }
+
+    /* =========================================================
+       BATTLE STATUS PANELS
+       ข้อมูลสดแบบภาพตัวอย่าง
+    ========================================================= */
+
+    .boss-name-live{
+      left:3.0%;
+      top:26.0%;
+      width:18.0%;
+      height:11.0%;
+      justify-content:flex-start;
+      align-items:flex-start;
+      padding:0 .5%;
+      color:#fff;
+      font-size:clamp(13px,2.1vw,34px);
+      line-height:1.02;
+      text-align:left;
+      text-shadow:0 3px 8px rgba(0,0,0,.75);
+    }
+
+    .boss-hp-text-live{
+      left:3.0%;
+      top:46.4%;
+      width:18.0%;
+      height:4.0%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(8px,1.15vw,20px);
+      text-shadow:0 2px 5px rgba(0,0,0,.8);
+    }
+
+    .boss-hp-percent-live{
+      left:3.0%;
+      top:50.6%;
+      width:9.0%;
+      height:5.2%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(12px,1.8vw,30px);
+      text-shadow:0 2px 5px rgba(0,0,0,.8);
+    }
+
+    .boss-hp-track-live{
+      position:absolute;
+      z-index:20;
+      left:7.0%;
+      top:43.8%;
+      width:13.3%;
+      height:2.25%;
+      border-radius:999px;
+      overflow:hidden;
+      pointer-events:none;
+      background:rgba(5,37,95,.72);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);
+    }
+
+    .boss-hp-fill-live{
+      width:0%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(180deg,#ff3b34,#c90000);
+      transition:width .25s ease;
+    }
+
+    .energy-track-live{
+      position:absolute;
+      z-index:20;
+      left:41.0%;
+      top:40.7%;
+      width:10.8%;
+      height:2.6%;
+      border-radius:4px;
+      overflow:hidden;
+      pointer-events:none;
+      background:rgba(223,230,242,.72);
+    }
+
+    .energy-fill-live{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,#ffba00,#ff8d00);
+      transition:width .25s ease;
+    }
+
+    .ranking-live{
+      position:absolute;
+      z-index:22;
+      left:24.8%;
+      top:64.0%;
+      width:24.2%;
+      height:13.2%;
+      display:grid;
+      grid-template-rows:repeat(3,1fr);
+      pointer-events:none;
+      color:#fff;
+      font-weight:900;
+      text-shadow:0 2px 4px rgba(0,0,0,.7);
+    }
+
+    .rank-row-live{
+      display:grid;
+      grid-template-columns:14% 1fr 28%;
+      align-items:center;
+      gap:3%;
+      font-size:clamp(7px,.9vw,16px);
+    }
+
+    .rank-medal-live{
+      text-align:center;
+      font-size:1.2em;
+    }
+
+    .rank-name-live{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      text-align:left;
+    }
+
+    .rank-score-live{
+      text-align:right;
+      padding-right:4%;
+    }
+
+    .boss-reward-live{
+      position:absolute;
+      z-index:22;
+      left:58.0%;
+      top:66.0%;
+      width:18.0%;
+      height:8.0%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      pointer-events:none;
+      color:#fff;
+      text-shadow:0 2px 5px rgba(0,0,0,.75);
+    }
+
+    .boss-reward-title-live{
+      font-size:clamp(8px,1vw,18px);
+      font-weight:900;
+    }
+
+    .boss-reward-detail-live{
+      margin-top:2%;
+      font-size:clamp(6px,.75vw,13px);
+      opacity:.95;
+    }
+
+    @media(max-width:700px){
+      .boss-name-live{
+        font-size:clamp(11px,4vw,25px);
+      }
+
+      .rank-row-live{
+        font-size:clamp(6px,2vw,12px);
+      }
     }
 
     /* =========================================================
@@ -405,7 +565,7 @@
 
     <img
       class="template-image"
-      src="./battle-template.png?v=20260824-10"
+      src="./battle-template.png?v=20260825-01"
       alt="Battle Template"
       draggable="false"
     >
@@ -423,6 +583,46 @@
     <div id="energyValue" class="live energy-live">0 / 200</div>
     <div id="bossEnergyValue" class="live boss-energy-live">0</div>
     <div id="regenTimer" class="live regen-live">00:25:30</div>
+
+    <!-- BOSS / MONTHLY STATUS -->
+    <div id="bossNameValue" class="live boss-name-live">BOSS OF THE MONTH</div>
+
+    <div class="boss-hp-track-live" aria-hidden="true">
+      <div id="bossHpFill" class="boss-hp-fill-live"></div>
+    </div>
+
+    <div id="bossHpText" class="live boss-hp-text-live">0 / 0</div>
+    <div id="bossHpPercent" class="live boss-hp-percent-live">0%</div>
+
+    <div class="energy-track-live" aria-hidden="true">
+      <div id="energyFillLive" class="energy-fill-live"></div>
+    </div>
+
+    <!-- BATTLE RANKING -->
+    <div id="battleRankingLive" class="ranking-live">
+      <div class="rank-row-live">
+        <div class="rank-medal-live">🥇</div>
+        <div id="rankName1" class="rank-name-live">-</div>
+        <div id="rankScore1" class="rank-score-live">0</div>
+      </div>
+
+      <div class="rank-row-live">
+        <div class="rank-medal-live">🥈</div>
+        <div id="rankName2" class="rank-name-live">-</div>
+        <div id="rankScore2" class="rank-score-live">0</div>
+      </div>
+
+      <div class="rank-row-live">
+        <div class="rank-medal-live">🥉</div>
+        <div id="rankName3" class="rank-name-live">-</div>
+        <div id="rankScore3" class="rank-score-live">0</div>
+      </div>
+    </div>
+
+    <div class="boss-reward-live">
+      <div class="boss-reward-title-live">BOSS REWARD</div>
+      <div id="bossRewardDetail" class="boss-reward-detail-live">รางวัลจากบอส</div>
+    </div>
 
     <button class="hotspot top-reward" type="button" onclick="goPage('REWARDS')" aria-label="รางวัล"></button>
     <button class="hotspot top-mission" type="button" onclick="goMission()" aria-label="ภารกิจ"></button>
@@ -452,7 +652,7 @@
 
     <img
       class="fight-image"
-      src="./battle%20map.jpeg?v=20260824-10"
+      src="./battle%20map.jpeg?v=20260825-01"
       alt="Fight Monster Battle Map"
       draggable="false"
     >
@@ -598,6 +798,17 @@ let playerMaxEnergy =
   ) || 200;
 
 let unlockedStage = 1;
+
+
+let battleBoss = {
+  name:"BOSS OF THE MONTH",
+  hp:0,
+  maxHp:0,
+  image:null,
+  rewardText:"รางวัลจากบอส"
+};
+
+let battleRanking = [];
 
 
 /* =========================================================
@@ -970,10 +1181,388 @@ function normalizeBattleDashboard(raw){
 
 
 /* =========================================================
+   BATTLE DISPLAY HELPERS
+========================================================= */
+
+function firstDefined(...values){
+
+  for(const value of values){
+
+    if(
+      value !== undefined &&
+      value !== null &&
+      value !== ""
+    ){
+      return value;
+    }
+  }
+
+  return undefined;
+}
+
+
+function normalizeRankingRows(payload){
+
+  const rows =
+    firstDefined(
+      payload?.ranking,
+      payload?.battleRanking,
+      payload?.battle_ranking,
+      payload?.topRanking,
+      payload?.top_ranking,
+      payload?.leaderboard,
+      payload?.rankings
+    );
+
+  if(!Array.isArray(rows)){
+    return [];
+  }
+
+  return rows
+    .slice(0,3)
+    .map(
+      (row,index) => ({
+        rank:
+          Number(
+            firstDefined(
+              row?.rank,
+              row?.position,
+              index + 1
+            )
+          ) || index + 1,
+
+        name:
+          String(
+            firstDefined(
+              row?.displayName,
+              row?.display_name,
+              row?.name,
+              row?.playerName,
+              row?.player_name,
+              "ROCK HERO"
+            )
+          ),
+
+        score:
+          Number(
+            firstDefined(
+              row?.score,
+              row?.damage,
+              row?.totalDamage,
+              row?.total_damage,
+              row?.points,
+              0
+            )
+          ) || 0
+      })
+    );
+}
+
+
+function normalizeBossData(payload){
+
+  const boss =
+    firstDefined(
+      payload?.boss,
+      payload?.monthlyBoss,
+      payload?.monthly_boss,
+      payload?.bossOfMonth,
+      payload?.boss_of_month
+    ) || {};
+
+  const hp =
+    Number(
+      firstDefined(
+        boss?.hp,
+        boss?.currentHp,
+        boss?.current_hp,
+        payload?.bossHp,
+        payload?.boss_hp,
+        0
+      )
+    ) || 0;
+
+  const maxHp =
+    Number(
+      firstDefined(
+        boss?.maxHp,
+        boss?.max_hp,
+        boss?.totalHp,
+        boss?.total_hp,
+        payload?.bossMaxHp,
+        payload?.boss_max_hp,
+        hp
+      )
+    ) || 0;
+
+  const name =
+    String(
+      firstDefined(
+        boss?.name,
+        boss?.title,
+        payload?.bossName,
+        payload?.boss_name,
+        "BOSS OF THE MONTH"
+      )
+    );
+
+  const image =
+    firstDefined(
+      boss?.image,
+      boss?.imageUrl,
+      boss?.image_url,
+      payload?.bossImage,
+      payload?.boss_image
+    );
+
+  const rewardCoin =
+    Number(
+      firstDefined(
+        boss?.rewardCoin,
+        boss?.reward_coin,
+        payload?.bossRewardCoin,
+        payload?.boss_reward_coin
+      )
+    );
+
+  const rewardExp =
+    Number(
+      firstDefined(
+        boss?.rewardExp,
+        boss?.reward_exp,
+        payload?.bossRewardExp,
+        payload?.boss_reward_exp
+      )
+    );
+
+  let rewardText =
+    String(
+      firstDefined(
+        boss?.rewardText,
+        boss?.reward_text,
+        payload?.bossRewardText,
+        payload?.boss_reward_text,
+        ""
+      )
+    ).trim();
+
+  if(!rewardText){
+
+    const parts = [];
+
+    if(Number.isFinite(rewardCoin)){
+      parts.push(
+        `⭐ ${rewardCoin.toLocaleString("en-US")} COIN`
+      );
+    }
+
+    if(Number.isFinite(rewardExp)){
+      parts.push(
+        `🏆 ${rewardExp.toLocaleString("en-US")} EXP`
+      );
+    }
+
+    rewardText =
+      parts.length
+        ? parts.join(" • ")
+        : "รางวัลจากบอส";
+  }
+
+  return {
+    name,
+    hp:
+      Math.max(0,hp),
+    maxHp:
+      Math.max(0,maxHp),
+    image:
+      image || null,
+    rewardText
+  };
+}
+
+
+function renderBattleStatusPanels(){
+
+  const bossName =
+    document.getElementById(
+      "bossNameValue"
+    );
+
+  const hpText =
+    document.getElementById(
+      "bossHpText"
+    );
+
+  const hpPercent =
+    document.getElementById(
+      "bossHpPercent"
+    );
+
+  const hpFill =
+    document.getElementById(
+      "bossHpFill"
+    );
+
+  const energyFill =
+    document.getElementById(
+      "energyFillLive"
+    );
+
+  const rewardDetail =
+    document.getElementById(
+      "bossRewardDetail"
+    );
+
+
+  const maxHp =
+    Math.max(
+      0,
+      Number(
+        battleBoss.maxHp
+      ) || 0
+    );
+
+  const hp =
+    Math.max(
+      0,
+      Math.min(
+        maxHp || Number.MAX_SAFE_INTEGER,
+        Number(
+          battleBoss.hp
+        ) || 0
+      )
+    );
+
+  const percent =
+    maxHp > 0
+      ? Math.max(
+          0,
+          Math.min(
+            100,
+            (hp / maxHp) * 100
+          )
+        )
+      : 0;
+
+
+  if(bossName){
+    bossName.textContent =
+      battleBoss.name ||
+      "BOSS OF THE MONTH";
+  }
+
+  if(hpText){
+    hpText.textContent =
+      maxHp > 0
+        ? `${Math.round(hp).toLocaleString("en-US")} / ${Math.round(maxHp).toLocaleString("en-US")}`
+        : "- / -";
+  }
+
+  if(hpPercent){
+    hpPercent.textContent =
+      `${Math.round(percent)}%`;
+  }
+
+  if(hpFill){
+    hpFill.style.width =
+      `${percent}%`;
+  }
+
+
+  const energyPercent =
+    playerMaxEnergy > 0
+      ? Math.max(
+          0,
+          Math.min(
+            100,
+            (playerEnergy / playerMaxEnergy) * 100
+          )
+        )
+      : 0;
+
+  if(energyFill){
+    energyFill.style.width =
+      `${energyPercent}%`;
+  }
+
+
+  if(rewardDetail){
+    rewardDetail.textContent =
+      battleBoss.rewardText ||
+      "รางวัลจากบอส";
+  }
+
+
+  for(let i = 0; i < 3; i++){
+
+    const row =
+      battleRanking[i];
+
+    const name =
+      document.getElementById(
+        `rankName${i + 1}`
+      );
+
+    const score =
+      document.getElementById(
+        `rankScore${i + 1}`
+      );
+
+    if(name){
+      name.textContent =
+        row?.name || "-";
+    }
+
+    if(score){
+      score.textContent =
+        Number(
+          row?.score || 0
+        ).toLocaleString(
+          "en-US"
+        );
+    }
+  }
+
+
+  /*
+    ถ้า Server มีรูป Boss จริง
+    ใช้รูปนั้นแทน Monster Stage
+  */
+  if(battleBoss.image){
+
+    const image =
+      document.getElementById(
+        "bossMonsterLive"
+      );
+
+    if(image){
+
+      image.onload =
+        () =>
+          image.classList.add(
+            "show"
+          );
+
+      image.src =
+        String(
+          battleBoss.image
+        );
+    }
+  }
+}
+
+
+/* =========================================================
    CURRENT MONSTER
 ========================================================= */
 
 function renderCurrentMonster(){
+
+  if(
+    battleBoss?.image
+  ){
+    return;
+  }
 
   const stageNumber =
     Math.max(
@@ -1033,7 +1622,7 @@ function renderCurrentMonster(){
     };
 
   image.src =
-    `${stage.monster}?v=20260824-10`;
+    `${stage.monster}?v=20260825-01`;
 }
 
 
@@ -1093,6 +1682,7 @@ function updateUI(){
 
   updateStageLocks();
   renderCurrentMonster();
+  renderBattleStatusPanels();
 }
 
 
@@ -1445,6 +2035,17 @@ async function loadBattleStatus(){
       payload?.player ??
       payload?.user ??
       {};
+
+
+    battleBoss =
+      normalizeBossData(
+        payload
+      );
+
+    battleRanking =
+      normalizeRankingRows(
+        payload
+      );
 
 
     const energy =
