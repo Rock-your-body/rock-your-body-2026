@@ -1,13 +1,13 @@
 /* =========================================================
    ROCK YOUR BODY 2026
-   APP-CONFIG.JS
+   APP CONFIG
    Version: 2026-08-25
 ========================================================= */
 
 window.APP_CONFIG = {
 
   /* =======================================================
-     LIFF
+     LINE LIFF
   ======================================================= */
 
   LIFF_ID:
@@ -26,8 +26,20 @@ window.APP_CONFIG = {
 
   API: {
 
+    /*
+      ใส่ URL API จริงตรงนี้
+
+      ตัวอย่างถ้าใช้ Google Apps Script:
+
+      DASHBOARD:
+        "https://script.google.com/macros/s/XXXXXXXXXXXX/exec"
+
+      ห้ามใส่ LIFF URL
+      ห้ามใส่ GitHub URL
+    */
+
     DASHBOARD:
-      "",
+      "ใส่_API_DASHBOARD_ตรงนี้"
 
   },
 
@@ -81,31 +93,3 @@ window.APP_CONFIG = {
     30000
 
 };
-
-
-console.log(
-  "================================="
-);
-
-console.log(
-  "ROCK APP CONFIG LOADED"
-);
-
-console.log(
-  "LIFF ID:",
-  window.APP_CONFIG.LIFF_ID
-);
-
-console.log(
-  "LIFF URL:",
-  window.APP_CONFIG.LIFF_URL
-);
-
-console.log(
-  "ENDPOINT:",
-  window.APP_CONFIG.ENDPOINT_URL
-);
-
-console.log(
-  "================================="
-);
