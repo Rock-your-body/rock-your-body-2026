@@ -1,7 +1,7 @@
 /* =========================================================
    ROCK YOUR BODY 2026
    COMMON.JS
-   Version: 2026-08-25
+   Version: 2026-08-25-FIX-LIFF
 ========================================================= */
 
 window.ROCK = (() => {
@@ -13,18 +13,18 @@ window.ROCK = (() => {
   const CFG = window.APP_CONFIG;
 
   if (!CFG) {
-
-    throw new Error(
-      "APP_CONFIG ไม่ถูกโหลด"
-    );
-
+    throw new Error("APP_CONFIG ไม่ถูกโหลด");
   }
 
+  console.log("ROCK CONFIG:", CFG);
 
-  console.log(
-    "ROCK CONFIG:",
-    CFG
-  );
+
+  /* =========================================================
+     STATE
+  ========================================================= */
+
+  let liffReady = false;
+  let liffInitPromise = null;
 
 
   /* =========================================================
@@ -34,27 +34,15 @@ window.ROCK = (() => {
   function go(url) {
 
     if (!url) {
-
-      console.error(
-        "NAVIGATION URL EMPTY"
-      );
-
+      console.error("NAVIGATION URL EMPTY");
       return false;
     }
 
+    console.log("NAVIGATE:", url);
 
-    console.log(
-      "NAVIGATE:",
-      url
-    );
-
-
-    window.location.href =
-      url;
-
+    window.location.href = url;
 
     return true;
-
   }
 
 
@@ -70,36 +58,24 @@ window.ROCK = (() => {
         return null;
       }
 
-
       const parts =
         String(token).split(".");
 
-
       if (parts.length !== 3) {
-
         return null;
-
       }
-
 
       let base64 =
         parts[1]
           .replace(/-/g, "+")
           .replace(/_/g, "/");
 
-
-      while (
-        base64.length % 4 !== 0
-      ) {
-
+      while (base64.length % 4 !== 0) {
         base64 += "=";
-
       }
-
 
       const binary =
         atob(base64);
-
 
       const bytes =
         Uint8Array.from(
@@ -107,14 +83,11 @@ window.ROCK = (() => {
           c => c.charCodeAt(0)
         );
 
-
       const text =
         new TextDecoder("utf-8")
           .decode(bytes);
 
-
       return JSON.parse(text);
-
 
     } catch (error) {
 
@@ -123,11 +96,8 @@ window.ROCK = (() => {
         error
       );
 
-
       return null;
-
     }
-
   }
 
 
@@ -143,346 +113,409 @@ window.ROCK = (() => {
     const payload =
       decodeJwtPayload(token);
 
-
     if (!payload) {
-
       return false;
-
     }
-
 
     const exp =
       Number(payload.exp);
 
-
     if (!Number.isFinite(exp)) {
-
       return false;
-
     }
-
 
     const now =
       Math.floor(
         Date.now() / 1000
       );
 
-
-    return (
-      exp <=
-      now +
-      bufferSeconds
-    );
-
+    return exp <= now + bufferSeconds;
   }
 
 
   /* =========================================================
-     LIFF RELOGIN
+     CHECK LIFF SDK
   ========================================================= */
 
-  function relogin(
-    reason = "TOKEN_EXPIRED"
-  ) {
-
-    const key =
-      "rock_liff_relogin_at";
-
-
-    const now =
-      Date.now();
-
-
-    const last =
-      Number(
-        sessionStorage.getItem(key) ||
-        "0"
-      );
-
-
-    /*
-      ป้องกัน Login Loop
-    */
+  function checkLiffSDK() {
 
     if (
-      last > 0 &&
-      now - last < 10000
-    ) {
-
-      throw new Error(
-        "LINE session ยังไม่พร้อม กรุณาปิดหน้านี้แล้วเปิดใหม่จาก LINE"
-      );
-
-    }
-
-
-    sessionStorage.setItem(
-      key,
-      String(now)
-    );
-
-
-    console.warn(
-      "LIFF RELOGIN:",
-      reason
-    );
-
-
-    try {
-
-      if (
-        typeof liff !== "undefined" &&
-        liff.isLoggedIn()
-      ) {
-
-        liff.logout();
-
-      }
-
-    } catch (error) {
-
-      console.warn(
-        "LIFF LOGOUT ERROR:",
-        error
-      );
-
-    }
-
-
-    if (
-      typeof liff === "undefined"
+      typeof window.liff === "undefined"
     ) {
 
       throw new Error(
         "LINE LIFF SDK ไม่พร้อม"
       );
-
     }
 
+    if (!CFG.LIFF_ID) {
+
+      throw new Error(
+        "ไม่พบ LIFF ID"
+      );
+    }
+  }
+
+
+  /* =========================================================
+     LIFF LOGIN
+     
+     สำคัญ:
+     - ไม่ logout
+     - ไม่บังคับ login ซ้ำ
+     - ไม่สร้าง login loop
+  ========================================================= */
+
+  function loginLiff() {
+
+    checkLiffSDK();
 
     console.log(
-      "กำลัง Login LINE ใหม่..."
+      "LIFF LOGIN REQUEST"
     );
 
+    /*
+      ถ้าอยู่ใน LINE App
+      ให้ LIFF จัดการ session เอง
+    */
 
-    liff.login({
+    try {
 
-      redirectUri:
-        window.location.href
+      liff.login({
+        redirectUri:
+          window.location.href
+      });
 
-    });
+    } catch (error) {
 
+      console.error(
+        "LIFF LOGIN ERROR:",
+        error
+      );
+
+      throw error;
+    }
   }
 
 
   /* =========================================================
      INIT LIFF
+     
+     จุดสำคัญของตัวแก้:
+     
+     1. init เพียงครั้งเดียว
+     2. ไม่ logout
+     3. ถ้า login อยู่แล้ว ใช้ session เดิม
+     4. ถ้าไม่ได้ login ค่อยเรียก login
+     5. ไม่ตรวจ JWT หมดอายุแล้ว logout ทันที
   ========================================================= */
 
   async function initLiff() {
 
-    console.log(
-      "================================="
-    );
+    /*
+      ถ้า init อยู่แล้ว
+      ใช้ Promise เดิม
+    */
 
-    console.log(
-      "ROCK LIFF INITIALIZATION"
-    );
-
-    console.log(
-      "================================="
-    );
-
-
-    /* -------------------------------------------------------
-       CHECK SDK
-    ------------------------------------------------------- */
-
-    if (
-      typeof liff === "undefined"
-    ) {
-
-      throw new Error(
-        "LINE LIFF SDK ไม่พร้อม"
-      );
-
+    if (liffInitPromise) {
+      return liffInitPromise;
     }
 
 
-    /* -------------------------------------------------------
-       CHECK LIFF ID
-    ------------------------------------------------------- */
+    liffInitPromise =
+      (async () => {
 
-    if (
-      !CFG.LIFF_ID
-    ) {
+        console.log(
+          "================================="
+        );
 
-      throw new Error(
-        "ไม่พบ LIFF ID ใน APP_CONFIG"
-      );
+        console.log(
+          "ROCK LIFF INITIALIZATION"
+        );
 
-    }
-
-
-    console.log(
-      "LIFF ID:",
-      CFG.LIFF_ID
-    );
+        console.log(
+          "================================="
+        );
 
 
-    console.log(
-      "CURRENT URL:",
-      window.location.href
-    );
+        /* ---------------------------------------------------
+           SDK
+        --------------------------------------------------- */
+
+        checkLiffSDK();
 
 
-    console.log(
-      "USER AGENT:",
-      navigator.userAgent
-    );
+        console.log(
+          "LIFF ID:",
+          CFG.LIFF_ID
+        );
+
+        console.log(
+          "CURRENT URL:",
+          window.location.href
+        );
+
+        console.log(
+          "IS HTTPS:",
+          location.protocol === "https:"
+        );
 
 
-    /* -------------------------------------------------------
-       INIT
-    ------------------------------------------------------- */
+        /* ---------------------------------------------------
+           INIT
+        --------------------------------------------------- */
 
-    try {
+        try {
 
-      console.log(
-        "STEP LIFF 1: เรียก liff.init()"
-      );
+          await liff.init({
+
+            liffId:
+              CFG.LIFF_ID
+
+          });
+
+        } catch (error) {
+
+          console.error(
+            "LIFF INIT ERROR:",
+            error
+          );
+
+          liffInitPromise = null;
+
+          throw new Error(
+            "ไม่สามารถเริ่มต้น LINE LIFF ได้: " +
+            (
+              error?.message ||
+              String(error)
+            )
+          );
+        }
 
 
-      await Promise.race([
-
-        liff.init({
-
-          liffId:
-            CFG.LIFF_ID
-
-        }),
+        console.log(
+          "LIFF INIT SUCCESS"
+        );
 
 
-        new Promise(
-          (_, reject) => {
+        /* ---------------------------------------------------
+           STATUS
+        --------------------------------------------------- */
 
-            setTimeout(
-              () => {
+        const loggedIn =
+          liff.isLoggedIn();
 
-                reject(
-                  new Error(
-                    "LIFF init ใช้เวลานานเกิน 15 วินาที"
-                  )
-                );
+        const inClient =
+          liff.isInClient();
 
-              },
-              15000
+
+        console.log(
+          "LIFF STATUS:",
+          {
+            loggedIn,
+            inClient
+          }
+        );
+
+
+        /* ---------------------------------------------------
+           NOT LOGGED IN
+        --------------------------------------------------- */
+
+        if (!loggedIn) {
+
+          console.warn(
+            "LIFF: USER NOT LOGGED IN"
+          );
+
+
+          /*
+            สำคัญมาก
+
+            ถ้าเปิดจาก LINE
+            ให้ login ผ่าน LIFF
+
+            ถ้าเปิดจาก browser ธรรมดา
+            ก็ยังสามารถ login ผ่าน LINE ได้
+          */
+
+          loginLiff();
+
+          return false;
+        }
+
+
+        /* ---------------------------------------------------
+           GET ID TOKEN
+        --------------------------------------------------- */
+
+        let token = null;
+
+        try {
+
+          token =
+            liff.getIDToken();
+
+        } catch (error) {
+
+          console.warn(
+            "GET ID TOKEN ERROR:",
+            error
+          );
+        }
+
+
+        /*
+          ไม่บังคับ logout
+          
+          บางกรณี LIFF session พร้อม
+          แต่ ID Token ยังไม่พร้อมในจังหวะแรก
+        */
+
+        if (!token) {
+
+          console.warn(
+            "LIFF LOGIN OK แต่ ID TOKEN ยังไม่พร้อม"
+          );
+
+          /*
+            ให้หน้าเว็บลอง get ใหม่ภายหลัง
+          */
+
+          liffReady = true;
+
+          return true;
+        }
+
+
+        console.log(
+          "LIFF ID TOKEN FOUND:",
+          token.length
+        );
+
+
+        /* ---------------------------------------------------
+           TOKEN INFORMATION
+        --------------------------------------------------- */
+
+        const payload =
+          decodeJwtPayload(token);
+
+
+        if (payload) {
+
+          console.log(
+            "LIFF TOKEN:",
+            {
+              sub:
+                payload.sub
+                  ? "FOUND"
+                  : "NONE",
+
+              iss:
+                payload.iss,
+
+              exp:
+                payload.exp
+            }
+          );
+
+
+          /*
+            ถ้า token ใกล้หมดอายุ
+            ไม่ logout อัตโนมัติ
+
+            เพราะการ logout คือสาเหตุหนึ่ง
+            ที่ทำให้ผู้ใช้เด้งกลับ LINE Login
+          */
+
+          if (
+            tokenExpired(
+              token,
+              10
+            )
+          ) {
+
+            console.warn(
+              "LIFF TOKEN NEAR EXPIRY"
             );
 
           }
-        )
-
-      ]);
+        }
 
 
-      console.log(
-        "STEP LIFF 2: liff.init() สำเร็จ"
-      );
+        /* ---------------------------------------------------
+           READY
+        --------------------------------------------------- */
+
+        liffReady = true;
+
+        console.log(
+          "================================="
+        );
+
+        console.log(
+          "LIFF READY"
+        );
+
+        console.log(
+          "================================="
+        );
 
 
-    } catch (error) {
+        return true;
 
-      console.error(
-        "LIFF INIT ERROR:",
-        error
-      );
+      })();
 
 
-      throw new Error(
-        "ไม่สามารถเริ่มต้น LINE LIFF ได้: " +
-        (
-          error?.message ||
-          String(error)
-        )
-      );
-
-    }
+    return liffInitPromise;
+  }
 
 
-    /* -------------------------------------------------------
-       STATUS
-    ------------------------------------------------------- */
+  /* =========================================================
+     IS LIFF READY
+  ========================================================= */
 
-    console.log(
-      "LIFF isLoggedIn:",
+  function isLiffReady() {
+
+    return (
+      liffReady &&
+      typeof window.liff !== "undefined" &&
       liff.isLoggedIn()
     );
+  }
 
 
-    console.log(
-      "LIFF isInClient:",
-      liff.isInClient()
-    );
+  /* =========================================================
+     GET ID TOKEN
+  ========================================================= */
+
+  function getIdToken() {
+
+    checkLiffSDK();
 
 
-    /* -------------------------------------------------------
-       LOGIN
-    ------------------------------------------------------- */
+    /*
+      ถ้ายังไม่ได้ login
+      อย่า logout
+      อย่าทำ login loop
+    */
 
-    if (
-      !liff.isLoggedIn()
-    ) {
+    if (!liff.isLoggedIn()) {
 
-      console.log(
-        "STEP LIFF 3: ยังไม่ได้ Login"
-      );
-
-
-      try {
-
-        liff.login({
-
-          redirectUri:
-            window.location.href
-
-        });
-
-
-      } catch (error) {
-
-        console.error(
-          "LIFF LOGIN ERROR:",
-          error
+      const error =
+        new Error(
+          "ยังไม่ได้เข้าสู่ระบบ LINE"
         );
 
+      error.code =
+        "LINE_NOT_LOGGED_IN";
 
-        throw new Error(
-          "ไม่สามารถเข้าสู่ระบบ LINE ได้: " +
-          (
-            error?.message ||
-            String(error)
-          )
-        );
-
-      }
-
-
-      return false;
-
+      throw error;
     }
-
-
-    /* -------------------------------------------------------
-       ID TOKEN
-    ------------------------------------------------------- */
-
-    console.log(
-      "STEP LIFF 4: ตรวจ ID Token"
-    );
 
 
     let token;
-
 
     try {
 
@@ -496,135 +529,41 @@ window.ROCK = (() => {
         error
       );
 
+      const err =
+        new Error(
+          "ไม่สามารถอ่าน LINE ID Token ได้"
+        );
 
-      throw new Error(
-        "ไม่สามารถอ่าน LINE ID Token ได้"
-      );
+      err.code =
+        "LINE_TOKEN_READ_ERROR";
 
+      throw err;
     }
-
-
-    console.log(
-      "ID TOKEN:",
-      token
-        ? "พบ Token"
-        : "ไม่พบ Token"
-    );
 
 
     if (!token) {
 
-      throw new Error(
-        "LINE Login สำเร็จ แต่ไม่พบ ID Token"
-      );
+      const error =
+        new Error(
+          "ไม่พบ LINE ID Token"
+        );
 
+      error.code =
+        "LINE_TOKEN_MISSING";
+
+      throw error;
     }
 
 
-    console.log(
-      "TOKEN LENGTH:",
-      token.length
-    );
-
-
-    /* -------------------------------------------------------
-       TOKEN EXPIRED
-    ------------------------------------------------------- */
+    /*
+      ตรวจ token หมดอายุ
+      แต่ไม่ logout
+    */
 
     if (
       tokenExpired(
         token,
-        60
-      )
-    ) {
-
-      console.warn(
-        "LINE ID TOKEN EXPIRED"
-      );
-
-
-      relogin(
-        "TOKEN_EXPIRED_CLIENT"
-      );
-
-
-      return false;
-
-    }
-
-
-    /* -------------------------------------------------------
-       LOGIN READY
-    ------------------------------------------------------- */
-
-    sessionStorage.removeItem(
-      "rock_liff_relogin_at"
-    );
-
-
-    console.log(
-      "================================="
-    );
-
-    console.log(
-      "LIFF READY"
-    );
-
-    console.log(
-      "================================="
-    );
-
-
-    return true;
-
-  }
-
-
-  /* =========================================================
-     GET ID TOKEN
-  ========================================================= */
-
-  function getIdToken() {
-
-    if (
-      typeof liff === "undefined"
-    ) {
-
-      throw new Error(
-        "LINE LIFF SDK ไม่พร้อม"
-      );
-
-    }
-
-
-    if (
-      !liff.isLoggedIn()
-    ) {
-
-      throw new Error(
-        "ยังไม่ได้เข้าสู่ระบบ LINE"
-      );
-
-    }
-
-
-    const token =
-      liff.getIDToken();
-
-
-    if (!token) {
-
-      throw new Error(
-        "ไม่พบ LINE ID Token"
-      );
-
-    }
-
-
-    if (
-      tokenExpired(
-        token,
-        30
+        5
       )
     ) {
 
@@ -633,18 +572,36 @@ window.ROCK = (() => {
           "LINE ID Token หมดอายุ"
         );
 
-
       error.code =
         "TOKEN_EXPIRED";
 
-
       throw error;
-
     }
 
 
     return token;
+  }
 
+
+  /* =========================================================
+     SAFE TOKEN
+  ========================================================= */
+
+  async function ensureLiff() {
+
+    if (
+      isLiffReady()
+    ) {
+
+      return true;
+    }
+
+
+    const ready =
+      await initLiff();
+
+
+    return ready === true;
   }
 
 
@@ -662,7 +619,6 @@ window.ROCK = (() => {
       throw new Error(
         "ไม่พบ API URL"
       );
-
     }
 
 
@@ -686,7 +642,9 @@ window.ROCK = (() => {
 
     console.log(
       "HAS ID TOKEN:",
-      Boolean(payload?.idToken)
+      Boolean(
+        payload?.idToken
+      )
     );
 
     console.log(
@@ -710,6 +668,9 @@ window.ROCK = (() => {
             headers: {
 
               "Content-Type":
+                "application/json",
+
+              "Accept":
                 "application/json"
 
             },
@@ -722,7 +683,6 @@ window.ROCK = (() => {
           }
         );
 
-
     } catch (error) {
 
       console.error(
@@ -730,11 +690,9 @@ window.ROCK = (() => {
         error
       );
 
-
       throw new Error(
         "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"
       );
-
     }
 
 
@@ -764,7 +722,6 @@ window.ROCK = (() => {
           ? JSON.parse(raw)
           : {};
 
-
     } catch (error) {
 
       console.error(
@@ -772,18 +729,10 @@ window.ROCK = (() => {
         error
       );
 
-
       throw new Error(
         "API ตอบกลับไม่ใช่ JSON"
       );
-
     }
-
-
-    console.log(
-      "API RESPONSE:",
-      data
-    );
 
 
     if (
@@ -811,17 +760,15 @@ window.ROCK = (() => {
 
 
       throw error;
-
     }
 
 
     return data;
-
   }
 
 
   /* =========================================================
-     TOKEN ERROR CHECK
+     TOKEN ERROR
   ========================================================= */
 
   function isTokenError(error) {
@@ -863,12 +810,17 @@ window.ROCK = (() => {
       code === "TOKEN_EXPIRED"
 
     );
-
   }
 
 
   /* =========================================================
      AUTHENTICATED POST
+     
+     สำคัญ:
+     ไม่มี relogin อัตโนมัติ
+     
+     เพราะถ้า API ตอบ 401
+     เราจะไม่ส่งผู้ใช้กลับหน้า LINE Login ทันที
   ========================================================= */
 
   async function postWithFreshToken(
@@ -876,80 +828,38 @@ window.ROCK = (() => {
     payload
   ) {
 
-    let idToken;
+    const ready =
+      await ensureLiff();
 
 
-    try {
+    if (!ready) {
 
-      idToken =
-        getIdToken();
-
-
-    } catch (error) {
-
-      if (
-        isTokenError(error)
-      ) {
-
-        relogin(
-          "TOKEN_EXPIRED_CLIENT_API"
+      const error =
+        new Error(
+          "กำลังเชื่อมต่อ LINE..."
         );
 
-
-        return await new Promise(
-          () => {}
-        );
-
-      }
-
+      error.code =
+        "LIFF_LOGIN_REQUIRED";
 
       throw error;
-
     }
 
 
-    try {
-
-      return await postJSON(
-        url,
-        {
-
-          ...payload,
-
-          idToken
-
-        }
-      );
+    const idToken =
+      getIdToken();
 
 
-    } catch (error) {
+    return await postJSON(
+      url,
+      {
 
-      if (
-        isTokenError(error)
-      ) {
+        ...payload,
 
-        console.warn(
-          "AUTH API TOKEN ERROR:",
-          error
-        );
-
-
-        relogin(
-          "TOKEN_EXPIRED_SERVER_API"
-        );
-
-
-        return await new Promise(
-          () => {}
-        );
+        idToken
 
       }
-
-
-      throw error;
-
-    }
-
+    );
   }
 
 
@@ -968,46 +878,29 @@ window.ROCK = (() => {
       throw new Error(
         "ไม่พบ API.DASHBOARD"
       );
-
     }
 
 
-    let idToken;
+    const ready =
+      await ensureLiff();
 
 
-    try {
+    if (!ready) {
 
-      idToken =
-        getIdToken();
-
-
-    } catch (error) {
-
-      console.error(
-        "PLAYER API TOKEN ERROR:",
-        error
-      );
-
-
-      if (
-        isTokenError(error)
-      ) {
-
-        relogin(
-          "TOKEN_EXPIRED_CLIENT_PLAYER"
+      const error =
+        new Error(
+          "กำลังเชื่อมต่อ LINE..."
         );
 
-
-        return await new Promise(
-          () => {}
-        );
-
-      }
-
+      error.code =
+        "LIFF_LOGIN_REQUIRED";
 
       throw error;
-
     }
+
+
+    const idToken =
+      getIdToken();
 
 
     try {
@@ -1026,7 +919,6 @@ window.ROCK = (() => {
 
       );
 
-
     } catch (error) {
 
       console.error(
@@ -1035,31 +927,18 @@ window.ROCK = (() => {
       );
 
 
-      if (
-        isTokenError(error)
-      ) {
+      /*
+        สำคัญมาก
 
-        console.warn(
-          "TOKEN INVALID FROM SERVER"
-        );
+        ไม่เรียก liff.logout()
+        ไม่เรียก liff.login()
 
-
-        relogin(
-          "TOKEN_EXPIRED_SERVER_PLAYER"
-        );
-
-
-        return await new Promise(
-          () => {}
-        );
-
-      }
-
+        ให้หน้าเว็บแสดง error
+        แทนการเด้งกลับ LINE Login
+      */
 
       throw error;
-
     }
-
   }
 
 
@@ -1069,18 +948,12 @@ window.ROCK = (() => {
 
   async function fetchDashboard() {
 
-    console.log(
-      "FETCH DASHBOARD"
-    );
-
-
     return await callPlayerApi({
 
       action:
         "dashboard"
 
     });
-
   }
 
 
@@ -1097,19 +970,14 @@ window.ROCK = (() => {
 
 
     if (
-
       !Number.isFinite(value) ||
-
       value < 20 ||
-
       value > 400
-
     ) {
 
       throw new Error(
         "น้ำหนักต้องอยู่ระหว่าง 20 - 400 kg"
       );
-
     }
 
 
@@ -1122,7 +990,6 @@ window.ROCK = (() => {
         value
 
     });
-
   }
 
 
@@ -1139,19 +1006,14 @@ window.ROCK = (() => {
 
 
     if (
-
       !Number.isFinite(value) ||
-
       value < 20 ||
-
       value > 400
-
     ) {
 
       throw new Error(
         "เป้าหมายต้องอยู่ระหว่าง 20 - 400 kg"
       );
-
     }
 
 
@@ -1164,7 +1026,6 @@ window.ROCK = (() => {
         value
 
     });
-
   }
 
 
@@ -1175,17 +1036,12 @@ window.ROCK = (() => {
   function fmtWeight(value) {
 
     if (
-
       value === null ||
-
       value === undefined ||
-
       value === ""
-
     ) {
 
       return "--.-";
-
     }
 
 
@@ -1194,11 +1050,8 @@ window.ROCK = (() => {
 
 
     return Number.isFinite(n)
-
       ? n.toFixed(1)
-
       : "--.-";
-
   }
 
 
@@ -1213,12 +1066,9 @@ window.ROCK = (() => {
 
 
     return Number.isFinite(n)
-
       ? Math.round(n)
           .toLocaleString("en-US")
-
       : "0";
-
   }
 
 
@@ -1229,9 +1079,7 @@ window.ROCK = (() => {
   function formatDate(value) {
 
     if (!value) {
-
       return "-";
-
     }
 
 
@@ -1246,7 +1094,6 @@ window.ROCK = (() => {
     ) {
 
       return "-";
-
     }
 
 
@@ -1262,7 +1109,6 @@ window.ROCK = (() => {
 
       }
     );
-
   }
 
 
@@ -1275,7 +1121,6 @@ window.ROCK = (() => {
     if (!value) {
 
       return "--/--/----";
-
     }
 
 
@@ -1290,7 +1135,6 @@ window.ROCK = (() => {
     ) {
 
       return "--/--/----";
-
     }
 
 
@@ -1309,7 +1153,6 @@ window.ROCK = (() => {
 
       }
     );
-
   }
 
 
@@ -1327,16 +1170,13 @@ window.ROCK = (() => {
 
 
     return Number.isFinite(n)
-
       ? n
-
       : fallback;
-
   }
 
 
   /* =========================================================
-     PAGE HELPERS
+     PAGE NAVIGATION
   ========================================================= */
 
   function goHome() {
@@ -1345,7 +1185,6 @@ window.ROCK = (() => {
       CFG.PAGE?.HOME ||
       "./dashboard.html"
     );
-
   }
 
 
@@ -1355,7 +1194,6 @@ window.ROCK = (() => {
       CFG.PAGE?.WEIGHT ||
       "./weight-check.html"
     );
-
   }
 
 
@@ -1365,7 +1203,6 @@ window.ROCK = (() => {
       CFG.PAGE?.PROGRESS ||
       "./progress.html"
     );
-
   }
 
 
@@ -1375,7 +1212,6 @@ window.ROCK = (() => {
       CFG.PAGE?.RANKING ||
       "./ranking.html"
     );
-
   }
 
 
@@ -1385,7 +1221,6 @@ window.ROCK = (() => {
       CFG.PAGE?.REWARDS ||
       "./rewards.html"
     );
-
   }
 
 
@@ -1395,7 +1230,6 @@ window.ROCK = (() => {
       CFG.PAGE?.MISSION ||
       "./mission.html"
     );
-
   }
 
 
@@ -1405,7 +1239,6 @@ window.ROCK = (() => {
       CFG.PAGE?.BATTLE ||
       "./battle.html"
     );
-
   }
 
 
@@ -1435,13 +1268,15 @@ window.ROCK = (() => {
 
     initLiff,
 
+    ensureLiff,
+
+    isLiffReady,
+
     getIdToken,
 
     postJSON,
 
     postWithFreshToken,
-
-    relogin,
 
     callPlayerApi,
 
@@ -1464,6 +1299,5 @@ window.ROCK = (() => {
     isTokenError
 
   };
-
 
 })();
