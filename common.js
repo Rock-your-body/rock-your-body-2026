@@ -210,34 +210,53 @@ window.ROCK = (() => {
      5. ไม่ตรวจ JWT หมดอายุแล้ว logout ทันที
   ========================================================= */
 
-  async function initLiff() {
+ async function initLiff() {
 
-    /*
-      ถ้า init อยู่แล้ว
-      ใช้ Promise เดิม
-    */
-
-    if (liffInitPromise) {
-      return liffInitPromise;
+    if (typeof liff === "undefined") {
+        throw new Error("LINE LIFF SDK ไม่พร้อม");
     }
 
+    await liff.init({
+        liffId: CFG.LIFF_ID
+    });
 
-    liffInitPromise =
-      (async () => {
+    console.log("LIFF INIT OK");
+    console.log("In Client:", liff.isInClient());
+    console.log("Logged In:", liff.isLoggedIn());
+
+    /*
+     * อยู่ใน LINE / LIFF Browser
+     */
+    if (liff.isInClient()) {
+
+        console.log("เปิดจาก LINE");
+
+        /*
+         * ห้าม liff.login() ตรงนี้
+         */
+
+        return true;
+    }
+
+    /*
+     * เปิดจาก Chrome / Browser ภายนอก
+     */
+    if (!liff.isLoggedIn()) {
 
         console.log(
-          "================================="
+            "เปิดจาก Browser ภายนอก → LINE Login"
         );
 
-        console.log(
-          "ROCK LIFF INITIALIZATION"
-        );
+        liff.login({
+            redirectUri:
+                window.location.href
+        });
 
-        console.log(
-          "================================="
-        );
+        return false;
+    }
 
-
+    return true;
+}
         /* ---------------------------------------------------
            SDK
         --------------------------------------------------- */
