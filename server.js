@@ -9,10 +9,6 @@ const FRONTEND_URL =
   process.env.FRONTEND_URL ||
   "https://rock-your-body.github.io";
 
-/* =========================================================
-   MIDDLEWARE
-   ========================================================= */
-
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -23,268 +19,690 @@ app.use(
 app.use(express.json());
 
 /* =========================================================
-   DEMO USER DATA
+   TEMP MEMBER DATABASE
+   ---------------------------------------------------------
+   Phase 1:
+   ใช้ Memory Database ก่อน
+   Phase ถัดไปจะเปลี่ยนเป็น Database จริง
    ========================================================= */
 
-const demoUser = {
-  lineUserId: null,
+const members = new Map();
 
-  name: "สมาชิก ROCK YOUR BODY",
+/* =========================================================
+   CREATE MEMBER
+   ========================================================= */
 
-  rockCoin: 1250,
+function createMember(lineUserId, profile = {}) {
+  const member = {
+    lineUserId,
 
-  energy: 150,
-  maxEnergy: 200,
+    displayName:
+      profile.displayName ||
+      "สมาชิก ROCK YOUR BODY",
 
-  points: 12560,
+    pictureUrl:
+      profile.pictureUrl ||
+      "",
 
-  rank: 12,
+    /* -------------------------
+       ROCK SYSTEM
+       ------------------------- */
 
-  weight: 78.5,
-  targetWeight: 72.0,
+    rockCoin: 0,
 
-  steps: 6842,
-  targetSteps: 10000,
+    energy: 200,
 
-  calories: 320,
-  targetCalories: 500,
+    maxEnergy: 200,
 
-  sleep: 7.3,
-  targetSleep: 8,
+    points: 0,
 
-  healthScore: 85,
+    rank: null,
 
-  inbodyScore: 72,
+    /* -------------------------
+       HEALTH
+       ------------------------- */
 
-  programDay: 45,
-  programTotalDays: 90,
-};
+    weight: null,
+
+    targetWeight: null,
+
+    steps: 0,
+
+    targetSteps: 10000,
+
+    calories: 0,
+
+    targetCalories: 500,
+
+    sleep: 0,
+
+    targetSleep: 8,
+
+    healthScore: 0,
+
+    inbodyScore: null,
+
+    /* -------------------------
+       PROGRAM
+       ------------------------- */
+
+    programDay: 1,
+
+    programTotalDays: 90,
+
+    createdAt:
+      new Date().toISOString(),
+
+    updatedAt:
+      new Date().toISOString()
+  };
+
+  members.set(
+    lineUserId,
+    member
+  );
+
+  return member;
+}
+
+/* =========================================================
+   GET MEMBER
+   ========================================================= */
+
+function getMember(lineUserId) {
+  if (!lineUserId) {
+    return null;
+  }
+
+  return members.get(lineUserId) || null;
+}
+
+/* =========================================================
+   REQUIRE LINE USER
+   ========================================================= */
+
+function requireLineUser(req, res) {
+
+  const lineUserId =
+    req.headers["x-line-user-id"];
+
+  if (!lineUserId) {
+
+    return res.status(401).json({
+      ok: false,
+      error: "LINE User ID is required"
+    });
+  }
+
+  return lineUserId;
+}
 
 /* =========================================================
    HEALTH CHECK
    ========================================================= */
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    ok: true,
-    service: "ROCK YOUR BODY 2026 API",
-    time: new Date().toISOString(),
-  });
-});
+app.get(
+  "/api/health",
+  (req, res) => {
+
+    res.json({
+
+      ok: true,
+
+      service:
+        "ROCK YOUR BODY 2026 API",
+
+      status:
+        "online",
+
+      members:
+        members.size,
+
+      time:
+        new Date().toISOString()
+
+    });
+
+  }
+);
+
+/* =========================================================
+   LOGIN / MEMBER
+   =========================================================
+
+   Frontend ส่ง:
+
+   x-line-user-id
+   x-line-display-name
+   x-line-picture-url
+
+   Backend จะสร้างสมาชิกใหม่
+   หรือโหลดสมาชิกเดิม
+   ========================================================= */
+
+app.post(
+  "/api/auth/line",
+  (req, res) => {
+
+    const lineUserId =
+      requireLineUser(req, res);
+
+    if (!lineUserId) return;
+
+    const displayName =
+      req.headers[
+        "x-line-display-name"
+      ] || "";
+
+    const pictureUrl =
+      req.headers[
+        "x-line-picture-url"
+      ] || "";
+
+    let member =
+      getMember(lineUserId);
+
+    /* -------------------------
+       NEW MEMBER
+       ------------------------- */
+
+    if (!member) {
+
+      member =
+        createMember(
+          lineUserId,
+          {
+            displayName,
+            pictureUrl
+          }
+        );
+
+    }
+
+    /* -------------------------
+       UPDATE LINE PROFILE
+       ------------------------- */
+
+    if (displayName) {
+
+      member.displayName =
+        displayName;
+
+    }
+
+    if (pictureUrl) {
+
+      member.pictureUrl =
+        pictureUrl;
+
+    }
+
+    member.updatedAt =
+      new Date().toISOString();
+
+    res.json({
+
+      ok: true,
+
+      message:
+        "LINE member authenticated",
+
+      user:
+        member
+
+    });
+
+  }
+);
 
 /* =========================================================
    CURRENT USER
    ========================================================= */
 
-app.get("/api/me", (req, res) => {
-  const lineUserId =
-    req.headers["x-line-user-id"] || null;
+app.get(
+  "/api/me",
+  (req, res) => {
 
-  res.json({
-    ok: true,
+    const lineUserId =
+      requireLineUser(req, res);
 
-    user: {
-      ...demoUser,
-      lineUserId,
-    },
-  });
-});
+    if (!lineUserId) return;
+
+    let member =
+      getMember(lineUserId);
+
+    /*
+      ถ้ายังไม่มีสมาชิก
+      สร้าง Account ใหม่ทันที
+    */
+
+    if (!member) {
+
+      member =
+        createMember(
+          lineUserId
+        );
+
+    }
+
+    res.json({
+
+      ok: true,
+
+      user:
+        member
+
+    });
+
+  }
+);
+
+/* =========================================================
+   UPDATE PROFILE
+   ========================================================= */
+
+app.put(
+  "/api/me",
+  (req, res) => {
+
+    const lineUserId =
+      requireLineUser(req, res);
+
+    if (!lineUserId) return;
+
+    const member =
+      getMember(lineUserId);
+
+    if (!member) {
+
+      return res.status(404).json({
+
+        ok: false,
+
+        error:
+          "Member not found"
+
+      });
+
+    }
+
+    const {
+      displayName,
+      pictureUrl,
+      targetWeight,
+      targetSteps,
+      targetCalories,
+      targetSleep
+    } = req.body || {};
+
+    if (
+      typeof displayName ===
+      "string"
+    ) {
+
+      member.displayName =
+        displayName;
+
+    }
+
+    if (
+      typeof pictureUrl ===
+      "string"
+    ) {
+
+      member.pictureUrl =
+        pictureUrl;
+
+    }
+
+    if (
+      targetWeight !== undefined
+    ) {
+
+      member.targetWeight =
+        Number(targetWeight);
+
+    }
+
+    if (
+      targetSteps !== undefined
+    ) {
+
+      member.targetSteps =
+        Number(targetSteps);
+
+    }
+
+    if (
+      targetCalories !== undefined
+    ) {
+
+      member.targetCalories =
+        Number(targetCalories);
+
+    }
+
+    if (
+      targetSleep !== undefined
+    ) {
+
+      member.targetSleep =
+        Number(targetSleep);
+
+    }
+
+    member.updatedAt =
+      new Date().toISOString();
+
+    res.json({
+
+      ok: true,
+
+      user:
+        member
+
+    });
+
+  }
+);
 
 /* =========================================================
    DASHBOARD
    ========================================================= */
 
-app.get("/api/dashboard", (req, res) => {
-  res.json({
-    ok: true,
+app.get(
+  "/api/dashboard",
+  (req, res) => {
 
-    dashboard: {
-      steps: {
-        current: demoUser.steps,
-        target: demoUser.targetSteps,
-        percent: Math.min(
-          100,
-          Math.round(
-            (demoUser.steps /
-              demoUser.targetSteps) *
-              100
-          )
-        ),
-      },
+    const lineUserId =
+      requireLineUser(req, res);
 
-      calories: {
-        current: demoUser.calories,
-        target: demoUser.targetCalories,
-        percent: Math.min(
-          100,
-          Math.round(
-            (demoUser.calories /
-              demoUser.targetCalories) *
-              100
-          )
-        ),
-      },
+    if (!lineUserId) return;
 
-      sleep: {
-        current: demoUser.sleep,
-        target: demoUser.targetSleep,
-        percent: Math.min(
-          100,
-          Math.round(
-            (demoUser.sleep /
-              demoUser.targetSleep) *
-              100
-          )
-        ),
-      },
+    const member =
+      getMember(lineUserId);
 
-      healthScore:
-        demoUser.healthScore,
+    if (!member) {
 
-      weight: {
-        current: demoUser.weight,
-        target: demoUser.targetWeight,
-      },
+      return res.status(404).json({
 
-      inbody: {
-        score:
-          demoUser.inbodyScore,
-      },
+        ok: false,
 
-      program: {
-        currentDay:
-          demoUser.programDay,
+        error:
+          "Member not found"
 
-        totalDays:
-          demoUser.programTotalDays,
+      });
 
-        percent: Math.round(
-          (demoUser.programDay /
-            demoUser.programTotalDays) *
-            100
-        ),
-      },
-    },
-  });
-});
+    }
+
+    res.json({
+
+      ok: true,
+
+      dashboard: {
+
+        member: {
+
+          lineUserId:
+            member.lineUserId,
+
+          displayName:
+            member.displayName,
+
+          pictureUrl:
+            member.pictureUrl
+
+        },
+
+        steps: {
+
+          current:
+            member.steps,
+
+          target:
+            member.targetSteps
+
+        },
+
+        calories: {
+
+          current:
+            member.calories,
+
+          target:
+            member.targetCalories
+
+        },
+
+        sleep: {
+
+          current:
+            member.sleep,
+
+          target:
+            member.targetSleep
+
+        },
+
+        healthScore:
+          member.healthScore,
+
+        weight: {
+
+          current:
+            member.weight,
+
+          target:
+            member.targetWeight
+
+        },
+
+        inbody: {
+
+          score:
+            member.inbodyScore
+
+        },
+
+        program: {
+
+          currentDay:
+            member.programDay,
+
+          totalDays:
+            member.programTotalDays
+
+        },
+
+        rockCoin:
+          member.rockCoin,
+
+        energy: {
+
+          current:
+            member.energy,
+
+          max:
+            member.maxEnergy
+
+        },
+
+        points:
+          member.points,
+
+        rank:
+          member.rank
+
+      }
+
+    });
+
+  }
+);
 
 /* =========================================================
    MISSIONS
    ========================================================= */
 
-app.get("/api/missions", (req, res) => {
-  res.json({
-    ok: true,
+app.get(
+  "/api/missions",
+  (req, res) => {
 
-    missions: {
-      daily: [
-        {
-          id: "daily-step",
+    const lineUserId =
+      requireLineUser(req, res);
 
-          title:
-            "เดินให้ครบ 10,000 ก้าว",
+    if (!lineUserId) return;
 
-          type: "MOVE",
+    const member =
+      getMember(lineUserId);
 
-          rewardCoin: 100,
-          rewardEnergy: 10,
+    if (!member) {
 
-          completed: false,
-        },
+      return res.status(404).json({
 
-        {
-          id: "daily-water",
+        ok: false,
 
-          title:
-            "ดื่มน้ำให้ครบ 3 ลิตร",
+        error:
+          "Member not found"
 
-          type: "HEALTH",
+      });
 
-          rewardCoin: 80,
-          rewardEnergy: 10,
+    }
 
-          completed: false,
-        },
+    res.json({
 
-        {
-          id: "daily-sleep",
+      ok: true,
 
-          title:
-            "นอนให้ได้อย่างน้อย 8 ชั่วโมง",
+      missions: {
 
-          type: "SLEEP",
+        daily: [
 
-          rewardCoin: 100,
-          rewardEnergy: 10,
+          {
+            id:
+              "daily-step",
 
-          completed: false,
-        },
-      ],
+            title:
+              "เดินให้ครบ 10,000 ก้าว",
 
-      weekly: [
-        {
-          id: "weekly-exercise",
+            type:
+              "MOVE",
 
-          title:
-            "ออกกำลังกายครบ 5 วัน",
+            rewardCoin:
+              100,
 
-          type: "MOVE",
+            rewardEnergy:
+              10,
 
-          rewardCoin: 300,
-          rewardEnergy: 30,
+            completed:
+              member.steps >=
+              member.targetSteps
 
-          completed: false,
-        },
+          },
 
-        {
-          id: "weekly-health",
+          {
+            id:
+              "daily-water",
 
-          title:
-            "ทำกิจกรรมสุขภาพครบ 7 วัน",
+            title:
+              "ดื่มน้ำให้ครบ 3 ลิตร",
 
-          type: "HEALTH",
+            type:
+              "HEALTH",
 
-          rewardCoin: 500,
-          rewardEnergy: 50,
+            rewardCoin:
+              80,
 
-          completed: false,
-        },
-      ],
+            rewardEnergy:
+              10,
 
-      monthly: [
-        {
-          id: "monthly-health",
+            completed:
+              false
 
-          title:
-            "ทำภารกิจสุขภาพครบตามเป้าหมาย",
+          }
 
-          type: "HEALTH",
+        ],
 
-          rewardCoin: 1000,
-          rewardEnergy: 100,
+        weekly: [
 
-          completed: false,
-        },
-      ],
+          {
+            id:
+              "weekly-exercise",
 
-      bonus: [
-        {
-          id: "bonus-checkup",
+            title:
+              "ออกกำลังกายครบ 5 วัน",
 
-          title:
-            "ตรวจสุขภาพ / InBody",
+            type:
+              "MOVE",
 
-          type: "BONUS",
+            rewardCoin:
+              300,
 
-          rewardCoin: 500,
-          rewardEnergy: 50,
+            rewardEnergy:
+              30,
 
-          completed: false,
-        },
-      ],
-    },
-  });
-});
+            completed:
+              false
+
+          }
+
+        ],
+
+        monthly: [
+
+          {
+            id:
+              "monthly-health",
+
+            title:
+              "ทำภารกิจสุขภาพครบตามเป้าหมาย",
+
+            type:
+              "HEALTH",
+
+            rewardCoin:
+              1000,
+
+            rewardEnergy:
+              100,
+
+            completed:
+              false
+
+          }
+
+        ],
+
+        bonus: [
+
+          {
+            id:
+              "bonus-checkup",
+
+            title:
+              "ตรวจสุขภาพ / InBody",
+
+            type:
+              "BONUS",
+
+            rewardCoin:
+              500,
+
+            rewardEnergy:
+              50,
+
+            completed:
+              false
+
+          }
+
+        ]
+
+      }
+
+    });
+
+  }
+);
 
 /* =========================================================
    COMPLETE MISSION
@@ -293,59 +711,64 @@ app.get("/api/missions", (req, res) => {
 app.post(
   "/api/missions/:missionId/complete",
   (req, res) => {
-    const missionId =
-      req.params.missionId;
 
-    const missionRewards = {
-      "daily-step": {
-        rockCoin: 100,
-        energy: 10,
-      },
+    const lineUserId =
+      requireLineUser(req, res);
 
-      "daily-water": {
-        rockCoin: 80,
-        energy: 10,
-      },
+    if (!lineUserId) return;
 
-      "daily-sleep": {
-        rockCoin: 100,
-        energy: 10,
-      },
+    const member =
+      getMember(lineUserId);
 
-      "weekly-exercise": {
-        rockCoin: 300,
-        energy: 30,
-      },
+    if (!member) {
 
-      "weekly-health": {
-        rockCoin: 500,
-        energy: 50,
-      },
-
-      "monthly-health": {
-        rockCoin: 1000,
-        energy: 100,
-      },
-
-      "bonus-checkup": {
-        rockCoin: 500,
-        energy: 50,
-      },
-    };
-
-    const reward =
-      missionRewards[missionId];
-
-    if (!reward) {
       return res.status(404).json({
+
         ok: false,
 
         error:
-          "Mission not found",
+          "Member not found"
+
       });
+
     }
 
+    const missionId =
+      req.params.missionId;
+
+    /*
+      Phase 1 reward
+      จะทำ Database จริงใน Phase 2
+    */
+
+    const reward = {
+
+      rockCoin: 100,
+
+      energy: 10,
+
+      points: 100
+
+    };
+
+    member.rockCoin +=
+      reward.rockCoin;
+
+    member.energy =
+      Math.min(
+        member.maxEnergy,
+        member.energy +
+        reward.energy
+      );
+
+    member.points +=
+      reward.points;
+
+    member.updatedAt =
+      new Date().toISOString();
+
     res.json({
+
       ok: true,
 
       message:
@@ -354,7 +777,22 @@ app.post(
       missionId,
 
       reward,
+
+      user: {
+
+        rockCoin:
+          member.rockCoin,
+
+        energy:
+          member.energy,
+
+        points:
+          member.points
+
+      }
+
     });
+
   }
 );
 
@@ -362,42 +800,78 @@ app.post(
    BATTLE
    ========================================================= */
 
-app.get("/api/battle", (req, res) => {
-  const hp = 68500;
-  const maxHp = 100000;
+app.get(
+  "/api/battle",
+  (req, res) => {
 
-  res.json({
-    ok: true,
+    const lineUserId =
+      requireLineUser(req, res);
 
-    battle: {
-      monster: {
-        id: "sugar-monster",
+    if (!lineUserId) return;
 
-        name:
-          "SUGAR MONSTER",
+    const member =
+      getMember(lineUserId);
 
-        hp,
+    if (!member) {
 
-        maxHp,
+      return res.status(404).json({
 
-        percent: Math.round(
-          (hp / maxHp) * 100
-        ),
+        ok: false,
 
-        damageTaken:
-          maxHp - hp,
-      },
+        error:
+          "Member not found"
 
-      user: {
-        energy:
-          demoUser.energy,
+      });
 
-        maxEnergy:
-          demoUser.maxEnergy,
-      },
-    },
-  });
-});
+    }
+
+    const maxHp =
+      100000;
+
+    const hp =
+      68500;
+
+    res.json({
+
+      ok: true,
+
+      battle: {
+
+        monster: {
+
+          id:
+            "sugar-monster",
+
+          name:
+            "SUGAR MONSTER",
+
+          hp,
+
+          maxHp,
+
+          percent:
+            Math.round(
+              (hp / maxHp) * 100
+            )
+
+        },
+
+        user: {
+
+          energy:
+            member.energy,
+
+          maxEnergy:
+            member.maxEnergy
+
+        }
+
+      }
+
+    });
+
+  }
+);
 
 /* =========================================================
    FIGHT MONSTER
@@ -406,43 +880,89 @@ app.get("/api/battle", (req, res) => {
 app.post(
   "/api/battle/fight",
   (req, res) => {
-    const energyCost = 10;
 
-    if (
-      demoUser.energy <
-      energyCost
-    ) {
-      return res.status(400).json({
+    const lineUserId =
+      requireLineUser(req, res);
+
+    if (!lineUserId) return;
+
+    const member =
+      getMember(lineUserId);
+
+    if (!member) {
+
+      return res.status(404).json({
+
         ok: false,
 
         error:
-          "Not enough energy",
+          "Member not found"
+
       });
+
     }
 
-    const damage = 500;
+    const energyUsed =
+      10;
 
-    demoUser.energy -=
-      energyCost;
+    if (
+      member.energy <
+      energyUsed
+    ) {
+
+      return res.status(400).json({
+
+        ok: false,
+
+        error:
+          "Energy is not enough"
+
+      });
+
+    }
+
+    member.energy -=
+      energyUsed;
+
+    const reward = {
+
+      rockCoin:
+        50,
+
+      points:
+        100
+
+    };
+
+    member.rockCoin +=
+      reward.rockCoin;
+
+    member.points +=
+      reward.points;
+
+    member.updatedAt =
+      new Date().toISOString();
 
     res.json({
+
       ok: true,
 
       result: {
-        damage,
 
-        energyUsed:
-          energyCost,
+        damage:
+          500,
+
+        energyUsed,
 
         remainingEnergy:
-          demoUser.energy,
+          member.energy,
 
-        reward: {
-          rockCoin: 50,
-          points: 100,
-        },
-      },
+        reward
+
+      }
+
     });
+
   }
 );
 
@@ -450,204 +970,272 @@ app.post(
    REWARDS
    ========================================================= */
 
-app.get("/api/rewards", (req, res) => {
-  res.json({
-    ok: true,
+app.get(
+  "/api/rewards",
+  (req, res) => {
 
-    rewards: [
-      {
-        id: "coin-1000",
+    const lineUserId =
+      requireLineUser(req, res);
 
-        name:
-          "1,000 ROCK COIN",
+    if (!lineUserId) return;
 
-        type:
-          "ROCK_COIN",
+    const member =
+      getMember(lineUserId);
 
-        value: 1000,
+    if (!member) {
 
-        claimed: false,
+      return res.status(404).json({
+
+        ok: false,
+
+        error:
+          "Member not found"
+
+      });
+
+    }
+
+    res.json({
+
+      ok: true,
+
+      user: {
+
+        rockCoin:
+          member.rockCoin,
+
+        points:
+          member.points
+
       },
 
-      {
-        id: "energy-10",
+      rewards: [
 
-        name:
-          "10 ENERGY",
+        {
+          id:
+            "coin-1000",
 
-        type:
-          "ENERGY",
+          name:
+            "1,000 ROCK COIN",
 
-        value: 10,
+          type:
+            "ROCK_COIN",
 
-        claimed: false,
-      },
+          value:
+            1000,
 
-      {
-        id: "health-badge",
+          claimed:
+            false
+        },
 
-        name:
-          "นักสู้สุขภาพ BADGE",
+        {
+          id:
+            "energy-10",
 
-        type:
-          "BADGE",
+          name:
+            "10 ENERGY",
 
-        value: 1,
+          type:
+            "ENERGY",
 
-        claimed: false,
-      },
-    ],
-  });
-});
+          value:
+            10,
+
+          claimed:
+            false
+        },
+
+        {
+          id:
+            "health-badge",
+
+          name:
+            "นักสู้สุขภาพ BADGE",
+
+          type:
+            "BADGE",
+
+          value:
+            1,
+
+          claimed:
+            false
+        }
+
+      ]
+
+    });
+
+  }
+);
 
 /* =========================================================
    RANKING
    ========================================================= */
 
-app.get("/api/ranking", (req, res) => {
-  res.json({
-    ok: true,
+app.get(
+  "/api/ranking",
+  (req, res) => {
 
-    myRank:
-      demoUser.rank,
+    const lineUserId =
+      requireLineUser(req, res);
 
-    myPoints:
-      demoUser.points,
+    if (!lineUserId) return;
 
-    totalMembers: 238,
+    const member =
+      getMember(lineUserId);
 
-    ranking: [
-      {
-        rank: 1,
+    if (!member) {
 
-        name:
-          "ROCK HERO",
+      return res.status(404).json({
 
-        points: 18560,
-      },
+        ok: false,
 
-      {
-        rank: 2,
+        error:
+          "Member not found"
 
-        name:
-          "FIT WARRIOR",
+      });
 
-        points: 16970,
-      },
+    }
 
-      {
-        rank: 3,
+    /*
+      Phase 1:
+      Ranking จากสมาชิกที่อยู่ใน Memory
+    */
 
-        name:
-          "HEALTHY KING",
+    const ranking =
+      Array.from(
+        members.values()
+      )
+      .sort(
+        (a, b) =>
+          b.points -
+          a.points
+      )
+      .map(
+        (item, index) => ({
 
-        points: 15730,
-      },
+          rank:
+            index + 1,
 
-      {
-        rank: 10,
+          name:
+            item.displayName,
 
-        name:
-          "MOVE MASTER",
+          points:
+            item.points
 
-        points: 13900,
-      },
+        })
+      );
 
-      {
-        rank: 11,
+    const myRankIndex =
+      ranking.findIndex(
+        item =>
+          members.get(
+            lineUserId
+          ) &&
+          item.name ===
+          member.displayName
+      );
 
-        name:
-          "HEALTH ROCKER",
+    res.json({
 
-        points: 13100,
-      },
+      ok: true,
 
-      {
-        rank: 12,
+      myRank:
+        myRankIndex >= 0
+          ? myRankIndex + 1
+          : null,
 
-        name:
-          "สมาชิก ROCK YOUR BODY",
+      totalMembers:
+        ranking.length,
 
-        points:
-          demoUser.points,
-      },
-    ],
-  });
-});
+      ranking
 
-/* =========================================================
-   SUMMARY
-   ========================================================= */
+    });
 
-app.get("/api/summary", (req, res) => {
-  res.json({
-    ok: true,
-
-    summary: {
-      points:
-        demoUser.points,
-
-      rockCoin:
-        demoUser.rockCoin,
-
-      energy:
-        demoUser.energy,
-
-      maxEnergy:
-        demoUser.maxEnergy,
-
-      rank:
-        demoUser.rank,
-
-      healthScore:
-        demoUser.healthScore,
-    },
-  });
-});
+  }
+);
 
 /* =========================================================
    404
    ========================================================= */
 
-app.use((req, res) => {
-  res.status(404).json({
-    ok: false,
+app.use(
+  (req, res) => {
 
-    error:
-      "API endpoint not found",
-  });
-});
+    res.status(404).json({
+
+      ok: false,
+
+      error:
+        "API endpoint not found",
+
+      path:
+        req.originalUrl
+
+    });
+
+  }
+);
 
 /* =========================================================
    ERROR HANDLER
    ========================================================= */
 
 app.use(
-  (err, req, res, next) => {
+  (
+    err,
+    req,
+    res,
+    next
+  ) => {
+
     console.error(
       "SERVER ERROR:",
       err
     );
 
     res.status(500).json({
+
       ok: false,
 
       error:
-        "Internal server error",
+        "Internal server error"
+
     });
+
   }
 );
 
 /* =========================================================
-   START SERVER
+   START
    ========================================================= */
 
 app.listen(
   PORT,
   "0.0.0.0",
   () => {
+
     console.log(
-      `ROCK YOUR BODY 2026 API running on port ${PORT}`
+      "===================================="
     );
+
+    console.log(
+      "ROCK YOUR BODY 2026 API"
+    );
+
+    console.log(
+      `Running on port ${PORT}`
+    );
+
+    console.log(
+      `Frontend: ${FRONTEND_URL}`
+    );
+
+    console.log(
+      "===================================="
+
+    );
+
   }
 );
