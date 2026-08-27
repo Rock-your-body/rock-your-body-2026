@@ -1,2060 +1,1528 @@
 <!doctype html>
 <html lang="th">
+
 <head>
-<meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover"
->
-
-<title>ROCK YOUR BODY 2026</title>
 
-<!-- LINE LIFF -->
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>ROCK YOUR BODY 2026</title>
+
+  <!-- LINE LIFF -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <!-- CONFIG -->
+  <script src="./app-config.js"></script>
+
+  <!-- COMMON -->
+  <script src="./common.js"></script>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #eef3fb;
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        Tahoma,
+        sans-serif;
+      color: #082b68;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    /* =====================================================
+       LOADING
+    ===================================================== */
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #eef3fb;
+
+      font-size: 20px;
+      font-weight: 700;
+      color: #082b68;
+    }
+
+    /* =====================================================
+       APP
+    ===================================================== */
+
+    #app {
+      display: none;
+      width: 100%;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .header {
+      display: grid;
+      grid-template-columns: 270px 1fr 300px;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .hospital {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.05;
+      color: #0a2c73;
+    }
+
+    .hospital span {
+      display: block;
+      font-size: 18px;
+      color: #65738b;
+      margin-top: 5px;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: clamp(38px, 5vw, 72px);
+      font-weight: 1000;
+      font-style: italic;
+      letter-spacing: -3px;
+      white-space: nowrap;
+      color: #102f78;
+    }
+
+    .logo .red {
+      color: #c91717;
+    }
+
+    .logo-year {
+      color: #102f78;
+      font-size: .55em;
+    }
+
+    .stats-top {
+      background: white;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .top-stat {
+      text-align: center;
+    }
+
+    .top-stat-label {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .top-stat-value {
+      font-size: 27px;
+      font-weight: 1000;
+      color: #102f78;
+    }
+
+    /* =====================================================
+       MAIN GRID
+    ===================================================== */
+
+    .main-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(280px, 1fr)
+        minmax(330px, 1.15fr)
+        minmax(430px, 1.35fr);
+
+      gap: 18px;
+    }
+
+    /* =====================================================
+       CARD
+    ===================================================== */
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 5px 16px rgba(0,0,0,.14);
+      overflow: hidden;
+    }
+
+    /* =====================================================
+       PROFILE
+    ===================================================== */
+
+    .profile-card {
+      background:
+        linear-gradient(
+          160deg,
+          #1265df,
+          #062b91 65%,
+          #031e63
+        );
+
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .profile-photo-wrap {
+      width: 190px;
+      height: 190px;
+      margin: 0 auto 14px;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          145deg,
+          #fff,
+          #d8eaff
+        );
+
+      padding: 6px;
+
+      box-shadow:
+        0 0 0 5px rgba(255,255,255,.4),
+        0 8px 20px rgba(0,0,0,.25);
+    }
+
+    .profile-photo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #dce8f8;
+    }
+
+    .upload-text {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .team {
+      background: rgba(0,0,0,.35);
+      border: 2px solid rgba(255,255,255,.5);
+      border-radius: 30px;
+      padding: 10px 18px;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .hero-name {
+      background:
+        linear-gradient(
+          90deg,
+          #061d55,
+          #123e9d
+        );
+
+      border-radius: 15px;
+      padding: 15px;
+
+      font-size: 28px;
+      font-weight: 1000;
+      font-style: italic;
+
+      margin-bottom: 8px;
+    }
+
+    .level {
+      display: inline-block;
+      background: #e52222;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .exp {
+      background: white;
+      color: #092b6d;
+      border-radius: 12px;
+      padding: 10px;
+      font-weight: 900;
+    }
+
+    .bar {
+      height: 14px;
+      background: #d6e1f0;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 7px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 20px;
+      background: linear-gradient(
+        90deg,
+        #006eff,
+        #0048c9
+      );
+    }
+
+    /* =====================================================
+       CENTER
+    ===================================================== */
+
+    .center-card {
+      padding: 25px;
+    }
+
+    .weight-row {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 20px;
+
+      padding-bottom: 18px;
+      border-bottom: 1px solid #d6dce8;
+
+      margin-bottom: 18px;
+    }
+
+    .icon-box {
+      font-size: 70px;
+      text-align: center;
+    }
+
+    .label {
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .weight {
+      font-size: 54px;
+      font-weight: 1000;
+      color: #092b70;
+    }
+
+    .target {
+      color: #d51b1b;
+    }
+
+    .progress-title {
+      font-size: 18px;
+      font-weight: 900;
+      margin-top: 10px;
+    }
+
+    .progress-value {
+      font-size: 30px;
+      font-weight: 1000;
+      color: #00863c;
+      text-align: right;
+    }
+
+    .small-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    /* =====================================================
+       RIGHT
+    ===================================================== */
+
+    .right-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .metric {
+      border-radius: 20px;
+      padding: 18px;
+      color: white;
+      min-height: 125px;
+
+      box-shadow:
+        inset 0 -8px 20px rgba(0,0,0,.15);
+    }
+
+    .steps {
+      background: linear-gradient(
+        145deg,
+        #1476ff,
+        #0035a7
+      );
+    }
+
+    .calories {
+      background: linear-gradient(
+        145deg,
+        #14b94d,
+        #006b2c
+      );
+    }
+
+    .sleep {
+      background: linear-gradient(
+        145deg,
+        #7126e9,
+        #3c0a9b
+      );
+    }
+
+    .health {
+      background: linear-gradient(
+        145deg,
+        #ff3971,
+        #c40040
+      );
+    }
+
+    .metric-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .metric-value {
+      font-size: 37px;
+      font-weight: 1000;
+      margin-top: 8px;
+    }
+
+    .metric-sub {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    /* =====================================================
+       REWARD
+    ===================================================== */
+
+    .reward {
+      grid-column: 1 / -1;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffb300,
+          #ff7100
+        );
+
+      color: white;
+      padding: 18px;
+      border-radius: 22px;
+
+      box-shadow: 0 5px 15px rgba(0,0,0,.18);
+    }
+
+    .section-title {
+      font-size: 25px;
+      font-weight: 1000;
+      margin-bottom: 12px;
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+    }
+
+    .reward-item {
+      background: white;
+      color: #222;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .reward-number {
+      font-size: 30px;
+      margin-top: 8px;
+    }
+
+    /* =====================================================
+       BOTTOM
+    ===================================================== */
+
+    .bottom-grid {
+      margin-top: 18px;
+
+      display: grid;
+      grid-template-columns:
+        1fr 1fr 1fr;
+
+      gap: 18px;
+    }
+
+    .button {
+      border: none;
+      border-radius: 20px;
+
+      min-height: 115px;
+
+      color: white;
+
+      font-size: 28px;
+      font-weight: 1000;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 12px rgba(0,0,0,.18);
+    }
+
+    .button small {
+      display: block;
+      font-size: 17px;
+      margin-top: 5px;
+    }
+
+    .home {
+      background:
+        linear-gradient(
+          145deg,
+          #145ee8,
+          #06236e
+        );
+    }
+
+    .mission {
+      background:
+        linear-gradient(
+          145deg,
+          #f01616,
+          #a00000
+        );
+    }
+
+    .battle {
+      background:
+        linear-gradient(
+          145deg,
+          #153e99,
+          #041a51
+        );
+    }
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 1000px) {
+
+      .header {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .logo {
+        white-space: normal;
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reward {
+        grid-column: auto;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      #app {
+        padding: 8px;
+      }
+
+      .right-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .reward-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .weight {
+        font-size: 40px;
+      }
+
+      .metric-value {
+        font-size: 28px;
+      }
+
+      .profile-photo-wrap {
+        width: 150px;
+        height: 150px;
+      }
+
+    }
+
+  </style>
 
-<!-- APP CONFIG -->
-<script src="./app-config.js"></script>
-
-<!-- COMMON CORE -->
-<script src="./common.js"></script>
-
-<style>
-
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  background:#eef3fb;
-  font-family:
-    "Noto Sans Thai",
-    "Noto Sans",
-    Arial,
-    Tahoma,
-    sans-serif;
-}
-
-body{
-  overflow-x:hidden;
-}
-
-/* =========================================================
-   HOME STAGE
-   อัตราส่วน Template = 1536 x 1024
-========================================================= */
-
-.home-page{
-  width:100%;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:0;
-}
-
-.home-stage{
-  position:relative;
-
-  width:min(100vw, 1536px);
-  aspect-ratio:1536 / 1024;
-
-  background-image:url("./home-template(1).png");
-  background-repeat:no-repeat;
-  background-size:100% 100%;
-  background-position:center;
-
-  overflow:hidden;
-}
-
-/* =========================================================
-   COMMON TEXT
-========================================================= */
-
-.data{
-  position:absolute;
-  z-index:10;
-  pointer-events:none;
-
-  white-space:nowrap;
-
-  color:#08245b;
-
-  font-weight:700;
-
-  line-height:1;
-}
-
-.clickable{
-  pointer-events:auto;
-  cursor:pointer;
-}
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile-photo{
-  position:absolute;
-
-  left:7.0%;
-  top:18.0%;
-
-  width:24.5%;
-  aspect-ratio:1/1;
-
-  border-radius:50%;
-
-  object-fit:cover;
-
-  z-index:5;
-
-  opacity:0;
-
-  transition:
-    opacity .25s ease,
-    transform .25s ease;
-}
-
-.profile-photo.loaded{
-  opacity:1;
-}
-
-.profile-photo:hover{
-  transform:scale(1.015);
-}
-
-/* =========================================================
-   PROFILE NAME / TEAM
-========================================================= */
-
-.player-name{
-  left:9.0%;
-  top:55.2%;
-
-  width:21%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(14px,2.0vw,30px);
-
-  font-weight:800;
-}
-
-.team-name{
-  left:9.0%;
-  top:48.9%;
-
-  width:20.8%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(11px,1.35vw,21px);
-
-  font-weight:700;
-}
-
-/* =========================================================
-   LEVEL
-========================================================= */
-
-.level{
-  left:24.2%;
-  top:55.0%;
-
-  width:5.2%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(14px,1.55vw,24px);
-
-  font-weight:900;
-}
-
-/* =========================================================
-   EXP
-========================================================= */
-
-.exp-value{
-  left:3.3%;
-  top:62.8%;
-
-  width:7%;
-
-  color:#08245b;
-
-  font-size:clamp(13px,1.6vw,25px);
-
-  font-weight:900;
-}
-
-.exp-total{
-  left:21.0%;
-  top:62.8%;
-
-  width:7%;
-
-  color:#08245b;
-
-  font-size:clamp(12px,1.4vw,22px);
-
-  font-weight:700;
-}
-
-.exp-fill{
-  position:absolute;
-
-  left:8.8%;
-  top:62.45%;
-
-  width:16.0%;
-  height:1.55%;
-
-  background:#1264e8;
-
-  border-radius:999px;
-
-  z-index:8;
-
-  transform-origin:left center;
-}
-
-/* =========================================================
-   TOP ROCK COIN
-========================================================= */
-
-.coin-value{
-  left:77.0%;
-  top:5.25%;
-
-  width:9.2%;
-
-  text-align:center;
-
-  color:#08245b;
-
-  font-size:clamp(18px,2.05vw,31px);
-
-  font-weight:900;
-}
-
-/* =========================================================
-   ENERGY
-========================================================= */
-
-.energy-value{
-  left:89.0%;
-  top:5.25%;
-
-  width:8%;
-
-  text-align:center;
-
-  color:#08245b;
-
-  font-size:clamp(17px,2vw,30px);
-
-  font-weight:900;
-}
-
-/* =========================================================
-   WEIGHT
-========================================================= */
-
-.weight-current{
-  left:44.6%;
-  top:20.7%;
-
-  width:15%;
-
-  text-align:center;
-
-  color:#08245b;
-
-  font-size:clamp(30px,4vw,60px);
-
-  font-weight:900;
-}
-
-.weight-target{
-  left:44.6%;
-  top:34.0%;
-
-  width:15%;
-
-  text-align:center;
-
-  color:#d21b18;
-
-  font-size:clamp(30px,4vw,60px);
-
-  font-weight:900;
-}
-
-/* =========================================================
-   WEIGHT PROGRESS
-========================================================= */
-
-.weight-percent{
-  left:53.4%;
-  top:47.5%;
-
-  width:6%;
-
-  color:#168b39;
-
-  font-size:clamp(20px,2.3vw,36px);
-
-  font-weight:900;
-}
-
-.weight-reduced{
-  left:35.4%;
-  top:52.65%;
-
-  width:9%;
-
-  color:#148b35;
-
-  font-size:clamp(12px,1.25vw,19px);
-
-  font-weight:900;
-}
-
-.weight-remaining{
-  left:52.5%;
-  top:52.65%;
-
-  width:9%;
-
-  color:#08245b;
-
-  font-size:clamp(12px,1.25vw,19px);
-
-  font-weight:900;
-}
-
-/* =========================================================
-   WEIGHT BAR
-========================================================= */
-
-.weight-bar{
-  position:absolute;
-
-  left:34.0%;
-  top:48.0%;
-
-  width:19.0%;
-  height:1.55%;
-
-  background:#10a94b;
-
-  border-radius:999px;
-
-  z-index:7;
-
-  transform-origin:left center;
-}
-
-/* =========================================================
-   RIGHT KPI
-========================================================= */
-
-.steps-value{
-  left:68.7%;
-  top:20.0%;
-
-  width:10.5%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(22px,3.0vw,45px);
-
-  font-weight:900;
-}
-
-.steps-target{
-  left:69.0%;
-  top:25.0%;
-
-  width:10%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(13px,1.45vw,22px);
-
-  font-weight:700;
-}
-
-.calories-value{
-  left:86.8%;
-  top:20.0%;
-
-  width:10.5%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(22px,3vw,45px);
-
-  font-weight:900;
-}
-
-.calories-target{
-  left:87.0%;
-  top:25.0%;
-
-  width:10%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(13px,1.45vw,22px);
-
-  font-weight:700;
-}
-
-.sleep-value{
-  left:69.0%;
-  top:37.2%;
-
-  width:10.5%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(21px,2.8vw,43px);
-
-  font-weight:900;
-}
-
-.sleep-target{
-  left:69.0%;
-  top:42.1%;
-
-  width:10%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(13px,1.45vw,22px);
-
-  font-weight:700;
-}
-
-.health-value{
-  left:86.8%;
-  top:37.2%;
-
-  width:10.5%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(25px,3vw,46px);
-
-  font-weight:900;
-}
-
-.health-target{
-  left:87.0%;
-  top:42.1%;
-
-  width:10%;
-
-  text-align:center;
-
-  color:#fff;
-
-  font-size:clamp(13px,1.45vw,22px);
-
-  font-weight:700;
-}
-
-/* =========================================================
-   KPI PROGRESS BARS
-========================================================= */
-
-.kpi-bar{
-  position:absolute;
-
-  z-index:8;
-
-  height:1.35%;
-
-  border-radius:999px;
-
-  transform-origin:left center;
-}
-
-.steps-bar{
-  left:62.8%;
-  top:27.45%;
-  width:15.2%;
-  background:#0cd4f2;
-}
-
-.calories-bar{
-  left:81.4%;
-  top:27.45%;
-  width:15.2%;
-  background:#15c34f;
-}
-
-.sleep-bar{
-  left:62.8%;
-  top:44.55%;
-  width:15.2%;
-  background:#a62cff;
-}
-
-.health-bar{
-  left:81.4%;
-  top:44.55%;
-  width:15.2%;
-  background:#ff153c;
-}
-
-/* =========================================================
-   INBODY
-========================================================= */
-
-.inbody-score{
-  left:34.0%;
-  top:74.2%;
-
-  width:10%;
-
-  color:#08245b;
-
-  font-size:clamp(21px,2.3vw,36px);
-
-  font-weight:900;
-}
-
-.inbody-plus{
-  left:44.5%;
-  top:73.0%;
-
-  width:4%;
-
-  color:#fff;
-
-  text-align:center;
-
-  font-size:clamp(12px,1.25vw,20px);
-
-  font-weight:900;
-}
-
-.inbody-date{
-  left:34.0%;
-  top:70.0%;
-
-  width:12%;
-
-  color:#08245b;
-
-  font-size:clamp(9px,0.95vw,15px);
-
-  font-weight:700;
-}
-
-/* =========================================================
-   PROGRAM
-========================================================= */
-
-.program-day{
-  left:48.2%;
-  top:74.0%;
-
-  width:9%;
-
-  color:#08245b;
-
-  text-align:center;
-
-  font-size:clamp(25px,3vw,45px);
-
-  font-weight:900;
-}
-
-.program-total{
-  left:56.0%;
-  top:74.7%;
-
-  width:7%;
-
-  color:#08245b;
-
-  font-size:clamp(14px,1.5vw,23px);
-
-  font-weight:900;
-}
-
-.program-remaining{
-  left:48.2%;
-  top:81.2%;
-
-  width:14%;
-
-  color:#08245b;
-
-  text-align:center;
-
-  font-size:clamp(11px,1.25vw,19px);
-
-  font-weight:700;
-}
-
-/* =========================================================
-   RANK
-========================================================= */
-
-.rank-value{
-  left:66.8%;
-  top:76.5%;
-
-  width:10%;
-
-  text-align:center;
-
-  color:#08245b;
-
-  font-size:clamp(30px,4vw,58px);
-
-  font-weight:900;
-}
-
-.rank-total{
-  left:64.0%;
-  top:83.0%;
-
-  width:16%;
-
-  text-align:center;
-
-  color:#08245b;
-
-  font-size:clamp(10px,1.1vw,17px);
-
-  font-weight:700;
-}
-
-/* =========================================================
-   NAV BUTTONS
-========================================================= */
-
-.nav-home,
-.nav-mission,
-.nav-battle{
-  position:absolute;
-
-  z-index:30;
-
-  cursor:pointer;
-
-  background:transparent;
-
-  border:0;
-
-  padding:0;
-
-  height:9.2%;
-}
-
-.nav-home{
-  left:1.3%;
-  top:89.0%;
-  width:31.2%;
-}
-
-.nav-mission{
-  left:34.3%;
-  top:89.0%;
-  width:31.2%;
-}
-
-.nav-battle{
-  left:67.2%;
-  top:89.0%;
-  width:31.2%;
-}
-
-/* =========================================================
-   INVISIBLE CLICK AREAS
-========================================================= */
-
-.btn-weight{
-  position:absolute;
-  left:1.2%;
-  top:67.8%;
-  width:14.8%;
-  height:19.5%;
-  z-index:30;
-  cursor:pointer;
-}
-
-.btn-progress{
-  position:absolute;
-  left:17.2%;
-  top:67.8%;
-  width:14.8%;
-  height:19.5%;
-  z-index:30;
-  cursor:pointer;
-}
-
-.btn-inbody{
-  position:absolute;
-  left:33.0%;
-  top:67.8%;
-  width:14.5%;
-  height:19.5%;
-  z-index:30;
-  cursor:pointer;
-}
-
-.btn-program{
-  position:absolute;
-  left:48.0%;
-  top:67.8%;
-  width:14.5%;
-  height:19.5%;
-  z-index:30;
-  cursor:pointer;
-}
-
-.btn-ranking{
-  position:absolute;
-  left:64.0%;
-  top:67.5%;
-  width:34.0%;
-  height:19.8%;
-  z-index:30;
-  cursor:pointer;
-}
-
-/* =========================================================
-   PROFILE UPLOAD / FALLBACK
-========================================================= */
-
-.profile-fallback{
-  position:absolute;
-
-  left:7%;
-  top:18%;
-
-  width:24.5%;
-  aspect-ratio:1/1;
-
-  border-radius:50%;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  color:#fff;
-
-  font-size:clamp(30px,4vw,60px);
-
-  font-weight:900;
-
-  z-index:4;
-
-  pointer-events:none;
-}
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading-screen{
-  position:fixed;
-
-  inset:0;
-
-  z-index:999;
-
-  background:
-    linear-gradient(
-      135deg,
-      #eef5ff,
-      #dceaff
-    );
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  flex-direction:column;
-
-  gap:15px;
-
-  color:#08245b;
-
-  font-weight:700;
-}
-
-.loading-logo{
-  font-size:clamp(24px,4vw,48px);
-
-  font-weight:900;
-
-  letter-spacing:-1px;
-}
-
-.loading-spinner{
-  width:42px;
-  height:42px;
-
-  border-radius:50%;
-
-  border:4px solid #d5e2f5;
-
-  border-top-color:#0b53c6;
-
-  animation:spin .8s linear infinite;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-.error-screen{
-  position:fixed;
-
-  inset:0;
-
-  z-index:1000;
-
-  display:none;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:25px;
-
-  background:#eef4ff;
-}
-
-.error-box{
-  max-width:520px;
-
-  width:100%;
-
-  background:#fff;
-
-  border-radius:20px;
-
-  padding:30px;
-
-  text-align:center;
-
-  box-shadow:0 15px 50px rgba(0,0,0,.15);
-}
-
-.error-box h2{
-  margin:0 0 10px;
-
-  color:#d71920;
-}
-
-.error-box p{
-  color:#555;
-
-  line-height:1.7;
-}
-
-.retry{
-  border:0;
-
-  border-radius:12px;
-
-  padding:12px 24px;
-
-  background:#073b93;
-
-  color:#fff;
-
-  font-weight:800;
-
-  cursor:pointer;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:600px){
-
-  .home-page{
-    width:100%;
-    overflow-x:auto;
-    justify-content:flex-start;
-  }
-
-  .home-stage{
-    width:100vw;
-    min-width:100vw;
-  }
-
-}
-
-</style>
 </head>
+
 
 <body>
 
-<!-- =======================================================
-     LOADING
-======================================================== -->
 
-<div
-  id="loadingScreen"
-  class="loading-screen"
->
-
-  <div class="loading-logo">
-    ROCK YOUR BODY 2026
-  </div>
-
-  <div class="loading-spinner"></div>
-
-  <div>
-    กำลังโหลดข้อมูลสมาชิก...
-  </div>
-
+<div id="loading">
+  กำลังเปิด ROCK YOUR BODY...
 </div>
 
 
-<!-- =======================================================
-     ERROR
-======================================================== -->
+<div id="app">
 
-<div
-  id="errorScreen"
-  class="error-screen"
->
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-  <div class="error-box">
+  <header class="header">
 
-    <h2>
-      ไม่สามารถโหลดข้อมูลได้
-    </h2>
+    <div class="hospital">
+      ✚ BANGKOK HOSPITAL
+      <span>UDON</span>
+    </div>
 
-    <p id="errorMessage">
-      กรุณาลองใหม่อีกครั้ง
-    </p>
+    <div class="logo">
+      ROCK <span class="red">YOUR</span> BODY
+      <span class="logo-year">2026</span>
+    </div>
+
+    <div class="stats-top">
+
+      <div class="top-stat">
+        <div class="top-stat-label">
+          ROCK COIN
+        </div>
+
+        <div
+          class="top-stat-value"
+          id="coin"
+        >
+          0
+        </div>
+      </div>
+
+      <div class="top-stat">
+        <div class="top-stat-label">
+          ENERGY
+        </div>
+
+        <div
+          class="top-stat-value"
+          id="energy"
+        >
+          0 / 200
+        </div>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
+
+  <main class="main-grid">
+
+
+    <!-- PROFILE -->
+
+    <section class="card profile-card">
+
+      <div class="profile-photo-wrap">
+
+        <img
+          id="profilePhoto"
+          class="profile-photo"
+          src=""
+          alt="LINE Profile"
+        >
+
+      </div>
+
+      <div
+        id="profileName"
+        class="upload-text"
+      >
+        กำลังโหลดข้อมูล...
+      </div>
+
+      <div class="team">
+        Team :
+        <span id="team">
+          HERO ROCK
+        </span>
+      </div>
+
+      <div class="hero-name">
+
+        HERO ROCK
+
+        <span
+          id="level"
+          class="level"
+        >
+          Lv.1
+        </span>
+
+      </div>
+
+      <div class="exp">
+
+        EXP
+
+        <div class="bar">
+          <div
+            id="expBar"
+            class="bar-fill"
+          ></div>
+        </div>
+
+        <div>
+          <span id="exp">0</span>
+          / 1,000
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- WEIGHT -->
+
+    <section class="card center-card">
+
+      <div class="weight-row">
+
+        <div class="icon-box">
+          ⚖️
+        </div>
+
+        <div>
+
+          <div class="label">
+            น้ำหนักปัจจุบัน
+          </div>
+
+          <div
+            id="weight"
+            class="weight"
+          >
+            0.0 kg
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="weight-row">
+
+        <div class="icon-box">
+          🎯
+        </div>
+
+        <div>
+
+          <div class="label">
+            เป้าหมาย
+          </div>
+
+          <div
+            id="targetWeight"
+            class="weight target"
+          >
+            0.0 kg
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="progress-title">
+        ความคืบหน้าเป้าหมายน้ำหนัก
+      </div>
+
+      <div class="bar">
+        <div
+          id="weightBar"
+          class="bar-fill"
+        ></div>
+      </div>
+
+      <div
+        id="weightPercent"
+        class="progress-value"
+      >
+        0%
+      </div>
+
+      <div class="small-info">
+
+        <span id="weightLost">
+          ลดไปแล้ว 0.0 kg
+        </span>
+
+        <span id="weightRemain">
+          เหลืออีก 0.0 kg
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- RIGHT -->
+
+    <section>
+
+      <div class="right-grid">
+
+
+        <div class="metric steps">
+
+          <div class="metric-title">
+            👣 วันนี้ก้าวไปแล้ว
+          </div>
+
+          <div
+            id="steps"
+            class="metric-value"
+          >
+            0
+          </div>
+
+          <div class="metric-sub">
+            / 10,000 ก้าว
+          </div>
+
+        </div>
+
+
+        <div class="metric calories">
+
+          <div class="metric-title">
+            🔥 แคลอรี่เผาผลาญ
+          </div>
+
+          <div
+            id="calories"
+            class="metric-value"
+          >
+            0
+          </div>
+
+          <div class="metric-sub">
+            / 500 kcal
+          </div>
+
+        </div>
+
+
+        <div class="metric sleep">
+
+          <div class="metric-title">
+            🌙 นอนหลับ
+          </div>
+
+          <div
+            id="sleep"
+            class="metric-value"
+          >
+            0.00 ชม.
+          </div>
+
+          <div class="metric-sub">
+            / 8 ชม.
+          </div>
+
+        </div>
+
+
+        <div class="metric health">
+
+          <div class="metric-title">
+            ❤️ คะแนนสุขภาพรวม
+          </div>
+
+          <div
+            id="healthScore"
+            class="metric-value"
+          >
+            0
+          </div>
+
+          <div class="metric-sub">
+            คะแนน
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- REWARD -->
+
+    <section class="reward">
+
+      <div class="section-title">
+        🎁 รางวัลของฉัน
+      </div>
+
+      <div class="reward-grid">
+
+        <div class="reward-item">
+
+          🪙
+
+          <div class="reward-number">
+            <span id="rewardCoin">
+              0
+            </span>
+          </div>
+
+          ROCK COIN
+
+        </div>
+
+
+        <div class="reward-item">
+
+          ⚡
+
+          <div class="reward-number">
+            x<span id="rewardEnergy">
+              0
+            </span>
+          </div>
+
+          ENERGY
+
+        </div>
+
+
+        <div class="reward-item">
+
+          🏅
+
+          <div class="reward-number">
+            <span id="badge">
+              0
+            </span>
+          </div>
+
+          BADGE
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =====================================================
+       NAVIGATION
+  ====================================================== -->
+
+  <div class="bottom-grid">
 
     <button
-      class="retry"
-      onclick="location.reload()"
+      class="button home"
+      onclick="ROCK.goHome()"
     >
-      ลองใหม่
+      🏠 HOME
+      <small>หน้าหลัก</small>
+    </button>
+
+
+    <button
+      class="button mission"
+      onclick="ROCK.goMission()"
+    >
+      🎯 MISSION
+      <small>ภารกิจ</small>
+    </button>
+
+
+    <button
+      class="button battle"
+      onclick="ROCK.goBattle()"
+    >
+      ⚔️ BATTLE
+      <small>ต่อสู้กับมอนสเตอร์</small>
     </button>
 
   </div>
 
+
 </div>
-
-
-<!-- =======================================================
-     HOME
-======================================================== -->
-
-<main class="home-page">
-
-<section
-  class="home-stage"
-  id="homeStage"
->
-
-
-<!-- =====================================================
-     PROFILE
-===================================================== -->
-
-<div
-  id="profileFallback"
-  class="profile-fallback"
->
-  ?
-</div>
-
-<img
-  id="profilePhoto"
-  class="profile-photo"
-  alt="LINE Profile"
->
-
-
-<div
-  id="teamName"
-  class="data team-name"
->
-  Team : HERO ROCK
-</div>
-
-
-<div
-  id="playerName"
-  class="data player-name"
->
-  HERO ROCK
-</div>
-
-
-<div
-  id="playerLevel"
-  class="data level"
->
-  Lv.12
-</div>
-
-
-<!-- EXP -->
-
-<div
-  id="expFill"
-  class="exp-fill"
-></div>
-
-<div
-  id="expValue"
-  class="data exp-value"
->
-  560
-</div>
-
-<div
-  id="expTotal"
-  class="data exp-total"
->
-  / 1000
-</div>
-
-
-<!-- =====================================================
-     TOP BAR
-===================================================== -->
-
-<div
-  id="coinValue"
-  class="data coin-value"
->
-  0
-</div>
-
-<div
-  id="energyValue"
-  class="data energy-value"
->
-  0/200
-</div>
-
-
-<!-- =====================================================
-     WEIGHT
-===================================================== -->
-
-<div
-  id="weightCurrent"
-  class="data weight-current"
->
-  0.0 kg
-</div>
-
-<div
-  id="weightTarget"
-  class="data weight-target"
->
-  0.0 kg
-</div>
-
-<div
-  id="weightBar"
-  class="weight-bar"
-></div>
-
-<div
-  id="weightPercent"
-  class="data weight-percent"
->
-  0%
-</div>
-
-<div
-  id="weightReduced"
-  class="data weight-reduced"
->
-  ลดไปแล้ว 0 kg
-</div>
-
-<div
-  id="weightRemaining"
-  class="data weight-remaining"
->
-  เหลืออีก 0 kg
-</div>
-
-
-<!-- =====================================================
-     KPI
-===================================================== -->
-
-<div
-  id="stepsValue"
-  class="data steps-value"
->
-  0
-</div>
-
-<div
-  id="stepsTarget"
-  class="data steps-target"
->
-  / 10,000 ก้าว
-</div>
-
-
-<div
-  id="caloriesValue"
-  class="data calories-value"
->
-  0
-</div>
-
-<div
-  id="caloriesTarget"
-  class="data calories-target"
->
-  / 500 kcal
-</div>
-
-
-<div
-  id="sleepValue"
-  class="data sleep-value"
->
-  0 ชม.
-</div>
-
-<div
-  id="sleepTarget"
-  class="data sleep-target"
->
-  / 8 ชม.
-</div>
-
-
-<div
-  id="healthValue"
-  class="data health-value"
->
-  0
-</div>
-
-<div
-  id="healthTarget"
-  class="data health-target"
->
-  คะแนน
-</div>
-
-
-<!-- KPI BARS -->
-
-<div
-  id="stepsBar"
-  class="kpi-bar steps-bar"
-></div>
-
-<div
-  id="caloriesBar"
-  class="kpi-bar calories-bar"
-></div>
-
-<div
-  id="sleepBar"
-  class="kpi-bar sleep-bar"
-></div>
-
-<div
-  id="healthBar"
-  class="kpi-bar health-bar"
-></div>
-
-
-<!-- =====================================================
-     INBODY
-===================================================== -->
-
-<div
-  id="inbodyDate"
-  class="data inbody-date"
->
-  (9 พ.ค. 2026)
-</div>
-
-<div
-  id="inbodyScore"
-  class="data inbody-score"
->
-  0 /100
-</div>
-
-<div
-  id="inbodyPlus"
-  class="data inbody-plus"
->
-  +0
-</div>
-
-
-<!-- =====================================================
-     PROGRAM
-===================================================== -->
-
-<div
-  id="programDay"
-  class="data program-day"
->
-  0
-</div>
-
-<div
-  id="programTotal"
-  class="data program-total"
->
-  / 90 วัน
-</div>
-
-<div
-  id="programRemaining"
-  class="data program-remaining"
->
-  เหลืออีก 90 วัน
-</div>
-
-
-<!-- =====================================================
-     RANK
-===================================================== -->
-
-<div
-  id="rankValue"
-  class="data rank-value"
->
-  #-
-</div>
-
-<div
-  id="rankTotal"
-  class="data rank-total"
->
-  จากผู้เข้าร่วมทั้งหมด 0 คน
-</div>
-
-
-<!-- =====================================================
-     CLICK AREAS
-===================================================== -->
-
-<div
-  class="btn-weight"
-  onclick="ROCK.go('dashboard')"
-  title="Weight Check"
-></div>
-
-<div
-  class="btn-progress"
-  onclick="ROCK.go('dashboard')"
-  title="My Progress"
-></div>
-
-<div
-  class="btn-inbody"
-  onclick="ROCK.go('dashboard')"
-  title="InBody"
-></div>
-
-<div
-  class="btn-program"
-  onclick="ROCK.go('dashboard')"
-  title="Program"
-></div>
-
-<div
-  class="btn-ranking"
-  onclick="ROCK.goRanking()"
-  title="Ranking"
-></div>
-
-
-<!-- =====================================================
-     NAV
-===================================================== -->
-
-<button
-  class="nav-home"
-  onclick="ROCK.goHome()"
-  aria-label="Home"
-></button>
-
-<button
-  class="nav-mission"
-  onclick="ROCK.goMission()"
-  aria-label="Mission"
-></button>
-
-<button
-  class="nav-battle"
-  onclick="ROCK.goBattle()"
-  aria-label="Battle"
-></button>
-
-
-</section>
-
-</main>
 
 
 <script>
 
 /* =========================================================
-   HOME CONTROLLER
-========================================================= */
+   ROCK YOUR BODY HOME
+   ========================================================= */
 
-(function(){
+(async function () {
 
-  "use strict";
+  const loading =
+    document.getElementById("loading");
 
-
-  /* =======================================================
-     HELPERS
-  ======================================================= */
-
-  function $(id){
-    return document.getElementById(id);
-  }
+  const app =
+    document.getElementById("app");
 
 
-  function num(value){
+  function showError(message) {
 
-    return Number(value || 0);
+    loading.innerHTML =
+      "ไม่สามารถโหลดข้อมูลได้<br><br>" +
+      message;
 
   }
 
 
-  function format(value){
+  function value(data, keys, fallback = 0) {
 
-    return num(value).toLocaleString("en-US");
+    for (const key of keys) {
 
-  }
+      if (
+        data &&
+        data[key] !== undefined &&
+        data[key] !== null
+      ) {
 
+        return data[key];
 
-  function percent(current,target){
+      }
 
-    current = num(current);
-    target = num(target);
-
-    if(target <= 0){
-      return 0;
     }
 
-    return Math.min(
-      100,
-      Math.max(
-        0,
-        (current / target) * 100
-      )
+    return fallback;
+
+  }
+
+
+  try {
+
+    console.log(
+      "HOME: START"
     );
 
-  }
 
+    /* =====================================================
+       1. CHECK CONFIG
+    ===================================================== */
 
-  function setText(id,value){
+    if (!window.ROCK_CONFIG) {
 
-    const element = $(id);
-
-    if(element){
-      element.textContent =
-        value ?? "";
-    }
-
-  }
-
-
-  function setScale(id,value){
-
-    const element = $(id);
-
-    if(element){
-
-      element.style.transform =
-        `scaleX(${Math.max(0,Math.min(1,value))})`;
-
-    }
-
-  }
-
-
-  /* =======================================================
-     LINE PROFILE
-  ======================================================= */
-
-  async function getLINEProfile(){
-
-    try{
-
-      if(
-        typeof liff === "undefined" ||
-        !window.ROCK_CONFIG?.LIFF_ID
-      ){
-
-        return null;
-
-      }
-
-
-      if(
-        !liff.isLoggedIn()
-      ){
-
-        liff.login();
-
-        return null;
-
-      }
-
-
-      const profile =
-        await liff.getProfile();
-
-      return profile;
-
-    }catch(error){
-
-      console.warn(
-        "LINE profile unavailable:",
-        error
+      throw new Error(
+        "ไม่พบ app-config.js"
       );
 
-      return null;
+    }
+
+
+    /* =====================================================
+       2. LIFF
+    ===================================================== */
+
+    const line =
+      await ROCK.initLINE();
+
+
+    console.log(
+      "HOME LINE:",
+      line
+    );
+
+
+    if (!line.ok) {
+
+      if (line.mode === "login") {
+
+        return;
+
+      }
+
+      throw new Error(
+        "ไม่สามารถเข้าสู่ระบบ LINE ได้"
+      );
 
     }
 
-  }
+
+    /* =====================================================
+       3. PROFILE FROM LINE
+    ===================================================== */
+
+    const lineUser =
+      line.user;
 
 
-  /* =======================================================
-     PROFILE
-  ======================================================= */
-
-  function renderProfile(profile,user){
-
-    const photo =
-      profile?.pictureUrl ||
-      user?.pictureUrl ||
-      "";
-
-
-    const displayName =
-      profile?.displayName ||
-      user?.displayName ||
-      user?.name ||
+    document.getElementById(
+      "profileName"
+    ).textContent =
+      lineUser.displayName ||
       "สมาชิก ROCK YOUR BODY";
 
 
-    if(photo){
+    if (lineUser.pictureUrl) {
 
-      const image =
-        $("profilePhoto");
-
-      image.src = photo;
-
-      image.onload = function(){
-
-        image.classList.add("loaded");
-
-        $("profileFallback")
-          .style.display = "none";
-
-      };
-
-      image.onerror = function(){
-
-        image.classList.remove("loaded");
-
-        $("profileFallback")
-          .style.display = "flex";
-
-      };
+      document.getElementById(
+        "profilePhoto"
+      ).src =
+        lineUser.pictureUrl;
 
     }
 
 
-    setText(
-      "playerName",
-      displayName
+    /* =====================================================
+       4. GET USER FROM API
+    ===================================================== */
+
+    const result =
+      await ROCK.getMe();
+
+
+    console.log(
+      "HOME API USER:",
+      result
     );
 
 
-    /*
-      ถ้า backend มี teamName
-      ให้ใช้ของ backend
-    */
+    if (
+      !result ||
+      !result.user
+    ) {
 
-    setText(
-      "teamName",
-      user?.teamName ||
-      "Team : HERO ROCK"
-    );
+      throw new Error(
+        result?.error ||
+        "ไม่พบข้อมูลสมาชิก"
+      );
 
-
-    const initial =
-      displayName
-        .trim()
-        .charAt(0)
-        .toUpperCase() ||
-      "?";
-
-
-    setText(
-      "profileFallback",
-      initial
-    );
-
-  }
-
-
-  /* =======================================================
-     RENDER USER
-  ======================================================= */
-
-  function renderUser(user){
-
-    if(!user){
-      return;
     }
 
 
-    /* TOP */
-
-    setText(
-      "coinValue",
-      format(user.rockCoin)
-    );
+    const user =
+      result.user;
 
 
-    setText(
-      "energyValue",
-      `${format(user.energy)}/${format(
-        user.maxEnergy || 200
-      )}`
-    );
+    /* =====================================================
+       5. PROFILE
+    ===================================================== */
+
+    document.getElementById(
+      "profileName"
+    ).textContent =
+      user.displayName ||
+      lineUser.displayName ||
+      "สมาชิก ROCK YOUR BODY";
 
 
-    /* PROFILE */
-
-    setText(
-      "playerLevel",
-      `Lv.${user.level || 12}`
-    );
-
-
-    setText(
-      "expValue",
-      format(user.exp || 560)
-    );
+    document.getElementById(
+      "team"
+    ).textContent =
+      user.team ||
+      "HERO ROCK";
 
 
-    setText(
-      "expTotal",
-      `/ ${format(user.expMax || 1000)}`
-    );
+    document.getElementById(
+      "level"
+    ).textContent =
+      "Lv." +
+      value(
+        user,
+        ["level"],
+        1
+      );
 
 
-    setScale(
-      "expFill",
-      percent(
-        user.exp || 560,
-        user.expMax || 1000
-      ) / 100
-    );
+    /* =====================================================
+       6. COIN / ENERGY
+    ===================================================== */
+
+    const coin =
+      value(
+        user,
+        ["rockCoin", "coin"],
+        0
+      );
+
+    const energy =
+      value(
+        user,
+        ["energy"],
+        0
+      );
+
+    const maxEnergy =
+      value(
+        user,
+        ["maxEnergy"],
+        200
+      );
 
 
-    /* WEIGHT */
+    document.getElementById(
+      "coin"
+    ).textContent =
+      Number(coin).toLocaleString();
+
+
+    document.getElementById(
+      "energy"
+    ).textContent =
+      `${Number(energy).toLocaleString()} / ${Number(maxEnergy).toLocaleString()}`;
+
+
+    document.getElementById(
+      "rewardCoin"
+    ).textContent =
+      Number(coin).toLocaleString();
+
+
+    document.getElementById(
+      "rewardEnergy"
+    ).textContent =
+      Number(energy).toLocaleString();
+
+
+    /* =====================================================
+       7. EXP
+    ===================================================== */
+
+    const exp =
+      Number(
+        value(
+          user,
+          ["exp", "experience"],
+          0
+        )
+      );
+
+    const maxExp =
+      Number(
+        value(
+          user,
+          ["maxExp"],
+          1000
+        )
+      );
+
+
+    document.getElementById(
+      "exp"
+    ).textContent =
+      exp.toLocaleString();
+
+
+    document.getElementById(
+      "expBar"
+    ).style.width =
+      Math.min(
+        100,
+        (exp / maxExp) * 100
+      ) + "%";
+
+
+    /* =====================================================
+       8. WEIGHT
+    ===================================================== */
 
     const weight =
-      num(user.weight);
+      Number(
+        value(
+          user,
+          [
+            "weight",
+            "currentWeight"
+          ],
+          0
+        )
+      );
+
 
     const targetWeight =
-      num(user.targetWeight);
+      Number(
+        value(
+          user,
+          [
+            "targetWeight",
+            "goalWeight"
+          ],
+          0
+        )
+      );
 
 
-    setText(
-      "weightCurrent",
-      `${weight.toFixed(1)} kg`
-    );
+    document.getElementById(
+      "weight"
+    ).textContent =
+      weight.toFixed(1) +
+      " kg";
 
 
-    setText(
-      "weightTarget",
-      `${targetWeight.toFixed(1)} kg`
-    );
+    document.getElementById(
+      "targetWeight"
+    ).textContent =
+      targetWeight.toFixed(1) +
+      " kg";
 
 
-    let weightProgress = 0;
+    let percent = 0;
 
-    if(
+    let lost = 0;
+
+    let remain = 0;
+
+
+    if (
       weight > 0 &&
       targetWeight > 0
-    ){
+    ) {
 
       /*
-        ใช้ข้อมูลเริ่มต้นถ้ามี
-        เพื่อคำนวณความคืบหน้า
+        ถ้ามี startingWeight
+        จะคำนวณจากน้ำหนักเริ่มต้น
       */
 
-      const start =
-        num(
-          user.startWeight
-        ) || weight;
+      const startingWeight =
+        Number(
+          value(
+            user,
+            [
+              "startingWeight",
+              "initialWeight"
+            ],
+            weight
+          )
+        );
 
-      if(start !== targetWeight){
 
-        weightProgress =
-          ((start - weight) /
-          (start - targetWeight)) *
-          100;
+      const total =
+        startingWeight -
+        targetWeight;
+
+
+      lost =
+        startingWeight -
+        weight;
+
+
+      remain =
+        Math.max(
+          0,
+          weight -
+          targetWeight
+        );
+
+
+      if (total > 0) {
+
+        percent =
+          Math.max(
+            0,
+            Math.min(
+              100,
+              (lost / total) * 100
+            )
+          );
 
       }
 
     }
 
 
-    weightProgress =
-      Math.max(
-        0,
-        Math.min(
-          100,
-          weightProgress
+    document.getElementById(
+      "weightPercent"
+    ).textContent =
+      Math.round(percent) +
+      "%";
+
+
+    document.getElementById(
+      "weightBar"
+    ).style.width =
+      percent + "%";
+
+
+    document.getElementById(
+      "weightLost"
+    ).textContent =
+      "ลดไปแล้ว " +
+      lost.toFixed(1) +
+      " kg";
+
+
+    document.getElementById(
+      "weightRemain"
+    ).textContent =
+      "เหลืออีก " +
+      remain.toFixed(1) +
+      " kg";
+
+
+    /* =====================================================
+       9. DAILY DATA
+    ===================================================== */
+
+    document.getElementById(
+      "steps"
+    ).textContent =
+      Number(
+        value(
+          user,
+          ["steps", "todaySteps"],
+          0
+        )
+      ).toLocaleString();
+
+
+    document.getElementById(
+      "calories"
+    ).textContent =
+      Number(
+        value(
+          user,
+          [
+            "calories",
+            "todayCalories"
+          ],
+          0
+        )
+      ).toLocaleString();
+
+
+    document.getElementById(
+      "sleep"
+    ).textContent =
+      Number(
+        value(
+          user,
+          [
+            "sleep",
+            "sleepHours",
+            "todaySleep"
+          ],
+          0
+        )
+      ).toFixed(2) +
+      " ชม.";
+
+
+    document.getElementById(
+      "healthScore"
+    ).textContent =
+      Number(
+        value(
+          user,
+          [
+            "healthScore",
+            "healthPoints",
+            "score"
+          ],
+          0
         )
       );
 
 
-    setText(
-      "weightPercent",
-      `${Math.round(weightProgress)}%`
-    );
+    /* =====================================================
+       10. BADGE
+    ===================================================== */
 
-
-    setScale(
-      "weightBar",
-      weightProgress / 100
-    );
-
-
-    const reduced =
-      Math.max(
-        0,
-        (num(user.startWeight) || weight) -
-        weight
-      );
-
-
-    const remaining =
-      Math.max(
-        0,
-        weight - targetWeight
-      );
-
-
-    setText(
-      "weightReduced",
-      `ลดไปแล้ว ${reduced.toFixed(1)} kg`
-    );
-
-
-    setText(
-      "weightRemaining",
-      `เหลืออีก ${remaining.toFixed(1)} kg`
-    );
-
-
-    /* KPI */
-
-    const steps =
-      num(user.steps);
-
-    const targetSteps =
-      num(user.targetSteps) || 10000;
-
-
-    setText(
-      "stepsValue",
-      format(steps)
-    );
-
-
-    setText(
-      "stepsTarget",
-      `/ ${format(targetSteps)} ก้าว`
-    );
-
-
-    setScale(
-      "stepsBar",
-      percent(
-        steps,
-        targetSteps
-      ) / 100
-    );
-
-
-    const calories =
-      num(user.calories);
-
-    const targetCalories =
-      num(user.targetCalories) || 500;
-
-
-    setText(
-      "caloriesValue",
-      format(calories)
-    );
-
-
-    setText(
-      "caloriesTarget",
-      `/ ${format(targetCalories)} kcal`
-    );
-
-
-    setScale(
-      "caloriesBar",
-      percent(
-        calories,
-        targetCalories
-      ) / 100
-    );
-
-
-    const sleep =
-      num(user.sleep);
-
-    const targetSleep =
-      num(user.targetSleep) || 8;
-
-
-    setText(
-      "sleepValue",
-      `${sleep.toFixed(2)} ชม.`
-    );
-
-
-    setText(
-      "sleepTarget",
-      `/ ${targetSleep} ชม.`
-    );
-
-
-    setScale(
-      "sleepBar",
-      percent(
-        sleep,
-        targetSleep
-      ) / 100
-    );
-
-
-    const health =
-      num(user.healthScore);
-
-
-    setText(
-      "healthValue",
-      format(health)
-    );
-
-
-    setScale(
-      "healthBar",
-      Math.max(
-        0,
-        Math.min(
-          100,
-          health
+    document.getElementById(
+      "badge"
+    ).textContent =
+      Number(
+        value(
+          user,
+          [
+            "badgeCount",
+            "badges"
+          ],
+          0
         )
-      ) / 100
-    );
-
-
-    /* INBODY */
-
-    setText(
-      "inbodyScore",
-      `${format(user.inbodyScore || 0)} /100`
-    );
-
-
-    setText(
-      "inbodyPlus",
-      `+${format(user.inbodyChange || 0)}`
-    );
-
-
-    if(user.inbodyDate){
-
-      setText(
-        "inbodyDate",
-        `(${user.inbodyDate})`
-      );
-
-    }
-
-
-    /* PROGRAM */
-
-    const programDay =
-      num(user.programDay);
-
-    const programTotal =
-      num(user.programTotalDays) || 90;
-
-
-    setText(
-      "programDay",
-      format(programDay)
-    );
-
-
-    setText(
-      "programTotal",
-      `/ ${format(programTotal)} วัน`
-    );
-
-
-    setText(
-      "programRemaining",
-      `เหลืออีก ${format(
-        Math.max(
-          0,
-          programTotal - programDay
-        )
-      )} วัน`
-    );
-
-
-    /* RANK */
-
-    setText(
-      "rankValue",
-      user.rank
-        ? `#${format(user.rank)}`
-        : "#-"
-    );
-
-
-    setText(
-      "rankTotal",
-      `จากผู้เข้าร่วมทั้งหมด ${format(
-        user.totalMembers || 0
-      )} คน`
-    );
-
-  }
-
-
-  /* =======================================================
-     LOAD DATA
-  ======================================================= */
-
-  async function loadHome(){
-
-    try{
-
-      /*
-        1. LINE PROFILE
-      */
-
-      let profile =
-        await getLINEProfile();
-
-
-      /*
-        2. Backend
-      */
-
-      let response =
-        await ROCK.getMe();
-
-
-      /*
-        Backend API ตอนนี้อาจคืน user
-        แบบข้อมูลตัวเลข + LINE ID
-      */
-
-      let user =
-        response?.user || {};
-
-
-      /*
-        3. ดึง profile จาก localStorage
-        กรณี LIFF เคย login แล้ว
-      */
-
-      const stored =
-        ROCK.load(
-          ROCK.config.STORAGE.USER,
-          {}
-        ) || {};
-
-
-      /*
-        รวมข้อมูลโดยให้ข้อมูลล่าสุดจาก LINE
-        มีความสำคัญสำหรับรูปและชื่อ
-      */
-
-      profile =
-        profile ||
-        stored;
-
-
-      user = {
-        ...user,
-        ...stored,
-
-        ...(profile ? {
-
-          lineUserId:
-            profile.userId ||
-            profile.lineUserId ||
-            user.lineUserId,
-
-          displayName:
-            profile.displayName ||
-            user.displayName,
-
-          pictureUrl:
-            profile.pictureUrl ||
-            user.pictureUrl
-
-        } : {})
-
-      };
-
-
-      renderProfile(
-        profile,
-        user
       );
 
 
-      renderUser(
-        user
-      );
+    /* =====================================================
+       11. SHOW APP
+    ===================================================== */
+
+    loading.style.display =
+      "none";
+
+    app.style.display =
+      "block";
 
 
-      /*
-        ซ่อน loading
-      */
-
-      $("loadingScreen")
-        .style.display = "none";
+    console.log(
+      "HOME: READY"
+    );
 
 
-      console.log(
-        "HOME DATA READY:",
-        user
-      );
+  } catch (error) {
+
+    console.error(
+      "HOME ERROR:",
+      error
+    );
 
 
-    }catch(error){
-
-      console.error(
-        "HOME LOAD ERROR:",
-        error
-      );
-
-
-      $("loadingScreen")
-        .style.display = "none";
-
-
-      $("errorScreen")
-        .style.display = "flex";
-
-
-      $("errorMessage")
-        .textContent =
-          error?.message ||
-          "เกิดข้อผิดพลาดในการโหลดข้อมูล";
-
-    }
-
-  }
-
-
-  /* =======================================================
-     START
-  ======================================================= */
-
-  if(
-    window.ROCK &&
-    typeof ROCK.getMe === "function"
-  ){
-
-    loadHome();
-
-  }else{
-
-    $("loadingScreen")
-      .style.display = "none";
-
-    $("errorScreen")
-      .style.display = "flex";
-
-    $("errorMessage")
-      .textContent =
-        "ไม่พบ common.js หรือ ROCK CORE";
+    showError(
+      error?.message ||
+      String(error)
+    );
 
   }
 
 })();
 
 </script>
+
 
 </body>
 </html>
