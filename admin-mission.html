@@ -1,0 +1,230 @@
+window.APP_CONFIG = {
+
+  /* =========================================================
+     LIFF
+  ========================================================= */
+
+  LIFF_ID:
+    "2011201679-uNWz5yqF",
+
+
+  /* =========================================================
+     API
+  ========================================================= */
+
+  API: {
+
+    DASHBOARD:
+      "https://rock-your-body-2026.onrender.com/api/player",
+
+    MISSION:
+      "https://rock-your-body-2026.onrender.com/api/mission",
+
+    BATTLE:
+      "https://rock-your-body-2026.onrender.com/api/battle",
+
+    /*
+      Admin ใช้ mission Edge Function ตัวเดียวกัน
+      เพราะ mission_with_admin.ts รองรับ:
+      - adminWhoAmI
+      - adminListSubmissions
+      - adminReviewSubmission
+    */
+    MISSION_ADMIN:
+      "https://rock-your-body-2026.onrender.com/api/mission"
+
+  },
+
+
+  /* =========================================================
+     PAGE
+  ========================================================= */
+
+  PAGE: {
+
+    HOME:
+      "./dashboard.html",
+
+    WEIGHT:
+      "./weight-check.html",
+
+    PROGRESS:
+      "./progress.html",
+
+    RANKING:
+      "./ranking.html",
+
+    REWARDS:
+      "./rewards.html",
+
+    MISSION:
+      "./mission.html?v=20260824-03",
+
+    BATTLE:
+      "./battle.html?v=20260824-03",
+
+    MISSION_ADMIN:
+      "./mission-admin.html?v=20260824-03"
+
+  },
+
+
+  /* =========================================================
+     GAME SETTINGS
+  ========================================================= */
+
+  EXP_PER_LEVEL:
+    500,
+
+  MAX_ENERGY:
+    200,
+
+  REFRESH_MS:
+    30000
+
+};
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+window.goHome = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.HOME ||
+    "./dashboard.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goWeight = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.WEIGHT ||
+    "./weight-check.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goProgress = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.PROGRESS ||
+    "./progress.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goRanking = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.RANKING ||
+    "./ranking.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goRewards = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.REWARDS ||
+    "./rewards.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goMission = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.MISSION ||
+    "./mission.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goBattle = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.BATTLE ||
+    "./battle.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+window.goMissionAdmin = function () {
+
+  const url =
+    window.APP_CONFIG?.PAGE?.MISSION_ADMIN ||
+    "./mission-admin.html";
+
+  window.location.href =
+    url;
+
+};
+
+
+/* =========================================================
+   GENERIC NAVIGATION
+========================================================= */
+
+window.APP_NAV = {
+
+  go(pageName) {
+
+    const key =
+      String(
+        pageName || ""
+      )
+        .trim()
+        .toUpperCase();
+
+
+    const url =
+      window.APP_CONFIG
+        ?.PAGE
+        ?.[key];
+
+
+    if (!url) {
+
+      console.error(
+        "PAGE_NOT_FOUND:",
+        key
+      );
+
+      return false;
+
+    }
+
+
+    window.location.href =
+      url;
+
+
+    return true;
+
+  }
+
+};
