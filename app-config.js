@@ -1,126 +1,28 @@
-/* =========================================================
-   ROCK YOUR BODY 2026
-   APP CONFIG
-   Version: 2026-08-27-FINAL
-   ========================================================= */
+window.ROCK_CONFIG = {
+  APP_NAME: "ROCK YOUR BODY 2026",
 
-window.APP_CONFIG = {
+  API_BASE: "https://rock-your-body-2026.onrender.com",
 
-  /* -------------------------------------------------------
-     APP
-  ------------------------------------------------------- */
+  LIFF_ID: "",
 
-  APP_NAME:
-    "ROCK YOUR BODY 2026",
+  FRONTEND_URL:
+    "https://rock-your-body.github.io/rock-your-body-2026/",
 
-  VERSION:
-    "2026-08-27-FINAL",
+  MAX_ENERGY: 200,
 
-
-  /* -------------------------------------------------------
-     LINE LIFF
-  ------------------------------------------------------- */
-
-  LIFF_ID:
-    "2011201679-uNWz5yqF",
-
-
-  /* -------------------------------------------------------
-     API
-  ------------------------------------------------------- */
-
-  API: {
-
-    DASHBOARD:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
-
-    MISSION:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
-
-    BATTLE:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
-
+  PAGES: {
+    home: "./HOME.html",
+    mission: "./mission.html",
+    battle: "./battle.html",
+    progress: "./progress.html",
+    ranking: "./ranking.html",
+    reward: "./reward.html",
+    food: "./food-log.html"
   },
 
-
-  /* -------------------------------------------------------
-     PAGES
-  ------------------------------------------------------- */
-
-  PAGE: {
-
-    HOME:
-      "./dashboard.html",
-
-    MISSION:
-      "./mission.html",
-
-    BATTLE:
-      "./battle.html",
-
-    WEIGHT:
-      "./weight-check.html",
-
-    PROGRESS:
-      "./progress.html",
-
-    REWARDS:
-      "./rewards.html",
-
-    RANKING:
-      "./ranking.html"
-
-  },
-
-
-  /* -------------------------------------------------------
-     GAME
-  ------------------------------------------------------- */
-
-  MAX_ENERGY:
-    200,
-
-  EXP_PER_LEVEL:
-    500,
-
-
-  /* -------------------------------------------------------
-     REFRESH
-  ------------------------------------------------------- */
-
-  REFRESH_MS:
-    30000
-
+  STORAGE: {
+    LINE_USER_ID: "rock_line_user_id",
+    LINE_PROFILE: "rock_line_profile",
+    USER: "rock_user"
+  }
 };
-
-
-/* =========================================================
-   SAFETY CHECK
-   ========================================================= */
-
-console.log(
-  "================================="
-);
-
-console.log(
-  "ROCK APP CONFIG READY"
-);
-
-console.log(
-  "LIFF_ID:",
-  window.APP_CONFIG.LIFF_ID
-);
-
-console.log(
-  "DASHBOARD API:",
-  window.APP_CONFIG.API.DASHBOARD
-);
-
-console.log(
-  "HOME:",
-  window.APP_CONFIG.PAGE.HOME
-);
-
-console.log(
-  "================================="
-);
