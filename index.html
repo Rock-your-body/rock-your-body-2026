@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="th">
 
 <head>
@@ -11,9 +10,12 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>
-    ROCK YOUR BODY 2026
-  </title>
+  <meta
+    name="theme-color"
+    content="#eef4ff"
+  >
+
+  <title>ROCK YOUR BODY 2026</title>
 
 
   <!-- =====================================================
@@ -26,14 +28,14 @@
 
 
   <!-- =====================================================
-       CONFIG
+       APP CONFIG
   ====================================================== -->
 
   <script src="./app-config.js"></script>
 
 
   <!-- =====================================================
-       COMMON
+       COMMON JS
   ====================================================== -->
 
   <script src="./common.js"></script>
@@ -41,21 +43,31 @@
 
   <style>
 
+    * {
+      box-sizing: border-box;
+    }
+
     html,
     body {
 
       margin: 0;
-
       padding: 0;
 
       width: 100%;
+      min-height: 100%;
 
-      height: 100%;
-
-      background: #c9c9c9;
+      background:
+        linear-gradient(
+          135deg,
+          #eef6ff 0%,
+          #ffffff 50%,
+          #eaf3ff 100%
+        );
 
       font-family:
         Arial,
+        "Noto Sans Thai",
+        Tahoma,
         sans-serif;
 
     }
@@ -63,9 +75,7 @@
 
     #loading {
 
-      width: 100%;
-
-      height: 100%;
+      min-height: 100vh;
 
       display: flex;
 
@@ -75,7 +85,117 @@
 
       text-align: center;
 
-      color: #333;
+      padding: 30px;
+
+      color: #08245b;
+
+    }
+
+
+    .loading-box {
+
+      width: min(420px, 90vw);
+
+      background: rgba(255,255,255,.95);
+
+      border-radius: 24px;
+
+      padding: 35px 25px;
+
+      box-shadow:
+        0 15px 40px rgba(0,35,100,.15);
+
+      border:
+        1px solid rgba(30,100,200,.15);
+
+    }
+
+
+    .logo {
+
+      font-size: 30px;
+
+      font-weight: 900;
+
+      font-style: italic;
+
+      letter-spacing: -1px;
+
+      margin-bottom: 10px;
+
+      color: #08245b;
+
+    }
+
+
+    .logo span {
+
+      color: #d71920;
+
+    }
+
+
+    .loading-text {
+
+      font-size: 17px;
+
+      font-weight: 700;
+
+      margin-top: 18px;
+
+    }
+
+
+    .spinner {
+
+      width: 42px;
+
+      height: 42px;
+
+      margin: 22px auto 0;
+
+      border-radius: 50%;
+
+      border:
+        4px solid #dbe8ff;
+
+      border-top-color:
+        #0b4dcc;
+
+      animation:
+        spin .8s linear infinite;
+
+    }
+
+
+    @keyframes spin {
+
+      to {
+        transform: rotate(360deg);
+      }
+
+    }
+
+
+    #error {
+
+      display: none;
+
+      margin-top: 20px;
+
+      padding: 14px;
+
+      border-radius: 12px;
+
+      background: #fff0f0;
+
+      color: #b00020;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+      word-break: break-word;
 
     }
 
@@ -89,7 +209,21 @@
 
 <div id="loading">
 
-  กำลังเปิด ROCK YOUR BODY...
+  <div class="loading-box">
+
+    <div class="logo">
+      ROCK <span>YOUR BODY</span> 2026
+    </div>
+
+    <div class="loading-text">
+      กำลังเปิด ROCK YOUR BODY...
+    </div>
+
+    <div class="spinner"></div>
+
+    <div id="error"></div>
+
+  </div>
 
 </div>
 
@@ -98,64 +232,201 @@
 
 (async function () {
 
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "ROCK YOUR BODY 2026"
+  );
+
+  console.log(
+    "INDEX START"
+  );
+
+  console.log(
+    "================================="
+  );
+
+
   try {
 
+
+    /*
+    ========================================================
+    ตรวจสอบ CONFIG
+    ========================================================
+    */
+
+    if (
+      !window.ROCK_CONFIG
+    ) {
+
+      throw new Error(
+        "ไม่พบ app-config.js"
+      );
+
+    }
+
+
     console.log(
-      "INDEX START"
+      "CONFIG READY",
+      window.ROCK_CONFIG
     );
 
 
-    const ready =
-      await ROCK.initLiff();
+    /*
+    ========================================================
+    ตรวจสอบ ROCK COMMON
+    ========================================================
+    */
 
+    if (
+      !window.ROCK
+    ) {
 
-    console.log(
-      "LIFF READY:",
-      ready
-    );
-
-
-    if (!ready) {
-
-      /*
-        ถ้า LIFF กำลัง authentication
-        ไม่ต้องทำอะไรเพิ่ม
-
-        LINE จะ redirect กลับมาเอง
-      */
-
-      return;
+      throw new Error(
+        "ไม่พบ common.js หรือ ROCK object"
+      );
 
     }
 
 
     /*
-      เปิด Dashboard
+    ========================================================
+    LIFF
+    ========================================================
     */
 
+    let liffReady = false;
+
+
+    if (
+      typeof ROCK.initLiff === "function"
+    ) {
+
+      console.log(
+        "กำลังตรวจสอบ LINE LIFF..."
+      );
+
+
+      liffReady =
+        await ROCK.initLiff();
+
+
+      console.log(
+        "LIFF READY:",
+        liffReady
+      );
+
+    }
+
+
+    /*
+    ========================================================
+    ถ้าเปิดจาก LINE
+    ========================================================
+    */
+
+    if (
+      liffReady
+    ) {
+
+      console.log(
+        "LINE LIFF READY"
+      );
+
+
+      /*
+      ดึงข้อมูล LINE Profile
+      */
+
+      if (
+        typeof ROCK.getLineProfile === "function"
+      ) {
+
+        try {
+
+          const profile =
+            await ROCK.getLineProfile();
+
+          console.log(
+            "LINE PROFILE:",
+            profile
+          );
+
+        } catch (profileError) {
+
+          console.warn(
+            "LINE PROFILE ERROR:",
+            profileError
+          );
+
+        }
+
+      }
+
+    }
+
+
+    /*
+    ========================================================
+    ไปหน้า HOME
+    ========================================================
+    */
+
+    console.log(
+      "OPEN HOME"
+    );
+
+
     window.location.replace(
-      "./dashboard.html"
+      "./HOME.html"
     );
 
 
   } catch (error) {
+
+
+    console.error(
+      "================================="
+    );
 
     console.error(
       "INDEX ERROR:",
       error
     );
 
+    console.error(
+      "================================="
+    );
 
-    document.getElementById(
-      "loading"
-    ).innerHTML =
 
-      "ไม่สามารถเปิด ROCK YOUR BODY ได้<br><br>" +
+    const errorBox =
+      document.getElementById(
+        "error"
+      );
+
+
+    errorBox.style.display =
+      "block";
+
+
+    errorBox.innerHTML =
+
+      "<strong>ไม่สามารถเปิดระบบได้</strong><br><br>" +
 
       (
-        error?.message ||
-        String(error)
-      );
+        error &&
+        error.message
+          ? error.message
+          : String(error)
+      ) +
+
+      "<br><br>" +
+
+      "กรุณาตรวจสอบ app-config.js และ common.js";
+
 
   }
 
