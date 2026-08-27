@@ -11,7 +11,7 @@ window.APP_CONFIG = {
   MAX_ENERGY: 200,
 
   PAGES: {
-    home: "./HOME.html",
+   HOME: "./dashboard.html"
     mission: "./mission.html",
     battle: "./battle.html",
     progress: "./progress.html",
