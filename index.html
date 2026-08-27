@@ -1,1 +1,192 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROCK YOUR BODY 2026</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><script src="./app-config.js"></script><script src="./common.js"></script><style>html,body{margin:0;width:100%;height:100%;font-family:"Noto Sans Thai",Arial,sans-serif;background:#eef3fb}#loading{height:100%;display:grid;place-items:center;text-align:center;color:#132b72;font-weight:800}</style></head><body><div id="loading">กำลังเปิด ROCK YOUR BODY...</div><script>(async()=>{try{const r=await ROCK.init();if(r?.mode==="login")return;location.replace("./HOME.html")}catch(e){document.getElementById("loading").innerHTML="ไม่สามารถเปิดระบบได้<br><br>"+e.message}})();</script></body></html>
+<!doctype html>
+<html lang="th">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>ROCK YOUR BODY 2026</title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <script src="./app-config.js"></script>
+
+  <script src="./common.js"></script>
+
+  <style>
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #c9c9c9;
+      font-family: Arial, sans-serif;
+    }
+
+    #loading {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #333;
+      font-size: 18px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div id="loading">
+  กำลังเปิด ROCK YOUR BODY...
+</div>
+
+<script>
+
+(async function () {
+
+  "use strict";
+
+  try {
+
+    console.log("=================================");
+    console.log("ROCK YOUR BODY ROUTER START");
+    console.log("=================================");
+
+
+    /*
+    ========================================================
+    1. อ่าน page จาก URL
+    ========================================================
+    */
+
+    const params = new URLSearchParams(
+      window.location.search
+    );
+
+    const page =
+      (
+        params.get("page") ||
+        "home"
+      ).toLowerCase();
+
+
+    /*
+    ========================================================
+    2. กำหนดหน้าที่อนุญาต
+    ========================================================
+    */
+
+    const routes = {
+
+      home: "./HOME.html",
+
+      mission: "./mission.html",
+
+      battle: "./battle.html",
+
+      reward: "./reward.html",
+
+      ranking: "./ranking.html",
+
+      info: "./info.html",
+
+      dashboard: "./dashboard.html",
+
+      food: "./food-log.html"
+
+    };
+
+
+    /*
+    ========================================================
+    3. ถ้าไม่มีหน้า → Home
+    ========================================================
+    */
+
+    const target =
+      routes[page] ||
+      routes.home;
+
+
+    console.log(
+      "REQUEST PAGE:",
+      page
+    );
+
+    console.log(
+      "TARGET:",
+      target
+    );
+
+
+    /*
+    ========================================================
+    4. เตรียม LINE
+    ========================================================
+    */
+
+    if (
+      window.ROCK &&
+      typeof ROCK.initLINE === "function"
+    ) {
+
+      const line =
+        await ROCK.initLINE();
+
+      console.log(
+        "LINE RESULT:",
+        line
+      );
+
+    }
+
+
+    /*
+    ========================================================
+    5. เปิดหน้าที่ต้องการ
+    ========================================================
+    */
+
+    window.location.replace(
+      target
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "ROCK ROUTER ERROR:",
+      error
+    );
+
+
+    document.getElementById(
+      "loading"
+    ).innerHTML =
+
+      `
+      ไม่สามารถเปิด ROCK YOUR BODY ได้
+      <br><br>
+      ${error?.message || error}
+      `;
+
+  }
+
+})();
+
+</script>
+
+</body>
+
+</html>
