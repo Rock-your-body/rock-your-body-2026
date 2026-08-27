@@ -18,8 +18,7 @@
 
   const API_BASE =
     window.ROCK_API_BASE ||
-    "https://rock-your-body-2026.onrender.com";
-
+  "https://rock-your-body-2026.onrender.com",
   /* =======================================================
      LINE LIFF
      ======================================================= */
@@ -43,8 +42,7 @@
      ======================================================= */
 
   const FRONTEND_URL =
-    "https://rock-your-body.github.io";
-
+    "https://rock-your-body.github.io/rock-your-body-2026/",
   /* =======================================================
      DEFAULT GAME SETTINGS
      ======================================================= */
