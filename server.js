@@ -36,9 +36,31 @@ app.get("/api/health", (req, res) => {
 
 app.get("/api/me", async (req, res) => {
   try {
+    const lineUserId = req.headers["x-line-user-id"];
+
+    // ไม่มี LINE User ID
+    if (!lineUserId) {
+      return res.status(401).json({
+        ok: false,
+        message: "LINE User ID is required",
+      });
+    }
+
+    // ข้อมูลทดลองของสมาชิก
+    // ขั้นต่อไปจะเปลี่ยนส่วนนี้เป็น Database
+    const user = {
+      lineUserId: lineUserId,
+      name: "สมาชิก ROCK YOUR BODY",
+      rockCoin: 1250,
+      energy: 150,
+      maxEnergy: 200,
+      points: 0,
+      rank: null,
+    };
+
     res.json({
       ok: true,
-      message: "Authentication endpoint ready",
+      user: user,
     });
   } catch (error) {
     console.error("ME API ERROR:", error);
@@ -56,9 +78,55 @@ app.get("/api/me", async (req, res) => {
 
 app.get("/api/dashboard", async (req, res) => {
   try {
-    res.status(501).json({
-      ok: false,
-      error: "Dashboard data source is not connected yet",
+    const lineUserId = req.headers["x-line-user-id"];
+
+    if (!lineUserId) {
+      return res.status(401).json({
+        ok: false,
+        message: "LINE User ID is required",
+      });
+    }
+
+    res.json({
+      ok: true,
+
+      user: {
+        lineUserId: lineUserId,
+        name: "สมาชิก ROCK YOUR BODY",
+      },
+
+      points: {
+        rockCoin: 1250,
+        missionPoint: 0,
+        battlePoint: 0,
+      },
+
+      energy: {
+        current: 150,
+        max: 200,
+      },
+
+      mission: {
+        daily: 0,
+        weekly: 0,
+        monthly: 0,
+        bonus: 0,
+      },
+
+      battle: {
+        bossName: "SUGAR MONSTER",
+        hp: 68500,
+        maxHp: 100000,
+      },
+
+      health: {
+        weight: null,
+        targetWeight: null,
+        steps: 0,
+        calories: 0,
+        sleep: null,
+        healthScore: null,
+      },
     });
   } catch (error) {
     console.error("DASHBOARD API ERROR:", error);
