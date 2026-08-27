@@ -1,1 +1,511 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROCK YOUR BODY 2026 - Rewards</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><script src="./app-config.js"></script><script src="./common.js"></script><style>body{margin:0;background:#eef4ff;font-family:Arial,'Noto Sans Thai',sans-serif;color:#08245b}.wrap{max-width:720px;margin:auto;padding:18px}.card{background:#fff;border-radius:22px;padding:18px;margin:14px 0;box-shadow:0 8px 24px #1233}.hero{background:linear-gradient(135deg,#7b1fe4,#3b0a8f);color:#fff}.reward{padding:15px;border:1px solid #e3eaf5;border-radius:16px;margin:10px 0}.btn{padding:10px 14px;border:0;border-radius:12px;background:#f59e0b;color:#fff;font-weight:900}.home{width:100%;background:#073b93}</style></head><body><main class="wrap"><section class="card hero"><h1>🎁 REWARD</h1><p>รางวัลของฉัน</p></section><section class="card" id="list">กำลังโหลด...</section><button class="btn home" onclick="ROCK.goHome()">🏠 กลับ HOME</button></main><script>async function claim(id){try{const r=await ROCK.callPlayerApi({action:'claimReward',rewardId:id});alert(r.alreadyClaimed?'รับรางวัลไปแล้ว':'บันทึกการรับรางวัลแล้ว');location.reload()}catch(e){alert(e.message)}}(async()=>{try{await ROCK.initLiff();const d=await ROCK.callPlayerApi({action:'rewards'});const a=d.rewards||[];document.getElementById('list').innerHTML=a.length?a.map(r=>`<div class="reward"><b>🏅 ${r.title}</b><p>+${r.reward?.rockCoin||0} COIN • +${r.reward?.energy||0} ENERGY • +${r.reward?.exp||0} EXP</p><small>${new Date(r.createdAt).toLocaleString('th-TH')}</small><br><button class="btn" ${r.claimedAt?'disabled':''} onclick="claim('${r.id}')">${r.claimedAt?'รับแล้ว':'รับรางวัล'}</button></div>`).join(''):'<p>ยังไม่มีรางวัล</p>'}catch(e){document.getElementById('list').textContent='❌ '+e.message}})()</script></body></html>
+<!doctype html>
+<html lang="th">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>ROCK YOUR BODY 2026 - REWARD</title>
+
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <script src="./app-config.js?v=20260827-01"></script>
+
+  <script src="./common.js?v=20260827-01"></script>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      background: #eef4ff;
+
+      font-family:
+        "Noto Sans Thai",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      color: #082b68;
+
+    }
+
+
+    #loading {
+
+      position: fixed;
+      inset: 0;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      background: #eef4ff;
+
+      font-size: 20px;
+      font-weight: 800;
+
+    }
+
+
+    #app {
+
+      display: none;
+
+      width: 100%;
+      max-width: 1000px;
+
+      margin: auto;
+
+      padding: 20px;
+
+    }
+
+
+    .header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    h1 {
+
+      margin: 0;
+
+      font-size: 34px;
+
+    }
+
+
+    .back {
+
+      border: 0;
+
+      background: #102f78;
+
+      color: white;
+
+      padding: 12px 20px;
+
+      border-radius: 14px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+    }
+
+
+    #rewardList {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3,1fr);
+
+      gap: 15px;
+
+    }
+
+
+    .reward {
+
+      background: white;
+
+      border-radius: 22px;
+
+      padding: 25px;
+
+      text-align: center;
+
+      box-shadow:
+        0 4px 16px rgba(0,0,0,.08);
+
+    }
+
+
+    .reward-icon {
+
+      font-size: 45px;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .reward-name {
+
+      font-size: 19px;
+
+      font-weight: 900;
+
+      min-height: 50px;
+
+    }
+
+
+    .reward-value {
+
+      margin: 12px 0;
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+    }
+
+
+    .claim {
+
+      width: 100%;
+
+      border: 0;
+
+      border-radius: 13px;
+
+      padding: 13px;
+
+      background: #102f78;
+
+      color: white;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+    }
+
+
+    .claim:disabled {
+
+      background: #8992a3;
+
+      cursor: not-allowed;
+
+    }
+
+
+    @media(max-width:700px){
+
+      #rewardList {
+
+        grid-template-columns:
+          1fr 1fr;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div id="loading">
+  กำลังโหลด REWARD...
+</div>
+
+
+<main id="app">
+
+
+  <header class="header">
+
+    <h1>
+      REWARD
+    </h1>
+
+    <button
+      class="back"
+      onclick="window.ROCK.goHome()"
+    >
+      HOME
+    </button>
+
+  </header>
+
+
+  <div id="rewardList"></div>
+
+
+</main>
+
+
+<script>
+
+(function(){
+
+  "use strict";
+
+
+  function icon(
+    type
+  ){
+
+    if(type === "ROCK_COIN"){
+      return "🪙";
+    }
+
+    if(type === "ENERGY"){
+      return "⚡";
+    }
+
+    if(type === "BADGE"){
+      return "🏆";
+    }
+
+    return "🎁";
+
+  }
+
+
+  function escapeHTML(
+    value
+  ){
+
+    return String(
+      value ?? ""
+    )
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+
+  }
+
+
+  function render(
+    rewards
+  ){
+
+    const list =
+      document.getElementById(
+        "rewardList"
+      );
+
+
+    if(
+      !Array.isArray(rewards) ||
+      rewards.length === 0
+    ){
+
+      list.innerHTML =
+        `
+        <div class="reward">
+          ยังไม่มี Reward
+        </div>
+        `;
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      rewards
+        .map(
+          reward => {
+
+            const claimed =
+              Boolean(
+                reward.claimed
+              );
+
+
+            return `
+              <article class="reward">
+
+                <div class="reward-icon">
+                  ${icon(
+                    reward.type
+                  )}
+                </div>
+
+
+                <div class="reward-name">
+                  ${escapeHTML(
+                    reward.name
+                  )}
+                </div>
+
+
+                <div class="reward-value">
+
+                  Value:
+                  ${Number(
+                    reward.value || 0
+                  ).toLocaleString()}
+
+                </div>
+
+
+                <button
+                  class="claim"
+                  data-reward-id="${escapeHTML(
+                    reward.id
+                  )}"
+                  ${claimed ? "disabled" : ""}
+                >
+
+                  ${
+                    claimed
+                      ? "CLAIMED"
+                      : "CLAIM REWARD"
+                  }
+
+                </button>
+
+              </article>
+            `;
+
+          }
+        )
+        .join("");
+
+
+    list
+      .querySelectorAll(
+        "[data-reward-id]"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            async function(){
+
+              /*
+                ตอนนี้ Backend ที่เรามี
+                มี GET /api/rewards
+                แต่ยังไม่มี endpoint
+                สำหรับ claim reward
+
+                ดังนั้นยังไม่ยิง API ปลอม
+                เพื่อไม่ทำให้ข้อมูลเสีย
+              */
+
+              alert(
+                "Reward นี้พร้อมสำหรับระบบ Claim ในขั้นตอนถัดไป"
+              );
+
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  async function start(){
+
+    try{
+
+      const ready =
+        await window.ROCK
+          .initLiff();
+
+
+      if(
+        ready === false
+      ){
+
+        return;
+
+      }
+
+
+      const result =
+        await window.ROCK
+          .getRewards();
+
+
+      console.log(
+        "REWARDS:",
+        result
+      );
+
+
+      render(
+        result?.rewards ||
+        result?.data?.rewards ||
+        []
+      );
+
+
+      document
+        .getElementById(
+          "loading"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "app"
+        )
+        .style.display =
+        "block";
+
+
+    }catch(error){
+
+      console.error(
+        "REWARD ERROR:",
+        error
+      );
+
+
+      document
+        .getElementById(
+          "loading"
+        )
+        .innerHTML =
+        `
+        ไม่สามารถโหลด Reward ได้
+        <br><br>
+        <small>
+          ${error.message}
+        </small>
+        `;
+
+    }
+
+  }
+
+
+  start();
+
+})();
+
+</script>
+
+
+</body>
+</html>
