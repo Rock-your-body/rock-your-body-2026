@@ -3,7 +3,9 @@
   "version": "2.0.0",
   "description": "ROCK YOUR BODY 2026 API",
   "main": "server.js",
-  "scripts": { "start": "node server.js" },
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
