@@ -999,46 +999,28 @@
      ======================================================= */
 
    window.ROCK = {
-
-  config: CONFIG,
-
-  api,
-
-  healthCheck,
-
-  initLINE,
-
-  getMe,
-
-  getDashboard,
-  fetchDashboard: getDashboard,
-
-  getMissions,
-  completeMission,
-
-  getBattle,
-  fightMonster,
-
-  getRewards,
-
-  getRanking,
-
+  CFG,
   go,
   goHome,
+  goWeight,
+  goProgress,
+  goRanking,
+  goRewards,
   goMission,
   goBattle,
-  goReward,
-  goRanking,
-  goInfo,
-
-  save,
-  load,
-
-  number,
-  coin,
-  energy,
-
-  updateTopBar,
-
-  init
+  initLiff,
+  getIdToken,
+  getProfile,
+  postJSON,
+  callPlayerApi,
+  fetchDashboard,
+  saveWeight,
+  setTarget,
+  fmtWeight,
+  fmtInt,
+  formatDate,
+  formatDateOnly,
+  num,
+  isTokenError,
+  logout
 };
