@@ -1503,6 +1503,462 @@
     );
 
   </script>
+<script>
+/* =========================================================
+   ROCK YOUR BODY 2026
+   API BRIDGE
+   ========================================================= */
 
+const ROCK_API =
+  "https://rock-your-body-2026.onrender.com";
+
+/* ---------------------------------------------------------
+   API REQUEST
+   --------------------------------------------------------- */
+
+async function rockApi(path, options = {}) {
+  try {
+    const response = await fetch(
+      ROCK_API + path,
+      {
+        ...options,
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          ...(options.headers || {}),
+        },
+      }
+    );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        data.message ||
+        "API Error"
+      );
+    }
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "ROCK API ERROR:",
+      path,
+      error
+    );
+
+    throw error;
+  }
+}
+
+/* ---------------------------------------------------------
+   LOAD USER
+   --------------------------------------------------------- */
+
+async function loadRockUser() {
+
+  try {
+
+    const data =
+      await rockApi("/api/me");
+
+    if (
+      !data ||
+      !data.ok ||
+      !data.user
+    ) {
+      throw new Error(
+        "Invalid user response"
+      );
+    }
+
+    window.ROCK_USER =
+      data.user;
+
+    updateRockUserUI(
+      data.user
+    );
+
+    return data.user;
+
+  } catch (error) {
+
+    console.error(
+      "LOAD USER ERROR:",
+      error
+    );
+
+    return null;
+  }
+}
+
+/* ---------------------------------------------------------
+   LOAD DASHBOARD
+   --------------------------------------------------------- */
+
+async function loadRockDashboard() {
+
+  try {
+
+    const data =
+      await rockApi(
+        "/api/dashboard"
+      );
+
+    if (
+      data &&
+      data.ok
+    ) {
+
+      window.ROCK_DASHBOARD =
+        data.dashboard;
+
+      updateRockDashboardUI(
+        data.dashboard
+      );
+    }
+
+    return data;
+
+  } catch (error) {
+
+    console.error(
+      "LOAD DASHBOARD ERROR:",
+      error
+    );
+
+    return null;
+  }
+}
+
+/* ---------------------------------------------------------
+   UPDATE USER UI
+   --------------------------------------------------------- */
+
+function updateRockUserUI(user) {
+
+  if (!user) return;
+
+  /*
+   * รองรับทั้ง id และ data-field
+   * เพื่อไม่ต้องรื้อ HTML เดิม
+   */
+
+  setRockText(
+    "rockCoin",
+    user.rockCoin
+  );
+
+  setRockText(
+    "points",
+    user.points
+  );
+
+  setRockText(
+    "energy",
+    `${user.energy}/${user.maxEnergy}`
+  );
+
+  setRockText(
+    "rank",
+    user.rank
+      ? `#${user.rank}`
+      : "-"
+  );
+
+  setRockText(
+    "userName",
+    user.name
+  );
+
+  setRockText(
+    "weight",
+    user.weight
+  );
+
+  setRockText(
+    "targetWeight",
+    user.targetWeight
+  );
+
+  setRockText(
+    "steps",
+    user.steps
+  );
+
+  setRockText(
+    "targetSteps",
+    user.targetSteps
+  );
+
+  setRockText(
+    "calories",
+    user.calories
+  );
+
+  setRockText(
+    "targetCalories",
+    user.targetCalories
+  );
+
+  setRockText(
+    "sleep",
+    user.sleep
+  );
+
+  setRockText(
+    "targetSleep",
+    user.targetSleep
+  );
+
+  setRockText(
+    "healthScore",
+    user.healthScore
+  );
+
+  setRockText(
+    "inbodyScore",
+    user.inbodyScore
+  );
+
+  setRockText(
+    "programDay",
+    user.programDay
+  );
+
+  setRockText(
+    "programTotalDays",
+    user.programTotalDays
+  );
+}
+
+/* ---------------------------------------------------------
+   UPDATE DASHBOARD UI
+   --------------------------------------------------------- */
+
+function updateRockDashboardUI(
+  dashboard
+) {
+
+  if (!dashboard) return;
+
+  const steps =
+    dashboard.steps;
+
+  const calories =
+    dashboard.calories;
+
+  const sleep =
+    dashboard.sleep;
+
+  const weight =
+    dashboard.weight;
+
+  const program =
+    dashboard.program;
+
+  if (steps) {
+
+    setRockText(
+      "steps",
+      steps.current
+    );
+
+    setRockText(
+      "targetSteps",
+      steps.target
+    );
+
+    setRockProgress(
+      "stepsProgress",
+      steps.percent
+    );
+  }
+
+  if (calories) {
+
+    setRockText(
+      "calories",
+      calories.current
+    );
+
+    setRockText(
+      "targetCalories",
+      calories.target
+    );
+
+    setRockProgress(
+      "caloriesProgress",
+      calories.percent
+    );
+  }
+
+  if (sleep) {
+
+    setRockText(
+      "sleep",
+      sleep.current
+    );
+
+    setRockText(
+      "targetSleep",
+      sleep.target
+    );
+
+    setRockProgress(
+      "sleepProgress",
+      sleep.percent
+    );
+  }
+
+  if (weight) {
+
+    setRockText(
+      "weight",
+      weight.current
+    );
+
+    setRockText(
+      "targetWeight",
+      weight.target
+    );
+  }
+
+  if (program) {
+
+    setRockText(
+      "programDay",
+      program.currentDay
+    );
+
+    setRockText(
+      "programTotalDays",
+      program.totalDays
+    );
+
+    setRockProgress(
+      "programProgress",
+      program.percent
+    );
+  }
+
+  setRockText(
+    "healthScore",
+    dashboard.healthScore
+  );
+
+  if (
+    dashboard.inbody
+  ) {
+
+    setRockText(
+      "inbodyScore",
+      dashboard.inbody.score
+    );
+  }
+}
+
+/* ---------------------------------------------------------
+   TEXT HELPER
+   --------------------------------------------------------- */
+
+function setRockText(
+  id,
+  value
+) {
+
+  const element =
+    document.getElementById(id);
+
+  if (!element) return;
+
+  element.textContent =
+    value ?? "-";
+}
+
+/* ---------------------------------------------------------
+   PROGRESS HELPER
+   --------------------------------------------------------- */
+
+function setRockProgress(
+  id,
+  percent
+) {
+
+  const element =
+    document.getElementById(id);
+
+  if (!element) return;
+
+  const value =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(percent) || 0
+      )
+    );
+
+  element.style.width =
+    value + "%";
+
+  element.setAttribute(
+    "aria-valuenow",
+    value
+  );
+}
+
+/* ---------------------------------------------------------
+   LOAD ALL HOME DATA
+   --------------------------------------------------------- */
+
+async function loadRockHome() {
+
+  try {
+
+    await Promise.all([
+      loadRockUser(),
+      loadRockDashboard()
+    ]);
+
+    console.log(
+      "ROCK YOUR BODY HOME loaded"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "HOME LOAD ERROR:",
+      error
+    );
+  }
+}
+
+/* ---------------------------------------------------------
+   START
+   --------------------------------------------------------- */
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    loadRockHome
+  );
+
+} else {
+
+  loadRockHome();
+
+}
+</script>
 </body>
 </html>
