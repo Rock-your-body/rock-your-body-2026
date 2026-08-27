@@ -9,6 +9,8 @@ const FRONTEND_URL =
   process.env.FRONTEND_URL ||
   "https://rock-your-body.github.io";
 
+const LINE_CHANNEL_ID = process.env.LINE_CHANNEL_ID;
+
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -19,7 +21,7 @@ app.use(
 app.use(express.json());
 
 // =========================
-// Health Check
+// HEALTH CHECK
 // =========================
 
 app.get("/api/health", (req, res) => {
@@ -31,111 +33,119 @@ app.get("/api/health", (req, res) => {
 });
 
 // =========================
-// Current User
+// LOGIN / CURRENT USER
 // =========================
 
-app.get("/api/me", async (req, res) => {
+app.post("/api/me", async (req, res) => {
   try {
-    const lineUserId = req.headers["x-line-user-id"];
+    const { idToken } = req.body;
 
-    // ไม่มี LINE User ID
-    if (!lineUserId) {
+    if (!idToken) {
       return res.status(401).json({
         ok: false,
-        message: "LINE User ID is required",
+        error: "LINE ID Token is required",
       });
     }
 
-    // ข้อมูลทดลองของสมาชิก
-    // ขั้นต่อไปจะเปลี่ยนส่วนนี้เป็น Database
+    if (!LINE_CHANNEL_ID) {
+      return res.status(500).json({
+        ok: false,
+        error: "LINE_CHANNEL_ID is not configured",
+      });
+    }
+
+    // Verify ID Token with LINE
+    const response = await fetch(
+      "https://api.line.me/oauth2/v2.1/verify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          id_token: idToken,
+          client_id: LINE_CHANNEL_ID,
+        }),
+      }
+    );
+
+    const lineUser = await response.json();
+
+    if (!response.ok) {
+      console.error("LINE VERIFY ERROR:", lineUser);
+
+      return res.status(401).json({
+        ok: false,
+        error: "Invalid LINE ID Token",
+      });
+    }
+
+    // LINE User ID
+    const lineUserId = lineUser.sub;
+
+    // =========================
+    // TEMPORARY USER DATA
+    // =========================
+
     const user = {
       lineUserId: lineUserId,
-      name: "สมาชิก ROCK YOUR BODY",
-      rockCoin: 1250,
-      energy: 150,
+      name: lineUser.name || "สมาชิก ROCK YOUR BODY",
+
+      rockCoin: 0,
+      energy: 0,
       maxEnergy: 200,
       points: 0,
+
       rank: null,
+
+      profileImage: lineUser.picture || null,
+
+      // เตรียมไว้สำหรับระบบสมาชิก
+      missions: [],
+      battles: [],
+      rewards: [],
     };
 
-    res.json({
+    return res.json({
       ok: true,
-      user: user,
+      user,
     });
+
   } catch (error) {
     console.error("ME API ERROR:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       ok: false,
-      error: "Unable to load user profile",
+      error: "Unable to authenticate LINE user",
     });
   }
 });
 
 // =========================
-// Dashboard
+// DASHBOARD
 // =========================
 
 app.get("/api/dashboard", async (req, res) => {
-  try {
-    const lineUserId = req.headers["x-line-user-id"];
+  res.json({
+    ok: true,
 
-    if (!lineUserId) {
-      return res.status(401).json({
-        ok: false,
-        message: "LINE User ID is required",
-      });
-    }
+    rockCoin: 0,
+    energy: 0,
+    maxEnergy: 200,
+    points: 0,
+    rank: null,
 
-    res.json({
-      ok: true,
+    weight: null,
+    targetWeight: null,
 
-      user: {
-        lineUserId: lineUserId,
-        name: "สมาชิก ROCK YOUR BODY",
-      },
+    steps: 0,
+    calories: 0,
+    sleep: 0,
+    healthScore: 0,
 
-      points: {
-        rockCoin: 1250,
-        missionPoint: 0,
-        battlePoint: 0,
-      },
-
-      energy: {
-        current: 150,
-        max: 200,
-      },
-
-      mission: {
-        daily: 0,
-        weekly: 0,
-        monthly: 0,
-        bonus: 0,
-      },
-
-      battle: {
-        bossName: "SUGAR MONSTER",
-        hp: 68500,
-        maxHp: 100000,
-      },
-
-      health: {
-        weight: null,
-        targetWeight: null,
-        steps: 0,
-        calories: 0,
-        sleep: null,
-        healthScore: null,
-      },
-    });
-  } catch (error) {
-    console.error("DASHBOARD API ERROR:", error);
-
-    res.status(500).json({
-      ok: false,
-      error: "Unable to load dashboard",
-    });
-  }
+    programDay: 0,
+    programTotalDays: 90,
+  });
 });
 
 // =========================
@@ -150,7 +160,7 @@ app.use((req, res) => {
 });
 
 // =========================
-// Error Handler
+// ERROR HANDLER
 // =========================
 
 app.use((err, req, res, next) => {
@@ -163,7 +173,7 @@ app.use((err, req, res, next) => {
 });
 
 // =========================
-// Start Server
+// START
 // =========================
 
 app.listen(PORT, "0.0.0.0", () => {
