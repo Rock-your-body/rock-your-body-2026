@@ -1,4 +1,4 @@
-window.ROCK_CONFIG = {
+window.APP_CONFIG = {
   APP_NAME: "ROCK YOUR BODY 2026",
 
   API_BASE: "https://rock-your-body-2026.onrender.com",
