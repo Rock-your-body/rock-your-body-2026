@@ -8,16 +8,23 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#eef4ff">
+  <meta name="theme-color" content="#071d5c">
 
   <title>ROCK YOUR BODY 2026</title>
 
-  <script src="./app-config.js"></script>
-  <script src="./common.js"></script>
+  <!-- =====================================================
+       LINE LIFF SDK
+  ====================================================== -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <style>
+    /* =====================================================
+       RESET
+    ====================================================== */
+
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html,
@@ -31,833 +38,2243 @@
         Tahoma,
         sans-serif;
       background:
-        linear-gradient(180deg, #eef4ff 0%, #ffffff 100%);
-      color: #08245b;
+        linear-gradient(
+          180deg,
+          #eef4ff 0%,
+          #f7f9ff 45%,
+          #edf3ff 100%
+        );
+      color: #071d5c;
     }
 
     body {
-      padding-bottom: 30px;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
     button {
       font-family: inherit;
+    }
+
+    /* =====================================================
+       APP
+    ====================================================== */
+
+    .app {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+      padding-bottom: 35px;
+    }
+
+    /* =====================================================
+       LOADING
+    ====================================================== */
+
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background:
+        radial-gradient(
+          circle at center,
+          #173f9d 0%,
+          #071d5c 55%,
+          #030f34 100%
+        );
+
+      color: white;
+      text-align: center;
+    }
+
+    .loading-box {
+      width: 90%;
+      max-width: 360px;
+    }
+
+    .loading-logo {
+      font-size: 42px;
+      font-weight: 1000;
+      font-style: italic;
+      letter-spacing: -2px;
+    }
+
+    .loading-logo span {
+      color: #ff1717;
+    }
+
+    .loading-sub {
+      margin-top: 8px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      opacity: .85;
+      font-weight: 800;
+    }
+
+    .loader {
+      width: 48px;
+      height: 48px;
+      margin: 28px auto 0;
+
+      border: 5px solid rgba(255,255,255,.25);
+      border-top-color: #fff;
+      border-radius: 50%;
+
+      animation: spin .9s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-text {
+      margin-top: 15px;
+      font-size: 13px;
+      opacity: .8;
+    }
+
+    /* =====================================================
+       ERROR
+    ====================================================== */
+
+    #errorScreen {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background: #eef4ff;
+    }
+
+    .error-box {
+      width: 100%;
+      max-width: 420px;
+
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+
+      box-shadow: 0 15px 45px rgba(7,29,92,.18);
+
+      text-align: center;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .error-title {
+      font-size: 22px;
+      font-weight: 1000;
+      color: #071d5c;
+    }
+
+    .error-message {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .retry-btn {
+      margin-top: 22px;
+
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+
+      padding: 14px;
+
+      background: #073b93;
+      color: white;
+
+      font-size: 15px;
+      font-weight: 900;
+
       cursor: pointer;
     }
 
-    .page {
-      width: 100%;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 14px;
+    /* =====================================================
+       TOP HEADER
+    ====================================================== */
+
+    .top-header {
+      position: relative;
+
+      padding:
+        max(18px, env(safe-area-inset-top))
+        18px
+        12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #f5f8ff 100%
+        );
+
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+
+      box-shadow:
+        0 8px 25px rgba(7,29,92,.10);
     }
 
-    /* =========================
-       HEADER
-       ========================= */
-
-    .header {
-      background: #ffffff;
-      border-radius: 22px;
-      padding: 16px;
-      box-shadow: 0 8px 24px rgba(20, 55, 120, 0.12);
-      margin-bottom: 14px;
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
+
+    /* =====================================================
+       BRAND
+    ====================================================== */
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .brand-logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #073b93, #0c62d6);
-      color: white;
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff1717,
+          #073b93
+        );
+
+      color: white;
+
+      font-size: 21px;
       font-weight: 1000;
+
+      box-shadow:
+        0 5px 15px rgba(7,59,147,.25);
     }
 
     .brand-text {
-      flex: 1;
+      line-height: 1.05;
     }
 
-    .brand-title {
-      font-size: 20px;
+    .brand-main {
+      font-size: 14px;
       font-weight: 1000;
-      color: #073b93;
-      line-height: 1.1;
+      letter-spacing: .3px;
     }
 
     .brand-sub {
-      font-size: 12px;
+      margin-top: 4px;
+      font-size: 9px;
       font-weight: 700;
       color: #64748b;
-      margin-top: 3px;
+      letter-spacing: 1px;
     }
 
-    /* =========================
-       USER CARD
-       ========================= */
+    /* =====================================================
+       COINS
+    ====================================================== */
 
-    .user-card {
-      margin-top: 14px;
-      border-radius: 18px;
-      padding: 16px;
+    .currency-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .currency {
+      min-width: 74px;
+
+      padding: 8px 10px;
+
+      border-radius: 14px;
+
+      background: white;
+
+      border: 1px solid #dce5f8;
+
+      box-shadow: 0 5px 15px rgba(7,29,92,.08);
+    }
+
+    .currency-label {
+      font-size: 8px;
+      font-weight: 900;
+      color: #718096;
+      letter-spacing: .5px;
+    }
+
+    .currency-value {
+      margin-top: 2px;
+      font-size: 14px;
+      font-weight: 1000;
+      color: #071d5c;
+    }
+
+    .energy-value {
+      color: #f59e0b;
+    }
+
+    /* =====================================================
+       HERO
+    ====================================================== */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+
+      margin: 14px 14px 0;
+
+      padding: 22px;
+
+      border-radius: 26px;
+
       background:
-        linear-gradient(135deg, #063b96, #164fc1);
+        linear-gradient(
+          135deg,
+          #071d5c 0%,
+          #073b93 55%,
+          #0a56bd 100%
+        );
+
       color: white;
-      box-shadow: 0 8px 20px rgba(0, 50, 150, 0.20);
+
+      box-shadow:
+        0 12px 30px rgba(7,59,147,.25);
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width: 230px;
+      height: 230px;
+
+      right: -80px;
+      top: -100px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,.18),
+          transparent 65%
+        );
+    }
+
+    .hero::after {
+      content: "";
+
+      position: absolute;
+
+      width: 160px;
+      height: 160px;
+
+      left: -90px;
+      bottom: -100px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,.10),
+          transparent 65%
+        );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
     }
 
     .welcome {
-      font-size: 13px;
-      opacity: 0.85;
+      font-size: 12px;
       font-weight: 700;
+      opacity: .75;
     }
 
-    .user-name {
-      font-size: 22px;
-      font-weight: 1000;
+    .hero-name {
       margin-top: 4px;
-    }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .stat {
-      background: rgba(255,255,255,0.13);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 14px;
-      padding: 11px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      opacity: 0.78;
-      font-weight: 700;
-    }
-
-    .stat-value {
-      font-size: 20px;
+      font-size: 28px;
       font-weight: 1000;
-      margin-top: 3px;
+
+      letter-spacing: -.5px;
     }
 
-    /* =========================
-       MENU
-       ========================= */
+    .hero-program {
+      margin-top: 5px;
 
-    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+
+      opacity: .8;
+      letter-spacing: .5px;
+    }
+
+    .hero-bottom {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
-      margin: 20px 4px 10px;
+
+      margin-top: 20px;
     }
 
-    .section-title strong {
-      font-size: 18px;
-      font-weight: 1000;
+    .health-score-label {
+      font-size: 10px;
+      font-weight: 800;
+      opacity: .7;
     }
 
-    .section-title span {
-      font-size: 11px;
-      color: #64748b;
-      font-weight: 700;
-    }
+    .health-score {
+      margin-top: 2px;
 
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .menu-card {
-      position: relative;
-      min-height: 155px;
-      border: 0;
-      border-radius: 22px;
-      overflow: hidden;
-      color: white;
-      text-align: left;
-      padding: 18px;
-      box-shadow: 0 8px 20px rgba(20, 50, 100, 0.18);
-      transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
-    }
-
-    .menu-card:active {
-      transform: scale(0.97);
-    }
-
-    .menu-icon {
       font-size: 40px;
       line-height: 1;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
-    }
 
-    .menu-title {
-      font-size: 22px;
       font-weight: 1000;
-      letter-spacing: 0.3px;
     }
 
-    .menu-sub {
+    .health-score span {
       font-size: 13px;
-      font-weight: 700;
-      margin-top: 3px;
-      opacity: 0.95;
+      font-weight: 800;
+      opacity: .75;
     }
 
-    .menu-arrow {
-      position: absolute;
-      right: 14px;
-      bottom: 12px;
-      width: 30px;
-      height: 30px;
-      border: 1px solid rgba(255,255,255,0.8);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
+    .progress-wrap {
+      width: 150px;
     }
 
-    .home {
-      background: linear-gradient(135deg, #0647b9, #126fe4);
-    }
-
-    .mission {
-      background: linear-gradient(135deg, #d90000, #ff2418);
-    }
-
-    .battle {
-      background: linear-gradient(135deg, #073b93, #174fd0);
-    }
-
-    .reward {
-      background: linear-gradient(135deg, #5414c8, #7c21df);
-    }
-
-    .ranking {
-      background: linear-gradient(135deg, #ef7b00, #ffae00);
-    }
-
-    .info {
-      background: linear-gradient(135deg, #009da5, #16c9c7);
-    }
-
-    /* =========================
-       PROGRAM
-       ========================= */
-
-    .program-card {
-      margin-top: 14px;
-      background: white;
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: 0 8px 22px rgba(20, 50, 100, 0.10);
-    }
-
-    .program-head {
+    .progress-label {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-    }
 
-    .program-title {
-      font-size: 16px;
-      font-weight: 1000;
-    }
+      margin-bottom: 5px;
 
-    .program-day {
-      font-size: 13px;
-      font-weight: 900;
-      color: #1261cf;
+      font-size: 9px;
+      font-weight: 800;
+      opacity: .75;
     }
 
     .progress {
-      height: 11px;
-      background: #e7edf7;
-      border-radius: 99px;
+      height: 9px;
+
       overflow: hidden;
-      margin-top: 12px;
+
+      border-radius: 20px;
+
+      background: rgba(255,255,255,.2);
     }
 
     .progress-bar {
       height: 100%;
       width: 0%;
-      border-radius: 99px;
-      background: linear-gradient(90deg, #0751c8, #11a7ff);
-      transition: width 0.5s ease;
+
+      border-radius: inherit;
+
+      background: white;
+
+      transition: width .7s ease;
     }
 
-    /* =========================
-       LOADING / ERROR
-       ========================= */
+    /* =====================================================
+       SECTION
+    ====================================================== */
 
-    .loading {
-      text-align: center;
-      padding: 10px;
-      color: #64748b;
-      font-size: 12px;
+    .section {
+      padding: 18px 14px 0;
+    }
+
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 1000;
+      color: #071d5c;
+    }
+
+    .section-subtitle {
+      font-size: 10px;
       font-weight: 700;
+      color: #94a3b8;
     }
 
-    .error {
-      display: none;
+    /* =====================================================
+       STAT GRID
+    ====================================================== */
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      position: relative;
+
+      min-height: 128px;
+
+      padding: 16px;
+
+      border-radius: 20px;
+
+      background: white;
+
+      border: 1px solid #e1e8f6;
+
+      box-shadow:
+        0 8px 22px rgba(7,29,92,.07);
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 12px;
+
+      background: #eef4ff;
+
+      font-size: 19px;
+    }
+
+    .stat-label {
       margin-top: 12px;
-      background: #fff1f1;
-      color: #b00020;
-      border: 1px solid #ffcaca;
-      border-radius: 14px;
-      padding: 12px;
-      font-size: 12px;
+
+      font-size: 10px;
+      font-weight: 800;
+
+      color: #718096;
+    }
+
+    .stat-value {
+      margin-top: 2px;
+
+      font-size: 23px;
+      font-weight: 1000;
+
+      color: #071d5c;
+    }
+
+    .stat-target {
+      margin-left: 3px;
+
+      font-size: 10px;
       font-weight: 700;
+
+      color: #94a3b8;
     }
 
-    /* =========================
+    .mini-bar {
+      margin-top: 9px;
+
+      height: 6px;
+
+      overflow: hidden;
+
+      border-radius: 10px;
+
+      background: #edf2fa;
+    }
+
+    .mini-bar-fill {
+      height: 100%;
+      width: 0%;
+
+      border-radius: inherit;
+
+      background:
+        linear-gradient(
+          90deg,
+          #073b93,
+          #2c7be5
+        );
+
+      transition: width .7s ease;
+    }
+
+    /* =====================================================
+       WEIGHT + INBODY
+    ====================================================== */
+
+    .two-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .big-card {
+      background: white;
+
+      border-radius: 20px;
+
+      padding: 18px;
+
+      border: 1px solid #e1e8f6;
+
+      box-shadow:
+        0 8px 22px rgba(7,29,92,.07);
+    }
+
+    .big-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #718096;
+    }
+
+    .big-value {
+      margin-top: 5px;
+
+      font-size: 30px;
+      font-weight: 1000;
+
+      color: #071d5c;
+    }
+
+    .big-unit {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+    }
+
+    .big-info {
+      margin-top: 8px;
+
+      font-size: 10px;
+      font-weight: 700;
+
+      color: #94a3b8;
+    }
+
+    .inbody-score {
+      color: #ff1717;
+    }
+
+    /* =====================================================
+       PROGRAM
+    ====================================================== */
+
+    .program-card {
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff,
+          #f4f7ff
+        );
+
+      border-radius: 22px;
+
+      padding: 18px;
+
+      border: 1px solid #dce6f8;
+
+      box-shadow:
+        0 8px 22px rgba(7,29,92,.07);
+    }
+
+    .program-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .program-title {
+      font-size: 14px;
+      font-weight: 1000;
+    }
+
+    .program-days {
+      font-size: 12px;
+      font-weight: 1000;
+      color: #073b93;
+    }
+
+    .program-progress {
+      margin-top: 12px;
+
+      height: 10px;
+
+      overflow: hidden;
+
+      border-radius: 20px;
+
+      background: #e7edf8;
+    }
+
+    .program-fill {
+      width: 0%;
+      height: 100%;
+
+      border-radius: inherit;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ff1717,
+          #ff7a00
+        );
+
+      transition: width .8s ease;
+    }
+
+    .program-foot {
+      display: flex;
+      justify-content: space-between;
+
+      margin-top: 7px;
+
+      font-size: 9px;
+      font-weight: 800;
+
+      color: #94a3b8;
+    }
+
+    /* =====================================================
+       QUICK MENU
+    ====================================================== */
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .quick-btn {
+      min-height: 92px;
+
+      border: 0;
+
+      border-radius: 18px;
+
+      background: white;
+
+      border: 1px solid #e1e8f6;
+
+      box-shadow:
+        0 7px 18px rgba(7,29,92,.07);
+
+      cursor: pointer;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      gap: 6px;
+
+      color: #071d5c;
+    }
+
+    .quick-btn:active {
+      transform: scale(.96);
+    }
+
+    .quick-icon {
+      font-size: 28px;
+    }
+
+    .quick-title {
+      font-size: 10px;
+      font-weight: 1000;
+    }
+
+    .quick-desc {
+      font-size: 8px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    /* =====================================================
+       FOOTER
+    ====================================================== */
+
+    .footer {
+      margin-top: 24px;
+
+      text-align: center;
+
+      color: #94a3b8;
+
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    .footer strong {
+      color: #073b93;
+    }
+
+    /* =====================================================
        RESPONSIVE
-       ========================= */
+    ====================================================== */
 
-    @media (max-width: 420px) {
+    @media (max-width: 380px) {
 
-      .page {
-        padding: 10px;
+      .hero {
+        margin-left: 10px;
+        margin-right: 10px;
       }
 
-      .menu-grid {
-        gap: 9px;
+      .section {
+        padding-left: 10px;
+        padding-right: 10px;
       }
 
-      .menu-card {
-        min-height: 145px;
-        padding: 15px;
-        border-radius: 19px;
+      .currency {
+        min-width: 65px;
+        padding: 7px 8px;
       }
 
-      .menu-icon {
-        font-size: 34px;
+      .hero-name {
+        font-size: 24px;
       }
 
-      .menu-title {
-        font-size: 19px;
+      .stat-card {
+        padding: 13px;
       }
 
-      .menu-sub {
-        font-size: 12px;
+      .big-value {
+        font-size: 26px;
       }
 
-      .stats {
-        gap: 8px;
-      }
     }
+
   </style>
 </head>
 
 <body>
 
-<div class="page">
+  <!-- =====================================================
+       LOADING SCREEN
+  ====================================================== -->
 
-  <!-- HEADER -->
-  <header class="header">
+  <div id="loadingScreen">
 
-    <div class="brand">
+    <div class="loading-box">
 
-      <div class="brand-logo">
-        B+
+      <div class="loading-logo">
+        ROCK <span>YOUR</span> BODY
       </div>
 
-      <div class="brand-text">
-        <div class="brand-title">
-          BANGKOK HOSPITAL UDON
-        </div>
+      <div class="loading-sub">
+        2026 • MOVE • EAT • SLEEP • HEALTH
+      </div>
 
-        <div class="brand-sub">
-          ROCK YOUR BODY 2026
-        </div>
+      <div class="loader"></div>
+
+      <div class="loading-text">
+        กำลังเชื่อมต่อข้อมูลสมาชิก...
       </div>
 
     </div>
 
-    <!-- USER -->
-    <section class="user-card">
+  </div>
 
-      <div class="welcome">
-        WELCOME BACK
+
+  <!-- =====================================================
+       ERROR SCREEN
+  ====================================================== -->
+
+  <div id="errorScreen">
+
+    <div class="error-box">
+
+      <div class="error-icon">
+        ⚠️
+      </div>
+
+      <div class="error-title">
+        ไม่สามารถโหลดข้อมูลได้
       </div>
 
       <div
-        class="user-name"
-        id="userName"
+        id="errorMessage"
+        class="error-message"
       >
-        สมาชิก ROCK YOUR BODY
+        กรุณาลองใหม่อีกครั้ง
       </div>
 
-      <div class="stats">
+      <button
+        class="retry-btn"
+        onclick="location.reload()"
+      >
+        🔄 ลองใหม่
+      </button>
 
-        <div class="stat">
-          <div class="stat-label">
-            🪙 ROCK COIN
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       MAIN APP
+  ====================================================== -->
+
+  <main
+    id="app"
+    class="app"
+    style="display:none;"
+  >
+
+    <!-- ===================================================
+         HEADER
+    ==================================================== -->
+
+    <header class="top-header">
+
+      <div class="header-row">
+
+        <div class="brand">
+
+          <div class="brand-mark">
+            +
           </div>
 
-          <div
-            class="stat-value"
-            id="rockCoin"
-          >
-            0
+          <div class="brand-text">
+
+            <div class="brand-main">
+              BANGKOK HOSPITAL UDON
+            </div>
+
+            <div class="brand-sub">
+              ROCK YOUR BODY 2026
+            </div>
+
           </div>
+
         </div>
 
-        <div class="stat">
-          <div class="stat-label">
-            ⚡ ENERGY
+
+        <div class="currency-wrap">
+
+          <div class="currency">
+
+            <div class="currency-label">
+              🪙 ROCK COIN
+            </div>
+
+            <div
+              id="rockCoin"
+              class="currency-value"
+            >
+              0
+            </div>
+
           </div>
 
-          <div
-            class="stat-value"
-            id="energy"
-          >
-            0 / 200
+
+          <div class="currency">
+
+            <div class="currency-label">
+              ⚡ ENERGY
+            </div>
+
+            <div
+              id="energy"
+              class="currency-value energy-value"
+            >
+              0/0
+            </div>
+
           </div>
+
         </div>
 
-        <div class="stat">
-          <div class="stat-label">
-            ⭐ POINTS
-          </div>
+      </div>
 
-          <div
-            class="stat-value"
-            id="points"
-          >
-            0
-          </div>
+    </header>
+
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <div class="welcome">
+          WELCOME BACK, ROCKER
         </div>
 
-        <div class="stat">
-          <div class="stat-label">
-            🏆 RANK
+        <div
+          id="memberName"
+          class="hero-name"
+        >
+          สมาชิก ROCK YOUR BODY
+        </div>
+
+        <div class="hero-program">
+          ROCK YOUR BODY 2026 • HEALTH JOURNEY
+        </div>
+
+
+        <div class="hero-bottom">
+
+          <div>
+
+            <div class="health-score-label">
+              HEALTH SCORE
+            </div>
+
+            <div
+              id="healthScore"
+              class="health-score"
+            >
+              —
+              <span>/100</span>
+            </div>
+
           </div>
 
-          <div
-            class="stat-value"
-            id="rank"
-          >
-            -
+
+          <div class="progress-wrap">
+
+            <div class="progress-label">
+
+              <span>
+                HEALTH
+              </span>
+
+              <span id="healthPercent">
+                0%
+              </span>
+
+            </div>
+
+            <div class="progress">
+
+              <div
+                id="healthBar"
+                class="progress-bar"
+              ></div>
+
+            </div>
+
           </div>
+
         </div>
 
       </div>
 
     </section>
 
-  </header>
 
+    <!-- ===================================================
+         DAILY TARGET
+    ==================================================== -->
 
-  <!-- MENU -->
-  <div class="section-title">
-    <strong>ROCK YOUR BODY</strong>
-    <span>เลือกเมนู</span>
-  </div>
+    <section class="section">
 
+      <div class="section-title-row">
 
-  <main class="menu-grid">
+        <div class="section-title">
+          🎯 Daily Target
+        </div>
 
-    <!-- HOME -->
-    <button
-      class="menu-card home"
-      onclick="go('./HOME.html')"
-    >
-      <div class="menu-icon">🏠</div>
+        <div class="section-subtitle">
+          วันนี้ของคุณ
+        </div>
 
-      <div class="menu-title">
-        HOME
       </div>
 
-      <div class="menu-sub">
-        หน้าหลัก
+
+      <div class="stat-grid">
+
+        <!-- STEPS -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              🚶
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            STEPS
+          </div>
+
+          <div>
+
+            <span
+              id="steps"
+              class="stat-value"
+            >
+              —
+            </span>
+
+            <span class="stat-target">
+              / <span id="targetSteps">—</span>
+            </span>
+
+          </div>
+
+          <div class="mini-bar">
+
+            <div
+              id="stepsBar"
+              class="mini-bar-fill"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- CALORIES -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              🔥
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            CALORIES
+          </div>
+
+          <div>
+
+            <span
+              id="calories"
+              class="stat-value"
+            >
+              —
+            </span>
+
+            <span class="stat-target">
+              / <span id="targetCalories">—</span> kcal
+            </span>
+
+          </div>
+
+          <div class="mini-bar">
+
+            <div
+              id="caloriesBar"
+              class="mini-bar-fill"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- SLEEP -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              😴
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            SLEEP
+          </div>
+
+          <div>
+
+            <span
+              id="sleep"
+              class="stat-value"
+            >
+              —
+            </span>
+
+            <span class="stat-target">
+              / <span id="targetSleep">—</span> hr
+            </span>
+
+          </div>
+
+          <div class="mini-bar">
+
+            <div
+              id="sleepBar"
+              class="mini-bar-fill"
+            ></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- POINTS -->
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">
+              ⭐
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            POINTS
+          </div>
+
+          <div
+            id="points"
+            class="stat-value"
+          >
+            —
+          </div>
+
+          <div class="stat-label">
+            RANK #<span id="rank">—</span>
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="menu-arrow">
-        ›
-      </div>
-    </button>
+    </section>
 
 
-    <!-- MISSION -->
-    <button
-      class="menu-card mission"
-      onclick="go('./mission.html')"
-    >
-      <div class="menu-icon">🎯</div>
+    <!-- ===================================================
+         BODY & INBODY
+    ==================================================== -->
 
-      <div class="menu-title">
-        MISSION
-      </div>
+    <section class="section">
 
-      <div class="menu-sub">
-        ภารกิจ
-      </div>
+      <div class="section-title-row">
 
-      <div class="menu-arrow">
-        ›
-      </div>
-    </button>
+        <div class="section-title">
+          💪 Body & Health
+        </div>
 
+        <div class="section-subtitle">
+          สุขภาพของคุณ
+        </div>
 
-    <!-- BATTLE -->
-    <button
-      class="menu-card battle"
-      onclick="go('./battle.html')"
-    >
-      <div class="menu-icon">⚔️</div>
-
-      <div class="menu-title">
-        BATTLE
       </div>
 
-      <div class="menu-sub">
-        ต่อสู้กับมอนสเตอร์
+
+      <div class="two-card">
+
+        <!-- WEIGHT -->
+
+        <div class="big-card">
+
+          <div class="big-label">
+            CURRENT WEIGHT
+          </div>
+
+          <div>
+
+            <span
+              id="weight"
+              class="big-value"
+            >
+              —
+            </span>
+
+            <span class="big-unit">
+              kg
+            </span>
+
+          </div>
+
+          <div class="big-info">
+            Target
+            <strong>
+              <span id="targetWeight">—</span> kg
+            </strong>
+          </div>
+
+        </div>
+
+
+        <!-- INBODY -->
+
+        <div class="big-card">
+
+          <div class="big-label">
+            INBODY SCORE
+          </div>
+
+          <div>
+
+            <span
+              id="inbodyScore"
+              class="big-value inbody-score"
+            >
+              —
+            </span>
+
+            <span class="big-unit">
+              /100
+            </span>
+
+          </div>
+
+          <div class="big-info">
+            Body composition
+          </div>
+
+        </div>
+
       </div>
 
-      <div class="menu-arrow">
-        ›
-      </div>
-    </button>
+    </section>
 
 
-    <!-- REWARD -->
-    <button
-      class="menu-card reward"
-      onclick="go('./reward.html')"
-    >
-      <div class="menu-icon">🎁</div>
+    <!-- ===================================================
+         PROGRAM
+    ==================================================== -->
 
-      <div class="menu-title">
-        REWARD
-      </div>
+    <section class="section">
 
-      <div class="menu-sub">
-        รางวัลของฉัน
-      </div>
+      <div class="section-title-row">
 
-      <div class="menu-arrow">
-        ›
-      </div>
-    </button>
+        <div class="section-title">
+          🏆 Program Progress
+        </div>
 
+        <div class="section-subtitle">
+          ROCK YOUR BODY 2026
+        </div>
 
-    <!-- RANKING -->
-    <button
-      class="menu-card ranking"
-      onclick="go('./ranking.html')"
-    >
-      <div class="menu-icon">🏆</div>
-
-      <div class="menu-title">
-        RANKING
       </div>
 
-      <div class="menu-sub">
-        อันดับการแข่งขัน
+
+      <div class="program-card">
+
+        <div class="program-head">
+
+          <div class="program-title">
+            HEALTH JOURNEY
+          </div>
+
+          <div class="program-days">
+
+            Day
+            <span id="programDay">
+              —
+            </span>
+            /
+            <span id="programTotal">
+              —
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="program-progress">
+
+          <div
+            id="programBar"
+            class="program-fill"
+          ></div>
+
+        </div>
+
+
+        <div class="program-foot">
+
+          <span>
+            START
+          </span>
+
+          <span>
+            เหลือ
+            <strong id="programRemain">
+              —
+            </strong>
+            วัน
+          </span>
+
+          <span>
+            GOAL
+          </span>
+
+        </div>
+
       </div>
 
-      <div class="menu-arrow">
-        ›
+    </section>
+
+
+    <!-- ===================================================
+         QUICK MENU
+    ==================================================== -->
+
+    <section class="section">
+
+      <div class="section-title-row">
+
+        <div class="section-title">
+          ⚡ Quick Menu
+        </div>
+
+        <div class="section-subtitle">
+          ไปต่อกันเลย!
+        </div>
+
       </div>
-    </button>
 
 
-    <!-- INFORMATION -->
-    <button
-      class="menu-card info"
-      onclick="go('./info.html')"
-    >
-      <div class="menu-icon">ℹ️</div>
+      <div class="quick-grid">
 
-      <div class="menu-title">
-        ข้อมูลเพิ่มเติม
+        <!-- MISSION -->
+
+        <button
+          class="quick-btn"
+          onclick="goPage('mission.html')"
+        >
+
+          <div class="quick-icon">
+            🎯
+          </div>
+
+          <div class="quick-title">
+            MISSION
+          </div>
+
+          <div class="quick-desc">
+            ภารกิจ
+          </div>
+
+        </button>
+
+
+        <!-- BATTLE -->
+
+        <button
+          class="quick-btn"
+          onclick="goPage('battle.html')"
+        >
+
+          <div class="quick-icon">
+            ⚔️
+          </div>
+
+          <div class="quick-title">
+            BATTLE
+          </div>
+
+          <div class="quick-desc">
+            ต่อสู้กับมอนสเตอร์
+          </div>
+
+        </button>
+
+
+        <!-- REWARD -->
+
+        <button
+          class="quick-btn"
+          onclick="goPage('rewards.html')"
+        >
+
+          <div class="quick-icon">
+            🎁
+          </div>
+
+          <div class="quick-title">
+            REWARD
+          </div>
+
+          <div class="quick-desc">
+            รางวัลของฉัน
+          </div>
+
+        </button>
+
+
+        <!-- RANKING -->
+
+        <button
+          class="quick-btn"
+          onclick="goPage('ranking.html')"
+        >
+
+          <div class="quick-icon">
+            🏆
+          </div>
+
+          <div class="quick-title">
+            RANKING
+          </div>
+
+          <div class="quick-desc">
+            อันดับการแข่งขัน
+          </div>
+
+        </button>
+
+
+        <!-- INFO -->
+
+        <button
+          class="quick-btn"
+          onclick="goPage('info.html')"
+        >
+
+          <div class="quick-icon">
+            ℹ️
+          </div>
+
+          <div class="quick-title">
+            INFO
+          </div>
+
+          <div class="quick-desc">
+            ข้อมูลโครงการ
+          </div>
+
+        </button>
+
+
+        <!-- REFRESH -->
+
+        <button
+          class="quick-btn"
+          onclick="loadHome()"
+        >
+
+          <div class="quick-icon">
+            🔄
+          </div>
+
+          <div class="quick-title">
+            REFRESH
+          </div>
+
+          <div class="quick-desc">
+            อัปเดตข้อมูล
+          </div>
+
+        </button>
+
       </div>
 
-      <div class="menu-sub">
-        โครงการและสิทธิประโยชน์
-      </div>
+    </section>
 
-      <div class="menu-arrow">
-        ›
-      </div>
-    </button>
+
+    <!-- ===================================================
+         FOOTER
+    ==================================================== -->
+
+    <footer class="footer">
+
+      <strong>
+        ROCK YOUR BODY 2026
+      </strong>
+
+      <br>
+
+      MOVE • EAT • SLEEP • HEALTH
+
+      <br>
+
+      Bangkok Hospital Udon
+
+    </footer>
 
   </main>
 
 
-  <!-- PROGRAM -->
-  <section class="program-card">
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
 
-    <div class="program-head">
+  <script>
 
-      <div class="program-title">
-        🚀 ROCK YOUR BODY PROGRAM
-      </div>
+    /* =====================================================
+       CONFIG
+    ====================================================== */
 
-      <div
-        class="program-day"
-        id="programDay"
-      >
-        Day 0 / 0
-      </div>
+    const API_BASE =
+      "https://rock-your-body-2026.onrender.com";
 
-    </div>
+    /*
+      LIFF ID ของ ROCK YOUR BODY 2026
+    */
 
-    <div class="progress">
-      <div
-        class="progress-bar"
-        id="programProgress"
-      ></div>
-    </div>
-
-  </section>
+    const LIFF_ID =
+      "2011201679-uNWz5yqF";
 
 
-  <div
-    class="loading"
-    id="loading"
-  >
-    กำลังโหลดข้อมูลสมาชิก...
-  </div>
+    /* =====================================================
+       ELEMENT HELPER
+    ====================================================== */
 
-  <div
-    class="error"
-    id="error"
-  ></div>
-
-</div>
+    function $(id) {
+      return document.getElementById(id);
+    }
 
 
-<script>
+    /* =====================================================
+       NUMBER FORMAT
+    ====================================================== */
 
-  /* ========================================================
-     API CONFIG
-     ======================================================== */
+    function number(value) {
 
-  const API_BASE =
-    (
-      window.APP_CONFIG &&
-      (
-        window.APP_CONFIG.API_BASE_URL ||
-        window.APP_CONFIG.API_URL
-      )
-    )
-    ||
-    "https://rock-your-body-2026.onrender.com";
+      const n = Number(value);
+
+      if (!Number.isFinite(n)) {
+        return "—";
+      }
+
+      return n.toLocaleString("en-US");
+    }
 
 
-  /* ========================================================
-     NAVIGATION
-     ======================================================== */
+    /* =====================================================
+       PERCENT
+    ====================================================== */
 
-  function go(page) {
-    window.location.href = page;
-  }
+    function percent(current, target) {
+
+      const c = Number(current);
+      const t = Number(target);
+
+      if (
+        !Number.isFinite(c) ||
+        !Number.isFinite(t) ||
+        t <= 0
+      ) {
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        Math.min(
+          100,
+          (c / t) * 100
+        )
+      );
+
+    }
 
 
-  /* ========================================================
-     FORMAT NUMBER
-     ======================================================== */
+    /* =====================================================
+       SET BAR
+    ====================================================== */
 
-  function number(value) {
+    function setBar(id, value) {
 
-    return Number(value || 0)
-      .toLocaleString("en-US");
+      const el = $(id);
 
-  }
+      if (!el) return;
+
+      el.style.width =
+        Math.round(value) + "%";
+
+    }
 
 
-  /* ========================================================
-     LOAD CURRENT USER
-     ======================================================== */
+    /* =====================================================
+       SHOW ERROR
+    ====================================================== */
 
-  async function loadUser() {
+    function showError(message) {
 
-    const loading =
-      document.getElementById("loading");
+      $("loadingScreen").style.display =
+        "none";
 
-    const error =
-      document.getElementById("error");
+      $("app").style.display =
+        "none";
 
-    try {
+      $("errorScreen").style.display =
+        "flex";
+
+      $("errorMessage").textContent =
+        message || "เกิดข้อผิดพลาด";
+
+    }
+
+
+    /* =====================================================
+       API REQUEST
+    ====================================================== */
+
+    async function apiGet(path, lineUserId) {
 
       const response =
         await fetch(
-          API_BASE + "/api/me",
+          API_BASE + path,
           {
             method: "GET",
+
             headers: {
-              "Accept": "application/json"
-            }
+              "Accept": "application/json",
+
+              ...(lineUserId
+                ? {
+                    "x-line-user-id":
+                      lineUserId
+                  }
+                : {})
+            },
+
+            cache: "no-store"
           }
         );
+
+
+      const raw =
+        await response.text();
+
+
+      let data;
+
+
+      try {
+
+        data =
+          raw
+            ? JSON.parse(raw)
+            : {};
+
+      } catch (error) {
+
+        throw new Error(
+          "API ตอบกลับไม่ใช่ JSON"
+        );
+
+      }
 
 
       if (!response.ok) {
 
         throw new Error(
-          "API /api/me ตอบกลับ " +
+          data.message ||
+          data.error ||
+          "API Error " +
           response.status
         );
 
       }
 
 
-      const data =
-        await response.json();
+      return data;
+
+    }
 
 
-      if (!data.ok || !data.user) {
+    /* =====================================================
+       LIFF INITIALIZE
+    ====================================================== */
+
+    async function initLIFF() {
+
+      if (
+        !window.liff ||
+        typeof liff.init !== "function"
+      ) {
 
         throw new Error(
-          "ไม่พบข้อมูลสมาชิก"
+          "ไม่พบ LINE LIFF SDK"
         );
 
       }
 
 
-      const user =
-        data.user;
+      await liff.init({
+        liffId: LIFF_ID
+      });
 
 
-      /* USER */
+      /*
+        ถ้าเปิดใน LINE และยังไม่ได้ Login
+        ให้เข้าสู่ระบบก่อน
+      */
 
-      document.getElementById(
-        "userName"
-      ).textContent =
-        user.name ||
-        "สมาชิก ROCK YOUR BODY";
+      if (!liff.isLoggedIn()) {
 
+        liff.login();
 
-      /* ROCK COIN */
-
-      document.getElementById(
-        "rockCoin"
-      ).textContent =
-        number(user.rockCoin);
-
-
-      /* ENERGY */
-
-      document.getElementById(
-        "energy"
-      ).textContent =
-        number(user.energy) +
-        " / " +
-        number(user.maxEnergy);
-
-
-      /* POINTS */
-
-      document.getElementById(
-        "points"
-      ).textContent =
-        number(user.points);
-
-
-      /* RANK */
-
-      document.getElementById(
-        "rank"
-      ).textContent =
-        user.rank == null
-          ? "-"
-          : "#" + user.rank;
-
-
-      /* PROGRAM */
-
-      const current =
-        Number(user.programDay || 0);
-
-      const total =
-        Number(user.programTotalDays || 0);
-
-
-      document.getElementById(
-        "programDay"
-      ).textContent =
-        "Day " +
-        current +
-        " / " +
-        total;
-
-
-      let percent = 0;
-
-      if (total > 0) {
-
-        percent =
-          Math.min(
-            100,
-            Math.max(
-              0,
-              (current / total) * 100
-            )
-          );
+        return null;
 
       }
 
 
-      document.getElementById(
-        "programProgress"
-      ).style.width =
-        percent + "%";
+      let profile = null;
 
 
-      loading.style.display =
-        "none";
+      try {
+
+        profile =
+          await liff.getProfile();
+
+      } catch (error) {
+
+        console.warn(
+          "LIFF getProfile failed:",
+          error
+        );
+
+      }
+
+
+      return {
+        userId:
+          profile?.userId || null,
+
+        displayName:
+          profile?.displayName || null,
+
+        pictureUrl:
+          profile?.pictureUrl || null
+      };
 
     }
 
-    catch (err) {
 
-      console.error(
-        "HOME LOAD ERROR:",
-        err
+    /* =====================================================
+       RENDER USER
+    ====================================================== */
+
+    function renderUser(user) {
+
+      if (!user) {
+        throw new Error(
+          "ไม่พบข้อมูลสมาชิก"
+        );
+      }
+
+
+      /* -----------------------------------------------
+         HEADER
+      ------------------------------------------------ */
+
+      $("rockCoin").textContent =
+        number(user.rockCoin);
+
+
+      $("energy").textContent =
+        number(user.energy) +
+        "/" +
+        number(user.maxEnergy);
+
+
+      /* -----------------------------------------------
+         NAME
+      ------------------------------------------------ */
+
+      $("memberName").textContent =
+        user.name ||
+        "สมาชิก ROCK YOUR BODY";
+
+
+      /* -----------------------------------------------
+         HEALTH SCORE
+      ------------------------------------------------ */
+
+      const healthScore =
+        Number(user.healthScore);
+
+
+      if (Number.isFinite(healthScore)) {
+
+        $("healthScore").innerHTML =
+          healthScore +
+          '<span>/100</span>';
+
+        $("healthPercent").textContent =
+          Math.round(
+            Math.max(
+              0,
+              Math.min(
+                100,
+                healthScore
+              )
+            )
+          ) + "%";
+
+        setBar(
+          "healthBar",
+          healthScore
+        );
+
+      }
+
+
+      /* -----------------------------------------------
+         STEPS
+      ------------------------------------------------ */
+
+      $("steps").textContent =
+        number(user.steps);
+
+      $("targetSteps").textContent =
+        number(user.targetSteps);
+
+      setBar(
+        "stepsBar",
+        percent(
+          user.steps,
+          user.targetSteps
+        )
       );
 
-      loading.style.display =
-        "none";
 
-      error.style.display =
-        "block";
+      /* -----------------------------------------------
+         CALORIES
+      ------------------------------------------------ */
 
-      error.textContent =
-        "ไม่สามารถโหลดข้อมูลสมาชิกได้ กรุณาลองใหม่อีกครั้ง";
+      $("calories").textContent =
+        number(user.calories);
+
+      $("targetCalories").textContent =
+        number(user.targetCalories);
+
+      setBar(
+        "caloriesBar",
+        percent(
+          user.calories,
+          user.targetCalories
+        )
+      );
+
+
+      /* -----------------------------------------------
+         SLEEP
+      ------------------------------------------------ */
+
+      $("sleep").textContent =
+        Number.isFinite(
+          Number(user.sleep)
+        )
+          ? Number(user.sleep).toFixed(1)
+          : "—";
+
+
+      $("targetSleep").textContent =
+        Number.isFinite(
+          Number(user.targetSleep)
+        )
+          ? Number(user.targetSleep).toFixed(1)
+          : "—";
+
+
+      setBar(
+        "sleepBar",
+        percent(
+          user.sleep,
+          user.targetSleep
+        )
+      );
+
+
+      /* -----------------------------------------------
+         POINTS
+      ------------------------------------------------ */
+
+      $("points").textContent =
+        number(user.points);
+
+
+      $("rank").textContent =
+        user.rank ??
+        "—";
+
+
+      /* -----------------------------------------------
+         WEIGHT
+      ------------------------------------------------ */
+
+      $("weight").textContent =
+        Number.isFinite(
+          Number(user.weight)
+        )
+          ? Number(user.weight).toFixed(1)
+          : "—";
+
+
+      $("targetWeight").textContent =
+        Number.isFinite(
+          Number(user.targetWeight)
+        )
+          ? Number(user.targetWeight).toFixed(1)
+          : "—";
+
+
+      /* -----------------------------------------------
+         INBODY
+      ------------------------------------------------ */
+
+      $("inbodyScore").textContent =
+        Number.isFinite(
+          Number(user.inbodyScore)
+        )
+          ? Number(user.inbodyScore)
+          : "—";
+
+
+      /* -----------------------------------------------
+         PROGRAM
+      ------------------------------------------------ */
+
+      const programDay =
+        Number(user.programDay);
+
+      const programTotal =
+        Number(user.programTotalDays);
+
+
+      $("programDay").textContent =
+        Number.isFinite(programDay)
+          ? programDay
+          : "—";
+
+
+      $("programTotal").textContent =
+        Number.isFinite(programTotal)
+          ? programTotal
+          : "—";
+
+
+      if (
+        Number.isFinite(programDay) &&
+        Number.isFinite(programTotal) &&
+        programTotal > 0
+      ) {
+
+        const p =
+          percent(
+            programDay,
+            programTotal
+          );
+
+
+        setBar(
+          "programBar",
+          p
+        );
+
+
+        $("programRemain").textContent =
+          Math.max(
+            0,
+            programTotal - programDay
+          );
+
+      }
 
     }
 
-  }
+
+    /* =====================================================
+       LOAD HOME
+    ====================================================== */
+
+    async function loadHome() {
+
+      $("errorScreen").style.display =
+        "none";
+
+      $("loadingScreen").style.display =
+        "flex";
+
+      $("app").style.display =
+        "none";
 
 
-  /* ========================================================
-     START
-     ======================================================== */
+      try {
 
-  document.addEventListener(
-    "DOMContentLoaded",
-    loadUser
-  );
+        /*
+          1. Initialize LINE LIFF
+        */
 
-</script>
+        const profile =
+          await initLIFF();
+
+
+        /*
+          ถ้า liff.login() ถูกเรียก
+          ให้หยุดรอ redirect
+        */
+
+        if (!profile) {
+          return;
+        }
+
+
+        /*
+          2. ต้องมี LINE User ID
+        */
+
+        if (!profile.userId) {
+
+          throw new Error(
+            "ไม่สามารถอ่าน LINE User ID ได้"
+          );
+
+        }
+
+
+        console.log(
+          "LINE USER ID:",
+          profile.userId
+        );
+
+
+        /*
+          3. เรียก API /api/me
+        */
+
+        const result =
+          await apiGet(
+            "/api/me",
+            profile.userId
+          );
+
+
+        console.log(
+          "API /api/me:",
+          result
+        );
+
+
+        /*
+          4. ตรวจ response
+        */
+
+        if (
+          !result ||
+          result.ok !== true
+        ) {
+
+          throw new Error(
+            result?.message ||
+            result?.error ||
+            "ไม่สามารถโหลดข้อมูลสมาชิก"
+          );
+
+        }
+
+
+        /*
+          5. Render
+        */
+
+        renderUser(
+          result.user
+        );
+
+
+        /*
+          6. แสดงหน้า HOME
+        */
+
+        $("loadingScreen").style.display =
+          "none";
+
+        $("errorScreen").style.display =
+          "none";
+
+        $("app").style.display =
+          "block";
+
+
+      } catch (error) {
+
+        console.error(
+          "HOME ERROR:",
+          error
+        );
+
+
+        showError(
+          error?.message ||
+          "ไม่สามารถเชื่อมต่อระบบได้"
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ====================================================== */
+
+    function goPage(page) {
+
+      /*
+        ใช้ relative path
+        เพื่อรองรับ GitHub Pages
+      */
+
+      window.location.href =
+        "./" + page;
+
+    }
+
+
+    /* =====================================================
+       START
+    ====================================================== */
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        loadHome();
+
+      }
+    );
+
+  </script>
 
 </body>
 </html>
