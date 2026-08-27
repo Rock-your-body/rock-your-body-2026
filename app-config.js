@@ -1,126 +1,126 @@
 /* =========================================================
    ROCK YOUR BODY 2026
    APP CONFIG
+   Version: 2026-08-27-FINAL
    ========================================================= */
 
-window.ROCK_CONFIG = {
+window.APP_CONFIG = {
 
-  APP_NAME: "ROCK YOUR BODY 2026",
+  /* -------------------------------------------------------
+     APP
+  ------------------------------------------------------- */
 
-  /* =======================================================
-     BACKEND
-     ======================================================= */
+  APP_NAME:
+    "ROCK YOUR BODY 2026",
 
-  API_BASE:
-    window.ROCK_API_BASE ||
-    "https://rock-your-body-2026.onrender.com",
+  VERSION:
+    "2026-08-27-FINAL",
 
 
-  /* =======================================================
+  /* -------------------------------------------------------
      LINE LIFF
-     ======================================================= */
-
-  /*
-    ใส่ LIFF ID จริงของ ROCK YOUR BODY
-
-    ตัวอย่าง:
-    "2001234567-AbCdEfGh"
-
-    ห้ามใส่ URL
-    ห้ามใส่ https://
-  */
+  ------------------------------------------------------- */
 
   LIFF_ID:
-    window.ROCK_LIFF_ID ||
     "2011201679-uNWz5yqF",
 
 
-  /* =======================================================
-     FRONTEND
-     ======================================================= */
+  /* -------------------------------------------------------
+     API
+  ------------------------------------------------------- */
 
-  FRONTEND_URL:
-    "https://rock-your-body.github.io/rock-your-body-2026/",
+  API: {
 
+    DASHBOARD:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
-  /* =======================================================
-     GAME SETTINGS
-     ======================================================= */
+    MISSION:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
 
-  MAX_ENERGY: 200,
-
-  DEFAULT_TEAM: "HERO ROCK",
-
-  DEFAULT_LEVEL: 1,
-
-  DEFAULT_EXP: 0,
-
-  DEFAULT_MAX_EXP: 1000,
-
-
-  /* =======================================================
-     PAGES
-     ======================================================= */
-
-  PAGES: {
-
-    home:
-      "./HOME.html",
-
-    mission:
-      "./mission.html",
-
-    battle:
-      "./battle.html",
-
-    reward:
-      "./reward.html",
-
-    ranking:
-      "./ranking.html",
-
-    info:
-      "./info.html",
-
-    dashboard:
-      "./dashboard.html",
-
-    food:
-      "./food-log.html"
+    BATTLE:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
 
   },
 
 
-  /* =======================================================
-     STORAGE
-     ======================================================= */
+  /* -------------------------------------------------------
+     PAGES
+  ------------------------------------------------------- */
 
-  STORAGE: {
+  PAGE: {
 
-    LINE_USER_ID:
-      "rock_line_user_id",
+    HOME:
+      "./dashboard.html",
 
-    USER:
-      "rock_user",
+    MISSION:
+      "./mission.html",
 
-    LINE_PROFILE:
-      "rock_line_profile",
+    BATTLE:
+      "./battle.html",
 
-    ENERGY:
-      "rock_energy",
+    WEIGHT:
+      "./weight-check.html",
 
-    COIN:
-      "rock_coin",
+    PROGRESS:
+      "./progress.html",
 
-    POINTS:
-      "rock_points"
+    REWARDS:
+      "./rewards.html",
 
-  }
+    RANKING:
+      "./ranking.html"
+
+  },
+
+
+  /* -------------------------------------------------------
+     GAME
+  ------------------------------------------------------- */
+
+  MAX_ENERGY:
+    200,
+
+  EXP_PER_LEVEL:
+    500,
+
+
+  /* -------------------------------------------------------
+     REFRESH
+  ------------------------------------------------------- */
+
+  REFRESH_MS:
+    30000
 
 };
 
 
+/* =========================================================
+   SAFETY CHECK
+   ========================================================= */
+
 console.log(
-  "ROCK YOUR BODY CONFIG READY",
-  window.ROCK_CONFIG
+  "================================="
+);
+
+console.log(
+  "ROCK APP CONFIG READY"
+);
+
+console.log(
+  "LIFF_ID:",
+  window.APP_CONFIG.LIFF_ID
+);
+
+console.log(
+  "DASHBOARD API:",
+  window.APP_CONFIG.API.DASHBOARD
+);
+
+console.log(
+  "HOME:",
+  window.APP_CONFIG.PAGE.HOME
+);
+
+console.log(
+  "================================="
 );
