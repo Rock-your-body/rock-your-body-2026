@@ -203,3 +203,66 @@ console.log(
 console.log(
   "================================="
 );
+/* =========================================================
+   ROCK COMPATIBILITY
+   ========================================================= */
+
+window.ROCK = window.ROCK || {};
+
+window.ROCK.initLINE = async function () {
+
+  if (!window.liff) {
+    throw new Error("LIFF SDK is not loaded");
+  }
+
+  if (!window.APP_CONFIG) {
+    throw new Error("APP_CONFIG is not loaded");
+  }
+
+  const liffId =
+    window.APP_CONFIG.LIFF_ID;
+
+  if (!liffId) {
+    throw new Error("LIFF_ID is missing");
+  }
+
+  await liff.init({
+    liffId: liffId
+  });
+
+  if (!liff.isLoggedIn()) {
+
+    liff.login({
+      redirectUri: window.location.href
+    });
+
+    return null;
+  }
+
+  const profile =
+    await liff.getProfile();
+
+  const userId =
+    profile.userId;
+
+  if (!userId) {
+    throw new Error(
+      "LINE User ID is missing"
+    );
+  }
+
+  localStorage.setItem(
+    "rock_line_user_id",
+    userId
+  );
+
+  localStorage.setItem(
+    "rock_line_profile",
+    JSON.stringify(profile)
+  );
+
+  return {
+    userId,
+    profile
+  };
+};
