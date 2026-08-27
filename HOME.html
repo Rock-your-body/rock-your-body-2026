@@ -1,4154 +1,2386 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-
 <head>
+<meta charset="utf-8">
 
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-               initial-scale=1,
-               maximum-scale=1,
-               viewport-fit=cover">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"
+>
 
 <title>ROCK YOUR BODY 2026</title>
 
 <!-- =====================================================
-     FONT : THAI SANS / ไม่มีหัว
-     ===================================================== -->
-
-<link rel="preconnect"
-      href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet">
-
-
-<!-- =====================================================
      LINE LIFF
-     ===================================================== -->
-
+===================================================== -->
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-
 <!-- =====================================================
-     ROCK CONFIG
-     ===================================================== -->
-
+     CONFIG
+===================================================== -->
 <script src="./app-config.js"></script>
 
+<!-- =====================================================
+     COMMON CORE
+===================================================== -->
 <script src="./common.js"></script>
-
 
 <style>
 
-/* =========================================================
-   RESET
-   ========================================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+  box-sizing:border-box;
 }
 
 html,
-body {
-    width: 100%;
-    min-height: 100%;
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  font-family:
+    "Noto Sans Thai",
+    "Noto Sans",
+    Arial,
+    Tahoma,
+    sans-serif;
+  background:#eef4ff;
+  color:#08245b;
 }
 
-body {
-
-    font-family:
-        "Noto Sans Thai",
-        Arial,
-        sans-serif;
-
-    background:
-        #eef4ff;
-
-    color:
-        #08245b;
-
-    overflow-x: hidden;
+body{
+  overflow-x:hidden;
 }
 
-
-/* =========================================================
+/* =====================================================
    APP
-   ========================================================= */
+===================================================== */
 
-.app {
-
-    width: 100%;
-
-    min-height: 100vh;
-
-    background:
-        linear-gradient(
-            180deg,
-            #f7fbff 0%,
-            #eef5ff 100%
-        );
-
+.app{
+  width:100%;
+  max-width:1600px;
+  margin:0 auto;
+  padding:18px;
 }
 
-
-/* =========================================================
-   MAIN CONTAINER
-   ========================================================= */
-
-.home {
-
-    width: 100%;
-
-    max-width: 1536px;
-
-    min-height: 100vh;
-
-    margin: auto;
-
-    padding:
-        20px 20px 18px;
-
-}
-
-
-/* =========================================================
+/* =====================================================
    HEADER
-   ========================================================= */
+===================================================== */
 
-.header {
-
-    height: 120px;
-
-    display: grid;
-
-    grid-template-columns:
-        310px
-        1fr
-        390px;
-
-    align-items: center;
-
-    gap: 20px;
-
-}
-
-
-/* =========================================================
-   HOSPITAL
-   ========================================================= */
-
-.hospital {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-}
-
-.hospital-logo {
-
-    width: 76px;
-
-    height: 76px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 54px;
-
-    line-height: 1;
-
-}
-
-.hospital-name {
-
-    color: #07337f;
-
-    font-weight: 900;
-
-    font-size: 28px;
-
-    line-height: 1.05;
-
-}
-
-.hospital-name small {
-
-    display: block;
-
-    margin-top: 6px;
-
-    font-size: 20px;
-
-    color: #67758e;
-
-    font-weight: 700;
-
-}
-
-
-/* =========================================================
-   ROCK TITLE
-   ========================================================= */
-
-.brand {
-
-    text-align: center;
-
-    white-space: nowrap;
-
-}
-
-.brand-title {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: clamp(
-        44px,
-        4.8vw,
-        76px
-    );
-
-    font-style: italic;
-
-    font-weight: 900;
-
-    letter-spacing: -4px;
-
-    line-height: .95;
-
-    color: #112b76;
-
-    text-shadow:
-        1px 2px 0 #fff;
-
-}
-
-.brand-title .red {
-
-    color: #bd0d0d;
-
-}
-
-.brand-year {
-
-    font-size: 32px;
-
-    color: #10266e;
-
-    margin-left: 8px;
-
-}
-
-.tagline {
-
-    margin-top: 8px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-weight: 900;
-
-    font-size: 22px;
-
-    letter-spacing: 2px;
-
-}
-
-.tagline .move {
-    color: #164de0;
-}
-
-.tagline .eat {
-    color: #e65d00;
-}
-
-.tagline .sleep {
-    color: #6d14d9;
-}
-
-.tagline .health {
-    color: #168339;
-}
-
-
-/* =========================================================
-   TOP STATUS
-   ========================================================= */
-
-.top-status {
-
-    height: 90px;
-
-    border:
-        2px solid #c9dcf9;
-
-    border-radius: 24px;
-
-    background:
-        rgba(255,255,255,.92);
-
-    box-shadow:
-        0 5px 18px rgba(20,65,130,.13);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-around;
-
-}
-
-.status-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    min-width: 145px;
-
-}
-
-.status-icon {
-
-    width: 58px;
-
-    height: 58px;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 36px;
-
-}
-
-.coin-icon {
-
-    background:
-        linear-gradient(
-            145deg,
-            #fff4a8,
-            #ffb800
-        );
-
-    border:
-        3px solid #d98200;
-
-    box-shadow:
-        0 3px 6px #999;
-
-}
-
-.energy-icon {
-
-    font-size: 46px;
-
-}
-
-.status-text {
-
-    text-align: left;
-
-}
-
-.status-number {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 28px;
-
-    font-weight: 900;
-
-    color: #10245f;
-
-    line-height: 1;
-
-}
-
-.status-label {
-
-    font-size: 13px;
-
-    font-weight: 800;
-
-    color: #14285e;
-
-    margin-top: 4px;
-
-}
-
-
-/* =========================================================
-   DASHBOARD GRID
-   ========================================================= */
-
-.dashboard {
-
-    display: grid;
-
-    grid-template-columns:
-        31%
-        31%
-        38%;
-
-    gap: 14px;
-
-    margin-top: 10px;
-
-}
-
-
-/* =========================================================
-   LEFT COLUMN
-   ========================================================= */
-
-.left-column {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 14px;
-
-}
-
-
-/* =========================================================
-   PROFILE CARD
-   ========================================================= */
-
-.profile-card {
-
-    height: 530px;
-
-    position: relative;
-
-    overflow: hidden;
-
-    border-radius: 28px;
-
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            #66b9ff 0,
-            #0874e7 28%,
-            #0752bb 65%,
-            #07378e 100%
-        );
-
-    border:
-        2px solid #5ca7ff;
-
-    box-shadow:
-        inset 0 0 35px rgba(255,255,255,.18),
-        0 10px 25px rgba(0,50,120,.18);
-
-}
-
-
-/* city background */
-
-.profile-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    opacity: .22;
-
-    background-image:
-        linear-gradient(
-            90deg,
-            transparent 48%,
-            rgba(255,255,255,.7) 49%,
-            transparent 50%
-        );
-
-    background-size:
-        45px 45px;
-
-}
-
-
-/* circular profile */
-
-.profile-ring {
-
-    position: absolute;
-
-    width: 345px;
-
-    height: 345px;
-
-    left: 50%;
-
-    top: 28px;
-
-    transform:
-        translateX(-50%);
-
-    border-radius: 50%;
-
-    border:
-        10px solid rgba(255,255,255,.9);
-
-    box-shadow:
-        0 0 0 8px rgba(255,255,255,.22),
-        0 0 30px rgba(255,255,255,.35);
-
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            #0c5dcb,
-            #042b74
-        );
-
-}
-
-
-/* LINE image */
-
-.profile-image {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-    display: block;
-
-}
-
-
-/* default avatar */
-
-.profile-fallback {
-
-    width: 100%;
-
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 145px;
-
-    color: #0a327f;
-
-    background:
-        linear-gradient(
-            180deg,
-            #8fcaff,
-            #2376d9
-        );
-
-}
-
-
-/* camera */
-
-.profile-camera {
-
-    position: absolute;
-
-    left: 50%;
-
-    top: 220px;
-
-    transform:
-        translateX(-50%);
-
-    width: 78px;
-
-    height: 78px;
-
-    border-radius: 50%;
-
-    background:
-        #07358a;
-
-    border:
-        5px solid #fff;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: white;
-
-    font-size: 38px;
-
-    z-index: 4;
-
-}
-
-
-/* upload text */
-
-.profile-caption {
-
-    position: absolute;
-
-    top: 330px;
-
-    left: 0;
-
-    right: 0;
-
-    text-align: center;
-
-    color: white;
-
-    font-size: 19px;
-
-    font-weight: 800;
-
-}
-
-
-/* team */
-
-.team-box {
-
-    position: absolute;
-
-    left: 9%;
-
-    right: 9%;
-
-    top: 380px;
-
-    height: 45px;
-
-    border-radius: 25px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #144ec1,
-            #08286e
-        );
-
-    border:
-        2px solid white;
-
-    box-shadow:
-        0 4px 10px rgba(0,0,0,.3);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: white;
-
-    font-size: 18px;
-
-    font-weight: 800;
-
-}
-
-
-/* hero */
-
-.hero-box {
-
-    position: absolute;
-
-    left: 4%;
-
-    right: 4%;
-
-    top: 432px;
-
-    height: 78px;
-
-    border-radius: 16px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #103d9d,
-            #061e5d
-        );
-
-    border:
-        2px solid #70baff;
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 8px 14px;
-
-    color: white;
-
-}
-
-.hero-shield {
-
-    font-size: 40px;
-
-    margin-right: 12px;
-
-}
-
-.hero-name {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 28px;
-
-    font-style: italic;
-
-    font-weight: 900;
-
-    flex: 1;
-
-}
-
-.level {
-
-    background:
-        linear-gradient(
-            180deg,
-            #ff4c42,
-            #d70000
-        );
-
-    border-radius: 9px;
-
-    padding:
-        9px 12px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-weight: 900;
-
-    font-size: 21px;
-
-}
-
-
-/* EXP */
-
-.exp-box {
-
-    position: absolute;
-
-    left: 4%;
-
-    right: 4%;
-
-    bottom: 8px;
-
-    height: 48px;
-
-    border-radius: 12px;
-
-    background: white;
-
-    border:
-        2px solid #66aaff;
-
-    display: flex;
-
-    align-items: center;
-
-    padding: 0 15px;
-
-    gap: 12px;
-
-}
-
-.exp-label {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 20px;
-
-    font-weight: 900;
-
-}
-
-.progress {
-
-    height: 17px;
-
-    flex: 1;
-
-    background:
-        #d8e3f2;
-
-    border-radius: 20px;
-
-    overflow: hidden;
-
-}
-
-.progress-fill {
-
-    height: 100%;
-
-    border-radius: inherit;
-
-    background:
-        linear-gradient(
-            90deg,
-            #0637d8,
-            #1648ed
-        );
-
-}
-
-
-/* =========================================================
-   QUICK BUTTONS
-   ========================================================= */
-
-.quick-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 14px;
-
-}
-
-.quick-card {
-
-    height: 184px;
-
-    border-radius: 24px;
-
-    color: white;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    cursor: pointer;
-
-    border:
-        2px solid rgba(255,255,255,.8);
-
-    box-shadow:
-        0 7px 15px rgba(0,30,100,.2);
-
-    transition:
-        transform .15s ease;
-
-}
-
-.quick-card:hover {
-
-    transform:
-        translateY(-3px);
-
-}
-
-.quick-card.blue {
-
-    background:
-        linear-gradient(
-            145deg,
-            #0d5cff,
-            #062c9a
-        );
-
-}
-
-.quick-card.green {
-
-    background:
-        linear-gradient(
-            145deg,
-            #13ad48,
-            #05752e
-        );
-
-}
-
-.quick-icon {
-
-    font-size: 65px;
-
-    line-height: 1;
-
-}
-
-.quick-title {
-
-    font-size: 22px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-weight: 900;
-
-    margin-top: 7px;
-
-}
-
-.quick-sub {
-
-    font-size: 15px;
-
-    font-weight: 700;
-
-    margin-top: 2px;
-
-}
-
-
-/* =========================================================
-   CENTER COLUMN
-   ========================================================= */
-
-.center-column {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 14px;
-
-}
-
-
-/* =========================================================
-   WEIGHT CARD
-   ========================================================= */
-
-.weight-card {
-
-    height: 530px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #ffffff,
-            #f8fbff
-        );
-
-    border:
-        2px solid #c8dcf6;
-
-    border-radius: 28px;
-
-    padding:
-        30px 24px;
-
-    box-shadow:
-        0 7px 20px rgba(40,80,140,.13);
-
-}
-
-.metric-row {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 22px;
-
-}
-
-.metric-icon {
-
-    width: 130px;
-
-    height: 130px;
-
-    border-radius: 24px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 75px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #e7f2ff,
-            #d5e7ff
-        );
-
-    border:
-        3px solid #2257b9;
-
-}
-
-.metric-content {
-
-    flex: 1;
-
-}
-
-.metric-label {
-
-    font-size: 21px;
-
-    font-weight: 900;
-
-    color: #09245f;
-
-}
-
-.metric-value {
-
-    margin-top: 2px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 62px;
-
-    font-weight: 900;
-
-    line-height: 1;
-
-    color: #09245f;
-
-}
-
-.metric-unit {
-
-    font-size: 26px;
-
-    font-weight: 800;
-
-}
-
-.divider {
-
-    height: 2px;
-
-    background:
-        #d9e4f2;
-
-    margin:
-        20px 0;
-
-}
-
-.target-value {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 61px;
-
-    font-weight: 900;
-
-    line-height: 1;
-
-    color: #c80000;
-
+.header{
+  display:grid;
+  grid-template-columns:280px 1fr 390px;
+  gap:20px;
+  align-items:center;
+  margin-bottom:14px;
 }
-
-.target-label {
-
-    font-size: 22px;
-
-    font-weight: 900;
 
+.hospital{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
-.target-row {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 22px;
-
+.hospital-logo{
+  width:76px;
+  height:76px;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,#f00 0 45%,#fff 45% 55%,#073b93 55%);
+  position:relative;
+  box-shadow:0 5px 14px #001d5730;
+}
+
+.hospital-logo:before{
+  content:"+";
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:54px;
+  font-weight:900;
 }
-
-.target-icon {
-
-    width: 130px;
-
-    height: 130px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 85px;
-
+
+.hospital-name{
+  font-size:27px;
+  line-height:1;
+  font-weight:900;
+  color:#12377f;
 }
-
-
-/* weight progress */
-
-.weight-progress {
-
-    margin-top: 25px;
 
-    padding:
-        17px;
-
-    border:
-        2px solid #c4d9f2;
-
-    border-radius: 22px;
-
-    background:
-        #f8fbff;
-
+.hospital-sub{
+  margin-top:7px;
+  font-size:21px;
+  font-weight:700;
+  color:#65708a;
 }
 
-.weight-progress-title {
+/* =====================================================
+   TITLE
+===================================================== */
 
-    font-size: 20px;
-
-    font-weight: 900;
-
-    color: #1045a3;
-
+.brand{
+  text-align:center;
+  line-height:.9;
+  white-space:nowrap;
 }
-
-.weight-bar {
 
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    margin-top: 12px;
-
+.brand-main{
+  font-size:66px;
+  font-weight:1000;
+  font-style:italic;
+  letter-spacing:-3px;
+  color:#0a2470;
 }
 
-.weight-bar .progress {
-
-    height: 20px;
-
+.brand-main .red{
+  color:#c71919;
 }
-
-.weight-percent {
-
-    font-family:
-        Arial,
-        sans-serif;
 
-    font-size: 42px;
-
-    font-weight: 900;
-
-    color: #16813b;
-
+.brand-year{
+  color:#11256e;
+  font-size:42px;
+  font-weight:1000;
 }
-
-.weight-info {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-top: 7px;
-
-    font-size: 17px;
-
-    font-weight: 700;
 
+.brand-sub{
+  margin-top:12px;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:2px;
 }
 
+.move{color:#1850d5}
+.eat{color:#e87800}
+.sleep{color:#6b18df}
+.health{color:#16813b}
+
+/* =====================================================
+   RESOURCE BAR
+===================================================== */
 
-/* =========================================================
+.resources{
+  background:#fff;
+  border:2px solid #c9d8f5;
+  border-radius:24px;
+  padding:13px 20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:22px;
+  box-shadow:0 6px 18px #15356c18;
+}
+
+.resource{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:145px;
+}
+
+.resource-icon{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  background:#ffd15a;
+  box-shadow:inset 0 0 0 3px #e29b00;
+}
+
+.energy-icon{
+  background:#fff;
+  box-shadow:none;
+}
+
+.resource-value{
+  font-size:27px;
+  line-height:1;
+  font-weight:1000;
+  color:#11256e;
+}
+
+.resource-label{
+  font-size:13px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+/* =====================================================
+   MAIN GRID
+===================================================== */
+
+.main-grid{
+  display:grid;
+  grid-template-columns:
+    minmax(330px,1.1fr)
+    minmax(430px,1.15fr)
+    minmax(480px,1.25fr);
+  gap:18px;
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+  background:#fff;
+  border-radius:25px;
+  border:2px solid #d3e0f6;
+  box-shadow:0 8px 22px #15356c1b;
+  overflow:hidden;
+}
+
+/* =====================================================
+   PROFILE
+===================================================== */
+
+.profile-card{
+  padding:14px;
+}
+
+.profile{
+  height:520px;
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 50% 38%,#ffffff 0 22%,transparent 23%),
+    linear-gradient(145deg,#0b65ed,#052477);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding-top:26px;
+}
+
+.profile:before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  border:3px solid #fff;
+  opacity:.8;
+  top:20px;
+}
+
+.profile:after{
+  content:"";
+  position:absolute;
+  width:330px;
+  height:330px;
+  border-radius:50%;
+  border:2px solid #fff;
+  opacity:.6;
+  top:65px;
+}
+
+.profile-img{
+  position:relative;
+  z-index:3;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#0a3a9c;
+  border:7px solid #fff;
+  box-shadow:
+    0 0 0 5px #61a8ff,
+    0 10px 25px #00113f80;
+}
+
+.profile-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:85px;
+  font-weight:900;
+}
+
+.profile-camera{
+  position:absolute;
+  z-index:5;
+  top:208px;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:#fff;
+  border:5px solid #17377d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+}
+
+.profile-upload{
+  position:absolute;
+  z-index:5;
+  top:315px;
+  color:#fff;
+  font-size:21px;
+  font-weight:900;
+  text-shadow:0 2px 5px #001;
+}
+
+.team{
+  position:absolute;
+  z-index:8;
+  bottom:148px;
+  width:88%;
+  height:52px;
+  border-radius:30px;
+  background:linear-gradient(90deg,#0b2f82,#071a55);
+  border:3px solid #5eafff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  font-size:19px;
+  font-weight:900;
+}
+
+.team-edit{
+  margin-left:auto;
+  font-size:23px;
+}
+
+.hero{
+  position:absolute;
+  z-index:8;
+  bottom:78px;
+  width:94%;
+  height:66px;
+  border-radius:17px;
+  background:linear-gradient(90deg,#071e5d,#0c408e);
+  border:3px solid #75baff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+}
+
+.hero-badge{
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  background:#143c8e;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+}
+
+.hero-name{
+  margin-left:12px;
+  font-size:29px;
+  font-weight:1000;
+  font-style:italic;
+}
+
+.level{
+  margin-left:auto;
+  background:#e21c20;
+  border-radius:8px;
+  padding:8px 10px;
+  font-size:20px;
+  font-weight:1000;
+}
+
+.exp{
+  position:absolute;
+  z-index:8;
+  bottom:15px;
+  width:94%;
+  height:53px;
+  border-radius:12px;
+  background:#fff;
+  border:3px solid #56a8ff;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  font-weight:1000;
+}
+
+.exp-title{
+  font-size:19px;
+}
+
+.progress{
+  flex:1;
+  height:17px;
+  border-radius:20px;
+  background:#d9e1ed;
+  margin:0 14px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,#0059ff,#1733b8);
+  width:56%;
+}
+
+.exp-value{
+  font-size:17px;
+}
+
+/* =====================================================
+   CENTER WEIGHT
+===================================================== */
+
+.weight-card{
+  padding:22px;
+}
+
+.weight-row{
+  display:grid;
+  grid-template-columns:145px 1fr;
+  gap:18px;
+  align-items:center;
+  padding-bottom:18px;
+  border-bottom:1px solid #d6dfef;
+}
+
+.weight-icon,
+.target-icon{
+  width:130px;
+  height:130px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:72px;
+}
+
+.weight-icon{
+  background:#e9f0ff;
+}
+
+.target-icon{
+  background:#fff0f0;
+}
+
+.label{
+  font-size:22px;
+  font-weight:900;
+}
+
+.big-value{
+  font-size:61px;
+  line-height:1;
+  font-weight:1000;
+  margin-top:5px;
+  color:#071e68;
+}
+
+.unit{
+  font-size:28px;
+}
+
+.target{
+  margin-top:18px;
+}
+
+.target .big-value{
+  color:#c91818;
+}
+
+.target-progress{
+  margin-top:18px;
+  padding:18px;
+  border:2px solid #cddcf3;
+  border-radius:20px;
+  background:#fafdff;
+}
+
+.target-title{
+  font-size:20px;
+  font-weight:900;
+}
+
+.percent-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:12px;
+}
+
+.percent{
+  font-size:39px;
+  font-weight:1000;
+  color:#16823b;
+}
+
+.target-progress .progress{
+  margin:0;
+  height:20px;
+}
+
+.target-info{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
+  font-size:16px;
+  font-weight:800;
+}
+
+/* =====================================================
    CENTER LOWER
-   ========================================================= */
+===================================================== */
 
-.center-lower {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 14px;
-
+.center-bottom{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:14px;
 }
 
-.info-card {
-
-    height: 260px;
-
-    border-radius: 25px;
-
-    background: white;
-
-    border:
-        2px solid #b9d6fa;
-
-    padding: 18px;
-
-    box-shadow:
-        0 7px 18px rgba(40,80,140,.11);
-
+.small-card{
+  min-height:250px;
+  padding:16px;
+  border-radius:22px;
+  background:#fff;
+  border:2px solid #b7d2f8;
+  box-shadow:0 6px 16px #12356c15;
 }
 
-.info-head {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    font-size: 19px;
-
-    font-weight: 900;
-
-    color: #102c7a;
-
+.small-title{
+  font-size:20px;
+  font-weight:1000;
+  color:#19337d;
 }
 
-.info-score {
-
-    margin-top: 10px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 39px;
-
-    font-weight: 900;
-
-    color: #122b79;
-
+.small-score{
+  font-size:42px;
+  font-weight:1000;
+  margin-top:16px;
 }
 
-.info-score small {
-
-    font-size: 20px;
-
+.score-unit{
+  font-size:18px;
 }
 
-.plus {
-
-    display: inline-block;
-
-    margin-left: 8px;
-
-    padding:
-        4px 9px;
-
-    border-radius: 12px;
-
-    background: #078c25;
-
-    color: white;
-
-    font-size: 17px;
-
+.plus{
+  float:right;
+  background:#13a83d;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:20px;
+  font-weight:1000;
 }
 
-.sparkline {
-
-    width: 100%;
-
-    height: 80px;
-
-    margin-top: 8px;
-
+.chart{
+  height:65px;
+  margin-top:10px;
+  position:relative;
+  border-bottom:2px solid #c6d5ef;
 }
 
-.inbody-button {
-
-    height: 38px;
-
-    border-radius: 20px;
-
-    background:
-        #f3f0ff;
-
-    color:
-        #4b16c4;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 14px;
-
-    font-weight: 900;
-
+.chart svg{
+  width:100%;
+  height:100%;
 }
 
-.program-number {
+/* =====================================================
+   PROGRAM
+===================================================== */
 
-    margin-top: 20px;
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 53px;
-
-    font-weight: 900;
-
-    color: #112b78;
-
+.program-number{
+  margin-top:40px;
+  font-size:51px;
+  font-weight:1000;
 }
 
-.program-number small {
-
-    font-size: 22px;
-
+.program-number span{
+  font-size:22px;
 }
 
-.program-bar {
-
-    margin-top: 10px;
-
+.program-progress{
+  height:17px;
+  margin-top:12px;
+  border-radius:20px;
+  background:#d5e3f6;
+  overflow:hidden;
 }
 
-.program-remaining {
-
-    margin-top: 7px;
-
-    color: #173da4;
-
-    font-size: 16px;
-
-    font-weight: 800;
-
+.program-progress-fill{
+  height:100%;
+  background:#1596ef;
+  border-radius:20px;
+  width:50%;
 }
 
-
-/* =========================================================
-   RIGHT COLUMN
-   ========================================================= */
-
-.right-column {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 14px;
-
+.program-left{
+  margin-top:10px;
+  color:#1648a4;
+  font-weight:900;
 }
 
+/* =====================================================
+   RIGHT
+===================================================== */
 
-/* =========================================================
-   MINI STAT GRID
-   ========================================================= */
-
-.stat-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 14px;
-
+.right-column{
+  display:grid;
+  gap:14px;
 }
 
-.stat-card {
-
-    height: 155px;
-
-    border-radius: 24px;
-
-    padding:
-        15px;
-
-    position: relative;
-
-    overflow: hidden;
-
-    color: white;
-
-    border:
-        2px solid rgba(255,255,255,.8);
-
-    box-shadow:
-        0 7px 16px rgba(0,30,90,.18);
-
+.stats-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
-.stat-card.blue {
-
-    background:
-        linear-gradient(
-            145deg,
-            #1765e8,
-            #063c9c
-        );
-
+.stat{
+  min-height:150px;
+  border-radius:23px;
+  color:#fff;
+  padding:17px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 7px 17px #12356c20;
 }
 
-.stat-card.green {
-
-    background:
-        linear-gradient(
-            145deg,
-            #13a94d,
-            #056b2b
-        );
-
+.stat.blue{
+  background:linear-gradient(145deg,#176cf2,#06317d);
 }
 
-.stat-card.purple {
-
-    background:
-        linear-gradient(
-            145deg,
-            #7e2be5,
-            #4311a7
-        );
-
+.stat.green{
+  background:linear-gradient(145deg,#19ad50,#007136);
 }
 
-.stat-card.pink {
-
-    background:
-        linear-gradient(
-            145deg,
-            #f32262,
-            #c40046
-        );
-
+.stat.purple{
+  background:linear-gradient(145deg,#7d2af3,#4711ad);
 }
 
-.stat-top {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
+.stat.pink{
+  background:linear-gradient(145deg,#fa3762,#c70c42);
 }
 
-.stat-emoji {
-
-    font-size: 50px;
-
+.stat-title{
+  text-align:right;
+  font-size:17px;
+  font-weight:900;
 }
 
-.stat-title {
-
-    font-size: 17px;
-
-    font-weight: 800;
-
+.stat-icon{
+  position:absolute;
+  left:17px;
+  top:19px;
+  font-size:55px;
 }
 
-.stat-value {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 40px;
-
-    line-height: 1;
-
-    font-weight: 900;
-
-    text-align: center;
-
-    margin-top: -3px;
-
+.stat-value{
+  text-align:right;
+  margin-top:5px;
+  font-size:41px;
+  font-weight:1000;
 }
 
-.stat-target {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    text-align: center;
-
-    font-size: 18px;
-
-    font-weight: 700;
-
+.stat-sub{
+  text-align:right;
+  font-size:16px;
+  font-weight:800;
 }
 
-.stat-progress {
-
-    height: 12px;
-
-    margin:
-        8px 5px 0;
-
-    border-radius: 10px;
-
-    background:
-        rgba(255,255,255,.5);
-
-    overflow: hidden;
-
+.stat .progress{
+  position:absolute;
+  left:20px;
+  right:20px;
+  bottom:14px;
+  height:12px;
+  margin:0;
+  background:#ffffff55;
 }
 
-.stat-progress-fill {
-
-    height: 100%;
-
-    border-radius: inherit;
-
-    background: white;
-
+.stat .progress-fill{
+  background:#fff;
 }
 
+/* =====================================================
+   REWARDS
+===================================================== */
 
-/* =========================================================
-   REWARD CARD
-   ========================================================= */
-
-.reward-card {
-
-    height: 205px;
-
-    border-radius: 26px;
-
-    padding: 15px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #ffb000,
-            #ef7100
-        );
-
-    border:
-        2px solid #ffce68;
-
-    box-shadow:
-        0 8px 18px rgba(160,80,0,.18);
-
-    color: white;
-
+.rewards{
+  background:linear-gradient(145deg,#ffad12,#f47c00);
+  border-radius:23px;
+  padding:15px;
+  color:#fff;
+  box-shadow:0 7px 17px #8e4c0028;
 }
 
-.reward-head {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    font-size: 22px;
-
-    font-weight: 900;
-
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:24px;
+  font-weight:1000;
 }
 
-.reward-items {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap: 12px;
-
-    margin-top: 10px;
-
+.reward-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:12px;
 }
 
-.reward-item {
-
-    height: 125px;
-
-    border-radius: 18px;
-
-    background:
-        #fffaf0;
-
-    color: #142251;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
+.reward{
+  background:#fff;
+  color:#24180b;
+  min-height:132px;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border:2px solid #ffe2aa;
 }
 
-.reward-icon {
-
-    font-size: 43px;
-
+.reward-icon{
+  font-size:47px;
 }
 
-.reward-value {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 23px;
-
-    font-weight: 900;
-
+.reward-value{
+  font-size:24px;
+  font-weight:1000;
+  margin-top:4px;
 }
 
-.reward-label {
-
-    font-size: 13px;
-
-    font-weight: 800;
-
+.reward-label{
+  font-size:14px;
+  font-weight:900;
 }
 
+/* =====================================================
+   RANKING
+===================================================== */
 
-/* =========================================================
-   RANK CARD
-   ========================================================= */
-
-.rank-card {
-
-    height: 165px;
-
-    border-radius: 25px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #12b69a,
-            #067b73
-        );
-
-    border:
-        2px solid #71e3cb;
-
-    color: white;
-
-    padding: 15px;
-
-    position: relative;
-
-    overflow: hidden;
-
+.ranking{
+  background:linear-gradient(145deg,#14b99b,#07836f);
+  border-radius:23px;
+  padding:15px;
+  color:#fff;
+  min-height:175px;
+  box-shadow:0 7px 17px #006b5b25;
 }
 
-.rank-head {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    font-size: 22px;
-
-    font-weight: 900;
-
+.rank-body{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:1fr 1.2fr 1fr;
+  gap:7px;
+  align-items:end;
 }
 
-.rank-body {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
+.rank-box{
+  background:#e7ffff;
+  color:#0a2467;
+  border-radius:18px;
+  min-height:82px;
+  text-align:center;
+  padding:8px;
 }
 
-.my-rank {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 52px;
-
-    font-weight: 900;
-
-    line-height: 1;
-
+.my-rank{
+  font-size:44px;
+  line-height:1;
+  font-weight:1000;
 }
 
-.rank-sub {
-
-    font-size: 14px;
-
-    font-weight: 700;
-
+.rank-note{
+  font-size:15px;
+  font-weight:900;
 }
 
-.podium {
-
-    display: flex;
-
-    align-items: end;
-
-    height: 90px;
-
-    gap: 7px;
-
-}
-
-.person {
-
-    width: 62px;
-
-    text-align: center;
-
-    font-size: 12px;
-
-    font-weight: 900;
-
-}
-
-.person-avatar {
-
-    width: 46px;
-
-    height: 46px;
-
-    border-radius: 50%;
-
-    margin: auto;
-
-    background:
-        white;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 25px;
-
-}
-
-.person.first {
-
-    transform:
-        translateY(-18px);
-
-}
-
-
-/* =========================================================
+/* =====================================================
    BOTTOM NAV
-   ========================================================= */
+===================================================== */
 
-.bottom-nav {
+.bottom-nav{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:15px;
+  margin-top:16px;
+}
 
-    display: grid;
+.nav-btn{
+  height:112px;
+  border:0;
+  border-radius:22px;
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 7px 15px #12356c25;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+}
 
-    grid-template-columns:
-        1fr 1fr 1fr;
+.nav-btn.home{
+  background:linear-gradient(145deg,#063db1,#001e68);
+}
 
-    gap: 16px;
+.nav-btn.mission{
+  background:linear-gradient(145deg,#e51a1a,#a60000);
+}
 
-    margin-top: 14px;
+.nav-btn.battle{
+  background:linear-gradient(145deg,#063db1,#001e68);
+}
+
+.nav-icon{
+  font-size:57px;
+}
+
+.nav-main{
+  font-size:35px;
+  font-weight:1000;
+  font-style:italic;
+}
+
+.nav-sub{
+  font-size:18px;
+  font-weight:800;
+  text-align:center;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:1100px){
+
+  .header{
+    grid-template-columns:1fr;
+  }
+
+  .hospital{
+    justify-content:center;
+  }
+
+  .brand{
+    white-space:normal;
+  }
+
+  .resources{
+    justify-content:center;
+  }
+
+  .main-grid{
+    grid-template-columns:1fr;
+  }
 
 }
 
-.nav-button {
-
-    height: 108px;
-
-    border-radius: 23px;
-
-    border:
-        2px solid rgba(255,255,255,.85);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 22px;
-
-    color: white;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 7px 15px rgba(0,30,100,.2);
-
-}
-
-.nav-home {
-
-    background:
-        linear-gradient(
-            145deg,
-            #0b58e7,
-            #062b86
-        );
-
-}
-
-.nav-mission {
-
-    background:
-        linear-gradient(
-            145deg,
-            #fa1e14,
-            #a90000
-        );
-
-}
-
-.nav-battle {
-
-    background:
-        linear-gradient(
-            145deg,
-            #0d58e6,
-            #062b86
-        );
-
-}
-
-.nav-icon {
-
-    font-size: 52px;
-
-}
-
-.nav-text {
-
-    text-align: center;
-
-}
-
-.nav-title {
-
-    font-family:
-        Arial,
-        sans-serif;
-
-    font-size: 38px;
-
-    font-style: italic;
-
-    font-weight: 900;
-
-    line-height: .95;
-
-}
-
-.nav-sub {
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-}
-
-
-/* =========================================================
-   LOADING
-   ========================================================= */
-
-.loading {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999;
-
-    background:
-        rgba(5,35,95,.92);
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: white;
-
-    transition:
-        opacity .3s ease;
-
-}
-
-.loading.hidden {
-
-    opacity: 0;
-
-    pointer-events: none;
-
-}
-
-.spinner {
-
-    width: 60px;
-
-    height: 60px;
-
-    border:
-        6px solid rgba(255,255,255,.3);
-
-    border-top-color:
-        white;
-
-    border-radius: 50%;
-
-    animation:
-        spin 1s linear infinite;
-
-}
-
-@keyframes spin {
-
-    to {
-        transform:
-            rotate(360deg);
-    }
-
-}
-
-.loading-text {
-
-    margin-top: 15px;
-
-    font-weight: 800;
-
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 1100px) {
-
-    .home {
-        padding: 12px;
-    }
-
-    .header {
-
-        grid-template-columns:
-            1fr;
-
-        height: auto;
-
-    }
-
-    .hospital {
-        justify-content: center;
-    }
-
-    .top-status {
-        max-width: 600px;
-        margin: auto;
-    }
-
-    .dashboard {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-    .profile-card,
-    .weight-card {
-        height: 500px;
-    }
-
-}
-
-@media (max-width: 650px) {
-
-    .home {
-        padding: 8px;
-    }
-
-    .hospital-name {
-        font-size: 20px;
-    }
-
-    .hospital-name small {
-        font-size: 14px;
-    }
-
-    .brand-title {
-        font-size: 40px;
-    }
-
-    .brand-year {
-        font-size: 20px;
-    }
-
-    .tagline {
-        font-size: 15px;
-    }
-
-    .top-status {
-        height: auto;
-        padding: 12px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .status-item {
-        min-width: 130px;
-    }
-
-    .center-lower {
-        grid-template-columns:
-            1fr;
-    }
-
-    .stat-grid {
-        grid-template-columns:
-            1fr 1fr;
-    }
-
-    .bottom-nav {
-        grid-template-columns:
-            1fr;
-    }
-
-    .profile-ring {
-        width: 270px;
-        height: 270px;
-    }
-
-    .profile-camera {
-        top: 185px;
-    }
-
-    .profile-caption {
-        top: 285px;
-    }
-
-    .team-box {
-        top: 335px;
-    }
-
-    .hero-box {
-        top: 385px;
-    }
-
-    .profile-card {
-        height: 490px;
-    }
-
-    .exp-box {
-        bottom: 8px;
-    }
-
-}
-
-
-/* =========================================================
-   PREVENT TEXT SELECTION ON GAME UI
-   ========================================================= */
-
-.nav-button,
-.quick-card,
-.reward-card {
-
-    user-select: none;
-
-}
-
-
-/* =========================================================
-   CLICK FEEDBACK
-   ========================================================= */
-
-button,
-.nav-button,
-.quick-card {
-
-    -webkit-tap-highlight-color:
-        transparent;
-
-}
-
-
-/* =========================================================
-   HIDE BROKEN IMAGE
-   ========================================================= */
-
-img {
-
-    max-width: 100%;
+@media(max-width:650px){
+
+  .app{
+    padding:8px;
+  }
+
+  .brand-main{
+    font-size:36px;
+    letter-spacing:-1px;
+  }
+
+  .brand-year{
+    font-size:27px;
+  }
+
+  .brand-sub{
+    font-size:13px;
+  }
+
+  .hospital-name{
+    font-size:21px;
+  }
+
+  .hospital-sub{
+    font-size:16px;
+  }
+
+  .resources{
+    padding:9px;
+    gap:8px;
+  }
+
+  .resource{
+    min-width:0;
+  }
+
+  .resource-icon{
+    width:38px;
+    height:38px;
+    font-size:21px;
+  }
+
+  .resource-value{
+    font-size:19px;
+  }
+
+  .resource-label{
+    font-size:9px;
+  }
+
+  .profile{
+    height:470px;
+  }
+
+  .weight-row{
+    grid-template-columns:90px 1fr;
+  }
+
+  .weight-icon,
+  .target-icon{
+    width:85px;
+    height:85px;
+    font-size:48px;
+  }
+
+  .big-value{
+    font-size:42px;
+  }
+
+  .center-bottom{
+    grid-template-columns:1fr;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat-value{
+    font-size:29px;
+  }
+
+  .stat-title{
+    font-size:12px;
+  }
+
+  .stat-icon{
+    font-size:35px;
+  }
+
+  .bottom-nav{
+    grid-template-columns:1fr;
+  }
 
 }
 
 </style>
-
 </head>
-
 
 <body>
 
 <div class="app">
 
-<div class="home">
+  <!-- ===================================================
+       HEADER
+  ==================================================== -->
 
-
-<!-- =====================================================
-     HEADER
-     ===================================================== -->
-
-<header class="header">
-
-
-    <!-- HOSPITAL -->
+  <header class="header">
 
     <div class="hospital">
 
-        <div class="hospital-logo">
-            🏥
-        </div>
+      <div class="hospital-logo"></div>
 
+      <div>
         <div class="hospital-name">
-
-            BANGKOK
-            HOSPITAL
-
-            <small>
-                UDON
-            </small>
-
+          BANGKOK<br>HOSPITAL
         </div>
+
+        <div class="hospital-sub">
+          UDON
+        </div>
+      </div>
 
     </div>
 
-
-    <!-- BRAND -->
 
     <div class="brand">
 
-        <div class="brand-title">
+      <div class="brand-main">
+        ROCK <span class="red">YOUR</span> BODY
+        <span class="brand-year">2026</span>
+      </div>
 
-            ROCK
-            <span class="red">
-                YOUR BODY
-            </span>
-
-            <span class="brand-year">
-                2026
-            </span>
-
-        </div>
-
-        <div class="tagline">
-
-            <span class="move">MOVE</span>
-            •
-            <span class="eat">EAT</span>
-            •
-            <span class="sleep">SLEEP</span>
-            •
-            <span class="health">HEALTH</span>
-
-        </div>
+      <div class="brand-sub">
+        <span class="move">MOVE</span>
+        &nbsp;•&nbsp;
+        <span class="eat">EAT</span>
+        &nbsp;•&nbsp;
+        <span class="sleep">SLEEP</span>
+        &nbsp;•&nbsp;
+        <span class="health">HEALTH</span>
+      </div>
 
     </div>
 
 
-    <!-- TOP STATUS -->
+    <div class="resources">
 
-    <div class="top-status">
+      <div class="resource">
 
-        <div class="status-item">
+        <div class="resource-icon">
+          ⭐
+        </div>
 
-            <div class="status-icon coin-icon">
-                ⭐
-            </div>
+        <div>
+          <div
+            class="resource-value"
+            id="coinValue"
+          >
+            0
+          </div>
 
-            <div class="status-text">
+          <div class="resource-label">
+            ROCK COIN
+          </div>
+        </div>
 
-                <div
-                    class="status-number"
-                    id="coinTop">
-                    1,250
-                </div>
+      </div>
 
-                <div class="status-label">
-                    ROCK COIN
-                </div>
 
-            </div>
+      <div class="resource">
+
+        <div class="resource-icon energy-icon">
+          ⚡
+        </div>
+
+        <div>
+
+          <div
+            class="resource-value"
+            id="energyValue"
+          >
+            0/200
+          </div>
+
+          <div class="resource-label">
+            ENERGY
+          </div>
 
         </div>
 
-
-        <div class="status-item">
-
-            <div class="status-icon energy-icon">
-                ⚡
-            </div>
-
-            <div class="status-text">
-
-                <div class="status-number">
-
-                    <span id="energyTop">
-                        150
-                    </span>
-
-                    /
-                    <span id="energyMaxTop">
-                        200
-                    </span>
-
-                </div>
-
-                <div class="status-label">
-                    ENERGY
-                </div>
-
-            </div>
-
-        </div>
+      </div>
 
     </div>
 
-</header>
+  </header>
 
 
-<!-- =====================================================
-     MAIN DASHBOARD
-     ===================================================== -->
+  <!-- ===================================================
+       MAIN
+  ==================================================== -->
 
-<main class="dashboard">
-
-
-<!-- =====================================================
-     LEFT
-     ===================================================== -->
-
-<section class="left-column">
+  <main class="main-grid">
 
 
-    <!-- PROFILE -->
+    <!-- ================================================
+         LEFT PROFILE
+    ================================================= -->
 
-    <div class="profile-card">
+    <section>
 
+      <div class="card profile-card">
 
-        <div class="profile-ring">
+        <div class="profile">
 
-            <img
-                id="profileImage"
-                class="profile-image"
-                alt="LINE Profile"
-                style="display:none">
+          <img
+            id="profileImage"
+            class="profile-img"
+            alt="LINE Profile"
+            style="display:none"
+          >
 
-            <div
-                id="profileFallback"
-                class="profile-fallback">
-                👤
-            </div>
+          <div
+            id="profilePlaceholder"
+            class="profile-img profile-placeholder"
+          >
+            👤
+          </div>
 
-        </div>
-
-
-        <div class="profile-camera">
+          <div class="profile-camera">
             📷
-        </div>
+          </div>
+
+          <div
+            class="profile-upload"
+            id="profileName"
+          >
+            กำลังโหลดข้อมูล...
+          </div>
 
 
-        <div class="profile-caption">
-            อัปโหลดรูปของคุณ
-        </div>
+          <div class="team">
 
-
-        <div
-            class="team-box"
-            id="teamName">
-            Team : HERO ROCK
-        </div>
-
-
-        <div class="hero-box">
-
-            <div class="hero-shield">
-                🛡️
-            </div>
-
-            <div
-                class="hero-name"
-                id="heroName">
+            <span>
+              ✎
+              Team :
+              <span id="teamName">
                 HERO ROCK
+              </span>
+            </span>
+
+            <span class="team-edit">
+              ▼
+            </span>
+
+          </div>
+
+
+          <div class="hero">
+
+            <div class="hero-badge">
+              ★
             </div>
 
             <div
-                class="level"
-                id="heroLevel">
-                Lv.12
+              class="hero-name"
+              id="heroName"
+            >
+              HERO ROCK
             </div>
 
-        </div>
+            <div
+              class="level"
+              id="level"
+            >
+              Lv.12
+            </div>
+
+          </div>
 
 
-        <div class="exp-box">
+          <div class="exp">
 
-            <div class="exp-label">
-                EXP
+            <div class="exp-title">
+              EXP
             </div>
 
             <div class="progress">
 
-                <div
-                    id="expProgress"
-                    class="progress-fill"
-                    style="width:56%">
-                </div>
+              <div
+                id="expBar"
+                class="progress-fill"
+              ></div>
 
             </div>
 
             <div
-                id="expText"
-                style="
-                    font-family:Arial;
-                    font-weight:900;
-                    white-space:nowrap;">
-                560 / 1000
+              id="expValue"
+              class="exp-value"
+            >
+              0 / 1000
             </div>
+
+          </div>
 
         </div>
 
-    </div>
+      </div>
 
 
-    <!-- QUICK -->
+      <!-- LEFT BUTTONS -->
 
-    <div class="quick-grid">
+      <div class="center-bottom">
+
+        <button
+          class="small-card"
+          onclick="ROCK.go('dashboard')"
+        >
+
+          <div style="font-size:50px">
+            ⚖️
+          </div>
+
+          <div class="small-title">
+            WEIGHT CHECK
+          </div>
+
+          <div>
+            ชั่งน้ำหนัก
+          </div>
+
+        </button>
 
 
-        <div
-            class="quick-card blue"
-            onclick="ROCK.goDashboard()">
+        <button
+          class="small-card"
+          onclick="ROCK.go('dashboard')"
+        >
 
-            <div class="quick-icon">
-                ⚖️
+          <div style="font-size:50px">
+            📈
+          </div>
+
+          <div class="small-title">
+            MY PROGRESS
+          </div>
+
+          <div>
+            ความก้าวหน้าของฉัน
+          </div>
+
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================================
+         CENTER
+    ================================================= -->
+
+    <section>
+
+
+      <div class="card weight-card">
+
+        <div class="weight-row">
+
+          <div class="weight-icon">
+            ⚖️
+          </div>
+
+          <div>
+
+            <div class="label">
+              น้ำหนักปัจจุบัน
             </div>
 
-            <div class="quick-title">
-                WEIGHT CHECK
-            </div>
+            <div class="big-value">
 
-            <div class="quick-sub">
-                ชั่งน้ำหนัก
-            </div>
+              <span id="currentWeight">
+                0
+              </span>
 
-        </div>
-
-
-        <div
-            class="quick-card green"
-            onclick="ROCK.goDashboard()">
-
-            <div class="quick-icon">
-                📈
-            </div>
-
-            <div class="quick-title">
-                MY PROGRESS
-            </div>
-
-            <div class="quick-sub">
-                ความก้าวหน้าของฉัน
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     CENTER
-     ===================================================== -->
-
-<section class="center-column">
-
-
-    <!-- WEIGHT -->
-
-    <div class="weight-card">
-
-
-        <div class="metric-row">
-
-            <div class="metric-icon">
-                ⚖️
-            </div>
-
-            <div class="metric-content">
-
-                <div class="metric-label">
-                    น้ำหนักปัจจุบัน
-                </div>
-
-                <div class="metric-value">
-
-                    <span id="weight">
-                        78.5
-                    </span>
-
-                    <span class="metric-unit">
-                        kg
-                    </span>
-
-                </div>
+              <span class="unit">
+                kg
+              </span>
 
             </div>
 
-        </div>
-
-
-        <div class="divider"></div>
-
-
-        <div class="target-row">
-
-            <div class="target-icon">
-                🎯
-            </div>
-
-            <div>
-
-                <div class="target-label">
-                    เป้าหมาย
-                </div>
-
-                <div class="target-value">
-
-                    <span id="targetWeight">
-                        72.0
-                    </span>
-
-                    <span
-                        class="metric-unit">
-                        kg
-                    </span>
-
-                </div>
-
-            </div>
+          </div>
 
         </div>
 
 
-        <div class="weight-progress">
+        <div class="weight-row target">
 
-            <div class="weight-progress-title">
-                ความคืบหน้าสู่เป้าหมายน้ำหนัก
+          <div class="target-icon">
+            🎯
+          </div>
+
+          <div>
+
+            <div class="label">
+              เป้าหมาย
             </div>
 
-            <div class="weight-bar">
+            <div class="big-value">
 
-                <div class="progress">
+              <span id="targetWeight">
+                0
+              </span>
 
-                    <div
-                        id="weightProgress"
-                        class="progress-fill"
-                        style="width:62%">
-                    </div>
-
-                </div>
-
-                <div
-                    class="weight-percent"
-                    id="weightPercent">
-                    62%
-                </div>
+              <span class="unit">
+                kg
+              </span>
 
             </div>
 
-
-            <div class="weight-info">
-
-                <span>
-                    ลดไปแล้ว
-                    <strong id="lostWeight">
-                        6.5 kg
-                    </strong>
-                </span>
-
-                <span>
-                    เหลืออีก
-                    <strong id="remainingWeight">
-                        6.5 kg
-                    </strong>
-                </span>
-
-            </div>
+          </div>
 
         </div>
 
-    </div>
+
+        <div class="target-progress">
+
+          <div class="target-title">
+            ความคืบหน้าเป้าหมายน้ำหนัก
+          </div>
+
+          <div class="percent-row">
+
+            <div class="progress">
+
+              <div
+                id="weightProgressBar"
+                class="progress-fill"
+              ></div>
+
+            </div>
+
+            <div
+              class="percent"
+              id="weightPercent"
+            >
+              0%
+            </div>
+
+          </div>
 
 
-    <!-- LOWER -->
+          <div class="target-info">
 
-    <div class="center-lower">
+            <span>
+              ลดไปแล้ว
+              <b id="lostWeight">
+                0
+              </b>
+              kg
+            </span>
+
+            <span>
+              เหลืออีก
+              <b id="remainingWeight">
+                0
+              </b>
+              kg
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CENTER LOWER -->
+
+      <div class="center-bottom">
 
 
         <!-- INBODY -->
 
-        <div class="info-card">
+        <div class="small-card">
 
-            <div class="info-head">
-                🛡️
-                InBody ล่าสุด
-            </div>
+          <div class="small-title">
+            🛡️ InBody ล่าสุด
+          </div>
 
-            <div
-                style="
-                    font-size:13px;
-                    font-weight:700;">
-                (<span id="inbodyDate">
-                    9 พ.ค. 2026
-                </span>)
-            </div>
+          <div style="font-size:14px">
+            <span id="inbodyDate">
+              -
+            </span>
+          </div>
 
-            <div class="info-score">
+          <div class="small-score">
 
-                InBody Score
+            <span id="inbodyScore">
+              0
+            </span>
 
-                <br>
+            <span class="score-unit">
+              / 100
+            </span>
 
-                <span id="inbodyScore">
-                    72
-                </span>
+            <span class="plus">
+              +3
+            </span>
 
-                <small>
-                    / 100
-                </small>
+          </div>
 
-                <span class="plus">
-                    +3
-                </span>
 
-            </div>
-
+          <div class="chart">
 
             <svg
-                class="sparkline"
-                viewBox="0 0 300 80"
-                preserveAspectRatio="none">
+              viewBox="0 0 300 70"
+              preserveAspectRatio="none"
+            >
 
-                <polyline
-                    points="
-                    0,55
-                    45,72
-                    90,52
-                    135,68
-                    180,45
-                    225,55
-                    270,32
-                    300,18"
-                    fill="none"
-                    stroke="#6845d9"
-                    stroke-width="5"/>
-
-                <circle
-                    cx="0"
-                    cy="55"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="45"
-                    cy="72"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="90"
-                    cy="52"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="135"
-                    cy="68"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="180"
-                    cy="45"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="225"
-                    cy="55"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="270"
-                    cy="32"
-                    r="5"
-                    fill="#6845d9"/>
-
-                <circle
-                    cx="300"
-                    cy="18"
-                    r="5"
-                    fill="#6845d9"/>
+              <polyline
+                points="0,50 45,65 90,45 135,60 180,40 225,48 300,20"
+                fill="none"
+                stroke="#6635d9"
+                stroke-width="4"
+              />
 
             </svg>
 
+          </div>
 
-            <div class="inbody-button">
-                ดูผล InBody ล่าสุด →
-            </div>
+          <div
+            style="
+              margin-top:12px;
+              text-align:center;
+              font-weight:900;
+              color:#4926a5;
+            "
+          >
+            ดูผล InBody ล่าสุด →
+          </div>
 
         </div>
 
 
         <!-- PROGRAM -->
 
-        <div class="info-card">
+        <div class="small-card">
 
-            <div class="info-head">
-                📅
-                ระยะเวลาโครงการ
-            </div>
+          <div class="small-title">
+            📅 ระยะเวลาโครงการ
+          </div>
 
-            <div class="program-number">
+          <div class="program-number">
 
-                <span id="programDay">
-                    45
-                </span>
-
-                <small>
-                    / 90 วัน
-                </small>
-
-            </div>
-
-            <div class="program-bar">
-
-                <div class="progress">
-
-                    <div
-                        id="programProgress"
-                        class="progress-fill"
-                        style="width:50%">
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="program-remaining">
-
-                เหลืออีก
-                <strong id="programRemaining">
-                    45
-                </strong>
-                วัน
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================================
-     RIGHT
-     ===================================================== -->
-
-<section class="right-column">
-
-
-    <!-- STATS -->
-
-    <div class="stat-grid">
-
-
-        <!-- STEPS -->
-
-        <div class="stat-card blue">
-
-            <div class="stat-top">
-
-                <div class="stat-emoji">
-                    👣
-                </div>
-
-                <div class="stat-title">
-                    วันนี้ก้าวไปแล้ว
-                </div>
-
-            </div>
-
-            <div
-                class="stat-value"
-                id="steps">
-                6,842
-            </div>
-
-            <div class="stat-target">
-
-                /
-                <span id="stepsTarget">
-                    10,000
-                </span>
-                ก้าว
-
-            </div>
-
-            <div class="stat-progress">
-
-                <div
-                    id="stepsProgress"
-                    class="stat-progress-fill"
-                    style="width:68%">
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- CALORIES -->
-
-        <div class="stat-card green">
-
-            <div class="stat-top">
-
-                <div class="stat-emoji">
-                    🔥
-                </div>
-
-                <div class="stat-title">
-                    แคลอรี่เผาผลาญ
-                </div>
-
-            </div>
-
-            <div
-                class="stat-value"
-                id="calories">
-                320
-            </div>
-
-            <div class="stat-target">
-
-                /
-                <span id="caloriesTarget">
-                    500
-                </span>
-                kcal
-
-            </div>
-
-            <div class="stat-progress">
-
-                <div
-                    id="caloriesProgress"
-                    class="stat-progress-fill"
-                    style="width:64%">
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- SLEEP -->
-
-        <div class="stat-card purple">
-
-            <div class="stat-top">
-
-                <div class="stat-emoji">
-                    🌙
-                </div>
-
-                <div class="stat-title">
-                    นอนหลับ
-                </div>
-
-            </div>
-
-            <div
-                class="stat-value"
-                id="sleep">
-                7.30
-            </div>
-
-            <div class="stat-target">
-
-                /
-                <span id="sleepTarget">
-                    8
-                </span>
-                ชม.
-
-            </div>
-
-            <div class="stat-progress">
-
-                <div
-                    id="sleepProgress"
-                    class="stat-progress-fill"
-                    style="width:91%">
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- HEALTH -->
-
-        <div class="stat-card pink">
-
-            <div class="stat-top">
-
-                <div class="stat-emoji">
-                    ❤️
-                </div>
-
-                <div class="stat-title">
-                    คะแนนสุขภาพรวม
-                </div>
-
-            </div>
-
-            <div
-                class="stat-value"
-                id="healthScore">
-                85
-            </div>
-
-            <div class="stat-target">
-                คะแนน
-            </div>
-
-            <div class="stat-progress">
-
-                <div
-                    id="healthProgress"
-                    class="stat-progress-fill"
-                    style="width:85%">
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- REWARDS -->
-
-    <div class="reward-card">
-
-        <div class="reward-head">
+            <span id="programDay">
+              0
+            </span>
 
             <span>
-                🎁
-                รางวัลของฉัน
+              / 90 วัน
             </span>
 
-            <span
-                style="
-                    font-size:15px;">
-                ดูทั้งหมด →
+          </div>
+
+          <div class="program-progress">
+
+            <div
+              id="programBar"
+              class="program-progress-fill"
+            ></div>
+
+          </div>
+
+          <div class="program-left">
+
+            เหลืออีก
+            <span id="programLeft">
+              0
             </span>
+            วัน
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================================
+         RIGHT
+    ================================================= -->
+
+    <section class="right-column">
+
+
+      <!-- STATS -->
+
+      <div class="stats-grid">
+
+
+        <div class="stat blue">
+
+          <div class="stat-icon">
+            👣
+          </div>
+
+          <div class="stat-title">
+            วันนี้ก้าวไปแล้ว
+          </div>
+
+          <div
+            class="stat-value"
+            id="stepsValue"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            / 10,000 ก้าว
+          </div>
+
+          <div class="progress">
+
+            <div
+              id="stepsBar"
+              class="progress-fill"
+            ></div>
+
+          </div>
 
         </div>
 
 
-        <div class="reward-items">
+        <div class="stat green">
 
+          <div class="stat-icon">
+            🔥
+          </div>
 
-            <div class="reward-item">
+          <div class="stat-title">
+            แคลอรี่เผาผลาญ
+          </div>
 
-                <div class="reward-icon">
-                    ⭐
-                </div>
+          <div
+            class="stat-value"
+            id="caloriesValue"
+          >
+            0
+          </div>
 
-                <div class="reward-value">
-                    1,000
-                </div>
+          <div class="stat-sub">
+            / 500 kcal
+          </div>
 
-                <div class="reward-label">
-                    ROCK COIN
-                </div>
+          <div class="progress">
 
-            </div>
+            <div
+              id="caloriesBar"
+              class="progress-fill"
+            ></div>
 
-
-            <div class="reward-item">
-
-                <div class="reward-icon">
-                    ⚡
-                </div>
-
-                <div class="reward-value">
-                    x10
-                </div>
-
-                <div class="reward-label">
-                    ENERGY
-                </div>
-
-            </div>
-
-
-            <div class="reward-item">
-
-                <div class="reward-icon">
-                    🏅
-                </div>
-
-                <div class="reward-value">
-                    นักสู้สุขภาพ
-                </div>
-
-                <div class="reward-label">
-                    BADGE
-                </div>
-
-            </div>
+          </div>
 
         </div>
 
-    </div>
+
+        <div class="stat purple">
+
+          <div class="stat-icon">
+            🌙
+          </div>
+
+          <div class="stat-title">
+            นอนหลับ
+          </div>
+
+          <div
+            class="stat-value"
+            id="sleepValue"
+          >
+            0
+          </div>
+
+          <div class="stat-sub">
+            / 8 ชม.
+          </div>
+
+          <div class="progress">
+
+            <div
+              id="sleepBar"
+              class="progress-fill"
+            ></div>
+
+          </div>
+
+        </div>
 
 
-    <!-- RANK -->
+        <div class="stat pink">
 
-    <div class="rank-card">
+          <div class="stat-icon">
+            ❤️
+          </div>
 
-        <div class="rank-head">
+          <div class="stat-title">
+            คะแนนสุขภาพรวม
+          </div>
 
-            <span>
-                📊
-                อันดับของฉัน
-            </span>
+          <div
+            class="stat-value"
+            id="healthScore"
+          >
+            0
+          </div>
 
-            <span
-                style="
-                    font-size:14px;">
-                ดูอันดับทั้งหมด →
-            </span>
+          <div class="stat-sub">
+            คะแนน
+          </div>
+
+          <div class="progress">
+
+            <div
+              id="healthBar"
+              class="progress-fill"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- REWARDS -->
+
+      <div class="rewards">
+
+        <div class="section-head">
+
+          <span>
+            🎁 รางวัลของฉัน
+          </span>
+
+          <span
+            onclick="ROCK.go('reward')"
+            style="cursor:pointer"
+          >
+            ดูทั้งหมด →
+          </span>
+
+        </div>
+
+
+        <div class="reward-grid">
+
+          <div class="reward">
+
+            <div class="reward-icon">
+              ⭐
+            </div>
+
+            <div class="reward-value">
+              1,000
+            </div>
+
+            <div class="reward-label">
+              ROCK COIN
+            </div>
+
+          </div>
+
+
+          <div class="reward">
+
+            <div class="reward-icon">
+              ⚡
+            </div>
+
+            <div class="reward-value">
+              x10
+            </div>
+
+            <div class="reward-label">
+              ENERGY
+            </div>
+
+          </div>
+
+
+          <div class="reward">
+
+            <div class="reward-icon">
+              🏅
+            </div>
+
+            <div class="reward-value">
+              นักสู้สุขภาพ
+            </div>
+
+            <div class="reward-label">
+              BADGE
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RANKING -->
+
+      <div class="ranking">
+
+        <div class="section-head">
+
+          <span>
+            📊 อันดับของฉัน
+          </span>
+
+          <span
+            onclick="ROCK.go('ranking')"
+            style="cursor:pointer"
+          >
+            ดูอันดับทั้งหมด →
+          </span>
 
         </div>
 
 
         <div class="rank-body">
 
-            <div>
+          <div class="rank-box">
 
-                <div
-                    class="my-rank"
-                    id="myRank">
-                    #12
-                </div>
-
-                <div class="rank-sub">
-
-                    จากผู้เข้าร่วมทั้งหมด
-                    <strong id="totalMembers">
-                        238
-                    </strong>
-                    คน
-
-                </div>
-
+            <div class="my-rank">
+              #<span id="myRank">
+                -
+              </span>
             </div>
 
-
-            <div class="podium">
-
-
-                <div class="person">
-
-                    <div class="person-avatar">
-                        👨🏻
-                    </div>
-
-                    2
-
-                </div>
-
-
-                <div class="person first">
-
-                    <div class="person-avatar">
-                        🧑🏻
-                    </div>
-
-                    1
-
-                </div>
-
-
-                <div class="person">
-
-                    <div class="person-avatar">
-                        👩🏻
-                    </div>
-
-                    3
-
-                </div>
-
+            <div class="rank-note">
+              จากผู้เข้าร่วมทั้งหมด
             </div>
+
+          </div>
+
+
+          <div class="rank-box">
+
+            <div style="font-size:38px">
+              🥇
+            </div>
+
+            <div class="rank-note">
+              อันดับ 1
+            </div>
+
+          </div>
+
+
+          <div class="rank-box">
+
+            <div style="font-size:38px">
+              🥈 🥉
+            </div>
+
+            <div class="rank-note">
+              Top Players
+            </div>
+
+          </div>
 
         </div>
 
-    </div>
+      </div>
 
-</section>
+    </section>
 
-</main>
-
-
-<!-- =====================================================
-     BOTTOM NAV
-     ===================================================== -->
-
-<nav class="bottom-nav">
+  </main>
 
 
-    <div
-        class="nav-button nav-home"
-        onclick="ROCK.goHome()">
+  <!-- ===================================================
+       BOTTOM NAV
+  ==================================================== -->
 
-        <div class="nav-icon">
-            🏠
+  <nav class="bottom-nav">
+
+    <button
+      class="nav-btn home"
+      onclick="ROCK.goHome()"
+    >
+
+      <div class="nav-icon">
+        🏠
+      </div>
+
+      <div>
+
+        <div class="nav-main">
+          HOME
         </div>
 
-        <div class="nav-text">
-
-            <div class="nav-title">
-                HOME
-            </div>
-
-            <div class="nav-sub">
-                หน้าหลัก
-            </div>
-
+        <div class="nav-sub">
+          หน้าหลัก
         </div>
 
-    </div>
+      </div>
+
+    </button>
 
 
-    <div
-        class="nav-button nav-mission"
-        onclick="ROCK.goMission()">
+    <button
+      class="nav-btn mission"
+      onclick="ROCK.goMission()"
+    >
 
-        <div class="nav-icon">
-            🎯
+      <div class="nav-icon">
+        🎯
+      </div>
+
+      <div>
+
+        <div class="nav-main">
+          MISSION
         </div>
 
-        <div class="nav-text">
-
-            <div class="nav-title">
-                MISSION
-            </div>
-
-            <div class="nav-sub">
-                ภารกิจ
-            </div>
-
+        <div class="nav-sub">
+          ภารกิจ
         </div>
 
-    </div>
+      </div>
+
+    </button>
 
 
-    <div
-        class="nav-button nav-battle"
-        onclick="ROCK.goBattle()">
+    <button
+      class="nav-btn battle"
+      onclick="ROCK.goBattle()"
+    >
 
-        <div class="nav-icon">
-            ⚔️
+      <div class="nav-icon">
+        ⚔️
+      </div>
+
+      <div>
+
+        <div class="nav-main">
+          BATTLE
         </div>
 
-        <div class="nav-text">
-
-            <div class="nav-title">
-                BATTLE
-            </div>
-
-            <div class="nav-sub">
-                ต่อสู้กับมอนสเตอร์
-            </div>
-
+        <div class="nav-sub">
+          ต่อสู้กับมอนสเตอร์
         </div>
 
-    </div>
+      </div>
 
-</nav>
+    </button>
 
-
-</div>
-</div>
-
-
-<!-- =====================================================
-     LOADING
-     ===================================================== -->
-
-<div
-    id="loading"
-    class="loading">
-
-    <div class="spinner"></div>
-
-    <div class="loading-text">
-        ROCK YOUR BODY 2026
-    </div>
+  </nav>
 
 </div>
 
 
 <!-- =====================================================
-     JAVASCRIPT
-     ===================================================== -->
+     HOME SCRIPT
+===================================================== -->
 
 <script>
 
-"use strict";
+(function(){
+
+  "use strict";
 
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+  function setText(id,value){
 
-function el(id) {
+    const el =
+      document.getElementById(id);
 
-    return document.getElementById(id);
-
-}
-
-
-function setText(id, value) {
-
-    const node = el(id);
-
-    if (node) {
-        node.textContent = value;
+    if(el){
+      el.textContent =
+        value ?? "-";
     }
 
-}
+  }
 
 
-function formatNumber(value) {
+  function percent(current,target){
 
-    const n =
-        Number(value) || 0;
+    current =
+      Number(current) || 0;
 
-    return n.toLocaleString("en-US");
+    target =
+      Number(target) || 0;
 
-}
+    if(target <= 0){
+      return 0;
+    }
 
-
-function formatDecimal(value, digits = 1) {
-
-    const n =
-        Number(value) || 0;
-
-    return n.toLocaleString(
-        "en-US",
-        {
-            minimumFractionDigits: digits,
-            maximumFractionDigits: digits
-        }
-    );
-
-}
-
-
-function clampPercent(value) {
-
-    return Math.min(
+    return Math.max(
+      0,
+      Math.min(
         100,
-        Math.max(
-            0,
-            Number(value) || 0
-        )
+        (current / target) * 100
+      )
     );
 
-}
+  }
 
 
-/* =========================================================
-   PROFILE
-   ========================================================= */
+  function setBar(id,value){
 
-function renderProfile(profile, user) {
+    const el =
+      document.getElementById(id);
 
-    const image =
-        profile?.pictureUrl ||
-        user?.pictureUrl ||
-        "";
-
-    const name =
-        profile?.displayName ||
-        user?.name ||
-        "สมาชิก ROCK YOUR BODY";
-
-
-    if (image) {
-
-        const img =
-            el("profileImage");
-
-        const fallback =
-            el("profileFallback");
-
-        img.src = image;
-
-        img.style.display =
-            "block";
-
-        fallback.style.display =
-            "none";
-
-        img.onerror = function () {
-
-            img.style.display =
-                "none";
-
-            fallback.style.display =
-                "flex";
-
-        };
-
+    if(el){
+      el.style.width =
+        Math.max(
+          0,
+          Math.min(100,value)
+        ) + "%";
     }
 
+  }
 
-    /*
-       ชื่อ Hero
-       ใช้ชื่อ LINE
-       ถ้ายาวเกินไปให้ย่อ
-    */
 
-    let heroName =
-        name.toUpperCase();
+  function formatNumber(value){
 
-    if (heroName.length > 16) {
+    return Number(value || 0)
+      .toLocaleString("en-US");
 
-        heroName =
-            heroName.substring(
-                0,
-                16
+  }
+
+
+  /* =====================================================
+     LINE PROFILE
+  ===================================================== */
+
+  async function loadLINEProfile(){
+
+    try{
+
+      if(
+        typeof liff !== "undefined" &&
+        window.ROCK_CONFIG &&
+        window.ROCK_CONFIG.LIFF_ID
+      ){
+
+        if(
+          !liff.isLoggedIn()
+        ){
+
+          liff.login({
+            redirectUri:
+              window.location.href
+          });
+
+          return null;
+
+        }
+
+
+        const profile =
+          await liff.getProfile();
+
+
+        if(profile){
+
+          const image =
+            document.getElementById(
+              "profileImage"
             );
 
+          const placeholder =
+            document.getElementById(
+              "profilePlaceholder"
+            );
+
+
+          if(profile.pictureUrl){
+
+            image.src =
+              profile.pictureUrl;
+
+            image.style.display =
+              "block";
+
+            placeholder.style.display =
+              "none";
+
+          }
+
+
+          setText(
+            "profileName",
+            profile.displayName ||
+            "สมาชิก ROCK YOUR BODY"
+          );
+
+
+          setText(
+            "heroName",
+            profile.displayName ||
+            "HERO ROCK"
+          );
+
+
+          localStorage.setItem(
+            window.ROCK_CONFIG.STORAGE.LINE_USER_ID,
+            profile.userId
+          );
+
+
+          return profile;
+
+        }
+
+      }
+
+    }catch(error){
+
+      console.error(
+        "LINE PROFILE ERROR:",
+        error
+      );
+
     }
 
-    setText(
-        "heroName",
-        heroName
-    );
+    return null;
 
-}
+  }
 
 
-/* =========================================================
-   RENDER USER
-   ========================================================= */
+  /* =====================================================
+     LOAD USER
+  ===================================================== */
 
-function renderUser(user) {
+  async function loadHome(){
 
-    if (!user) {
+    try{
+
+      const lineProfile =
+        await loadLINEProfile();
+
+
+      const result =
+        await ROCK.getMe();
+
+
+      if(
+        !result ||
+        !result.user
+      ){
+
+        console.error(
+          "USER DATA NOT FOUND"
+        );
+
         return;
-    }
+
+      }
 
 
-    /* COIN */
+      const user =
+        result.user;
 
-    setText(
-        "coinTop",
+
+      /* ================================================
+         RESOURCE
+      ================================================ */
+
+      setText(
+        "coinValue",
         formatNumber(
-            user.rockCoin
+          user.rockCoin
         )
-    );
+      );
 
 
-    /* ENERGY */
-
-    setText(
-        "energyTop",
-        formatNumber(
-            user.energy
-        )
-    );
-
-    setText(
-        "energyMaxTop",
-        formatNumber(
-            user.maxEnergy ||
-            ROCK_CONFIG.MAX_ENERGY
-        )
-    );
+      setText(
+        "energyValue",
+        `${formatNumber(user.energy)}/${formatNumber(user.maxEnergy || 200)}`
+      );
 
 
-    /* WEIGHT */
+      /* ================================================
+         PROFILE
+      ================================================ */
 
-    setText(
-        "weight",
-        formatDecimal(
-            user.weight,
-            1
-        )
-    );
+      if(
+        lineProfile
+      ){
+
+        setText(
+          "profileName",
+          lineProfile.displayName
+        );
+
+        setText(
+          "heroName",
+          lineProfile.displayName
+        );
+
+      }
 
 
-    setText(
-        "targetWeight",
-        formatDecimal(
-            user.targetWeight,
-            1
-        )
-    );
+      /* ================================================
+         WEIGHT
+      ================================================ */
 
-
-    /* WEIGHT PROGRESS */
-
-    const weight =
+      const currentWeight =
         Number(user.weight) || 0;
 
-    const target =
+      const targetWeight =
         Number(user.targetWeight) || 0;
 
 
-    /*
-       ค่าเริ่มต้นของภาพคือ
-       78.5 -> 72
-    */
+      setText(
+        "currentWeight",
+        currentWeight.toFixed(1)
+      );
 
-    const startWeight =
+
+      setText(
+        "targetWeight",
+        targetWeight.toFixed(1)
+      );
+
+
+      const initialWeight =
         Math.max(
-            weight,
-            target
+          currentWeight,
+          targetWeight + 10
         );
 
 
-    let weightPercent = 0;
-
-    if (
-        startWeight > target &&
-        weight <= startWeight
-    ) {
-
-        const total =
-            startWeight - target;
-
-        const lost =
-            startWeight - weight;
-
-        weightPercent =
-            total > 0
-                ? (lost / total) * 100
-                : 0;
-
-    }
-
-
-    weightPercent =
-        clampPercent(
-            weightPercent
-        );
-
-
-    setText(
-        "weightPercent",
-        Math.round(
-            weightPercent
-        ) + "%"
-    );
-
-
-    el(
-        "weightProgress"
-    ).style.width =
-        weightPercent + "%";
-
-
-    const lostWeight =
+      const lostWeight =
         Math.max(
-            0,
-            startWeight - weight
+          0,
+          initialWeight -
+          currentWeight
         );
 
-    const remainingWeight =
+
+      const remainingWeight =
         Math.max(
-            0,
-            weight - target
+          0,
+          currentWeight -
+          targetWeight
         );
 
 
-    setText(
+      const weightPercent =
+        initialWeight > targetWeight
+          ? (
+              (initialWeight - currentWeight) /
+              (initialWeight - targetWeight)
+            ) * 100
+          : 0;
+
+
+      setText(
         "lostWeight",
-        formatDecimal(
-            lostWeight,
-            1
-        ) + " kg"
-    );
+        lostWeight.toFixed(1)
+      );
 
 
-    setText(
+      setText(
         "remainingWeight",
-        formatDecimal(
-            remainingWeight,
-            1
-        ) + " kg"
-    );
+        remainingWeight.toFixed(1)
+      );
 
 
-    /* STEPS */
+      setText(
+        "weightPercent",
+        Math.round(weightPercent) + "%"
+      );
 
-    setText(
-        "steps",
+
+      setBar(
+        "weightProgressBar",
+        weightPercent
+      );
+
+
+      /* ================================================
+         STEPS
+      ================================================ */
+
+      setText(
+        "stepsValue",
         formatNumber(
-            user.steps
+          user.steps
         )
-    );
+      );
 
-    setText(
-        "stepsTarget",
+
+      setBar(
+        "stepsBar",
+        percent(
+          user.steps,
+          user.targetSteps
+        )
+      );
+
+
+      /* ================================================
+         CALORIES
+      ================================================ */
+
+      setText(
+        "caloriesValue",
         formatNumber(
-            user.targetSteps
+          user.calories
         )
-    );
+      );
 
 
-    const stepsPercent =
-        clampPercent(
-            (
-                Number(user.steps) /
-                Number(user.targetSteps || 1)
-            ) * 100
-        );
-
-
-    el(
-        "stepsProgress"
-    ).style.width =
-        stepsPercent + "%";
-
-
-    /* CALORIES */
-
-    setText(
-        "calories",
-        formatNumber(
-            user.calories
+      setBar(
+        "caloriesBar",
+        percent(
+          user.calories,
+          user.targetCalories
         )
-    );
+      );
 
-    setText(
-        "caloriesTarget",
-        formatNumber(
-            user.targetCalories
+
+      /* ================================================
+         SLEEP
+      ================================================ */
+
+      setText(
+        "sleepValue",
+        Number(user.sleep || 0)
+          .toFixed(2)
+      );
+
+
+      setBar(
+        "sleepBar",
+        percent(
+          user.sleep,
+          user.targetSleep
         )
-    );
+      );
 
 
-    const caloriesPercent =
-        clampPercent(
-            (
-                Number(user.calories) /
-                Number(user.targetCalories || 1)
-            ) * 100
-        );
+      /* ================================================
+         HEALTH SCORE
+      ================================================ */
 
-
-    el(
-        "caloriesProgress"
-    ).style.width =
-        caloriesPercent + "%";
-
-
-    /* SLEEP */
-
-    setText(
-        "sleep",
-        formatDecimal(
-            user.sleep,
-            2
-        )
-    );
-
-    setText(
-        "sleepTarget",
-        formatDecimal(
-            user.targetSleep,
-            0
-        )
-    );
-
-
-    const sleepPercent =
-        clampPercent(
-            (
-                Number(user.sleep) /
-                Number(user.targetSleep || 1)
-            ) * 100
-        );
-
-
-    el(
-        "sleepProgress"
-    ).style.width =
-        sleepPercent + "%";
-
-
-    /* HEALTH SCORE */
-
-    setText(
+      setText(
         "healthScore",
-        formatNumber(
-            user.healthScore
-        )
-    );
+        user.healthScore
+      );
 
 
-    el(
-        "healthProgress"
-    ).style.width =
-        clampPercent(
-            user.healthScore
-        ) + "%";
+      setBar(
+        "healthBar",
+        user.healthScore
+      );
 
 
-    /* INBODY */
+      /* ================================================
+         INBODY
+      ================================================ */
 
-    setText(
+      setText(
         "inbodyScore",
-        formatNumber(
-            user.inbodyScore
-        )
-    );
+        user.inbodyScore
+      );
 
 
-    /* PROGRAM */
+      /* ================================================
+         PROGRAM
+      ================================================ */
 
-    const day =
-        Number(
-            user.programDay
-        ) || 0;
+      const programDay =
+        Number(user.programDay) || 0;
 
-    const total =
-        Number(
-            user.programTotalDays
-        ) || 90;
+      const programTotal =
+        Number(user.programTotalDays) || 90;
 
 
-    setText(
+      setText(
         "programDay",
-        formatNumber(day)
-    );
+        programDay
+      );
 
 
-    setText(
-        "programRemaining",
-        formatNumber(
-            Math.max(
-                0,
-                total - day
-            )
+      setText(
+        "programLeft",
+        Math.max(
+          0,
+          programTotal - programDay
         )
-    );
+      );
 
 
-    el(
-        "programProgress"
-    ).style.width =
-        clampPercent(
-            (day / total) * 100
-        ) + "%";
+      setBar(
+        "programBar",
+        percent(
+          programDay,
+          programTotal
+        )
+      );
 
 
-    /* PROFILE */
+      /* ================================================
+         RANK
+      ================================================ */
 
-    renderProfile(
-        null,
+      setText(
+        "myRank",
+        user.rank || "-"
+      );
+
+
+      /* ================================================
+         LEVEL
+      ================================================ */
+
+      const level =
+        Math.max(
+          1,
+          Number(user.level) ||
+          Math.floor(
+            (Number(user.points) || 0) /
+            1000
+          ) ||
+          1
+        );
+
+
+      setText(
+        "level",
+        "Lv." + level
+      );
+
+
+      /* ================================================
+         EXP
+      ================================================ */
+
+      const exp =
+        Number(user.exp) ||
+        (
+          Number(user.points || 0) %
+          1000
+        );
+
+
+      const maxExp =
+        Number(user.maxExp) ||
+        1000;
+
+
+      setText(
+        "expValue",
+        `${formatNumber(exp)} / ${formatNumber(maxExp)}`
+      );
+
+
+      setBar(
+        "expBar",
+        percent(
+          exp,
+          maxExp
+        )
+      );
+
+
+      console.log(
+        "HOME DATA READY",
         user
-    );
+      );
 
-}
+    }catch(error){
 
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
-function renderDashboard(data) {
-
-    if (
-        !data ||
-        !data.dashboard
-    ) {
-
-        return;
+      console.error(
+        "HOME ERROR:",
+        error
+      );
 
     }
 
+  }
 
-    const d =
-        data.dashboard;
 
+  /* =====================================================
+     START
+  ===================================================== */
 
-    if (d.steps) {
-
-        setText(
-            "steps",
-            formatNumber(
-                d.steps.current
-            )
-        );
-
-        setText(
-            "stepsTarget",
-            formatNumber(
-                d.steps.target
-            )
-        );
-
-        el(
-            "stepsProgress"
-        ).style.width =
-            clampPercent(
-                (
-                    d.steps.current /
-                    d.steps.target
-                ) * 100
-            ) + "%";
-
-    }
-
-
-    if (d.calories) {
-
-        setText(
-            "calories",
-            formatNumber(
-                d.calories.current
-            )
-        );
-
-        setText(
-            "caloriesTarget",
-            formatNumber(
-                d.calories.target
-            )
-        );
-
-        el(
-            "caloriesProgress"
-        ).style.width =
-            clampPercent(
-                (
-                    d.calories.current /
-                    d.calories.target
-                ) * 100
-            ) + "%";
-
-    }
-
-
-    if (d.sleep) {
-
-        setText(
-            "sleep",
-            formatDecimal(
-                d.sleep.current,
-                2
-            )
-        );
-
-        setText(
-            "sleepTarget",
-            formatDecimal(
-                d.sleep.target,
-                0
-            )
-        );
-
-        el(
-            "sleepProgress"
-        ).style.width =
-            clampPercent(
-                (
-                    d.sleep.current /
-                    d.sleep.target
-                ) * 100
-            ) + "%";
-
-    }
-
-
-    if (
-        d.healthScore !== undefined
-    ) {
-
-        setText(
-            "healthScore",
-            formatNumber(
-                d.healthScore
-            )
-        );
-
-        el(
-            "healthProgress"
-        ).style.width =
-            clampPercent(
-                d.healthScore
-            ) + "%";
-
-    }
-
-
-    if (d.weight) {
-
-        setText(
-            "weight",
-            formatDecimal(
-                d.weight.current,
-                1
-            )
-        );
-
-        setText(
-            "targetWeight",
-            formatDecimal(
-                d.weight.target,
-                1
-            )
-        );
-
-    }
-
-
-    if (d.inbody) {
-
-        setText(
-            "inbodyScore",
-            formatNumber(
-                d.inbody.score
-            )
-        );
-
-    }
-
-
-    if (d.program) {
-
-        const day =
-            Number(
-                d.program.currentDay
-            ) || 0;
-
-        const total =
-            Number(
-                d.program.totalDays
-            ) || 90;
-
-
-        setText(
-            "programDay",
-            formatNumber(day)
-        );
-
-
-        setText(
-            "programRemaining",
-            formatNumber(
-                Math.max(
-                    0,
-                    total - day
-                )
-            )
-        );
-
-
-        el(
-            "programProgress"
-        ).style.width =
-            clampPercent(
-                (day / total) * 100
-            ) + "%";
-
-    }
-
-}
-
-
-/* =========================================================
-   RANK
-   ========================================================= */
-
-async function loadRanking() {
-
-    try {
-
-        const data =
-            await ROCK.fetchRanking();
-
-
-        if (!data) {
-            return;
-        }
-
-
-        if (
-            data.myRank !== undefined
-        ) {
-
-            setText(
-                "myRank",
-                "#" +
-                data.myRank
-            );
-
-        }
-
-
-        if (
-            data.totalMembers !== undefined
-        ) {
-
-            setText(
-                "totalMembers",
-                formatNumber(
-                    data.totalMembers
-                )
-            );
-
-        }
-
-    } catch (error) {
-
-        console.warn(
-            "Ranking unavailable:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   MAIN INIT
-   ========================================================= */
-
-async function initHome() {
-
-    const loading =
-        el("loading");
-
-
-    try {
-
-        /*
-           Initialize LINE
-        */
-
-        let line =
-            null;
-
-        try {
-
-            line =
-                await ROCK.initLIFF();
-
-        } catch (error) {
-
-            console.warn(
-                "LINE initialization skipped:",
-                error
-            );
-
-        }
-
-
-        /*
-           Get stored user first
-        */
-
-        let user =
-            ROCK.getStoredUser();
-
-
-        /*
-           LINE profile
-        */
-
-        if (
-            line &&
-            line.profile
-        ) {
-
-            user = {
-
-                ...user,
-
-                lineUserId:
-                    line.profile.userId ||
-                    user.lineUserId,
-
-                name:
-                    line.profile.displayName ||
-                    user.name,
-
-                pictureUrl:
-                    line.profile.pictureUrl ||
-                    user.pictureUrl
-
-            };
-
-
-            ROCK.saveUser(
-                user
-            );
-
-
-            renderProfile(
-                line.profile,
-                user
-            );
-
-        } else {
-
-            renderProfile(
-                null,
-                user
-            );
-
-        }
-
-
-        /*
-           Render stored data
-        */
-
-        renderUser(
-            user
-        );
-
-
-        /*
-           Fetch API user
-        */
-
-        try {
-
-            const result =
-                await ROCK.fetchMe();
-
-
-            if (
-                result &&
-                result.user
-            ) {
-
-                user = {
-
-                    ...user,
-
-                    ...result.user
-
-                };
-
-
-                /*
-                   LINE profile
-                   ต้องชนะข้อมูลจาก API
-                   สำหรับชื่อและรูป
-                */
-
-                if (
-                    line &&
-                    line.profile
-                ) {
-
-                    user.name =
-                        line.profile.displayName ||
-                        user.name;
-
-                    user.pictureUrl =
-                        line.profile.pictureUrl ||
-                        user.pictureUrl;
-
-                    user.lineUserId =
-                        line.profile.userId ||
-                        user.lineUserId;
-
-                }
-
-
-                ROCK.saveUser(
-                    user
-                );
-
-
-                renderUser(
-                    user
-                );
-
-
-                renderProfile(
-                    line?.profile,
-                    user
-                );
-
-            }
-
-        } catch (error) {
-
-            console.warn(
-                "API /me unavailable:",
-                error
-            );
-
-        }
-
-
-        /*
-           Dashboard
-        */
-
-        try {
-
-            const dashboard =
-                await ROCK.fetchDashboard();
-
-
-            renderDashboard(
-                dashboard
-            );
-
-        } catch (error) {
-
-            console.warn(
-                "Dashboard unavailable:",
-                error
-            );
-
-        }
-
-
-        /*
-           Ranking
-        */
-
-        await loadRanking();
-
-
-    } catch (error) {
-
-        console.error(
-            "HOME initialization error:",
-            error
-        );
-
-    }
-
-
-    /*
-       Hide loading
-    */
-
-    setTimeout(
-        function () {
-
-            loading.classList.add(
-                "hidden"
-            );
-
-        },
-        250
-    );
-
-}
-
-
-/* =========================================================
-   START
-   ========================================================= */
-
-document.addEventListener(
+  document.addEventListener(
     "DOMContentLoaded",
-    initHome
-);
+    loadHome
+  );
+
+})();
 
 </script>
 
