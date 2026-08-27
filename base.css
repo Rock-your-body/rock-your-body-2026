@@ -1,0 +1,793 @@
+/* =========================================================
+   ROCK YOUR BODY 2026
+   BASE.CSS - RESPONSIVE TEMPLATE SYSTEM
+   HOME / MISSION / BATTLE / WEIGHT
+========================================================= */
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+  background:#eef5ff;
+  font-family:"Prompt",Arial,"Noto Sans Thai",sans-serif;
+}
+
+button,input,select,textarea{font:inherit}
+
+/* =========================================================
+   COMMON TEMPLATE STAGE
+========================================================= */
+.stage,
+#homeStage,
+#missionStage,
+#battleStage{
+  position:relative;
+  width:100%;
+  max-width:1536px;
+  margin:0 auto;
+  padding:0;
+  overflow:hidden;
+  background:#eef5ff;
+  container-type:inline-size;
+}
+
+.stage>.template,
+#homeStage>.template,
+#missionStage>.template,
+#battleStage>.template{
+  position:relative;
+  z-index:1;
+  display:block;
+  width:100%;
+  height:auto;
+  max-width:none;
+  margin:0;
+  padding:0;
+  border:0;
+  user-select:none;
+  pointer-events:none;
+}
+
+.data-box,.overlay,.live-track,.hotspot{position:absolute}
+
+.data-box,.overlay{
+  z-index:15;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  padding:0;
+  background:transparent;
+  text-align:center;
+  white-space:nowrap;
+  pointer-events:none;
+  font-variant-numeric:tabular-nums;
+}
+
+.data-box{overflow:hidden}
+
+.overlay{
+  overflow:visible;
+  font-weight:900;
+  line-height:1;
+}
+
+.live-track{
+  z-index:12;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(18,68,132,.13);
+  pointer-events:none;
+}
+
+.live-fill{
+  width:0%;
+  height:100%;
+  border-radius:inherit;
+  transition:width .45s ease;
+}
+
+.hotspot{
+  z-index:30;
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.hotspot:active{background:rgba(255,255,255,.08)}
+
+.data-value{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0 2%;
+  color:#06276c;
+  font-weight:900;
+  line-height:1;
+  text-align:center;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+  font-size:clamp(6px,1.1cqw,28px);
+}
+
+.data-weight{
+  font-size:clamp(10px,1.65cqw,44px);
+  letter-spacing:-.03em;
+}
+
+.data-small{font-size:clamp(5px,.85cqw,14px)}
+.red{color:#d20d0d}
+.white{color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.35)}
+.live-blue{color:#06276c}
+.live-red{color:#d20d0d}
+.live-white{color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.35)}
+
+/* =========================================================
+   HOME SETTINGS
+========================================================= */
+#homeStage{
+  --profile-left:4.5%;
+  --profile-top:17%;
+  --profile-size:25%;
+
+  --coin-left:75%;
+  --coin-top:5%;
+  --coin-width:6.7%;
+  --coin-height:7%;
+
+  --energy-left:88.4%;
+  --energy-top:5%;
+  --energy-width:9.7%;
+  --energy-height:8%;
+
+  --level-left:23.2%;
+  --level-top:54.8%;
+  --level-width:6.7%;
+  --level-height:4%;
+
+  --expbar-left:8.6%;
+  --expbar-top:74.8%;
+  --expbar-width:14%;
+  --expbar-height:1.8%;
+
+  --exptext-left:22%;
+  --exptext-top:73%;
+  --exptext-width:9%;
+  --exptext-height:4.5%;
+
+  --current-left:41.5%;
+  --current-top:24.4%;
+  --current-width:15%;
+  --current-height:8%;
+
+  --updated-left:35%;
+  --updated-top:33.4%;
+  --updated-width:20%;
+  --updated-height:9%;
+
+  --target-left:41.5%;
+  --target-top:51.2%;
+  --target-width:15%;
+  --target-height:8%;
+
+  --remaining-left:41.5%;
+  --remaining-top:60.9%;
+  --remaining-width:10%;
+  --remaining-height:8%;
+
+  --lost-left:35%;
+  --lost-top:71%;
+  --lost-width:10.5%;
+  --lost-height:8%;
+
+  --startdate-left:47.5%;
+  --startdate-top:71%;
+  --startdate-width:10.5%;
+  --startdate-height:8%;
+}
+
+#homeStage .profile-frame{
+  position:absolute;
+  left:var(--profile-left);
+  top:var(--profile-top);
+  width:var(--profile-size);
+  aspect-ratio:1/1;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  overflow:hidden;
+  z-index:5;
+  pointer-events:none;
+}
+
+#homeStage .profile-photo{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:none;
+  max-height:none;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  object-fit:cover;
+  object-position:50% 50%;
+}
+
+#homeStage .profile-photo:not([src]),
+#homeStage .profile-photo[src=""]{display:none}
+
+.coin-box{left:var(--coin-left);top:var(--coin-top);width:var(--coin-width);height:var(--coin-height)}
+.energy-box{left:var(--energy-left);top:var(--energy-top);width:var(--energy-width);height:var(--energy-height)}
+.level-box{left:var(--level-left);top:var(--level-top);width:var(--level-width);height:var(--level-height)}
+.exptext-box{left:var(--exptext-left);top:var(--exptext-top);width:var(--exptext-width);height:var(--exptext-height)}
+.current-box{left:var(--current-left);top:var(--current-top);width:var(--current-width);height:var(--current-height)}
+.updated-box{left:var(--updated-left);top:var(--updated-top);width:var(--updated-width);height:var(--updated-height)}
+.target-box{left:var(--target-left);top:var(--target-top);width:var(--target-width);height:var(--target-height)}
+.remaining-box{left:var(--remaining-left);top:var(--remaining-top);width:var(--remaining-width);height:var(--remaining-height)}
+.lost-box{left:var(--lost-left);top:var(--lost-top);width:var(--lost-width);height:var(--lost-height)}
+.startdate-box{left:var(--startdate-left);top:var(--startdate-top);width:var(--startdate-width);height:var(--startdate-height)}
+
+.coin-box,.energy-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.top-data-content{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  line-height:1.05;
+}
+
+.top-data-value{
+  display:block;
+  color:#052d73;
+  font-size:clamp(7px,1.15cqw,26px);
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.top-data-label{
+  display:block;
+  margin-top:2px;
+  color:#052d73;
+  font-size:clamp(4px,.55cqw,12px);
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.updated-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  overflow:hidden;
+}
+
+.update-inline,.update-content{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  margin:0;
+  padding:0;
+  white-space:nowrap;
+}
+
+.update-label{
+  margin:0;
+  padding:0;
+  color:#173b78;
+  font-size:clamp(5px,.72cqw,11px);
+  font-weight:600;
+  line-height:1;
+}
+
+.update-date{
+  margin:0;
+  padding:0;
+  color:#002f7d;
+  font-size:clamp(5px,.72cqw,11px);
+  font-weight:800;
+  line-height:1;
+}
+
+.remaining-box,.lost-box,.startdate-box{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  overflow:hidden;
+  text-align:center;
+}
+
+.remaining-inline,
+.remaining-box .summary-content{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  margin:0;
+  padding:0 2%;
+  white-space:nowrap;
+  line-height:1;
+}
+
+.remaining-label{
+  display:inline-block;
+  margin:0;
+  padding:0;
+  color:#d20d0d;
+  font-size:clamp(5px,.62cqw,9px);
+  font-weight:600;
+  line-height:1;
+  white-space:nowrap;
+}
+
+.remaining-number{
+  display:inline-flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:2px;
+  margin:0;
+  padding:0;
+  color:#d20d0d;
+  font-size:clamp(5px,.68cqw,10px);
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+}
+
+#remaining{display:inline}
+.remaining-unit{display:inline;font-size:.85em;font-weight:700}
+
+.lost-box .summary-content,
+.startdate-box .summary-content{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  line-height:1.05;
+}
+
+.lost-box .summary-label,
+.startdate-box .summary-label{
+  display:block;
+  margin:0 0 2px;
+  padding:0;
+  color:#06337a;
+  font-size:clamp(4px,.6cqw,10px);
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.lost-box .summary-value,
+.startdate-box .summary-value{
+  display:block;
+  margin:0;
+  padding:0;
+  color:#06337a;
+  font-size:clamp(6px,1cqw,16px);
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.startdate-box .date-value{font-size:clamp(5px,.72cqw,11px)}
+
+.exp-track{
+  position:absolute;
+  z-index:15;
+  left:var(--expbar-left);
+  top:var(--expbar-top);
+  width:var(--expbar-width);
+  height:var(--expbar-height);
+  overflow:hidden;
+  border-radius:999px;
+  background:#d7e5f6;
+  pointer-events:none;
+}
+
+#expBar{
+  width:0%;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#15a2ff,#0b52d1);
+  transition:width .6s ease;
+}
+
+/* =========================================================
+   MISSION SETTINGS
+========================================================= */
+#missionStage{
+  --mission-coin-left:78.8%;
+  --mission-coin-top:2.4%;
+  --mission-coin-width:7.7%;
+  --mission-coin-height:8%;
+
+  --mission-energy-left:88.8%;
+  --mission-energy-top:2.4%;
+  --mission-energy-width:9.7%;
+  --mission-energy-height:8%;
+
+  --daily-progress-left:36%;
+  --daily-progress-top:35.5%;
+  --daily-progress-width:25.7%;
+  --daily-progress-height:2.1%;
+  --daily-count-left:55.6%;
+  --daily-count-top:25%;
+  --daily-count-width:5.5%;
+  --daily-count-height:5%;
+  --daily-coin-left:42%;
+  --daily-coin-top:70%;
+  --daily-coin-width:7%;
+  --daily-coin-height:5%;
+  --daily-energy-left:53%;
+  --daily-energy-top:70%;
+  --daily-energy-width:7%;
+  --daily-energy-height:5%;
+
+  --weekly-progress-left:66.6%;
+  --weekly-progress-top:35.5%;
+  --weekly-progress-width:28.7%;
+  --weekly-progress-height:2.1%;
+  --weekly-count-left:90.6%;
+  --weekly-count-top:25%;
+  --weekly-count-width:5.5%;
+  --weekly-count-height:5%;
+  --weekly-coin-left:73%;
+  --weekly-coin-top:70%;
+  --weekly-coin-width:7%;
+  --weekly-coin-height:5%;
+  --weekly-energy-left:84%;
+  --weekly-energy-top:70%;
+  --weekly-energy-width:7%;
+  --weekly-energy-height:5%;
+
+  --monthly-progress-left:36%;
+  --monthly-progress-top:66.6%;
+  --monthly-progress-width:25.7%;
+  --monthly-progress-height:2.1%;
+  --monthly-count-left:55.6%;
+  --monthly-count-top:56.7%;
+  --monthly-count-width:5.5%;
+  --monthly-count-height:5%;
+  --monthly-coin-left:42%;
+  --monthly-coin-top:88%;
+  --monthly-coin-width:7%;
+  --monthly-coin-height:5%;
+  --monthly-energy-left:53%;
+  --monthly-energy-top:88%;
+  --monthly-energy-width:7%;
+  --monthly-energy-height:5%;
+
+  --bonus-progress-left:66.6%;
+  --bonus-progress-top:66.6%;
+  --bonus-progress-width:28.7%;
+  --bonus-progress-height:2.1%;
+  --bonus-count-left:90.6%;
+  --bonus-count-top:56.5%;
+  --bonus-count-width:5.5%;
+  --bonus-count-height:5%;
+  --bonus-coin-left:73%;
+  --bonus-coin-top:88%;
+  --bonus-coin-width:7%;
+  --bonus-coin-height:5%;
+  --bonus-energy-left:84%;
+  --bonus-energy-top:88%;
+  --bonus-energy-width:7%;
+  --bonus-energy-height:5%;
+
+  --mission-point-left:88%;
+  --mission-point-top:17%;
+  --mission-point-width:8%;
+  --mission-point-height:7%;
+}
+
+.mission-coin-box{left:var(--mission-coin-left);top:var(--mission-coin-top);width:var(--mission-coin-width);height:var(--mission-coin-height)}
+.mission-energy-box{left:var(--mission-energy-left);top:var(--mission-energy-top);width:var(--mission-energy-width);height:var(--mission-energy-height)}
+
+.daily-count,.weekly-count,.monthly-count,.bonus-count{
+  position:absolute;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  padding:0;
+  color:#fff;
+  font-size:clamp(6px,1.1cqw,18px);
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+  text-shadow:0 1px 3px rgba(0,0,0,.25);
+  pointer-events:none;
+}
+
+.daily-count{left:var(--daily-count-left);top:var(--daily-count-top);width:var(--daily-count-width);height:var(--daily-count-height)}
+.weekly-count{left:var(--weekly-count-left);top:var(--weekly-count-top);width:var(--weekly-count-width);height:var(--weekly-count-height)}
+.monthly-count{left:var(--monthly-count-left);top:var(--monthly-count-top);width:var(--monthly-count-width);height:var(--monthly-count-height)}
+.bonus-count{left:var(--bonus-count-left);top:var(--bonus-count-top);width:var(--bonus-count-width);height:var(--bonus-count-height)}
+
+.daily-track{left:var(--daily-progress-left);top:var(--daily-progress-top);width:var(--daily-progress-width);height:var(--daily-progress-height)}
+.weekly-track{left:var(--weekly-progress-left);top:var(--weekly-progress-top);width:var(--weekly-progress-width);height:var(--weekly-progress-height)}
+.monthly-track{left:var(--monthly-progress-left);top:var(--monthly-progress-top);width:var(--monthly-progress-width);height:var(--monthly-progress-height)}
+.bonus-track{left:var(--bonus-progress-left);top:var(--bonus-progress-top);width:var(--bonus-progress-width);height:var(--bonus-progress-height)}
+
+.daily-coin{left:var(--daily-coin-left);top:var(--daily-coin-top);width:var(--daily-coin-width);height:var(--daily-coin-height)}
+.daily-energy{left:var(--daily-energy-left);top:var(--daily-energy-top);width:var(--daily-energy-width);height:var(--daily-energy-height)}
+.weekly-coin{left:var(--weekly-coin-left);top:var(--weekly-coin-top);width:var(--weekly-coin-width);height:var(--weekly-coin-height)}
+.weekly-energy{left:var(--weekly-energy-left);top:var(--weekly-energy-top);width:var(--weekly-energy-width);height:var(--weekly-energy-height)}
+.monthly-coin{left:var(--monthly-coin-left);top:var(--monthly-coin-top);width:var(--monthly-coin-width);height:var(--monthly-coin-height)}
+.monthly-energy{left:var(--monthly-energy-left);top:var(--monthly-energy-top);width:var(--monthly-energy-width);height:var(--monthly-energy-height)}
+.bonus-coin{left:var(--bonus-coin-left);top:var(--bonus-coin-top);width:var(--bonus-coin-width);height:var(--bonus-coin-height)}
+.bonus-energy{left:var(--bonus-energy-left);top:var(--bonus-energy-top);width:var(--bonus-energy-width);height:var(--bonus-energy-height)}
+
+.mission-coin-box,.mission-energy-box,
+.daily-coin,.daily-energy,.weekly-coin,.weekly-energy,
+.monthly-coin,.monthly-energy,.bonus-coin,.bonus-energy{
+  position:absolute;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(5px,1cqw,17px);
+  font-weight:900;
+  line-height:1;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.mission-point-box{
+  position:absolute;
+  z-index:20;
+  left:var(--mission-point-left);
+  top:var(--mission-point-top);
+  width:var(--mission-point-width);
+  height:var(--mission-point-height);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(6px,1cqw,17px);
+  font-weight:900;
+  color:#fff;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+.mission-fill-daily{background:linear-gradient(90deg,#ffb21a,#ff5700)}
+.mission-fill-weekly{background:linear-gradient(90deg,#1684ff,#074fc8)}
+.mission-fill-monthly{background:linear-gradient(90deg,#a634eb,#6120b6)}
+.mission-fill-bonus{background:linear-gradient(90deg,#24bd66,#07823b)}
+
+/* =========================================================
+   BATTLE SETTINGS
+   ปรับค่า % ให้ตรง battle-template.png ของจริง
+========================================================= */
+#battleStage{
+  --battle-coin-left:76.4%;
+  --battle-coin-top:3.9%;
+  --battle-coin-width:7.7%;
+  --battle-coin-height:8%;
+
+  --battle-energy-left:88.4%;
+  --battle-energy-top:3.4%;
+  --battle-energy-width:9.7%;
+  --battle-energy-height:8%;
+
+  --player-hp-left:10%;
+  --player-hp-top:30%;
+  --player-hp-width:30%;
+  --player-hp-height:2%;
+
+  --player-hp-text-left:30%;
+  --player-hp-text-top:27%;
+  --player-hp-text-width:10%;
+  --player-hp-text-height:4%;
+
+  --monster-hp-left:60%;
+  --monster-hp-top:30%;
+  --monster-hp-width:30%;
+  --monster-hp-height:2%;
+
+  --monster-hp-text-left:80%;
+  --monster-hp-text-top:27%;
+  --monster-hp-text-width:10%;
+  --monster-hp-text-height:4%;
+}
+
+.battle-coin-box{left:var(--battle-coin-left);top:var(--battle-coin-top);width:var(--battle-coin-width);height:var(--battle-coin-height)}
+.battle-energy-box{left:var(--battle-energy-left);top:var(--battle-energy-top);width:var(--battle-energy-width);height:var(--battle-energy-height)}
+.player-hp-track{left:var(--player-hp-left);top:var(--player-hp-top);width:var(--player-hp-width);height:var(--player-hp-height)}
+.player-hp-text{left:var(--player-hp-text-left);top:var(--player-hp-text-top);width:var(--player-hp-text-width);height:var(--player-hp-text-height)}
+.monster-hp-track{left:var(--monster-hp-left);top:var(--monster-hp-top);width:var(--monster-hp-width);height:var(--monster-hp-height)}
+.monster-hp-text{left:var(--monster-hp-text-left);top:var(--monster-hp-text-top);width:var(--monster-hp-text-width);height:var(--monster-hp-text-height)}
+
+#battleStage .overlay,
+#battleStage .battle-coin-box,
+#battleStage .battle-energy-box{
+  font-size:clamp(6px,1.15cqw,20px);
+}
+
+.hp-fill{background:linear-gradient(90deg,#ff4242,#be0717)}
+.energy-fill{background:linear-gradient(90deg,#ffd528,#ff8d00)}
+
+/* =========================================================
+   STATUS
+========================================================= */
+.status,#status{display:none}
+
+.status.show,#status.show{
+  position:fixed;
+  z-index:99999;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:block;
+  max-width:90vw;
+  padding:10px 18px;
+  border-radius:999px;
+  background:#0755b7;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+  text-align:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+}
+
+.status.error,#status.error{background:#c62828}
+
+/* =========================================================
+   WEIGHT CHECK
+========================================================= */
+.weight-page{
+  width:100%;
+  min-height:100vh;
+  padding:22px 14px 50px;
+  color:#08245b;
+  background:linear-gradient(180deg,#eaf3ff,#f7fbff);
+}
+
+.weight-app{width:100%;max-width:620px;margin:0 auto}
+
+.weight-header{
+  padding:22px 18px;
+  border-radius:24px;
+  background:#fff;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(15,53,103,.10);
+}
+
+.weight-brand{
+  color:#073b93;
+  font-size:clamp(25px,5vw,38px);
+  font-weight:900;
+}
+
+.weight-brand-red{color:#d71920}
+
+.weight-tagline{
+  margin-top:8px;
+  color:#64748b;
+  font-size:14px;
+  font-weight:800;
+}
+
+.weight-hero{
+  margin-top:18px;
+  padding:24px;
+  border-radius:25px;
+  color:#fff;
+  background:linear-gradient(135deg,#073b93,#0765d8 60%,#148bf3);
+}
+
+.weight-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:clamp(26px,5vw,38px);
+  font-weight:900;
+}
+
+.weight-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:20px;
+}
+
+.weight-summary{
+  min-height:110px;
+  padding:18px;
+  border-radius:19px;
+  background:rgba(255,255,255,.15);
+}
+
+.weight-summary-value{
+  margin-top:10px;
+  font-size:clamp(27px,6vw,40px);
+  font-weight:900;
+}
+
+.weight-card{
+  margin-top:18px;
+  padding:22px;
+  border-radius:23px;
+  background:#fff;
+  box-shadow:0 10px 30px rgba(15,53,103,.10);
+}
+
+.weight-input-box{
+  display:flex;
+  align-items:center;
+  width:100%;
+  min-height:78px;
+  margin-top:18px;
+  padding:0 20px;
+  border:2px solid #c9d9ef;
+  border-radius:18px;
+  background:#fbfdff;
+}
+
+.weight-input-box input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#08245b;
+  font-size:clamp(30px,7vw,42px);
+  font-weight:900;
+}
+
+.weight-unit{margin-left:10px;color:#64748b;font-weight:900}
+
+.weight-button{
+  width:100%;
+  min-height:60px;
+  border:0;
+  border-radius:16px;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:900;
+}
+
+.weight-save{margin-top:18px;color:#fff;background:#06c755}
+.weight-target{margin-top:15px;color:#073b93;background:#eaf3ff}
+.weight-home{margin-top:18px;color:#fff;background:#075ac7}
+
+@media(max-width:600px){
+  .data-value{text-shadow:none}
+  .weight-page{padding:12px 10px 35px}
+  .weight-header{padding:20px 14px}
+  .weight-hero{padding:20px}
+  .weight-card{padding:18px}
+  .weight-button{min-height:56px}
+}
