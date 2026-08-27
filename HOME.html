@@ -5,24 +5,18 @@
 
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
 >
 
 <title>ROCK YOUR BODY 2026</title>
 
-<!-- =====================================================
-     LINE LIFF
-===================================================== -->
+<!-- LINE LIFF -->
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-<!-- =====================================================
-     CONFIG
-===================================================== -->
+<!-- APP CONFIG -->
 <script src="./app-config.js"></script>
 
-<!-- =====================================================
-     COMMON CORE
-===================================================== -->
+<!-- COMMON CORE -->
 <script src="./common.js"></script>
 
 <style>
@@ -37,939 +31,901 @@ body{
   padding:0;
   width:100%;
   min-height:100%;
+  background:#eef3fb;
   font-family:
     "Noto Sans Thai",
     "Noto Sans",
     Arial,
     Tahoma,
     sans-serif;
-  background:#eef4ff;
-  color:#08245b;
 }
 
 body{
   overflow-x:hidden;
 }
 
-/* =====================================================
-   APP
-===================================================== */
+/* =========================================================
+   HOME STAGE
+   อัตราส่วน Template = 1536 x 1024
+========================================================= */
 
-.app{
+.home-page{
   width:100%;
-  max-width:1600px;
-  margin:0 auto;
-  padding:18px;
-}
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-.header{
-  display:grid;
-  grid-template-columns:280px 1fr 390px;
-  gap:20px;
-  align-items:center;
-  margin-bottom:14px;
-}
-
-.hospital{
+  min-height:100vh;
   display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.hospital-logo{
-  width:76px;
-  height:76px;
-  border-radius:16px;
-  background:
-    linear-gradient(135deg,#f00 0 45%,#fff 45% 55%,#073b93 55%);
-  position:relative;
-  box-shadow:0 5px 14px #001d5730;
-}
-
-.hospital-logo:before{
-  content:"+";
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
   justify-content:center;
-  color:#fff;
-  font-size:54px;
-  font-weight:900;
+  align-items:flex-start;
+  padding:0;
 }
 
-.hospital-name{
-  font-size:27px;
-  line-height:1;
-  font-weight:900;
-  color:#12377f;
+.home-stage{
+  position:relative;
+
+  width:min(100vw, 1536px);
+  aspect-ratio:1536 / 1024;
+
+  background-image:url("./home-template(1).png");
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  background-position:center;
+
+  overflow:hidden;
 }
 
-.hospital-sub{
-  margin-top:7px;
-  font-size:21px;
-  font-weight:700;
-  color:#65708a;
-}
+/* =========================================================
+   COMMON TEXT
+========================================================= */
 
-/* =====================================================
-   TITLE
-===================================================== */
+.data{
+  position:absolute;
+  z-index:10;
+  pointer-events:none;
 
-.brand{
-  text-align:center;
-  line-height:.9;
   white-space:nowrap;
-}
 
-.brand-main{
-  font-size:66px;
-  font-weight:1000;
-  font-style:italic;
-  letter-spacing:-3px;
-  color:#0a2470;
-}
+  color:#08245b;
 
-.brand-main .red{
-  color:#c71919;
-}
+  font-weight:700;
 
-.brand-year{
-  color:#11256e;
-  font-size:42px;
-  font-weight:1000;
-}
-
-.brand-sub{
-  margin-top:12px;
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:2px;
-}
-
-.move{color:#1850d5}
-.eat{color:#e87800}
-.sleep{color:#6b18df}
-.health{color:#16813b}
-
-/* =====================================================
-   RESOURCE BAR
-===================================================== */
-
-.resources{
-  background:#fff;
-  border:2px solid #c9d8f5;
-  border-radius:24px;
-  padding:13px 20px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:22px;
-  box-shadow:0 6px 18px #15356c18;
-}
-
-.resource{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:145px;
-}
-
-.resource-icon{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  background:#ffd15a;
-  box-shadow:inset 0 0 0 3px #e29b00;
-}
-
-.energy-icon{
-  background:#fff;
-  box-shadow:none;
-}
-
-.resource-value{
-  font-size:27px;
   line-height:1;
-  font-weight:1000;
-  color:#11256e;
 }
 
-.resource-label{
-  font-size:13px;
-  font-weight:900;
-  margin-top:5px;
+.clickable{
+  pointer-events:auto;
+  cursor:pointer;
 }
 
-/* =====================================================
-   MAIN GRID
-===================================================== */
-
-.main-grid{
-  display:grid;
-  grid-template-columns:
-    minmax(330px,1.1fr)
-    minmax(430px,1.15fr)
-    minmax(480px,1.25fr);
-  gap:18px;
-}
-
-/* =====================================================
-   CARD
-===================================================== */
-
-.card{
-  background:#fff;
-  border-radius:25px;
-  border:2px solid #d3e0f6;
-  box-shadow:0 8px 22px #15356c1b;
-  overflow:hidden;
-}
-
-/* =====================================================
+/* =========================================================
    PROFILE
-===================================================== */
+========================================================= */
 
-.profile-card{
-  padding:14px;
-}
-
-.profile{
-  height:520px;
-  border-radius:22px;
-  background:
-    radial-gradient(circle at 50% 38%,#ffffff 0 22%,transparent 23%),
-    linear-gradient(145deg,#0b65ed,#052477);
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  padding-top:26px;
-}
-
-.profile:before{
-  content:"";
+.profile-photo{
   position:absolute;
-  width:420px;
-  height:420px;
-  border-radius:50%;
-  border:3px solid #fff;
-  opacity:.8;
-  top:20px;
-}
 
-.profile:after{
-  content:"";
-  position:absolute;
-  width:330px;
-  height:330px;
-  border-radius:50%;
-  border:2px solid #fff;
-  opacity:.6;
-  top:65px;
-}
+  left:7.0%;
+  top:18.0%;
 
-.profile-img{
-  position:relative;
-  z-index:3;
-  width:230px;
-  height:230px;
+  width:24.5%;
+  aspect-ratio:1/1;
+
   border-radius:50%;
+
   object-fit:cover;
-  background:#0a3a9c;
-  border:7px solid #fff;
-  box-shadow:
-    0 0 0 5px #61a8ff,
-    0 10px 25px #00113f80;
-}
 
-.profile-placeholder{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-size:85px;
-  font-weight:900;
-}
-
-.profile-camera{
-  position:absolute;
   z-index:5;
-  top:208px;
-  width:64px;
-  height:64px;
-  border-radius:50%;
-  background:#fff;
-  border:5px solid #17377d;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
+
+  opacity:0;
+
+  transition:
+    opacity .25s ease,
+    transform .25s ease;
 }
 
-.profile-upload{
-  position:absolute;
-  z-index:5;
-  top:315px;
+.profile-photo.loaded{
+  opacity:1;
+}
+
+.profile-photo:hover{
+  transform:scale(1.015);
+}
+
+/* =========================================================
+   PROFILE NAME / TEAM
+========================================================= */
+
+.player-name{
+  left:9.0%;
+  top:55.2%;
+
+  width:21%;
+
+  text-align:center;
+
   color:#fff;
-  font-size:21px;
-  font-weight:900;
-  text-shadow:0 2px 5px #001;
+
+  font-size:clamp(14px,2.0vw,30px);
+
+  font-weight:800;
 }
 
-.team{
-  position:absolute;
-  z-index:8;
-  bottom:148px;
-  width:88%;
-  height:52px;
-  border-radius:30px;
-  background:linear-gradient(90deg,#0b2f82,#071a55);
-  border:3px solid #5eafff;
+.team-name{
+  left:9.0%;
+  top:48.9%;
+
+  width:20.8%;
+
+  text-align:center;
+
   color:#fff;
-  display:flex;
-  align-items:center;
-  padding:0 18px;
-  font-size:19px;
-  font-weight:900;
+
+  font-size:clamp(11px,1.35vw,21px);
+
+  font-weight:700;
 }
 
-.team-edit{
-  margin-left:auto;
-  font-size:23px;
-}
-
-.hero{
-  position:absolute;
-  z-index:8;
-  bottom:78px;
-  width:94%;
-  height:66px;
-  border-radius:17px;
-  background:linear-gradient(90deg,#071e5d,#0c408e);
-  border:3px solid #75baff;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  padding:0 16px;
-}
-
-.hero-badge{
-  width:42px;
-  height:42px;
-  border-radius:10px;
-  background:#143c8e;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-}
-
-.hero-name{
-  margin-left:12px;
-  font-size:29px;
-  font-weight:1000;
-  font-style:italic;
-}
+/* =========================================================
+   LEVEL
+========================================================= */
 
 .level{
-  margin-left:auto;
-  background:#e21c20;
-  border-radius:8px;
-  padding:8px 10px;
-  font-size:20px;
-  font-weight:1000;
+  left:24.2%;
+  top:55.0%;
+
+  width:5.2%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(14px,1.55vw,24px);
+
+  font-weight:900;
 }
 
-.exp{
-  position:absolute;
-  z-index:8;
-  bottom:15px;
-  width:94%;
-  height:53px;
-  border-radius:12px;
-  background:#fff;
-  border:3px solid #56a8ff;
-  display:flex;
-  align-items:center;
-  padding:0 14px;
-  font-weight:1000;
-}
-
-.exp-title{
-  font-size:19px;
-}
-
-.progress{
-  flex:1;
-  height:17px;
-  border-radius:20px;
-  background:#d9e1ed;
-  margin:0 14px;
-  overflow:hidden;
-}
-
-.progress-fill{
-  height:100%;
-  border-radius:20px;
-  background:linear-gradient(90deg,#0059ff,#1733b8);
-  width:56%;
-}
+/* =========================================================
+   EXP
+========================================================= */
 
 .exp-value{
-  font-size:17px;
-}
+  left:3.3%;
+  top:62.8%;
 
-/* =====================================================
-   CENTER WEIGHT
-===================================================== */
+  width:7%;
 
-.weight-card{
-  padding:22px;
-}
+  color:#08245b;
 
-.weight-row{
-  display:grid;
-  grid-template-columns:145px 1fr;
-  gap:18px;
-  align-items:center;
-  padding-bottom:18px;
-  border-bottom:1px solid #d6dfef;
-}
+  font-size:clamp(13px,1.6vw,25px);
 
-.weight-icon,
-.target-icon{
-  width:130px;
-  height:130px;
-  border-radius:20px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:72px;
-}
-
-.weight-icon{
-  background:#e9f0ff;
-}
-
-.target-icon{
-  background:#fff0f0;
-}
-
-.label{
-  font-size:22px;
   font-weight:900;
 }
 
-.big-value{
-  font-size:61px;
-  line-height:1;
-  font-weight:1000;
-  margin-top:5px;
-  color:#071e68;
+.exp-total{
+  left:21.0%;
+  top:62.8%;
+
+  width:7%;
+
+  color:#08245b;
+
+  font-size:clamp(12px,1.4vw,22px);
+
+  font-weight:700;
 }
 
-.unit{
-  font-size:28px;
+.exp-fill{
+  position:absolute;
+
+  left:8.8%;
+  top:62.45%;
+
+  width:16.0%;
+  height:1.55%;
+
+  background:#1264e8;
+
+  border-radius:999px;
+
+  z-index:8;
+
+  transform-origin:left center;
 }
 
-.target{
-  margin-top:18px;
-}
+/* =========================================================
+   TOP ROCK COIN
+========================================================= */
 
-.target .big-value{
-  color:#c91818;
-}
+.coin-value{
+  left:77.0%;
+  top:5.25%;
 
-.target-progress{
-  margin-top:18px;
-  padding:18px;
-  border:2px solid #cddcf3;
-  border-radius:20px;
-  background:#fafdff;
-}
+  width:9.2%;
 
-.target-title{
-  font-size:20px;
+  text-align:center;
+
+  color:#08245b;
+
+  font-size:clamp(18px,2.05vw,31px);
+
   font-weight:900;
 }
 
-.percent-row{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:12px;
+/* =========================================================
+   ENERGY
+========================================================= */
+
+.energy-value{
+  left:89.0%;
+  top:5.25%;
+
+  width:8%;
+
+  text-align:center;
+
+  color:#08245b;
+
+  font-size:clamp(17px,2vw,30px);
+
+  font-weight:900;
 }
 
-.percent{
-  font-size:39px;
-  font-weight:1000;
-  color:#16823b;
+/* =========================================================
+   WEIGHT
+========================================================= */
+
+.weight-current{
+  left:44.6%;
+  top:20.7%;
+
+  width:15%;
+
+  text-align:center;
+
+  color:#08245b;
+
+  font-size:clamp(30px,4vw,60px);
+
+  font-weight:900;
 }
 
-.target-progress .progress{
-  margin:0;
-  height:20px;
+.weight-target{
+  left:44.6%;
+  top:34.0%;
+
+  width:15%;
+
+  text-align:center;
+
+  color:#d21b18;
+
+  font-size:clamp(30px,4vw,60px);
+
+  font-weight:900;
 }
 
-.target-info{
-  display:flex;
-  justify-content:space-between;
-  margin-top:10px;
-  font-size:16px;
-  font-weight:800;
+/* =========================================================
+   WEIGHT PROGRESS
+========================================================= */
+
+.weight-percent{
+  left:53.4%;
+  top:47.5%;
+
+  width:6%;
+
+  color:#168b39;
+
+  font-size:clamp(20px,2.3vw,36px);
+
+  font-weight:900;
 }
 
-/* =====================================================
-   CENTER LOWER
-===================================================== */
+.weight-reduced{
+  left:35.4%;
+  top:52.65%;
 
-.center-bottom{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:14px;
+  width:9%;
+
+  color:#148b35;
+
+  font-size:clamp(12px,1.25vw,19px);
+
+  font-weight:900;
 }
 
-.small-card{
-  min-height:250px;
-  padding:16px;
-  border-radius:22px;
-  background:#fff;
-  border:2px solid #b7d2f8;
-  box-shadow:0 6px 16px #12356c15;
+.weight-remaining{
+  left:52.5%;
+  top:52.65%;
+
+  width:9%;
+
+  color:#08245b;
+
+  font-size:clamp(12px,1.25vw,19px);
+
+  font-weight:900;
 }
 
-.small-title{
-  font-size:20px;
-  font-weight:1000;
-  color:#19337d;
+/* =========================================================
+   WEIGHT BAR
+========================================================= */
+
+.weight-bar{
+  position:absolute;
+
+  left:34.0%;
+  top:48.0%;
+
+  width:19.0%;
+  height:1.55%;
+
+  background:#10a94b;
+
+  border-radius:999px;
+
+  z-index:7;
+
+  transform-origin:left center;
 }
 
-.small-score{
-  font-size:42px;
-  font-weight:1000;
-  margin-top:16px;
-}
+/* =========================================================
+   RIGHT KPI
+========================================================= */
 
-.score-unit{
-  font-size:18px;
-}
+.steps-value{
+  left:68.7%;
+  top:20.0%;
 
-.plus{
-  float:right;
-  background:#13a83d;
+  width:10.5%;
+
+  text-align:center;
+
   color:#fff;
-  padding:6px 12px;
-  border-radius:20px;
-  font-weight:1000;
+
+  font-size:clamp(22px,3.0vw,45px);
+
+  font-weight:900;
 }
 
-.chart{
-  height:65px;
-  margin-top:10px;
-  position:relative;
-  border-bottom:2px solid #c6d5ef;
+.steps-target{
+  left:69.0%;
+  top:25.0%;
+
+  width:10%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(13px,1.45vw,22px);
+
+  font-weight:700;
 }
 
-.chart svg{
-  width:100%;
-  height:100%;
+.calories-value{
+  left:86.8%;
+  top:20.0%;
+
+  width:10.5%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(22px,3vw,45px);
+
+  font-weight:900;
 }
 
-/* =====================================================
+.calories-target{
+  left:87.0%;
+  top:25.0%;
+
+  width:10%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(13px,1.45vw,22px);
+
+  font-weight:700;
+}
+
+.sleep-value{
+  left:69.0%;
+  top:37.2%;
+
+  width:10.5%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(21px,2.8vw,43px);
+
+  font-weight:900;
+}
+
+.sleep-target{
+  left:69.0%;
+  top:42.1%;
+
+  width:10%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(13px,1.45vw,22px);
+
+  font-weight:700;
+}
+
+.health-value{
+  left:86.8%;
+  top:37.2%;
+
+  width:10.5%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(25px,3vw,46px);
+
+  font-weight:900;
+}
+
+.health-target{
+  left:87.0%;
+  top:42.1%;
+
+  width:10%;
+
+  text-align:center;
+
+  color:#fff;
+
+  font-size:clamp(13px,1.45vw,22px);
+
+  font-weight:700;
+}
+
+/* =========================================================
+   KPI PROGRESS BARS
+========================================================= */
+
+.kpi-bar{
+  position:absolute;
+
+  z-index:8;
+
+  height:1.35%;
+
+  border-radius:999px;
+
+  transform-origin:left center;
+}
+
+.steps-bar{
+  left:62.8%;
+  top:27.45%;
+  width:15.2%;
+  background:#0cd4f2;
+}
+
+.calories-bar{
+  left:81.4%;
+  top:27.45%;
+  width:15.2%;
+  background:#15c34f;
+}
+
+.sleep-bar{
+  left:62.8%;
+  top:44.55%;
+  width:15.2%;
+  background:#a62cff;
+}
+
+.health-bar{
+  left:81.4%;
+  top:44.55%;
+  width:15.2%;
+  background:#ff153c;
+}
+
+/* =========================================================
+   INBODY
+========================================================= */
+
+.inbody-score{
+  left:34.0%;
+  top:74.2%;
+
+  width:10%;
+
+  color:#08245b;
+
+  font-size:clamp(21px,2.3vw,36px);
+
+  font-weight:900;
+}
+
+.inbody-plus{
+  left:44.5%;
+  top:73.0%;
+
+  width:4%;
+
+  color:#fff;
+
+  text-align:center;
+
+  font-size:clamp(12px,1.25vw,20px);
+
+  font-weight:900;
+}
+
+.inbody-date{
+  left:34.0%;
+  top:70.0%;
+
+  width:12%;
+
+  color:#08245b;
+
+  font-size:clamp(9px,0.95vw,15px);
+
+  font-weight:700;
+}
+
+/* =========================================================
    PROGRAM
-===================================================== */
+========================================================= */
 
-.program-number{
-  margin-top:40px;
-  font-size:51px;
-  font-weight:1000;
-}
+.program-day{
+  left:48.2%;
+  top:74.0%;
 
-.program-number span{
-  font-size:22px;
-}
+  width:9%;
 
-.program-progress{
-  height:17px;
-  margin-top:12px;
-  border-radius:20px;
-  background:#d5e3f6;
-  overflow:hidden;
-}
+  color:#08245b;
 
-.program-progress-fill{
-  height:100%;
-  background:#1596ef;
-  border-radius:20px;
-  width:50%;
-}
-
-.program-left{
-  margin-top:10px;
-  color:#1648a4;
-  font-weight:900;
-}
-
-/* =====================================================
-   RIGHT
-===================================================== */
-
-.right-column{
-  display:grid;
-  gap:14px;
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.stat{
-  min-height:150px;
-  border-radius:23px;
-  color:#fff;
-  padding:17px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 7px 17px #12356c20;
-}
-
-.stat.blue{
-  background:linear-gradient(145deg,#176cf2,#06317d);
-}
-
-.stat.green{
-  background:linear-gradient(145deg,#19ad50,#007136);
-}
-
-.stat.purple{
-  background:linear-gradient(145deg,#7d2af3,#4711ad);
-}
-
-.stat.pink{
-  background:linear-gradient(145deg,#fa3762,#c70c42);
-}
-
-.stat-title{
-  text-align:right;
-  font-size:17px;
-  font-weight:900;
-}
-
-.stat-icon{
-  position:absolute;
-  left:17px;
-  top:19px;
-  font-size:55px;
-}
-
-.stat-value{
-  text-align:right;
-  margin-top:5px;
-  font-size:41px;
-  font-weight:1000;
-}
-
-.stat-sub{
-  text-align:right;
-  font-size:16px;
-  font-weight:800;
-}
-
-.stat .progress{
-  position:absolute;
-  left:20px;
-  right:20px;
-  bottom:14px;
-  height:12px;
-  margin:0;
-  background:#ffffff55;
-}
-
-.stat .progress-fill{
-  background:#fff;
-}
-
-/* =====================================================
-   REWARDS
-===================================================== */
-
-.rewards{
-  background:linear-gradient(145deg,#ffad12,#f47c00);
-  border-radius:23px;
-  padding:15px;
-  color:#fff;
-  box-shadow:0 7px 17px #8e4c0028;
-}
-
-.section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:24px;
-  font-weight:1000;
-}
-
-.reward-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:12px;
-}
-
-.reward{
-  background:#fff;
-  color:#24180b;
-  min-height:132px;
-  border-radius:18px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
   text-align:center;
-  border:2px solid #ffe2aa;
-}
 
-.reward-icon{
-  font-size:47px;
-}
+  font-size:clamp(25px,3vw,45px);
 
-.reward-value{
-  font-size:24px;
-  font-weight:1000;
-  margin-top:4px;
-}
-
-.reward-label{
-  font-size:14px;
   font-weight:900;
 }
 
-/* =====================================================
-   RANKING
-===================================================== */
+.program-total{
+  left:56.0%;
+  top:74.7%;
 
-.ranking{
-  background:linear-gradient(145deg,#14b99b,#07836f);
-  border-radius:23px;
-  padding:15px;
-  color:#fff;
-  min-height:175px;
-  box-shadow:0 7px 17px #006b5b25;
+  width:7%;
+
+  color:#08245b;
+
+  font-size:clamp(14px,1.5vw,23px);
+
+  font-weight:900;
 }
 
-.rank-body{
-  margin-top:10px;
-  display:grid;
-  grid-template-columns:1fr 1.2fr 1fr;
-  gap:7px;
-  align-items:end;
-}
+.program-remaining{
+  left:48.2%;
+  top:81.2%;
 
-.rank-box{
-  background:#e7ffff;
-  color:#0a2467;
-  border-radius:18px;
-  min-height:82px;
+  width:14%;
+
+  color:#08245b;
+
   text-align:center;
-  padding:8px;
+
+  font-size:clamp(11px,1.25vw,19px);
+
+  font-weight:700;
 }
 
-.my-rank{
-  font-size:44px;
-  line-height:1;
-  font-weight:1000;
-}
+/* =========================================================
+   RANK
+========================================================= */
 
-.rank-note{
-  font-size:15px;
+.rank-value{
+  left:66.8%;
+  top:76.5%;
+
+  width:10%;
+
+  text-align:center;
+
+  color:#08245b;
+
+  font-size:clamp(30px,4vw,58px);
+
   font-weight:900;
 }
 
-/* =====================================================
-   BOTTOM NAV
-===================================================== */
+.rank-total{
+  left:64.0%;
+  top:83.0%;
 
-.bottom-nav{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:15px;
-  margin-top:16px;
+  width:16%;
+
+  text-align:center;
+
+  color:#08245b;
+
+  font-size:clamp(10px,1.1vw,17px);
+
+  font-weight:700;
 }
 
-.nav-btn{
-  height:112px;
-  border:0;
-  border-radius:22px;
-  color:#fff;
+/* =========================================================
+   NAV BUTTONS
+========================================================= */
+
+.nav-home,
+.nav-mission,
+.nav-battle{
+  position:absolute;
+
+  z-index:30;
+
   cursor:pointer;
-  box-shadow:0 7px 15px #12356c25;
+
+  background:transparent;
+
+  border:0;
+
+  padding:0;
+
+  height:9.2%;
+}
+
+.nav-home{
+  left:1.3%;
+  top:89.0%;
+  width:31.2%;
+}
+
+.nav-mission{
+  left:34.3%;
+  top:89.0%;
+  width:31.2%;
+}
+
+.nav-battle{
+  left:67.2%;
+  top:89.0%;
+  width:31.2%;
+}
+
+/* =========================================================
+   INVISIBLE CLICK AREAS
+========================================================= */
+
+.btn-weight{
+  position:absolute;
+  left:1.2%;
+  top:67.8%;
+  width:14.8%;
+  height:19.5%;
+  z-index:30;
+  cursor:pointer;
+}
+
+.btn-progress{
+  position:absolute;
+  left:17.2%;
+  top:67.8%;
+  width:14.8%;
+  height:19.5%;
+  z-index:30;
+  cursor:pointer;
+}
+
+.btn-inbody{
+  position:absolute;
+  left:33.0%;
+  top:67.8%;
+  width:14.5%;
+  height:19.5%;
+  z-index:30;
+  cursor:pointer;
+}
+
+.btn-program{
+  position:absolute;
+  left:48.0%;
+  top:67.8%;
+  width:14.5%;
+  height:19.5%;
+  z-index:30;
+  cursor:pointer;
+}
+
+.btn-ranking{
+  position:absolute;
+  left:64.0%;
+  top:67.5%;
+  width:34.0%;
+  height:19.8%;
+  z-index:30;
+  cursor:pointer;
+}
+
+/* =========================================================
+   PROFILE UPLOAD / FALLBACK
+========================================================= */
+
+.profile-fallback{
+  position:absolute;
+
+  left:7%;
+  top:18%;
+
+  width:24.5%;
+  aspect-ratio:1/1;
+
+  border-radius:50%;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:18px;
+
+  color:#fff;
+
+  font-size:clamp(30px,4vw,60px);
+
+  font-weight:900;
+
+  z-index:4;
+
+  pointer-events:none;
 }
 
-.nav-btn.home{
-  background:linear-gradient(145deg,#063db1,#001e68);
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading-screen{
+  position:fixed;
+
+  inset:0;
+
+  z-index:999;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef5ff,
+      #dceaff
+    );
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  flex-direction:column;
+
+  gap:15px;
+
+  color:#08245b;
+
+  font-weight:700;
 }
 
-.nav-btn.mission{
-  background:linear-gradient(145deg,#e51a1a,#a60000);
+.loading-logo{
+  font-size:clamp(24px,4vw,48px);
+
+  font-weight:900;
+
+  letter-spacing:-1px;
 }
 
-.nav-btn.battle{
-  background:linear-gradient(145deg,#063db1,#001e68);
+.loading-spinner{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  border:4px solid #d5e2f5;
+
+  border-top-color:#0b53c6;
+
+  animation:spin .8s linear infinite;
 }
 
-.nav-icon{
-  font-size:57px;
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-.nav-main{
-  font-size:35px;
-  font-weight:1000;
-  font-style:italic;
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-screen{
+  position:fixed;
+
+  inset:0;
+
+  z-index:1000;
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:25px;
+
+  background:#eef4ff;
 }
 
-.nav-sub{
-  font-size:18px;
-  font-weight:800;
+.error-box{
+  max-width:520px;
+
+  width:100%;
+
+  background:#fff;
+
+  border-radius:20px;
+
+  padding:30px;
+
   text-align:center;
+
+  box-shadow:0 15px 50px rgba(0,0,0,.15);
 }
 
-/* =====================================================
+.error-box h2{
+  margin:0 0 10px;
+
+  color:#d71920;
+}
+
+.error-box p{
+  color:#555;
+
+  line-height:1.7;
+}
+
+.retry{
+  border:0;
+
+  border-radius:12px;
+
+  padding:12px 24px;
+
+  background:#073b93;
+
+  color:#fff;
+
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+/* =========================================================
    MOBILE
-===================================================== */
+========================================================= */
 
-@media(max-width:1100px){
+@media(max-width:600px){
 
-  .header{
-    grid-template-columns:1fr;
+  .home-page{
+    width:100%;
+    overflow-x:auto;
+    justify-content:flex-start;
   }
 
-  .hospital{
-    justify-content:center;
-  }
-
-  .brand{
-    white-space:normal;
-  }
-
-  .resources{
-    justify-content:center;
-  }
-
-  .main-grid{
-    grid-template-columns:1fr;
-  }
-
-}
-
-@media(max-width:650px){
-
-  .app{
-    padding:8px;
-  }
-
-  .brand-main{
-    font-size:36px;
-    letter-spacing:-1px;
-  }
-
-  .brand-year{
-    font-size:27px;
-  }
-
-  .brand-sub{
-    font-size:13px;
-  }
-
-  .hospital-name{
-    font-size:21px;
-  }
-
-  .hospital-sub{
-    font-size:16px;
-  }
-
-  .resources{
-    padding:9px;
-    gap:8px;
-  }
-
-  .resource{
-    min-width:0;
-  }
-
-  .resource-icon{
-    width:38px;
-    height:38px;
-    font-size:21px;
-  }
-
-  .resource-value{
-    font-size:19px;
-  }
-
-  .resource-label{
-    font-size:9px;
-  }
-
-  .profile{
-    height:470px;
-  }
-
-  .weight-row{
-    grid-template-columns:90px 1fr;
-  }
-
-  .weight-icon,
-  .target-icon{
-    width:85px;
-    height:85px;
-    font-size:48px;
-  }
-
-  .big-value{
-    font-size:42px;
-  }
-
-  .center-bottom{
-    grid-template-columns:1fr;
-  }
-
-  .stats-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .stat-value{
-    font-size:29px;
-  }
-
-  .stat-title{
-    font-size:12px;
-  }
-
-  .stat-icon{
-    font-size:35px;
-  }
-
-  .bottom-nav{
-    grid-template-columns:1fr;
+  .home-stage{
+    width:100vw;
+    min-width:100vw;
   }
 
 }
@@ -979,912 +935,467 @@ body{
 
 <body>
 
-<div class="app">
-
-  <!-- ===================================================
-       HEADER
-  ==================================================== -->
-
-  <header class="header">
-
-    <div class="hospital">
-
-      <div class="hospital-logo"></div>
-
-      <div>
-        <div class="hospital-name">
-          BANGKOK<br>HOSPITAL
-        </div>
-
-        <div class="hospital-sub">
-          UDON
-        </div>
-      </div>
-
-    </div>
-
-
-    <div class="brand">
-
-      <div class="brand-main">
-        ROCK <span class="red">YOUR</span> BODY
-        <span class="brand-year">2026</span>
-      </div>
-
-      <div class="brand-sub">
-        <span class="move">MOVE</span>
-        &nbsp;•&nbsp;
-        <span class="eat">EAT</span>
-        &nbsp;•&nbsp;
-        <span class="sleep">SLEEP</span>
-        &nbsp;•&nbsp;
-        <span class="health">HEALTH</span>
-      </div>
-
-    </div>
-
-
-    <div class="resources">
-
-      <div class="resource">
-
-        <div class="resource-icon">
-          ⭐
-        </div>
-
-        <div>
-          <div
-            class="resource-value"
-            id="coinValue"
-          >
-            0
-          </div>
-
-          <div class="resource-label">
-            ROCK COIN
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="resource">
-
-        <div class="resource-icon energy-icon">
-          ⚡
-        </div>
-
-        <div>
-
-          <div
-            class="resource-value"
-            id="energyValue"
-          >
-            0/200
-          </div>
-
-          <div class="resource-label">
-            ENERGY
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </header>
-
-
-  <!-- ===================================================
-       MAIN
-  ==================================================== -->
-
-  <main class="main-grid">
-
-
-    <!-- ================================================
-         LEFT PROFILE
-    ================================================= -->
-
-    <section>
-
-      <div class="card profile-card">
-
-        <div class="profile">
-
-          <img
-            id="profileImage"
-            class="profile-img"
-            alt="LINE Profile"
-            style="display:none"
-          >
-
-          <div
-            id="profilePlaceholder"
-            class="profile-img profile-placeholder"
-          >
-            👤
-          </div>
-
-          <div class="profile-camera">
-            📷
-          </div>
-
-          <div
-            class="profile-upload"
-            id="profileName"
-          >
-            กำลังโหลดข้อมูล...
-          </div>
-
-
-          <div class="team">
-
-            <span>
-              ✎
-              Team :
-              <span id="teamName">
-                HERO ROCK
-              </span>
-            </span>
-
-            <span class="team-edit">
-              ▼
-            </span>
-
-          </div>
-
-
-          <div class="hero">
-
-            <div class="hero-badge">
-              ★
-            </div>
-
-            <div
-              class="hero-name"
-              id="heroName"
-            >
-              HERO ROCK
-            </div>
-
-            <div
-              class="level"
-              id="level"
-            >
-              Lv.12
-            </div>
-
-          </div>
-
-
-          <div class="exp">
-
-            <div class="exp-title">
-              EXP
-            </div>
-
-            <div class="progress">
-
-              <div
-                id="expBar"
-                class="progress-fill"
-              ></div>
-
-            </div>
-
-            <div
-              id="expValue"
-              class="exp-value"
-            >
-              0 / 1000
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- LEFT BUTTONS -->
-
-      <div class="center-bottom">
-
-        <button
-          class="small-card"
-          onclick="ROCK.go('dashboard')"
-        >
-
-          <div style="font-size:50px">
-            ⚖️
-          </div>
-
-          <div class="small-title">
-            WEIGHT CHECK
-          </div>
-
-          <div>
-            ชั่งน้ำหนัก
-          </div>
-
-        </button>
-
-
-        <button
-          class="small-card"
-          onclick="ROCK.go('dashboard')"
-        >
-
-          <div style="font-size:50px">
-            📈
-          </div>
-
-          <div class="small-title">
-            MY PROGRESS
-          </div>
-
-          <div>
-            ความก้าวหน้าของฉัน
-          </div>
-
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================================================
-         CENTER
-    ================================================= -->
-
-    <section>
-
-
-      <div class="card weight-card">
-
-        <div class="weight-row">
-
-          <div class="weight-icon">
-            ⚖️
-          </div>
-
-          <div>
-
-            <div class="label">
-              น้ำหนักปัจจุบัน
-            </div>
-
-            <div class="big-value">
-
-              <span id="currentWeight">
-                0
-              </span>
-
-              <span class="unit">
-                kg
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="weight-row target">
-
-          <div class="target-icon">
-            🎯
-          </div>
-
-          <div>
-
-            <div class="label">
-              เป้าหมาย
-            </div>
-
-            <div class="big-value">
-
-              <span id="targetWeight">
-                0
-              </span>
-
-              <span class="unit">
-                kg
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="target-progress">
-
-          <div class="target-title">
-            ความคืบหน้าเป้าหมายน้ำหนัก
-          </div>
-
-          <div class="percent-row">
-
-            <div class="progress">
-
-              <div
-                id="weightProgressBar"
-                class="progress-fill"
-              ></div>
-
-            </div>
-
-            <div
-              class="percent"
-              id="weightPercent"
-            >
-              0%
-            </div>
-
-          </div>
-
-
-          <div class="target-info">
-
-            <span>
-              ลดไปแล้ว
-              <b id="lostWeight">
-                0
-              </b>
-              kg
-            </span>
-
-            <span>
-              เหลืออีก
-              <b id="remainingWeight">
-                0
-              </b>
-              kg
-            </span>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- CENTER LOWER -->
-
-      <div class="center-bottom">
-
-
-        <!-- INBODY -->
-
-        <div class="small-card">
-
-          <div class="small-title">
-            🛡️ InBody ล่าสุด
-          </div>
-
-          <div style="font-size:14px">
-            <span id="inbodyDate">
-              -
-            </span>
-          </div>
-
-          <div class="small-score">
-
-            <span id="inbodyScore">
-              0
-            </span>
-
-            <span class="score-unit">
-              / 100
-            </span>
-
-            <span class="plus">
-              +3
-            </span>
-
-          </div>
-
-
-          <div class="chart">
-
-            <svg
-              viewBox="0 0 300 70"
-              preserveAspectRatio="none"
-            >
-
-              <polyline
-                points="0,50 45,65 90,45 135,60 180,40 225,48 300,20"
-                fill="none"
-                stroke="#6635d9"
-                stroke-width="4"
-              />
-
-            </svg>
-
-          </div>
-
-          <div
-            style="
-              margin-top:12px;
-              text-align:center;
-              font-weight:900;
-              color:#4926a5;
-            "
-          >
-            ดูผล InBody ล่าสุด →
-          </div>
-
-        </div>
-
-
-        <!-- PROGRAM -->
-
-        <div class="small-card">
-
-          <div class="small-title">
-            📅 ระยะเวลาโครงการ
-          </div>
-
-          <div class="program-number">
-
-            <span id="programDay">
-              0
-            </span>
-
-            <span>
-              / 90 วัน
-            </span>
-
-          </div>
-
-          <div class="program-progress">
-
-            <div
-              id="programBar"
-              class="program-progress-fill"
-            ></div>
-
-          </div>
-
-          <div class="program-left">
-
-            เหลืออีก
-            <span id="programLeft">
-              0
-            </span>
-            วัน
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================================================
-         RIGHT
-    ================================================= -->
-
-    <section class="right-column">
-
-
-      <!-- STATS -->
-
-      <div class="stats-grid">
-
-
-        <div class="stat blue">
-
-          <div class="stat-icon">
-            👣
-          </div>
-
-          <div class="stat-title">
-            วันนี้ก้าวไปแล้ว
-          </div>
-
-          <div
-            class="stat-value"
-            id="stepsValue"
-          >
-            0
-          </div>
-
-          <div class="stat-sub">
-            / 10,000 ก้าว
-          </div>
-
-          <div class="progress">
-
-            <div
-              id="stepsBar"
-              class="progress-fill"
-            ></div>
-
-          </div>
-
-        </div>
-
-
-        <div class="stat green">
-
-          <div class="stat-icon">
-            🔥
-          </div>
-
-          <div class="stat-title">
-            แคลอรี่เผาผลาญ
-          </div>
-
-          <div
-            class="stat-value"
-            id="caloriesValue"
-          >
-            0
-          </div>
-
-          <div class="stat-sub">
-            / 500 kcal
-          </div>
-
-          <div class="progress">
-
-            <div
-              id="caloriesBar"
-              class="progress-fill"
-            ></div>
-
-          </div>
-
-        </div>
-
-
-        <div class="stat purple">
-
-          <div class="stat-icon">
-            🌙
-          </div>
-
-          <div class="stat-title">
-            นอนหลับ
-          </div>
-
-          <div
-            class="stat-value"
-            id="sleepValue"
-          >
-            0
-          </div>
-
-          <div class="stat-sub">
-            / 8 ชม.
-          </div>
-
-          <div class="progress">
-
-            <div
-              id="sleepBar"
-              class="progress-fill"
-            ></div>
-
-          </div>
-
-        </div>
-
-
-        <div class="stat pink">
-
-          <div class="stat-icon">
-            ❤️
-          </div>
-
-          <div class="stat-title">
-            คะแนนสุขภาพรวม
-          </div>
-
-          <div
-            class="stat-value"
-            id="healthScore"
-          >
-            0
-          </div>
-
-          <div class="stat-sub">
-            คะแนน
-          </div>
-
-          <div class="progress">
-
-            <div
-              id="healthBar"
-              class="progress-fill"
-            ></div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- REWARDS -->
-
-      <div class="rewards">
-
-        <div class="section-head">
-
-          <span>
-            🎁 รางวัลของฉัน
-          </span>
-
-          <span
-            onclick="ROCK.go('reward')"
-            style="cursor:pointer"
-          >
-            ดูทั้งหมด →
-          </span>
-
-        </div>
-
-
-        <div class="reward-grid">
-
-          <div class="reward">
-
-            <div class="reward-icon">
-              ⭐
-            </div>
-
-            <div class="reward-value">
-              1,000
-            </div>
-
-            <div class="reward-label">
-              ROCK COIN
-            </div>
-
-          </div>
-
-
-          <div class="reward">
-
-            <div class="reward-icon">
-              ⚡
-            </div>
-
-            <div class="reward-value">
-              x10
-            </div>
-
-            <div class="reward-label">
-              ENERGY
-            </div>
-
-          </div>
-
-
-          <div class="reward">
-
-            <div class="reward-icon">
-              🏅
-            </div>
-
-            <div class="reward-value">
-              นักสู้สุขภาพ
-            </div>
-
-            <div class="reward-label">
-              BADGE
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- RANKING -->
-
-      <div class="ranking">
-
-        <div class="section-head">
-
-          <span>
-            📊 อันดับของฉัน
-          </span>
-
-          <span
-            onclick="ROCK.go('ranking')"
-            style="cursor:pointer"
-          >
-            ดูอันดับทั้งหมด →
-          </span>
-
-        </div>
-
-
-        <div class="rank-body">
-
-          <div class="rank-box">
-
-            <div class="my-rank">
-              #<span id="myRank">
-                -
-              </span>
-            </div>
-
-            <div class="rank-note">
-              จากผู้เข้าร่วมทั้งหมด
-            </div>
-
-          </div>
-
-
-          <div class="rank-box">
-
-            <div style="font-size:38px">
-              🥇
-            </div>
-
-            <div class="rank-note">
-              อันดับ 1
-            </div>
-
-          </div>
-
-
-          <div class="rank-box">
-
-            <div style="font-size:38px">
-              🥈 🥉
-            </div>
-
-            <div class="rank-note">
-              Top Players
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- ===================================================
-       BOTTOM NAV
-  ==================================================== -->
-
-  <nav class="bottom-nav">
-
-    <button
-      class="nav-btn home"
-      onclick="ROCK.goHome()"
-    >
-
-      <div class="nav-icon">
-        🏠
-      </div>
-
-      <div>
-
-        <div class="nav-main">
-          HOME
-        </div>
-
-        <div class="nav-sub">
-          หน้าหลัก
-        </div>
-
-      </div>
-
-    </button>
-
-
-    <button
-      class="nav-btn mission"
-      onclick="ROCK.goMission()"
-    >
-
-      <div class="nav-icon">
-        🎯
-      </div>
-
-      <div>
-
-        <div class="nav-main">
-          MISSION
-        </div>
-
-        <div class="nav-sub">
-          ภารกิจ
-        </div>
-
-      </div>
-
-    </button>
-
-
-    <button
-      class="nav-btn battle"
-      onclick="ROCK.goBattle()"
-    >
-
-      <div class="nav-icon">
-        ⚔️
-      </div>
-
-      <div>
-
-        <div class="nav-main">
-          BATTLE
-        </div>
-
-        <div class="nav-sub">
-          ต่อสู้กับมอนสเตอร์
-        </div>
-
-      </div>
-
-    </button>
-
-  </nav>
+<!-- =======================================================
+     LOADING
+======================================================== -->
+
+<div
+  id="loadingScreen"
+  class="loading-screen"
+>
+
+  <div class="loading-logo">
+    ROCK YOUR BODY 2026
+  </div>
+
+  <div class="loading-spinner"></div>
+
+  <div>
+    กำลังโหลดข้อมูลสมาชิก...
+  </div>
 
 </div>
 
 
+<!-- =======================================================
+     ERROR
+======================================================== -->
+
+<div
+  id="errorScreen"
+  class="error-screen"
+>
+
+  <div class="error-box">
+
+    <h2>
+      ไม่สามารถโหลดข้อมูลได้
+    </h2>
+
+    <p id="errorMessage">
+      กรุณาลองใหม่อีกครั้ง
+    </p>
+
+    <button
+      class="retry"
+      onclick="location.reload()"
+    >
+      ลองใหม่
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     HOME
+======================================================== -->
+
+<main class="home-page">
+
+<section
+  class="home-stage"
+  id="homeStage"
+>
+
+
 <!-- =====================================================
-     HOME SCRIPT
+     PROFILE
 ===================================================== -->
 
+<div
+  id="profileFallback"
+  class="profile-fallback"
+>
+  ?
+</div>
+
+<img
+  id="profilePhoto"
+  class="profile-photo"
+  alt="LINE Profile"
+>
+
+
+<div
+  id="teamName"
+  class="data team-name"
+>
+  Team : HERO ROCK
+</div>
+
+
+<div
+  id="playerName"
+  class="data player-name"
+>
+  HERO ROCK
+</div>
+
+
+<div
+  id="playerLevel"
+  class="data level"
+>
+  Lv.12
+</div>
+
+
+<!-- EXP -->
+
+<div
+  id="expFill"
+  class="exp-fill"
+></div>
+
+<div
+  id="expValue"
+  class="data exp-value"
+>
+  560
+</div>
+
+<div
+  id="expTotal"
+  class="data exp-total"
+>
+  / 1000
+</div>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<div
+  id="coinValue"
+  class="data coin-value"
+>
+  0
+</div>
+
+<div
+  id="energyValue"
+  class="data energy-value"
+>
+  0/200
+</div>
+
+
+<!-- =====================================================
+     WEIGHT
+===================================================== -->
+
+<div
+  id="weightCurrent"
+  class="data weight-current"
+>
+  0.0 kg
+</div>
+
+<div
+  id="weightTarget"
+  class="data weight-target"
+>
+  0.0 kg
+</div>
+
+<div
+  id="weightBar"
+  class="weight-bar"
+></div>
+
+<div
+  id="weightPercent"
+  class="data weight-percent"
+>
+  0%
+</div>
+
+<div
+  id="weightReduced"
+  class="data weight-reduced"
+>
+  ลดไปแล้ว 0 kg
+</div>
+
+<div
+  id="weightRemaining"
+  class="data weight-remaining"
+>
+  เหลืออีก 0 kg
+</div>
+
+
+<!-- =====================================================
+     KPI
+===================================================== -->
+
+<div
+  id="stepsValue"
+  class="data steps-value"
+>
+  0
+</div>
+
+<div
+  id="stepsTarget"
+  class="data steps-target"
+>
+  / 10,000 ก้าว
+</div>
+
+
+<div
+  id="caloriesValue"
+  class="data calories-value"
+>
+  0
+</div>
+
+<div
+  id="caloriesTarget"
+  class="data calories-target"
+>
+  / 500 kcal
+</div>
+
+
+<div
+  id="sleepValue"
+  class="data sleep-value"
+>
+  0 ชม.
+</div>
+
+<div
+  id="sleepTarget"
+  class="data sleep-target"
+>
+  / 8 ชม.
+</div>
+
+
+<div
+  id="healthValue"
+  class="data health-value"
+>
+  0
+</div>
+
+<div
+  id="healthTarget"
+  class="data health-target"
+>
+  คะแนน
+</div>
+
+
+<!-- KPI BARS -->
+
+<div
+  id="stepsBar"
+  class="kpi-bar steps-bar"
+></div>
+
+<div
+  id="caloriesBar"
+  class="kpi-bar calories-bar"
+></div>
+
+<div
+  id="sleepBar"
+  class="kpi-bar sleep-bar"
+></div>
+
+<div
+  id="healthBar"
+  class="kpi-bar health-bar"
+></div>
+
+
+<!-- =====================================================
+     INBODY
+===================================================== -->
+
+<div
+  id="inbodyDate"
+  class="data inbody-date"
+>
+  (9 พ.ค. 2026)
+</div>
+
+<div
+  id="inbodyScore"
+  class="data inbody-score"
+>
+  0 /100
+</div>
+
+<div
+  id="inbodyPlus"
+  class="data inbody-plus"
+>
+  +0
+</div>
+
+
+<!-- =====================================================
+     PROGRAM
+===================================================== -->
+
+<div
+  id="programDay"
+  class="data program-day"
+>
+  0
+</div>
+
+<div
+  id="programTotal"
+  class="data program-total"
+>
+  / 90 วัน
+</div>
+
+<div
+  id="programRemaining"
+  class="data program-remaining"
+>
+  เหลืออีก 90 วัน
+</div>
+
+
+<!-- =====================================================
+     RANK
+===================================================== -->
+
+<div
+  id="rankValue"
+  class="data rank-value"
+>
+  #-
+</div>
+
+<div
+  id="rankTotal"
+  class="data rank-total"
+>
+  จากผู้เข้าร่วมทั้งหมด 0 คน
+</div>
+
+
+<!-- =====================================================
+     CLICK AREAS
+===================================================== -->
+
+<div
+  class="btn-weight"
+  onclick="ROCK.go('dashboard')"
+  title="Weight Check"
+></div>
+
+<div
+  class="btn-progress"
+  onclick="ROCK.go('dashboard')"
+  title="My Progress"
+></div>
+
+<div
+  class="btn-inbody"
+  onclick="ROCK.go('dashboard')"
+  title="InBody"
+></div>
+
+<div
+  class="btn-program"
+  onclick="ROCK.go('dashboard')"
+  title="Program"
+></div>
+
+<div
+  class="btn-ranking"
+  onclick="ROCK.goRanking()"
+  title="Ranking"
+></div>
+
+
+<!-- =====================================================
+     NAV
+===================================================== -->
+
+<button
+  class="nav-home"
+  onclick="ROCK.goHome()"
+  aria-label="Home"
+></button>
+
+<button
+  class="nav-mission"
+  onclick="ROCK.goMission()"
+  aria-label="Mission"
+></button>
+
+<button
+  class="nav-battle"
+  onclick="ROCK.goBattle()"
+  aria-label="Battle"
+></button>
+
+
+</section>
+
+</main>
+
+
 <script>
+
+/* =========================================================
+   HOME CONTROLLER
+========================================================= */
 
 (function(){
 
   "use strict";
 
 
-  function setText(id,value){
+  /* =======================================================
+     HELPERS
+  ======================================================= */
 
-    const el =
-      document.getElementById(id);
+  function $(id){
+    return document.getElementById(id);
+  }
 
-    if(el){
-      el.textContent =
-        value ?? "-";
-    }
+
+  function num(value){
+
+    return Number(value || 0);
+
+  }
+
+
+  function format(value){
+
+    return num(value).toLocaleString("en-US");
 
   }
 
 
   function percent(current,target){
 
-    current =
-      Number(current) || 0;
-
-    target =
-      Number(target) || 0;
+    current = num(current);
+    target = num(target);
 
     if(target <= 0){
       return 0;
     }
 
-    return Math.max(
-      0,
-      Math.min(
-        100,
+    return Math.min(
+      100,
+      Math.max(
+        0,
         (current / target) * 100
       )
     );
@@ -1892,493 +1403,654 @@ body{
   }
 
 
-  function setBar(id,value){
+  function setText(id,value){
 
-    const el =
-      document.getElementById(id);
+    const element = $(id);
 
-    if(el){
-      el.style.width =
-        Math.max(
-          0,
-          Math.min(100,value)
-        ) + "%";
+    if(element){
+      element.textContent =
+        value ?? "";
     }
 
   }
 
 
-  function formatNumber(value){
+  function setScale(id,value){
 
-    return Number(value || 0)
-      .toLocaleString("en-US");
+    const element = $(id);
+
+    if(element){
+
+      element.style.transform =
+        `scaleX(${Math.max(0,Math.min(1,value))})`;
+
+    }
 
   }
 
 
-  /* =====================================================
+  /* =======================================================
      LINE PROFILE
-  ===================================================== */
+  ======================================================= */
 
-  async function loadLINEProfile(){
+  async function getLINEProfile(){
 
     try{
 
       if(
-        typeof liff !== "undefined" &&
-        window.ROCK_CONFIG &&
-        window.ROCK_CONFIG.LIFF_ID
+        typeof liff === "undefined" ||
+        !window.ROCK_CONFIG?.LIFF_ID
       ){
 
-        if(
-          !liff.isLoggedIn()
-        ){
-
-          liff.login({
-            redirectUri:
-              window.location.href
-          });
-
-          return null;
-
-        }
-
-
-        const profile =
-          await liff.getProfile();
-
-
-        if(profile){
-
-          const image =
-            document.getElementById(
-              "profileImage"
-            );
-
-          const placeholder =
-            document.getElementById(
-              "profilePlaceholder"
-            );
-
-
-          if(profile.pictureUrl){
-
-            image.src =
-              profile.pictureUrl;
-
-            image.style.display =
-              "block";
-
-            placeholder.style.display =
-              "none";
-
-          }
-
-
-          setText(
-            "profileName",
-            profile.displayName ||
-            "สมาชิก ROCK YOUR BODY"
-          );
-
-
-          setText(
-            "heroName",
-            profile.displayName ||
-            "HERO ROCK"
-          );
-
-
-          localStorage.setItem(
-            window.ROCK_CONFIG.STORAGE.LINE_USER_ID,
-            profile.userId
-          );
-
-
-          return profile;
-
-        }
+        return null;
 
       }
 
+
+      if(
+        !liff.isLoggedIn()
+      ){
+
+        liff.login();
+
+        return null;
+
+      }
+
+
+      const profile =
+        await liff.getProfile();
+
+      return profile;
+
     }catch(error){
 
-      console.error(
-        "LINE PROFILE ERROR:",
+      console.warn(
+        "LINE profile unavailable:",
         error
       );
 
-    }
+      return null;
 
-    return null;
+    }
 
   }
 
 
-  /* =====================================================
-     LOAD USER
-  ===================================================== */
+  /* =======================================================
+     PROFILE
+  ======================================================= */
+
+  function renderProfile(profile,user){
+
+    const photo =
+      profile?.pictureUrl ||
+      user?.pictureUrl ||
+      "";
+
+
+    const displayName =
+      profile?.displayName ||
+      user?.displayName ||
+      user?.name ||
+      "สมาชิก ROCK YOUR BODY";
+
+
+    if(photo){
+
+      const image =
+        $("profilePhoto");
+
+      image.src = photo;
+
+      image.onload = function(){
+
+        image.classList.add("loaded");
+
+        $("profileFallback")
+          .style.display = "none";
+
+      };
+
+      image.onerror = function(){
+
+        image.classList.remove("loaded");
+
+        $("profileFallback")
+          .style.display = "flex";
+
+      };
+
+    }
+
+
+    setText(
+      "playerName",
+      displayName
+    );
+
+
+    /*
+      ถ้า backend มี teamName
+      ให้ใช้ของ backend
+    */
+
+    setText(
+      "teamName",
+      user?.teamName ||
+      "Team : HERO ROCK"
+    );
+
+
+    const initial =
+      displayName
+        .trim()
+        .charAt(0)
+        .toUpperCase() ||
+      "?";
+
+
+    setText(
+      "profileFallback",
+      initial
+    );
+
+  }
+
+
+  /* =======================================================
+     RENDER USER
+  ======================================================= */
+
+  function renderUser(user){
+
+    if(!user){
+      return;
+    }
+
+
+    /* TOP */
+
+    setText(
+      "coinValue",
+      format(user.rockCoin)
+    );
+
+
+    setText(
+      "energyValue",
+      `${format(user.energy)}/${format(
+        user.maxEnergy || 200
+      )}`
+    );
+
+
+    /* PROFILE */
+
+    setText(
+      "playerLevel",
+      `Lv.${user.level || 12}`
+    );
+
+
+    setText(
+      "expValue",
+      format(user.exp || 560)
+    );
+
+
+    setText(
+      "expTotal",
+      `/ ${format(user.expMax || 1000)}`
+    );
+
+
+    setScale(
+      "expFill",
+      percent(
+        user.exp || 560,
+        user.expMax || 1000
+      ) / 100
+    );
+
+
+    /* WEIGHT */
+
+    const weight =
+      num(user.weight);
+
+    const targetWeight =
+      num(user.targetWeight);
+
+
+    setText(
+      "weightCurrent",
+      `${weight.toFixed(1)} kg`
+    );
+
+
+    setText(
+      "weightTarget",
+      `${targetWeight.toFixed(1)} kg`
+    );
+
+
+    let weightProgress = 0;
+
+    if(
+      weight > 0 &&
+      targetWeight > 0
+    ){
+
+      /*
+        ใช้ข้อมูลเริ่มต้นถ้ามี
+        เพื่อคำนวณความคืบหน้า
+      */
+
+      const start =
+        num(
+          user.startWeight
+        ) || weight;
+
+      if(start !== targetWeight){
+
+        weightProgress =
+          ((start - weight) /
+          (start - targetWeight)) *
+          100;
+
+      }
+
+    }
+
+
+    weightProgress =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          weightProgress
+        )
+      );
+
+
+    setText(
+      "weightPercent",
+      `${Math.round(weightProgress)}%`
+    );
+
+
+    setScale(
+      "weightBar",
+      weightProgress / 100
+    );
+
+
+    const reduced =
+      Math.max(
+        0,
+        (num(user.startWeight) || weight) -
+        weight
+      );
+
+
+    const remaining =
+      Math.max(
+        0,
+        weight - targetWeight
+      );
+
+
+    setText(
+      "weightReduced",
+      `ลดไปแล้ว ${reduced.toFixed(1)} kg`
+    );
+
+
+    setText(
+      "weightRemaining",
+      `เหลืออีก ${remaining.toFixed(1)} kg`
+    );
+
+
+    /* KPI */
+
+    const steps =
+      num(user.steps);
+
+    const targetSteps =
+      num(user.targetSteps) || 10000;
+
+
+    setText(
+      "stepsValue",
+      format(steps)
+    );
+
+
+    setText(
+      "stepsTarget",
+      `/ ${format(targetSteps)} ก้าว`
+    );
+
+
+    setScale(
+      "stepsBar",
+      percent(
+        steps,
+        targetSteps
+      ) / 100
+    );
+
+
+    const calories =
+      num(user.calories);
+
+    const targetCalories =
+      num(user.targetCalories) || 500;
+
+
+    setText(
+      "caloriesValue",
+      format(calories)
+    );
+
+
+    setText(
+      "caloriesTarget",
+      `/ ${format(targetCalories)} kcal`
+    );
+
+
+    setScale(
+      "caloriesBar",
+      percent(
+        calories,
+        targetCalories
+      ) / 100
+    );
+
+
+    const sleep =
+      num(user.sleep);
+
+    const targetSleep =
+      num(user.targetSleep) || 8;
+
+
+    setText(
+      "sleepValue",
+      `${sleep.toFixed(2)} ชม.`
+    );
+
+
+    setText(
+      "sleepTarget",
+      `/ ${targetSleep} ชม.`
+    );
+
+
+    setScale(
+      "sleepBar",
+      percent(
+        sleep,
+        targetSleep
+      ) / 100
+    );
+
+
+    const health =
+      num(user.healthScore);
+
+
+    setText(
+      "healthValue",
+      format(health)
+    );
+
+
+    setScale(
+      "healthBar",
+      Math.max(
+        0,
+        Math.min(
+          100,
+          health
+        )
+      ) / 100
+    );
+
+
+    /* INBODY */
+
+    setText(
+      "inbodyScore",
+      `${format(user.inbodyScore || 0)} /100`
+    );
+
+
+    setText(
+      "inbodyPlus",
+      `+${format(user.inbodyChange || 0)}`
+    );
+
+
+    if(user.inbodyDate){
+
+      setText(
+        "inbodyDate",
+        `(${user.inbodyDate})`
+      );
+
+    }
+
+
+    /* PROGRAM */
+
+    const programDay =
+      num(user.programDay);
+
+    const programTotal =
+      num(user.programTotalDays) || 90;
+
+
+    setText(
+      "programDay",
+      format(programDay)
+    );
+
+
+    setText(
+      "programTotal",
+      `/ ${format(programTotal)} วัน`
+    );
+
+
+    setText(
+      "programRemaining",
+      `เหลืออีก ${format(
+        Math.max(
+          0,
+          programTotal - programDay
+        )
+      )} วัน`
+    );
+
+
+    /* RANK */
+
+    setText(
+      "rankValue",
+      user.rank
+        ? `#${format(user.rank)}`
+        : "#-"
+    );
+
+
+    setText(
+      "rankTotal",
+      `จากผู้เข้าร่วมทั้งหมด ${format(
+        user.totalMembers || 0
+      )} คน`
+    );
+
+  }
+
+
+  /* =======================================================
+     LOAD DATA
+  ======================================================= */
 
   async function loadHome(){
 
     try{
 
-      const lineProfile =
-        await loadLINEProfile();
+      /*
+        1. LINE PROFILE
+      */
+
+      let profile =
+        await getLINEProfile();
 
 
-      const result =
+      /*
+        2. Backend
+      */
+
+      let response =
         await ROCK.getMe();
 
 
-      if(
-        !result ||
-        !result.user
-      ){
+      /*
+        Backend API ตอนนี้อาจคืน user
+        แบบข้อมูลตัวเลข + LINE ID
+      */
 
-        console.error(
-          "USER DATA NOT FOUND"
-        );
-
-        return;
-
-      }
+      let user =
+        response?.user || {};
 
 
-      const user =
-        result.user;
+      /*
+        3. ดึง profile จาก localStorage
+        กรณี LIFF เคย login แล้ว
+      */
+
+      const stored =
+        ROCK.load(
+          ROCK.config.STORAGE.USER,
+          {}
+        ) || {};
 
 
-      /* ================================================
-         RESOURCE
-      ================================================ */
+      /*
+        รวมข้อมูลโดยให้ข้อมูลล่าสุดจาก LINE
+        มีความสำคัญสำหรับรูปและชื่อ
+      */
 
-      setText(
-        "coinValue",
-        formatNumber(
-          user.rockCoin
-        )
+      profile =
+        profile ||
+        stored;
+
+
+      user = {
+        ...user,
+        ...stored,
+
+        ...(profile ? {
+
+          lineUserId:
+            profile.userId ||
+            profile.lineUserId ||
+            user.lineUserId,
+
+          displayName:
+            profile.displayName ||
+            user.displayName,
+
+          pictureUrl:
+            profile.pictureUrl ||
+            user.pictureUrl
+
+        } : {})
+
+      };
+
+
+      renderProfile(
+        profile,
+        user
       );
 
 
-      setText(
-        "energyValue",
-        `${formatNumber(user.energy)}/${formatNumber(user.maxEnergy || 200)}`
+      renderUser(
+        user
       );
 
 
-      /* ================================================
-         PROFILE
-      ================================================ */
-
-      if(
-        lineProfile
-      ){
-
-        setText(
-          "profileName",
-          lineProfile.displayName
-        );
-
-        setText(
-          "heroName",
-          lineProfile.displayName
-        );
-
-      }
-
-
-      /* ================================================
-         WEIGHT
-      ================================================ */
-
-      const currentWeight =
-        Number(user.weight) || 0;
-
-      const targetWeight =
-        Number(user.targetWeight) || 0;
-
-
-      setText(
-        "currentWeight",
-        currentWeight.toFixed(1)
-      );
-
-
-      setText(
-        "targetWeight",
-        targetWeight.toFixed(1)
-      );
-
-
-      const initialWeight =
-        Math.max(
-          currentWeight,
-          targetWeight + 10
-        );
-
-
-      const lostWeight =
-        Math.max(
-          0,
-          initialWeight -
-          currentWeight
-        );
-
-
-      const remainingWeight =
-        Math.max(
-          0,
-          currentWeight -
-          targetWeight
-        );
-
-
-      const weightPercent =
-        initialWeight > targetWeight
-          ? (
-              (initialWeight - currentWeight) /
-              (initialWeight - targetWeight)
-            ) * 100
-          : 0;
-
-
-      setText(
-        "lostWeight",
-        lostWeight.toFixed(1)
-      );
-
-
-      setText(
-        "remainingWeight",
-        remainingWeight.toFixed(1)
-      );
-
-
-      setText(
-        "weightPercent",
-        Math.round(weightPercent) + "%"
-      );
-
-
-      setBar(
-        "weightProgressBar",
-        weightPercent
-      );
-
-
-      /* ================================================
-         STEPS
-      ================================================ */
-
-      setText(
-        "stepsValue",
-        formatNumber(
-          user.steps
-        )
-      );
-
-
-      setBar(
-        "stepsBar",
-        percent(
-          user.steps,
-          user.targetSteps
-        )
-      );
-
-
-      /* ================================================
-         CALORIES
-      ================================================ */
-
-      setText(
-        "caloriesValue",
-        formatNumber(
-          user.calories
-        )
-      );
-
-
-      setBar(
-        "caloriesBar",
-        percent(
-          user.calories,
-          user.targetCalories
-        )
-      );
-
-
-      /* ================================================
-         SLEEP
-      ================================================ */
-
-      setText(
-        "sleepValue",
-        Number(user.sleep || 0)
-          .toFixed(2)
-      );
-
-
-      setBar(
-        "sleepBar",
-        percent(
-          user.sleep,
-          user.targetSleep
-        )
-      );
-
-
-      /* ================================================
-         HEALTH SCORE
-      ================================================ */
-
-      setText(
-        "healthScore",
-        user.healthScore
-      );
-
-
-      setBar(
-        "healthBar",
-        user.healthScore
-      );
-
-
-      /* ================================================
-         INBODY
-      ================================================ */
-
-      setText(
-        "inbodyScore",
-        user.inbodyScore
-      );
-
-
-      /* ================================================
-         PROGRAM
-      ================================================ */
-
-      const programDay =
-        Number(user.programDay) || 0;
-
-      const programTotal =
-        Number(user.programTotalDays) || 90;
-
-
-      setText(
-        "programDay",
-        programDay
-      );
-
-
-      setText(
-        "programLeft",
-        Math.max(
-          0,
-          programTotal - programDay
-        )
-      );
-
-
-      setBar(
-        "programBar",
-        percent(
-          programDay,
-          programTotal
-        )
-      );
-
-
-      /* ================================================
-         RANK
-      ================================================ */
-
-      setText(
-        "myRank",
-        user.rank || "-"
-      );
-
-
-      /* ================================================
-         LEVEL
-      ================================================ */
-
-      const level =
-        Math.max(
-          1,
-          Number(user.level) ||
-          Math.floor(
-            (Number(user.points) || 0) /
-            1000
-          ) ||
-          1
-        );
-
-
-      setText(
-        "level",
-        "Lv." + level
-      );
-
-
-      /* ================================================
-         EXP
-      ================================================ */
-
-      const exp =
-        Number(user.exp) ||
-        (
-          Number(user.points || 0) %
-          1000
-        );
-
-
-      const maxExp =
-        Number(user.maxExp) ||
-        1000;
-
-
-      setText(
-        "expValue",
-        `${formatNumber(exp)} / ${formatNumber(maxExp)}`
-      );
-
-
-      setBar(
-        "expBar",
-        percent(
-          exp,
-          maxExp
-        )
-      );
+      /*
+        ซ่อน loading
+      */
+
+      $("loadingScreen")
+        .style.display = "none";
 
 
       console.log(
-        "HOME DATA READY",
+        "HOME DATA READY:",
         user
       );
+
 
     }catch(error){
 
       console.error(
-        "HOME ERROR:",
+        "HOME LOAD ERROR:",
         error
       );
+
+
+      $("loadingScreen")
+        .style.display = "none";
+
+
+      $("errorScreen")
+        .style.display = "flex";
+
+
+      $("errorMessage")
+        .textContent =
+          error?.message ||
+          "เกิดข้อผิดพลาดในการโหลดข้อมูล";
 
     }
 
   }
 
 
-  /* =====================================================
+  /* =======================================================
      START
-  ===================================================== */
+  ======================================================= */
 
-  document.addEventListener(
-    "DOMContentLoaded",
-    loadHome
-  );
+  if(
+    window.ROCK &&
+    typeof ROCK.getMe === "function"
+  ){
+
+    loadHome();
+
+  }else{
+
+    $("loadingScreen")
+      .style.display = "none";
+
+    $("errorScreen")
+      .style.display = "flex";
+
+    $("errorMessage")
+      .textContent =
+        "ไม่พบ common.js หรือ ROCK CORE";
+
+  }
 
 })();
 
