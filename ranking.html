@@ -1,1 +1,1742 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROCK YOUR BODY 2026 - Ranking</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><script src="./app-config.js"></script><script src="./common.js"></script><style>body{margin:0;background:#eef4ff;font-family:Arial,'Noto Sans Thai',sans-serif;color:#08245b}.wrap{max-width:720px;margin:auto;padding:18px}.card{background:#fff;border-radius:22px;padding:18px;margin:14px 0;box-shadow:0 8px 24px #1233}.hero{background:linear-gradient(135deg,#ff9d00,#e85a00);color:#fff}.row{display:grid;grid-template-columns:55px 1fr 110px;gap:10px;align-items:center;padding:13px;border-bottom:1px solid #edf1f7}.me{background:#fff3cd;border-radius:12px}.rank{font-size:22px;font-weight:900}.points{text-align:right;font-weight:900}.btn{width:100%;padding:14px;border:0;border-radius:14px;background:#073b93;color:#fff;font-weight:900}</style></head><body><main class="wrap"><section class="card hero"><h1>🏆 RANKING</h1><p>อันดับการแข่งขัน ROCK YOUR BODY 2026</p><h2 id="my">กำลังโหลด...</h2></section><section class="card" id="list"></section><button class="btn" onclick="ROCK.goHome()">🏠 กลับ HOME</button></main><script>(async()=>{try{await ROCK.initLiff();const d=await ROCK.callPlayerApi({action:'ranking'});document.getElementById('my').textContent='อันดับของฉัน #'+(d.myRank||'-');document.getElementById('list').innerHTML=(d.ranking||[]).map(x=>`<div class="row ${x.rank===d.myRank?'me':''}"><div class="rank">#${x.rank}</div><div><b>${x.name||'สมาชิก'}</b><br><small>Lv.${x.level||1} • ${x.rockCoin||0} COIN</small></div><div class="points">${Number(x.points||0).toLocaleString()} PTS</div></div>`).join('')||'<p>ยังไม่มีข้อมูล</p>'}catch(e){document.getElementById('list').textContent='❌ '+e.message}})()</script></body></html>
+<!doctype html>
+<html lang="th">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>ROCK YOUR BODY 2026 - RANKING</title>
+
+
+  <!-- =====================================================
+       LINE LIFF SDK
+  ====================================================== -->
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+
+  <!-- =====================================================
+       CONFIG
+  ====================================================== -->
+
+  <script src="./app-config.js?v=20260827-01"></script>
+
+
+  <!-- =====================================================
+       COMMON CORE
+  ====================================================== -->
+
+  <script src="./common.js?v=20260827-01"></script>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    html,
+    body {
+
+      margin: 0;
+      padding: 0;
+
+      width: 100%;
+      min-height: 100%;
+
+      font-family:
+        "Noto Sans Thai",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          180deg,
+          #eef4ff 0%,
+          #f7f9fc 100%
+        );
+
+      color: #102f78;
+
+    }
+
+
+    body {
+
+      display: flex;
+      justify-content: center;
+
+    }
+
+
+    /* =====================================================
+       LOADING
+    ====================================================== */
+
+    #loading {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 9999;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      padding: 30px;
+
+      background: #eef4ff;
+
+      font-size: 20px;
+
+      font-weight: 900;
+
+    }
+
+
+    /* =====================================================
+       APP
+    ====================================================== */
+
+    #app {
+
+      display: none;
+
+      width: 100%;
+
+      max-width: 1100px;
+
+      padding: 18px;
+
+    }
+
+
+    /* =====================================================
+       HEADER
+    ====================================================== */
+
+    .header {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .brand {
+
+      margin: 0;
+
+      font-size: 32px;
+
+      line-height: 1;
+
+      font-weight: 1000;
+
+      font-style: italic;
+
+      letter-spacing: -1px;
+
+    }
+
+
+    .brand .rock {
+
+      color: #102f78;
+
+    }
+
+
+    .brand .your {
+
+      color: #c81919;
+
+    }
+
+
+    .back-button {
+
+      border: 0;
+
+      padding: 11px 18px;
+
+      border-radius: 14px;
+
+      background: #102f78;
+
+      color: #fff;
+
+      font-size: 14px;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+    }
+
+
+    /* =====================================================
+       TITLE
+    ====================================================== */
+
+    .page-title {
+
+      text-align: center;
+
+      margin: 10px 0 4px;
+
+      font-size: 38px;
+
+      font-weight: 1000;
+
+      font-style: italic;
+
+      color: #102f78;
+
+    }
+
+
+    .page-subtitle {
+
+      text-align: center;
+
+      margin: 0 0 22px;
+
+      color: #65738b;
+
+      font-size: 15px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       MY RANK CARD
+    ====================================================== */
+
+    .my-rank {
+
+      position: relative;
+
+      overflow: hidden;
+
+      padding: 22px;
+
+      margin-bottom: 20px;
+
+      border-radius: 24px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #102f78,
+          #1c4da8
+        );
+
+      color: #fff;
+
+      box-shadow:
+        0 10px 25px
+        rgba(16,47,120,.20);
+
+    }
+
+
+    .my-rank::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 180px;
+
+      height: 180px;
+
+      right: -60px;
+
+      top: -70px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(255,255,255,.08);
+
+    }
+
+
+    .my-rank-label {
+
+      position: relative;
+
+      z-index: 1;
+
+      font-size: 14px;
+
+      font-weight: 800;
+
+      opacity: .85;
+
+    }
+
+
+    .my-rank-content {
+
+      position: relative;
+
+      z-index: 1;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+    }
+
+
+    .my-rank-number {
+
+      font-size: 58px;
+
+      line-height: 1;
+
+      font-weight: 1000;
+
+      font-style: italic;
+
+    }
+
+
+    .my-rank-name {
+
+      font-size: 20px;
+
+      font-weight: 1000;
+
+    }
+
+
+    .my-rank-points {
+
+      margin-top: 5px;
+
+      font-size: 14px;
+
+      font-weight: 800;
+
+      opacity: .9;
+
+    }
+
+
+    .total-members {
+
+      text-align: right;
+
+      font-size: 13px;
+
+      font-weight: 800;
+
+      opacity: .85;
+
+    }
+
+
+    /* =====================================================
+       TOP 3
+    ====================================================== */
+
+    .top-three {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1.15fr 1fr;
+
+      align-items: end;
+
+      gap: 12px;
+
+      margin-bottom: 22px;
+
+    }
+
+
+    .podium {
+
+      min-height: 190px;
+
+      padding: 18px 10px;
+
+      border-radius: 22px;
+
+      background: #fff;
+
+      text-align: center;
+
+      box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.07);
+
+    }
+
+
+    .podium.first {
+
+      min-height: 220px;
+
+    }
+
+
+    .medal {
+
+      font-size: 38px;
+
+      line-height: 1;
+
+    }
+
+
+    .podium-rank {
+
+      margin-top: 8px;
+
+      font-size: 25px;
+
+      font-weight: 1000;
+
+      font-style: italic;
+
+    }
+
+
+    .podium-name {
+
+      margin-top: 8px;
+
+      min-height: 42px;
+
+      font-size: 15px;
+
+      font-weight: 1000;
+
+      word-break: break-word;
+
+    }
+
+
+    .podium-points {
+
+      margin-top: 6px;
+
+      font-size: 14px;
+
+      color: #65738b;
+
+      font-weight: 900;
+
+    }
+
+
+    /* =====================================================
+       RANKING LIST
+    ====================================================== */
+
+    .ranking-card {
+
+      background: #fff;
+
+      border-radius: 24px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.07);
+
+    }
+
+
+    .section-title {
+
+      margin-bottom: 15px;
+
+      font-size: 22px;
+
+      font-weight: 1000;
+
+    }
+
+
+    .ranking-list {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+    }
+
+
+    .rank-row {
+
+      display: grid;
+
+      grid-template-columns:
+        55px 1fr auto;
+
+      align-items: center;
+
+      gap: 12px;
+
+      min-height: 68px;
+
+      padding: 10px 14px;
+
+      border-radius: 16px;
+
+      background: #f4f7fc;
+
+    }
+
+
+    .rank-row.me {
+
+      background: #e6edff;
+
+      outline: 2px solid #102f78;
+
+    }
+
+
+    .rank-position {
+
+      text-align: center;
+
+      font-size: 21px;
+
+      font-weight: 1000;
+
+      font-style: italic;
+
+    }
+
+
+    .rank-user {
+
+      min-width: 0;
+
+    }
+
+
+    .rank-name {
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+      white-space: nowrap;
+
+      font-size: 16px;
+
+      font-weight: 1000;
+
+      color: #102f78;
+
+    }
+
+
+    .rank-you {
+
+      display: inline-block;
+
+      margin-left: 5px;
+
+      padding: 2px 7px;
+
+      border-radius: 8px;
+
+      background: #c81919;
+
+      color: #fff;
+
+      font-size: 10px;
+
+      font-weight: 900;
+
+      vertical-align: middle;
+
+    }
+
+
+    .rank-points {
+
+      text-align: right;
+
+      font-size: 16px;
+
+      font-weight: 1000;
+
+      white-space: nowrap;
+
+    }
+
+
+    .points-label {
+
+      display: block;
+
+      margin-top: 2px;
+
+      color: #65738b;
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       EMPTY
+    ====================================================== */
+
+    .empty {
+
+      padding: 35px 15px;
+
+      text-align: center;
+
+      color: #65738b;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       ERROR
+    ====================================================== */
+
+    .error-box {
+
+      display: none;
+
+      padding: 20px;
+
+      border-radius: 18px;
+
+      background: #fff0f0;
+
+      color: #a50000;
+
+      text-align: center;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ====================================================== */
+
+    @media(max-width:700px){
+
+      #app {
+
+        padding: 12px;
+
+      }
+
+
+      .brand {
+
+        font-size: 25px;
+
+      }
+
+
+      .page-title {
+
+        font-size: 32px;
+
+      }
+
+
+      .top-three {
+
+        gap: 8px;
+
+      }
+
+
+      .podium {
+
+        padding: 14px 7px;
+
+      }
+
+
+      .podium.first {
+
+        min-height: 210px;
+
+      }
+
+
+      .podium-name {
+
+        font-size: 13px;
+
+      }
+
+    }
+
+
+    @media(max-width:480px){
+
+      .header {
+
+        align-items: flex-start;
+
+      }
+
+
+      .back-button {
+
+        padding: 9px 13px;
+
+      }
+
+
+      .my-rank {
+
+        padding: 18px;
+
+      }
+
+
+      .my-rank-number {
+
+        font-size: 48px;
+
+      }
+
+
+      .my-rank-name {
+
+        font-size: 17px;
+
+      }
+
+
+      .total-members {
+
+        font-size: 11px;
+
+      }
+
+
+      .rank-row {
+
+        grid-template-columns:
+          45px 1fr auto;
+
+        gap: 8px;
+
+        padding: 9px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     LOADING
+======================================================== -->
+
+<div id="loading">
+
+  กำลังโหลด Ranking...
+
+</div>
+
+
+<!-- =======================================================
+     APP
+======================================================== -->
+
+<main id="app">
+
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <h1 class="brand">
+
+      <span class="rock">
+        ROCK
+      </span>
+
+      <span class="your">
+        YOUR
+      </span>
+
+      BODY
+
+    </h1>
+
+
+    <button
+      class="back-button"
+      type="button"
+      onclick="goHome()"
+    >
+
+      HOME
+
+    </button>
+
+  </header>
+
+
+  <!-- TITLE -->
+
+  <h2 class="page-title">
+
+    🏆 RANKING
+
+  </h2>
+
+
+  <p class="page-subtitle">
+
+    ตารางคะแนนนักสู้ ROCK YOUR BODY 2026
+
+  </p>
+
+
+  <!-- =====================================================
+       MY RANK
+  ====================================================== -->
+
+  <section class="my-rank">
+
+
+    <div class="my-rank-label">
+
+      RANK ของคุณ
+
+    </div>
+
+
+    <div class="my-rank-content">
+
+
+      <div>
+
+        <div
+          id="myRank"
+          class="my-rank-number"
+        >
+
+          -
+
+        </div>
+
+
+        <div
+          id="myName"
+          class="my-rank-name"
+        >
+
+          สมาชิก ROCK YOUR BODY
+
+        </div>
+
+
+        <div
+          id="myPoints"
+          class="my-rank-points"
+        >
+
+          0 POINTS
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="totalMembers"
+        class="total-members"
+      >
+
+        0 MEMBERS
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       TOP 3
+  ====================================================== -->
+
+  <section
+    id="topThree"
+    class="top-three"
+  >
+
+  </section>
+
+
+  <!-- =====================================================
+       RANKING
+  ====================================================== -->
+
+  <section class="ranking-card">
+
+
+    <div class="section-title">
+
+      LEADERBOARD
+
+    </div>
+
+
+    <div
+      id="rankingList"
+      class="ranking-list"
+    >
+
+    </div>
+
+
+    <div
+      id="empty"
+      class="empty"
+      style="display:none"
+    >
+
+      ยังไม่มีข้อมูล Ranking
+
+    </div>
+
+
+    <div
+      id="errorBox"
+      class="error-box"
+    >
+
+      ไม่สามารถโหลดข้อมูล Ranking ได้
+
+    </div>
+
+
+  </section>
+
+
+</main>
+
+
+<script>
+
+(function(){
+
+  "use strict";
+
+
+  /* =====================================================
+     HELPERS
+  ====================================================== */
+
+
+  function el(id){
+
+    return document.getElementById(id);
+
+  }
+
+
+  function setText(
+    id,
+    value
+  ){
+
+    const node =
+      el(id);
+
+
+    if(node){
+
+      node.textContent =
+        value;
+
+    }
+
+  }
+
+
+  function number(value){
+
+    const n =
+      Number(value);
+
+
+    if(
+      !Number.isFinite(n)
+    ){
+
+      return "0";
+
+    }
+
+
+    return n.toLocaleString(
+      "en-US"
+    );
+
+  }
+
+
+  function escapeHTML(value){
+
+    return String(
+      value ?? ""
+    )
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  /* =====================================================
+     HOME
+  ====================================================== */
+
+
+  window.goHome =
+    function(){
+
+      if(
+        window.ROCK &&
+        typeof window.ROCK.goHome ===
+        "function"
+      ){
+
+        window.ROCK.goHome();
+
+        return;
+
+      }
+
+
+      window.location.href =
+        "./HOME.html";
+
+    };
+
+
+  /* =====================================================
+     LIFF PROFILE
+  ====================================================== */
+
+
+  async function loadProfile(){
+
+    try{
+
+      /*
+        รองรับ common.js
+        ที่มี getProfile()
+      */
+
+      if(
+        window.ROCK &&
+        typeof window.ROCK.getProfile ===
+        "function"
+      ){
+
+        const profile =
+          await window.ROCK.getProfile();
+
+
+        if(profile?.displayName){
+
+          setText(
+            "myName",
+            profile.displayName
+          );
+
+        }
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "PROFILE ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     LOAD RANKING
+  ====================================================== */
+
+
+  async function loadRanking(){
+
+    if(
+      !window.ROCK
+    ){
+
+      throw new Error(
+        "common.js โหลดไม่สำเร็จ"
+      );
+
+    }
+
+
+    if(
+      typeof window.ROCK.getRanking !==
+      "function"
+    ){
+
+      throw new Error(
+        "ROCK.getRanking() ไม่พบใน common.js"
+      );
+
+    }
+
+
+    const result =
+      await window.ROCK.getRanking();
+
+
+    console.log(
+      "RANKING DATA:",
+      result
+    );
+
+
+    return result;
+
+  }
+
+
+  /* =====================================================
+     NORMALIZE DATA
+  ====================================================== */
+
+
+  function normalize(
+    result
+  ){
+
+    const data =
+      result?.data ||
+      result?.ranking ||
+      result;
+
+
+    /*
+      API ปัจจุบันของ ROCK
+      ส่ง:
+
+      {
+        ok:true,
+        myRank:12,
+        totalMembers:238,
+        ranking:[]
+      }
+    */
+
+
+    const list =
+      Array.isArray(
+        result?.ranking
+      )
+        ? result.ranking
+        : Array.isArray(
+            data?.ranking
+          )
+          ? data.ranking
+          : Array.isArray(data)
+            ? data
+            : [];
+
+
+    const myRank =
+      result?.myRank ??
+      data?.myRank ??
+      null;
+
+
+    const totalMembers =
+      result?.totalMembers ??
+      data?.totalMembers ??
+      list.length;
+
+
+    return {
+
+      myRank,
+
+      totalMembers,
+
+      list
+
+    };
+
+  }
+
+
+  /* =====================================================
+     RENDER MY RANK
+  ====================================================== */
+
+
+  function renderMyRank(
+    data
+  ){
+
+    const me =
+      data.list.find(
+        item =>
+          Number(
+            item.rank
+          ) === Number(
+            data.myRank
+          )
+      );
+
+
+    setText(
+      "myRank",
+      data.myRank
+        ? "#" + number(data.myRank)
+        : "-"
+    );
+
+
+    setText(
+      "totalMembers",
+      number(
+        data.totalMembers
+      ) +
+      " MEMBERS"
+    );
+
+
+    if(me){
+
+      setText(
+        "myName",
+        me.name ||
+        "สมาชิก ROCK YOUR BODY"
+      );
+
+
+      setText(
+        "myPoints",
+        number(
+          me.points
+        ) +
+        " POINTS"
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     MEDAL
+  ====================================================== */
+
+
+  function medal(rank){
+
+    if(
+      Number(rank) === 1
+    ){
+
+      return "🥇";
+
+    }
+
+
+    if(
+      Number(rank) === 2
+    ){
+
+      return "🥈";
+
+    }
+
+
+    if(
+      Number(rank) === 3
+    ){
+
+      return "🥉";
+
+    }
+
+
+    return "🏅";
+
+  }
+
+
+  /* =====================================================
+     RENDER TOP 3
+  ====================================================== */
+
+
+  function renderTopThree(
+    list
+  ){
+
+    const top =
+      list
+        .filter(
+          item =>
+            Number(item.rank) >= 1 &&
+            Number(item.rank) <= 3
+        )
+        .sort(
+          (a,b) =>
+            Number(a.rank) -
+            Number(b.rank)
+        );
+
+
+    if(!top.length){
+
+      el(
+        "topThree"
+      ).innerHTML =
+        "";
+
+      return;
+
+    }
+
+
+    /*
+      แสดงตำแหน่ง
+      2 - 1 - 3
+      ให้เหมือน podium
+    */
+
+
+    const order =
+      [2,1,3];
+
+
+    const html =
+      order.map(
+        rank => {
+
+          const item =
+            top.find(
+              x =>
+                Number(x.rank) ===
+                rank
+            );
+
+
+          if(!item){
+
+            return `
+              <div></div>
+            `;
+
+          }
+
+
+          const first =
+            rank === 1
+              ? " first"
+              : "";
+
+
+          return `
+
+            <div class="podium${first}">
+
+              <div class="medal">
+                ${medal(rank)}
+              </div>
+
+              <div class="podium-rank">
+                #${number(rank)}
+              </div>
+
+              <div class="podium-name">
+                ${escapeHTML(
+                  item.name ||
+                  "สมาชิก"
+                )}
+              </div>
+
+              <div class="podium-points">
+                ${number(
+                  item.points
+                )}
+                POINTS
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      ).join("");
+
+
+    el(
+      "topThree"
+    ).innerHTML =
+      html;
+
+  }
+
+
+  /* =====================================================
+     RENDER LIST
+  ====================================================== */
+
+
+  function renderList(
+    list,
+    myRank
+  ){
+
+    const container =
+      el("rankingList");
+
+
+    if(
+      !list ||
+      !list.length
+    ){
+
+      container.innerHTML =
+        "";
+
+
+      el(
+        "empty"
+      ).style.display =
+        "block";
+
+
+      return;
+
+    }
+
+
+    el(
+      "empty"
+    ).style.display =
+      "none";
+
+
+    /*
+      เรียงจาก Rank 1 → สูงสุด
+    */
+
+
+    const sorted =
+      [...list].sort(
+        (a,b) =>
+          Number(a.rank || 999999) -
+          Number(b.rank || 999999)
+      );
+
+
+    container.innerHTML =
+      sorted.map(
+        item => {
+
+          const rank =
+            Number(
+              item.rank
+            );
+
+
+          const isMe =
+            Number(rank) ===
+            Number(myRank);
+
+
+          return `
+
+            <div
+              class="
+                rank-row
+                ${isMe ? "me" : ""}
+              "
+            >
+
+              <div class="rank-position">
+
+                ${rank <= 3
+                  ? medal(rank)
+                  : "#" + number(rank)
+                }
+
+              </div>
+
+
+              <div class="rank-user">
+
+                <div class="rank-name">
+
+                  ${escapeHTML(
+                    item.name ||
+                    "สมาชิก ROCK YOUR BODY"
+                  )}
+
+                  ${
+                    isMe
+                      ? `
+                        <span class="rank-you">
+                          YOU
+                        </span>
+                      `
+                      : ""
+                  }
+
+                </div>
+
+              </div>
+
+
+              <div class="rank-points">
+
+                ${number(
+                  item.points
+                )}
+
+                <span class="points-label">
+                  POINTS
+                </span>
+
+              </div>
+
+
+            </div>
+
+          `;
+
+        }
+      ).join("");
+
+  }
+
+
+  /* =====================================================
+     START
+  ====================================================== */
+
+
+  async function start(){
+
+    try{
+
+
+      if(
+        !window.ROCK
+      ){
+
+        throw new Error(
+          "ไม่พบ ROCK common core"
+        );
+
+      }
+
+
+      /*
+        ถ้า common.js มี initLiff
+        ให้ใช้ระบบเดียวกัน
+      */
+
+
+      if(
+        typeof window.ROCK.initLiff ===
+        "function"
+      ){
+
+        const ready =
+          await window.ROCK.initLiff();
+
+
+        if(
+          ready === false
+        ){
+
+          return;
+
+        }
+
+      }
+
+
+      await loadProfile();
+
+
+      const result =
+        await loadRanking();
+
+
+      const data =
+        normalize(
+          result
+        );
+
+
+      console.log(
+        "NORMALIZED RANKING:",
+        data
+      );
+
+
+      renderMyRank(
+        data
+      );
+
+
+      renderTopThree(
+        data.list
+      );
+
+
+      renderList(
+        data.list,
+        data.myRank
+      );
+
+
+      el(
+        "loading"
+      ).style.display =
+        "none";
+
+
+      el(
+        "app"
+      ).style.display =
+        "block";
+
+
+    }catch(error){
+
+      console.error(
+        "RANKING ERROR:",
+        error
+      );
+
+
+      el(
+        "loading"
+      ).style.display =
+        "none";
+
+
+      el(
+        "app"
+      ).style.display =
+        "block";
+
+
+      el(
+        "errorBox"
+      ).style.display =
+        "block";
+
+
+      el(
+        "rankingList"
+      ).innerHTML =
+        "";
+
+    }
+
+  }
+
+
+  start();
+
+
+})();
+
+</script>
+
+
+</body>
+
+</html>
