@@ -998,10 +998,9 @@
      PUBLIC API
      ======================================================= */
 
-  window.ROCK = {
+   window.ROCK = {
 
-    config:
-      CONFIG,
+    config: CONFIG,
 
     api,
 
@@ -1012,13 +1011,12 @@
     getMe,
 
     getDashboard,
+    fetchDashboard: getDashboard,
 
     getMissions,
-
     completeMission,
 
     getBattle,
-
     fightMonster,
 
     getRewards,
@@ -1026,34 +1024,21 @@
     getRanking,
 
     go,
-
     goHome,
-
     goMission,
-
     goBattle,
-
     goReward,
-
     goRanking,
-
     goInfo,
 
     save,
-
     load,
 
     number,
-
     coin,
-
     energy,
 
     updateTopBar,
 
     init
-
   };
-
-
-})();
