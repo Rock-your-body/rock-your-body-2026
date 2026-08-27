@@ -1,6 +1,21 @@
 /* =========================================================
    ROCK YOUR BODY 2026
-   COMMON CORE
+   COMMON.JS
+   Version: 2026-08-27-FINAL
+
+   FLOW
+
+   LINE
+     ↓
+   LIFF
+     ↓
+   ID TOKEN
+     ↓
+   player-dashboard API
+     ↓
+   dashboard data
+     ↓
+   window.ROCK
    ========================================================= */
 
 (function () {
@@ -8,170 +23,608 @@
   "use strict";
 
 
-  const CONFIG =
-    window.ROCK_CONFIG;
+  /* =======================================================
+     CONFIG
+  ======================================================= */
+
+  const CFG =
+    window.APP_CONFIG;
 
 
-  if (!CONFIG) {
+  if (!CFG) {
 
     console.error(
-      "ROCK_CONFIG is missing."
+      "APP_CONFIG ไม่ถูกโหลด"
     );
 
     return;
+
   }
-
-
-  const STORAGE =
-    CONFIG.STORAGE;
-
 
 
   /* =======================================================
-     STORAGE
-     ======================================================= */
+     STATE
+  ======================================================= */
 
-  function save(key, value) {
+  let liffInitialized =
+    false;
 
-    try {
+  let liffInitializing =
+    null;
 
-      localStorage.setItem(
-        key,
-        JSON.stringify(value)
-      );
 
-    } catch (error) {
+  /* =======================================================
+     NAVIGATION
+  ======================================================= */
+
+  function go(url) {
+
+    if (!url) {
 
       console.error(
-        "Storage save error:",
-        error
+        "NAVIGATION URL EMPTY"
       );
 
+      return false;
+
     }
+
+    window.location.href =
+      url;
+
+    return true;
 
   }
 
 
+  function goHome() {
 
-  function load(
-    key,
-    fallback = null
-  ) {
+    return go(
+      CFG.PAGE.HOME
+    );
+
+  }
+
+
+  function goMission() {
+
+    return go(
+      CFG.PAGE.MISSION
+    );
+
+  }
+
+
+  function goBattle() {
+
+    return go(
+      CFG.PAGE.BATTLE
+    );
+
+  }
+
+
+  function goWeight() {
+
+    return go(
+      CFG.PAGE.WEIGHT
+    );
+
+  }
+
+
+  function goProgress() {
+
+    return go(
+      CFG.PAGE.PROGRESS
+    );
+
+  }
+
+
+  function goRewards() {
+
+    return go(
+      CFG.PAGE.REWARDS
+    );
+
+  }
+
+
+  function goRanking() {
+
+    return go(
+      CFG.PAGE.RANKING
+    );
+
+  }
+
+
+  /* =======================================================
+     LIFF STATUS
+  ======================================================= */
+
+  function isLiffReady() {
+
+    return (
+      typeof window.liff !==
+        "undefined"
+    );
+
+  }
+
+
+  function isLoggedIn() {
 
     try {
 
-      const value =
-        localStorage.getItem(key);
-
-
-      if (
-        value === null
-      ) {
-
-        return fallback;
-
+      if (!isLiffReady()) {
+        return false;
       }
 
-
-      return JSON.parse(value);
+      return Boolean(
+        window.liff.isLoggedIn()
+      );
 
     } catch (error) {
 
-      console.error(
-        "Storage load error:",
+      console.warn(
+        "LIFF LOGIN CHECK:",
         error
       );
 
-      return fallback;
+      return false;
+
     }
 
   }
 
 
+  function isInClient() {
 
-  /* =======================================================
-     API
-     ======================================================= */
+    try {
 
-  async function api(
-    path,
-    options = {}
-  ) {
+      if (!isLiffReady()) {
+        return false;
+      }
 
-    const url =
-      CONFIG.API_BASE.replace(
-        /\/$/,
-        ""
-      ) + path;
-
-
-    const lineUserId =
-      localStorage.getItem(
-        STORAGE.LINE_USER_ID
+      return Boolean(
+        window.liff.isInClient()
       );
 
+    } catch (error) {
 
-    const headers = {
+      return false;
 
-      ...(options.body
-        ? {
-            "Content-Type":
-              "application/json"
-          }
-        : {}),
+    }
 
-      ...(options.headers || {})
-
-    };
+  }
 
 
-    /*
-      ส่ง LINE USER ID ให้ Backend
-    */
+  /* =======================================================
+     INIT LIFF
+  ======================================================= */
 
-    if (lineUserId) {
+  async function initLiff() {
 
-      headers[
-        "x-line-user-id"
-      ] = lineUserId;
+    /* already ready */
+
+    if (liffInitialized) {
+
+      return true;
 
     }
 
 
-    const response =
-      await fetch(
-        url,
-        {
-          ...options,
-          headers
+    /* prevent duplicate init */
+
+    if (liffInitializing) {
+
+      return await liffInitializing;
+
+    }
+
+
+    liffInitializing =
+      (async function () {
+
+        console.log(
+          "ROCK LIFF INIT"
+        );
+
+
+        /* SDK */
+
+        if (!isLiffReady()) {
+
+          throw new Error(
+            "ไม่พบ LINE LIFF SDK"
+          );
+
         }
+
+
+        /* LIFF ID */
+
+        if (!CFG.LIFF_ID) {
+
+          throw new Error(
+            "ไม่พบ LIFF ID"
+          );
+
+        }
+
+
+        console.log(
+          "LIFF ID:",
+          CFG.LIFF_ID
+        );
+
+
+        console.log(
+          "CURRENT URL:",
+          window.location.href
+        );
+
+
+        /* -------------------------------------------------
+           INIT
+        ------------------------------------------------- */
+
+        try {
+
+          await window.liff.init({
+
+            liffId:
+              CFG.LIFF_ID,
+
+            withLoginOnExternalBrowser:
+              true
+
+          });
+
+        } catch (error) {
+
+          console.error(
+            "LIFF INIT ERROR:",
+            error
+          );
+
+          throw new Error(
+            "LIFF เริ่มต้นไม่สำเร็จ: " +
+            (
+              error?.message ||
+              String(error)
+            )
+          );
+
+        }
+
+
+        console.log(
+          "LIFF INIT SUCCESS"
+        );
+
+
+        /* -------------------------------------------------
+           LOGIN
+        ------------------------------------------------- */
+
+        if (!isLoggedIn()) {
+
+          console.log(
+            "LINE ยังไม่ได้ Login"
+          );
+
+
+          /*
+             ใน LINE LIFF Client
+             ไม่ต้อง login ซ้ำ
+          */
+
+          if (isInClient()) {
+
+            console.warn(
+              "อยู่ใน LINE แต่ยังไม่มี Login"
+            );
+
+            return false;
+
+          }
+
+
+          /*
+             External browser
+          */
+
+          try {
+
+            window.liff.login({
+              redirectUri:
+                window.location.href
+            });
+
+          } catch (error) {
+
+            console.error(
+              "LIFF LOGIN ERROR:",
+              error
+            );
+
+          }
+
+
+          return false;
+
+        }
+
+
+        /* -------------------------------------------------
+           TOKEN
+        ------------------------------------------------- */
+
+        const token =
+          window.liff.getIDToken();
+
+
+        if (!token) {
+
+          throw new Error(
+            "ไม่พบ LINE ID Token"
+          );
+
+        }
+
+
+        console.log(
+          "LINE ID TOKEN READY"
+        );
+
+
+        liffInitialized =
+          true;
+
+
+        return true;
+
+      })();
+
+
+    try {
+
+      return await liffInitializing;
+
+    } finally {
+
+      liffInitializing =
+        null;
+
+    }
+
+  }
+
+
+  /* =======================================================
+     GET ID TOKEN
+  ======================================================= */
+
+  function getIdToken() {
+
+    if (!isLiffReady()) {
+
+      const error =
+        new Error(
+          "LINE LIFF SDK ไม่พร้อม"
+        );
+
+      error.code =
+        "LIFF_SDK_MISSING";
+
+      throw error;
+
+    }
+
+
+    if (!window.liff.isLoggedIn()) {
+
+      const error =
+        new Error(
+          "ยังไม่ได้เข้าสู่ระบบ LINE"
+        );
+
+      error.code =
+        "LINE_NOT_LOGGED_IN";
+
+      throw error;
+
+    }
+
+
+    const token =
+      window.liff.getIDToken();
+
+
+    if (!token) {
+
+      const error =
+        new Error(
+          "ไม่พบ LINE ID Token"
+        );
+
+      error.code =
+        "LINE_TOKEN_MISSING";
+
+      throw error;
+
+    }
+
+
+    return token;
+
+  }
+
+
+  /* =======================================================
+     GET LINE PROFILE
+  ======================================================= */
+
+  async function getProfile() {
+
+    try {
+
+      if (!isLiffReady()) {
+        return null;
+      }
+
+      if (!window.liff.isLoggedIn()) {
+        return null;
+      }
+
+      return await
+        window.liff.getProfile();
+
+    } catch (error) {
+
+      console.warn(
+        "GET PROFILE ERROR:",
+        error
       );
 
+      return null;
 
-    let data;
+    }
+
+  }
+
+
+  /* =======================================================
+     POST JSON
+  ======================================================= */
+
+  async function postJSON(
+    url,
+    payload
+  ) {
+
+    if (!url) {
+
+      throw new Error(
+        "ไม่พบ API URL"
+      );
+
+    }
+
+
+    console.log(
+      "POST API:",
+      url
+    );
+
+
+    let response;
+
+
+    try {
+
+      response =
+        await fetch(
+          url,
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify(
+                payload
+              )
+
+          }
+        );
+
+    } catch (error) {
+
+      console.error(
+        "NETWORK ERROR:",
+        error
+      );
+
+      throw new Error(
+        "ไม่สามารถเชื่อมต่อ API ได้"
+      );
+
+    }
+
+
+    const raw =
+      await response.text();
+
+
+    let data =
+      {};
 
 
     try {
 
       data =
-        await response.json();
+        raw
+          ? JSON.parse(raw)
+          : {};
 
     } catch (error) {
 
+      console.error(
+        "API RAW:",
+        raw
+      );
+
       throw new Error(
-        "API returned invalid JSON"
+        "API ตอบกลับไม่ใช่ JSON"
       );
 
     }
 
 
-    if (!response.ok) {
+    console.log(
+      "API RESPONSE:",
+      data
+    );
 
-      throw new Error(
-        data?.error ||
-        data?.message ||
-        `API Error ${response.status}`
-      );
+
+    if (
+      !response.ok ||
+      data?.success === false ||
+      data?.ok === false
+    ) {
+
+      const error =
+        new Error(
+          data?.error ||
+          data?.message ||
+          (
+            "API ERROR " +
+            response.status
+          )
+        );
+
+
+      error.code =
+        data?.code ||
+        response.status;
+
+
+      error.data =
+        data;
+
+
+      throw error;
 
     }
 
@@ -181,846 +634,442 @@
   }
 
 
-
   /* =======================================================
-     HEALTH CHECK
-     ======================================================= */
+     PLAYER API
+  ======================================================= */
 
-  async function healthCheck() {
-
-    try {
-
-      const result =
-        await api(
-          "/api/health"
-        );
-
-
-      console.log(
-        "ROCK API ONLINE:",
-        result
-      );
-
-
-      return result;
-
-    } catch (error) {
-
-      console.error(
-        "ROCK API OFFLINE:",
-        error
-      );
-
-
-      return {
-
-        ok: false,
-
-        error:
-          error.message
-
-      };
-
-    }
-
-  }
-
-
-
-  /* =======================================================
-     LINE LIFF
-     ======================================================= */
-
-  async function initLINE() {
-
-    /*
-      ตรวจสอบ LIFF
-    */
+  async function callPlayerApi(
+    payload
+  ) {
 
     if (
-      typeof liff ===
-      "undefined"
+      !CFG.API ||
+      !CFG.API.DASHBOARD
     ) {
 
-      console.warn(
-        "LINE LIFF SDK not found."
+      throw new Error(
+        "ยังไม่ได้ตั้งค่า API.DASHBOARD"
       );
-
-
-      return {
-
-        ok: false,
-
-        mode: "no-liff"
-
-      };
 
     }
 
 
-
-    /*
-      ตรวจสอบ LIFF ID
-    */
-
-    if (
-      !CONFIG.LIFF_ID ||
-      CONFIG.LIFF_ID.includes(
-        "ใส่_LIFF_ID"
-      )
-    ) {
-
-      console.warn(
-        "LIFF ID is not configured."
-      );
+    const idToken =
+      getIdToken();
 
 
-      return {
+    return await postJSON(
 
-        ok: false,
+      CFG.API.DASHBOARD,
 
-        mode: "no-liff-id"
+      {
 
-      };
+        ...payload,
 
-    }
-
-
-
-    try {
-
-      /*
-        INIT LIFF
-      */
-
-      await liff.init({
-
-        liffId:
-          CONFIG.LIFF_ID
-
-      });
-
-
-
-      /*
-        ถ้ายัง Login
-      */
-
-      if (
-        !liff.isLoggedIn()
-      ) {
-
-        liff.login({
-
-          redirectUri:
-            window.location.href
-
-        });
-
-
-        return {
-
-          ok: false,
-
-          mode: "login"
-
-        };
+        idToken
 
       }
 
-
-
-      /*
-        ดึง LINE Profile
-      */
-
-      const profile =
-        await liff.getProfile();
-
-
-
-      const lineUserId =
-        profile.userId;
-
-
-
-      /*
-        เก็บ LINE User ID
-      */
-
-      localStorage.setItem(
-
-        STORAGE.LINE_USER_ID,
-
-        lineUserId
-
-      );
-
-
-
-      /*
-        เก็บ LINE Profile
-      */
-
-      const lineProfile = {
-
-        userId:
-          profile.userId,
-
-        displayName:
-          profile.displayName || "",
-
-        pictureUrl:
-          profile.pictureUrl || "",
-
-        statusMessage:
-          profile.statusMessage || ""
-
-      };
-
-
-      save(
-
-        STORAGE.LINE_PROFILE,
-
-        lineProfile
-
-      );
-
-
-
-      console.log(
-        "LINE PROFILE:",
-        lineProfile
-      );
-
-
-
-      return {
-
-        ok: true,
-
-        mode: "line",
-
-        user:
-          lineProfile
-
-      };
-
-
-    } catch (error) {
-
-      console.error(
-        "LINE LIFF ERROR:",
-        error
-      );
-
-
-      return {
-
-        ok: false,
-
-        mode: "error",
-
-        error:
-          error.message
-
-      };
-
-    }
+    );
 
   }
-
-
-
-  /* =======================================================
-     CURRENT USER
-     ======================================================= */
-
-  async function getMe() {
-
-    try {
-
-      /*
-        ต้องมี LINE User ID
-      */
-
-      const lineUserId =
-        localStorage.getItem(
-          STORAGE.LINE_USER_ID
-        );
-
-
-      if (!lineUserId) {
-
-        return {
-
-          ok: false,
-
-          error:
-            "LINE User ID is required"
-
-        };
-
-      }
-
-
-
-      const data =
-        await api(
-          "/api/me"
-        );
-
-
-
-      if (data?.user) {
-
-        /*
-          รวม LINE Profile
-          กับข้อมูล Game
-        */
-
-        const lineProfile =
-          load(
-            STORAGE.LINE_PROFILE,
-            {}
-          );
-
-
-        const user = {
-
-          ...data.user,
-
-          lineUserId:
-
-            data.user.lineUserId ||
-            lineUserId,
-
-          displayName:
-
-            data.user.displayName ||
-            lineProfile.displayName ||
-            data.user.name ||
-            "สมาชิก ROCK YOUR BODY",
-
-          pictureUrl:
-
-            data.user.pictureUrl ||
-            lineProfile.pictureUrl ||
-            ""
-
-        };
-
-
-        save(
-
-          STORAGE.USER,
-
-          user
-
-        );
-
-
-        return {
-
-          ...data,
-
-          user
-
-        };
-
-      }
-
-
-      return data;
-
-
-    } catch (error) {
-
-      console.error(
-        "GET USER ERROR:",
-        error
-      );
-
-
-      return {
-
-        ok: false,
-
-        error:
-          error.message
-
-      };
-
-    }
-
-  }
-
 
 
   /* =======================================================
      DASHBOARD
-     ======================================================= */
+  ======================================================= */
 
-  async function getDashboard() {
+  async function fetchDashboard() {
 
-    return api(
-      "/api/dashboard"
-    );
+    return await
+      callPlayerApi({
+
+        action:
+          "dashboard"
+
+      });
 
   }
-
 
 
   /* =======================================================
-     MISSIONS
-     ======================================================= */
+     SAVE WEIGHT
+  ======================================================= */
 
-  async function getMissions() {
-
-    return api(
-      "/api/missions"
-    );
-
-  }
-
-
-
-  async function completeMission(
-    missionId
+  async function saveWeight(
+    weight
   ) {
 
-    return api(
-
-      `/api/missions/${encodeURIComponent(
-        missionId
-      )}/complete`,
-
-      {
-
-        method: "POST"
-
-      }
-
-    );
-
-  }
+    const value =
+      Number(weight);
 
 
+    if (
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
+    ) {
 
-  /* =======================================================
-     BATTLE
-     ======================================================= */
-
-  async function getBattle() {
-
-    return api(
-      "/api/battle"
-    );
-
-  }
-
-
-
-  async function fightMonster() {
-
-    return api(
-
-      "/api/battle/fight",
-
-      {
-
-        method: "POST"
-
-      }
-
-    );
-
-  }
-
-
-
-  /* =======================================================
-     REWARD
-     ======================================================= */
-
-  async function getRewards() {
-
-    return api(
-      "/api/rewards"
-    );
-
-  }
-
-
-
-  /* =======================================================
-     RANKING
-     ======================================================= */
-
-  async function getRanking() {
-
-    return api(
-      "/api/ranking"
-    );
-
-  }
-
-
-
-  /* =======================================================
-     NAVIGATION
-     ======================================================= */
-
-  function go(page) {
-
-    const target =
-      CONFIG.PAGES[page];
-
-
-    if (!target) {
-
-      console.error(
-        "Unknown ROCK page:",
-        page
+      throw new Error(
+        "น้ำหนักต้องอยู่ระหว่าง 20 - 400 kg"
       );
-
-      return;
 
     }
 
 
-    window.location.href =
-      target;
+    return await
+      callPlayerApi({
+
+        action:
+          "saveWeight",
+
+        weight:
+          value
+
+      });
 
   }
-
-
-
-  function goHome() {
-
-    go("home");
-
-  }
-
-
-  function goMission() {
-
-    go("mission");
-
-  }
-
-
-  function goBattle() {
-
-    go("battle");
-
-  }
-
-
-  function goReward() {
-
-    go("reward");
-
-  }
-
-
-  function goRanking() {
-
-    go("ranking");
-
-  }
-
-
-  function goInfo() {
-
-    go("info");
-
-  }
-
 
 
   /* =======================================================
-     FORMATTERS
-     ======================================================= */
+     SET TARGET
+  ======================================================= */
 
-  function number(value) {
-
-    return Number(
-      value || 0
-    ).toLocaleString(
-      "en-US"
-    );
-
-  }
-
-
-
-  function coin(value) {
-
-    return number(value);
-
-  }
-
-
-
-  function energy(
-    value,
-    max = CONFIG.MAX_ENERGY
+  async function setTarget(
+    targetWeight
   ) {
 
-    return `${number(value)} / ${number(max)}`;
+    const value =
+      Number(targetWeight);
 
-  }
-
-
-
-  /* =======================================================
-     UPDATE TOP BAR
-     ======================================================= */
-
-  function updateTopBar(
-    user
-  ) {
-
-    if (!user) return;
-
-
-
-    document
-      .querySelectorAll(
-        "[data-rock-coin]"
-      )
-      .forEach(
-        element => {
-
-          element.textContent =
-            coin(
-              user.rockCoin
-            );
-
-        }
-      );
-
-
-
-    document
-      .querySelectorAll(
-        "[data-energy]"
-      )
-      .forEach(
-        element => {
-
-          element.textContent =
-            energy(
-              user.energy,
-              user.maxEnergy
-            );
-
-        }
-      );
-
-
-
-    document
-      .querySelectorAll(
-        "[data-points]"
-      )
-      .forEach(
-        element => {
-
-          element.textContent =
-            number(
-              user.points
-            );
-
-        }
-      );
-
-
-
-    document
-      .querySelectorAll(
-        "[data-rank]"
-      )
-      .forEach(
-        element => {
-
-          element.textContent =
-            user.rank
-              ? `#${user.rank}`
-              : "-";
-
-        }
-      );
-
-
-
-    /*
-      รูป LINE Profile
-    */
-
-    document
-      .querySelectorAll(
-        "[data-line-profile]"
-      )
-      .forEach(
-        element => {
-
-          if (
-            user.pictureUrl
-          ) {
-
-            element.src =
-              user.pictureUrl;
-
-          }
-
-        }
-      );
-
-
-
-    /*
-      ชื่อ LINE
-    */
-
-    document
-      .querySelectorAll(
-        "[data-line-name]"
-      )
-      .forEach(
-        element => {
-
-          element.textContent =
-            user.displayName ||
-            user.name ||
-            "สมาชิก ROCK YOUR BODY";
-
-        }
-      );
-
-  }
-
-
-
-  /* =======================================================
-     INIT
-     ======================================================= */
-
-  async function init() {
-
-    console.log(
-      "ROCK YOUR BODY CORE INITIALIZING..."
-    );
-
-
-    /*
-      1. API Health
-    */
-
-    await healthCheck();
-
-
-
-    /*
-      2. LINE
-    */
 
     if (
-      CONFIG.LIFF_ID
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
     ) {
 
-      const line =
-        await initLINE();
+      throw new Error(
+        "เป้าหมายต้องอยู่ระหว่าง 20 - 400 kg"
+      );
+
+    }
 
 
-      /*
-        ถ้ากำลัง Login
-        ให้หยุดตรงนี้
-      */
+    return await
+      callPlayerApi({
+
+        action:
+          "setTarget",
+
+        targetWeight:
+          value
+
+      });
+
+  }
+
+
+  /* =======================================================
+     FORMAT WEIGHT
+  ======================================================= */
+
+  function fmtWeight(
+    value
+  ) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === ""
+    ) {
+
+      return "--.-";
+
+    }
+
+
+    const n =
+      Number(value);
+
+
+    return Number.isFinite(n)
+
+      ? n.toFixed(1)
+
+      : "--.-";
+
+  }
+
+
+  /* =======================================================
+     FORMAT INTEGER
+  ======================================================= */
+
+  function fmtInt(
+    value
+  ) {
+
+    const n =
+      Number(value);
+
+
+    return Number.isFinite(n)
+
+      ? Math.round(n)
+          .toLocaleString(
+            "en-US"
+          )
+
+      : "0";
+
+  }
+
+
+  /* =======================================================
+     FORMAT DATE
+  ======================================================= */
+
+  function formatDate(
+    value
+  ) {
+
+    if (!value) {
+
+      return "-";
+
+    }
+
+
+    const date =
+      new Date(value);
+
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return "-";
+
+    }
+
+
+    return date.toLocaleString(
+
+      "th-TH",
+
+      {
+
+        dateStyle:
+          "short",
+
+        timeStyle:
+          "short"
+
+      }
+
+    );
+
+  }
+
+
+  /* =======================================================
+     FORMAT DATE ONLY
+  ======================================================= */
+
+  function formatDateOnly(
+    value
+  ) {
+
+    if (!value) {
+
+      return "--/--/----";
+
+    }
+
+
+    const date =
+      new Date(value);
+
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return "--/--/----";
+
+    }
+
+
+    return date.toLocaleDateString(
+
+      "th-TH",
+
+      {
+
+        day:
+          "2-digit",
+
+        month:
+          "2-digit",
+
+        year:
+          "numeric"
+
+      }
+
+    );
+
+  }
+
+
+  /* =======================================================
+     NUMBER
+  ======================================================= */
+
+  function num(
+    value,
+    fallback = 0
+  ) {
+
+    const n =
+      Number(value);
+
+
+    return Number.isFinite(n)
+
+      ? n
+
+      : fallback;
+
+  }
+
+
+  /* =======================================================
+     LOGOUT
+  ======================================================= */
+
+  function logout() {
+
+    try {
 
       if (
-        line.mode === "login"
+        isLiffReady() &&
+        window.liff.isLoggedIn()
       ) {
 
-        return {
-
-          ok: false,
-
-          mode: "login"
-
-        };
+        window.liff.logout();
 
       }
 
-    }
+    } catch (error) {
 
-
-
-    /*
-      3. โหลด User
-    */
-
-    const me =
-      await getMe();
-
-
-
-    /*
-      4. Update UI
-    */
-
-    if (
-      me?.user
-    ) {
-
-      updateTopBar(
-        me.user
+      console.warn(
+        "LOGOUT ERROR:",
+        error
       );
 
     }
 
 
-
-    console.log(
-      "ROCK YOUR BODY CORE READY"
-    );
+    liffInitialized =
+      false;
 
 
-    return me;
+    window.location.reload();
 
   }
-
 
 
   /* =======================================================
      PUBLIC API
-     ======================================================= */
+  ======================================================= */
 
-   window.ROCK = {
-  CFG,
-  go,
-  goHome,
-  goWeight,
-  goProgress,
-  goRanking,
-  goRewards,
-  goMission,
-  goBattle,
-  initLiff,
-  getIdToken,
-  getProfile,
-  postJSON,
-  callPlayerApi,
-  fetchDashboard,
-  saveWeight,
-  setTarget,
-  fmtWeight,
-  fmtInt,
-  formatDate,
-  formatDateOnly,
-  num,
-  isTokenError,
-  logout
-};
+  window.ROCK = {
+
+    CFG,
+
+    go,
+
+    goHome,
+
+    goMission,
+
+    goBattle,
+
+    goWeight,
+
+    goProgress,
+
+    goRewards,
+
+    goRanking,
+
+    initLiff,
+
+    getIdToken,
+
+    getProfile,
+
+    postJSON,
+
+    callPlayerApi,
+
+    fetchDashboard,
+
+    saveWeight,
+
+    setTarget,
+
+    fmtWeight,
+
+    fmtInt,
+
+    formatDate,
+
+    formatDateOnly,
+
+    num,
+
+    logout
+
+  };
+
+
+  /* =======================================================
+     READY
+  ======================================================= */
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "ROCK COMMON.JS READY"
+  );
+
+  console.log(
+    "ROCK:",
+    window.ROCK
+  );
+
+  console.log(
+    "ROCK.fetchDashboard:",
+    typeof window.ROCK.fetchDashboard
+  );
+
+  console.log(
+    "ROCK.initLiff:",
+    typeof window.ROCK.initLiff
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+})();
