@@ -1,80 +1,1059 @@
+/* =========================================================
+   ROCK YOUR BODY 2026
+   COMMON CORE
+   ========================================================= */
+
 (function () {
+
   "use strict";
-  const C = window.ROCK_CONFIG;
-  if (!C) throw new Error("ROCK_CONFIG is missing.");
-  const S = C.STORAGE;
 
-  function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-  function load(k,fallback=null){try{const v=localStorage.getItem(k);return v===null?fallback:JSON.parse(v);}catch(e){return fallback;}}
 
-  async function api(path, options={}) {
-    const headers={...(options.headers||{})};
-    if(options.body && !headers["Content-Type"]) headers["Content-Type"]="application/json";
-    const id=localStorage.getItem(S.LINE_USER_ID);
-    if(id) headers["x-line-user-id"]=id;
-    const res=await fetch(C.API_BASE.replace(/\/$/,"")+path,{...options,headers});
-    let data; try{data=await res.json();}catch(e){throw new Error(`API returned invalid JSON (${res.status})`);}
-    if(!res.ok) throw new Error(data?.error||data?.message||`API Error ${res.status}`);
-    return data;
+  const CONFIG =
+    window.ROCK_CONFIG;
+
+
+  if (!CONFIG) {
+
+    console.error(
+      "ROCK_CONFIG is missing."
+    );
+
+    return;
   }
 
-  async function initLINE(){
-    if(typeof liff==="undefined") return {ok:false,mode:"no-liff"};
-    if(!C.LIFF_ID) return {ok:false,mode:"no-liff-id"};
-    await liff.init({liffId:C.LIFF_ID});
-    if(!liff.isLoggedIn()){liff.login({redirectUri:location.href});return {ok:false,mode:"login"};}
-    const p=await liff.getProfile();
-    const profile={userId:p.userId,displayName:p.displayName||"สมาชิก ROCK YOUR BODY",pictureUrl:p.pictureUrl||"",statusMessage:p.statusMessage||""};
-    localStorage.setItem(S.LINE_USER_ID,profile.userId);
-    save(S.LINE_PROFILE,profile);
-    return {ok:true,mode:"line",user:profile};
-  }
 
-  async function getMe(){
-    const id=localStorage.getItem(S.LINE_USER_ID);
-    if(!id) return {ok:false,error:"LINE User ID is required"};
-    const data=await api("/api/me");
-    if(data.user){
-      const p=load(S.LINE_PROFILE,{});
-      data.user={...data.user,displayName:data.user.displayName||p.displayName||"สมาชิก ROCK YOUR BODY",pictureUrl:data.user.pictureUrl||p.pictureUrl||"",lineUserId:data.user.lineUserId||id};
-      save(S.USER,data.user);
+  const STORAGE =
+    CONFIG.STORAGE;
+
+
+
+  /* =======================================================
+     STORAGE
+     ======================================================= */
+
+  function save(key, value) {
+
+    try {
+
+      localStorage.setItem(
+        key,
+        JSON.stringify(value)
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Storage save error:",
+        error
+      );
+
     }
+
+  }
+
+
+
+  function load(
+    key,
+    fallback = null
+  ) {
+
+    try {
+
+      const value =
+        localStorage.getItem(key);
+
+
+      if (
+        value === null
+      ) {
+
+        return fallback;
+
+      }
+
+
+      return JSON.parse(value);
+
+    } catch (error) {
+
+      console.error(
+        "Storage load error:",
+        error
+      );
+
+      return fallback;
+    }
+
+  }
+
+
+
+  /* =======================================================
+     API
+     ======================================================= */
+
+  async function api(
+    path,
+    options = {}
+  ) {
+
+    const url =
+      CONFIG.API_BASE.replace(
+        /\/$/,
+        ""
+      ) + path;
+
+
+    const lineUserId =
+      localStorage.getItem(
+        STORAGE.LINE_USER_ID
+      );
+
+
+    const headers = {
+
+      ...(options.body
+        ? {
+            "Content-Type":
+              "application/json"
+          }
+        : {}),
+
+      ...(options.headers || {})
+
+    };
+
+
+    /*
+      ส่ง LINE USER ID ให้ Backend
+    */
+
+    if (lineUserId) {
+
+      headers[
+        "x-line-user-id"
+      ] = lineUserId;
+
+    }
+
+
+    const response =
+      await fetch(
+        url,
+        {
+          ...options,
+          headers
+        }
+      );
+
+
+    let data;
+
+
+    try {
+
+      data =
+        await response.json();
+
+    } catch (error) {
+
+      throw new Error(
+        "API returned invalid JSON"
+      );
+
+    }
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data?.error ||
+        data?.message ||
+        `API Error ${response.status}`
+      );
+
+    }
+
+
     return data;
+
   }
 
-  function number(v){return Number(v||0).toLocaleString("en-US");}
-  function bindUser(u){
-    if(!u)return;
-    document.querySelectorAll("[data-line-profile]").forEach(e=>{if(u.pictureUrl)e.src=u.pictureUrl;});
-    document.querySelectorAll("[data-line-name]").forEach(e=>e.textContent=u.displayName||u.name||"สมาชิก ROCK YOUR BODY");
-    document.querySelectorAll("[data-rock-coin]").forEach(e=>e.textContent=number(u.rockCoin));
-    document.querySelectorAll("[data-energy]").forEach(e=>e.textContent=`${number(u.energy)} / ${number(u.maxEnergy??C.MAX_ENERGY)}`);
-    document.querySelectorAll("[data-points]").forEach(e=>e.textContent=number(u.points));
-    document.querySelectorAll("[data-rank]").forEach(e=>e.textContent=u.rank?`#${u.rank}`:"-");
-    document.querySelectorAll("[data-weight]").forEach(e=>e.textContent=Number(u.weight??0).toFixed(1));
-    document.querySelectorAll("[data-target-weight]").forEach(e=>e.textContent=Number(u.targetWeight??0).toFixed(1));
-    document.querySelectorAll("[data-steps]").forEach(e=>e.textContent=number(u.steps));
-    document.querySelectorAll("[data-target-steps]").forEach(e=>e.textContent=number(u.targetSteps));
-    document.querySelectorAll("[data-calories]").forEach(e=>e.textContent=number(u.calories));
-    document.querySelectorAll("[data-target-calories]").forEach(e=>e.textContent=number(u.targetCalories));
-    document.querySelectorAll("[data-sleep]").forEach(e=>e.textContent=Number(u.sleep??0).toFixed(2));
-    document.querySelectorAll("[data-target-sleep]").forEach(e=>e.textContent=Number(u.targetSleep??0).toFixed(0));
-    document.querySelectorAll("[data-health-score]").forEach(e=>e.textContent=number(u.healthScore));
-    document.querySelectorAll("[data-inbody-score]").forEach(e=>e.textContent=number(u.inbodyScore));
-    document.querySelectorAll("[data-program-day]").forEach(e=>e.textContent=number(u.programDay));
-    document.querySelectorAll("[data-program-total]").forEach(e=>e.textContent=number(u.programTotalDays));
-    document.querySelectorAll("[data-team]").forEach(e=>e.textContent=u.team||"HERO ROCK");
-    document.querySelectorAll("[data-level]").forEach(e=>e.textContent=u.level??1);
-    document.querySelectorAll("[data-exp]").forEach(e=>e.textContent=`${number(u.exp??0)} / ${number(u.maxExp??1000)}`);
+
+
+  /* =======================================================
+     HEALTH CHECK
+     ======================================================= */
+
+  async function healthCheck() {
+
+    try {
+
+      const result =
+        await api(
+          "/api/health"
+        );
+
+
+      console.log(
+        "ROCK API ONLINE:",
+        result
+      );
+
+
+      return result;
+
+    } catch (error) {
+
+      console.error(
+        "ROCK API OFFLINE:",
+        error
+      );
+
+
+      return {
+
+        ok: false,
+
+        error:
+          error.message
+
+      };
+
+    }
+
   }
 
-  async function init(){
-    if(C.LIFF_ID){const l=await initLINE();if(l.mode==="login")return l;}
-    const me=await getMe();if(me.user)bindUser(me.user);return me;
+
+
+  /* =======================================================
+     LINE LIFF
+     ======================================================= */
+
+  async function initLINE() {
+
+    /*
+      ตรวจสอบ LIFF
+    */
+
+    if (
+      typeof liff ===
+      "undefined"
+    ) {
+
+      console.warn(
+        "LINE LIFF SDK not found."
+      );
+
+
+      return {
+
+        ok: false,
+
+        mode: "no-liff"
+
+      };
+
+    }
+
+
+
+    /*
+      ตรวจสอบ LIFF ID
+    */
+
+    if (
+      !CONFIG.LIFF_ID ||
+      CONFIG.LIFF_ID.includes(
+        "ใส่_LIFF_ID"
+      )
+    ) {
+
+      console.warn(
+        "LIFF ID is not configured."
+      );
+
+
+      return {
+
+        ok: false,
+
+        mode: "no-liff-id"
+
+      };
+
+    }
+
+
+
+    try {
+
+      /*
+        INIT LIFF
+      */
+
+      await liff.init({
+
+        liffId:
+          CONFIG.LIFF_ID
+
+      });
+
+
+
+      /*
+        ถ้ายัง Login
+      */
+
+      if (
+        !liff.isLoggedIn()
+      ) {
+
+        liff.login({
+
+          redirectUri:
+            window.location.href
+
+        });
+
+
+        return {
+
+          ok: false,
+
+          mode: "login"
+
+        };
+
+      }
+
+
+
+      /*
+        ดึง LINE Profile
+      */
+
+      const profile =
+        await liff.getProfile();
+
+
+
+      const lineUserId =
+        profile.userId;
+
+
+
+      /*
+        เก็บ LINE User ID
+      */
+
+      localStorage.setItem(
+
+        STORAGE.LINE_USER_ID,
+
+        lineUserId
+
+      );
+
+
+
+      /*
+        เก็บ LINE Profile
+      */
+
+      const lineProfile = {
+
+        userId:
+          profile.userId,
+
+        displayName:
+          profile.displayName || "",
+
+        pictureUrl:
+          profile.pictureUrl || "",
+
+        statusMessage:
+          profile.statusMessage || ""
+
+      };
+
+
+      save(
+
+        STORAGE.LINE_PROFILE,
+
+        lineProfile
+
+      );
+
+
+
+      console.log(
+        "LINE PROFILE:",
+        lineProfile
+      );
+
+
+
+      return {
+
+        ok: true,
+
+        mode: "line",
+
+        user:
+          lineProfile
+
+      };
+
+
+    } catch (error) {
+
+      console.error(
+        "LINE LIFF ERROR:",
+        error
+      );
+
+
+      return {
+
+        ok: false,
+
+        mode: "error",
+
+        error:
+          error.message
+
+      };
+
+    }
+
   }
 
-  const go=p=>{if(C.PAGES[p])location.href=C.PAGES[p];};
-  window.ROCK={config:C,api,save,load,initLINE,getMe,bindUser,init,number,go,
-    goHome:()=>go("home"),goMission:()=>go("mission"),goBattle:()=>go("battle"),
-    goReward:()=>go("reward"),goRanking:()=>go("ranking"),goInfo:()=>go("info")};
+
+
+  /* =======================================================
+     CURRENT USER
+     ======================================================= */
+
+  async function getMe() {
+
+    try {
+
+      /*
+        ต้องมี LINE User ID
+      */
+
+      const lineUserId =
+        localStorage.getItem(
+          STORAGE.LINE_USER_ID
+        );
+
+
+      if (!lineUserId) {
+
+        return {
+
+          ok: false,
+
+          error:
+            "LINE User ID is required"
+
+        };
+
+      }
+
+
+
+      const data =
+        await api(
+          "/api/me"
+        );
+
+
+
+      if (data?.user) {
+
+        /*
+          รวม LINE Profile
+          กับข้อมูล Game
+        */
+
+        const lineProfile =
+          load(
+            STORAGE.LINE_PROFILE,
+            {}
+          );
+
+
+        const user = {
+
+          ...data.user,
+
+          lineUserId:
+
+            data.user.lineUserId ||
+            lineUserId,
+
+          displayName:
+
+            data.user.displayName ||
+            lineProfile.displayName ||
+            data.user.name ||
+            "สมาชิก ROCK YOUR BODY",
+
+          pictureUrl:
+
+            data.user.pictureUrl ||
+            lineProfile.pictureUrl ||
+            ""
+
+        };
+
+
+        save(
+
+          STORAGE.USER,
+
+          user
+
+        );
+
+
+        return {
+
+          ...data,
+
+          user
+
+        };
+
+      }
+
+
+      return data;
+
+
+    } catch (error) {
+
+      console.error(
+        "GET USER ERROR:",
+        error
+      );
+
+
+      return {
+
+        ok: false,
+
+        error:
+          error.message
+
+      };
+
+    }
+
+  }
+
+
+
+  /* =======================================================
+     DASHBOARD
+     ======================================================= */
+
+  async function getDashboard() {
+
+    return api(
+      "/api/dashboard"
+    );
+
+  }
+
+
+
+  /* =======================================================
+     MISSIONS
+     ======================================================= */
+
+  async function getMissions() {
+
+    return api(
+      "/api/missions"
+    );
+
+  }
+
+
+
+  async function completeMission(
+    missionId
+  ) {
+
+    return api(
+
+      `/api/missions/${encodeURIComponent(
+        missionId
+      )}/complete`,
+
+      {
+
+        method: "POST"
+
+      }
+
+    );
+
+  }
+
+
+
+  /* =======================================================
+     BATTLE
+     ======================================================= */
+
+  async function getBattle() {
+
+    return api(
+      "/api/battle"
+    );
+
+  }
+
+
+
+  async function fightMonster() {
+
+    return api(
+
+      "/api/battle/fight",
+
+      {
+
+        method: "POST"
+
+      }
+
+    );
+
+  }
+
+
+
+  /* =======================================================
+     REWARD
+     ======================================================= */
+
+  async function getRewards() {
+
+    return api(
+      "/api/rewards"
+    );
+
+  }
+
+
+
+  /* =======================================================
+     RANKING
+     ======================================================= */
+
+  async function getRanking() {
+
+    return api(
+      "/api/ranking"
+    );
+
+  }
+
+
+
+  /* =======================================================
+     NAVIGATION
+     ======================================================= */
+
+  function go(page) {
+
+    const target =
+      CONFIG.PAGES[page];
+
+
+    if (!target) {
+
+      console.error(
+        "Unknown ROCK page:",
+        page
+      );
+
+      return;
+
+    }
+
+
+    window.location.href =
+      target;
+
+  }
+
+
+
+  function goHome() {
+
+    go("home");
+
+  }
+
+
+  function goMission() {
+
+    go("mission");
+
+  }
+
+
+  function goBattle() {
+
+    go("battle");
+
+  }
+
+
+  function goReward() {
+
+    go("reward");
+
+  }
+
+
+  function goRanking() {
+
+    go("ranking");
+
+  }
+
+
+  function goInfo() {
+
+    go("info");
+
+  }
+
+
+
+  /* =======================================================
+     FORMATTERS
+     ======================================================= */
+
+  function number(value) {
+
+    return Number(
+      value || 0
+    ).toLocaleString(
+      "en-US"
+    );
+
+  }
+
+
+
+  function coin(value) {
+
+    return number(value);
+
+  }
+
+
+
+  function energy(
+    value,
+    max = CONFIG.MAX_ENERGY
+  ) {
+
+    return `${number(value)} / ${number(max)}`;
+
+  }
+
+
+
+  /* =======================================================
+     UPDATE TOP BAR
+     ======================================================= */
+
+  function updateTopBar(
+    user
+  ) {
+
+    if (!user) return;
+
+
+
+    document
+      .querySelectorAll(
+        "[data-rock-coin]"
+      )
+      .forEach(
+        element => {
+
+          element.textContent =
+            coin(
+              user.rockCoin
+            );
+
+        }
+      );
+
+
+
+    document
+      .querySelectorAll(
+        "[data-energy]"
+      )
+      .forEach(
+        element => {
+
+          element.textContent =
+            energy(
+              user.energy,
+              user.maxEnergy
+            );
+
+        }
+      );
+
+
+
+    document
+      .querySelectorAll(
+        "[data-points]"
+      )
+      .forEach(
+        element => {
+
+          element.textContent =
+            number(
+              user.points
+            );
+
+        }
+      );
+
+
+
+    document
+      .querySelectorAll(
+        "[data-rank]"
+      )
+      .forEach(
+        element => {
+
+          element.textContent =
+            user.rank
+              ? `#${user.rank}`
+              : "-";
+
+        }
+      );
+
+
+
+    /*
+      รูป LINE Profile
+    */
+
+    document
+      .querySelectorAll(
+        "[data-line-profile]"
+      )
+      .forEach(
+        element => {
+
+          if (
+            user.pictureUrl
+          ) {
+
+            element.src =
+              user.pictureUrl;
+
+          }
+
+        }
+      );
+
+
+
+    /*
+      ชื่อ LINE
+    */
+
+    document
+      .querySelectorAll(
+        "[data-line-name]"
+      )
+      .forEach(
+        element => {
+
+          element.textContent =
+            user.displayName ||
+            user.name ||
+            "สมาชิก ROCK YOUR BODY";
+
+        }
+      );
+
+  }
+
+
+
+  /* =======================================================
+     INIT
+     ======================================================= */
+
+  async function init() {
+
+    console.log(
+      "ROCK YOUR BODY CORE INITIALIZING..."
+    );
+
+
+    /*
+      1. API Health
+    */
+
+    await healthCheck();
+
+
+
+    /*
+      2. LINE
+    */
+
+    if (
+      CONFIG.LIFF_ID
+    ) {
+
+      const line =
+        await initLINE();
+
+
+      /*
+        ถ้ากำลัง Login
+        ให้หยุดตรงนี้
+      */
+
+      if (
+        line.mode === "login"
+      ) {
+
+        return {
+
+          ok: false,
+
+          mode: "login"
+
+        };
+
+      }
+
+    }
+
+
+
+    /*
+      3. โหลด User
+    */
+
+    const me =
+      await getMe();
+
+
+
+    /*
+      4. Update UI
+    */
+
+    if (
+      me?.user
+    ) {
+
+      updateTopBar(
+        me.user
+      );
+
+    }
+
+
+
+    console.log(
+      "ROCK YOUR BODY CORE READY"
+    );
+
+
+    return me;
+
+  }
+
+
+
+  /* =======================================================
+     PUBLIC API
+     ======================================================= */
+
+  window.ROCK = {
+
+    config:
+      CONFIG,
+
+    api,
+
+    healthCheck,
+
+    initLINE,
+
+    getMe,
+
+    getDashboard,
+
+    getMissions,
+
+    completeMission,
+
+    getBattle,
+
+    fightMonster,
+
+    getRewards,
+
+    getRanking,
+
+    go,
+
+    goHome,
+
+    goMission,
+
+    goBattle,
+
+    goReward,
+
+    goRanking,
+
+    goInfo,
+
+    save,
+
+    load,
+
+    number,
+
+    coin,
+
+    energy,
+
+    updateTopBar,
+
+    init
+
+  };
+
+
 })();
