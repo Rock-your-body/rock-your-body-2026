@@ -1,1 +1,1769 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROCK YOUR BODY 2026 - Progress</title><script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><script src="./app-config.js"></script><script src="./common.js"></script><style>body{margin:0;background:#eef4ff;font-family:Arial,'Noto Sans Thai',sans-serif;color:#08245b}.wrap{max-width:720px;margin:auto;padding:18px}.card{background:#fff;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 8px 24px #1233}.hero{background:linear-gradient(135deg,#082d87,#1266d8);color:#fff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.v{font-size:28px;font-weight:900}.bar{height:12px;background:#dbe5f4;border-radius:20px;overflow:hidden}.fill{height:100%;background:#16a34a;width:0}.btn{width:100%;padding:14px;border:0;border-radius:14px;background:#073b93;color:#fff;font-weight:900}</style></head><body><main class="wrap"><section class="card hero"><h1>📈 MY PROGRESS</h1><p>ติดตามความก้าวหน้า MOVE • EAT • SLEEP • HEALTH</p></section><section class="card grid"><div><small>น้ำหนักล่าสุด</small><div id="weight" class="v">--.- kg</div></div><div><small>เป้าหมาย</small><div id="target" class="v">--.- kg</div></div><div><small>ลดไปแล้ว</small><div id="lost" class="v">--.- kg</div></div><div><small>คะแนนสุขภาพ</small><div id="health" class="v">0</div></div></section><section class="card"><h2>เป้าหมายน้ำหนัก</h2><div class="bar"><div id="fill" class="fill"></div></div><p id="progress">0%</p></section><button class="btn" onclick="ROCK.goHome()">🏠 กลับ HOME</button></main><script>(async()=>{try{await ROCK.initLiff();const d=await ROCK.callPlayerApi({action:'progress'});const w=d.user?.weight||{};document.getElementById('weight').textContent=ROCK.fmtWeight(w.current)+' kg';document.getElementById('target').textContent=ROCK.fmtWeight(w.target)+' kg';document.getElementById('lost').textContent=(Number(w.start)&&Number(w.current)?Math.max(0,w.start-w.current).toFixed(1):'--.-')+' kg';document.getElementById('health').textContent=d.user?.healthScore??0;let pct=0;if(Number(w.start)&&Number(w.target)&&w.start!==w.target)pct=Math.max(0,Math.min(100,(w.start-w.current)/(w.start-w.target)*100));document.getElementById('fill').style.width=pct+'%';document.getElementById('progress').textContent=pct.toFixed(0)+'%';}catch(e){document.body.innerHTML='<div style="padding:30px">❌ '+e.message+'</div>'}})()</script></body></html>
+<!doctype html>
+<html lang="th">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
+  <title>ROCK YOUR BODY 2026 - PROGRESS</title>
+
+
+  <!-- =====================================================
+       LINE LIFF
+  ====================================================== -->
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+
+  <!-- =====================================================
+       CONFIG
+  ====================================================== -->
+
+  <script src="./app-config.js?v=20260827-01"></script>
+
+
+  <!-- =====================================================
+       COMMON CORE
+  ====================================================== -->
+
+  <script src="./common.js?v=20260827-01"></script>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    html,
+    body {
+
+      margin: 0;
+      padding: 0;
+
+      width: 100%;
+      min-height: 100%;
+
+      background: #eef4ff;
+
+      font-family:
+        "Noto Sans Thai",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      color: #082b68;
+
+    }
+
+
+    body {
+
+      display: flex;
+      justify-content: center;
+
+    }
+
+
+    /* =====================================================
+       LOADING
+    ====================================================== */
+
+    #loading {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 9999;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      padding: 30px;
+
+      background: #eef4ff;
+
+      font-size: 20px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       APP
+    ====================================================== */
+
+    #app {
+
+      display: none;
+
+      width: 100%;
+
+      max-width: 1100px;
+
+      padding: 20px;
+
+    }
+
+
+    /* =====================================================
+       HEADER
+    ====================================================== */
+
+    .header {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .title {
+
+      margin: 0;
+
+      font-size: 36px;
+
+      font-weight: 1000;
+
+      font-style: italic;
+
+      color: #102f78;
+
+    }
+
+
+    .title span {
+
+      color: #c91717;
+
+    }
+
+
+    .back-button {
+
+      border: 0;
+
+      border-radius: 14px;
+
+      padding: 12px 20px;
+
+      background: #102f78;
+
+      color: #fff;
+
+      font-size: 15px;
+
+      font-weight: 900;
+
+      cursor: pointer;
+
+    }
+
+
+    /* =====================================================
+       PROFILE
+    ====================================================== */
+
+    .profile-card {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding: 18px;
+
+      margin-bottom: 20px;
+
+      background: #fff;
+
+      border-radius: 22px;
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,.08);
+
+    }
+
+
+    #profileImage {
+
+      display: none;
+
+      width: 65px;
+
+      height: 65px;
+
+      object-fit: cover;
+
+      border-radius: 50%;
+
+    }
+
+
+    .profile-name {
+
+      font-size: 21px;
+
+      font-weight: 900;
+
+    }
+
+
+    .profile-sub {
+
+      margin-top: 3px;
+
+      color: #65738b;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       PROGRAM
+    ====================================================== */
+
+    .card {
+
+      background: #fff;
+
+      border-radius: 24px;
+
+      padding: 24px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,.08);
+
+    }
+
+
+    .card-title {
+
+      margin-bottom: 18px;
+
+      font-size: 23px;
+
+      font-weight: 1000;
+
+    }
+
+
+    .program-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 15px;
+
+    }
+
+
+    .program-box {
+
+      padding: 20px;
+
+      background: #f3f6fc;
+
+      border-radius: 18px;
+
+      text-align: center;
+
+    }
+
+
+    .label {
+
+      color: #65738b;
+
+      font-size: 14px;
+
+      font-weight: 800;
+
+    }
+
+
+    .value {
+
+      margin-top: 5px;
+
+      font-size: 32px;
+
+      font-weight: 1000;
+
+      color: #102f78;
+
+    }
+
+
+    /* =====================================================
+       PROGRESS BAR
+    ====================================================== */
+
+    .progress-wrap {
+
+      margin-top: 20px;
+
+    }
+
+
+    .progress-info {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-bottom: 8px;
+
+      font-size: 15px;
+
+      font-weight: 900;
+
+    }
+
+
+    .progress-track {
+
+      width: 100%;
+
+      height: 18px;
+
+      overflow: hidden;
+
+      background: #dfe5ee;
+
+      border-radius: 99px;
+
+    }
+
+
+    .progress-bar {
+
+      width: 0%;
+
+      height: 100%;
+
+      background: #102f78;
+
+      border-radius: 99px;
+
+      transition: width .5s ease;
+
+    }
+
+
+    /* =====================================================
+       WEIGHT
+    ====================================================== */
+
+    .weight-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 15px;
+
+    }
+
+
+    .weight-box {
+
+      padding: 20px;
+
+      background: #f3f6fc;
+
+      border-radius: 18px;
+
+      text-align: center;
+
+    }
+
+
+    .weight-number {
+
+      margin-top: 5px;
+
+      font-size: 30px;
+
+      font-weight: 1000;
+
+    }
+
+
+    .unit {
+
+      color: #65738b;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       HEALTH DATA
+    ====================================================== */
+
+    .health-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 15px;
+
+    }
+
+
+    .health-box {
+
+      padding: 20px;
+
+      background: #f3f6fc;
+
+      border-radius: 18px;
+
+      text-align: center;
+
+    }
+
+
+    .health-score {
+
+      margin-top: 5px;
+
+      font-size: 30px;
+
+      font-weight: 1000;
+
+    }
+
+
+    /* =====================================================
+       EMPTY / ERROR
+    ====================================================== */
+
+    .empty {
+
+      padding: 30px;
+
+      background: #f3f6fc;
+
+      border-radius: 18px;
+
+      text-align: center;
+
+      color: #65738b;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ====================================================== */
+
+    @media(max-width:750px){
+
+      #app {
+
+        padding: 12px;
+
+      }
+
+
+      .title {
+
+        font-size: 28px;
+
+      }
+
+
+      .program-grid,
+      .weight-grid,
+      .health-grid {
+
+        grid-template-columns:
+          1fr 1fr;
+
+      }
+
+    }
+
+
+    @media(max-width:480px){
+
+      .header {
+
+        align-items: flex-start;
+
+      }
+
+
+      .profile-card {
+
+        padding: 15px;
+
+      }
+
+
+      .card {
+
+        padding: 18px;
+
+      }
+
+
+      .value {
+
+        font-size: 26px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     LOADING
+======================================================== -->
+
+<div id="loading">
+
+  กำลังโหลดข้อมูล Progress...
+
+</div>
+
+
+<!-- =======================================================
+     APP
+======================================================== -->
+
+<main id="app">
+
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <h1 class="title">
+
+      ROCK <span>YOUR</span> BODY
+
+    </h1>
+
+
+    <button
+      class="back-button"
+      type="button"
+      onclick="window.ROCK.goHome()"
+    >
+
+      HOME
+
+    </button>
+
+  </header>
+
+
+  <!-- =====================================================
+       PROFILE
+  ====================================================== -->
+
+  <section class="profile-card">
+
+
+    <img
+      id="profileImage"
+      alt="LINE Profile"
+    >
+
+
+    <div>
+
+      <div
+        id="profileName"
+        class="profile-name"
+      >
+
+        สมาชิก ROCK YOUR BODY
+
+      </div>
+
+
+      <div
+        id="profileLine"
+        class="profile-sub"
+      >
+
+        ROCK YOUR BODY 2026
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       PROGRAM PROGRESS
+  ====================================================== -->
+
+  <section class="card">
+
+
+    <div class="card-title">
+
+      PROGRAM PROGRESS
+
+    </div>
+
+
+    <div class="program-grid">
+
+
+      <div class="program-box">
+
+        <div class="label">
+
+          วันที่ปัจจุบัน
+
+        </div>
+
+
+        <div
+          id="programDay"
+          class="value"
+        >
+
+          0
+
+        </div>
+
+
+        <div class="unit">
+
+          DAY
+
+        </div>
+
+      </div>
+
+
+      <div class="program-box">
+
+        <div class="label">
+
+          ทั้งหมด
+
+        </div>
+
+
+        <div
+          id="programTotal"
+          class="value"
+        >
+
+          0
+
+        </div>
+
+
+        <div class="unit">
+
+          DAYS
+
+        </div>
+
+      </div>
+
+
+      <div class="program-box">
+
+        <div class="label">
+
+          ความคืบหน้า
+
+        </div>
+
+
+        <div
+          id="programPercent"
+          class="value"
+        >
+
+          0%
+
+        </div>
+
+
+        <div class="unit">
+
+          COMPLETE
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+
+      <div class="progress-info">
+
+        <span>
+          Program Progress
+        </span>
+
+
+        <span id="programProgressText">
+          0%
+        </span>
+
+      </div>
+
+
+      <div class="progress-track">
+
+        <div
+          id="programProgressBar"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       WEIGHT PROGRESS
+  ====================================================== -->
+
+  <section class="card">
+
+
+    <div class="card-title">
+
+      WEIGHT PROGRESS
+
+    </div>
+
+
+    <div class="weight-grid">
+
+
+      <div class="weight-box">
+
+        <div class="label">
+
+          น้ำหนักเริ่มต้น
+
+        </div>
+
+
+        <div
+          id="startWeight"
+          class="weight-number"
+        >
+
+          --.-
+
+        </div>
+
+
+        <div class="unit">
+          kg
+        </div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="label">
+
+          น้ำหนักปัจจุบัน
+
+        </div>
+
+
+        <div
+          id="currentWeight"
+          class="weight-number"
+        >
+
+          --.-
+
+        </div>
+
+
+        <div class="unit">
+          kg
+        </div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="label">
+
+          เป้าหมาย
+
+        </div>
+
+
+        <div
+          id="targetWeight"
+          class="weight-number"
+        >
+
+          --.-
+
+        </div>
+
+
+        <div class="unit">
+          kg
+        </div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="label">
+
+          ลดไปแล้ว
+
+        </div>
+
+
+        <div
+          id="lostWeight"
+          class="weight-number"
+        >
+
+          0.0
+
+        </div>
+
+
+        <div class="unit">
+          kg
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="progress-wrap">
+
+
+      <div class="progress-info">
+
+        <span>
+          Weight Goal Progress
+        </span>
+
+
+        <span id="weightPercent">
+          0%
+        </span>
+
+      </div>
+
+
+      <div class="progress-track">
+
+        <div
+          id="weightProgressBar"
+          class="progress-bar"
+        ></div>
+
+      </div>
+
+
+    </div>
+
+
+  </section>
+
+
+  <!-- =====================================================
+       HEALTH PROGRESS
+  ====================================================== -->
+
+  <section class="card">
+
+
+    <div class="card-title">
+
+      HEALTH PROGRESS
+
+    </div>
+
+
+    <div class="health-grid">
+
+
+      <div class="health-box">
+
+        <div class="label">
+          Health Score
+        </div>
+
+
+        <div
+          id="healthScore"
+          class="health-score"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="health-box">
+
+        <div class="label">
+          InBody Score
+        </div>
+
+
+        <div
+          id="inbodyScore"
+          class="health-score"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="health-box">
+
+        <div class="label">
+          Steps
+        </div>
+
+
+        <div
+          id="steps"
+          class="health-score"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="health-box">
+
+        <div class="label">
+          Sleep
+        </div>
+
+
+        <div
+          id="sleep"
+          class="health-score"
+        >
+          0
+        </div>
+
+        <div class="unit">
+          ชั่วโมง
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </section>
+
+
+</main>
+
+
+<script>
+
+(function(){
+
+  "use strict";
+
+
+  /* =====================================================
+     HELPERS
+  ====================================================== */
+
+
+  function get(
+    id
+  ){
+
+    return document.getElementById(id);
+
+  }
+
+
+  function setText(
+    id,
+    value
+  ){
+
+    const element =
+      get(id);
+
+
+    if(element){
+
+      element.textContent =
+        value;
+
+    }
+
+  }
+
+
+  function number(
+    value
+  ){
+
+    const n =
+      Number(value);
+
+
+    if(
+      !Number.isFinite(n)
+    ){
+
+      return "0";
+
+    }
+
+
+    return n.toLocaleString(
+      "en-US"
+    );
+
+  }
+
+
+  function decimal(
+    value
+  ){
+
+    const n =
+      Number(value);
+
+
+    if(
+      !Number.isFinite(n)
+    ){
+
+      return "--.-";
+
+    }
+
+
+    return n.toFixed(1);
+
+  }
+
+
+  function percent(
+    value
+  ){
+
+    const n =
+      Number(value);
+
+
+    if(
+      !Number.isFinite(n)
+    ){
+
+      return 0;
+
+    }
+
+
+    return Math.max(
+      0,
+      Math.min(
+        100,
+        n
+      )
+    );
+
+  }
+
+
+  /* =====================================================
+     PROFILE
+  ====================================================== */
+
+
+  async function loadProfile(){
+
+    try{
+
+      if(
+        typeof window.ROCK.getProfile !==
+        "function"
+      ){
+
+        console.warn(
+          "ROCK.getProfile() is not available."
+        );
+
+        return;
+
+      }
+
+
+      const profile =
+        await window.ROCK.getProfile();
+
+
+      if(!profile){
+
+        return;
+
+      }
+
+
+      setText(
+        "profileName",
+        profile.displayName ||
+        "สมาชิก ROCK YOUR BODY"
+      );
+
+
+      if(
+        profile.userId
+      ){
+
+        setText(
+          "profileLine",
+          "LINE ID: " +
+          profile.userId
+        );
+
+      }
+
+
+      if(
+        profile.pictureUrl
+      ){
+
+        const image =
+          get("profileImage");
+
+
+        image.src =
+          profile.pictureUrl;
+
+
+        image.style.display =
+          "block";
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "PROFILE ERROR:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     DASHBOARD DATA
+  ====================================================== */
+
+
+  async function loadProgress(){
+
+    /*
+      สำคัญ:
+
+      ใช้ ROCK.fetchDashboard()
+
+      ไม่ใช้
+      ROCK.getDashboard()
+
+      เพื่อให้หน้า Progress
+      ดึงข้อมูล player-dashboard
+      ชุดเดียวกับ HOME
+    */
+
+
+    if(
+      typeof window.ROCK.fetchDashboard !==
+      "function"
+    ){
+
+      throw new Error(
+        "ROCK.fetchDashboard() ไม่พบใน common.js"
+      );
+
+    }
+
+
+    const result =
+      await window.ROCK.fetchDashboard();
+
+
+    console.log(
+      "PROGRESS DATA:",
+      result
+    );
+
+
+    return (
+      result?.data ||
+      result?.dashboard ||
+      result
+    );
+
+  }
+
+
+  /* =====================================================
+     RENDER PROGRAM
+  ====================================================== */
+
+
+  function renderProgram(
+    data
+  ){
+
+    const program =
+      data?.program ||
+      {};
+
+
+    const currentDay =
+      Number(
+        program.currentDay ??
+        data?.programDay ??
+        data?.currentDay ??
+        0
+      );
+
+
+    const totalDays =
+      Number(
+        program.totalDays ??
+        data?.programTotalDays ??
+        data?.totalDays ??
+        90
+      );
+
+
+    const p =
+      totalDays > 0
+        ? (
+            currentDay /
+            totalDays
+          ) * 100
+        : 0;
+
+
+    const safePercent =
+      percent(p);
+
+
+    setText(
+      "programDay",
+      number(currentDay)
+    );
+
+
+    setText(
+      "programTotal",
+      number(totalDays)
+    );
+
+
+    setText(
+      "programPercent",
+      Math.round(
+        safePercent
+      ) + "%"
+    );
+
+
+    setText(
+      "programProgressText",
+      Math.round(
+        safePercent
+      ) + "%"
+    );
+
+
+    get(
+      "programProgressBar"
+    ).style.width =
+      safePercent + "%";
+
+  }
+
+
+  /* =====================================================
+     RENDER WEIGHT
+  ====================================================== */
+
+
+  function renderWeight(
+    data
+  ){
+
+    const weightData =
+      data?.weight ||
+      {};
+
+
+    const startWeight =
+      Number(
+        weightData.start ??
+        weightData.startWeight ??
+        data?.startWeight
+      );
+
+
+    const currentWeight =
+      Number(
+        weightData.current ??
+        weightData.currentWeight ??
+        data?.currentWeight
+      );
+
+
+    const targetWeight =
+      Number(
+        weightData.target ??
+        weightData.targetWeight ??
+        data?.targetWeight
+      );
+
+
+    setText(
+      "startWeight",
+      decimal(
+        startWeight
+      )
+    );
+
+
+    setText(
+      "currentWeight",
+      decimal(
+        currentWeight
+      )
+    );
+
+
+    setText(
+      "targetWeight",
+      decimal(
+        targetWeight
+      )
+    );
+
+
+    /* ---------------------------------------------
+       LOSS
+    --------------------------------------------- */
+
+
+    let lost =
+      0;
+
+
+    if(
+      Number.isFinite(
+        startWeight
+      ) &&
+      Number.isFinite(
+        currentWeight
+      )
+    ){
+
+      lost =
+        Math.max(
+          0,
+          startWeight -
+          currentWeight
+        );
+
+    }
+
+
+    setText(
+      "lostWeight",
+      decimal(lost)
+    );
+
+
+    /* ---------------------------------------------
+       GOAL PROGRESS
+    --------------------------------------------- */
+
+
+    let progress =
+      0;
+
+
+    if(
+      Number.isFinite(
+        startWeight
+      ) &&
+      Number.isFinite(
+        currentWeight
+      ) &&
+      Number.isFinite(
+        targetWeight
+      ) &&
+      startWeight !== targetWeight
+    ){
+
+      progress =
+        (
+          (
+            startWeight -
+            currentWeight
+          ) /
+          (
+            startWeight -
+            targetWeight
+          )
+        ) * 100;
+
+    }
+
+
+    progress =
+      percent(progress);
+
+
+    setText(
+      "weightPercent",
+      Math.round(
+        progress
+      ) + "%"
+    );
+
+
+    get(
+      "weightProgressBar"
+    ).style.width =
+      progress + "%";
+
+  }
+
+
+  /* =====================================================
+     RENDER HEALTH
+  ====================================================== */
+
+
+  function renderHealth(
+    data
+  ){
+
+    const health =
+      data?.health ||
+      {};
+
+
+    const inbody =
+      data?.inbody ||
+      {};
+
+
+    const steps =
+      data?.steps ||
+      {};
+
+
+    const sleep =
+      data?.sleep ||
+      {};
+
+
+    const healthScore =
+      Number(
+        health.score ??
+        data?.healthScore ??
+        0
+      );
+
+
+    const inbodyScore =
+      Number(
+        inbody.score ??
+        data?.inbodyScore ??
+        0
+      );
+
+
+    const stepValue =
+      Number(
+        steps.current ??
+        data?.steps ??
+        0
+      );
+
+
+    const sleepValue =
+      Number(
+        sleep.current ??
+        data?.sleep ??
+        0
+      );
+
+
+    setText(
+      "healthScore",
+      number(
+        healthScore
+      )
+    );
+
+
+    setText(
+      "inbodyScore",
+      number(
+        inbodyScore
+      )
+    );
+
+
+    setText(
+      "steps",
+      number(
+        stepValue
+      )
+    );
+
+
+    setText(
+      "sleep",
+      decimal(
+        sleepValue
+      )
+    );
+
+  }
+
+
+  /* =====================================================
+     START
+  ====================================================== */
+
+
+  async function start(){
+
+    const loading =
+      get("loading");
+
+
+    try{
+
+
+      /* -----------------------------------------------
+         ตรวจ ROCK
+      ----------------------------------------------- */
+
+
+      if(
+        !window.ROCK
+      ){
+
+        throw new Error(
+          "common.js โหลดไม่สำเร็จ"
+        );
+
+      }
+
+
+      /* -----------------------------------------------
+         LIFF
+      ----------------------------------------------- */
+
+
+      if(
+        typeof window.ROCK.initLiff ===
+        "function"
+      ){
+
+        const ready =
+          await window.ROCK.initLiff();
+
+
+        if(
+          ready === false
+        ){
+
+          return;
+
+        }
+
+      }
+
+
+      /* -----------------------------------------------
+         PROFILE
+      ----------------------------------------------- */
+
+
+      await loadProfile();
+
+
+      /* -----------------------------------------------
+         DATA
+      ----------------------------------------------- */
+
+
+      const data =
+        await loadProgress();
+
+
+      /* -----------------------------------------------
+         RENDER
+      ----------------------------------------------- */
+
+
+      renderProgram(
+        data
+      );
+
+
+      renderWeight(
+        data
+      );
+
+
+      renderHealth(
+        data
+      );
+
+
+      /* -----------------------------------------------
+         SHOW APP
+      ----------------------------------------------- */
+
+
+      loading.style.display =
+        "none";
+
+
+      get("app").style.display =
+        "block";
+
+
+    }catch(error){
+
+      console.error(
+        "PROGRESS ERROR:",
+        error
+      );
+
+
+      loading.innerHTML =
+        `
+          <div>
+
+            ไม่สามารถโหลดข้อมูล Progress ได้
+
+            <br><br>
+
+            <small>
+              ${String(
+                error?.message ||
+                error
+              )}
+            </small>
+
+          </div>
+        `;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RUN
+  ====================================================== */
+
+  start();
+
+
+})();
+
+</script>
+
+
+</body>
+
+</html>
