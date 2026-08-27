@@ -10,53 +10,18 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>
-    ROCK YOUR BODY 2026 - HOME
-  </title>
+  <title>ROCK YOUR BODY 2026 - HOME</title>
 
-  <!-- =========================================
-       FONT
-  ========================================== -->
 
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
+  <!-- LINE LIFF -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+  <!-- CONFIG -->
+  <script src="./app-config.js?v=20260827-01"></script>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
-  >
+  <!-- COMMON -->
+  <script src="./common.js?v=20260827-01"></script>
 
-  <!-- =========================================
-       LINE LIFF
-  ========================================== -->
-
-  <script
-    src="https://static.line-scdn.net/liff/edge/2/sdk.js"
-  ></script>
-
-  <!-- =========================================
-       CONFIG
-  ========================================== -->
-
-  <script
-    src="./app-config.js?v=20260826-01"
-  ></script>
-
-  <!-- =========================================
-       COMMON
-  ========================================== -->
-
-  <script
-    src="./common.js?v=20260826-01"
-  ></script>
 
   <style>
 
@@ -64,294 +29,305 @@
       box-sizing: border-box;
     }
 
+
     html,
     body {
+
       margin: 0;
       padding: 0;
+
       width: 100%;
       min-height: 100%;
+
       background: #eef4ff;
+
       font-family:
-        "Prompt",
+        "Noto Sans Thai",
+        Tahoma,
         Arial,
         sans-serif;
+
+      color: #082b68;
+
     }
+
 
     body {
+
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-    }
-
-    /* =========================================
-       HOME STAGE
-    ========================================== */
-
-    #homeStage {
-
-      position: relative;
-
-      width: min(
-        100vw,
-        1280px
-      );
-
-      aspect-ratio:
-        2500 / 1686;
-
-      overflow: hidden;
-
-      background: #ffffff;
-
-      margin: 0 auto;
 
     }
 
-    /* =========================================
-       TEMPLATE
-    ========================================== */
 
-    .template {
+    #loading {
 
-      position: absolute;
-
+      position: fixed;
       inset: 0;
 
-      width: 100%;
+      z-index: 9999;
 
-      height: 100%;
+      display: flex;
 
-      object-fit: fill;
+      align-items: center;
+      justify-content: center;
 
-      z-index: 1;
+      background: #eef4ff;
 
-      user-select: none;
+      font-size: 20px;
+      font-weight: 700;
 
-      pointer-events: none;
+      text-align: center;
 
-    }
-
-    /* =========================================
-       PROFILE
-    ========================================== */
-
-    .profile-frame {
-
-      position: absolute;
-
-      z-index: 10;
-
-      left: 18.8%;
-
-      top: 35.5%;
-
-      width: 28.7%;
-
-      aspect-ratio: 1 / 1;
-
-      transform:
-        translate(-50%, -50%);
-
-      border-radius: 50%;
-
-      overflow: hidden;
-
-      pointer-events: none;
+      padding: 30px;
 
     }
 
-    #profileImage {
 
-      width: 100%;
-
-      height: 100%;
+    #app {
 
       display: none;
 
-      object-fit: cover;
+      width: 100%;
+      max-width: 1280px;
+
+      padding: 20px;
+
+    }
+
+
+    .header {
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 20px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .logo {
+
+      font-size: 38px;
+      font-weight: 900;
+      font-style: italic;
+
+      color: #102f78;
+
+    }
+
+
+    .logo span {
+
+      color: #c91717;
+
+    }
+
+
+    .profile {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      background: white;
+
+      padding: 10px 16px;
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 4px 16px rgba(0,0,0,.10);
+
+    }
+
+
+    #profileImage {
+
+      width: 54px;
+      height: 54px;
 
       border-radius: 50%;
 
+      object-fit: cover;
+
+      display: none;
+
     }
 
-    /* =========================================
-       TOP ROCK COIN
-    ========================================== */
 
-    .coin-box {
+    .profile-name {
 
-      position: absolute;
+      font-size: 17px;
+      font-weight: 800;
 
-      z-index: 20;
+    }
 
-      left: 79.8%;
 
-      top: 7.2%;
+    .top-stats {
 
-      width: 9.8%;
+      display: grid;
 
-      height: 7%;
+      grid-template-columns:
+        repeat(3,1fr);
 
-      display: flex;
+      gap: 15px;
 
-      justify-content: center;
+      margin-bottom: 20px;
 
-      align-items: center;
+    }
+
+
+    .stat {
+
+      background: white;
+
+      border-radius: 20px;
+
+      padding: 18px;
 
       text-align: center;
 
-      pointer-events: none;
+      box-shadow:
+        0 4px 16px rgba(0,0,0,.10);
 
     }
 
-    #coin {
 
-      color: #071f55;
+    .stat-label {
 
-      font-size:
-        clamp(
-          18px,
-          2.4vw,
-          31px
-        );
+      font-size: 14px;
+      font-weight: 700;
+
+      color: #65738b;
+
+    }
+
+
+    .stat-value {
+
+      margin-top: 5px;
+
+      font-size: 30px;
+      font-weight: 900;
+
+      color: #102f78;
+
+    }
+
+
+    .main-card {
+
+      background: white;
+
+      border-radius: 28px;
+
+      padding: 25px;
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,.10);
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .section-title {
+
+      font-size: 24px;
 
       font-weight: 900;
 
-      line-height: 1;
-
-      text-shadow:
-        0 1px 1px
-        rgba(255,255,255,.8);
+      margin-bottom: 20px;
 
     }
 
-    /* =========================================
-       TOP ENERGY
-    ========================================== */
 
-    .energy-box {
+    .weight-grid {
 
-      position: absolute;
+      display: grid;
 
-      z-index: 20;
+      grid-template-columns:
+        repeat(3,1fr);
 
-      left: 92.0%;
+      gap: 15px;
 
-      top: 7.2%;
+    }
 
-      width: 12%;
 
-      height: 7%;
+    .weight-box {
 
-      display: flex;
+      padding: 20px;
 
-      justify-content: center;
+      border-radius: 18px;
 
-      align-items: center;
+      background: #f3f6fc;
 
       text-align: center;
 
-      pointer-events: none;
+    }
+
+
+    .weight-label {
+
+      font-size: 14px;
+
+      color: #65738b;
+
+      font-weight: 700;
 
     }
 
-    #energy {
 
-      color: #071f55;
+    .weight-value {
 
-      font-size:
-        clamp(
-          16px,
-          2.1vw,
-          29px
-        );
+      margin-top: 5px;
+
+      font-size: 30px;
 
       font-weight: 900;
 
-      line-height: 1;
+    }
 
-      white-space: nowrap;
+
+    .exp-wrap {
+
+      margin-top: 20px;
 
     }
 
-    /* =========================================
-       LEVEL
-    ========================================== */
 
-    .level-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 29.4%;
-
-      top: 64.0%;
-
-      width: 12%;
-
-      height: 6%;
+    .exp-text {
 
       display: flex;
 
-      align-items: center;
+      justify-content: space-between;
 
-      justify-content: center;
+      font-weight: 800;
 
-      pointer-events: none;
-
-    }
-
-    #level {
-
-      color: #ffffff;
-
-      font-size:
-        clamp(
-          17px,
-          2.0vw,
-          28px
-        );
-
-      font-weight: 900;
-
-      text-shadow:
-        0 2px 4px
-        rgba(0,0,0,.45);
+      margin-bottom: 7px;
 
     }
 
-    /* =========================================
-       EXP BAR
-    ========================================== */
 
     .exp-track {
 
-      position: absolute;
+      height: 15px;
 
-      z-index: 20;
+      background: #dfe5ee;
 
-      left: 10.25%;
-
-      top: 71.25%;
-
-      width: 21.4%;
-
-      height: 2.9%;
+      border-radius: 99px;
 
       overflow: hidden;
 
-      border-radius: 999px;
-
-      background:
-        rgba(
-          210,
-          222,
-          240,
-          .9
-        );
-
     }
+
 
     #expBar {
 
@@ -359,665 +335,66 @@
 
       height: 100%;
 
-      border-radius: 999px;
+      background: #102f78;
 
-      background:
-        linear-gradient(
-          90deg,
-          #00b7ff 0%,
-          #0867ff 48%,
-          #0538d4 100%
-        );
+      border-radius: 99px;
 
-      box-shadow:
-        inset
-        0 0 4px
-        rgba(255,255,255,.8);
-
-      transition:
-        width .45s ease;
+      transition: width .5s ease;
 
     }
 
-    /* =========================================
-       EXP TEXT
-    ========================================== */
 
-    .exptext-box {
+    .nav {
 
-      position: absolute;
+      display: grid;
 
-      z-index: 20;
+      grid-template-columns:
+        repeat(4,1fr);
 
-      left: 29.4%;
-
-      top: 71.0%;
-
-      width: 9.5%;
-
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
+      gap: 12px;
 
     }
 
-    #expText {
 
-      color: #08245b;
-
-      font-size:
-        clamp(
-          13px,
-          1.35vw,
-          20px
-        );
-
-      font-weight: 800;
-
-      white-space: nowrap;
-
-    }
-
-    /* =========================================
-       CURRENT WEIGHT
-    ========================================== */
-
-    .current-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 53.0%;
-
-      top: 40.0%;
-
-      width: 18%;
-
-      height: 9%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-    #currentWeight {
-
-      color: #08245b;
-
-      font-size:
-        clamp(
-          20px,
-          3.0vw,
-          43px
-        );
-
-      font-weight: 900;
-
-      white-space: nowrap;
-
-    }
-
-    /* =========================================
-       TARGET WEIGHT
-    ========================================== */
-
-    .target-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 53.0%;
-
-      top: 62.0%;
-
-      width: 18%;
-
-      height: 9%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-    #targetWeight {
-
-      color: #d31317;
-
-      font-size:
-        clamp(
-          20px,
-          3.0vw,
-          43px
-        );
-
-      font-weight: 900;
-
-      white-space: nowrap;
-
-    }
-
-    /* =========================================
-       UPDATED
-    ========================================== */
-
-    .updated-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 18%;
-
-      top: 43.5%;
-
-      width: 12%;
-
-      height: 3%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-    .update-inline {
-
-      display: flex;
-
-      gap: 4px;
-
-      align-items: center;
-
-      justify-content: center;
-
-      white-space: nowrap;
-
-    }
-
-    .update-label {
-
-      color: #163d79;
-
-      font-size:
-        clamp(
-          7px,
-          .85vw,
-          13px
-        );
-
-      font-weight: 700;
-
-    }
-
-    #updatedAt {
-
-      color: #163d79;
-
-      font-size:
-        clamp(
-          7px,
-          .85vw,
-          13px
-        );
-
-      font-weight: 700;
-
-    }
-
-    /* =========================================
-       REMAINING
-    ========================================== */
-
-    .remaining-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 18.5%;
-
-      top: 47.8%;
-
-      width: 15%;
-
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-    .remaining-inline {
-
-      display: flex;
-
-      gap: 5px;
-
-      align-items: center;
-
-    }
-
-    .remaining-label {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          9px,
-          1vw,
-          15px
-        );
-
-      font-weight: 700;
-
-    }
-
-    .remaining-number {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          10px,
-          1.2vw,
-          18px
-        );
-
-      font-weight: 900;
-
-    }
-
-    /* =========================================
-       LOST
-    ========================================== */
-
-    .lost-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 19.0%;
-
-      top: 51.7%;
-
-      width: 15%;
-
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-    .summary-content {
-
-      display: flex;
-
-      gap: 5px;
-
-      align-items: center;
-
-    }
-
-    .summary-label {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          9px,
-          1vw,
-          15px
-        );
-
-      font-weight: 700;
-
-    }
-
-    #lost {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          10px,
-          1.2vw,
-          18px
-        );
-
-      font-weight: 900;
-
-    }
-
-    /* =========================================
-       START DATE
-    ========================================== */
-
-    .startdate-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 19.0%;
-
-      top: 55.0%;
-
-      width: 15%;
-
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-    #startDate {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          8px,
-          1vw,
-          14px
-        );
-
-      font-weight: 700;
-
-    }
-
-    /* =========================================
-       CLICK AREAS
-    ========================================== */
-
-    .hotspot {
-
-      position: absolute;
-
-      z-index: 50;
+    .nav button {
 
       border: 0;
 
-      background: transparent;
+      padding: 16px 10px;
 
-      padding: 0;
+      border-radius: 16px;
 
-      margin: 0;
-
-      cursor: pointer;
-
-      -webkit-tap-highlight-color:
-        transparent;
-
-    }
-
-    .hotspot:active {
-
-      transform:
-        scale(.98);
-
-    }
-
-    /* WEIGHT */
-
-    #weightButton {
-
-      left: 59.4%;
-
-      top: 16.1%;
-
-      width: 18.7%;
-
-      height: 30.9%;
-
-    }
-
-    /* PROGRESS */
-
-    #progressButton {
-
-      left: 79.1%;
-
-      top: 16.1%;
-
-      width: 19.4%;
-
-      height: 30.9%;
-
-    }
-
-    /* RANKING */
-
-    #rankingButton {
-
-      left: 59.4%;
-
-      top: 49.4%;
-
-      width: 18.7%;
-
-      height: 31.1%;
-
-    }
-
-    /* REWARDS */
-
-    #rewardsButton {
-
-      left: 79.1%;
-
-      top: 49.4%;
-
-      width: 19.4%;
-
-      height: 31.1%;
-
-    }
-
-    /* HOME */
-
-    #homeButton {
-
-      left: 1.4%;
-
-      top: 83.2%;
-
-      width: 31.5%;
-
-      height: 14.5%;
-
-    }
-
-    /* MISSION */
-
-    #missionButton {
-
-      left: 33.7%;
-
-      top: 83.2%;
-
-      width: 32.2%;
-
-      height: 14.5%;
-
-    }
-
-    /* BATTLE */
-
-    #battleButton {
-
-      left: 66.5%;
-
-      top: 83.2%;
-
-      width: 32.1%;
-
-      height: 14.5%;
-
-    }
-
-    /* =========================================
-       STATUS
-    ========================================== */
-
-    #status {
-
-      position: fixed;
-
-      left: 50%;
-
-      bottom: 18px;
-
-      transform:
-        translateX(-50%);
-
-      z-index: 999;
-
-      display: none;
-
-      max-width: 90vw;
-
-      padding:
-        10px 18px;
-
-      border-radius: 999px;
-
-      background:
-        rgba(
-          7,
-          59,
-          147,
-          .95
-        );
+      background: #102f78;
 
       color: white;
 
-      font-size: 14px;
+      font-size: 16px;
 
       font-weight: 800;
 
-      text-align: center;
-
-      box-shadow:
-        0 8px 25px
-        rgba(0,0,0,.22);
+      cursor: pointer;
 
     }
 
-    #status.show {
 
-      display: block;
+    @media(max-width:700px){
 
-    }
-
-    #status.error {
-
-      background:
-        rgba(
-          190,
-          25,
-          25,
-          .96
-        );
-
-    }
-
-    /* =========================================
-       MOBILE
-    ========================================== */
-
-    @media(max-width:600px){
-
-      #homeStage {
-
-        width: 100vw;
-
-        max-width: 100vw;
-
+      #app {
+        padding: 12px;
       }
 
-      #coin {
-
-        font-size:
-          clamp(
-            15px,
-            4.5vw,
-            25px
-          );
-
+      .logo {
+        font-size: 28px;
       }
 
-      #energy {
-
-        font-size:
-          clamp(
-            13px,
-            4vw,
-            23px
-          );
-
+      .top-stats,
+      .weight-grid,
+      .nav {
+        grid-template-columns: 1fr 1fr;
       }
 
-      #currentWeight,
-      #targetWeight {
-
-        font-size:
-          clamp(
-            18px,
-            5.5vw,
-            32px
-          );
-
-      }
-
-      #expText {
-
-        font-size:
-          clamp(
-            9px,
-            2.7vw,
-            15px
-          );
-
+      .header {
+        align-items: flex-start;
       }
 
     }
@@ -1030,1223 +407,419 @@
 <body>
 
 
-<!-- =========================================
-     HOME
-========================================== -->
-
-<div id="homeStage">
-
-
-  <!-- =======================================
-       TEMPLATE
-  ======================================== -->
-
-  <img
-    class="template"
-    src="./home-template.png"
-    alt="ROCK YOUR BODY 2026 HOME"
-    draggable="false"
-  >
-
-
-  <!-- =======================================
-       PROFILE
-  ======================================== -->
-
-  <div class="profile-frame">
-
-    <img
-      id="profileImage"
-      alt="LINE Profile"
-    >
-
-  </div>
-
-
-  <!-- =======================================
-       COIN
-  ======================================== -->
-
-  <div class="coin-box">
-
-    <span id="coin">
-      0
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       ENERGY
-  ======================================== -->
-
-  <div class="energy-box">
-
-    <span id="energy">
-      0 / 200
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       LEVEL
-  ======================================== -->
-
-  <div class="level-box">
-
-    <span id="level">
-      Lv.1
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       EXP BAR
-  ======================================== -->
-
-  <div class="exp-track">
-
-    <div id="expBar"></div>
-
-  </div>
-
-
-  <!-- =======================================
-       EXP TEXT
-  ======================================== -->
-
-  <div class="exptext-box">
-
-    <span id="expText">
-      0 / 500
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       CURRENT WEIGHT
-  ======================================== -->
-
-  <div class="current-box">
-
-    <span id="currentWeight">
-      --.- kg
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       UPDATED
-  ======================================== -->
-
-  <div class="updated-box">
-
-    <div class="update-inline">
-
-      <span class="update-label">
-        อัปเดตล่าสุด
-      </span>
-
-      <span id="updatedAt">
-        --/--/----
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================
-       TARGET
-  ======================================== -->
-
-  <div class="target-box">
-
-    <span id="targetWeight">
-      --.- kg
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       REMAINING
-  ======================================== -->
-
-  <div class="remaining-box">
-
-    <div class="remaining-inline">
-
-      <span class="remaining-label">
-        เหลืออีก
-      </span>
-
-      <span class="remaining-number">
-
-        <span id="remaining">
-          --.-
-        </span>
-
-        kg
-
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================
-       LOST
-  ======================================== -->
-
-  <div class="lost-box">
-
-    <div class="summary-content">
-
-      <span class="summary-label">
-        ลดลงแล้ว
-      </span>
-
-      <span id="lost">
-        --.- kg
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================
-       START DATE
-  ======================================== -->
-
-  <div class="startdate-box">
-
-    <span id="startDate">
-      --/--/----
-    </span>
-
-  </div>
-
-
-  <!-- =======================================
-       BUTTONS
-  ======================================== -->
-
-  <button
-    id="weightButton"
-    class="hotspot"
-    aria-label="Weight Check"
-  ></button>
-
-
-  <button
-    id="progressButton"
-    class="hotspot"
-    aria-label="My Progress"
-  ></button>
-
-
-  <button
-    id="rankingButton"
-    class="hotspot"
-    aria-label="Ranking"
-  ></button>
-
-
-  <button
-    id="rewardsButton"
-    class="hotspot"
-    aria-label="Rewards"
-  ></button>
-
-
-  <button
-    id="homeButton"
-    class="hotspot"
-    aria-label="Home"
-  ></button>
-
-
-  <button
-    id="missionButton"
-    class="hotspot"
-    aria-label="Mission"
-  ></button>
-
-
-  <button
-    id="battleButton"
-    class="hotspot"
-    aria-label="Battle"
-  ></button>
-
-
+<div id="loading">
+  กำลังเชื่อมต่อ ROCK YOUR BODY...
 </div>
 
 
-<!-- =========================================
-     STATUS
-========================================== -->
+<main id="app">
 
-<div id="status"></div>
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <div class="logo">
+      ROCK <span>YOUR</span> BODY
+      <small>2026</small>
+    </div>
+
+
+    <div class="profile">
+
+      <img
+        id="profileImage"
+        alt="LINE Profile"
+      >
+
+      <div>
+
+        <div
+          id="profileName"
+          class="profile-name"
+        >
+          สมาชิก ROCK YOUR BODY
+        </div>
+
+        <div>
+          Lv.<span id="level">1</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- TOP STATS -->
+
+  <section class="top-stats">
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        ROCK COIN
+      </div>
+
+      <div
+        id="coin"
+        class="stat-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        ENERGY
+      </div>
+
+      <div
+        id="energy"
+        class="stat-value"
+      >
+        0 / 200
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        EXP
+      </div>
+
+      <div
+        id="expText"
+        class="stat-value"
+      >
+        0 / 500
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+  <!-- WEIGHT -->
+
+  <section class="main-card">
+
+
+    <div class="section-title">
+      น้ำหนักของฉัน
+    </div>
+
+
+    <div class="weight-grid">
+
+
+      <div class="weight-box">
+
+        <div class="weight-label">
+          น้ำหนักเริ่มต้น
+        </div>
+
+        <div
+          id="startWeight"
+          class="weight-value"
+        >
+          --.-
+        </div>
+
+        <div>kg</div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="weight-label">
+          น้ำหนักปัจจุบัน
+        </div>
+
+        <div
+          id="currentWeight"
+          class="weight-value"
+        >
+          --.-
+        </div>
+
+        <div>kg</div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="weight-label">
+          เป้าหมาย
+        </div>
+
+        <div
+          id="targetWeight"
+          class="weight-value"
+        >
+          --.-
+        </div>
+
+        <div>kg</div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="exp-wrap">
+
+      <div class="exp-text">
+
+        <span>
+          Level Progress
+        </span>
+
+        <span id="expPercent">
+          0%
+        </span>
+
+      </div>
+
+
+      <div class="exp-track">
+
+        <div id="expBar"></div>
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+
+  <!-- EXTRA -->
+
+  <section class="main-card">
+
+    <div class="section-title">
+      สถานะโปรแกรม
+    </div>
+
+
+    <div class="weight-grid">
+
+      <div class="weight-box">
+
+        <div class="weight-label">
+          ลดไปแล้ว
+        </div>
+
+        <div
+          id="lostWeight"
+          class="weight-value"
+        >
+          0.0
+        </div>
+
+        <div>kg</div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="weight-label">
+          เหลืออีก
+        </div>
+
+        <div
+          id="remainingWeight"
+          class="weight-value"
+        >
+          0.0
+        </div>
+
+        <div>kg</div>
+
+      </div>
+
+
+      <div class="weight-box">
+
+        <div class="weight-label">
+          อัปเดตล่าสุด
+        </div>
+
+        <div
+          id="updatedAt"
+          class="weight-value"
+          style="font-size:20px"
+        >
+          -
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- NAV -->
+
+  <nav class="nav">
+
+    <button onclick="window.ROCK.goMission()">
+      MISSION
+    </button>
+
+    <button onclick="window.ROCK.goBattle()">
+      BATTLE
+    </button>
+
+    <button onclick="window.ROCK.goRewards()">
+      REWARD
+    </button>
+
+    <button onclick="window.ROCK.goRanking()">
+      RANKING
+    </button>
+
+  </nav>
+
+
+</main>
 
 
 <script>
 
-/* =========================================================
-   HELPERS
-========================================================= */
+(function(){
 
-const $ = id =>
-  document.getElementById(id);
+  "use strict";
 
 
-let loading = false;
-
-let refreshTimer = null;
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-function showStatus(
-  message,
-  error = false
-){
-
-  const el =
-    $("status");
-
-  if(!el){
-    return;
-  }
-
-  el.textContent =
-    message;
-
-  el.className =
-    error
-      ? "show error"
-      : "show";
-
-}
-
-
-function hideStatus(){
-
-  const el =
-    $("status");
-
-  if(el){
-    el.className = "";
-  }
-
-}
-
-
-/* =========================================================
-   FORMAT NUMBER
-========================================================= */
-
-function fmtInt(value){
-
-  const n =
-    Number(value);
-
-  return Number.isFinite(n)
-    ? Math.round(n)
-        .toLocaleString("en-US")
-    : "0";
-
-}
-
-
-/* =========================================================
-   FORMAT WEIGHT
-========================================================= */
-
-function fmtWeight(value){
-
-  if(
-    value === null ||
-    value === undefined ||
-    value === ""
+  function setText(
+    id,
+    value
   ){
 
-    return "--.-";
+    const el =
+      document.getElementById(id);
+
+    if(el){
+
+      el.textContent =
+        value;
+
+    }
 
   }
 
-  const n =
-    Number(value);
 
-  return Number.isFinite(n)
-    ? n.toFixed(1)
-    : "--.-";
-
-}
-
-
-/* =========================================================
-   FORMAT DATE
-========================================================= */
-
-function fmtDate(value){
-
-  if(!value){
-    return "--/--/----";
-  }
-
-  const date =
-    new Date(value);
-
-  if(
-    Number.isNaN(
-      date.getTime()
-    )
+  function num(
+    value
   ){
 
-    return "--/--/----";
+    const n =
+      Number(value);
+
+    return Number.isFinite(n)
+      ? Math.round(n).toLocaleString("en-US")
+      : "0";
 
   }
 
-  return date.toLocaleDateString(
-    "th-TH",
-    {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    }
-  );
 
-}
-
-
-/* =========================================================
-   NORMALIZE DASHBOARD
-   รองรับข้อมูลหลายรูปแบบจาก API
-========================================================= */
-
-function normalizeDashboard(raw){
-
-  const data =
-    raw?.data ??
-    raw?.dashboard ??
-    raw ??
-    {};
-
-  const user =
-    data?.user ??
-    data?.player ??
-    {};
-
-  const weight =
-    data?.weight &&
-    typeof data.weight === "object"
-      ? data.weight
-      : {};
-
-  const energy =
-    data?.energy &&
-    typeof data.energy === "object"
-      ? data.energy
-      : {};
-
-
-  /* =========================================
-     COIN
-  ========================================== */
-
-  const coin =
-    Number(
-      data?.rockCoin ??
-      data?.rock_coin ??
-      data?.coin ??
-      user?.rockCoin ??
-      user?.rock_coin ??
-      user?.coin ??
-      0
-    );
-
-
-  /* =========================================
-     ENERGY
-  ========================================== */
-
-  const currentEnergy =
-    Number(
-      energy?.current ??
-      data?.energyCurrent ??
-      data?.currentEnergy ??
-      data?.current_energy ??
-      user?.energy ??
-      (
-        typeof data?.energy === "number"
-          ? data.energy
-          : 0
-      )
-    );
-
-
-  const maxEnergy =
-    Number(
-      energy?.max ??
-      data?.maxEnergy ??
-      data?.max_energy ??
-      user?.max_energy ??
-      user?.maxEnergy ??
-      window.APP_CONFIG?.MAX_ENERGY ??
-      200
-    );
-
-
-  /* =========================================
-     WEIGHT
-  ========================================== */
-
-  const currentWeight =
-    weight?.current ??
-    weight?.currentWeight ??
-    weight?.current_weight ??
-    data?.currentWeight ??
-    data?.current_weight ??
-    user?.currentWeight ??
-    user?.current_weight ??
-    null;
-
-
-  const targetWeight =
-    weight?.target ??
-    weight?.targetWeight ??
-    weight?.target_weight ??
-    data?.targetWeight ??
-    data?.target_weight ??
-    user?.targetWeight ??
-    user?.target_weight ??
-    null;
-
-
-  const startWeight =
-    weight?.start ??
-    weight?.startWeight ??
-    weight?.start_weight ??
-    data?.startWeight ??
-    data?.start_weight ??
-    user?.startWeight ??
-    user?.start_weight ??
-    null;
-
-
-  const updatedAt =
-    weight?.updatedAt ??
-    weight?.updated_at ??
-    weight?.lastRecordedAt ??
-    weight?.last_recorded_at ??
-    data?.weightUpdatedAt ??
-    data?.weight_updated_at ??
-    data?.updatedAt ??
-    data?.updated_at ??
-    user?.weightUpdatedAt ??
-    user?.weight_updated_at ??
-    null;
-
-
-  const startDate =
-    weight?.startDate ??
-    weight?.start_date ??
-    data?.startDate ??
-    data?.start_date ??
-    user?.startDate ??
-    user?.start_date ??
-    null;
-
-
-  /* =========================================
-     EXP
-  ========================================== */
-
-  const expObject =
-    data?.exp &&
-    typeof data.exp === "object"
-      ? data.exp
-      : {};
-
-  const totalExp =
-    Number(
-      expObject?.total ??
-      expObject?.current ??
-      data?.exp ??
-      user?.exp ??
-      user?.experience ??
-      0
-    );
-
-
-  /* =========================================
-     LEVEL
-  ========================================== */
-
-  const expPerLevel =
-    Number(
-      window.APP_CONFIG?.EXP_PER_LEVEL ??
-      ROCK?.CFG?.EXP_PER_LEVEL ??
-      500
-    ) || 500;
-
-
-  const level =
-    Number(
-      data?.level ??
-      user?.level ??
-      (
-        Math.floor(
-          totalExp /
-          expPerLevel
-        ) + 1
-      )
-    ) || 1;
-
-
-  /* =========================================
-     PROFILE
-  ========================================== */
-
-  const picture =
-    user?.pictureUrl ??
-    user?.picture_url ??
-    data?.pictureUrl ??
-    data?.picture_url ??
-    "";
-
-
-  return {
-
-    coin:
-      Number.isFinite(coin)
-        ? coin
-        : 0,
-
-    energy:
-      Number.isFinite(currentEnergy)
-        ? currentEnergy
-        : 0,
-
-    maxEnergy:
-      Number.isFinite(maxEnergy)
-        ? maxEnergy
-        : 200,
-
-    currentWeight,
-
-    targetWeight,
-
-    startWeight,
-
-    updatedAt,
-
-    startDate,
-
-    totalExp:
-      Number.isFinite(totalExp)
-        ? totalExp
-        : 0,
-
-    expPerLevel,
-
-    level,
-
-    picture
-
-  };
-
-}
-
-
-/* =========================================================
-   RENDER PROFILE
-========================================================= */
-
-function renderProfile(url){
-
-  const image =
-    $("profileImage");
-
-  if(!image){
-    return;
-  }
-
-  if(!url){
-
-    image.removeAttribute("src");
-
-    image.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  image.onload =
-    () => {
-
-      image.style.display =
-        "block";
-
-    };
-
-
-  image.onerror =
-    () => {
-
-      image.style.display =
-        "none";
-
-    };
-
-
-  image.src =
-    url;
-
-}
-
-
-/* =========================================================
-   RENDER HOME
-========================================================= */
-
-function renderHome(raw){
-
-  console.log(
-    "HOME API RAW:",
-    raw
-  );
-
-
-  const p =
-    normalizeDashboard(raw);
-
-
-  console.log(
-    "HOME NORMALIZED:",
-    p
-  );
-
-
-  /* =========================================
-     PROFILE
-  ========================================== */
-
-  renderProfile(
-    p.picture
-  );
-
-
-  /* =========================================
-     COIN
-  ========================================== */
-
-  $("coin").textContent =
-    fmtInt(
-      p.coin
-    );
-
-
-  /* =========================================
-     ENERGY
-  ========================================== */
-
-  $("energy").textContent =
-    fmtInt(
-      p.energy
-    ) +
-    " / " +
-    fmtInt(
-      p.maxEnergy
-    );
-
-
-  /* =========================================
-     LEVEL
-  ========================================== */
-
-  $("level").textContent =
-    "Lv." +
-    fmtInt(
-      p.level
-    );
-
-
-  /* =========================================
-     EXP
-  ========================================== */
-
-  const exp =
-    Math.max(
-      0,
-      p.totalExp
-    );
-
-
-  const expPerLevel =
-    Math.max(
-      1,
-      p.expPerLevel
-    );
-
-
-  const expInLevel =
-    exp %
-    expPerLevel;
-
-
-  const expPercent =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        (
-          expInLevel /
-          expPerLevel
-        ) * 100
-      )
-    );
-
-
-  $("expText").textContent =
-    fmtInt(
-      expInLevel
-    ) +
-    " / " +
-    fmtInt(
-      expPerLevel
-    );
-
-
-  $("expBar").style.width =
-    expPercent +
-    "%";
-
-
-  /* =========================================
-     CURRENT WEIGHT
-  ========================================== */
-
-  $("currentWeight").textContent =
-    fmtWeight(
-      p.currentWeight
-    ) +
-    " kg";
-
-
-  /* =========================================
-     TARGET
-  ========================================== */
-
-  $("targetWeight").textContent =
-    fmtWeight(
-      p.targetWeight
-    ) +
-    " kg";
-
-
-  /* =========================================
-     UPDATE DATE
-  ========================================== */
-
-  $("updatedAt").textContent =
-    fmtDate(
-      p.updatedAt
-    );
-
-
-  /* =========================================
-     REMAINING
-  ========================================== */
-
-  const current =
-    Number(
-      p.currentWeight
-    );
-
-  const target =
-    Number(
-      p.targetWeight
-    );
-
-
-  if(
-    Number.isFinite(current) &&
-    Number.isFinite(target)
+  function weight(
+    value
   ){
 
-    $("remaining").textContent =
-      Math.max(
-        0,
-        current -
-        target
-      ).toFixed(1);
+    const n =
+      Number(value);
 
-  }else{
-
-    $("remaining").textContent =
-      "--.-";
+    return Number.isFinite(n)
+      ? n.toFixed(1)
+      : "--.-";
 
   }
 
 
-  /* =========================================
-     LOST
-  ========================================== */
-
-  const start =
-    Number(
-      p.startWeight
-    );
-
-
-  if(
-    Number.isFinite(start) &&
-    Number.isFinite(current)
+  function date(
+    value
   ){
 
-    $("lost").textContent =
-      Math.max(
-        0,
-        start -
-        current
-      ).toFixed(1) +
-      " kg";
+    if(!value){
 
-  }else{
-
-    $("lost").textContent =
-      "--.- kg";
-
-  }
-
-
-  /* =========================================
-     START DATE
-  ========================================== */
-
-  $("startDate").textContent =
-    fmtDate(
-      p.startDate
-    );
-
-}
-
-
-/* =========================================================
-   LOAD DASHBOARD
-========================================================= */
-
-async function loadHome(){
-
-  if(loading){
-    return;
-  }
-
-  loading = true;
-
-
-  try{
-
-    showStatus(
-      "กำลังโหลดข้อมูล..."
-    );
-
-
-    /*
-      ใช้ common.js ตัวเดียวกับ
-      MISSION / BATTLE
-    */
-
-    const raw =
-      await ROCK.fetchDashboard();
-
-
-    renderHome(
-      raw
-    );
-
-
-    hideStatus();
-
-
-  }catch(error){
-
-    console.error(
-      "HOME LOAD ERROR:",
-      error
-    );
-
-
-    showStatus(
-      error?.message ||
-      "โหลดข้อมูลไม่สำเร็จ",
-      true
-    );
-
-
-  }finally{
-
-    loading = false;
-
-  }
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function goPage(name){
-
-  const url =
-    window.APP_CONFIG?.PAGE?.[name] ??
-    ROCK?.CFG?.PAGE?.[name];
-
-
-  if(url){
-
-    window.location.href =
-      url;
-
-  }
-
-}
-
-
-/* =========================================================
-   BUTTONS
-========================================================= */
-
-$("weightButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "WEIGHT"
-      );
+      return "-";
 
     }
-  );
 
 
-$("progressButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "PROGRESS"
-      );
-
-    }
-  );
-
-
-$("rankingButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "RANKING"
-      );
-
-    }
-  );
-
-
-$("rewardsButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "REWARDS"
-      );
-
-    }
-  );
-
-
-$("homeButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "HOME"
-      );
-
-    }
-  );
-
-
-$("missionButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "MISSION"
-      );
-
-    }
-  );
-
-
-$("battleButton")
-  .addEventListener(
-    "click",
-    () => {
-
-      goPage(
-        "BATTLE"
-      );
-
-    }
-  );
-
-
-/* =========================================================
-   START
-========================================================= */
-
-async function startHome(){
-
-  try{
-
-    if(!window.ROCK){
-
-      throw new Error(
-        "common.js โหลดไม่สำเร็จ"
-      );
-
-    }
-
-
-    showStatus(
-      "กำลังเชื่อมต่อ LINE..."
-    );
-
-
-    const ready =
-      await ROCK.initLiff(
-        "DASHBOARD"
-      );
+    const d =
+      new Date(value);
 
 
     if(
-      ready === false
+      Number.isNaN(
+        d.getTime()
+      )
     ){
 
-      return;
+      return "-";
 
     }
 
 
-    await loadHome();
-
-
-    /* =======================================
-       REALTIME REFRESH
-    ======================================== */
-
-    if(refreshTimer){
-
-      clearInterval(
-        refreshTimer
-      );
-
-    }
-
-
-    const refreshMs =
-      Number(
-        window.APP_CONFIG?.REFRESH_MS ??
-        ROCK?.CFG?.REFRESH_MS ??
-        30000
-      );
-
-
-    refreshTimer =
-      setInterval(
-        async () => {
-
-          if(
-            document.visibilityState !==
-            "visible"
-          ){
-
-            return;
-
-          }
-
-
-          await loadHome();
-
-        },
-        refreshMs
-      );
-
-
-  }catch(error){
-
-    console.error(
-      "HOME START ERROR:",
-      error
-    );
-
-
-    showStatus(
-      error?.message ||
-      String(error),
-      true
+    return d.toLocaleDateString(
+      "th-TH"
     );
 
   }
 
-}
 
+  async function loadHome(){
 
-/* =========================================================
-   REFRESH WHEN RETURN TO HOME
-========================================================= */
-
-document.addEventListener(
-  "visibilitychange",
-  async () => {
-
-    if(
-      document.visibilityState !==
-      "visible"
-    ){
-
-      return;
-
-    }
+    const loading =
+      document.getElementById(
+        "loading"
+      );
 
 
     try{
 
-      const ready =
-        await ROCK.initLiff(
-          "DASHBOARD"
+      if(
+        !window.ROCK
+      ){
+
+        throw new Error(
+          "common.js โหลดไม่สำเร็จ"
         );
+
+      }
+
+
+      if(
+        typeof window.ROCK.initLiff !==
+        "function"
+      ){
+
+        throw new Error(
+          "ROCK.initLiff ไม่พร้อม"
+        );
+
+      }
+
+
+      const ready =
+        await window.ROCK.initLiff();
 
 
       if(
@@ -2258,51 +831,346 @@ document.addEventListener(
       }
 
 
-      await loadHome();
+      const profile =
+        await window.ROCK.getProfile();
+
+
+      if(profile){
+
+        setText(
+          "profileName",
+          profile.displayName ||
+          "สมาชิก ROCK YOUR BODY"
+        );
+
+
+        if(
+          profile.pictureUrl
+        ){
+
+          const img =
+            document.getElementById(
+              "profileImage"
+            );
+
+          img.src =
+            profile.pictureUrl;
+
+          img.style.display =
+            "block";
+
+        }
+
+      }
+
+
+      const result =
+        await window.ROCK.fetchDashboard();
+
+
+      if(!result){
+
+        throw new Error(
+          "ไม่สามารถโหลด Dashboard"
+        );
+
+      }
+
+
+      console.log(
+        "HOME DASHBOARD:",
+        result
+      );
+
+
+      const d =
+        result.data ||
+        result.dashboard ||
+        result;
+
+
+      const user =
+        d.user ||
+        d.player ||
+        {};
+
+
+      const energy =
+        d.energy ||
+        {};
+
+
+      const exp =
+        d.exp ||
+        {};
+
+
+      const w =
+        d.weight ||
+        {};
+
+
+      const coin =
+        Number(
+          d.rockCoin ??
+          d.rock_coin ??
+          user.rockCoin ??
+          user.rock_coin ??
+          0
+        );
+
+
+      const currentEnergy =
+        Number(
+          energy.current ??
+          d.energyCurrent ??
+          user.energy ??
+          0
+        );
+
+
+      const maxEnergy =
+        Number(
+          energy.max ??
+          d.energyMax ??
+          user.maxEnergy ??
+          200
+        );
+
+
+      const totalExp =
+        Number(
+          exp.total ??
+          d.totalExp ??
+          user.exp ??
+          0
+        );
+
+
+      const expPerLevel =
+        Number(
+          window.APP_CONFIG?.EXP_PER_LEVEL
+        ) || 500;
+
+
+      const level =
+        Math.max(
+          1,
+          Number(
+            d.level ??
+            user.level ??
+            Math.floor(
+              totalExp /
+              expPerLevel
+            ) + 1
+          )
+        );
+
+
+      const currentWeight =
+        w.current ??
+        w.currentWeight ??
+        d.currentWeight ??
+        null;
+
+
+      const targetWeight =
+        w.target ??
+        w.targetWeight ??
+        d.targetWeight ??
+        null;
+
+
+      const startWeight =
+        w.start ??
+        w.startWeight ??
+        d.startWeight ??
+        null;
+
+
+      const updatedAt =
+        w.updatedAt ??
+        w.updated_at ??
+        d.updatedAt ??
+        null;
+
+
+      /* ---------------------------------------------
+         RENDER
+      --------------------------------------------- */
+
+
+      setText(
+        "coin",
+        num(coin)
+      );
+
+
+      setText(
+        "energy",
+        `${num(currentEnergy)} / ${num(maxEnergy)}`
+      );
+
+
+      setText(
+        "level",
+        num(level)
+      );
+
+
+      setText(
+        "currentWeight",
+        weight(currentWeight)
+      );
+
+
+      setText(
+        "targetWeight",
+        weight(targetWeight)
+      );
+
+
+      setText(
+        "startWeight",
+        weight(startWeight)
+      );
+
+
+      setText(
+        "updatedAt",
+        date(updatedAt)
+      );
+
+
+      const expInLevel =
+        Math.max(
+          0,
+          totalExp %
+          expPerLevel
+        );
+
+
+      const percent =
+        Math.min(
+          100,
+          (
+            expInLevel /
+            expPerLevel
+          ) * 100
+        );
+
+
+      setText(
+        "expText",
+        `${num(expInLevel)} / ${num(expPerLevel)}`
+      );
+
+
+      setText(
+        "expPercent",
+        `${Math.round(percent)}%`
+      );
+
+
+      document
+        .getElementById(
+          "expBar"
+        )
+        .style.width =
+        `${percent}%`;
+
+
+      const cw =
+        Number(currentWeight);
+
+
+      const tw =
+        Number(targetWeight);
+
+
+      const sw =
+        Number(startWeight);
+
+
+      if(
+        Number.isFinite(cw) &&
+        Number.isFinite(tw)
+      ){
+
+        setText(
+          "remainingWeight",
+          Math.max(
+            0,
+            cw - tw
+          ).toFixed(1)
+        );
+
+      }
+
+
+      if(
+        Number.isFinite(sw) &&
+        Number.isFinite(cw)
+      ){
+
+        setText(
+          "lostWeight",
+          Math.max(
+            0,
+            sw - cw
+          ).toFixed(1)
+        );
+
+      }
+
+
+      loading.style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "app"
+        )
+        .style.display =
+        "block";
 
 
     }catch(error){
 
       console.error(
-        "VISIBILITY REFRESH ERROR:",
+        "HOME ERROR:",
         error
       );
+
+
+      loading.innerHTML =
+        `
+        <div>
+          <div>
+            ไม่สามารถโหลดข้อมูลได้
+          </div>
+
+          <br>
+
+          <small>
+            ${error.message}
+          </small>
+        </div>
+        `;
 
     }
 
   }
-);
 
 
-window.addEventListener(
-  "pageshow",
-  async () => {
-
-    try{
-
-      await loadHome();
-
-    }catch(error){
-
-      console.error(
-        "PAGESHOW ERROR:",
-        error
-      );
-
-    }
-
-  }
-);
+  loadHome();
 
 
-/* =========================================================
-   START APP
-========================================================= */
-
-startHome();
+})();
 
 </script>
 
-</body>
 
+</body>
 </html>
