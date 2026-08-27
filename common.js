@@ -1000,45 +1000,45 @@
 
    window.ROCK = {
 
-    config: CONFIG,
+  config: CONFIG,
 
-    api,
+  api,
 
-    healthCheck,
+  healthCheck,
 
-    initLINE,
+  initLINE,
 
-    getMe,
+  getMe,
 
-    getDashboard,
-    fetchDashboard: getDashboard,
+  getDashboard,
+  fetchDashboard: getDashboard,
 
-    getMissions,
-    completeMission,
+  getMissions,
+  completeMission,
 
-    getBattle,
-    fightMonster,
+  getBattle,
+  fightMonster,
 
-    getRewards,
+  getRewards,
 
-    getRanking,
+  getRanking,
 
-    go,
-    goHome,
-    goMission,
-    goBattle,
-    goReward,
-    goRanking,
-    goInfo,
+  go,
+  goHome,
+  goMission,
+  goBattle,
+  goReward,
+  goRanking,
+  goInfo,
 
-    save,
-    load,
+  save,
+  load,
 
-    number,
-    coin,
-    energy,
+  number,
+  coin,
+  energy,
 
-    updateTopBar,
+  updateTopBar,
 
-    init
-  };
+  init
+};
