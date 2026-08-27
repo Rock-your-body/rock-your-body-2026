@@ -1,1 +1,863 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROCK YOUR BODY 2026</title></head><body><p style="font-family:Arial;text-align:center;padding:40px">กำลังเปิด ROCK YOUR BODY...</p><script>location.replace('./index.html');</script></body></html>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#eef4ff">
+
+  <title>ROCK YOUR BODY 2026</title>
+
+  <script src="./app-config.js"></script>
+  <script src="./common.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        Tahoma,
+        sans-serif;
+      background:
+        linear-gradient(180deg, #eef4ff 0%, #ffffff 100%);
+      color: #08245b;
+    }
+
+    body {
+      padding-bottom: 30px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .header {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(20, 55, 120, 0.12);
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #073b93, #0c62d6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 1000;
+    }
+
+    .brand-text {
+      flex: 1;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 1000;
+      color: #073b93;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 3px;
+    }
+
+    /* =========================
+       USER CARD
+       ========================= */
+
+    .user-card {
+      margin-top: 14px;
+      border-radius: 18px;
+      padding: 16px;
+      background:
+        linear-gradient(135deg, #063b96, #164fc1);
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 50, 150, 0.20);
+    }
+
+    .welcome {
+      font-size: 13px;
+      opacity: 0.85;
+      font-weight: 700;
+    }
+
+    .user-name {
+      font-size: 22px;
+      font-weight: 1000;
+      margin-top: 4px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px;
+      padding: 11px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      opacity: 0.78;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 1000;
+      margin-top: 3px;
+    }
+
+    /* =========================
+       MENU
+       ========================= */
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 4px 10px;
+    }
+
+    .section-title strong {
+      font-size: 18px;
+      font-weight: 1000;
+    }
+
+    .section-title span {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .menu-card {
+      position: relative;
+      min-height: 155px;
+      border: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      color: white;
+      text-align: left;
+      padding: 18px;
+      box-shadow: 0 8px 20px rgba(20, 50, 100, 0.18);
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .menu-card:active {
+      transform: scale(0.97);
+    }
+
+    .menu-icon {
+      font-size: 40px;
+      line-height: 1;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
+    }
+
+    .menu-title {
+      font-size: 22px;
+      font-weight: 1000;
+      letter-spacing: 0.3px;
+    }
+
+    .menu-sub {
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 3px;
+      opacity: 0.95;
+    }
+
+    .menu-arrow {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .home {
+      background: linear-gradient(135deg, #0647b9, #126fe4);
+    }
+
+    .mission {
+      background: linear-gradient(135deg, #d90000, #ff2418);
+    }
+
+    .battle {
+      background: linear-gradient(135deg, #073b93, #174fd0);
+    }
+
+    .reward {
+      background: linear-gradient(135deg, #5414c8, #7c21df);
+    }
+
+    .ranking {
+      background: linear-gradient(135deg, #ef7b00, #ffae00);
+    }
+
+    .info {
+      background: linear-gradient(135deg, #009da5, #16c9c7);
+    }
+
+    /* =========================
+       PROGRAM
+       ========================= */
+
+    .program-card {
+      margin-top: 14px;
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(20, 50, 100, 0.10);
+    }
+
+    .program-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .program-title {
+      font-size: 16px;
+      font-weight: 1000;
+    }
+
+    .program-day {
+      font-size: 13px;
+      font-weight: 900;
+      color: #1261cf;
+    }
+
+    .progress {
+      height: 11px;
+      background: #e7edf7;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #0751c8, #11a7ff);
+      transition: width 0.5s ease;
+    }
+
+    /* =========================
+       LOADING / ERROR
+       ========================= */
+
+    .loading {
+      text-align: center;
+      padding: 10px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .error {
+      display: none;
+      margin-top: 12px;
+      background: #fff1f1;
+      color: #b00020;
+      border: 1px solid #ffcaca;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+
+    @media (max-width: 420px) {
+
+      .page {
+        padding: 10px;
+      }
+
+      .menu-grid {
+        gap: 9px;
+      }
+
+      .menu-card {
+        min-height: 145px;
+        padding: 15px;
+        border-radius: 19px;
+      }
+
+      .menu-icon {
+        font-size: 34px;
+      }
+
+      .menu-title {
+        font-size: 19px;
+      }
+
+      .menu-sub {
+        font-size: 12px;
+      }
+
+      .stats {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        B+
+      </div>
+
+      <div class="brand-text">
+        <div class="brand-title">
+          BANGKOK HOSPITAL UDON
+        </div>
+
+        <div class="brand-sub">
+          ROCK YOUR BODY 2026
+        </div>
+      </div>
+
+    </div>
+
+    <!-- USER -->
+    <section class="user-card">
+
+      <div class="welcome">
+        WELCOME BACK
+      </div>
+
+      <div
+        class="user-name"
+        id="userName"
+      >
+        สมาชิก ROCK YOUR BODY
+      </div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">
+            🪙 ROCK COIN
+          </div>
+
+          <div
+            class="stat-value"
+            id="rockCoin"
+          >
+            0
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            ⚡ ENERGY
+          </div>
+
+          <div
+            class="stat-value"
+            id="energy"
+          >
+            0 / 200
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            ⭐ POINTS
+          </div>
+
+          <div
+            class="stat-value"
+            id="points"
+          >
+            0
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">
+            🏆 RANK
+          </div>
+
+          <div
+            class="stat-value"
+            id="rank"
+          >
+            -
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </header>
+
+
+  <!-- MENU -->
+  <div class="section-title">
+    <strong>ROCK YOUR BODY</strong>
+    <span>เลือกเมนู</span>
+  </div>
+
+
+  <main class="menu-grid">
+
+    <!-- HOME -->
+    <button
+      class="menu-card home"
+      onclick="go('./HOME.html')"
+    >
+      <div class="menu-icon">🏠</div>
+
+      <div class="menu-title">
+        HOME
+      </div>
+
+      <div class="menu-sub">
+        หน้าหลัก
+      </div>
+
+      <div class="menu-arrow">
+        ›
+      </div>
+    </button>
+
+
+    <!-- MISSION -->
+    <button
+      class="menu-card mission"
+      onclick="go('./mission.html')"
+    >
+      <div class="menu-icon">🎯</div>
+
+      <div class="menu-title">
+        MISSION
+      </div>
+
+      <div class="menu-sub">
+        ภารกิจ
+      </div>
+
+      <div class="menu-arrow">
+        ›
+      </div>
+    </button>
+
+
+    <!-- BATTLE -->
+    <button
+      class="menu-card battle"
+      onclick="go('./battle.html')"
+    >
+      <div class="menu-icon">⚔️</div>
+
+      <div class="menu-title">
+        BATTLE
+      </div>
+
+      <div class="menu-sub">
+        ต่อสู้กับมอนสเตอร์
+      </div>
+
+      <div class="menu-arrow">
+        ›
+      </div>
+    </button>
+
+
+    <!-- REWARD -->
+    <button
+      class="menu-card reward"
+      onclick="go('./reward.html')"
+    >
+      <div class="menu-icon">🎁</div>
+
+      <div class="menu-title">
+        REWARD
+      </div>
+
+      <div class="menu-sub">
+        รางวัลของฉัน
+      </div>
+
+      <div class="menu-arrow">
+        ›
+      </div>
+    </button>
+
+
+    <!-- RANKING -->
+    <button
+      class="menu-card ranking"
+      onclick="go('./ranking.html')"
+    >
+      <div class="menu-icon">🏆</div>
+
+      <div class="menu-title">
+        RANKING
+      </div>
+
+      <div class="menu-sub">
+        อันดับการแข่งขัน
+      </div>
+
+      <div class="menu-arrow">
+        ›
+      </div>
+    </button>
+
+
+    <!-- INFORMATION -->
+    <button
+      class="menu-card info"
+      onclick="go('./info.html')"
+    >
+      <div class="menu-icon">ℹ️</div>
+
+      <div class="menu-title">
+        ข้อมูลเพิ่มเติม
+      </div>
+
+      <div class="menu-sub">
+        โครงการและสิทธิประโยชน์
+      </div>
+
+      <div class="menu-arrow">
+        ›
+      </div>
+    </button>
+
+  </main>
+
+
+  <!-- PROGRAM -->
+  <section class="program-card">
+
+    <div class="program-head">
+
+      <div class="program-title">
+        🚀 ROCK YOUR BODY PROGRAM
+      </div>
+
+      <div
+        class="program-day"
+        id="programDay"
+      >
+        Day 0 / 0
+      </div>
+
+    </div>
+
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="programProgress"
+      ></div>
+    </div>
+
+  </section>
+
+
+  <div
+    class="loading"
+    id="loading"
+  >
+    กำลังโหลดข้อมูลสมาชิก...
+  </div>
+
+  <div
+    class="error"
+    id="error"
+  ></div>
+
+</div>
+
+
+<script>
+
+  /* ========================================================
+     API CONFIG
+     ======================================================== */
+
+  const API_BASE =
+    (
+      window.APP_CONFIG &&
+      (
+        window.APP_CONFIG.API_BASE_URL ||
+        window.APP_CONFIG.API_URL
+      )
+    )
+    ||
+    "https://rock-your-body-2026.onrender.com";
+
+
+  /* ========================================================
+     NAVIGATION
+     ======================================================== */
+
+  function go(page) {
+    window.location.href = page;
+  }
+
+
+  /* ========================================================
+     FORMAT NUMBER
+     ======================================================== */
+
+  function number(value) {
+
+    return Number(value || 0)
+      .toLocaleString("en-US");
+
+  }
+
+
+  /* ========================================================
+     LOAD CURRENT USER
+     ======================================================== */
+
+  async function loadUser() {
+
+    const loading =
+      document.getElementById("loading");
+
+    const error =
+      document.getElementById("error");
+
+    try {
+
+      const response =
+        await fetch(
+          API_BASE + "/api/me",
+          {
+            method: "GET",
+            headers: {
+              "Accept": "application/json"
+            }
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "API /api/me ตอบกลับ " +
+          response.status
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (!data.ok || !data.user) {
+
+        throw new Error(
+          "ไม่พบข้อมูลสมาชิก"
+        );
+
+      }
+
+
+      const user =
+        data.user;
+
+
+      /* USER */
+
+      document.getElementById(
+        "userName"
+      ).textContent =
+        user.name ||
+        "สมาชิก ROCK YOUR BODY";
+
+
+      /* ROCK COIN */
+
+      document.getElementById(
+        "rockCoin"
+      ).textContent =
+        number(user.rockCoin);
+
+
+      /* ENERGY */
+
+      document.getElementById(
+        "energy"
+      ).textContent =
+        number(user.energy) +
+        " / " +
+        number(user.maxEnergy);
+
+
+      /* POINTS */
+
+      document.getElementById(
+        "points"
+      ).textContent =
+        number(user.points);
+
+
+      /* RANK */
+
+      document.getElementById(
+        "rank"
+      ).textContent =
+        user.rank == null
+          ? "-"
+          : "#" + user.rank;
+
+
+      /* PROGRAM */
+
+      const current =
+        Number(user.programDay || 0);
+
+      const total =
+        Number(user.programTotalDays || 0);
+
+
+      document.getElementById(
+        "programDay"
+      ).textContent =
+        "Day " +
+        current +
+        " / " +
+        total;
+
+
+      let percent = 0;
+
+      if (total > 0) {
+
+        percent =
+          Math.min(
+            100,
+            Math.max(
+              0,
+              (current / total) * 100
+            )
+          );
+
+      }
+
+
+      document.getElementById(
+        "programProgress"
+      ).style.width =
+        percent + "%";
+
+
+      loading.style.display =
+        "none";
+
+    }
+
+    catch (err) {
+
+      console.error(
+        "HOME LOAD ERROR:",
+        err
+      );
+
+      loading.style.display =
+        "none";
+
+      error.style.display =
+        "block";
+
+      error.textContent =
+        "ไม่สามารถโหลดข้อมูลสมาชิกได้ กรุณาลองใหม่อีกครั้ง";
+
+    }
+
+  }
+
+
+  /* ========================================================
+     START
+     ======================================================== */
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    loadUser
+  );
+
+</script>
+
+</body>
+</html>
