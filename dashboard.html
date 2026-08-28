@@ -12,6 +12,10 @@
 
   <title>ROCK YOUR BODY 2026</title>
 
+  <!-- HOME v2026-08-28-weight-link : hotspot aligned + Weight Check linked -->
+
+  <!-- HOME hotspot alignment fix v2026-08-28-07 -->
+
 
   <!-- =====================================================
        GOOGLE FONT
@@ -47,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260828"
+    src="./app-config.js?v=20260828-weight-link"
   ></script>
 
 
@@ -816,11 +820,11 @@
 
     #weightButton {
 
-      left: 59.4%;
-      top: 16.1%;
+      left: 1.0%;
+      top: 72.8%;
 
-      width: 18.7%;
-      height: 30.9%;
+      width: 14.6%;
+      height: 20.5%;
 
     }
 
@@ -829,11 +833,11 @@
 
     #progressButton {
 
-      left: 79.1%;
-      top: 16.1%;
+      left: 16.5%;
+      top: 72.8%;
 
-      width: 19.4%;
-      height: 30.9%;
+      width: 14.6%;
+      height: 20.5%;
 
     }
 
@@ -902,6 +906,17 @@
 
     }
 
+
+
+    /* =====================================================
+       HOTSPOT DEBUG
+       เปลี่ยนเป็น body.debug-hotspots เพื่อดูกรอบปุ่ม
+    ====================================================== */
+
+    body.debug-hotspots .hotspot {
+      outline: 3px solid rgba(255,0,0,.9);
+      background: rgba(255,0,0,.12);
+    }
 
     /* =====================================================
        STATUS
@@ -2367,9 +2382,14 @@
         "click",
         () => {
 
-          goPage(
-            "WEIGHT"
-          );
+          const weightUrl =
+            window.APP_CONFIG
+              ?.PAGE
+              ?.WEIGHT ||
+            "./weight-check.html";
+
+          window.location.href =
+            weightUrl;
 
         }
       );
