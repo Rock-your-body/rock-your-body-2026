@@ -864,7 +864,7 @@ button,input,select,textarea{font:inherit}
 #homeStage{
 
   /* HERO */
-  --hero-name-left:8%;
+  --hero-name-left:4.5%;
   --hero-name-top:41%;
   --hero-name-width:22%;
   --hero-name-height:3.5%;
