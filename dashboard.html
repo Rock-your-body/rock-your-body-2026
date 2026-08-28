@@ -12,9 +12,7 @@
 
   <title>ROCK YOUR BODY 2026</title>
 
-  <!-- HOME v2026-08-28-weight-link : hotspot aligned + Weight Check linked -->
-
-  <!-- HOME hotspot alignment fix v2026-08-28-07 -->
+  <!-- HOME + InBody upload/chart v2026-08-28 -->
 
 
   <!-- =====================================================
@@ -51,7 +49,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260828-weight-link"
+    src="./app-config.js?v=20260828"
   ></script>
 
 
@@ -147,6 +145,965 @@
       pointer-events: none;
 
     }
+
+
+
+    /* =====================================================
+       INBODY
+    ====================================================== */
+
+    let inbodyHistory = [];
+
+
+    function fmtInbodyDate(value){
+
+      if(!value){
+        return "--/--/----";
+      }
+
+      const d =
+        new Date(
+          value
+        );
+
+      if(
+        Number.isNaN(
+          d.getTime()
+        )
+      ){
+        return "--/--/----";
+      }
+
+      return d.toLocaleDateString(
+        "th-TH",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    function normalizeInbodyHistory(raw){
+
+      const data =
+        raw?.data ??
+        raw ??
+        {};
+
+
+      const list =
+        data?.inbodyHistory ??
+        data?.inbody_history ??
+        data?.inbody?.history ??
+        [];
+
+
+      if(
+        !Array.isArray(
+          list
+        )
+      ){
+        return [];
+      }
+
+
+      return list
+        .map(
+          item => ({
+
+            score:
+              Number(
+                item?.score ??
+                item?.inbody_score ??
+                item?.inbodyScore
+              ),
+
+            measuredAt:
+              item?.measuredAt ??
+              item?.measured_at ??
+              item?.date ??
+              null,
+
+            fileUrl:
+              item?.fileUrl ??
+              item?.file_url ??
+              ""
+
+          })
+        )
+        .filter(
+          item =>
+            Number.isFinite(
+              item.score
+            ) &&
+            item.measuredAt
+        )
+        .sort(
+          (a,b) =>
+            new Date(
+              a.measuredAt
+            ) -
+            new Date(
+              b.measuredAt
+            )
+        );
+
+    }
+
+
+    function drawInbodyChart(
+      history
+    ){
+
+      const svg =
+        $("inbodyChart");
+
+      const empty =
+        $("inbodyEmpty");
+
+
+      if(
+        !svg ||
+        !empty
+      ){
+        return;
+      }
+
+
+      svg.innerHTML =
+        "";
+
+
+      if(
+        !Array.isArray(
+          history
+        ) ||
+        history.length === 0
+      ){
+
+        empty.style.display =
+          "flex";
+
+        return;
+      }
+
+
+      empty.style.display =
+        "none";
+
+
+      /*
+       * แสดง 7 ครั้งล่าสุด
+       */
+      const points =
+        history.slice(
+          -7
+        );
+
+
+      const scores =
+        points.map(
+          item =>
+            Number(
+              item.score
+            )
+        );
+
+
+      let min =
+        Math.min(
+          ...scores
+        );
+
+      let max =
+        Math.max(
+          ...scores
+        );
+
+
+      if(
+        max === min
+      ){
+
+        max += 5;
+        min -= 5;
+
+      }else{
+
+        const pad =
+          Math.max(
+            2,
+            (
+              max - min
+            ) * .15
+          );
+
+        max += pad;
+        min -= pad;
+
+      }
+
+
+      const W = 220;
+      const H = 80;
+
+      const left = 8;
+      const right = 8;
+      const top = 8;
+      const bottom = 8;
+
+
+      /*
+       * GRID
+       */
+      for(
+        let i = 1;
+        i <= 2;
+        i++
+      ){
+
+        const y =
+          top +
+          (
+            (
+              H -
+              top -
+              bottom
+            ) /
+            3
+          ) *
+          i;
+
+
+        const line =
+          document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "line"
+          );
+
+
+        line.setAttribute(
+          "x1",
+          left
+        );
+
+        line.setAttribute(
+          "x2",
+          W - right
+        );
+
+        line.setAttribute(
+          "y1",
+          y
+        );
+
+        line.setAttribute(
+          "y2",
+          y
+        );
+
+        line.setAttribute(
+          "class",
+          "inbody-chart-grid"
+        );
+
+
+        svg.appendChild(
+          line
+        );
+
+      }
+
+
+      const xy =
+        points.map(
+          (
+            item,
+            index
+          ) => {
+
+            const x =
+              points.length === 1
+                ? W / 2
+                : left +
+                  (
+                    index /
+                    (
+                      points.length -
+                      1
+                    )
+                  ) *
+                  (
+                    W -
+                    left -
+                    right
+                  );
+
+
+            const ratio =
+              (
+                Number(
+                  item.score
+                ) -
+                min
+              ) /
+              (
+                max -
+                min
+              );
+
+
+            const y =
+              H -
+              bottom -
+              ratio *
+              (
+                H -
+                top -
+                bottom
+              );
+
+
+            return {
+              x,
+              y,
+              score:
+                Number(
+                  item.score
+                )
+            };
+
+          }
+        );
+
+
+      const polyline =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "polyline"
+        );
+
+
+      polyline.setAttribute(
+        "points",
+        xy
+          .map(
+            p =>
+              `${p.x},${p.y}`
+          )
+          .join(" ")
+      );
+
+
+      polyline.setAttribute(
+        "class",
+        "inbody-chart-line"
+      );
+
+
+      svg.appendChild(
+        polyline
+      );
+
+
+      xy.forEach(
+        p => {
+
+          const circle =
+            document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "circle"
+            );
+
+
+          circle.setAttribute(
+            "cx",
+            p.x
+          );
+
+          circle.setAttribute(
+            "cy",
+            p.y
+          );
+
+          circle.setAttribute(
+            "r",
+            4
+          );
+
+          circle.setAttribute(
+            "class",
+            "inbody-chart-dot"
+          );
+
+
+          const title =
+            document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "title"
+            );
+
+
+          title.textContent =
+            `${p.score} คะแนน`;
+
+
+          circle.appendChild(
+            title
+          );
+
+
+          svg.appendChild(
+            circle
+          );
+
+        }
+      );
+
+    }
+
+
+    function renderInbody(
+      raw
+    ){
+
+      const history =
+        normalizeInbodyHistory(
+          raw
+        );
+
+
+      inbodyHistory =
+        history;
+
+
+      const latest =
+        history.length
+          ? history[
+              history.length - 1
+            ]
+          : null;
+
+
+      $("inbodyScore")
+        .textContent =
+          latest
+            ? fmtInt(
+                latest.score
+              )
+            : "--";
+
+
+      $("inbodyDate")
+        .textContent =
+          latest
+            ? (
+                "ล่าสุด " +
+                fmtInbodyDate(
+                  latest.measuredAt
+                )
+              )
+            : "ยังไม่มีข้อมูล";
+
+
+      drawInbodyChart(
+        history
+      );
+
+    }
+
+
+    function openInbodyModal(){
+
+      const modal =
+        $("inbodyModal");
+
+
+      if(!modal){
+        return;
+      }
+
+
+      const today =
+        new Date();
+
+
+      const y =
+        today.getFullYear();
+
+      const m =
+        String(
+          today.getMonth() + 1
+        )
+          .padStart(
+            2,
+            "0"
+          );
+
+      const d =
+        String(
+          today.getDate()
+        )
+          .padStart(
+            2,
+            "0"
+          );
+
+
+      $("inbodyMeasuredDate")
+        .value =
+          `${y}-${m}-${d}`;
+
+
+      $("inbodyScoreInput")
+        .value =
+          "";
+
+
+      $("inbodyFileInput")
+        .value =
+          "";
+
+
+      $("inbodyFileName")
+        .textContent =
+          "";
+
+
+      modal.classList.add(
+        "show"
+      );
+
+    }
+
+
+    function closeInbodyModal(){
+
+      $("inbodyModal")
+        ?.classList
+        .remove(
+          "show"
+        );
+
+    }
+
+
+
+    async function fetchInbodyHistory(){
+
+      const api =
+        window.APP_CONFIG
+          ?.API
+          ?.INBODY;
+
+
+      if(!api){
+
+        console.warn(
+          "ไม่พบ API.INBODY"
+        );
+
+        return {
+          success: true,
+          inbodyHistory: []
+        };
+
+      }
+
+
+      const response =
+        await fetch(
+          api,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                action: "list",
+                idToken:
+                  getIdToken()
+              })
+          }
+        );
+
+
+      const rawText =
+        await response.text();
+
+
+      let result =
+        {};
+
+
+      try{
+
+        result =
+          rawText
+            ? JSON.parse(
+                rawText
+              )
+            : {};
+
+      }catch{
+
+        throw new Error(
+          "InBody API ตอบกลับไม่ใช่ JSON"
+        );
+
+      }
+
+
+      if(
+        !response.ok ||
+        result?.success === false
+      ){
+
+        throw new Error(
+          result?.error ||
+          result?.message ||
+          `InBody HTTP ${response.status}`
+        );
+
+      }
+
+
+      return result;
+
+    }
+
+
+    async function loadInbodyHistory(){
+
+      try{
+
+        const result =
+          await fetchInbodyHistory();
+
+
+        renderInbody(
+          result
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "INBODY HISTORY ERROR:",
+          error
+        );
+
+
+        /*
+         * InBody โหลดไม่ได้
+         * ไม่ทำให้ HOME ทั้งหน้าล้ม
+         */
+        renderInbody({
+          inbodyHistory: []
+        });
+
+      }
+
+    }
+
+
+    async function saveInbody(){
+
+      const measuredDate =
+        $("inbodyMeasuredDate")
+          ?.value;
+
+
+      const score =
+        Number(
+          $("inbodyScoreInput")
+            ?.value
+        );
+
+
+      const file =
+        $("inbodyFileInput")
+          ?.files
+          ?.[0];
+
+
+      if(!measuredDate){
+
+        showStatus(
+          "กรุณาเลือกวันที่ตรวจ",
+          true
+        );
+
+        return;
+
+      }
+
+
+      if(
+        !Number.isFinite(
+          score
+        ) ||
+        score < 0 ||
+        score > 150
+      ){
+
+        showStatus(
+          "กรุณากรอก InBody Score 0-150",
+          true
+        );
+
+        return;
+
+      }
+
+
+      if(!file){
+
+        showStatus(
+          "กรุณาเลือกไฟล์ผล InBody",
+          true
+        );
+
+        return;
+
+      }
+
+
+      const api =
+        window.APP_CONFIG
+          ?.API
+          ?.INBODY;
+
+
+      if(!api){
+
+        showStatus(
+          "ยังไม่ได้ตั้งค่า API.INBODY ใน app-config.js",
+          true
+        );
+
+        return;
+
+      }
+
+
+      const saveButton =
+        $("inbodySave");
+
+
+      try{
+
+        saveButton.disabled =
+          true;
+
+
+        showStatus(
+          "กำลังอัปโหลดผล InBody..."
+        );
+
+
+        const idToken =
+          getIdToken();
+
+
+        const form =
+          new FormData();
+
+
+        form.append(
+          "action",
+          "upload"
+        );
+
+
+        form.append(
+          "idToken",
+          idToken
+        );
+
+
+        form.append(
+          "score",
+          String(
+            score
+          )
+        );
+
+
+        form.append(
+          "measuredDate",
+          measuredDate
+        );
+
+
+        form.append(
+          "file",
+          file
+        );
+
+
+        const response =
+          await fetch(
+            api,
+            {
+              method: "POST",
+              body: form
+            }
+          );
+
+
+        const rawText =
+          await response.text();
+
+
+        let result =
+          {};
+
+
+        try{
+
+          result =
+            rawText
+              ? JSON.parse(
+                  rawText
+                )
+              : {};
+
+        }catch{
+
+          throw new Error(
+            "InBody API ตอบกลับไม่ใช่ JSON"
+          );
+
+        }
+
+
+        if(
+          !response.ok ||
+          result?.success === false
+        ){
+
+          throw new Error(
+            result?.error ||
+            result?.message ||
+            `InBody HTTP ${response.status}`
+          );
+
+        }
+
+
+        closeInbodyModal();
+
+
+        showStatus(
+          "บันทึกผล InBody สำเร็จ"
+        );
+
+
+        /*
+         * โหลดประวัติ InBody ใหม่
+         * เพื่อให้คะแนนและกราฟเปลี่ยนทันที
+         */
+        await loadInbodyHistory();
+
+
+        setTimeout(
+          hideStatus,
+          1800
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "INBODY SAVE ERROR:",
+          error
+        );
+
+
+        showStatus(
+          error?.message ||
+          "อัปโหลด InBody ไม่สำเร็จ",
+          true
+        );
+
+
+      }finally{
+
+        saveButton.disabled =
+          false;
+
+      }
+
+    }
+
+
+    $("inbodyUploadButton")
+      ?.addEventListener(
+        "click",
+        openInbodyModal
+      );
+
+
+    $("inbodyCancel")
+      ?.addEventListener(
+        "click",
+        closeInbodyModal
+      );
+
+
+    $("inbodySave")
+      ?.addEventListener(
+        "click",
+        saveInbody
+      );
+
+
+    $("inbodyFileInput")
+      ?.addEventListener(
+        "change",
+        event => {
+
+          const file =
+            event.target
+              ?.files
+              ?.[0];
+
+
+          $("inbodyFileName")
+            .textContent =
+              file
+                ? file.name
+                : "";
+
+        }
+      );
+
+
+    $("inbodyModal")
+      ?.addEventListener(
+        "click",
+        event => {
+
+          if(
+            event.target ===
+            $("inbodyModal")
+          ){
+
+            closeInbodyModal();
+
+          }
+
+        }
+      );
+
 
 
     /* =====================================================
@@ -782,6 +1739,266 @@
     }
 
 
+
+    /* =====================================================
+       INBODY CARD / UPLOAD / GRAPH
+       วางทับช่อง InBody ใน home-template.png
+    ====================================================== */
+
+    .inbody-card {
+      position: absolute;
+      z-index: 30;
+
+      left: 32.6%;
+      top: 68.3%;
+
+      width: 14.5%;
+      height: 18.1%;
+
+      padding: .7% .8%;
+
+      color: #142d70;
+
+      pointer-events: auto;
+    }
+
+    .inbody-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .inbody-title {
+      font-size: clamp(9px, 1.05vw, 16px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .inbody-upload-button {
+      width: clamp(22px, 2.3vw, 34px);
+      height: clamp(22px, 2.3vw, 34px);
+
+      border: 0;
+      border-radius: 50%;
+
+      background: #14a53a;
+      color: #fff;
+
+      font-size: clamp(14px, 1.6vw, 23px);
+      font-weight: 900;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+
+      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    }
+
+    .inbody-latest {
+      margin-top: 2px;
+
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    #inbodyScore {
+      color: #102d78;
+      font-size: clamp(17px, 2.3vw, 32px);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .inbody-score-unit {
+      font-size: clamp(7px, .8vw, 12px);
+      font-weight: 700;
+    }
+
+    #inbodyDate {
+      margin-top: 2px;
+
+      color: #3c4f7e;
+      font-size: clamp(6px, .72vw, 11px);
+      font-weight: 700;
+
+      white-space: nowrap;
+    }
+
+    .inbody-chart-wrap {
+      position: absolute;
+
+      left: 5%;
+      right: 5%;
+      bottom: 7%;
+
+      height: 43%;
+    }
+
+    #inbodyChart {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .inbody-chart-grid {
+      stroke: rgba(80,100,150,.18);
+      stroke-width: 1;
+    }
+
+    .inbody-chart-line {
+      fill: none;
+      stroke: #6736e8;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .inbody-chart-dot {
+      fill: #fff;
+      stroke: #6736e8;
+      stroke-width: 2.5;
+    }
+
+    .inbody-empty {
+      position: absolute;
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      color: #62729a;
+      font-size: clamp(7px, .7vw, 11px);
+      font-weight: 700;
+
+      text-align: center;
+    }
+
+
+    /* =====================================================
+       INBODY MODAL
+    ====================================================== */
+
+    .inbody-modal {
+      position: fixed;
+      inset: 0;
+
+      z-index: 10000;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      padding: 18px;
+
+      background: rgba(2,18,58,.68);
+      backdrop-filter: blur(4px);
+    }
+
+    .inbody-modal.show {
+      display: flex;
+    }
+
+    .inbody-modal-card {
+      width: min(92vw, 430px);
+
+      padding: 20px;
+
+      border-radius: 22px;
+
+      background: #fff;
+      color: #082b68;
+
+      box-shadow: 0 18px 55px rgba(0,0,0,.3);
+    }
+
+    .inbody-modal-title {
+      margin: 0 0 14px;
+
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .inbody-field {
+      margin-bottom: 12px;
+    }
+
+    .inbody-field label {
+      display: block;
+
+      margin-bottom: 5px;
+
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .inbody-field input {
+      width: 100%;
+
+      padding: 11px 12px;
+
+      border: 1px solid #cbd8ee;
+      border-radius: 12px;
+
+      font: inherit;
+      color: #082b68;
+
+      outline: none;
+    }
+
+    .inbody-field input:focus {
+      border-color: #1769e8;
+      box-shadow: 0 0 0 3px rgba(23,105,232,.12);
+    }
+
+    .inbody-preview-name {
+      margin-top: 6px;
+
+      color: #62729a;
+      font-size: 12px;
+
+      word-break: break-word;
+    }
+
+    .inbody-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 10px;
+
+      margin-top: 16px;
+    }
+
+    .inbody-actions button {
+      min-height: 44px;
+
+      border: 0;
+      border-radius: 12px;
+
+      font: inherit;
+      font-weight: 900;
+
+      cursor: pointer;
+    }
+
+    #inbodyCancel {
+      background: #e9eef8;
+      color: #173b76;
+    }
+
+    #inbodySave {
+      background: linear-gradient(180deg,#166de9,#0746bb);
+      color: #fff;
+    }
+
+    #inbodySave:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+
     /* =====================================================
        BUTTON HOTSPOTS
     ====================================================== */
@@ -820,11 +2037,11 @@
 
     #weightButton {
 
-      left: 1.0%;
-      top: 72.8%;
+      left: 59.4%;
+      top: 16.1%;
 
-      width: 14.6%;
-      height: 20.5%;
+      width: 18.7%;
+      height: 30.9%;
 
     }
 
@@ -833,11 +2050,11 @@
 
     #progressButton {
 
-      left: 16.5%;
-      top: 72.8%;
+      left: 79.1%;
+      top: 16.1%;
 
-      width: 14.6%;
-      height: 20.5%;
+      width: 19.4%;
+      height: 30.9%;
 
     }
 
@@ -906,17 +2123,6 @@
 
     }
 
-
-
-    /* =====================================================
-       HOTSPOT DEBUG
-       เปลี่ยนเป็น body.debug-hotspots เพื่อดูกรอบปุ่ม
-    ====================================================== */
-
-    body.debug-hotspots .hotspot {
-      outline: 3px solid rgba(255,0,0,.9);
-      background: rgba(255,0,0,.12);
-    }
 
     /* =====================================================
        STATUS
@@ -1260,6 +2466,71 @@
     </div>
 
 
+
+    <!-- ===================================================
+         INBODY LATEST + GRAPH + UPLOAD
+    ==================================================== -->
+
+    <div class="inbody-card">
+
+      <div class="inbody-head">
+
+        <div class="inbody-title">
+          InBody ล่าสุด
+        </div>
+
+        <button
+          id="inbodyUploadButton"
+          class="inbody-upload-button"
+          type="button"
+          aria-label="อัปโหลดผล InBody"
+          title="อัปโหลดผล InBody"
+        >
+          +
+        </button>
+
+      </div>
+
+
+      <div class="inbody-latest">
+
+        <span id="inbodyScore">
+          --
+        </span>
+
+        <span class="inbody-score-unit">
+          คะแนน
+        </span>
+
+      </div>
+
+
+      <div id="inbodyDate">
+        ยังไม่มีข้อมูล
+      </div>
+
+
+      <div class="inbody-chart-wrap">
+
+        <svg
+          id="inbodyChart"
+          viewBox="0 0 220 80"
+          preserveAspectRatio="none"
+          aria-label="กราฟ InBody"
+        ></svg>
+
+        <div
+          id="inbodyEmpty"
+          class="inbody-empty"
+        >
+          อัปโหลดผล InBody เพื่อเริ่มกราฟ
+        </div>
+
+      </div>
+
+    </div>
+
+
     <!-- ===================================================
          NAVIGATION BUTTONS
     ==================================================== -->
@@ -1313,6 +2584,105 @@
       aria-label="Battle"
     ></button>
 
+
+  </div>
+
+
+
+  <!-- =====================================================
+       INBODY UPLOAD MODAL
+  ====================================================== -->
+
+  <div
+    id="inbodyModal"
+    class="inbody-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="inbodyModalTitle"
+  >
+
+    <div class="inbody-modal-card">
+
+      <h2
+        id="inbodyModalTitle"
+        class="inbody-modal-title"
+      >
+        อัปโหลดผล InBody
+      </h2>
+
+
+      <div class="inbody-field">
+
+        <label for="inbodyMeasuredDate">
+          วันที่ตรวจ
+        </label>
+
+        <input
+          id="inbodyMeasuredDate"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="inbody-field">
+
+        <label for="inbodyScoreInput">
+          InBody Score
+        </label>
+
+        <input
+          id="inbodyScoreInput"
+          type="number"
+          min="0"
+          max="150"
+          step="1"
+          inputmode="numeric"
+          placeholder="เช่น 72"
+        >
+
+      </div>
+
+
+      <div class="inbody-field">
+
+        <label for="inbodyFileInput">
+          รูปผล InBody
+        </label>
+
+        <input
+          id="inbodyFileInput"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,application/pdf"
+        >
+
+        <div
+          id="inbodyFileName"
+          class="inbody-preview-name"
+        ></div>
+
+      </div>
+
+
+      <div class="inbody-actions">
+
+        <button
+          id="inbodyCancel"
+          type="button"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          id="inbodySave"
+          type="button"
+        >
+          บันทึกผล
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -2313,6 +3683,9 @@
         );
 
 
+        await loadInbodyHistory();
+
+
         hideStatus();
 
 
@@ -2382,14 +3755,9 @@
         "click",
         () => {
 
-          const weightUrl =
-            window.APP_CONFIG
-              ?.PAGE
-              ?.WEIGHT ||
-            "./weight-check.html";
-
-          window.location.href =
-            weightUrl;
+          goPage(
+            "WEIGHT"
+          );
 
         }
       );
