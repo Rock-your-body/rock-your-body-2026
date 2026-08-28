@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260828-daily-health"></script>
+  <script src="./app-config.js?v=20260828-home-mission-health"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -100,6 +100,29 @@
     #top2Score{left:81.2%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
     #top3Score{left:94.0%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
 
+
+    /* HEALTH -> DAILY MISSION */
+    #stepsMissionButton{
+      left:61.0%;
+      top:14.7%;
+      width:17.6%;
+      height:14.8%;
+    }
+
+    #caloriesMissionButton{
+      left:80.2%;
+      top:14.7%;
+      width:18.2%;
+      height:14.8%;
+    }
+
+    #sleepMissionButton{
+      left:61.0%;
+      top:31.0%;
+      width:17.6%;
+      height:14.8%;
+    }
+
     /* HOTSPOTS */
     .hotspot{position:absolute;z-index:40;background:transparent;border:0;cursor:pointer}
     #weightButton{left:1.2%;top:66.7%;width:14.4%;height:21.0%}
@@ -144,15 +167,6 @@
     @media(max-width:700px){
       #homeStage{width:100vw}
     }
-  
-    #steps,
-    #calories,
-    #sleep{
-      pointer-events:auto !important;
-      cursor:pointer;
-      z-index:45;
-    }
-
   </style>
 </head>
 
@@ -208,6 +222,10 @@
     <div id="top1Score" class="abs"></div>
     <div id="top2Score" class="abs"></div>
     <div id="top3Score" class="abs"></div>
+
+    <button id="stepsMissionButton" class="hotspot" aria-label="กรอก Steps ใน Daily Mission"></button>
+    <button id="caloriesMissionButton" class="hotspot" aria-label="กรอก Calories ใน Daily Mission"></button>
+    <button id="sleepMissionButton" class="hotspot" aria-label="กรอก Sleep ใน Daily Mission"></button>
 
     <button id="weightButton" class="hotspot" aria-label="Weight Check"></button>
     <button id="progressButton" class="hotspot" aria-label="My Progress"></button>
@@ -1092,7 +1110,10 @@
       $("sleep")
         .textContent =
           sleepMinutes > 0
-            ? fmtSleep({ totalMinutes: sleepMinutes })
+            ? fmtSleep({
+                totalMinutes:
+                  sleepMinutes
+              })
             : "0 ชม. 0 นาที";
 
 
@@ -1267,34 +1288,39 @@
       }
     }
 
-    function goPage(name){
-      const page=window.APP_CONFIG?.PAGE?.[name] ?? window.APP_CONFIG?.PAGES?.[name];
-      if(!page){
-        showStatus("ไม่พบหน้า "+name,true);
-        return;
-      }
-      window.location.href=page;
-    }
 
-
-    function goDailyMission(
-      missionId,
+    function goDailyMissionMetric(
       metric
     ){
 
-      const base =
+      const missionPage =
         window.APP_CONFIG
           ?.PAGE
           ?.MISSION ||
         "./mission.html";
 
+
+      let missionId =
+        "daily_move_more";
+
+
+      if(
+        metric ===
+        "sleep"
+      ){
+        missionId =
+          "daily_sleep";
+      }
+
+
       const separator =
-        base.includes("?")
+        missionPage.includes("?")
           ? "&"
           : "?";
 
-      window.location.href =
-        base +
+
+      const url =
+        missionPage +
         separator +
         "category=daily" +
         "&mission=" +
@@ -1305,42 +1331,49 @@
         encodeURIComponent(
           metric
         );
+
+
+      window.location.href =
+        url;
+
     }
 
 
+    function goPage(name){
+      const page=window.APP_CONFIG?.PAGE?.[name] ?? window.APP_CONFIG?.PAGES?.[name];
+      if(!page){
+        showStatus("ไม่พบหน้า "+name,true);
+        return;
+      }
+      window.location.href=page;
+    }
 
-    $("steps")
-      ?.addEventListener(
+    $("stepsMissionButton")
+      .addEventListener(
         "click",
         () =>
-          goDailyMission(
-            "daily_move_more",
+          goDailyMissionMetric(
             "steps"
           )
       );
 
-
-    $("calories")
-      ?.addEventListener(
+    $("caloriesMissionButton")
+      .addEventListener(
         "click",
         () =>
-          goDailyMission(
-            "daily_move_more",
+          goDailyMissionMetric(
             "calories"
           )
       );
 
-
-    $("sleep")
-      ?.addEventListener(
+    $("sleepMissionButton")
+      .addEventListener(
         "click",
         () =>
-          goDailyMission(
-            "daily_sleep",
+          goDailyMissionMetric(
             "sleep"
           )
       );
-
 
     $("weightButton").addEventListener("click",()=>goPage("WEIGHT"));
     $("progressButton").addEventListener("click",()=>goPage("PROGRESS"));
