@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260829-health-zero-routes"></script>
+  <script src="./app-config.js?v=20260829-line-name-team-v1"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -38,7 +38,20 @@
       position:absolute;z-index:10;left:8.1%;top:17.3%;width:23.2%;height:28.4%;
       object-fit:cover;object-position:center top;border-radius:50%;display:none
     }
-    #teamName{left:8.1%;top:45.5%;width:18.5%;height:3.6%;font-size:clamp(8px,1vw,15px);color:#fff}
+    #teamName{left:8.1%;top:45.5%;width:18.5%;height:3.6%;font-size:clamp(8px,1vw,15px);color:#fff;pointer-events:auto;cursor:pointer;z-index:70}
+    #teamEditModal{
+      position:fixed;inset:0;z-index:40000;display:none;align-items:center;justify-content:center;
+      padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
+    }
+    #teamEditModal.show{display:flex}
+    #teamEditModal .modal-card{width:min(92vw,430px)}
+    #lineDisplayNameBox{
+      padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;background:#f3f6fb;
+      color:#173b76;font-weight:800
+    }
+    #teamNameInput{width:100%;padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;font:inherit}
+    #teamCancel{background:#e9eef8;color:#173b76}
+    #teamSave{background:#0d5bd7;color:#fff}
 
     /* TOP */
     #coin{left:75.0%;top:5.9%;width:8%;height:5%;font-size:clamp(16px,2.3vw,34px)}
@@ -202,7 +215,7 @@
 
     <img id="profileImage" alt="LINE Profile">
 
-    <div id="teamName" class="abs">HERO ROCK</div>
+    <div id="teamName" class="abs" title="แตะเพื่อเปลี่ยนชื่อทีม">กำลังโหลด...</div>
 
     <div id="coin" class="abs">0</div>
     <div id="energy" class="abs">0 / 200</div>
@@ -260,6 +273,27 @@
     <button id="battleButton" class="hotspot" aria-label="Battle"></button>
   </div>
 
+  <div id="teamEditModal">
+    <div class="modal-card">
+      <h2>ข้อมูล HERO / ทีม</h2>
+
+      <div class="field">
+        <label>ชื่อ HERO จาก LINE</label>
+        <div id="lineDisplayNameBox">--</div>
+      </div>
+
+      <div class="field">
+        <label for="teamNameInput">ชื่อทีม</label>
+        <input id="teamNameInput" type="text" maxlength="30" placeholder="เช่น HERO ROCK">
+      </div>
+
+      <div class="modal-actions">
+        <button id="teamCancel" type="button">ยกเลิก</button>
+        <button id="teamSave" type="button">บันทึกชื่อทีม</button>
+      </div>
+    </div>
+  </div>
+
   <div id="status"></div>
 
   <div id="inbodyModal">
@@ -295,6 +329,8 @@
 
     let loading = false;
     let refreshTimer = null;
+    let currentLineProfile = null;
+    let currentTeamName = "HERO ROCK";
 
     function showStatus(message,isError=false){
       const el=$("status");
@@ -485,6 +521,17 @@
         throw new Error("ไม่พบ LINE ID Token กรุณาเข้าใหม่ผ่าน LINE");
       }
       return token;
+    }
+
+    async function getLineProfileSafe(){
+      if(currentLineProfile) return currentLineProfile;
+      try{
+        currentLineProfile = await liff.getProfile();
+      }catch(error){
+        console.warn("LINE PROFILE ERROR:",error);
+        currentLineProfile = {};
+      }
+      return currentLineProfile;
     }
 
     async function postJson(url,payload){
@@ -723,6 +770,13 @@
           user.pictureUrl,user.picture_url,data.pictureUrl,data.picture_url
         ) ?? "",
 
+        lineDisplayName:pick(
+          user.lineDisplayName,user.line_display_name,
+          user.displayName,user.display_name,
+          data.lineDisplayName,data.line_display_name,
+          data.displayName,data.display_name
+        ) ?? "",
+
         teamName:pick(
           user.teamName,user.team_name,data.teamName,data.team_name,"HERO ROCK"
         ) ?? "HERO ROCK",
@@ -803,7 +857,17 @@
 
       await renderProfile(p.picture);
 
-      $("teamName").textContent=p.teamName;
+      const lineProfile = await getLineProfileSafe();
+      const heroDisplayName =
+        p.lineDisplayName ||
+        lineProfile?.displayName ||
+        "HERO";
+
+      currentTeamName = p.teamName || "HERO ROCK";
+
+      // ตำแหน่ง HERO ROCK บน template แสดงชื่อจาก LINE
+      $("teamName").textContent = heroDisplayName;
+      $("teamName").title = `Team: ${currentTeamName} • แตะเพื่อเปลี่ยนชื่อทีม`;
 
       $("coin").textContent=fmtInt(p.coin);
       $("energy").textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;
@@ -1675,6 +1739,67 @@
       }
     }
 
+
+    function openTeamEditModal(){
+      const modal=$("teamEditModal");
+      const profile=currentLineProfile || {};
+      $("lineDisplayNameBox").textContent=profile?.displayName || $("teamName")?.textContent || "--";
+      $("teamNameInput").value=currentTeamName || "";
+      modal.classList.add("show");
+    }
+
+    function closeTeamEditModal(){
+      $("teamEditModal").classList.remove("show");
+    }
+
+    async function saveTeamName(){
+      const teamName=String($("teamNameInput")?.value || "").trim();
+      const button=$("teamSave");
+
+      if(!teamName){
+        showStatus("❌ กรุณากรอกชื่อทีม",true);
+        return;
+      }
+      if(teamName.length>30){
+        showStatus("❌ ชื่อทีมต้องไม่เกิน 30 ตัวอักษร",true);
+        return;
+      }
+
+      const api=window.APP_CONFIG?.API?.DASHBOARD;
+      if(!api){
+        showStatus("❌ ไม่พบ API.DASHBOARD",true);
+        return;
+      }
+
+      try{
+        button.disabled=true;
+        button.textContent="กำลังบันทึก...";
+
+        const result=await postJson(api,{
+          action:"update_team_name",
+          idToken:getIdToken(),
+          teamName
+        });
+
+        currentTeamName=
+          result?.player?.team_name ||
+          result?.data?.team_name ||
+          result?.team_name ||
+          teamName;
+
+        closeTeamEditModal();
+        showStatus("✅ บันทึกชื่อทีมแล้ว");
+        setTimeout(hideStatus,1800);
+        await loadHome();
+      }catch(error){
+        console.error("TEAM NAME SAVE ERROR:",error);
+        showStatus("❌ "+(error?.message || "บันทึกชื่อทีมไม่สำเร็จ"),true);
+      }finally{
+        button.disabled=false;
+        button.textContent="บันทึกชื่อทีม";
+      }
+    }
+
     function goPage(name){
       const page=window.APP_CONFIG?.PAGE?.[name] ?? window.APP_CONFIG?.PAGES?.[name];
       if(!page){
@@ -1725,7 +1850,7 @@
         () => {
           goConfiguredPage(
             "DAILY_EXERCISE",
-            "./mission.html?category=daily&mission=daily_move_more&section=exercise"
+            "./mission.html?category=daily&mission=daily_exercise_30"
           );
         }
       );
@@ -1742,6 +1867,13 @@
         }
       );
 
+
+    $("teamName").addEventListener("click",openTeamEditModal);
+    $("teamCancel").addEventListener("click",closeTeamEditModal);
+    $("teamSave").addEventListener("click",saveTeamName);
+    $("teamEditModal").addEventListener("click",event=>{
+      if(event.target===$("teamEditModal")) closeTeamEditModal();
+    });
 
     $("weightButton").addEventListener("click",()=>goPage("WEIGHT"));
     $("progressButton").addEventListener("click",()=>goPage("PROGRESS"));
