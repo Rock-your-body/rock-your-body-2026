@@ -121,14 +121,54 @@
     #missionButton{left:34.0%;top:89.1%;width:30.1%;height:8.9%}
     #battleButton{left:65.0%;top:89.1%;width:33.0%;height:8.9%}
 
-    /* STATUS */
-    #status{
-      position:fixed;z-index:20000;left:50%;bottom:26px;transform:translateX(-50%);
-      display:none;max-width:min(90vw,520px);padding:12px 20px;border-radius:999px;
-      background:#0b56c6;color:#fff;font-weight:800;text-align:center;
-      box-shadow:0 12px 28px rgba(0,0,0,.2)
-    }
-    #status.error{background:#d92626}
+   /* =========================================================
+   STATUS / ERROR
+   ต้องอยู่เหนือ InBody Modal
+========================================================= */
+
+#status{
+  position:fixed;
+
+  left:50%;
+  bottom:max(
+    22px,
+    env(safe-area-inset-bottom)
+  );
+
+  transform:translateX(-50%);
+
+  z-index:120000 !important;
+
+  display:none;
+
+  width:max-content;
+  max-width:calc(100vw - 28px);
+
+  padding:12px 18px;
+
+  border-radius:16px;
+
+  background:rgba(7,59,147,.97);
+
+  color:#fff;
+
+  font-size:14px;
+  font-weight:800;
+  line-height:1.45;
+
+  text-align:center;
+
+  box-shadow:0 8px 28px rgba(0,0,0,.30);
+}
+
+#status.show{
+  display:block !important;
+}
+
+#status.error{
+  display:block !important;
+  background:#c62828 !important;
+}
 
     /* MODAL */
     #inbodyModal{
@@ -948,67 +988,388 @@
       $("inbodyModal").classList.remove("show");
     }
 
-    async function saveInbody(){
-      const measuredDate=$("inbodyMeasuredDate").value;
-      const score=Number($("inbodyScoreInput").value);
-      const file=$("inbodyFileInput").files?.[0];
-      const api=window.APP_CONFIG?.API?.INBODY;
+   async function saveInbody(){
 
-      if(!api){
-        showStatus("ไม่พบ API.INBODY ใน app-config.js",true);
-        return;
-      }
-      if(!measuredDate){
-        showStatus("กรุณาเลือกวันที่ตรวจ",true);
-        return;
-      }
-      if(!Number.isFinite(score) || score<0 || score>150){
-        showStatus("กรุณากรอก InBody Score 0-150",true);
-        return;
-      }
-      if(!file){
-        showStatus("กรุณาเลือกไฟล์ผล InBody",true);
-        return;
-      }
+  const measuredDate =
+    $("inbodyMeasuredDate")
+      ?.value ||
+    "";
 
-      const btn=$("inbodySave");
+  const score =
+    Number(
+      $("inbodyScoreInput")
+        ?.value
+    );
 
-      try{
-        btn.disabled=true;
-        showStatus("กำลังอัปโหลดผล InBody...");
+  const file =
+    $("inbodyFileInput")
+      ?.files?.[0] ||
+    null;
 
-        const form=new FormData();
-        form.append("action","upload");
-        form.append("idToken",getIdToken());
-        form.append("score",String(score));
-        form.append("measuredDate",measuredDate);
-        form.append("file",file);
+  const api =
+    window.APP_CONFIG
+      ?.API
+      ?.INBODY ||
+    "";
 
-        const response=await fetch(api,{method:"POST",body:form});
-        const text=await response.text();
+  const button =
+    $("inbodySave");
 
-        let result={};
-        try{result=text?JSON.parse(text):{}}
-        catch{throw new Error("InBody API ตอบกลับไม่ใช่ JSON")}
 
-        if(!response.ok || result?.success===false){
-          throw new Error(result?.error || result?.message || `HTTP ${response.status}`);
-        }
+  /* =====================================================
+     VALIDATE
+  ====================================================== */
 
-        closeInbodyModal();
-        await loadDailyHealth();
-        await loadInbodyHistory();
+  if(!api){
 
-        showStatus("บันทึกผล InBody สำเร็จ");
-        setTimeout(hideStatus,1600);
+    showStatus(
+      "❌ ไม่พบ API.INBODY ใน app-config.js",
+      true
+    );
 
-      }catch(error){
-        console.error(error);
-        showStatus(error?.message || "อัปโหลด InBody ไม่สำเร็จ",true);
-      }finally{
-        btn.disabled=false;
-      }
+    return;
+  }
+
+
+  if(!measuredDate){
+
+    showStatus(
+      "❌ กรุณาเลือกวันที่ตรวจ",
+      true
+    );
+
+    return;
+  }
+
+
+  if(
+    !Number.isFinite(score) ||
+    score < 0 ||
+    score > 150
+  ){
+
+    showStatus(
+      "❌ กรุณากรอก InBody Score 0-150",
+      true
+    );
+
+    return;
+  }
+
+
+  if(!file){
+
+    showStatus(
+      "❌ กรุณาเลือกรูป/PDF ผล InBody",
+      true
+    );
+
+    return;
+  }
+
+
+  /* =====================================================
+     FILE
+  ====================================================== */
+
+  console.log(
+    "INBODY FILE:",
+    {
+      name:file.name,
+      type:file.type,
+      size:file.size
     }
+  );
+
+
+  /*
+     Edge Function ปัจจุบันรับสูงสุด 10 MB
+  */
+
+  if(
+    file.size >
+    10 * 1024 * 1024
+  ){
+
+    showStatus(
+      "❌ ไฟล์ InBody ต้องไม่เกิน 10 MB",
+      true
+    );
+
+    return;
+  }
+
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "application/pdf"
+  ];
+
+
+  if(
+    file.type &&
+    !allowedTypes.includes(
+      file.type
+    )
+  ){
+
+    showStatus(
+      `❌ ไม่รองรับไฟล์ชนิด ${file.type}`,
+      true
+    );
+
+    return;
+  }
+
+
+  /* =====================================================
+     UPLOAD
+  ====================================================== */
+
+  try{
+
+    if(button){
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+
+    }
+
+
+    showStatus(
+      "กำลังอัปโหลดผล InBody..."
+    );
+
+
+    /* ===============================
+       LINE TOKEN
+    =============================== */
+
+    const idToken =
+      getIdToken();
+
+
+    if(!idToken){
+
+      throw new Error(
+        "ไม่พบ LINE ID Token กรุณาเปิดแอปผ่าน LINE ใหม่"
+      );
+
+    }
+
+
+    /* ===============================
+       FORM DATA
+    =============================== */
+
+    const form =
+      new FormData();
+
+
+    form.append(
+      "action",
+      "upload"
+    );
+
+
+    form.append(
+      "idToken",
+      idToken
+    );
+
+
+    form.append(
+      "score",
+      String(score)
+    );
+
+
+    form.append(
+      "measuredDate",
+      measuredDate
+    );
+
+
+    form.append(
+      "file",
+      file,
+      file.name
+    );
+
+
+    console.log(
+      "INBODY UPLOAD START:",
+      {
+        api,
+        measuredDate,
+        score,
+        fileName:file.name,
+        fileType:file.type,
+        fileSize:file.size
+      }
+    );
+
+
+    /* ===============================
+       REQUEST
+    =============================== */
+
+    const response =
+      await fetch(
+        api,
+        {
+          method:"POST",
+
+          /*
+             ห้ามกำหนด Content-Type เอง
+             Browser จะสร้าง multipart boundary
+          */
+
+          body:form
+        }
+      );
+
+
+    const raw =
+      await response.text();
+
+
+    console.log(
+      "INBODY HTTP:",
+      response.status
+    );
+
+
+    console.log(
+      "INBODY RESPONSE:",
+      raw
+    );
+
+
+    /* ===============================
+       JSON
+    =============================== */
+
+    let result = {};
+
+
+    try{
+
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    }catch(error){
+
+      console.error(
+        "INBODY JSON ERROR:",
+        error
+      );
+
+
+      throw new Error(
+        `InBody API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
+      );
+
+    }
+
+
+    /* ===============================
+       SERVER ERROR
+    =============================== */
+
+    if(
+      !response.ok ||
+      result?.success === false
+    ){
+
+      const serverMessage =
+        result?.error ||
+        result?.message ||
+        result?.details ||
+        `InBody HTTP ${response.status}`;
+
+
+      throw new Error(
+        serverMessage
+      );
+
+    }
+
+
+    /* ===============================
+       SUCCESS
+    =============================== */
+
+    closeInbodyModal();
+
+
+    showStatus(
+      "✅ บันทึกผล InBody สำเร็จ"
+    );
+
+
+    try{
+
+      await loadInbodyHistory();
+
+    }catch(error){
+
+      console.warn(
+        "RELOAD INBODY:",
+        error
+      );
+
+    }
+
+
+    setTimeout(
+      hideStatus,
+      2200
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "INBODY SAVE ERROR:",
+      error
+    );
+
+
+    const message =
+      error?.message ||
+      String(error) ||
+      "อัปโหลด InBody ไม่สำเร็จ";
+
+
+    showStatus(
+      "❌ " + message,
+      true
+    );
+
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "บันทึกผล";
+
+    }
+
+  }
+
+}
 
     /* =====================================================
        LOAD ALL HOME DATA
