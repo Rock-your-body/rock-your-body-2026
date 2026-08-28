@@ -1,0 +1,20 @@
+ROCK YOUR BODY 2026 — SUPABASE CONNECTION PATCH
+
+แก้ไข:
+1. common.js ไม่ต่อ /api/dashboard เข้ากับ URL Supabase อีกแล้ว
+2. GitHub Pages เรียก Supabase Edge Functions โดยตรง:
+   - player-dashboard
+   - mission
+   - battle
+3. ส่ง LINE ID Token ใน JSON body:
+   { action, idToken, ... }
+4. ไม่ส่ง service_role key ไปหน้า GitHub
+5. รองรับ dashboard / saveWeight / setTarget / progress
+6. Mission ใช้ action myMissionStatus
+7. Battle status ใช้ action battleStatus
+
+สำคัญ:
+- ตรวจ LIFF Endpoint URL ให้ตรงกับ GitHub Pages ปัจจุบัน
+- Supabase Edge Functions ต้องเปิด CORS สำหรับ GitHub Pages origin
+- ถ้า battle Edge Function ใช้ action โจมตีชื่ออื่นแทน "fight"
+  ให้เปลี่ยนคำว่า "fight" ใน common.js จุดเดียว
