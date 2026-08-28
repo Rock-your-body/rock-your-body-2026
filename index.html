@@ -1,192 +1,119 @@
 <!doctype html>
 <html lang="th">
-
 <head>
-
   <meta charset="utf-8">
 
   <meta
     name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
   <title>ROCK YOUR BODY 2026</title>
 
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-  <script src="./app-config.js"></script>
-
-  <script src="./common.js"></script>
+  <meta
+    name="theme-color"
+    content="#eef5ff"
+  >
 
   <style>
+    *{
+      box-sizing:border-box;
+    }
 
     html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #c9c9c9;
-      font-family: Arial, sans-serif;
+    body{
+      margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+      background:#eef5ff;
+      font-family:
+        "Prompt",
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
     }
 
-    #loading {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #333;
-      font-size: 18px;
+    body{
+      min-height:100vh;
+      min-height:100dvh;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:#06276c;
     }
 
+    .loading{
+      text-align:center;
+      padding:24px;
+    }
+
+    .spinner{
+      width:46px;
+      height:46px;
+
+      margin:0 auto 16px;
+
+      border:5px solid #dce8f8;
+      border-top-color:#075ac7;
+      border-radius:50%;
+
+      animation:spin .75s linear infinite;
+    }
+
+    .title{
+      font-size:22px;
+      font-weight:900;
+    }
+
+    .sub{
+      margin-top:6px;
+      font-size:14px;
+      font-weight:700;
+      opacity:.65;
+    }
+
+    @keyframes spin{
+      to{
+        transform:rotate(360deg);
+      }
+    }
   </style>
-
 </head>
 
 <body>
 
-<div id="loading">
-  กำลังเปิด ROCK YOUR BODY...
-</div>
+  <div class="loading">
+    <div class="spinner"></div>
 
-<script>
+    <div class="title">
+      ROCK YOUR BODY 2026
+    </div>
 
-(async function () {
-
-  "use strict";
-
-  try {
-
-    console.log("=================================");
-    console.log("ROCK YOUR BODY ROUTER START");
-    console.log("=================================");
+    <div class="sub">
+      กำลังเปิด HOME...
+    </div>
+  </div>
 
 
-    /*
-    ========================================================
-    1. อ่าน page จาก URL
-    ========================================================
-    */
+  <script>
+    (() => {
 
-    const params = new URLSearchParams(
-      window.location.search
-    );
+      const target =
+        "./dashboard.html?v=20260829-home-v10";
 
-    const page =
-      (
-        params.get("page") ||
-        "home"
-      ).toLowerCase();
-
-
-    /*
-    ========================================================
-    2. กำหนดหน้าที่อนุญาต
-    ========================================================
-    */
-
-    const routes = {
-
-      home: "./HOME.html",
-
-      mission: "./mission.html",
-
-      battle: "./battle.html",
-
-      reward: "./reward.html",
-
-      ranking: "./ranking.html",
-
-      info: "./info.html",
-
-      dashboard: "./dashboard.html",
-
-      food: "./food-log.html"
-
-    };
-
-
-    /*
-    ========================================================
-    3. ถ้าไม่มีหน้า → Home
-    ========================================================
-    */
-
-    const target =
-      routes[page] ||
-      routes.home;
-
-
-    console.log(
-      "REQUEST PAGE:",
-      page
-    );
-
-    console.log(
-      "TARGET:",
-      target
-    );
-
-
-    /*
-    ========================================================
-    4. เตรียม LINE
-    ========================================================
-    */
-
-    if (
-      window.ROCK &&
-      typeof ROCK.initLINE === "function"
-    ) {
-
-      const line =
-        await ROCK.initLINE();
-
-      console.log(
-        "LINE RESULT:",
-        line
+      /*
+        ใช้ replace()
+        เพื่อไม่ให้กดย้อนกลับมา index.html
+      */
+      window.location.replace(
+        target
       );
 
-    }
-
-
-    /*
-    ========================================================
-    5. เปิดหน้าที่ต้องการ
-    ========================================================
-    */
-
-    window.location.replace(
-      target
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "ROCK ROUTER ERROR:",
-      error
-    );
-
-
-    document.getElementById(
-      "loading"
-    ).innerHTML =
-
-      `
-      ไม่สามารถเปิด ROCK YOUR BODY ได้
-      <br><br>
-      ${error?.message || error}
-      `;
-
-  }
-
-})();
-
-</script>
+    })();
+  </script>
 
 </body>
-
 </html>
