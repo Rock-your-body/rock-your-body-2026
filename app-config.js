@@ -1,7 +1,7 @@
 /* =========================================================
    ROCK YOUR BODY 2026
    APP CONFIG
-   Version: 2026-08-28-FINAL
+   Version: 2026-08-28-INBODY
 ========================================================= */
 
 "use strict";
@@ -17,17 +17,11 @@ window.APP_CONFIG = {
     "ROCK YOUR BODY 2026",
 
   VERSION:
-    "2026-08-28-FINAL",
+    "2026-08-28-INBODY",
 
 
   /* =====================================================
      LINE LIFF
-
-     LINE Login Channel ID:
-     2011201679
-
-     LIFF ID:
-     2011201679-uNWz5yqF
   ====================================================== */
 
   LIFF_ID:
@@ -55,36 +49,34 @@ window.APP_CONFIG = {
 
   API: {
 
-    /* -------------------------
-       HOME / DASHBOARD
-    -------------------------- */
+    /* HOME / DASHBOARD */
 
     DASHBOARD:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
 
-    /* -------------------------
-       MISSION
-    -------------------------- */
+    /* MISSION */
 
     MISSION:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
 
 
-    /* -------------------------
-       BATTLE
-    -------------------------- */
+    /* BATTLE */
 
     BATTLE:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
+
+
+    /* INBODY */
+
+    INBODY:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/inbody"
 
   },
 
 
   /* =====================================================
      PAGE URL
-
-     ทุกหน้าอยู่ใน GitHub Pages project เดียวกัน
   ====================================================== */
 
   PAGE: {
@@ -115,7 +107,7 @@ window.APP_CONFIG = {
 
   /* =====================================================
      PAGES
-     รองรับโค้ดหน้าเก่าที่เรียก APP_CONFIG.PAGES
+     รองรับไฟล์เก่าที่เรียก APP_CONFIG.PAGES
   ====================================================== */
 
   PAGES: {
@@ -167,6 +159,9 @@ window.APP_CONFIG = {
     MISSION_EVIDENCE:
       "mission-evidence",
 
+    INBODY_RESULTS:
+      "inbody-results",
+
     ROCK_ASSETS:
       "rock-assets"
 
@@ -174,7 +169,7 @@ window.APP_CONFIG = {
 
 
   /* =====================================================
-     FILES / ASSETS
+     ASSETS
   ====================================================== */
 
   ASSETS: {
@@ -195,8 +190,6 @@ window.APP_CONFIG = {
 
 /* =========================================================
    BACKWARD COMPATIBILITY
-
-   รองรับไฟล์เก่าที่อาจเรียก APP_CONFIG.API_BASE
 ========================================================= */
 
 window.APP_CONFIG.API_BASE =
@@ -262,16 +255,25 @@ console.log(
     liffId:
       window.APP_CONFIG.LIFF_ID,
 
+    dashboardApi:
+      window.APP_CONFIG.API.DASHBOARD,
+
+    missionApi:
+      window.APP_CONFIG.API.MISSION,
+
+    battleApi:
+      window.APP_CONFIG.API.BATTLE,
+
+    inbodyApi:
+      window.APP_CONFIG.API.INBODY,
+
     home:
       window.APP_CONFIG.PAGE.HOME,
 
     weight:
       window.APP_CONFIG.PAGE.WEIGHT,
 
-    mission:
-      window.APP_CONFIG.PAGE.MISSION,
-
-    battle:
-      window.APP_CONFIG.PAGE.BATTLE
+    progress:
+      window.APP_CONFIG.PAGE.PROGRESS
   }
 );
