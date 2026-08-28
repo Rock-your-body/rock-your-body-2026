@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260828-home-all-data"></script>
+  <script src="./app-config.js?v=20260828-daily-health"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -109,6 +109,9 @@
     #rankingButton{left:64.7%;top:66.7%;width:33.8%;height:21.0%}
     #rewardsButton{left:61.0%;top:47.7%;width:37.5%;height:17.8%}
     #homeButton{left:1.0%;top:89.1%;width:31.8%;height:8.9%}
+    #stepsMissionButton{left:61.0%;top:13.7%;width:17.5%;height:16.0%}
+    #caloriesMissionButton{left:79.7%;top:13.7%;width:18.5%;height:16.0%}
+    #sleepMissionButton{left:61.0%;top:30.3%;width:17.5%;height:16.0%}
     #missionButton{left:34.0%;top:89.1%;width:30.1%;height:8.9%}
     #battleButton{left:65.0%;top:89.1%;width:33.0%;height:8.9%}
 
@@ -199,6 +202,10 @@
     <div id="top1Score" class="abs"></div>
     <div id="top2Score" class="abs"></div>
     <div id="top3Score" class="abs"></div>
+
+    <button id="stepsMissionButton" class="hotspot" aria-label="กรอกจำนวนก้าว Daily Mission"></button>
+    <button id="caloriesMissionButton" class="hotspot" aria-label="กรอก Calories Daily Mission"></button>
+    <button id="sleepMissionButton" class="hotspot" aria-label="กรอกการนอน Daily Mission"></button>
 
     <button id="weightButton" class="hotspot" aria-label="Weight Check"></button>
     <button id="progressButton" class="hotspot" aria-label="My Progress"></button>
@@ -298,32 +305,111 @@
     }
 
     function fmtSleep(value){
-      if(value===null || value===undefined || value==="") return "--";
-      if(typeof value==="string" && value.includes("ชม")) return value;
 
-      const totalMinutes =
-        typeof value==="object"
-          ? num(pick(value.minutes,value.totalMinutes,value.total_minutes),0)
-          : num(value,0);
-
-      if(totalMinutes>24 && totalMinutes<=24*60){
-        const h=Math.floor(totalMinutes/60);
-        const m=Math.round(totalMinutes%60);
-        return `${h} ชม. ${m} นาที`;
+      if(
+        value === null ||
+        value === undefined ||
+        value === ""
+      ){
+        return "--";
       }
 
-      const hours =
-        typeof value==="object"
-          ? num(pick(value.hours,value.totalHours,value.total_hours),0)
-          : num(value,0);
+      if(
+        typeof value ===
+        "object"
+      ){
+        const totalMinutes =
+          Number(
+            value?.totalMinutes ??
+            value?.total_minutes ??
+            value?.sleepMinutes ??
+            value?.sleep_minutes
+          );
 
-      if(hours>0 && hours<=24){
-        const h=Math.floor(hours);
-        const m=Math.round((hours-h)*60);
-        return m?`${h} ชม. ${m} นาที`:`${h} ชม.`;
+        if(
+          Number.isFinite(
+            totalMinutes
+          )
+        ){
+          const h =
+            Math.floor(
+              totalMinutes /
+              60
+            );
+
+          const m =
+            Math.round(
+              totalMinutes %
+              60
+            );
+
+          return (
+            `${h} ชม. ${m} นาที`
+          );
+        }
+
+        const h =
+          Number(
+            value?.hours ??
+            0
+          );
+
+        const m =
+          Number(
+            value?.minutes ??
+            0
+          );
+
+        if(
+          Number.isFinite(h) &&
+          Number.isFinite(m)
+        ){
+          return (
+            `${Math.floor(h)} ชม. ${Math.round(m)} นาที`
+          );
+        }
+
+        return "--";
       }
 
-      return "--";
+      const n =
+        Number(value);
+
+      if(
+        Number.isFinite(n)
+      ){
+        if(n > 24){
+          const h =
+            Math.floor(
+              n /
+              60
+            );
+
+          const m =
+            Math.round(
+              n %
+              60
+            );
+
+          return (
+            `${h} ชม. ${m} นาที`
+          );
+        }
+
+        const h =
+          Math.floor(n);
+
+        const m =
+          Math.round(
+            (n - h) * 60
+          );
+
+        return (
+          `${h} ชม. ${m} นาที`
+        );
+      }
+
+      return String(value);
     }
 
     function setBar(id,pct){
@@ -871,6 +957,7 @@
         }
 
         closeInbodyModal();
+        await loadDailyHealth();
         await loadInbodyHistory();
 
         showStatus("บันทึกผล InBody สำเร็จ");
@@ -887,6 +974,198 @@
     /* =====================================================
        LOAD ALL HOME DATA
     ====================================================== */
+
+
+
+    /* =====================================================
+       DAILY HEALTH
+       ข้อมูลมาจาก DAILY MISSION
+    ====================================================== */
+
+    async function fetchDailyHealth(){
+
+      const api =
+        window.APP_CONFIG
+          ?.API
+          ?.DAILY_HEALTH;
+
+
+      if(!api){
+        throw new Error(
+          "ไม่พบ API.DAILY_HEALTH"
+        );
+      }
+
+
+      return await postJson(
+        api,
+        {
+          action:
+            "today",
+
+          idToken:
+            getIdToken()
+        }
+      );
+
+    }
+
+
+    function renderDailyHealth(
+      raw
+    ){
+
+      const health =
+        raw?.health ??
+        raw?.data?.health ??
+        {};
+
+
+      const steps =
+        num(
+          health?.steps,
+          0
+        );
+
+
+      const calories =
+        num(
+          health?.calories,
+          0
+        );
+
+
+      const sleepMinutes =
+        num(
+          health?.sleepMinutes ??
+          health?.sleep_minutes ??
+          health?.sleep?.totalMinutes ??
+          health?.sleep?.total_minutes,
+          0
+        );
+
+
+      const stepsGoal =
+        num(
+          health?.goals?.steps ??
+          window.APP_CONFIG
+            ?.DAILY_GOALS
+            ?.STEPS,
+          8000
+        );
+
+
+      const caloriesGoal =
+        num(
+          health?.goals?.calories ??
+          window.APP_CONFIG
+            ?.DAILY_GOALS
+            ?.CALORIES,
+          300
+        );
+
+
+      const sleepGoal =
+        num(
+          health?.goals?.sleepMinutes ??
+          window.APP_CONFIG
+            ?.DAILY_GOALS
+            ?.SLEEP_MINUTES,
+          420
+        );
+
+
+      $("steps")
+        .textContent =
+          fmtInt(
+            steps
+          );
+
+
+      $("calories")
+        .textContent =
+          `${fmtInt(calories)} kcal`;
+
+
+      $("sleep")
+        .textContent =
+          fmtSleep({
+            totalMinutes:
+              sleepMinutes
+          });
+
+
+      setBar(
+        "stepsBar",
+        stepsGoal > 0
+          ? (
+              steps /
+              stepsGoal
+            ) * 100
+          : 0
+      );
+
+
+      setBar(
+        "caloriesBar",
+        caloriesGoal > 0
+          ? (
+              calories /
+              caloriesGoal
+            ) * 100
+          : 0
+      );
+
+
+      setBar(
+        "sleepBar",
+        sleepGoal > 0
+          ? (
+              sleepMinutes /
+              sleepGoal
+            ) * 100
+          : 0
+      );
+
+    }
+
+
+    async function loadDailyHealth(){
+
+      try{
+
+        const result =
+          await fetchDailyHealth();
+
+
+        renderDailyHealth(
+          result
+        );
+
+
+      }catch(error){
+
+        console.warn(
+          "DAILY HEALTH ERROR:",
+          error
+        );
+
+
+        /*
+         * Daily Mission มีปัญหา
+         * HOME ส่วนอื่นยังต้องทำงานต่อ
+         */
+        renderDailyHealth({
+          health: {
+            steps: 0,
+            calories: 0,
+            sleepMinutes: 0
+          }
+        });
+
+      }
+
+    }
 
 
     async function loadProjectSettings(){
@@ -995,6 +1274,82 @@
       }
       window.location.href=page;
     }
+
+    function goDailyHealthMission(
+      missionId,
+      metric
+    ){
+
+      const base =
+        window.APP_CONFIG
+          ?.PAGE
+          ?.MISSION ||
+        "./mission.html";
+
+
+      const url =
+        new URL(
+          base,
+          window.location.href
+        );
+
+
+      url.searchParams.set(
+        "category",
+        "daily"
+      );
+
+
+      url.searchParams.set(
+        "mission",
+        missionId
+      );
+
+
+      url.searchParams.set(
+        "metric",
+        metric
+      );
+
+
+      window.location.href =
+        url.toString();
+
+    }
+
+
+    $("stepsMissionButton")
+      .addEventListener(
+        "click",
+        () =>
+          goDailyHealthMission(
+            "daily_move_more",
+            "steps"
+          )
+      );
+
+
+    $("caloriesMissionButton")
+      .addEventListener(
+        "click",
+        () =>
+          goDailyHealthMission(
+            "daily_move_more",
+            "calories"
+          )
+      );
+
+
+    $("sleepMissionButton")
+      .addEventListener(
+        "click",
+        () =>
+          goDailyHealthMission(
+            "daily_sleep_well",
+            "sleep"
+          )
+      );
+
 
     $("weightButton").addEventListener("click",()=>goPage("WEIGHT"));
     $("progressButton").addEventListener("click",()=>goPage("PROGRESS"));
