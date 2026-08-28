@@ -52,7 +52,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260828-daily-v3"
+    src="./app-config.js?v=20260829-health-zero-routes"
   ></script>
 
 
@@ -90,47 +90,40 @@
     }
 
 
+    /*
+       CLICK AREAS — ตรงปุ่ม "ไปทำภารกิจ" บน mission-template.png
+       พิกัดคิดเป็น % จากภาพต้นฉบับ 1536 × 1024
+    */
+
     .mission-card-button.daily{
-
-      left:33%;
-      top:29%;
-
-      width:28%;
-      height:28%;
-
+      left:3.3%;
+      top:44.3%;
+      width:28.2%;
+      height:5.5%;
     }
 
 
     .mission-card-button.weekly{
-
-      left:62%;
-      top:29%;
-
-      width:33%;
-      height:28%;
-
+      left:35.4%;
+      top:44.3%;
+      width:28.1%;
+      height:5.5%;
     }
 
 
     .mission-card-button.monthly{
-
-      left:33%;
-      top:58%;
-
-      width:28%;
-      height:28%;
-
+      left:67.3%;
+      top:44.3%;
+      width:29.3%;
+      height:5.5%;
     }
 
 
     .mission-card-button.bonus{
-
-      left:62%;
-      top:58%;
-
-      width:33%;
-      height:28%;
-
+      left:3.3%;
+      top:80.0%;
+      width:27.2%;
+      height:5.5%;
     }
 
 
@@ -4175,7 +4168,15 @@ async function saveDailyHealthMetric(
 
 /* =========================================================
    DEEP LINK FROM HOME
+   Steps:
    mission.html?category=daily&mission=daily_move_more
+
+   Calories:
+   mission.html?category=daily&mission=daily_move_more&section=exercise
+   -> opens daily_exercise_30
+
+   Sleep:
+   mission.html?category=daily&mission=daily_sleep
 ========================================================= */
 
 function openMissionFromUrl(){
@@ -4194,10 +4195,31 @@ function openMissionFromUrl(){
       );
 
 
-    const missionId =
+    let missionId =
       params.get(
         "mission"
       );
+
+
+    const section =
+      params.get(
+        "section"
+      );
+
+
+    /*
+      HOME Calories deep link:
+      daily_move_more + section=exercise
+      ต้องเปิด EXERCISE จริง ไม่ใช่ MOVE MORE
+    */
+    if(
+      category === "daily" &&
+      missionId === "daily_move_more" &&
+      section === "exercise"
+    ){
+      missionId =
+        "daily_exercise_30";
+    }
 
 
     if(
