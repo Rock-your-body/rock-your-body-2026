@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260828-daily-v3"></script>
+  <script src="./app-config.js?v=20260829-health-zero-routes"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -177,13 +177,13 @@
     <div id="lost" class="abs">--.- kg</div>
     <div id="remaining" class="abs">--.- kg</div>
 
-    <div id="steps" class="abs">--</div>
+    <div id="steps" class="abs">0</div>
     <div id="stepsTrack" class="bar"><i id="stepsBar"></i></div>
 
-    <div id="calories" class="abs">-- kcal</div>
+    <div id="calories" class="abs">0 kcal</div>
     <div id="caloriesTrack" class="bar"><i id="caloriesBar"></i></div>
 
-    <div id="sleep" class="abs">--</div>
+    <div id="sleep" class="abs">0 ชม. 0 นาที</div>
     <div id="sleepTrack" class="bar"><i id="sleepBar"></i></div>
 
     <div id="healthScore" class="abs">-- / 100</div>
@@ -313,7 +313,7 @@
         value === undefined ||
         value === ""
       ){
-        return "--";
+        return "0 ชม. 0 นาที";
       }
 
       if(
@@ -554,15 +554,52 @@
         data.sleepHours,data.sleep_hours
       );
 
-      const sleepMinutes = typeof sleepValue==="object"
-        ? num(pick(sleepValue.minutes,sleepValue.totalMinutes,sleepValue.total_minutes),0)
-        : (
-            num(pick(data.sleepMinutes,data.sleep_minutes),NaN)
-          );
+      /*
+         IMPORTANT:
+         typeof null === "object"
+         จึงต้องเช็ก sleepValue !== null ก่อนอ่าน .minutes / .hours
+      */
+      const sleepIsObject =
+        sleepValue !== null &&
+        typeof sleepValue === "object";
 
-      const sleepHours = typeof sleepValue==="object"
-        ? num(pick(sleepValue.hours,sleepValue.totalHours,sleepValue.total_hours),0)
-        : num(pick(data.sleepHours,data.sleep_hours),NaN);
+      const sleepMinutes =
+        sleepIsObject
+          ? num(
+              pick(
+                sleepValue?.minutes,
+                sleepValue?.totalMinutes,
+                sleepValue?.total_minutes,
+                sleepValue?.sleepMinutes,
+                sleepValue?.sleep_minutes
+              ),
+              0
+            )
+          : num(
+              pick(
+                data.sleepMinutes,
+                data.sleep_minutes
+              ),
+              NaN
+            );
+
+      const sleepHours =
+        sleepIsObject
+          ? num(
+              pick(
+                sleepValue?.hours,
+                sleepValue?.totalHours,
+                sleepValue?.total_hours
+              ),
+              0
+            )
+          : num(
+              pick(
+                data.sleepHours,
+                data.sleep_hours
+              ),
+              NaN
+            );
 
       const sleepPercent = num(pick(
         activity.sleepPercent,activity.sleep_percent,
@@ -1253,6 +1290,13 @@
         await renderHome(raw);
 
         /*
+          Steps / Calories / Sleep
+          ใช้ข้อมูลจริงจาก DAILY MISSION / DAILY_HEALTH
+          ถ้าไม่มีข้อมูล renderDailyHealth() จะแสดง 0
+        */
+        await loadDailyHealth();
+
+        /*
           สำคัญ:
           InBody โหลดแยกจาก Dashboard
           ต่อให้ InBody error ก็ไม่ทำให้ HOME ทั้งหน้าล้ม
@@ -1320,7 +1364,7 @@
         () => {
           goConfiguredPage(
             "DAILY_EXERCISE",
-            "./mission.html?category=daily&mission=daily_exercise_30"
+            "./mission.html?category=daily&mission=daily_move_more&section=exercise"
           );
         }
       );
