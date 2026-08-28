@@ -2,37 +2,78 @@
    ROCK YOUR BODY 2026
    APP CONFIG
    Version: 2026-08-28-FINAL
-   ========================================================= */
+========================================================= */
+
+"use strict";
+
 
 window.APP_CONFIG = {
 
-  /* -------------------------------------------------------
+  /* =====================================================
      APP
-  ------------------------------------------------------- */
+  ====================================================== */
 
-  APP_NAME: "ROCK YOUR BODY 2026",
+  APP_NAME:
+    "ROCK YOUR BODY 2026",
 
-  VERSION: "2026-08-28-FINAL",
+  VERSION:
+    "2026-08-28-FINAL",
 
 
-  /* -------------------------------------------------------
+  /* =====================================================
      LINE LIFF
-  ------------------------------------------------------- */
 
-  LIFF_ID: "2011201679-uNWz5yqF",
+     LINE Login Channel ID:
+     2011201679
+
+     LIFF ID:
+     2011201679-uNWz5yqF
+  ====================================================== */
+
+  LIFF_ID:
+    "2011201679-uNWz5yqF",
 
 
-  /* -------------------------------------------------------
-     API
-  ------------------------------------------------------- */
+  /* =====================================================
+     SUPABASE
+  ====================================================== */
+
+  SUPABASE: {
+
+    PROJECT_REF:
+      "nztvqdzatdpauufpvdaa",
+
+    BASE_URL:
+      "https://nztvqdzatdpauufpvdaa.supabase.co"
+
+  },
+
+
+  /* =====================================================
+     SUPABASE EDGE FUNCTIONS
+  ====================================================== */
 
   API: {
+
+    /* -------------------------
+       HOME / DASHBOARD
+    -------------------------- */
 
     DASHBOARD:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
+
+    /* -------------------------
+       MISSION
+    -------------------------- */
+
     MISSION:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
+
+
+    /* -------------------------
+       BATTLE
+    -------------------------- */
 
     BATTLE:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle"
@@ -40,15 +81,16 @@ window.APP_CONFIG = {
   },
 
 
-  /* -------------------------------------------------------
-     PAGES
-     HOME.html = หน้าหลักตัวจริง
-  ------------------------------------------------------- */
+  /* =====================================================
+     PAGE URL
+
+     ทุกหน้าอยู่ใน GitHub Pages project เดียวกัน
+  ====================================================== */
 
   PAGE: {
 
     HOME:
-      "./HOME.html",
+      "./dashboard.html",
 
     MISSION:
       "./mission.html",
@@ -62,207 +104,174 @@ window.APP_CONFIG = {
     PROGRESS:
       "./progress.html",
 
-    REWARDS:
-      "./rewards.html",
-
     RANKING:
-      "./ranking.html"
+      "./ranking.html",
+
+    REWARDS:
+      "./rewards.html"
 
   },
 
 
-  /* -------------------------------------------------------
-     GAME
-  ------------------------------------------------------- */
+  /* =====================================================
+     PAGES
+     รองรับโค้ดหน้าเก่าที่เรียก APP_CONFIG.PAGES
+  ====================================================== */
 
-  MAX_ENERGY: 200,
+  PAGES: {
 
-  EXP_PER_LEVEL: 500,
+    HOME:
+      "./dashboard.html",
+
+    MISSION:
+      "./mission.html",
+
+    BATTLE:
+      "./battle.html",
+
+    WEIGHT:
+      "./weight-check.html",
+
+    PROGRESS:
+      "./progress.html",
+
+    RANKING:
+      "./ranking.html",
+
+    REWARDS:
+      "./rewards.html"
+
+  },
 
 
-  /* -------------------------------------------------------
-     REFRESH
-  ------------------------------------------------------- */
+  /* =====================================================
+     GAME CONFIG
+  ====================================================== */
 
-  REFRESH_MS: 30000
+  MAX_ENERGY:
+    200,
+
+  EXP_PER_LEVEL:
+    500,
+
+  REFRESH_MS:
+    30000,
+
+
+  /* =====================================================
+     STORAGE
+  ====================================================== */
+
+  STORAGE: {
+
+    MISSION_EVIDENCE:
+      "mission-evidence",
+
+    ROCK_ASSETS:
+      "rock-assets"
+
+  },
+
+
+  /* =====================================================
+     FILES / ASSETS
+  ====================================================== */
+
+  ASSETS: {
+
+    HOME_TEMPLATE:
+      "./home-template.png",
+
+    MISSION_TEMPLATE:
+      "./mission-template.png",
+
+    BATTLE_TEMPLATE:
+      "./battle-template.png"
+
+  }
 
 };
 
 
 /* =========================================================
    BACKWARD COMPATIBILITY
-   รองรับโค้ดเก่าที่เรียก ROCK_CONFIG
-   ========================================================= */
 
-window.ROCK_CONFIG = {
+   รองรับไฟล์เก่าที่อาจเรียก APP_CONFIG.API_BASE
+========================================================= */
 
-  APP_NAME:
-    window.APP_CONFIG.APP_NAME,
+window.APP_CONFIG.API_BASE =
+  window.APP_CONFIG.SUPABASE.BASE_URL;
 
-  VERSION:
-    window.APP_CONFIG.VERSION,
 
-  LIFF_ID:
-    window.APP_CONFIG.LIFF_ID,
+/* =========================================================
+   PAGE HELPER
+========================================================= */
 
-  API_BASE:
-    "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1",
+window.APP_CONFIG.getPage =
+  function getPage(name) {
 
-  API:
-    window.APP_CONFIG.API,
+    const key =
+      String(
+        name || ""
+      )
+        .trim()
+        .toUpperCase();
 
-  FRONTEND_URL:
-    "https://rock-your-body.github.io/rock-your-body-2026/",
 
-  MAX_ENERGY:
-    window.APP_CONFIG.MAX_ENERGY,
+    return (
+      window.APP_CONFIG.PAGE[key] ||
+      window.APP_CONFIG.PAGE.HOME
+    );
 
-  EXP_PER_LEVEL:
-    window.APP_CONFIG.EXP_PER_LEVEL,
+  };
 
-  REFRESH_MS:
-    window.APP_CONFIG.REFRESH_MS,
 
-  PAGES: {
+/* =========================================================
+   API HELPER
+========================================================= */
+
+window.APP_CONFIG.getApi =
+  function getApi(name) {
+
+    const key =
+      String(
+        name || ""
+      )
+        .trim()
+        .toUpperCase();
+
+
+    return (
+      window.APP_CONFIG.API[key] ||
+      null
+    );
+
+  };
+
+
+/* =========================================================
+   DEBUG
+========================================================= */
+
+console.log(
+  "ROCK YOUR BODY APP CONFIG:",
+  {
+    version:
+      window.APP_CONFIG.VERSION,
+
+    liffId:
+      window.APP_CONFIG.LIFF_ID,
 
     home:
       window.APP_CONFIG.PAGE.HOME,
+
+    weight:
+      window.APP_CONFIG.PAGE.WEIGHT,
 
     mission:
       window.APP_CONFIG.PAGE.MISSION,
 
     battle:
-      window.APP_CONFIG.PAGE.BATTLE,
-
-    weight:
-      window.APP_CONFIG.PAGE.WEIGHT,
-
-    progress:
-      window.APP_CONFIG.PAGE.PROGRESS,
-
-    reward:
-      window.APP_CONFIG.PAGE.REWARDS,
-
-    ranking:
-      window.APP_CONFIG.PAGE.RANKING
-
-  },
-
-  STORAGE: {
-
-    LINE_USER_ID:
-      "rock_line_user_id",
-
-    LINE_PROFILE:
-      "rock_line_profile",
-
-    USER:
-      "rock_user"
-
+      window.APP_CONFIG.PAGE.BATTLE
   }
-
-};
-
-
-/* =========================================================
-   SAFETY CHECK
-   ========================================================= */
-
-console.log(
-  "================================="
 );
-
-console.log(
-  "ROCK YOUR BODY 2026"
-);
-
-console.log(
-  "APP CONFIG READY"
-);
-
-console.log(
-  "LIFF_ID:",
-  window.APP_CONFIG.LIFF_ID
-);
-
-console.log(
-  "DASHBOARD API:",
-  window.APP_CONFIG.API.DASHBOARD
-);
-
-console.log(
-  "HOME:",
-  window.APP_CONFIG.PAGE.HOME
-);
-
-console.log(
-  "ROCK_CONFIG:",
-  window.ROCK_CONFIG
-);
-
-console.log(
-  "================================="
-);
-/* =========================================================
-   ROCK COMPATIBILITY
-   ========================================================= */
-
-window.ROCK = window.ROCK || {};
-
-window.ROCK.initLINE = async function () {
-
-  if (!window.liff) {
-    throw new Error("LIFF SDK is not loaded");
-  }
-
-  if (!window.APP_CONFIG) {
-    throw new Error("APP_CONFIG is not loaded");
-  }
-
-  const liffId =
-    window.APP_CONFIG.LIFF_ID;
-
-  if (!liffId) {
-    throw new Error("LIFF_ID is missing");
-  }
-
-  await liff.init({
-    liffId: liffId
-  });
-
-  if (!liff.isLoggedIn()) {
-
-    liff.login({
-      redirectUri: window.location.href
-    });
-
-    return null;
-  }
-
-  const profile =
-    await liff.getProfile();
-
-  const userId =
-    profile.userId;
-
-  if (!userId) {
-    throw new Error(
-      "LINE User ID is missing"
-    );
-  }
-
-  localStorage.setItem(
-    "rock_line_user_id",
-    userId
-  );
-
-  localStorage.setItem(
-    "rock_line_profile",
-    JSON.stringify(profile)
-  );
-
-  return {
-    userId,
-    profile
-  };
-};
