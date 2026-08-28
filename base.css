@@ -820,3 +820,120 @@ button,input,select,textarea{font:inherit}
 #missionStage .nutrition-card-button:active{
   background:rgba(255,255,255,.06);
 }
+.hero-name-box{
+  left:var(--hero-name-left);
+  top:var(--hero-name-top);
+  width:var(--hero-name-width);
+  height:var(--hero-name-height);
+}
+
+.team-name-box{
+  left:var(--team-name-left);
+  top:var(--team-name-top);
+  width:var(--team-name-width);
+  height:var(--team-name-height);
+}
+
+.steps-box{
+  left:var(--steps-left);
+  top:var(--steps-top);
+  width:var(--steps-width);
+  height:var(--steps-height);
+}
+
+.calories-box{
+  left:var(--calories-left);
+  top:var(--calories-top);
+  width:var(--calories-width);
+  height:var(--calories-height);
+}
+
+.sleep-box{
+  left:var(--sleep-left);
+  top:var(--sleep-top);
+  width:var(--sleep-width);
+  height:var(--sleep-height);
+}
+
+.health-box{
+  left:var(--health-left);
+  top:var(--health-top);
+  width:var(--health-width);
+  height:var(--health-height);
+}
+#homeStage{
+
+  /* HERO */
+  --hero-name-left:8%;
+  --hero-name-top:41%;
+  --hero-name-width:22%;
+  --hero-name-height:3.5%;
+
+  --team-name-left:8%;
+  --team-name-top:46%;
+  --team-name-width:22%;
+  --team-name-height:3.5%;
+
+  /* HEALTH */
+  --steps-left:66%;
+  --steps-top:18%;
+  --steps-width:13%;
+  --steps-height:8%;
+
+  --calories-left:84%;
+  --calories-top:18%;
+  --calories-width:13%;
+  --calories-height:8%;
+
+  --sleep-left:66%;
+  --sleep-top:34%;
+  --sleep-width:13%;
+  --sleep-height:8%;
+
+  --health-left:84%;
+  --health-top:34%;
+  --health-width:13%;
+  --health-height:8%;
+
+  /* INBODY */
+  --inbody-score-left:35%;
+  --inbody-score-top:68%;
+  --inbody-score-width:10%;
+  --inbody-score-height:6%;
+
+  /* PROJECT */
+  --project-left:50%;
+  --project-top:66%;
+  --project-width:12%;
+  --project-height:8%;
+
+  /* RANKING */
+  --rank-left:69%;
+  --rank-top:75%;
+  --rank-width:12%;
+  --rank-height:7%;
+}
+.data-value{
+  color:#06276c;
+  font-weight:900;
+  font-size:clamp(6px,1.1cqw,28px);
+}
+
+.data-weight{
+  font-size:clamp(10px,1.65cqw,44px);
+}
+
+.red{
+  color:#d20d0d;
+}
+
+.white{
+  color:#fff;
+}
+:root{
+  --home-blue:#06276c;
+  --home-dark-blue:#001e5a;
+  --home-red:#cf0b0b;
+  --home-green:#008d3c;
+  --home-white:#ffffff;
+}
