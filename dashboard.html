@@ -1,4034 +1,962 @@
 <!doctype html>
 <html lang="th">
-
 <head>
-
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026</title>
 
-  <!-- HOME + InBody upload/chart v2026-08-28 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-
-  <!-- =====================================================
-       GOOGLE FONT
-  ====================================================== -->
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
-  >
-
-
-  <!-- =====================================================
-       LINE LIFF SDK
-  ====================================================== -->
-
-  <script
-    src="https://static.line-scdn.net/liff/edge/2/sdk.js"
-  ></script>
-
-
-  <!-- =====================================================
-       APP CONFIG
-  ====================================================== -->
-
-  <script
-    src="./app-config.js?v=20260828"
-  ></script>
-
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js?v=20260828-home-all-data"></script>
 
   <style>
-
-    /* =====================================================
-       RESET
-    ====================================================== */
-
-    * {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;padding:0;width:100%;min-height:100%;
+      background:#eef4ff;font-family:"Prompt",Arial,sans-serif;color:#082b68
+    }
+    body{display:flex;justify-content:center;align-items:flex-start;overflow-x:hidden}
+    #homeStage{
+      position:relative;width:min(100vw,1280px);aspect-ratio:1536/1024;
+      overflow:hidden;background:#fff;margin:0 auto
+    }
+    .template{
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:fill;z-index:1;pointer-events:none;user-select:none
     }
 
-
-    html,
-    body {
-
-      margin: 0;
-      padding: 0;
-
-      width: 100%;
-      min-height: 100%;
-
-      background: #eef4ff;
-
-      font-family:
-        "Prompt",
-        Arial,
-        sans-serif;
-
-      color: #082b68;
-
+    .abs{
+      position:absolute;z-index:20;display:flex;align-items:center;justify-content:center;
+      text-align:center;font-weight:900;line-height:1.05;pointer-events:none
     }
 
+    /* PROFILE */
+    #profileImage{
+      position:absolute;z-index:10;left:8.1%;top:17.3%;width:23.2%;height:28.4%;
+      object-fit:cover;object-position:center top;border-radius:50%;display:none
+    }
+    #teamName{left:8.1%;top:45.5%;width:18.5%;height:3.6%;font-size:clamp(8px,1vw,15px);color:#fff}
 
-    body {
+    /* TOP */
+    #coin{left:75.0%;top:5.9%;width:8%;height:5%;font-size:clamp(16px,2.3vw,34px)}
+    #energy{left:89.0%;top:5.9%;width:9%;height:5%;font-size:clamp(15px,2.1vw,32px)}
+    #level{left:25.1%;top:52.8%;width:6.3%;height:4.8%;font-size:clamp(14px,1.8vw,28px);color:#fff}
+    #expText{left:23.1%;top:61.3%;width:7.5%;height:3%;font-size:clamp(10px,1.2vw,17px)}
+    .bar{
+      position:absolute;z-index:18;height:1.45%;border-radius:999px;overflow:hidden;pointer-events:none
+    }
+    .bar>i{display:block;height:100%;width:0;border-radius:inherit;background:#1267f5}
+    #expTrack{left:7.4%;top:61.0%;width:15.2%}
 
-      display: flex;
+    /* WEIGHT */
+    #currentWeight{left:42.6%;top:20.9%;width:13%;height:5.2%;font-size:clamp(19px,2.9vw,43px)}
+    #targetWeight{left:42.6%;top:34.2%;width:13%;height:5.2%;font-size:clamp(19px,2.9vw,43px)}
+    #weightProgressPct{left:36.2%;top:49.3%;width:5%;height:5%;font-size:clamp(12px,1.5vw,22px)}
+    #weightProgressTrack{left:42.6%;top:49.4%;width:11.8%;height:1.7%}
+    #lost{left:36.1%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
+    #remaining{left:51.2%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
 
-      justify-content: center;
+    /* HEALTH CARDS */
+    #steps{left:68.5%;top:20.3%;width:9%;height:5%;font-size:clamp(17px,2.5vw,38px);color:#fff}
+    #stepsTrack{left:62.2%;top:25.8%;width:12.2%;height:1.5%}
+    #calories{left:89.0%;top:20.3%;width:9%;height:5%;font-size:clamp(17px,2.5vw,38px);color:#fff}
+    #caloriesTrack{left:81.0%;top:25.8%;width:14.0%;height:1.5%}
+    #sleep{left:68.4%;top:36.4%;width:10%;height:5%;font-size:clamp(14px,2.1vw,31px);color:#fff}
+    #sleepTrack{left:62.2%;top:42.5%;width:12.2%;height:1.5%}
+    #healthScore{left:89.0%;top:36.4%;width:10%;height:5%;font-size:clamp(17px,2.5vw,38px);color:#fff}
+    #healthTrack{left:81.0%;top:42.5%;width:14.0%;height:1.5%}
 
-      align-items: flex-start;
+    /* REWARDS */
+    #rewardCoin{left:66.3%;top:60.0%;width:8%;height:4%;font-size:clamp(13px,1.8vw,27px)}
+    #rewardEnergy{left:79.3%;top:60.0%;width:9%;height:4%;font-size:clamp(13px,1.8vw,27px)}
+    #rewardBadge{left:91.8%;top:60.2%;width:10%;height:4%;font-size:clamp(8px,1.05vw,15px)}
 
-      overflow-x: hidden;
-
+    /* INBODY */
+    #inbodyDate{left:36.8%;top:68.7%;width:10%;height:2.4%;font-size:clamp(7px,.85vw,12px)}
+    #inbodyScore{left:36.8%;top:73.0%;width:7%;height:4.2%;font-size:clamp(17px,2.4vw,35px)}
+    #inbodyChart{
+      position:absolute;z-index:22;left:33.4%;top:76.4%;width:12.2%;height:7.0%;
+      pointer-events:none;overflow:visible
+    }
+    #inbodyUpload{
+      position:absolute;z-index:30;left:44.7%;top:72.8%;width:2.6%;aspect-ratio:1;
+      border:none;border-radius:50%;background:#16a63d;color:#fff;font-weight:900;
+      font-size:clamp(16px,2vw,29px);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)
     }
 
+    /* PROJECT */
+    #projectRange{left:55.4%;top:73.0%;width:14%;height:3.3%;font-size:clamp(8px,1.05vw,15px)}
+    #projectElapsed{left:52.6%;top:78.4%;width:8%;height:4.4%;font-size:clamp(18px,2.2vw,32px)}
+    #projectTrack{left:50.6%;top:81.1%;width:11.8%;height:1.5%}
+    #projectRemaining{left:52.7%;top:86.5%;width:8%;height:4%;font-size:clamp(12px,1.45vw,21px)}
 
-    /* =====================================================
-       HOME STAGE
-    ====================================================== */
+    /* RANKING */
+    #myRank{left:70.0%;top:76.7%;width:7%;height:6%;font-size:clamp(24px,3vw,45px)}
+    #participantCount{left:70.0%;top:84.2%;width:9%;height:4%;font-size:clamp(12px,1.55vw,22px)}
+    #top1Score{left:87.7%;top:85.7%;width:8%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
+    #top2Score{left:81.2%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
+    #top3Score{left:94.0%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
 
-    #homeStage {
+    /* HOTSPOTS */
+    .hotspot{position:absolute;z-index:40;background:transparent;border:0;cursor:pointer}
+    #weightButton{left:1.2%;top:66.7%;width:14.4%;height:21.0%}
+    #progressButton{left:16.7%;top:66.7%;width:14.5%;height:21.0%}
+    #inbodyViewButton{left:33.2%;top:83.3%;width:13.8%;height:4.5%}
+    #rankingButton{left:64.7%;top:66.7%;width:33.8%;height:21.0%}
+    #rewardsButton{left:61.0%;top:47.7%;width:37.5%;height:17.8%}
+    #homeButton{left:1.0%;top:89.1%;width:31.8%;height:8.9%}
+    #missionButton{left:34.0%;top:89.1%;width:30.1%;height:8.9%}
+    #battleButton{left:65.0%;top:89.1%;width:33.0%;height:8.9%}
 
-      position: relative;
+    /* STATUS */
+    #status{
+      position:fixed;z-index:20000;left:50%;bottom:26px;transform:translateX(-50%);
+      display:none;max-width:min(90vw,520px);padding:12px 20px;border-radius:999px;
+      background:#0b56c6;color:#fff;font-weight:800;text-align:center;
+      box-shadow:0 12px 28px rgba(0,0,0,.2)
+    }
+    #status.error{background:#d92626}
 
-      width: min(
-        100vw,
-        1280px
+    /* MODAL */
+    #inbodyModal{
+      position:fixed;inset:0;z-index:30000;display:none;align-items:center;justify-content:center;
+      padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
+    }
+    #inbodyModal.show{display:flex}
+    .modal-card{
+      width:min(92vw,430px);padding:20px;background:#fff;border-radius:22px;
+      box-shadow:0 18px 55px rgba(0,0,0,.3)
+    }
+    .modal-card h2{margin:0 0 14px;font-size:20px}
+    .field{margin-bottom:12px}
+    .field label{display:block;margin-bottom:5px;font-size:13px;font-weight:800}
+    .field input{width:100%;padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;font:inherit}
+    .modal-actions{display:grid;grid-template-columns:1fr 1.3fr;gap:10px;margin-top:16px}
+    .modal-actions button{min-height:44px;border:0;border-radius:12px;font:inherit;font-weight:900;cursor:pointer}
+    #inbodyCancel{background:#e9eef8;color:#173b76}
+    #inbodySave{background:#0d5bd7;color:#fff}
+    #inbodySave:disabled{opacity:.55}
+
+    @media(max-width:700px){
+      #homeStage{width:100vw}
+    }
+  </style>
+</head>
+
+<body>
+  <div id="homeStage">
+    <img class="template" src="./home-template.png" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
+
+    <img id="profileImage" alt="LINE Profile">
+
+    <div id="teamName" class="abs">HERO ROCK</div>
+
+    <div id="coin" class="abs">0</div>
+    <div id="energy" class="abs">0 / 200</div>
+    <div id="level" class="abs">Lv.1</div>
+    <div id="expTrack" class="bar"><i id="expBar"></i></div>
+    <div id="expText" class="abs">0 / 500</div>
+
+    <div id="currentWeight" class="abs">--.- kg</div>
+    <div id="targetWeight" class="abs">--.- kg</div>
+    <div id="weightProgressPct" class="abs">0%</div>
+    <div id="weightProgressTrack" class="bar"><i id="weightProgressBar"></i></div>
+    <div id="lost" class="abs">--.- kg</div>
+    <div id="remaining" class="abs">--.- kg</div>
+
+    <div id="steps" class="abs">--</div>
+    <div id="stepsTrack" class="bar"><i id="stepsBar"></i></div>
+
+    <div id="calories" class="abs">-- kcal</div>
+    <div id="caloriesTrack" class="bar"><i id="caloriesBar"></i></div>
+
+    <div id="sleep" class="abs">--</div>
+    <div id="sleepTrack" class="bar"><i id="sleepBar"></i></div>
+
+    <div id="healthScore" class="abs">-- / 100</div>
+    <div id="healthTrack" class="bar"><i id="healthBar"></i></div>
+
+    <div id="rewardCoin" class="abs">0</div>
+    <div id="rewardEnergy" class="abs">0 / 200</div>
+    <div id="rewardBadge" class="abs">--</div>
+
+    <div id="inbodyDate" class="abs">ยังไม่มีข้อมูล</div>
+    <div id="inbodyScore" class="abs">--</div>
+    <svg id="inbodyChart" viewBox="0 0 220 80" preserveAspectRatio="none"></svg>
+    <button id="inbodyUpload" type="button" aria-label="อัปโหลด InBody">+</button>
+
+    <div id="projectRange" class="abs">--</div>
+    <div id="projectElapsed" class="abs">-- วัน</div>
+    <div id="projectTrack" class="bar"><i id="projectBar"></i></div>
+    <div id="projectRemaining" class="abs">-- วัน</div>
+
+    <div id="myRank" class="abs"># --</div>
+    <div id="participantCount" class="abs">-- คน</div>
+    <div id="top1Score" class="abs"></div>
+    <div id="top2Score" class="abs"></div>
+    <div id="top3Score" class="abs"></div>
+
+    <button id="weightButton" class="hotspot" aria-label="Weight Check"></button>
+    <button id="progressButton" class="hotspot" aria-label="My Progress"></button>
+    <button id="inbodyViewButton" class="hotspot" aria-label="ดูผล InBody ทั้งหมด"></button>
+    <button id="rankingButton" class="hotspot" aria-label="Ranking"></button>
+    <button id="rewardsButton" class="hotspot" aria-label="Rewards"></button>
+    <button id="homeButton" class="hotspot" aria-label="Home"></button>
+    <button id="missionButton" class="hotspot" aria-label="Mission"></button>
+    <button id="battleButton" class="hotspot" aria-label="Battle"></button>
+  </div>
+
+  <div id="status"></div>
+
+  <div id="inbodyModal">
+    <div class="modal-card">
+      <h2>อัปโหลดผล InBody</h2>
+
+      <div class="field">
+        <label for="inbodyMeasuredDate">วันที่ตรวจ</label>
+        <input id="inbodyMeasuredDate" type="date">
+      </div>
+
+      <div class="field">
+        <label for="inbodyScoreInput">InBody Score</label>
+        <input id="inbodyScoreInput" type="number" min="0" max="150" step="1" inputmode="numeric" placeholder="เช่น 72">
+      </div>
+
+      <div class="field">
+        <label for="inbodyFileInput">รูป/PDF ผล InBody</label>
+        <input id="inbodyFileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">
+      </div>
+
+      <div class="modal-actions">
+        <button id="inbodyCancel" type="button">ยกเลิก</button>
+        <button id="inbodySave" type="button">บันทึกผล</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const $ = id => document.getElementById(id);
+
+    let loading = false;
+    let refreshTimer = null;
+
+    function showStatus(message,isError=false){
+      const el=$("status");
+      el.textContent=message;
+      el.classList.toggle("error",!!isError);
+      el.style.display="block";
+    }
+
+    function hideStatus(){
+      $("status").style.display="none";
+    }
+
+    function num(value,fallback=0){
+      const n=Number(value);
+      return Number.isFinite(n)?n:fallback;
+    }
+
+    function pick(...values){
+      for(const v of values){
+        if(v!==undefined && v!==null && v!=="") return v;
+      }
+      return null;
+    }
+
+    function clamp(value,min,max){
+      return Math.max(min,Math.min(max,num(value,0)));
+    }
+
+    function fmtInt(v){
+      return Math.round(num(v,0)).toLocaleString("en-US");
+    }
+
+    function fmtWeight(v){
+      const n=Number(v);
+      return Number.isFinite(n)?n.toFixed(1):"--.-";
+    }
+
+    function fmtDate(value){
+      if(!value) return "--";
+      const d=new Date(value);
+      if(Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleDateString("th-TH",{day:"2-digit",month:"short",year:"numeric"});
+    }
+
+    function fmtDateShort(value){
+      if(!value) return "--";
+      const d=new Date(value);
+      if(Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
+    }
+
+    function fmtSleep(value){
+      if(value===null || value===undefined || value==="") return "--";
+      if(typeof value==="string" && value.includes("ชม")) return value;
+
+      const totalMinutes =
+        typeof value==="object"
+          ? num(pick(value.minutes,value.totalMinutes,value.total_minutes),0)
+          : num(value,0);
+
+      if(totalMinutes>24 && totalMinutes<=24*60){
+        const h=Math.floor(totalMinutes/60);
+        const m=Math.round(totalMinutes%60);
+        return `${h} ชม. ${m} นาที`;
+      }
+
+      const hours =
+        typeof value==="object"
+          ? num(pick(value.hours,value.totalHours,value.total_hours),0)
+          : num(value,0);
+
+      if(hours>0 && hours<=24){
+        const h=Math.floor(hours);
+        const m=Math.round((hours-h)*60);
+        return m?`${h} ชม. ${m} นาที`:`${h} ชม.`;
+      }
+
+      return "--";
+    }
+
+    function setBar(id,pct){
+      const el=$(id);
+      if(el) el.style.width=clamp(pct,0,100)+"%";
+    }
+
+    async function initLINE(){
+      if(typeof liff==="undefined"){
+        throw new Error("LINE LIFF SDK ไม่พร้อม");
+      }
+
+      const liffId=window.APP_CONFIG?.LIFF_ID;
+      if(!liffId){
+        throw new Error("ไม่พบ APP_CONFIG.LIFF_ID");
+      }
+
+      await liff.init({liffId});
+
+      if(!liff.isLoggedIn()){
+        liff.login({redirectUri:window.location.href});
+        return false;
+      }
+
+      return true;
+    }
+
+    function getIdToken(){
+      const token=liff.getIDToken();
+      if(!token){
+        throw new Error("ไม่พบ LINE ID Token กรุณาเข้าใหม่ผ่าน LINE");
+      }
+      return token;
+    }
+
+    async function postJson(url,payload){
+      const response=await fetch(url,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      });
+
+      const text=await response.text();
+      let data={};
+
+      try{
+        data=text?JSON.parse(text):{};
+      }catch{
+        throw new Error(`API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`);
+      }
+
+      if(!response.ok || data?.success===false){
+        throw new Error(data?.error || data?.message || `HTTP ${response.status}`);
+      }
+
+      return data;
+    }
+
+    async function fetchDashboard(){
+      const api=window.APP_CONFIG?.API?.DASHBOARD;
+      if(!api) throw new Error("ไม่พบ API.DASHBOARD ใน app-config.js");
+
+      return postJson(api,{
+        action:"dashboard",
+        idToken:getIdToken()
+      });
+    }
+
+    function normalizeDashboard(raw){
+      const data=raw?.data ?? raw?.dashboard ?? raw ?? {};
+      const user=data?.user ?? data?.player ?? {};
+      const weight=(data?.weight && typeof data.weight==="object")?data.weight:{};
+      const energy=(data?.energy && typeof data.energy==="object")?data.energy:{};
+      const activity=data?.activity ?? data?.today ?? data?.health ?? {};
+      const rewards=data?.rewards ?? data?.myRewards ?? data?.my_rewards ?? {};
+      const project=data?.project ?? data?.campaign ?? {};
+      const ranking=data?.ranking ?? data?.leaderboard ?? {};
+      const expObj=(data?.exp && typeof data.exp==="object")?data.exp:{};
+
+      const coin=num(pick(
+        data.rockCoin,data.rock_coin,data.coin,
+        user.rockCoin,user.rock_coin,user.coin
+      ),0);
+
+      const currentEnergy=num(pick(
+        energy.current,data.energyCurrent,data.currentEnergy,data.current_energy,
+        user.energy,typeof data.energy==="number"?data.energy:null
+      ),0);
+
+      const maxEnergy=num(pick(
+        energy.max,data.maxEnergy,data.max_energy,user.maxEnergy,user.max_energy,
+        window.APP_CONFIG?.MAX_ENERGY,200
+      ),200);
+
+      const currentWeight=pick(
+        weight.current,weight.currentWeight,weight.current_weight,
+        data.currentWeight,data.current_weight,user.currentWeight,user.current_weight
       );
 
-      aspect-ratio:
-        2500 / 1686;
+      const targetWeight=pick(
+        weight.target,weight.targetWeight,weight.target_weight,
+        data.targetWeight,data.target_weight,user.targetWeight,user.target_weight
+      );
 
-      overflow: hidden;
+      const startWeight=pick(
+        weight.start,weight.startWeight,weight.start_weight,
+        data.startWeight,data.start_weight,user.startWeight,user.start_weight
+      );
 
-      background: #ffffff;
+      const totalExp=num(pick(
+        expObj.total,expObj.current,
+        typeof data.exp==="number"?data.exp:null,
+        user.exp,user.experience
+      ),0);
 
-      margin: 0 auto;
+      const expPerLevel=num(window.APP_CONFIG?.EXP_PER_LEVEL,500) || 500;
+      const level=num(pick(data.level,user.level),Math.floor(totalExp/expPerLevel)+1) || 1;
 
+      const steps=num(pick(
+        activity.steps,data.steps,data.todaySteps,data.today_steps,
+        user.steps
+      ),0);
+
+      const stepsGoal=num(pick(
+        activity.stepsGoal,activity.steps_goal,data.stepsGoal,data.steps_goal,10000
+      ),10000);
+
+      const calories=num(pick(
+        activity.calories,activity.kcal,data.calories,data.kcal,
+        data.caloriesBurned,data.calories_burned
+      ),0);
+
+      const caloriesGoal=num(pick(
+        activity.caloriesGoal,activity.calories_goal,
+        data.caloriesGoal,data.calories_goal,2000
+      ),2000);
+
+      const sleepValue=pick(
+        activity.sleep,data.sleep,data.sleepMinutes,data.sleep_minutes,
+        data.sleepHours,data.sleep_hours
+      );
+
+      const sleepMinutes = typeof sleepValue==="object"
+        ? num(pick(sleepValue.minutes,sleepValue.totalMinutes,sleepValue.total_minutes),0)
+        : (
+            num(pick(data.sleepMinutes,data.sleep_minutes),NaN)
+          );
+
+      const sleepHours = typeof sleepValue==="object"
+        ? num(pick(sleepValue.hours,sleepValue.totalHours,sleepValue.total_hours),0)
+        : num(pick(data.sleepHours,data.sleep_hours),NaN);
+
+      const sleepPercent = num(pick(
+        activity.sleepPercent,activity.sleep_percent,
+        data.sleepPercent,data.sleep_percent,
+        Number.isFinite(sleepMinutes)?(sleepMinutes/480)*100:null,
+        Number.isFinite(sleepHours)?(sleepHours/8)*100:null
+      ),0);
+
+      const healthScore=num(pick(
+        activity.healthScore,activity.health_score,
+        data.healthScore,data.health_score,
+        data.overallHealthScore,data.overall_health_score
+      ),0);
+
+      const rewardCoin=num(pick(
+        rewards.coin,rewards.rockCoin,rewards.rock_coin,
+        data.rewardCoin,data.reward_coin,coin
+      ),coin);
+
+      const rewardEnergy=num(pick(
+        rewards.energy,data.rewardEnergy,data.reward_energy,currentEnergy
+      ),currentEnergy);
+
+      const rewardBadge=pick(
+        rewards.badge,rewards.badgeName,rewards.badge_name,
+        data.badge,data.badgeName,data.badge_name,
+        user.badge,user.badge_name
+      ) ?? "--";
+
+      const projectStart=pick(
+        project.startDate,project.start_date,data.projectStartDate,data.project_start_date
+      );
+
+      const projectEnd=pick(
+        project.endDate,project.end_date,data.projectEndDate,data.project_end_date
+      );
+
+      const elapsedDays=num(pick(
+        project.elapsedDays,project.elapsed_days,data.elapsedDays,data.elapsed_days
+      ),NaN);
+
+      const remainingDays=num(pick(
+        project.remainingDays,project.remaining_days,data.projectRemainingDays,data.project_remaining_days
+      ),NaN);
+
+      const totalDays=num(pick(
+        project.totalDays,project.total_days,data.projectTotalDays,data.project_total_days
+      ),NaN);
+
+      const myRank=num(pick(
+        ranking.myRank,ranking.my_rank,ranking.rank,
+        data.myRank,data.my_rank,data.rank
+      ),0);
+
+      const participantCount=num(pick(
+        ranking.totalParticipants,ranking.total_participants,ranking.participantCount,
+        data.totalParticipants,data.total_participants,data.participantCount,data.participant_count
+      ),0);
+
+      const top = Array.isArray(ranking.top3)
+        ? ranking.top3
+        : Array.isArray(ranking.top)
+          ? ranking.top
+          : Array.isArray(data.top3)
+            ? data.top3
+            : [];
+
+      return {
+        raw:data,
+        coin,
+        energy:currentEnergy,
+        maxEnergy,
+        currentWeight,
+        targetWeight,
+        startWeight,
+        level,
+        totalExp,
+        expPerLevel,
+
+        picture:pick(
+          user.pictureUrl,user.picture_url,data.pictureUrl,data.picture_url
+        ) ?? "",
+
+        teamName:pick(
+          user.teamName,user.team_name,data.teamName,data.team_name,"HERO ROCK"
+        ) ?? "HERO ROCK",
+
+        steps,
+        stepsGoal,
+        calories,
+        caloriesGoal,
+
+        sleepValue,
+        sleepPercent,
+        healthScore,
+
+        rewardCoin,
+        rewardEnergy,
+        rewardBadge,
+
+        projectStart,
+        projectEnd,
+        elapsedDays,
+        remainingDays,
+        totalDays,
+
+        myRank,
+        participantCount,
+        top
+      };
     }
 
+    async function renderProfile(url){
+      const image=$("profileImage");
 
-    /* =====================================================
-       BACKGROUND TEMPLATE
-    ====================================================== */
+      let finalUrl=url;
 
-    .template {
+      if(!finalUrl){
+        try{
+          const profile=await liff.getProfile();
+          finalUrl=profile?.pictureUrl || "";
+        }catch{}
+      }
 
-      position: absolute;
+      if(!finalUrl){
+        image.style.display="none";
+        return;
+      }
 
-      inset: 0;
-
-      width: 100%;
-      height: 100%;
-
-      object-fit: fill;
-
-      z-index: 1;
-
-      user-select: none;
-
-      pointer-events: none;
-
+      image.onload=()=>image.style.display="block";
+      image.onerror=()=>image.style.display="none";
+      image.src=finalUrl;
     }
 
+    function calculateProject(p){
+      const now=new Date();
+      const start=p.projectStart?new Date(p.projectStart):null;
+      const end=p.projectEnd?new Date(p.projectEnd):null;
 
+      let total=p.totalDays;
+      let elapsed=p.elapsedDays;
+      let remaining=p.remainingDays;
+
+      if(start && end && !Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())){
+        if(!Number.isFinite(total)){
+          total=Math.max(1,Math.ceil((end-start)/86400000)+1);
+        }
+        if(!Number.isFinite(elapsed)){
+          elapsed=clamp(Math.floor((now-start)/86400000)+1,0,total);
+        }
+        if(!Number.isFinite(remaining)){
+          remaining=Math.max(0,total-elapsed);
+        }
+      }
+
+      return {total,elapsed,remaining};
+    }
+
+    async function renderHome(raw){
+      const p=normalizeDashboard(raw);
+
+      await renderProfile(p.picture);
+
+      $("teamName").textContent=p.teamName;
+
+      $("coin").textContent=fmtInt(p.coin);
+      $("energy").textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;
+
+      $("level").textContent=`Lv.${fmtInt(p.level)}`;
+
+      const expInLevel=((p.totalExp%p.expPerLevel)+p.expPerLevel)%p.expPerLevel;
+      $("expText").textContent=`${fmtInt(expInLevel)} / ${fmtInt(p.expPerLevel)}`;
+      setBar("expBar",(expInLevel/p.expPerLevel)*100);
+
+      $("currentWeight").textContent=`${fmtWeight(p.currentWeight)} kg`;
+      $("targetWeight").textContent=`${fmtWeight(p.targetWeight)} kg`;
+
+      const current=Number(p.currentWeight);
+      const target=Number(p.targetWeight);
+      const start=Number(p.startWeight);
+
+      let lost=NaN;
+      let remaining=NaN;
+      let weightPct=0;
+
+      if(Number.isFinite(start) && Number.isFinite(current)){
+        lost=Math.max(0,start-current);
+      }
+      if(Number.isFinite(current) && Number.isFinite(target)){
+        remaining=Math.max(0,current-target);
+      }
+      if(Number.isFinite(start) && Number.isFinite(target) && Number.isFinite(current) && start!==target){
+        weightPct=clamp(((start-current)/(start-target))*100,0,100);
+      }
+
+      $("lost").textContent=Number.isFinite(lost)?`${lost.toFixed(1)} kg`:"--.- kg";
+      $("remaining").textContent=Number.isFinite(remaining)?`${remaining.toFixed(1)} kg`:"--.- kg";
+      $("weightProgressPct").textContent=`${Math.round(weightPct)}%`;
+      setBar("weightProgressBar",weightPct);
+
+      $("steps").textContent=fmtInt(p.steps);
+      setBar("stepsBar",p.stepsGoal>0?(p.steps/p.stepsGoal)*100:0);
+
+      $("calories").textContent=`${fmtInt(p.calories)} kcal`;
+      setBar("caloriesBar",p.caloriesGoal>0?(p.calories/p.caloriesGoal)*100:0);
+
+      $("sleep").textContent=fmtSleep(p.sleepValue);
+      setBar("sleepBar",p.sleepPercent);
+
+      $("healthScore").textContent=`${fmtInt(p.healthScore)} / 100`;
+      setBar("healthBar",p.healthScore);
+
+      $("rewardCoin").textContent=fmtInt(p.rewardCoin);
+      $("rewardEnergy").textContent=`${fmtInt(p.rewardEnergy)} / ${fmtInt(p.maxEnergy)}`;
+      $("rewardBadge").textContent=String(p.rewardBadge);
+
+      if(p.projectStart || p.projectEnd){
+        $("projectRange").textContent=`${fmtDateShort(p.projectStart)} - ${fmtDateShort(p.projectEnd)}`;
+      }else{
+        $("projectRange").textContent="--";
+      }
+
+      const proj=calculateProject(p);
+      $("projectElapsed").textContent=Number.isFinite(proj.elapsed)?`${fmtInt(proj.elapsed)} วัน`:"-- วัน";
+      $("projectRemaining").textContent=Number.isFinite(proj.remaining)?`${fmtInt(proj.remaining)} วัน`:"-- วัน";
+      setBar("projectBar",Number.isFinite(proj.total)&&proj.total>0&&Number.isFinite(proj.elapsed)?(proj.elapsed/proj.total)*100:0);
+
+      $("myRank").textContent=p.myRank>0?`# ${fmtInt(p.myRank)}`:"# --";
+      $("participantCount").textContent=p.participantCount>0?`${fmtInt(p.participantCount)} คน`:"-- คน";
+
+      const top=p.top || [];
+      $("top1Score").textContent=top[0]?.score!=null?fmtInt(top[0].score):"";
+      $("top2Score").textContent=top[1]?.score!=null?fmtInt(top[1].score):"";
+      $("top3Score").textContent=top[2]?.score!=null?fmtInt(top[2].score):"";
+    }
 
     /* =====================================================
        INBODY
     ====================================================== */
 
-    let inbodyHistory = [];
-
-
-    function fmtInbodyDate(value){
-
-      if(!value){
-        return "--/--/----";
-      }
-
-      const d =
-        new Date(
-          value
-        );
-
-      if(
-        Number.isNaN(
-          d.getTime()
-        )
-      ){
-        return "--/--/----";
-      }
-
-      return d.toLocaleDateString(
-        "th-TH",
-        {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric"
-        }
-      );
-
-    }
-
-
     function normalizeInbodyHistory(raw){
+      const data=raw?.data ?? raw ?? {};
+      const list=data?.inbodyHistory ?? data?.inbody_history ?? data?.history ?? [];
 
-      const data =
-        raw?.data ??
-        raw ??
-        {};
+      if(!Array.isArray(list)) return [];
 
+      return list.map(item=>({
+        score:num(pick(item.score,item.inbody_score,item.inbodyScore),NaN),
+        measuredAt:pick(item.measuredAt,item.measured_at,item.date)
+      }))
+      .filter(item=>Number.isFinite(item.score) && item.measuredAt)
+      .sort((a,b)=>new Date(a.measuredAt)-new Date(b.measuredAt));
+    }
 
-      const list =
-        data?.inbodyHistory ??
-        data?.inbody_history ??
-        data?.inbody?.history ??
-        [];
+    function drawInbodyChart(history){
+      const svg=$("inbodyChart");
+      svg.innerHTML="";
 
+      if(!history.length) return;
 
-      if(
-        !Array.isArray(
-          list
-        )
-      ){
-        return [];
+      const list=history.slice(-7);
+      const scores=list.map(x=>x.score);
+      let min=Math.min(...scores);
+      let max=Math.max(...scores);
+
+      if(max===min){min-=5;max+=5}
+      else{
+        const pad=Math.max(2,(max-min)*.15);
+        min-=pad;max+=pad;
       }
 
-
-      return list
-        .map(
-          item => ({
-
-            score:
-              Number(
-                item?.score ??
-                item?.inbody_score ??
-                item?.inbodyScore
-              ),
-
-            measuredAt:
-              item?.measuredAt ??
-              item?.measured_at ??
-              item?.date ??
-              null,
-
-            fileUrl:
-              item?.fileUrl ??
-              item?.file_url ??
-              ""
-
-          })
-        )
-        .filter(
-          item =>
-            Number.isFinite(
-              item.score
-            ) &&
-            item.measuredAt
-        )
-        .sort(
-          (a,b) =>
-            new Date(
-              a.measuredAt
-            ) -
-            new Date(
-              b.measuredAt
-            )
-        );
-
-    }
-
-
-    function drawInbodyChart(
-      history
-    ){
-
-      const svg =
-        $("inbodyChart");
-
-      const empty =
-        $("inbodyEmpty");
-
-
-      if(
-        !svg ||
-        !empty
-      ){
-        return;
-      }
-
-
-      svg.innerHTML =
-        "";
-
-
-      if(
-        !Array.isArray(
-          history
-        ) ||
-        history.length === 0
-      ){
-
-        empty.style.display =
-          "flex";
-
-        return;
-      }
-
-
-      empty.style.display =
-        "none";
-
-
-      /*
-       * แสดง 7 ครั้งล่าสุด
-       */
-      const points =
-        history.slice(
-          -7
-        );
-
-
-      const scores =
-        points.map(
-          item =>
-            Number(
-              item.score
-            )
-        );
-
-
-      let min =
-        Math.min(
-          ...scores
-        );
-
-      let max =
-        Math.max(
-          ...scores
-        );
-
-
-      if(
-        max === min
-      ){
-
-        max += 5;
-        min -= 5;
-
-      }else{
-
-        const pad =
-          Math.max(
-            2,
-            (
-              max - min
-            ) * .15
-          );
-
-        max += pad;
-        min -= pad;
-
-      }
-
-
-      const W = 220;
-      const H = 80;
-
-      const left = 8;
-      const right = 8;
-      const top = 8;
-      const bottom = 8;
-
-
-      /*
-       * GRID
-       */
-      for(
-        let i = 1;
-        i <= 2;
-        i++
-      ){
-
-        const y =
-          top +
-          (
-            (
-              H -
-              top -
-              bottom
-            ) /
-            3
-          ) *
-          i;
-
-
-        const line =
-          document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "line"
-          );
-
-
-        line.setAttribute(
-          "x1",
-          left
-        );
-
-        line.setAttribute(
-          "x2",
-          W - right
-        );
-
-        line.setAttribute(
-          "y1",
-          y
-        );
-
-        line.setAttribute(
-          "y2",
-          y
-        );
-
-        line.setAttribute(
-          "class",
-          "inbody-chart-grid"
-        );
-
-
-        svg.appendChild(
-          line
-        );
-
-      }
-
-
-      const xy =
-        points.map(
-          (
-            item,
-            index
-          ) => {
-
-            const x =
-              points.length === 1
-                ? W / 2
-                : left +
-                  (
-                    index /
-                    (
-                      points.length -
-                      1
-                    )
-                  ) *
-                  (
-                    W -
-                    left -
-                    right
-                  );
-
-
-            const ratio =
-              (
-                Number(
-                  item.score
-                ) -
-                min
-              ) /
-              (
-                max -
-                min
-              );
-
-
-            const y =
-              H -
-              bottom -
-              ratio *
-              (
-                H -
-                top -
-                bottom
-              );
-
-
-            return {
-              x,
-              y,
-              score:
-                Number(
-                  item.score
-                )
-            };
-
-          }
-        );
-
-
-      const polyline =
-        document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "polyline"
-        );
-
-
-      polyline.setAttribute(
-        "points",
-        xy
-          .map(
-            p =>
-              `${p.x},${p.y}`
-          )
-          .join(" ")
-      );
-
-
-      polyline.setAttribute(
-        "class",
-        "inbody-chart-line"
-      );
-
-
-      svg.appendChild(
-        polyline
-      );
-
-
-      xy.forEach(
-        p => {
-
-          const circle =
-            document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "circle"
-            );
-
-
-          circle.setAttribute(
-            "cx",
-            p.x
-          );
-
-          circle.setAttribute(
-            "cy",
-            p.y
-          );
-
-          circle.setAttribute(
-            "r",
-            4
-          );
-
-          circle.setAttribute(
-            "class",
-            "inbody-chart-dot"
-          );
-
-
-          const title =
-            document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "title"
-            );
-
-
-          title.textContent =
-            `${p.score} คะแนน`;
-
-
-          circle.appendChild(
-            title
-          );
-
-
-          svg.appendChild(
-            circle
-          );
-
-        }
-      );
-
-    }
-
-
-    function renderInbody(
-      raw
-    ){
-
-      const history =
-        normalizeInbodyHistory(
-          raw
-        );
-
-
-      inbodyHistory =
-        history;
-
-
-      const latest =
-        history.length
-          ? history[
-              history.length - 1
-            ]
-          : null;
-
-
-      $("inbodyScore")
-        .textContent =
-          latest
-            ? fmtInt(
-                latest.score
-              )
-            : "--";
-
-
-      $("inbodyDate")
-        .textContent =
-          latest
-            ? (
-                "ล่าสุด " +
-                fmtInbodyDate(
-                  latest.measuredAt
-                )
-              )
-            : "ยังไม่มีข้อมูล";
-
-
-      drawInbodyChart(
-        history
-      );
-
-    }
-
-
-    function openInbodyModal(){
-
-      const modal =
-        $("inbodyModal");
-
-
-      if(!modal){
-        return;
-      }
-
-
-      const today =
-        new Date();
-
-
-      const y =
-        today.getFullYear();
-
-      const m =
-        String(
-          today.getMonth() + 1
-        )
-          .padStart(
-            2,
-            "0"
-          );
-
-      const d =
-        String(
-          today.getDate()
-        )
-          .padStart(
-            2,
-            "0"
-          );
-
-
-      $("inbodyMeasuredDate")
-        .value =
-          `${y}-${m}-${d}`;
-
-
-      $("inbodyScoreInput")
-        .value =
-          "";
-
-
-      $("inbodyFileInput")
-        .value =
-          "";
-
-
-      $("inbodyFileName")
-        .textContent =
-          "";
-
-
-      modal.classList.add(
-        "show"
-      );
-
-    }
-
-
-    function closeInbodyModal(){
-
-      $("inbodyModal")
-        ?.classList
-        .remove(
-          "show"
-        );
-
-    }
-
-
-
-    async function fetchInbodyHistory(){
-
-      const api =
-        window.APP_CONFIG
-          ?.API
-          ?.INBODY;
-
-
-      if(!api){
-
-        console.warn(
-          "ไม่พบ API.INBODY"
-        );
-
-        return {
-          success: true,
-          inbodyHistory: []
-        };
-
-      }
-
-
-      const response =
-        await fetch(
-          api,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-                action: "list",
-                idToken:
-                  getIdToken()
-              })
-          }
-        );
-
-
-      const rawText =
-        await response.text();
-
-
-      let result =
-        {};
-
-
-      try{
-
-        result =
-          rawText
-            ? JSON.parse(
-                rawText
-              )
-            : {};
-
-      }catch{
-
-        throw new Error(
-          "InBody API ตอบกลับไม่ใช่ JSON"
-        );
-
-      }
-
-
-      if(
-        !response.ok ||
-        result?.success === false
-      ){
-
-        throw new Error(
-          result?.error ||
-          result?.message ||
-          `InBody HTTP ${response.status}`
-        );
-
-      }
-
-
-      return result;
-
-    }
-
-
-    async function loadInbodyHistory(){
-
-      try{
-
-        const result =
-          await fetchInbodyHistory();
-
-
-        renderInbody(
-          result
-        );
-
-
-      }catch(error){
-
-        console.error(
-          "INBODY HISTORY ERROR:",
-          error
-        );
-
-
-        /*
-         * InBody โหลดไม่ได้
-         * ไม่ทำให้ HOME ทั้งหน้าล้ม
-         */
-        renderInbody({
-          inbodyHistory: []
-        });
-
-      }
-
-    }
-
-
-    async function saveInbody(){
-
-      const measuredDate =
-        $("inbodyMeasuredDate")
-          ?.value;
-
-
-      const score =
-        Number(
-          $("inbodyScoreInput")
-            ?.value
-        );
-
-
-      const file =
-        $("inbodyFileInput")
-          ?.files
-          ?.[0];
-
-
-      if(!measuredDate){
-
-        showStatus(
-          "กรุณาเลือกวันที่ตรวจ",
-          true
-        );
-
-        return;
-
-      }
-
-
-      if(
-        !Number.isFinite(
-          score
-        ) ||
-        score < 0 ||
-        score > 150
-      ){
-
-        showStatus(
-          "กรุณากรอก InBody Score 0-150",
-          true
-        );
-
-        return;
-
-      }
-
-
-      if(!file){
-
-        showStatus(
-          "กรุณาเลือกไฟล์ผล InBody",
-          true
-        );
-
-        return;
-
-      }
-
-
-      const api =
-        window.APP_CONFIG
-          ?.API
-          ?.INBODY;
-
-
-      if(!api){
-
-        showStatus(
-          "ยังไม่ได้ตั้งค่า API.INBODY ใน app-config.js",
-          true
-        );
-
-        return;
-
-      }
-
-
-      const saveButton =
-        $("inbodySave");
-
-
-      try{
-
-        saveButton.disabled =
-          true;
-
-
-        showStatus(
-          "กำลังอัปโหลดผล InBody..."
-        );
-
-
-        const idToken =
-          getIdToken();
-
-
-        const form =
-          new FormData();
-
-
-        form.append(
-          "action",
-          "upload"
-        );
-
-
-        form.append(
-          "idToken",
-          idToken
-        );
-
-
-        form.append(
-          "score",
-          String(
-            score
-          )
-        );
-
-
-        form.append(
-          "measuredDate",
-          measuredDate
-        );
-
-
-        form.append(
-          "file",
-          file
-        );
-
-
-        const response =
-          await fetch(
-            api,
-            {
-              method: "POST",
-              body: form
-            }
-          );
-
-
-        const rawText =
-          await response.text();
-
-
-        let result =
-          {};
-
-
-        try{
-
-          result =
-            rawText
-              ? JSON.parse(
-                  rawText
-                )
-              : {};
-
-        }catch{
-
-          throw new Error(
-            "InBody API ตอบกลับไม่ใช่ JSON"
-          );
-
-        }
-
-
-        if(
-          !response.ok ||
-          result?.success === false
-        ){
-
-          throw new Error(
-            result?.error ||
-            result?.message ||
-            `InBody HTTP ${response.status}`
-          );
-
-        }
-
-
-        closeInbodyModal();
-
-
-        showStatus(
-          "บันทึกผล InBody สำเร็จ"
-        );
-
-
-        /*
-         * โหลดประวัติ InBody ใหม่
-         * เพื่อให้คะแนนและกราฟเปลี่ยนทันที
-         */
-        await loadInbodyHistory();
-
-
-        setTimeout(
-          hideStatus,
-          1800
-        );
-
-
-      }catch(error){
-
-        console.error(
-          "INBODY SAVE ERROR:",
-          error
-        );
-
-
-        showStatus(
-          error?.message ||
-          "อัปโหลด InBody ไม่สำเร็จ",
-          true
-        );
-
-
-      }finally{
-
-        saveButton.disabled =
-          false;
-
-      }
-
-    }
-
-
-    $("inbodyUploadButton")
-      ?.addEventListener(
-        "click",
-        openInbodyModal
-      );
-
-
-    $("inbodyCancel")
-      ?.addEventListener(
-        "click",
-        closeInbodyModal
-      );
-
-
-    $("inbodySave")
-      ?.addEventListener(
-        "click",
-        saveInbody
-      );
-
-
-    $("inbodyFileInput")
-      ?.addEventListener(
-        "change",
-        event => {
-
-          const file =
-            event.target
-              ?.files
-              ?.[0];
-
-
-          $("inbodyFileName")
-            .textContent =
-              file
-                ? file.name
-                : "";
-
-        }
-      );
-
-
-    $("inbodyModal")
-      ?.addEventListener(
-        "click",
-        event => {
-
-          if(
-            event.target ===
-            $("inbodyModal")
-          ){
-
-            closeInbodyModal();
-
-          }
-
-        }
-      );
-
-
-
-    /* =====================================================
-       PROFILE IMAGE
-    ====================================================== */
-
-    .profile-frame {
-
-      position: absolute;
-
-      z-index: 10;
-
-      left: 18.8%;
-      top: 35.5%;
-
-      width: 28.7%;
-
-      aspect-ratio: 1 / 1;
-
-      transform:
-        translate(-50%, -50%);
-
-      border-radius: 50%;
-
-      overflow: hidden;
-
-      pointer-events: none;
-
-    }
-
-
-    #profileImage {
-
-      width: 100%;
-      height: 100%;
-
-      display: none;
-
-      object-fit: cover;
-
-      border-radius: 50%;
-
-    }
-
-
-    /* =====================================================
-       ROCK COIN
-    ====================================================== */
-
-    .coin-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 79.8%;
-      top: 7.2%;
-
-      width: 9.8%;
-      height: 7%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      text-align: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #coin {
-
-      color: #071f55;
-
-      font-size:
-        clamp(
-          18px,
-          2.4vw,
-          31px
-        );
-
-      font-weight: 900;
-
-      line-height: 1;
-
-      white-space: nowrap;
-
-    }
-
-
-    /* =====================================================
-       ENERGY
-    ====================================================== */
-
-    .energy-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 92%;
-      top: 7.2%;
-
-      width: 12%;
-      height: 7%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      text-align: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #energy {
-
-      color: #071f55;
-
-      font-size:
-        clamp(
-          16px,
-          2.1vw,
-          29px
-        );
-
-      font-weight: 900;
-
-      line-height: 1;
-
-      white-space: nowrap;
-
-    }
-
-
-    /* =====================================================
-       LEVEL
-    ====================================================== */
-
-    .level-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 29.4%;
-      top: 64%;
-
-      width: 12%;
-      height: 6%;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #level {
-
-      color: #ffffff;
-
-      font-size:
-        clamp(
-          17px,
-          2vw,
-          28px
-        );
-
-      font-weight: 900;
-
-      text-shadow:
-        0 2px 4px
-        rgba(0,0,0,.45);
-
-    }
-
-
-    /* =====================================================
-       EXP BAR
-    ====================================================== */
-
-    .exp-track {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 10.25%;
-      top: 71.25%;
-
-      width: 21.4%;
-      height: 2.9%;
-
-      overflow: hidden;
-
-      border-radius: 999px;
-
-      background:
-        rgba(
-          210,
-          222,
-          240,
-          .9
-        );
-
-    }
-
-
-    #expBar {
-
-      width: 0%;
-
-      height: 100%;
-
-      border-radius: 999px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #00b7ff 0%,
-          #0867ff 48%,
-          #0538d4 100%
-        );
-
-      transition:
-        width .45s ease;
-
-    }
-
-
-    /* =====================================================
-       EXP TEXT
-    ====================================================== */
-
-    .exptext-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 29.4%;
-      top: 71%;
-
-      width: 9.5%;
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #expText {
-
-      color: #08245b;
-
-      font-size:
-        clamp(
-          13px,
-          1.35vw,
-          20px
-        );
-
-      font-weight: 800;
-
-      white-space: nowrap;
-
-    }
-
-
-    /* =====================================================
-       CURRENT WEIGHT
-    ====================================================== */
-
-    .current-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 53%;
-      top: 40%;
-
-      width: 18%;
-      height: 9%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #currentWeight {
-
-      color: #08245b;
-
-      font-size:
-        clamp(
-          20px,
-          3vw,
-          43px
-        );
-
-      font-weight: 900;
-
-      white-space: nowrap;
-
-    }
-
-
-    /* =====================================================
-       TARGET WEIGHT
-    ====================================================== */
-
-    .target-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 53%;
-      top: 62%;
-
-      width: 18%;
-      height: 9%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #targetWeight {
-
-      color: #d31317;
-
-      font-size:
-        clamp(
-          20px,
-          3vw,
-          43px
-        );
-
-      font-weight: 900;
-
-      white-space: nowrap;
-
-    }
-
-
-    /* =====================================================
-       UPDATED DATE
-    ====================================================== */
-
-    .updated-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 18%;
-      top: 43.5%;
-
-      width: 12%;
-      height: 3%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    .update-inline {
-
-      display: flex;
-
-      gap: 4px;
-
-      align-items: center;
-
-      justify-content: center;
-
-      white-space: nowrap;
-
-    }
-
-
-    .update-label {
-
-      color: #163d79;
-
-      font-size:
-        clamp(
-          7px,
-          .85vw,
-          13px
-        );
-
-      font-weight: 700;
-
-    }
-
-
-    #updatedAt {
-
-      color: #163d79;
-
-      font-size:
-        clamp(
-          7px,
-          .85vw,
-          13px
-        );
-
-      font-weight: 700;
-
-    }
-
-
-    /* =====================================================
-       REMAINING
-    ====================================================== */
-
-    .remaining-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 18.5%;
-      top: 47.8%;
-
-      width: 15%;
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    .remaining-inline {
-
-      display: flex;
-
-      gap: 5px;
-
-      align-items: center;
-
-    }
-
-
-    .remaining-label {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          9px,
-          1vw,
-          15px
-        );
-
-      font-weight: 700;
-
-    }
-
-
-    .remaining-number {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          10px,
-          1.2vw,
-          18px
-        );
-
-      font-weight: 900;
-
-    }
-
-
-    /* =====================================================
-       LOST WEIGHT
-    ====================================================== */
-
-    .lost-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 19%;
-      top: 51.7%;
-
-      width: 15%;
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    .summary-content {
-
-      display: flex;
-
-      gap: 5px;
-
-      align-items: center;
-
-    }
-
-
-    .summary-label {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          9px,
-          1vw,
-          15px
-        );
-
-      font-weight: 700;
-
-    }
-
-
-    #lost {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          10px,
-          1.2vw,
-          18px
-        );
-
-      font-weight: 900;
-
-    }
-
-
-    /* =====================================================
-       START DATE
-    ====================================================== */
-
-    .startdate-box {
-
-      position: absolute;
-
-      z-index: 20;
-
-      left: 19%;
-      top: 55%;
-
-      width: 15%;
-      height: 4%;
-
-      display: flex;
-
-      justify-content: center;
-
-      align-items: center;
-
-      pointer-events: none;
-
-    }
-
-
-    #startDate {
-
-      color: #173b76;
-
-      font-size:
-        clamp(
-          8px,
-          1vw,
-          14px
-        );
-
-      font-weight: 700;
-
-    }
-
-
-
-    /* =====================================================
-       INBODY CARD / UPLOAD / GRAPH
-       วางทับช่อง InBody ใน home-template.png
-    ====================================================== */
-
-    .inbody-card {
-      position: absolute;
-      z-index: 30;
-
-      left: 32.6%;
-      top: 68.3%;
-
-      width: 14.5%;
-      height: 18.1%;
-
-      padding: .7% .8%;
-
-      color: #142d70;
-
-      pointer-events: auto;
-    }
-
-    .inbody-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .inbody-title {
-      font-size: clamp(9px, 1.05vw, 16px);
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .inbody-upload-button {
-      width: clamp(22px, 2.3vw, 34px);
-      height: clamp(22px, 2.3vw, 34px);
-
-      border: 0;
-      border-radius: 50%;
-
-      background: #14a53a;
-      color: #fff;
-
-      font-size: clamp(14px, 1.6vw, 23px);
-      font-weight: 900;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      cursor: pointer;
-
-      box-shadow: 0 2px 6px rgba(0,0,0,.25);
-    }
-
-    .inbody-latest {
-      margin-top: 2px;
-
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
-    }
-
-    #inbodyScore {
-      color: #102d78;
-      font-size: clamp(17px, 2.3vw, 32px);
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .inbody-score-unit {
-      font-size: clamp(7px, .8vw, 12px);
-      font-weight: 700;
-    }
-
-    #inbodyDate {
-      margin-top: 2px;
-
-      color: #3c4f7e;
-      font-size: clamp(6px, .72vw, 11px);
-      font-weight: 700;
-
-      white-space: nowrap;
-    }
-
-    .inbody-chart-wrap {
-      position: absolute;
-
-      left: 5%;
-      right: 5%;
-      bottom: 7%;
-
-      height: 43%;
-    }
-
-    #inbodyChart {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .inbody-chart-grid {
-      stroke: rgba(80,100,150,.18);
-      stroke-width: 1;
-    }
-
-    .inbody-chart-line {
-      fill: none;
-      stroke: #6736e8;
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .inbody-chart-dot {
-      fill: #fff;
-      stroke: #6736e8;
-      stroke-width: 2.5;
-    }
-
-    .inbody-empty {
-      position: absolute;
-      inset: 0;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      color: #62729a;
-      font-size: clamp(7px, .7vw, 11px);
-      font-weight: 700;
-
-      text-align: center;
-    }
-
-
-    /* =====================================================
-       INBODY MODAL
-    ====================================================== */
-
-    .inbody-modal {
-      position: fixed;
-      inset: 0;
-
-      z-index: 10000;
-
-      display: none;
-      align-items: center;
-      justify-content: center;
-
-      padding: 18px;
-
-      background: rgba(2,18,58,.68);
-      backdrop-filter: blur(4px);
-    }
-
-    .inbody-modal.show {
-      display: flex;
-    }
-
-    .inbody-modal-card {
-      width: min(92vw, 430px);
-
-      padding: 20px;
-
-      border-radius: 22px;
-
-      background: #fff;
-      color: #082b68;
-
-      box-shadow: 0 18px 55px rgba(0,0,0,.3);
-    }
-
-    .inbody-modal-title {
-      margin: 0 0 14px;
-
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .inbody-field {
-      margin-bottom: 12px;
-    }
-
-    .inbody-field label {
-      display: block;
-
-      margin-bottom: 5px;
-
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .inbody-field input {
-      width: 100%;
-
-      padding: 11px 12px;
-
-      border: 1px solid #cbd8ee;
-      border-radius: 12px;
-
-      font: inherit;
-      color: #082b68;
-
-      outline: none;
-    }
-
-    .inbody-field input:focus {
-      border-color: #1769e8;
-      box-shadow: 0 0 0 3px rgba(23,105,232,.12);
-    }
-
-    .inbody-preview-name {
-      margin-top: 6px;
-
-      color: #62729a;
-      font-size: 12px;
-
-      word-break: break-word;
-    }
-
-    .inbody-actions {
-      display: grid;
-      grid-template-columns: 1fr 1.3fr;
-      gap: 10px;
-
-      margin-top: 16px;
-    }
-
-    .inbody-actions button {
-      min-height: 44px;
-
-      border: 0;
-      border-radius: 12px;
-
-      font: inherit;
-      font-weight: 900;
-
-      cursor: pointer;
-    }
-
-    #inbodyCancel {
-      background: #e9eef8;
-      color: #173b76;
-    }
-
-    #inbodySave {
-      background: linear-gradient(180deg,#166de9,#0746bb);
-      color: #fff;
-    }
-
-    #inbodySave:disabled {
-      opacity: .55;
-      cursor: wait;
-    }
-
-
-    /* =====================================================
-       BUTTON HOTSPOTS
-    ====================================================== */
-
-    .hotspot {
-
-      position: absolute;
-
-      z-index: 50;
-
-      border: 0;
-
-      background: transparent;
-
-      padding: 0;
-
-      margin: 0;
-
-      cursor: pointer;
-
-      -webkit-tap-highlight-color:
-        transparent;
-
-    }
-
-
-    .hotspot:active {
-
-      transform:
-        scale(.98);
-
-    }
-
-
-    /* WEIGHT */
-
-    #weightButton {
-
-      left: 59.4%;
-      top: 16.1%;
-
-      width: 18.7%;
-      height: 30.9%;
-
-    }
-
-
-    /* PROGRESS */
-
-    #progressButton {
-
-      left: 79.1%;
-      top: 16.1%;
-
-      width: 19.4%;
-      height: 30.9%;
-
-    }
-
-
-    /* RANKING */
-
-    #rankingButton {
-
-      left: 59.4%;
-      top: 49.4%;
-
-      width: 18.7%;
-      height: 31.1%;
-
-    }
-
-
-    /* REWARDS */
-
-    #rewardsButton {
-
-      left: 79.1%;
-      top: 49.4%;
-
-      width: 19.4%;
-      height: 31.1%;
-
-    }
-
-
-    /* HOME */
-
-    #homeButton {
-
-      left: 1.4%;
-      top: 83.2%;
-
-      width: 31.5%;
-      height: 14.5%;
-
-    }
-
-
-    /* MISSION */
-
-    #missionButton {
-
-      left: 33.7%;
-      top: 83.2%;
-
-      width: 32.2%;
-      height: 14.5%;
-
-    }
-
-
-    /* BATTLE */
-
-    #battleButton {
-
-      left: 66.5%;
-      top: 83.2%;
-
-      width: 32.1%;
-      height: 14.5%;
-
-    }
-
-
-    /* =====================================================
-       STATUS
-    ====================================================== */
-
-    #status {
-
-      position: fixed;
-
-      left: 50%;
-
-      bottom: 18px;
-
-      transform:
-        translateX(-50%);
-
-      z-index: 9999;
-
-      display: none;
-
-      max-width: 90vw;
-
-      padding:
-        10px 18px;
-
-      border-radius: 999px;
-
-      background:
-        rgba(
-          7,
-          59,
-          147,
-          .95
-        );
-
-      color: white;
-
-      font-size: 14px;
-
-      font-weight: 800;
-
-      text-align: center;
-
-      box-shadow:
-        0 8px 25px
-        rgba(0,0,0,.22);
-
-    }
-
-
-    #status.show {
-
-      display: block;
-
-    }
-
-
-    #status.error {
-
-      background:
-        rgba(
-          190,
-          25,
-          25,
-          .96
-        );
-
-    }
-
-
-    /* =====================================================
-       MOBILE
-    ====================================================== */
-
-    @media(max-width:600px){
-
-      #homeStage {
-
-        width: 100vw;
-
-        max-width: 100vw;
-
-      }
-
-
-      #coin {
-
-        font-size:
-          clamp(
-            15px,
-            4.5vw,
-            25px
-          );
-
-      }
-
-
-      #energy {
-
-        font-size:
-          clamp(
-            13px,
-            4vw,
-            23px
-          );
-
-      }
-
-
-      #currentWeight,
-      #targetWeight {
-
-        font-size:
-          clamp(
-            18px,
-            5.5vw,
-            32px
-          );
-
-      }
-
-
-      #expText {
-
-        font-size:
-          clamp(
-            9px,
-            2.7vw,
-            15px
-          );
-
-      }
-
-    }
-
-  </style>
-
-</head>
-
-
-<body>
-
-
-  <!-- =====================================================
-       HOME
-  ====================================================== -->
-
-  <div id="homeStage">
-
-
-    <!-- BACKGROUND -->
-
-    <img
-      class="template"
-      src="./home-template.png"
-      alt="ROCK YOUR BODY 2026 HOME"
-      draggable="false"
-    >
-
-
-    <!-- ===================================================
-         PROFILE
-    ==================================================== -->
-
-    <div class="profile-frame">
-
-      <img
-        id="profileImage"
-        alt="LINE Profile"
-      >
-
-    </div>
-
-
-    <!-- ===================================================
-         ROCK COIN
-    ==================================================== -->
-
-    <div class="coin-box">
-
-      <span id="coin">
-        0
-      </span>
-
-    </div>
-
-
-    <!-- ===================================================
-         ENERGY
-    ==================================================== -->
-
-    <div class="energy-box">
-
-      <span id="energy">
-        0 / 200
-      </span>
-
-    </div>
-
-
-    <!-- ===================================================
-         LEVEL
-    ==================================================== -->
-
-    <div class="level-box">
-
-      <span id="level">
-        Lv.1
-      </span>
-
-    </div>
-
-
-    <!-- ===================================================
-         EXP BAR
-    ==================================================== -->
-
-    <div class="exp-track">
-
-      <div id="expBar"></div>
-
-    </div>
-
-
-    <!-- EXP TEXT -->
-
-    <div class="exptext-box">
-
-      <span id="expText">
-        0 / 500
-      </span>
-
-    </div>
-
-
-    <!-- ===================================================
-         CURRENT WEIGHT
-    ==================================================== -->
-
-    <div class="current-box">
-
-      <span id="currentWeight">
-        --.- kg
-      </span>
-
-    </div>
-
-
-    <!-- ===================================================
-         TARGET WEIGHT
-    ==================================================== -->
-
-    <div class="target-box">
-
-      <span id="targetWeight">
-        --.- kg
-      </span>
-
-    </div>
-
-
-    <!-- ===================================================
-         UPDATED
-    ==================================================== -->
-
-    <div class="updated-box">
-
-      <div class="update-inline">
-
-        <span class="update-label">
-          อัปเดตล่าสุด
-        </span>
-
-        <span id="updatedAt">
-          --/--/----
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <!-- ===================================================
-         REMAINING
-    ==================================================== -->
-
-    <div class="remaining-box">
-
-      <div class="remaining-inline">
-
-        <span class="remaining-label">
-          เหลืออีก
-        </span>
-
-        <span class="remaining-number">
-
-          <span id="remaining">
-            --.-
-          </span>
-
-          kg
-
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <!-- ===================================================
-         LOST
-    ==================================================== -->
-
-    <div class="lost-box">
-
-      <div class="summary-content">
-
-        <span class="summary-label">
-          ลดลงแล้ว
-        </span>
-
-        <span id="lost">
-          --.- kg
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <!-- ===================================================
-         START DATE
-    ==================================================== -->
-
-    <div class="startdate-box">
-
-      <span id="startDate">
-        --/--/----
-      </span>
-
-    </div>
-
-
-
-    <!-- ===================================================
-         INBODY LATEST + GRAPH + UPLOAD
-    ==================================================== -->
-
-    <div class="inbody-card">
-
-      <div class="inbody-head">
-
-        <div class="inbody-title">
-          InBody ล่าสุด
-        </div>
-
-        <button
-          id="inbodyUploadButton"
-          class="inbody-upload-button"
-          type="button"
-          aria-label="อัปโหลดผล InBody"
-          title="อัปโหลดผล InBody"
-        >
-          +
-        </button>
-
-      </div>
-
-
-      <div class="inbody-latest">
-
-        <span id="inbodyScore">
-          --
-        </span>
-
-        <span class="inbody-score-unit">
-          คะแนน
-        </span>
-
-      </div>
-
-
-      <div id="inbodyDate">
-        ยังไม่มีข้อมูล
-      </div>
-
-
-      <div class="inbody-chart-wrap">
-
-        <svg
-          id="inbodyChart"
-          viewBox="0 0 220 80"
-          preserveAspectRatio="none"
-          aria-label="กราฟ InBody"
-        ></svg>
-
-        <div
-          id="inbodyEmpty"
-          class="inbody-empty"
-        >
-          อัปโหลดผล InBody เพื่อเริ่มกราฟ
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- ===================================================
-         NAVIGATION BUTTONS
-    ==================================================== -->
-
-
-    <button
-      id="weightButton"
-      class="hotspot"
-      aria-label="Weight Check"
-    ></button>
-
-
-    <button
-      id="progressButton"
-      class="hotspot"
-      aria-label="My Progress"
-    ></button>
-
-
-    <button
-      id="rankingButton"
-      class="hotspot"
-      aria-label="Ranking"
-    ></button>
-
-
-    <button
-      id="rewardsButton"
-      class="hotspot"
-      aria-label="Rewards"
-    ></button>
-
-
-    <button
-      id="homeButton"
-      class="hotspot"
-      aria-label="Home"
-    ></button>
-
-
-    <button
-      id="missionButton"
-      class="hotspot"
-      aria-label="Mission"
-    ></button>
-
-
-    <button
-      id="battleButton"
-      class="hotspot"
-      aria-label="Battle"
-    ></button>
-
-
-  </div>
-
-
-
-  <!-- =====================================================
-       INBODY UPLOAD MODAL
-  ====================================================== -->
-
-  <div
-    id="inbodyModal"
-    class="inbody-modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="inbodyModalTitle"
-  >
-
-    <div class="inbody-modal-card">
-
-      <h2
-        id="inbodyModalTitle"
-        class="inbody-modal-title"
-      >
-        อัปโหลดผล InBody
-      </h2>
-
-
-      <div class="inbody-field">
-
-        <label for="inbodyMeasuredDate">
-          วันที่ตรวจ
-        </label>
-
-        <input
-          id="inbodyMeasuredDate"
-          type="date"
-        >
-
-      </div>
-
-
-      <div class="inbody-field">
-
-        <label for="inbodyScoreInput">
-          InBody Score
-        </label>
-
-        <input
-          id="inbodyScoreInput"
-          type="number"
-          min="0"
-          max="150"
-          step="1"
-          inputmode="numeric"
-          placeholder="เช่น 72"
-        >
-
-      </div>
-
-
-      <div class="inbody-field">
-
-        <label for="inbodyFileInput">
-          รูปผล InBody
-        </label>
-
-        <input
-          id="inbodyFileInput"
-          type="file"
-          accept="image/jpeg,image/png,image/webp,application/pdf"
-        >
-
-        <div
-          id="inbodyFileName"
-          class="inbody-preview-name"
-        ></div>
-
-      </div>
-
-
-      <div class="inbody-actions">
-
-        <button
-          id="inbodyCancel"
-          type="button"
-        >
-          ยกเลิก
-        </button>
-
-        <button
-          id="inbodySave"
-          type="button"
-        >
-          บันทึกผล
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================================
-       STATUS
-  ====================================================== -->
-
-  <div id="status"></div>
-
-
-  <script>
-
-    /* =====================================================
-       BASIC HELPERS
-    ====================================================== */
-
-    const $ = (id) =>
-      document.getElementById(id);
-
-
-    let loading = false;
-
-    let refreshTimer = null;
-
-
-    /* =====================================================
-       STATUS
-    ====================================================== */
-
-    function showStatus(
-      message,
-      error = false
-    ){
-
-      const el =
-        $("status");
-
-      if(!el){
-        return;
-      }
-
-      el.textContent =
-        message;
-
-      el.className =
-        error
-          ? "show error"
-          : "show";
-
-    }
-
-
-    function hideStatus(){
-
-      const el =
-        $("status");
-
-      if(el){
-
-        el.className = "";
-
-      }
-
-    }
-
-
-    /* =====================================================
-       NUMBER FORMAT
-    ====================================================== */
-
-    function fmtInt(value){
-
-      const n =
-        Number(value);
-
-      return Number.isFinite(n)
-        ? Math.round(n)
-            .toLocaleString("en-US")
-        : "0";
-
-    }
-
-
-    /* =====================================================
-       WEIGHT FORMAT
-    ====================================================== */
-
-    function fmtWeight(value){
-
-      if(
-        value === null ||
-        value === undefined ||
-        value === ""
-      ){
-
-        return "--.-";
-
-      }
-
-      const n =
-        Number(value);
-
-      return Number.isFinite(n)
-        ? n.toFixed(1)
-        : "--.-";
-
-    }
-
-
-    /* =====================================================
-       DATE FORMAT
-    ====================================================== */
-
-    function fmtDate(value){
-
-      if(!value){
-
-        return "--/--/----";
-
-      }
-
-      const date =
-        new Date(value);
-
-      if(
-        Number.isNaN(
-          date.getTime()
-        )
-      ){
-
-        return "--/--/----";
-
-      }
-
-      return date.toLocaleDateString(
-        "th-TH",
-        {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric"
-        }
-      );
-
-    }
-
-
-    /* =====================================================
-       GET LIFF ID
-    ====================================================== */
-
-    function getLiffId(){
-
-      const id =
-        window.APP_CONFIG?.LIFF_ID;
-
-      if(!id){
-
-        throw new Error(
-          "ไม่พบ LIFF_ID ใน app-config.js"
-        );
-
-      }
-
-      return id;
-
-    }
-
-
-    /* =====================================================
-       INIT LINE
-    ====================================================== */
-
-    async function initLINE(){
-
-      if(
-        typeof liff === "undefined"
-      ){
-
-        throw new Error(
-          "LINE LIFF SDK ไม่พร้อม"
-        );
-
-      }
-
-
-      const liffId =
-        getLiffId();
-
-
-      /*
-       * สำคัญ:
-       * ไม่ใช้ ROCK.initLINE
-       * ไม่ใช้ ROCK.initLiff
-       */
-
-      await liff.init({
-        liffId
+      const W=220,H=80,L=8,R=8,T=8,B=8;
+
+      const points=list.map((item,index)=>{
+        const x=list.length===1?W/2:L+(index/(list.length-1))*(W-L-R);
+        const y=H-B-((item.score-min)/(max-min))*(H-T-B);
+        return {x,y,score:item.score};
       });
 
+      const poly=document.createElementNS("http://www.w3.org/2000/svg","polyline");
+      poly.setAttribute("points",points.map(p=>`${p.x},${p.y}`).join(" "));
+      poly.setAttribute("fill","none");
+      poly.setAttribute("stroke","#6736e8");
+      poly.setAttribute("stroke-width","3");
+      poly.setAttribute("stroke-linecap","round");
+      poly.setAttribute("stroke-linejoin","round");
+      svg.appendChild(poly);
 
-      if(
-        !liff.isLoggedIn()
-      ){
-
-        liff.login({
-          redirectUri:
-            window.location.href
-        });
-
-        return false;
-
-      }
-
-
-      return true;
-
+      points.forEach(p=>{
+        const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+        c.setAttribute("cx",p.x);
+        c.setAttribute("cy",p.y);
+        c.setAttribute("r","4");
+        c.setAttribute("fill","#fff");
+        c.setAttribute("stroke","#6736e8");
+        c.setAttribute("stroke-width","2.5");
+        svg.appendChild(c);
+      });
     }
 
+    function renderInbody(raw){
+      const history=normalizeInbodyHistory(raw);
+      const latest=history.length?history[history.length-1]:null;
 
-    /* =====================================================
-       GET LINE ID TOKEN
-    ====================================================== */
-
-    function getIdToken(){
-
-      if(
-        typeof liff === "undefined"
-      ){
-
-        throw new Error(
-          "LINE LIFF SDK ไม่พร้อม"
-        );
-
-      }
-
-
-      if(
-        !liff.isLoggedIn()
-      ){
-
-        throw new Error(
-          "LINE ยังไม่ได้ Login"
-        );
-
-      }
-
-
-      const token =
-        liff.getIDToken();
-
-
-      if(!token){
-
-        throw new Error(
-          "ไม่พบ LINE ID Token"
-        );
-
-      }
-
-
-      return token;
-
+      $("inbodyScore").textContent=latest?fmtInt(latest.score):"--";
+      $("inbodyDate").textContent=latest?`(${fmtDateShort(latest.measuredAt)})`:"ยังไม่มีข้อมูล";
+      drawInbodyChart(history);
     }
 
-
-    /* =====================================================
-       FETCH DASHBOARD
-    ====================================================== */
-
-    async function fetchDashboard(){
-
-      const api =
-        window.APP_CONFIG
-          ?.API
-          ?.DASHBOARD;
-
+    async function fetchInbodyHistory(){
+      const api=window.APP_CONFIG?.API?.INBODY;
 
       if(!api){
-
-        throw new Error(
-          "ไม่พบ Dashboard API ใน app-config.js"
-        );
-
+        return {success:true,inbodyHistory:[]};
       }
 
+      return postJson(api,{
+        action:"list",
+        idToken:getIdToken()
+      });
+    }
 
-      const idToken =
-        getIdToken();
-
-
-      /*
-       * ส่งให้ player-dashboard
-       *
-       * action = dashboard
-       * idToken = LINE ID Token
-       */
-
-      const response =
-        await fetch(
-          api,
-          {
-            method: "POST",
-
-            headers: {
-
-              "Content-Type":
-                "application/json"
-
-            },
-
-            body:
-              JSON.stringify({
-
-                action:
-                  "dashboard",
-
-                idToken
-
-              })
-
-          }
-        );
-
-
-      const rawText =
-        await response.text();
-
-
-      let data = {};
-
-
+    async function loadInbodyHistory(){
       try{
-
-        data =
-          rawText
-            ? JSON.parse(rawText)
-            : {};
-
+        const result=await fetchInbodyHistory();
+        renderInbody(result);
       }catch(error){
-
-        throw new Error(
-          "Dashboard API ตอบกลับไม่ใช่ JSON"
-        );
-
+        console.warn("INBODY HISTORY ERROR:",error);
+        renderInbody({inbodyHistory:[]});
       }
-
-
-      if(
-        !response.ok
-      ){
-
-        throw new Error(
-          data?.error ||
-          data?.message ||
-          `Dashboard HTTP ${response.status}`
-        );
-
-      }
-
-
-      if(
-        data?.success === false ||
-        data?.ok === false
-      ){
-
-        throw new Error(
-          data?.error ||
-          data?.message ||
-          "โหลดข้อมูล Dashboard ไม่สำเร็จ"
-        );
-
-      }
-
-
-      console.log(
-        "DASHBOARD API RESPONSE:",
-        data
-      );
-
-
-      return data;
-
     }
 
-
-    /* =====================================================
-       NORMALIZE DASHBOARD
-    ====================================================== */
-
-    function normalizeDashboard(raw){
-
-      const data =
-        raw?.data ??
-        raw?.dashboard ??
-        raw ??
-        {};
-
-
-      const user =
-        data?.user ??
-        data?.player ??
-        {};
-
-
-      const weight =
-        data?.weight &&
-        typeof data.weight === "object"
-          ? data.weight
-          : {};
-
-
-      const energy =
-        data?.energy &&
-        typeof data.energy === "object"
-          ? data.energy
-          : {};
-
-
-      /* =================================================
-         COIN
-      ================================================= */
-
-      const coin =
-        Number(
-          data?.rockCoin ??
-          data?.rock_coin ??
-          data?.coin ??
-          user?.rockCoin ??
-          user?.rock_coin ??
-          user?.coin ??
-          0
-        );
-
-
-      /* =================================================
-         ENERGY
-      ================================================= */
-
-      const currentEnergy =
-        Number(
-          energy?.current ??
-          data?.energyCurrent ??
-          data?.currentEnergy ??
-          data?.current_energy ??
-          user?.energy ??
-          (
-            typeof data?.energy === "number"
-              ? data.energy
-              : 0
-          )
-        );
-
-
-      const maxEnergy =
-        Number(
-          energy?.max ??
-          data?.maxEnergy ??
-          data?.max_energy ??
-          user?.maxEnergy ??
-          user?.max_energy ??
-          window.APP_CONFIG?.MAX_ENERGY ??
-          200
-        );
-
-
-      /* =================================================
-         WEIGHT
-      ================================================= */
-
-      const currentWeight =
-        weight?.current ??
-        weight?.currentWeight ??
-        weight?.current_weight ??
-        data?.currentWeight ??
-        data?.current_weight ??
-        user?.currentWeight ??
-        user?.current_weight ??
-        null;
-
-
-      const targetWeight =
-        weight?.target ??
-        weight?.targetWeight ??
-        weight?.target_weight ??
-        data?.targetWeight ??
-        data?.target_weight ??
-        user?.targetWeight ??
-        user?.target_weight ??
-        null;
-
-
-      const startWeight =
-        weight?.start ??
-        weight?.startWeight ??
-        weight?.start_weight ??
-        data?.startWeight ??
-        data?.start_weight ??
-        user?.startWeight ??
-        user?.start_weight ??
-        null;
-
-
-      const updatedAt =
-        weight?.updatedAt ??
-        weight?.updated_at ??
-        weight?.lastRecordedAt ??
-        weight?.last_recorded_at ??
-        data?.weightUpdatedAt ??
-        data?.weight_updated_at ??
-        data?.updatedAt ??
-        data?.updated_at ??
-        null;
-
-
-      const startDate =
-        weight?.startDate ??
-        weight?.start_date ??
-        data?.startDate ??
-        data?.start_date ??
-        null;
-
-
-      /* =================================================
-         EXP
-      ================================================= */
-
-      const expObject =
-        data?.exp &&
-        typeof data.exp === "object"
-          ? data.exp
-          : {};
-
-
-      const totalExp =
-        Number(
-          expObject?.total ??
-          expObject?.current ??
-          data?.exp ??
-          user?.exp ??
-          user?.experience ??
-          0
-        );
-
-
-      /* =================================================
-         LEVEL
-      ================================================= */
-
-      const expPerLevel =
-        Number(
-          window.APP_CONFIG
-            ?.EXP_PER_LEVEL ??
-          500
-        ) || 500;
-
-
-      const level =
-        Number(
-          data?.level ??
-          user?.level ??
-          (
-            Math.floor(
-              totalExp /
-              expPerLevel
-            ) + 1
-          )
-        ) || 1;
-
-
-      /* =================================================
-         PROFILE
-      ================================================= */
-
-      const picture =
-        user?.pictureUrl ??
-        user?.picture_url ??
-        data?.pictureUrl ??
-        data?.picture_url ??
-        "";
-
-
-      return {
-
-        coin:
-          Number.isFinite(coin)
-            ? coin
-            : 0,
-
-        energy:
-          Number.isFinite(currentEnergy)
-            ? currentEnergy
-            : 0,
-
-        maxEnergy:
-          Number.isFinite(maxEnergy)
-            ? maxEnergy
-            : 200,
-
-        currentWeight,
-
-        targetWeight,
-
-        startWeight,
-
-        updatedAt,
-
-        startDate,
-
-        totalExp:
-          Number.isFinite(totalExp)
-            ? totalExp
-            : 0,
-
-        expPerLevel,
-
-        level,
-
-        picture
-
-      };
-
+    function openInbodyModal(){
+      const d=new Date();
+      $("inbodyMeasuredDate").value=[
+        d.getFullYear(),
+        String(d.getMonth()+1).padStart(2,"0"),
+        String(d.getDate()).padStart(2,"0")
+      ].join("-");
+      $("inbodyScoreInput").value="";
+      $("inbodyFileInput").value="";
+      $("inbodyModal").classList.add("show");
     }
 
+    function closeInbodyModal(){
+      $("inbodyModal").classList.remove("show");
+    }
 
-    /* =====================================================
-       PROFILE
-    ====================================================== */
+    async function saveInbody(){
+      const measuredDate=$("inbodyMeasuredDate").value;
+      const score=Number($("inbodyScoreInput").value);
+      const file=$("inbodyFileInput").files?.[0];
+      const api=window.APP_CONFIG?.API?.INBODY;
 
-    function renderProfile(
-      url
-    ){
-
-      const image =
-        $("profileImage");
-
-
-      if(!image){
+      if(!api){
+        showStatus("ไม่พบ API.INBODY ใน app-config.js",true);
+        return;
+      }
+      if(!measuredDate){
+        showStatus("กรุณาเลือกวันที่ตรวจ",true);
+        return;
+      }
+      if(!Number.isFinite(score) || score<0 || score>150){
+        showStatus("กรุณากรอก InBody Score 0-150",true);
+        return;
+      }
+      if(!file){
+        showStatus("กรุณาเลือกไฟล์ผล InBody",true);
         return;
       }
 
-
-      if(!url){
-
-        image.removeAttribute(
-          "src"
-        );
-
-        image.style.display =
-          "none";
-
-        return;
-
-      }
-
-
-      image.onload =
-        () => {
-
-          image.style.display =
-            "block";
-
-        };
-
-
-      image.onerror =
-        () => {
-
-          image.style.display =
-            "none";
-
-        };
-
-
-      image.src =
-        url;
-
-    }
-
-
-    /* =====================================================
-       GET LINE PROFILE FALLBACK
-    ====================================================== */
-
-    async function getLineProfile(){
+      const btn=$("inbodySave");
 
       try{
+        btn.disabled=true;
+        showStatus("กำลังอัปโหลดผล InBody...");
 
-        if(
-          typeof liff === "undefined"
-        ){
+        const form=new FormData();
+        form.append("action","upload");
+        form.append("idToken",getIdToken());
+        form.append("score",String(score));
+        form.append("measuredDate",measuredDate);
+        form.append("file",file);
 
-          return null;
+        const response=await fetch(api,{method:"POST",body:form});
+        const text=await response.text();
 
+        let result={};
+        try{result=text?JSON.parse(text):{}}
+        catch{throw new Error("InBody API ตอบกลับไม่ใช่ JSON")}
+
+        if(!response.ok || result?.success===false){
+          throw new Error(result?.error || result?.message || `HTTP ${response.status}`);
         }
 
+        closeInbodyModal();
+        await loadInbodyHistory();
 
-        if(
-          !liff.isLoggedIn()
-        ){
-
-          return null;
-
-        }
-
-
-        const profile =
-          await liff.getProfile();
-
-
-        return profile || null;
+        showStatus("บันทึกผล InBody สำเร็จ");
+        setTimeout(hideStatus,1600);
 
       }catch(error){
-
-        console.warn(
-          "LINE PROFILE ERROR:",
-          error
-        );
-
-        return null;
-
+        console.error(error);
+        showStatus(error?.message || "อัปโหลด InBody ไม่สำเร็จ",true);
+      }finally{
+        btn.disabled=false;
       }
-
     }
 
-
     /* =====================================================
-       RENDER HOME
-    ====================================================== */
-
-    async function renderHome(
-      raw
-    ){
-
-      console.log(
-        "HOME RAW:",
-        raw
-      );
-
-
-      const p =
-        normalizeDashboard(
-          raw
-        );
-
-
-      console.log(
-        "HOME NORMALIZED:",
-        p
-      );
-
-
-      /* ================================================
-         PROFILE
-      ================================================= */
-
-      let picture =
-        p.picture;
-
-
-      if(!picture){
-
-        const profile =
-          await getLineProfile();
-
-
-        picture =
-          profile?.pictureUrl ||
-          "";
-
-      }
-
-
-      renderProfile(
-        picture
-      );
-
-
-      /* ================================================
-         COIN
-      ================================================= */
-
-      $("coin").textContent =
-        fmtInt(
-          p.coin
-        );
-
-
-      /* ================================================
-         ENERGY
-      ================================================= */
-
-      $("energy").textContent =
-        fmtInt(
-          p.energy
-        ) +
-        " / " +
-        fmtInt(
-          p.maxEnergy
-        );
-
-
-      /* ================================================
-         LEVEL
-      ================================================= */
-
-      $("level").textContent =
-        "Lv." +
-        fmtInt(
-          p.level
-        );
-
-
-      /* ================================================
-         EXP
-      ================================================= */
-
-      const exp =
-        Math.max(
-          0,
-          p.totalExp
-        );
-
-
-      const expPerLevel =
-        Math.max(
-          1,
-          p.expPerLevel
-        );
-
-
-      const expInLevel =
-        exp %
-        expPerLevel;
-
-
-      const expPercent =
-        Math.max(
-          0,
-          Math.min(
-            100,
-            (
-              expInLevel /
-              expPerLevel
-            ) * 100
-          )
-        );
-
-
-      $("expText").textContent =
-        fmtInt(
-          expInLevel
-        ) +
-        " / " +
-        fmtInt(
-          expPerLevel
-        );
-
-
-      $("expBar").style.width =
-        expPercent +
-        "%";
-
-
-      /* ================================================
-         CURRENT WEIGHT
-      ================================================= */
-
-      $("currentWeight").textContent =
-        fmtWeight(
-          p.currentWeight
-        ) +
-        " kg";
-
-
-      /* ================================================
-         TARGET WEIGHT
-      ================================================= */
-
-      $("targetWeight").textContent =
-        fmtWeight(
-          p.targetWeight
-        ) +
-        " kg";
-
-
-      /* ================================================
-         UPDATED
-      ================================================= */
-
-      $("updatedAt").textContent =
-        fmtDate(
-          p.updatedAt
-        );
-
-
-      /* ================================================
-         REMAINING
-      ================================================= */
-
-      const current =
-        Number(
-          p.currentWeight
-        );
-
-
-      const target =
-        Number(
-          p.targetWeight
-        );
-
-
-      if(
-        Number.isFinite(current) &&
-        Number.isFinite(target)
-      ){
-
-        $("remaining").textContent =
-          Math.max(
-            0,
-            current - target
-          ).toFixed(1);
-
-      }else{
-
-        $("remaining").textContent =
-          "--.-";
-
-      }
-
-
-      /* ================================================
-         LOST
-      ================================================= */
-
-      const start =
-        Number(
-          p.startWeight
-        );
-
-
-      if(
-        Number.isFinite(start) &&
-        Number.isFinite(current)
-      ){
-
-        $("lost").textContent =
-          Math.max(
-            0,
-            start - current
-          ).toFixed(1) +
-          " kg";
-
-      }else{
-
-        $("lost").textContent =
-          "--.- kg";
-
-      }
-
-
-      /* ================================================
-         START DATE
-      ================================================= */
-
-      $("startDate").textContent =
-        fmtDate(
-          p.startDate
-        );
-
-    }
-
-
-    /* =====================================================
-       LOAD HOME
+       LOAD ALL HOME DATA
     ====================================================== */
 
     async function loadHome(){
-
-      if(loading){
-
-        return;
-
-      }
-
-
-      loading = true;
-
+      if(loading) return;
+      loading=true;
 
       try{
+        const raw=await fetchDashboard();
 
-        const raw =
-          await fetchDashboard();
+        await renderHome(raw);
 
-
-        await renderHome(
-          raw
-        );
-
-
+        /*
+          สำคัญ:
+          InBody โหลดแยกจาก Dashboard
+          ต่อให้ InBody error ก็ไม่ทำให้ HOME ทั้งหน้าล้ม
+        */
         await loadInbodyHistory();
-
 
         hideStatus();
 
-
       }catch(error){
-
-        console.error(
-          "HOME LOAD ERROR:",
-          error
-        );
-
-
-        showStatus(
-          error?.message ||
-          "โหลดข้อมูลไม่สำเร็จ",
-          true
-        );
-
+        console.error("HOME LOAD ERROR:",error);
+        showStatus(error?.message || "โหลดข้อมูล HOME ไม่สำเร็จ",true);
       }finally{
-
-        loading = false;
-
+        loading=false;
       }
-
     }
 
-
-    /* =====================================================
-       NAVIGATION
-    ====================================================== */
-
-    function goPage(
-      name
-    ){
-
-      const page =
-        window.APP_CONFIG
-          ?.PAGE
-          ?.[
-            name
-          ];
-
-
+    function goPage(name){
+      const page=window.APP_CONFIG?.PAGE?.[name] ?? window.APP_CONFIG?.PAGES?.[name];
       if(!page){
-
-        showStatus(
-          "ไม่พบหน้า " + name,
-          true
-        );
-
+        showStatus("ไม่พบหน้า "+name,true);
         return;
-
       }
-
-
-      window.location.href =
-        page;
-
+      window.location.href=page;
     }
 
+    $("weightButton").addEventListener("click",()=>goPage("WEIGHT"));
+    $("progressButton").addEventListener("click",()=>goPage("PROGRESS"));
+    $("rankingButton").addEventListener("click",()=>goPage("RANKING"));
+    $("rewardsButton").addEventListener("click",()=>goPage("REWARDS"));
+    $("homeButton").addEventListener("click",()=>goPage("HOME"));
+    $("missionButton").addEventListener("click",()=>goPage("MISSION"));
+    $("battleButton").addEventListener("click",()=>goPage("BATTLE"));
 
-    /* =====================================================
-       BUTTON EVENTS
-    ====================================================== */
+    $("inbodyViewButton").addEventListener("click",()=>goPage("PROGRESS"));
+    $("inbodyUpload").addEventListener("click",openInbodyModal);
+    $("inbodyCancel").addEventListener("click",closeInbodyModal);
+    $("inbodySave").addEventListener("click",saveInbody);
 
-    $("weightButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "WEIGHT"
-          );
-
-        }
-      );
-
-
-    $("progressButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "PROGRESS"
-          );
-
-        }
-      );
-
-
-    $("rankingButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "RANKING"
-          );
-
-        }
-      );
-
-
-    $("rewardsButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "REWARDS"
-          );
-
-        }
-      );
-
-
-    $("homeButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "HOME"
-          );
-
-        }
-      );
-
-
-    $("missionButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "MISSION"
-          );
-
-        }
-      );
-
-
-    $("battleButton")
-      .addEventListener(
-        "click",
-        () => {
-
-          goPage(
-            "BATTLE"
-          );
-
-        }
-      );
-
-
-    /* =====================================================
-       START APP
-    ====================================================== */
+    $("inbodyModal").addEventListener("click",event=>{
+      if(event.target===$("inbodyModal")) closeInbodyModal();
+    });
 
     async function startApp(){
-
       try{
+        showStatus("กำลังเชื่อมต่อ LINE...");
 
-        showStatus(
-          "กำลังเชื่อมต่อ LINE..."
-        );
-
-
-        /*
-         * สำคัญมาก
-         *
-         * ไม่เรียก:
-         * ROCK.initLINE()
-         * ROCK.initLiff()
-         * ROCK.fetchDashboard()
-         *
-         * ใช้ LIFF โดยตรง
-         */
-
-        const ready =
-          await initLINE();
-
-
-        if(
-          ready === false
-        ){
-
-          return;
-
-        }
-
+        const ready=await initLINE();
+        if(ready===false) return;
 
         await loadHome();
 
-
-        /* ===============================================
-           AUTO REFRESH
-        ============================================== */
-
-        if(refreshTimer){
-
-          clearInterval(
-            refreshTimer
-          );
-
-        }
-
-
-        const refreshMs =
-          Number(
-            window.APP_CONFIG
-              ?.REFRESH_MS ??
-            30000
-          );
-
-
-        refreshTimer =
-          setInterval(
-            async () => {
-
-              if(
-                document.visibilityState !==
-                "visible"
-              ){
-
-                return;
-
-              }
-
-
-              await loadHome();
-
-            },
-            refreshMs
-          );
-
+        const ms=num(window.APP_CONFIG?.REFRESH_MS,30000);
+        refreshTimer=setInterval(loadHome,Math.max(10000,ms));
 
       }catch(error){
-
-        console.error(
-          "START APP ERROR:",
-          error
-        );
-
-
-        showStatus(
-          error?.message ||
-          "ไม่สามารถเข้าสู่ระบบได้",
-          true
-        );
-
+        console.error("START APP ERROR:",error);
+        showStatus(error?.message || "เปิดแอปไม่สำเร็จ",true);
       }
-
     }
 
-
-    /* =====================================================
-       REFRESH WHEN RETURN TO PAGE
-    ====================================================== */
-
-    document.addEventListener(
-      "visibilitychange",
-      async () => {
-
-        if(
-          document.visibilityState !==
-          "visible"
-        ){
-
-          return;
-
-        }
-
-
-        try{
-
-          /*
-           * ถ้า LIFF ถูก initialize แล้ว
-           * ไม่ต้อง init ซ้ำ
-           */
-
-          if(
-            typeof liff !== "undefined" &&
-            liff.isLoggedIn()
-          ){
-
-            await loadHome();
-
-          }
-
-        }catch(error){
-
-          console.error(
-            "VISIBILITY ERROR:",
-            error
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       PAGESHOW
-    ====================================================== */
-
-    window.addEventListener(
-      "pageshow",
-      async () => {
-
-        try{
-
-          if(
-            typeof liff !== "undefined" &&
-            liff.isLoggedIn()
-          ){
-
-            await loadHome();
-
-          }
-
-        }catch(error){
-
-          console.error(
-            "PAGESHOW ERROR:",
-            error
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =====================================================
-       RUN
-    ====================================================== */
-
     startApp();
-
   </script>
-
 </body>
-
 </html>
