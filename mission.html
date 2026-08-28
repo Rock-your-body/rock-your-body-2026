@@ -68,63 +68,51 @@
 
   <style>
 
-    /* =====================================================
-       MISSION CLICK AREA
-    ====================================================== */
+   /* =====================================================
+   MISSION CLICK AREA
+   ตรงเฉพาะปุ่ม "ไปทำภารกิจ"
+===================================================== */
 
-    .mission-card-button{
+.mission-card-button{
+  position:absolute;
+  z-index:40;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
 
-      position:absolute;
+/* DAILY - ปุ่มสีส้ม */
+.mission-card-button.daily{
+  left:3.0%;
+  top:59.3%;
+  width:29.0%;
+  height:6.3%;
+}
 
-      z-index:40;
+/* WEEKLY - ปุ่มสีน้ำเงิน */
+.mission-card-button.weekly{
+  left:35.4%;
+  top:59.3%;
+  width:29.0%;
+  height:6.3%;
+}
 
-      border:0;
+/* MONTHLY - ปุ่มสีม่วง */
+.mission-card-button.monthly{
+  left:67.5%;
+  top:59.3%;
+  width:29.0%;
+  height:6.3%;
+}
 
-      background:transparent;
-
-      cursor:pointer;
-
-      -webkit-tap-highlight-color:
-        transparent;
-
-    }
-
-
-    /*
-       CLICK AREAS — ตรงปุ่ม "ไปทำภารกิจ" บน mission-template.png
-       พิกัดคิดเป็น % จากภาพต้นฉบับ 1536 × 1024
-    */
-
-    .mission-card-button.daily{
-      left:3.3%;
-      top:44.3%;
-      width:28.2%;
-      height:5.5%;
-    }
-
-
-    .mission-card-button.weekly{
-      left:35.4%;
-      top:44.3%;
-      width:28.1%;
-      height:5.5%;
-    }
-
-
-    .mission-card-button.monthly{
-      left:67.3%;
-      top:44.3%;
-      width:29.3%;
-      height:5.5%;
-    }
-
-
-    .mission-card-button.bonus{
-      left:3.3%;
-      top:80.0%;
-      width:27.2%;
-      height:5.5%;
-    }
+/* BONUS - ปุ่มสีเขียว */
+.mission-card-button.bonus{
+  left:3.2%;
+  top:85.5%;
+  width:28.0%;
+  height:6.0%;
+}
 
 
     /* =====================================================
