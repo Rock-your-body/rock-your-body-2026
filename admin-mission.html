@@ -1,49 +1,100 @@
+/* =========================================================
+   ROCK YOUR BODY 2026
+   APP CONFIG
+   Version: 2026-08-28-PROJECT
+========================================================= */
+
+"use strict";
+
+
 window.APP_CONFIG = {
 
-  /* =========================================================
-     LIFF
-  ========================================================= */
+  /* =====================================================
+     APP
+  ====================================================== */
+
+  APP_NAME:
+    "ROCK YOUR BODY 2026",
+
+  VERSION:
+    "2026-08-28-PROJECT",
+
+
+  /* =====================================================
+     LINE LIFF
+  ====================================================== */
 
   LIFF_ID:
     "2011201679-uNWz5yqF",
 
 
-  /* =========================================================
-     API
-  ========================================================= */
+  /* =====================================================
+     SUPABASE
+  ====================================================== */
 
-  API: {
+  SUPABASE: {
 
-    DASHBOARD:
-      "https://rock-your-body-2026.onrender.com/api/player",
+    PROJECT_REF:
+      "nztvqdzatdpauufpvdaa",
 
-    MISSION:
-      "https://rock-your-body-2026.onrender.com/api/mission",
-
-    BATTLE:
-      "https://rock-your-body-2026.onrender.com/api/battle",
-
-    /*
-      Admin ใช้ mission Edge Function ตัวเดียวกัน
-      เพราะ mission_with_admin.ts รองรับ:
-      - adminWhoAmI
-      - adminListSubmissions
-      - adminReviewSubmission
-    */
-    MISSION_ADMIN:
-      "https://rock-your-body-2026.onrender.com/api/mission"
+    BASE_URL:
+      "https://nztvqdzatdpauufpvdaa.supabase.co"
 
   },
 
 
-  /* =========================================================
-     PAGE
-  ========================================================= */
+  /* =====================================================
+     SUPABASE EDGE FUNCTIONS
+  ====================================================== */
+
+  API: {
+
+    /* HOME / DASHBOARD */
+
+    DASHBOARD:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
+
+
+    /* MISSION */
+
+    MISSION:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
+
+
+    /* BATTLE */
+
+    BATTLE:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
+
+
+    /* INBODY */
+
+    INBODY:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/inbody",
+
+
+    /* PROJECT SETTINGS */
+
+    PROJECT:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/project-settings"
+
+  },
+
+
+  /* =====================================================
+     PAGE URL
+  ====================================================== */
 
   PAGE: {
 
     HOME:
       "./dashboard.html",
+
+    MISSION:
+      "./mission.html",
+
+    BATTLE:
+      "./battle.html",
 
     WEIGHT:
       "./weight-check.html",
@@ -57,174 +108,192 @@ window.APP_CONFIG = {
     REWARDS:
       "./rewards.html",
 
-    MISSION:
-      "./mission.html?v=20260824-03",
-
-    BATTLE:
-      "./battle.html?v=20260824-03",
-
-    MISSION_ADMIN:
-      "./mission-admin.html?v=20260824-03"
+    PROJECT_SETTINGS:
+      "./project-settings.html"
 
   },
 
 
-  /* =========================================================
-     GAME SETTINGS
-  ========================================================= */
+  /* =====================================================
+     PAGES
+     รองรับไฟล์เก่าที่เรียก APP_CONFIG.PAGES
+  ====================================================== */
 
-  EXP_PER_LEVEL:
-    500,
+  PAGES: {
+
+    HOME:
+      "./dashboard.html",
+
+    MISSION:
+      "./mission.html",
+
+    BATTLE:
+      "./battle.html",
+
+    WEIGHT:
+      "./weight-check.html",
+
+    PROGRESS:
+      "./progress.html",
+
+    RANKING:
+      "./ranking.html",
+
+    REWARDS:
+      "./rewards.html",
+
+    PROJECT_SETTINGS:
+      "./project-settings.html"
+
+  },
+
+
+  /* =====================================================
+     GAME CONFIG
+  ====================================================== */
 
   MAX_ENERGY:
     200,
 
+  EXP_PER_LEVEL:
+    500,
+
   REFRESH_MS:
-    30000
+    30000,
+
+
+  /* =====================================================
+     STORAGE
+  ====================================================== */
+
+  STORAGE: {
+
+    MISSION_EVIDENCE:
+      "mission-evidence",
+
+    INBODY_RESULTS:
+      "inbody-results",
+
+    ROCK_ASSETS:
+      "rock-assets"
+
+  },
+
+
+  /* =====================================================
+     ASSETS
+  ====================================================== */
+
+  ASSETS: {
+
+    HOME_TEMPLATE:
+      "./home-template.png",
+
+    MISSION_TEMPLATE:
+      "./mission-template.png",
+
+    BATTLE_TEMPLATE:
+      "./battle-template.png"
+
+  }
 
 };
 
 
 /* =========================================================
-   PAGE NAVIGATION
+   BACKWARD COMPATIBILITY
 ========================================================= */
 
-window.goHome = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.HOME ||
-    "./dashboard.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goWeight = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.WEIGHT ||
-    "./weight-check.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goProgress = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.PROGRESS ||
-    "./progress.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goRanking = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.RANKING ||
-    "./ranking.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goRewards = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.REWARDS ||
-    "./rewards.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goMission = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.MISSION ||
-    "./mission.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goBattle = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.BATTLE ||
-    "./battle.html";
-
-  window.location.href =
-    url;
-
-};
-
-
-window.goMissionAdmin = function () {
-
-  const url =
-    window.APP_CONFIG?.PAGE?.MISSION_ADMIN ||
-    "./mission-admin.html";
-
-  window.location.href =
-    url;
-
-};
+window.APP_CONFIG.API_BASE =
+  window.APP_CONFIG.SUPABASE.BASE_URL;
 
 
 /* =========================================================
-   GENERIC NAVIGATION
+   PAGE HELPER
 ========================================================= */
 
-window.APP_NAV = {
-
-  go(pageName) {
+window.APP_CONFIG.getPage =
+  function getPage(name) {
 
     const key =
       String(
-        pageName || ""
+        name || ""
       )
         .trim()
         .toUpperCase();
 
 
-    const url =
-      window.APP_CONFIG
-        ?.PAGE
-        ?.[key];
+    return (
+      window.APP_CONFIG.PAGE[key] ||
+      window.APP_CONFIG.PAGE.HOME
+    );
+
+  };
 
 
-    if (!url) {
+/* =========================================================
+   API HELPER
+========================================================= */
 
-      console.error(
-        "PAGE_NOT_FOUND:",
-        key
-      );
+window.APP_CONFIG.getApi =
+  function getApi(name) {
 
-      return false;
-
-    }
-
-
-    window.location.href =
-      url;
+    const key =
+      String(
+        name || ""
+      )
+        .trim()
+        .toUpperCase();
 
 
-    return true;
+    return (
+      window.APP_CONFIG.API[key] ||
+      null
+    );
+
+  };
+
+
+/* =========================================================
+   DEBUG
+========================================================= */
+
+console.log(
+  "ROCK YOUR BODY APP CONFIG:",
+  {
+
+    version:
+      window.APP_CONFIG.VERSION,
+
+    liffId:
+      window.APP_CONFIG.LIFF_ID,
+
+    dashboardApi:
+      window.APP_CONFIG.API.DASHBOARD,
+
+    missionApi:
+      window.APP_CONFIG.API.MISSION,
+
+    battleApi:
+      window.APP_CONFIG.API.BATTLE,
+
+    inbodyApi:
+      window.APP_CONFIG.API.INBODY,
+
+    projectApi:
+      window.APP_CONFIG.API.PROJECT,
+
+    home:
+      window.APP_CONFIG.PAGE.HOME,
+
+    weight:
+      window.APP_CONFIG.PAGE.WEIGHT,
+
+    progress:
+      window.APP_CONFIG.PAGE.PROGRESS,
+
+    projectSettings:
+      window.APP_CONFIG.PAGE.PROJECT_SETTINGS
 
   }
-
-};
+);
