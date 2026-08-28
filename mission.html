@@ -52,7 +52,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260829-health-zero-routes"
+    src="./app-config.js?v=20260829-mission-nutrition-final-v1"
   ></script>
 
 
@@ -114,6 +114,20 @@
   height:6.0%;
 }
 
+
+    /* NUTRITION APP - พื้นที่กดบนการ์ด Nutrition */
+    .nutrition-card-button{
+      position:absolute;
+      z-index:45;
+      left:35.4%;
+      top:85.5%;
+      width:29.0%;
+      height:6.0%;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
 
     /* =====================================================
        MODAL
@@ -5007,6 +5021,315 @@ async function submitEvidence(){
 
 
   }catch(error){
+    /* =====================================================
+       ERROR
+    ====================================================== */
+
+    console.error(
+      "MISSION SUBMIT ERROR:",
+      error
+    );
+
+    showMissionStatus(
+      "ERROR: " +
+      (
+        error?.message ||
+        String(error) ||
+        "UNKNOWN ERROR"
+      )
+    );
+
+  }finally{
+
+    /* =====================================================
+       RESTORE BUTTON
+    ====================================================== */
+
+    button.disabled = false;
+    button.textContent = "ส่งหลักฐานให้ Admin ตรวจสอบ";
+  }
+}
+
+/* =========================================================
+   LOAD STATUS FROM API
+========================================================= */
+
+async function refreshMissionStatus(){
+
+  /* =====================================================
+     NO API
+  ====================================================== */
+
+  if(!MISSION_API){
+
+    updateAutoBonus();
+
+    checkApprovedMessage();
+
+    updateTemplate();
+
+    return;
+  }
+
+
+  try{
+
+    /* =====================================================
+       TOKEN
+    ====================================================== */
+
+    const idToken =
+      ROCK.getIdToken();
+
+
+    if(!idToken){
+
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+
+    }
+
+
+    /* =====================================================
+       REQUEST
+    ====================================================== */
+
+    const response =
+      await fetch(
+        MISSION_API,
+        {
+
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              action:
+                "myMissionStatus",
+
+              idToken:
+                idToken
+
+            })
+
+        }
+      );
+
+
+    /* =====================================================
+       RESPONSE
+    ====================================================== */
+
+    const raw =
+      await response.text();
+
+
+    console.log(
+      "MISSION STATUS HTTP:",
+      response.status
+    );
+
+
+    console.log(
+      "MISSION STATUS RAW:",
+      raw
+    );
+
+
+    let result = {};
+
+
+    try{
+
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    }catch(error){
+
+      throw new Error(
+        `Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`
+      );
+
+    }
+
+
+    if(
+      !response.ok ||
+      result?.success === false
+    ){
+
+      throw new Error(
+
+        result?.error ||
+
+        result?.message ||
+
+        `โหลด Mission ไม่สำเร็จ HTTP ${response.status}`
+
+      );
+
+    }
+
+
+    /* =====================================================
+       UPDATE LOCAL STATUS
+    ====================================================== */
+
+    const local =
+      readLocal();
+
+
+    const submissions =
+      Array.isArray(
+        result?.submissions
+      )
+        ? result.submissions
+        : [];
+
+
+    submissions
+      .forEach(
+        item => {
+
+          const missionId =
+
+            item?.mission_id ||
+
+            item?.missionId;
+
+
+          if(!missionId){
+            return;
+          }
+
+
+          local[
+            missionId
+          ] = {
+
+            ...local[
+              missionId
+            ],
+
+            status:
+              item?.status ||
+              "pending",
+
+            approvedAt:
+              item?.approved_at ||
+              item?.approvedAt ||
+              null,
+
+            reviewedAt:
+              item?.reviewed_at ||
+              item?.reviewedAt ||
+              null,
+
+            rejectReason:
+              item?.reject_reason ||
+              item?.rejected_reason ||
+              item?.rejectReason ||
+              "",
+
+            rewardGranted:
+              item?.reward_granted ===
+              true,
+
+            submittedAt:
+              item?.submitted_at ||
+              local[
+                missionId
+              ]?.submittedAt ||
+              null
+
+          };
+
+        }
+      );
+
+
+    writeLocal(
+      local
+    );
+
+
+    /* =====================================================
+       AUTO BONUS
+    ====================================================== */
+
+    updateAutoBonus();
+
+
+    /* =====================================================
+       CONGRATULATION
+    ====================================================== */
+
+    checkApprovedMessage();
+
+
+    /* =====================================================
+       UPDATE TEMPLATE
+    ====================================================== */
+
+    updateTemplate();
+
+
+    /* =====================================================
+       REFRESH OPEN CATEGORY
+    ====================================================== */
+
+    const modal =
+      document.getElementById(
+        "missionModal"
+      );
+
+
+    if(
+      modal &&
+      modal.classList.contains(
+        "show"
+      )
+    ){
+
+      renderCategory();
+
+    }
+
+
+    return result;
+
+
+  }catch(error){
+
+    console.error(
+      "MISSION STATUS ERROR:",
+      error
+    );
+
+
+    /*
+      ไม่แสดง Toast ทุก 30 วินาที
+      เพื่อไม่รบกวนผู้เล่น
+    */
+
+    return null;
+
+  }
+
+}
+
+/* =========================================================
+   FINAL INITIALIZER
+========================================================= */
 
     /* =========================================================
    MISSION PAGE FIX / FINAL INITIALIZER
@@ -5642,46 +5965,39 @@ function goHome(){
     "./index.html";
 
 }
-function goHome(){
 
-  try{
 
-    if(
-      typeof ROCK?.goHome ===
-      "function"
-    ){
 
-      ROCK.goHome();
-      return;
+/* =========================================================
+   NUTRITION
+========================================================= */
 
-    }
+function goNutrition(){
 
-    if(
-      typeof ROCK?.navigate ===
-      "function"
-    ){
+  const baseUrl =
+    window.APP_CONFIG
+      ?.PAGE
+      ?.NUTRITION ||
+    window.APP_CONFIG
+      ?.PAGES
+      ?.NUTRITION ||
+    "./nutrition.html";
 
-      ROCK.navigate(
-        "index.html"
-      );
-
-      return;
-
-    }
-
-  }catch(error){
-
-    console.warn(
-      "ROCK HOME ERROR:",
-      error
-    );
-
-  }
+  const separator =
+    baseUrl.includes("?")
+      ? "&"
+      : "?";
 
   window.location.href =
-    "./index.html";
+    baseUrl +
+    separator +
+    "from=mission&mission=daily_eat_smart";
 }
 
+
+/* =========================================================
+   WAIT FOR ROCK / LIFF
+========================================================= */
 /* =========================================================
    WAIT FOR ROCK / LIFF
 ========================================================= */
@@ -5973,315 +6289,6 @@ if(
 
 }
 
-    /* =====================================================
-       ERROR
-    ====================================================== */
-
-    console.error(
-      "MISSION SUBMIT ERROR:",
-      error
-    );
-
-
-    showMissionStatus(
-      "ERROR: " +
-      (
-        error?.message ||
-        String(error) ||
-        "UNKNOWN ERROR"
-      )
-    );
-
-
-  }finally{
-
-    /* =====================================================
-       RESTORE BUTTON
-    ====================================================== */
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      "ส่งหลักฐานให้ Admin ตรวจสอบ";
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD STATUS FROM API
-========================================================= */
-
-async function refreshMissionStatus(){
-
-  /* =====================================================
-     NO API
-  ====================================================== */
-
-  if(!MISSION_API){
-
-    updateAutoBonus();
-
-    checkApprovedMessage();
-
-    updateTemplate();
-
-    return;
-  }
-
-
-  try{
-
-    /* =====================================================
-       TOKEN
-    ====================================================== */
-
-    const idToken =
-      ROCK.getIdToken();
-
-
-    if(!idToken){
-
-      throw new Error(
-        "ไม่พบ LINE ID Token"
-      );
-
-    }
-
-
-    /* =====================================================
-       REQUEST
-    ====================================================== */
-
-    const response =
-      await fetch(
-        MISSION_API,
-        {
-
-          method:
-            "POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              action:
-                "myMissionStatus",
-
-              idToken:
-                idToken
-
-            })
-
-        }
-      );
-
-
-    /* =====================================================
-       RESPONSE
-    ====================================================== */
-
-    const raw =
-      await response.text();
-
-
-    console.log(
-      "MISSION STATUS HTTP:",
-      response.status
-    );
-
-
-    console.log(
-      "MISSION STATUS RAW:",
-      raw
-    );
-
-
-    let result = {};
-
-
-    try{
-
-      result =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    }catch(error){
-
-      throw new Error(
-        `Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`
-      );
-
-    }
-
-
-    if(
-      !response.ok ||
-      result?.success === false
-    ){
-
-      throw new Error(
-
-        result?.error ||
-
-        result?.message ||
-
-        `โหลด Mission ไม่สำเร็จ HTTP ${response.status}`
-
-      );
-
-    }
-
-
-    /* =====================================================
-       UPDATE LOCAL STATUS
-    ====================================================== */
-
-    const local =
-      readLocal();
-
-
-    const submissions =
-      Array.isArray(
-        result?.submissions
-      )
-        ? result.submissions
-        : [];
-
-
-    submissions
-      .forEach(
-        item => {
-
-          const missionId =
-
-            item?.mission_id ||
-
-            item?.missionId;
-
-
-          if(!missionId){
-            return;
-          }
-
-
-          local[
-            missionId
-          ] = {
-
-            ...local[
-              missionId
-            ],
-
-            status:
-              item?.status ||
-              "pending",
-
-            approvedAt:
-              item?.approved_at ||
-              item?.approvedAt ||
-              null,
-
-            reviewedAt:
-              item?.reviewed_at ||
-              item?.reviewedAt ||
-              null,
-
-            rejectReason:
-              item?.reject_reason ||
-              item?.rejected_reason ||
-              item?.rejectReason ||
-              "",
-
-            rewardGranted:
-              item?.reward_granted ===
-              true,
-
-            submittedAt:
-              item?.submitted_at ||
-              local[
-                missionId
-              ]?.submittedAt ||
-              null
-
-          };
-
-        }
-      );
-
-
-    writeLocal(
-      local
-    );
-
-
-    /* =====================================================
-       AUTO BONUS
-    ====================================================== */
-
-    updateAutoBonus();
-
-
-    /* =====================================================
-       CONGRATULATION
-    ====================================================== */
-
-    checkApprovedMessage();
-
-
-    /* =====================================================
-       UPDATE TEMPLATE
-    ====================================================== */
-
-    updateTemplate();
-
-
-    /* =====================================================
-       REFRESH OPEN CATEGORY
-    ====================================================== */
-
-    const modal =
-      document.getElementById(
-        "missionModal"
-      );
-
-
-    if(
-      modal &&
-      modal.classList.contains(
-        "show"
-      )
-    ){
-
-      renderCategory();
-
-    }
-
-
-    return result;
-
-
-  }catch(error){
-
-    console.error(
-      "MISSION STATUS ERROR:",
-      error
-    );
-
-
-    /*
-      ไม่แสดง Toast ทุก 30 วินาที
-      เพื่อไม่รบกวนผู้เล่น
-    */
-
-    return null;
-
-  }
+</script>
+</body>
+</html>
