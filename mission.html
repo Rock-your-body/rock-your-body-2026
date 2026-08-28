@@ -1,624 +1,869 @@
 <!doctype html>
 <html lang="th">
-
 <head>
-
   <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - MISSION</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-  <script src="./app-config.js?v=20260827-01"></script>
-
-  <script src="./common.js?v=20260827-01"></script>
-
+  <script src="./app-config.js?v=20260828-01"></script>
+  <script src="./common.js?v=20260828-01"></script>
 
   <style>
+    *{box-sizing:border-box}
 
-    * {
-      box-sizing: border-box;
+    html,body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      background:#eef4ff;
+      font-family:"Noto Sans Thai",Tahoma,Arial,sans-serif;
+      color:#082b68;
     }
 
-
-    body {
-
-      margin: 0;
-
-      background: #eef4ff;
-
-      font-family:
-        "Noto Sans Thai",
-        Tahoma,
-        Arial,
-        sans-serif;
-
-      color: #082b68;
-
+    body{
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
     }
 
-
-    #loading {
-
-      position: fixed;
-      inset: 0;
-
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-
-      background: #eef4ff;
-
-      font-size: 20px;
-      font-weight: 800;
-
+    /* =========================================================
+       ใช้ภาพ mission-template.png เป็นหน้าหลัก
+       ขนาดภาพต้นฉบับ 1536 x 1024
+    ========================================================= */
+    #missionStage{
+      position:relative;
+      width:min(100vw,1536px);
+      aspect-ratio:1536 / 1024;
+      margin:0 auto;
+      overflow:hidden;
+      background:#fff;
     }
 
-
-    #app {
-
-      display: none;
-
-      width: 100%;
-      max-width: 1000px;
-
-      margin: auto;
-
-      padding: 20px;
-
+    #missionTemplate{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:fill;
+      z-index:1;
+      user-select:none;
+      pointer-events:none;
     }
 
-
-    .header {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      margin-bottom: 20px;
-
+    /* =========================================================
+       LIVE VALUES
+    ========================================================= */
+    .live{
+      position:absolute;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      pointer-events:none;
+      white-space:nowrap;
+      text-shadow:0 1px 1px rgba(255,255,255,.7);
     }
 
-
-    h1 {
-
-      margin: 0;
-
-      font-size: 34px;
-
+    #coinValue{
+      left:73.0%;
+      top:3.5%;
+      width:9.0%;
+      height:6.5%;
+      color:#0a2d70;
+      font-size:clamp(10px,1.55vw,25px);
     }
 
-
-    .back {
-
-      border: 0;
-
-      background: #102f78;
-
-      color: white;
-
-      padding: 12px 20px;
-
-      border-radius: 14px;
-
-      font-weight: 800;
-
-      cursor: pointer;
-
+    #energyValue{
+      left:86.8%;
+      top:3.5%;
+      width:10.8%;
+      height:6.5%;
+      color:#0a2d70;
+      font-size:clamp(10px,1.55vw,25px);
     }
 
-
-    .mission-section {
-
-      margin-bottom: 25px;
-
+    #missionPointValue{
+      left:89.3%;
+      top:16.2%;
+      width:7.5%;
+      height:4%;
+      color:#fff;
+      font-size:clamp(9px,1.15vw,18px);
+      text-shadow:0 2px 4px rgba(0,0,0,.35);
     }
 
-
-    .section-title {
-
-      font-size: 23px;
-
-      font-weight: 900;
-
-      margin-bottom: 12px;
-
+    .count{
+      color:#fff;
+      border-radius:9px;
+      min-width:4.8%;
+      height:4.8%;
+      font-size:clamp(9px,1.15vw,18px);
+      text-shadow:0 2px 3px rgba(0,0,0,.3);
     }
 
-
-    .mission {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      gap: 15px;
-
-      background: white;
-
-      border-radius: 20px;
-
-      padding: 18px;
-
-      margin-bottom: 12px;
-
-      box-shadow:
-        0 4px 15px rgba(0,0,0,.08);
-
+    #dailyCount{
+      left:25.6%;
+      top:24.2%;
+      width:5.7%;
     }
 
-
-    .mission-title {
-
-      font-size: 18px;
-
-      font-weight: 800;
-
+    #weeklyCount{
+      left:57.9%;
+      top:24.2%;
+      width:5.7%;
     }
 
-
-    .mission-meta {
-
-      color: #65738b;
-
-      font-size: 14px;
-
-      margin-top: 5px;
-
+    #monthlyCount{
+      left:90.3%;
+      top:24.2%;
+      width:5.7%;
     }
 
-
-    .complete {
-
-      border: 0;
-
-      background: #102f78;
-
-      color: white;
-
-      padding: 12px 18px;
-
-      border-radius: 13px;
-
-      font-weight: 800;
-
-      cursor: pointer;
-
-      white-space: nowrap;
-
+    #bonusCount{
+      left:25.7%;
+      top:56.6%;
+      width:5.7%;
     }
 
-
-    .complete.done {
-
-      background: #6b7280;
-
+    /* Reward numbers */
+    .reward-live{
+      position:absolute;
+      z-index:21;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      pointer-events:none;
+      font-size:clamp(8px,.9vw,15px);
     }
 
+    #dailyCoin{left:12.2%;top:39.0%;width:5%;height:3%}
+    #dailyEnergy{left:23.7%;top:39.0%;width:5%;height:3%}
 
-    @media(max-width:650px){
+    #weeklyCoin{left:44.7%;top:39.0%;width:5%;height:3%}
+    #weeklyEnergy{left:56.2%;top:39.0%;width:5%;height:3%}
 
-      .mission {
+    #monthlyCoin{left:77.1%;top:39.0%;width:5%;height:3%}
+    #monthlyEnergy{left:88.6%;top:39.0%;width:5%;height:3%}
 
-        flex-direction: column;
+    #bonusCoin{left:11.6%;top:72.0%;width:5%;height:3%}
+    #bonusEnergy{left:23.8%;top:72.0%;width:5%;height:3%}
 
-        align-items: stretch;
+    /* =========================================================
+       HOTSPOTS
+    ========================================================= */
+    .hotspot{
+      position:absolute;
+      z-index:40;
+      border:0;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
 
+    .hotspot:active{
+      background:rgba(255,255,255,.08);
+    }
+
+    #dailyButton{left:2.0%;top:22.0%;width:30.8%;height:29.8%}
+    #weeklyButton{left:33.4%;top:22.0%;width:31.3%;height:29.8%}
+    #monthlyButton{left:65.5%;top:22.0%;width:32.2%;height:29.8%}
+    #bonusButton{left:1.8%;top:53.7%;width:30.8%;height:34.0%}
+
+    #nutritionButton{left:33.2%;top:53.2%;width:38.6%;height:35.5%}
+
+    #homeButton{left:1.5%;top:90.0%;width:30.5%;height:8.2%}
+    #missionButton{left:33.0%;top:90.0%;width:31.7%;height:8.2%}
+    #battleButton{left:65.8%;top:90.0%;width:32.8%;height:8.2%}
+
+    /* =========================================================
+       MODAL — รายการภารกิจจริง
+    ========================================================= */
+    #missionModal{
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(1,22,66,.72);
+      backdrop-filter:blur(4px);
+    }
+
+    #missionModal.show{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(94vw,760px);
+      max-height:86vh;
+      overflow:auto;
+      background:#f8fbff;
+      border-radius:24px;
+      padding:20px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      margin-bottom:14px;
+    }
+
+    #modalTitle{
+      margin:0;
+      color:#0b347d;
+      font-size:clamp(22px,4vw,34px);
+      font-weight:900;
+    }
+
+    #closeModal{
+      width:42px;
+      height:42px;
+      border:0;
+      border-radius:50%;
+      background:#e8eef9;
+      color:#123772;
+      font-size:24px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .mission-item{
+      margin:10px 0;
+      padding:16px;
+      border-radius:18px;
+      border:1px solid #dbe5f6;
+      background:#fff;
+      box-shadow:0 4px 14px rgba(11,52,125,.08);
+    }
+
+    .mission-item-title{
+      color:#0c3479;
+      font-weight:900;
+      font-size:18px;
+    }
+
+    .mission-item-desc{
+      margin-top:5px;
+      color:#64748b;
+      font-size:14px;
+    }
+
+    .mission-item-reward{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      font-weight:800;
+      color:#0c3479;
+    }
+
+    .chip{
+      padding:6px 10px;
+      border-radius:999px;
+      background:#edf4ff;
+    }
+
+    .status-chip{
+      background:#fff1c7;
+    }
+
+    .empty{
+      padding:20px;
+      text-align:center;
+      color:#64748b;
+      font-weight:700;
+    }
+
+    /* =========================================================
+       LOADING / TOAST
+    ========================================================= */
+    #loading{
+      position:fixed;
+      inset:0;
+      z-index:2000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eef4ff;
+      color:#0b347d;
+      font-weight:900;
+      font-size:20px;
+    }
+
+    #toast{
+      position:fixed;
+      z-index:3000;
+      left:50%;
+      bottom:20px;
+      transform:translateX(-50%);
+      display:none;
+      max-width:90vw;
+      padding:10px 18px;
+      border-radius:999px;
+      background:#0b58b8;
+      color:#fff;
+      font-weight:800;
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+
+    #toast.show{display:block}
+    #toast.error{background:#c81d25}
+
+    @media(max-width:700px){
+      #missionStage{
+        width:100vw;
       }
-
     }
-
   </style>
-
 </head>
-
 
 <body>
 
+<div id="missionStage">
 
-<div id="loading">
-  กำลังโหลด MISSION...
+  <img
+    id="missionTemplate"
+    src="./mission-template.png?v=20260828-01"
+    alt="ROCK YOUR BODY 2026 MISSION"
+    draggable="false"
+  >
+
+  <!-- LIVE -->
+  <div id="coinValue" class="live">0</div>
+  <div id="energyValue" class="live">0 / 200</div>
+  <div id="missionPointValue" class="live">0 PTS</div>
+
+  <div id="dailyCount" class="live count">0 / 0</div>
+  <div id="weeklyCount" class="live count">0 / 0</div>
+  <div id="monthlyCount" class="live count">0 / 0</div>
+  <div id="bonusCount" class="live count">0 / 0</div>
+
+  <div id="dailyCoin" class="reward-live"></div>
+  <div id="dailyEnergy" class="reward-live"></div>
+  <div id="weeklyCoin" class="reward-live"></div>
+  <div id="weeklyEnergy" class="reward-live"></div>
+  <div id="monthlyCoin" class="reward-live"></div>
+  <div id="monthlyEnergy" class="reward-live"></div>
+  <div id="bonusCoin" class="reward-live"></div>
+  <div id="bonusEnergy" class="reward-live"></div>
+
+  <!-- CLICK AREAS -->
+  <button id="dailyButton" class="hotspot" aria-label="Daily Mission"></button>
+  <button id="weeklyButton" class="hotspot" aria-label="Weekly Mission"></button>
+  <button id="monthlyButton" class="hotspot" aria-label="Monthly Mission"></button>
+  <button id="bonusButton" class="hotspot" aria-label="Bonus Mission"></button>
+  <button id="nutritionButton" class="hotspot" aria-label="Nutrition"></button>
+
+  <button id="homeButton" class="hotspot" aria-label="Home"></button>
+  <button id="missionButton" class="hotspot" aria-label="Mission"></button>
+  <button id="battleButton" class="hotspot" aria-label="Battle"></button>
+
+</div>
+
+<div id="loading">กำลังโหลด MISSION...</div>
+<div id="toast"></div>
+
+<div id="missionModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="modalTitle">MISSION</h2>
+      <button id="closeModal" type="button">×</button>
+    </div>
+    <div id="modalList"></div>
+  </div>
 </div>
 
 
-<main id="app">
-
-
-  <header class="header">
-
-    <h1>
-      MISSION
-    </h1>
-
-    <button
-      class="back"
-      onclick="window.ROCK.goHome()"
-    >
-      HOME
-    </button>
-
-  </header>
-
-
-  <section
-    id="dailySection"
-    class="mission-section"
-  >
-
-    <div class="section-title">
-      DAILY MISSION
-    </div>
-
-    <div id="dailyList"></div>
-
-  </section>
-
-
-  <section
-    id="weeklySection"
-    class="mission-section"
-  >
-
-    <div class="section-title">
-      WEEKLY MISSION
-    </div>
-
-    <div id="weeklyList"></div>
-
-  </section>
-
-
-  <section
-    id="monthlySection"
-    class="mission-section"
-  >
-
-    <div class="section-title">
-      MONTHLY MISSION
-    </div>
-
-    <div id="monthlyList"></div>
-
-  </section>
-
-
-  <section
-    id="bonusSection"
-    class="mission-section"
-  >
-
-    <div class="section-title">
-      BONUS
-    </div>
-
-    <div id="bonusList"></div>
-
-  </section>
-
-
-</main>
-
-
 <script>
-
 (function(){
-
   "use strict";
 
+  const $ = id => document.getElementById(id);
 
-  function escapeHTML(
-    value
-  ){
+  const state = {
+    dashboard:null,
+    missions:{
+      daily:[],
+      weekly:[],
+      monthly:[],
+      bonus:[]
+    }
+  };
 
-    return String(
-      value ?? ""
-    )
+  /* =========================================================
+     HELPERS
+  ========================================================= */
+
+  function num(value,fallback=0){
+    const n=Number(value);
+    return Number.isFinite(n)?n:fallback;
+  }
+
+  function fmt(value){
+    return Math.round(num(value,0)).toLocaleString("en-US");
+  }
+
+  function escapeHTML(value){
+    return String(value??"")
       .replaceAll("&","&amp;")
       .replaceAll("<","&lt;")
       .replaceAll(">","&gt;")
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
-
   }
 
+  function toast(message,error=false){
+    const el=$("toast");
+    el.textContent=message;
+    el.className=error?"show error":"show";
+    clearTimeout(window.__missionToastTimer);
+    window.__missionToastTimer=setTimeout(()=>{
+      el.className="";
+    },3500);
+  }
 
-  function renderList(
-    elementId,
-    list
-  ){
+  function first(...values){
+    for(const value of values){
+      if(value!==undefined && value!==null && value!==""){
+        return value;
+      }
+    }
+    return undefined;
+  }
 
-    const el =
-      document.getElementById(
-        elementId
-      );
+  function normalizeArray(value){
+    return Array.isArray(value)?value:[];
+  }
 
+  /* =========================================================
+     DASHBOARD
+  ========================================================= */
 
-    if(!el){
+  function normalizeDashboard(raw){
+    const d=raw?.data??raw?.dashboard??raw??{};
+    const user=d?.user??d?.player??{};
 
-      return;
+    const energyObject=
+      d?.energy && typeof d.energy==="object"
+        ? d.energy
+        : {};
 
+    return {
+      coin:num(first(
+        d?.rockCoin,
+        d?.rock_coin,
+        d?.coin,
+        user?.rockCoin,
+        user?.rock_coin,
+        user?.coin
+      ),0),
+
+      energy:num(first(
+        energyObject?.current,
+        d?.energyCurrent,
+        d?.currentEnergy,
+        user?.energy,
+        typeof d?.energy==="number"?d.energy:undefined
+      ),0),
+
+      maxEnergy:num(first(
+        energyObject?.max,
+        d?.maxEnergy,
+        d?.max_energy,
+        user?.max_energy,
+        user?.maxEnergy,
+        window.APP_CONFIG?.MAX_ENERGY
+      ),200),
+
+      missionPoint:num(first(
+        d?.missionPoint,
+        d?.mission_point,
+        d?.missionPoints,
+        d?.mission_points,
+        user?.missionPoint,
+        user?.mission_point,
+        user?.mission_points
+      ),0)
+    };
+  }
+
+  function renderDashboard(){
+    const p=normalizeDashboard(state.dashboard);
+
+    $("coinValue").textContent=fmt(p.coin);
+    $("energyValue").textContent=
+      `${fmt(p.energy)} / ${fmt(p.maxEnergy)}`;
+
+    $("missionPointValue").textContent=
+      `${fmt(p.missionPoint)} PTS`;
+  }
+
+  /* =========================================================
+     MISSIONS NORMALIZER
+  ========================================================= */
+
+  function normalizeMissionResponse(raw){
+    const d=raw?.data??raw??{};
+
+    let source=
+      d?.missions ??
+      d?.missionStatus ??
+      d?.mission_status ??
+      {};
+
+    /*
+      รองรับกรณี API ส่ง array เดียว
+    */
+    if(Array.isArray(source)){
+      const grouped={
+        daily:[],
+        weekly:[],
+        monthly:[],
+        bonus:[]
+      };
+
+      source.forEach(item=>{
+        const type=String(
+          first(
+            item?.category,
+            item?.type,
+            item?.mission_type,
+            "daily"
+          )
+        ).toLowerCase();
+
+        if(type.includes("week")){
+          grouped.weekly.push(item);
+        }else if(type.includes("month")){
+          grouped.monthly.push(item);
+        }else if(type.includes("bonus")||type.includes("extra")){
+          grouped.bonus.push(item);
+        }else{
+          grouped.daily.push(item);
+        }
+      });
+
+      return grouped;
     }
 
-
-    if(
-      !Array.isArray(list) ||
-      list.length === 0
-    ){
-
-      el.innerHTML =
-        `<div class="mission">
-          ยังไม่มีภารกิจ
-        </div>`;
-
-      return;
-
-    }
-
-
-    el.innerHTML =
-      list
-        .map(
-          mission => {
-
-            const done =
-              Boolean(
-                mission.completed
-              );
-
-
-            return `
-              <div class="mission">
-
-                <div>
-
-                  <div class="mission-title">
-                    ${escapeHTML(
-                      mission.title
-                    )}
-                  </div>
-
-                  <div class="mission-meta">
-                    ${escapeHTML(
-                      mission.type || ""
-                    )}
-
-                    ·
-
-                    🪙
-                    ${Number(
-                      mission.rewardCoin || 0
-                    ).toLocaleString()}
-
-                    ·
-
-                    ⚡
-                    ${Number(
-                      mission.rewardEnergy || 0
-                    ).toLocaleString()}
-                  </div>
-
-                </div>
-
-
-                <button
-                  class="complete ${done ? "done" : ""}"
-                  data-mission-id="${escapeHTML(
-                    mission.id
-                  )}"
-                  ${done ? "disabled" : ""}
-                >
-
-                  ${
-                    done
-                      ? "COMPLETED"
-                      : "COMPLETE"
-                  }
-
-                </button>
-
-              </div>
-            `;
-
-          }
-        )
-        .join("");
-
-
-    el
-      .querySelectorAll(
-        "[data-mission-id]"
+    return {
+      daily:normalizeArray(
+        first(source?.daily,d?.daily,[])
+      ),
+      weekly:normalizeArray(
+        first(source?.weekly,d?.weekly,[])
+      ),
+      monthly:normalizeArray(
+        first(source?.monthly,d?.monthly,[])
+      ),
+      bonus:normalizeArray(
+        first(source?.bonus,d?.bonus,d?.extra,[])
       )
-      .forEach(
-        button => {
+    };
+  }
 
-          button.addEventListener(
-            "click",
-            async function(){
+  function missionDone(item){
+    return Boolean(
+      item?.completed ??
+      item?.done ??
+      item?.approved ??
+      item?.is_completed ??
+      String(item?.status??"").toLowerCase()==="approved" ??
+      false
+    );
+  }
 
-              const id =
-                button.dataset.missionId;
+  function categoryStats(list){
+    const total=list.length;
+    const done=list.filter(missionDone).length;
 
+    const coin=list.reduce(
+      (sum,item)=>sum+num(first(
+        item?.rewardCoin,
+        item?.reward_coin,
+        item?.coin
+      ),0),
+      0
+    );
 
-              try{
+    const energy=list.reduce(
+      (sum,item)=>sum+num(first(
+        item?.rewardEnergy,
+        item?.reward_energy,
+        item?.energy
+      ),0),
+      0
+    );
 
-                button.disabled =
-                  true;
+    return {total,done,coin,energy};
+  }
 
+  function renderMissionSummary(){
+    const groups=[
+      ["daily","dailyCount","dailyCoin","dailyEnergy"],
+      ["weekly","weeklyCount","weeklyCoin","weeklyEnergy"],
+      ["monthly","monthlyCount","monthlyCoin","monthlyEnergy"],
+      ["bonus","bonusCount","bonusCoin","bonusEnergy"]
+    ];
 
-                button.textContent =
-                  "กำลังทำ...";
+    groups.forEach(([key,countId,coinId,energyId])=>{
+      const stats=categoryStats(state.missions[key]);
 
+      $(countId).textContent=
+        `${stats.done} / ${stats.total}`;
 
-                const result =
-                  await window.ROCK
-                    .completeMission(
-                      id
-                    );
+      $(coinId).textContent=
+        stats.coin>0
+          ? `+${fmt(stats.coin)}`
+          : "";
 
+      $(energyId).textContent=
+        stats.energy>0
+          ? `+${fmt(stats.energy)}`
+          : "";
+    });
+  }
 
-                console.log(
-                  "MISSION COMPLETE:",
-                  result
-                );
+  /* =========================================================
+     MODAL
+  ========================================================= */
 
+  const titles={
+    daily:"DAILY MISSION",
+    weekly:"WEEKLY MISSION",
+    monthly:"MONTHLY MISSION",
+    bonus:"BONUS MISSION"
+  };
 
-                button.textContent =
-                  "COMPLETED";
+  function openMission(category){
+    const list=state.missions[category]||[];
 
+    $("modalTitle").textContent=
+      titles[category]||"MISSION";
 
-                button.classList.add(
-                  "done"
-                );
-
-
-              }catch(error){
-
-                console.error(
-                  error
-                );
-
-
-                button.disabled =
-                  false;
-
-
-                button.textContent =
-                  "COMPLETE";
-
-
-                alert(
-                  error.message ||
-                  "ไม่สามารถทำภารกิจได้"
-                );
-
-              }
-
-            }
+    if(!list.length){
+      $("modalList").innerHTML=
+        `<div class="empty">ยังไม่มีภารกิจในหมวดนี้</div>`;
+    }else{
+      $("modalList").innerHTML=
+        list.map(item=>{
+          const title=first(
+            item?.title,
+            item?.name,
+            item?.missionTitle,
+            item?.mission_title,
+            item?.missionId,
+            item?.mission_id,
+            "MISSION"
           );
 
-        }
-      );
+          const desc=first(
+            item?.description,
+            item?.detail,
+            item?.desc,
+            ""
+          );
 
-  }
+          const coin=num(first(
+            item?.rewardCoin,
+            item?.reward_coin,
+            item?.coin
+          ),0);
 
+          const energy=num(first(
+            item?.rewardEnergy,
+            item?.reward_energy,
+            item?.energy
+          ),0);
 
-  async function start(){
+          const exp=num(first(
+            item?.rewardExp,
+            item?.reward_exp,
+            item?.exp
+          ),0);
 
-    try{
+          const status=first(
+            item?.status,
+            missionDone(item)?"completed":"pending"
+          );
 
-      const ready =
-        await window.ROCK
-          .initLiff();
-
-
-      if(
-        ready === false
-      ){
-
-        return;
-
-      }
-
-
-      const result =
-        await window.ROCK
-          .getMissions();
-
-
-      console.log(
-        "MISSIONS:",
-        result
-      );
-
-
-      const missions =
-        result?.missions ||
-        result?.data?.missions ||
-        {};
-
-
-      renderList(
-        "dailyList",
-        missions.daily
-      );
-
-
-      renderList(
-        "weeklyList",
-        missions.weekly
-      );
-
-
-      renderList(
-        "monthlyList",
-        missions.monthly
-      );
-
-
-      renderList(
-        "bonusList",
-        missions.bonus
-      );
-
-
-      document
-        .getElementById(
-          "loading"
-        )
-        .style.display =
-        "none";
-
-
-      document
-        .getElementById(
-          "app"
-        )
-        .style.display =
-        "block";
-
-
-    }catch(error){
-
-      console.error(
-        "MISSION ERROR:",
-        error
-      );
-
-
-      document
-        .getElementById(
-          "loading"
-        )
-        .innerHTML =
-        `
-        ไม่สามารถโหลด Mission ได้
-        <br><br>
-        <small>
-          ${error.message}
-        </small>
-        `;
-
+          return `
+            <div class="mission-item">
+              <div class="mission-item-title">${escapeHTML(title)}</div>
+              ${desc?`<div class="mission-item-desc">${escapeHTML(desc)}</div>`:""}
+              <div class="mission-item-reward">
+                ${coin?`<span class="chip">🪙 +${fmt(coin)} COIN</span>`:""}
+                ${energy?`<span class="chip">⚡ +${fmt(energy)} ENERGY</span>`:""}
+                ${exp?`<span class="chip">🏆 +${fmt(exp)} EXP</span>`:""}
+                <span class="chip status-chip">${escapeHTML(status)}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
     }
 
+    $("missionModal").classList.add("show");
   }
 
+  function closeModal(){
+    $("missionModal").classList.remove("show");
+  }
 
-  start();
+  /* =========================================================
+     LOAD
+  ========================================================= */
+
+  async function loadAll(){
+    try{
+      if(!window.ROCK){
+        throw new Error("common.js โหลดไม่สำเร็จ");
+      }
+
+      const ready=await ROCK.initLiff();
+
+      if(ready===false){
+        return;
+      }
+
+      const results=await Promise.allSettled([
+        typeof ROCK.fetchDashboard==="function"
+          ? ROCK.fetchDashboard()
+          : Promise.resolve(null),
+
+        typeof ROCK.getMissions==="function"
+          ? ROCK.getMissions()
+          : Promise.resolve(null)
+      ]);
+
+      if(results[0].status==="fulfilled"){
+        state.dashboard=results[0].value;
+      }else{
+        console.error(
+          "MISSION DASHBOARD ERROR:",
+          results[0].reason
+        );
+      }
+
+      if(results[1].status==="fulfilled"){
+        state.missions=
+          normalizeMissionResponse(
+            results[1].value
+          );
+      }else{
+        console.error(
+          "MISSION API ERROR:",
+          results[1].reason
+        );
+        toast(
+          results[1].reason?.message ||
+          "โหลดรายการ Mission ไม่สำเร็จ",
+          true
+        );
+      }
+
+      renderDashboard();
+      renderMissionSummary();
+
+      $("loading").style.display="none";
+
+    }catch(error){
+      console.error("MISSION START ERROR:",error);
+
+      $("loading").innerHTML=
+        `ไม่สามารถโหลด Mission ได้<br><small>${escapeHTML(error?.message||error)}</small>`;
+    }
+  }
+
+  /* =========================================================
+     EVENTS
+  ========================================================= */
+
+  $("dailyButton").addEventListener(
+    "click",
+    ()=>openMission("daily")
+  );
+
+  $("weeklyButton").addEventListener(
+    "click",
+    ()=>openMission("weekly")
+  );
+
+  $("monthlyButton").addEventListener(
+    "click",
+    ()=>openMission("monthly")
+  );
+
+  $("bonusButton").addEventListener(
+    "click",
+    ()=>openMission("bonus")
+  );
+
+  $("nutritionButton").addEventListener(
+    "click",
+    ()=>{
+      toast("เมนูบันทึกโภชนาการกำลังเชื่อมต่อ");
+    }
+  );
+
+  $("homeButton").addEventListener(
+    "click",
+    ()=>{
+      window.location.href=
+        window.APP_CONFIG?.PAGE?.HOME ||
+        "./HOME.html";
+    }
+  );
+
+  $("missionButton").addEventListener(
+    "click",
+    ()=>window.location.reload()
+  );
+
+  $("battleButton").addEventListener(
+    "click",
+    ()=>{
+      window.location.href=
+        window.APP_CONFIG?.PAGE?.BATTLE ||
+        "./battle.html";
+    }
+  );
+
+  $("closeModal").addEventListener(
+    "click",
+    closeModal
+  );
+
+  $("missionModal").addEventListener(
+    "click",
+    event=>{
+      if(event.target===$("missionModal")){
+        closeModal();
+      }
+    }
+  );
+
+  document.addEventListener(
+    "visibilitychange",
+    ()=>{
+      if(document.visibilityState==="visible"){
+        loadAll();
+      }
+    }
+  );
+
+  loadAll();
 
 })();
-
 </script>
-
 
 </body>
 </html>
