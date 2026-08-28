@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>กำหนดระยะเวลาโครงการ</title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js?v=20260828-project-settings"></script>
+
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:linear-gradient(180deg,#eef5ff,#dfeaff);
+      font-family:Arial,"Noto Sans Thai",sans-serif;
+      color:#082b68;
+      padding:20px;
+    }
+    .wrap{
+      width:min(100%,520px);
+      margin:0 auto;
+    }
+    .card{
+      background:#fff;
+      border-radius:24px;
+      padding:22px;
+      box-shadow:0 18px 45px rgba(12,48,100,.15);
+    }
+    h1{
+      margin:0 0 6px;
+      font-size:26px;
+    }
+    .sub{
+      color:#61749d;
+      margin-bottom:20px;
+      font-weight:700;
+    }
+    .field{
+      margin-bottom:16px;
+    }
+    label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:900;
+    }
+    input{
+      width:100%;
+      min-height:48px;
+      border:1px solid #cbd9ef;
+      border-radius:14px;
+      padding:0 14px;
+      font:inherit;
+      color:#082b68;
+      background:#f9fbff;
+    }
+    .summary{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:18px;
+    }
+    .box{
+      border-radius:18px;
+      padding:16px;
+      text-align:center;
+      background:#edf4ff;
+    }
+    .box strong{
+      display:block;
+      font-size:28px;
+      margin-top:6px;
+    }
+    .progress{
+      height:14px;
+      background:#d9e3f4;
+      border-radius:999px;
+      overflow:hidden;
+      margin:18px 0 6px;
+    }
+    #progressBar{
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,#1f68ef,#29a6ff);
+      border-radius:inherit;
+    }
+    .buttons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:20px;
+    }
+    button{
+      min-height:48px;
+      border:0;
+      border-radius:14px;
+      font-weight:900;
+      font-size:16px;
+      cursor:pointer;
+    }
+    #backBtn{
+      background:#e8eef8;
+      color:#173b76;
+    }
+    #saveBtn{
+      background:#0a57cc;
+      color:#fff;
+    }
+    #status{
+      margin-top:14px;
+      padding:12px;
+      border-radius:12px;
+      display:none;
+      background:#e9f7ed;
+      color:#13702c;
+      font-weight:800;
+    }
+    #status.error{
+      background:#ffeaea;
+      color:#b21c1c;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+
+    <div class="card">
+
+      <h1>
+        ระยะเวลาโครงการ
+      </h1>
+
+      <div class="sub">
+        กำหนดวันเริ่มต้นและวันสิ้นสุดของ ROCK YOUR BODY 2026
+      </div>
+
+
+      <div class="field">
+
+        <label for="startDate">
+          วันเริ่มต้นโครงการ
+        </label>
+
+        <input
+          id="startDate"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="endDate">
+          วันสิ้นสุดโครงการ
+        </label>
+
+        <input
+          id="endDate"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="summary">
+
+        <div class="box">
+          ผ่านไปแล้ว
+          <strong id="elapsedDays">
+            0 วัน
+          </strong>
+        </div>
+
+        <div class="box">
+          เหลืออีก
+          <strong id="remainingDays">
+            0 วัน
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+
+      <div
+        id="percentText"
+        style="text-align:center;font-weight:800;color:#5e7199"
+      >
+        0%
+      </div>
+
+
+      <div class="buttons">
+
+        <button
+          id="backBtn"
+          type="button"
+        >
+          กลับ HOME
+        </button>
+
+        <button
+          id="saveBtn"
+          type="button"
+        >
+          บันทึก
+        </button>
+
+      </div>
+
+
+      <div id="status"></div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    "use strict";
+
+    const $ =
+      id =>
+        document.getElementById(
+          id
+        );
+
+
+    function showStatus(
+      message,
+      error = false
+    ){
+
+      const el =
+        $("status");
+
+      el.textContent =
+        message;
+
+      el.classList.toggle(
+        "error",
+        !!error
+      );
+
+      el.style.display =
+        "block";
+
+    }
+
+
+    function hideStatus(){
+
+      $("status")
+        .style
+        .display =
+          "none";
+
+    }
+
+
+    async function initLINE(){
+
+      if(
+        typeof liff ===
+        "undefined"
+      ){
+        throw new Error(
+          "LINE LIFF SDK ไม่พร้อม"
+        );
+      }
+
+
+      const liffId =
+        window.APP_CONFIG
+          ?.LIFF_ID;
+
+
+      if(!liffId){
+        throw new Error(
+          "ไม่พบ APP_CONFIG.LIFF_ID"
+        );
+      }
+
+
+      await liff.init({
+        liffId
+      });
+
+
+      if(
+        !liff.isLoggedIn()
+      ){
+
+        liff.login({
+          redirectUri:
+            window.location.href
+        });
+
+        return false;
+      }
+
+
+      return true;
+
+    }
+
+
+    function getIdToken(){
+
+      const token =
+        liff.getIDToken();
+
+
+      if(!token){
+        throw new Error(
+          "ไม่พบ LINE ID Token"
+        );
+      }
+
+
+      return token;
+
+    }
+
+
+    function apiUrl(){
+
+      const api =
+        window.APP_CONFIG
+          ?.API
+          ?.PROJECT;
+
+
+      if(!api){
+        throw new Error(
+          "ไม่พบ API.PROJECT ใน app-config.js"
+        );
+      }
+
+
+      return api;
+
+    }
+
+
+    async function post(
+      body
+    ){
+
+      const response =
+        await fetch(
+          apiUrl(),
+          {
+            method:
+              "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(
+                body
+              )
+          }
+        );
+
+
+      const text =
+        await response.text();
+
+
+      let data = {};
+
+
+      try{
+
+        data =
+          text
+            ? JSON.parse(
+                text
+              )
+            : {};
+
+      }catch{
+
+        throw new Error(
+          "Project API ตอบกลับไม่ใช่ JSON"
+        );
+
+      }
+
+
+      if(
+        !response.ok ||
+        data?.success ===
+          false
+      ){
+
+        throw new Error(
+          data?.error ||
+          data?.message ||
+          `HTTP ${response.status}`
+        );
+
+      }
+
+
+      return data;
+
+    }
+
+
+    function calculateLocal(){
+
+      const startValue =
+        $("startDate")
+          .value;
+
+      const endValue =
+        $("endDate")
+          .value;
+
+
+      if(
+        !startValue ||
+        !endValue
+      ){
+        return;
+      }
+
+
+      const start =
+        new Date(
+          startValue +
+          "T00:00:00"
+        );
+
+      const end =
+        new Date(
+          endValue +
+          "T23:59:59"
+        );
+
+
+      if(
+        end <
+        start
+      ){
+
+        $("elapsedDays")
+          .textContent =
+            "--";
+
+        $("remainingDays")
+          .textContent =
+            "--";
+
+        $("progressBar")
+          .style
+          .width =
+            "0%";
+
+        $("percentText")
+          .textContent =
+            "วันสิ้นสุดต้องไม่น้อยกว่าวันเริ่มต้น";
+
+        return;
+      }
+
+
+      const DAY =
+        24 * 60 * 60 * 1000;
+
+
+      const total =
+        Math.max(
+          1,
+          Math.ceil(
+            (
+              new Date(
+                endValue +
+                "T00:00:00"
+              ) -
+              new Date(
+                startValue +
+                "T00:00:00"
+              )
+            ) /
+            DAY
+          ) + 1
+        );
+
+
+      const now =
+        new Date();
+
+
+      let elapsed = 0;
+      let remaining =
+        total;
+
+
+      if(
+        now <
+        start
+      ){
+
+        elapsed = 0;
+        remaining =
+          total;
+
+      }else if(
+        now >
+        end
+      ){
+
+        elapsed =
+          total;
+
+        remaining =
+          0;
+
+      }else{
+
+        elapsed =
+          Math.max(
+            1,
+            Math.floor(
+              (
+                now -
+                start
+              ) /
+              DAY
+            ) + 1
+          );
+
+
+        remaining =
+          Math.max(
+            0,
+            total -
+            elapsed
+          );
+
+      }
+
+
+      const percent =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            (
+              elapsed /
+              total
+            ) *
+            100
+          )
+        );
+
+
+      $("elapsedDays")
+        .textContent =
+          `${elapsed} วัน`;
+
+
+      $("remainingDays")
+        .textContent =
+          `${remaining} วัน`;
+
+
+      $("progressBar")
+        .style
+        .width =
+          `${percent}%`;
+
+
+      $("percentText")
+        .textContent =
+          `${Math.round(percent)}% ของโครงการ`;
+
+    }
+
+
+    async function loadSettings(){
+
+      const result =
+        await post({
+          action:
+            "get"
+        });
+
+
+      const project =
+        result?.project ??
+        {};
+
+
+      $("startDate")
+        .value =
+          project?.start_date ??
+          "";
+
+
+      $("endDate")
+        .value =
+          project?.end_date ??
+          "";
+
+
+      calculateLocal();
+
+    }
+
+
+    async function saveSettings(){
+
+      const startDate =
+        $("startDate")
+          .value;
+
+      const endDate =
+        $("endDate")
+          .value;
+
+
+      if(
+        !startDate ||
+        !endDate
+      ){
+
+        showStatus(
+          "กรุณาเลือกวันเริ่มต้นและวันสิ้นสุด",
+          true
+        );
+
+        return;
+      }
+
+
+      if(
+        endDate <
+        startDate
+      ){
+
+        showStatus(
+          "วันสิ้นสุดต้องไม่น้อยกว่าวันเริ่มต้น",
+          true
+        );
+
+        return;
+      }
+
+
+      const button =
+        $("saveBtn");
+
+
+      try{
+
+        button.disabled =
+          true;
+
+
+        showStatus(
+          "กำลังบันทึก..."
+        );
+
+
+        const result =
+          await post({
+            action:
+              "save",
+
+            idToken:
+              getIdToken(),
+
+            startDate,
+
+            endDate
+          });
+
+
+        const project =
+          result?.project ??
+          {};
+
+
+        $("elapsedDays")
+          .textContent =
+            `${project.elapsedDays ?? 0} วัน`;
+
+
+        $("remainingDays")
+          .textContent =
+            `${project.remainingDays ?? 0} วัน`;
+
+
+        $("progressBar")
+          .style
+          .width =
+            `${project.percent ?? 0}%`;
+
+
+        $("percentText")
+          .textContent =
+            `${Math.round(project.percent ?? 0)}% ของโครงการ`;
+
+
+        showStatus(
+          "บันทึกระยะเวลาโครงการสำเร็จ"
+        );
+
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+
+        showStatus(
+          error?.message ||
+          "บันทึกไม่สำเร็จ",
+          true
+        );
+
+
+      }finally{
+
+        button.disabled =
+          false;
+
+      }
+
+    }
+
+
+    $("startDate")
+      .addEventListener(
+        "change",
+        calculateLocal
+      );
+
+
+    $("endDate")
+      .addEventListener(
+        "change",
+        calculateLocal
+      );
+
+
+    $("saveBtn")
+      .addEventListener(
+        "click",
+        saveSettings
+      );
+
+
+    $("backBtn")
+      .addEventListener(
+        "click",
+        () => {
+
+          window.location.href =
+            window.APP_CONFIG
+              ?.PAGE
+              ?.HOME ||
+            "./dashboard.html";
+
+        }
+      );
+
+
+    async function start(){
+
+      try{
+
+        showStatus(
+          "กำลังเชื่อมต่อ LINE..."
+        );
+
+
+        const ready =
+          await initLINE();
+
+
+        if(
+          ready ===
+          false
+        ){
+          return;
+        }
+
+
+        await loadSettings();
+
+
+        hideStatus();
+
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+
+        showStatus(
+          error?.message ||
+          "เปิดหน้าไม่สำเร็จ",
+          true
+        );
+
+      }
+
+    }
+
+
+    start();
+  </script>
+
+</body>
+</html>
