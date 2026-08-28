@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260823-02"
+    src="./app-config.js?v=20260828-home-mission-health"
   ></script>
 
 
@@ -2018,6 +2018,7 @@ const ROCK =
 
 
 const MISSION_API =
+  window.APP_CONFIG?.API?.MISSION ||
   ROCK?.CFG?.API?.MISSION ||
   "";
 
