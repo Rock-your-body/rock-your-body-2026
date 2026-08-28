@@ -1,869 +1,1226 @@
-<!doctype html>
-<html lang="th">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 - MISSION</title>
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260828-01"></script>
-  <script src="./common.js?v=20260828-01"></script>
 
-  <style>
-    *{box-sizing:border-box}
+/* =========================================================
+   ENV
+========================================================= */
 
-    html,body{
-      margin:0;
-      width:100%;
-      min-height:100%;
-      background:#eef4ff;
-      font-family:"Noto Sans Thai",Tahoma,Arial,sans-serif;
-      color:#082b68;
-    }
+const SUPABASE_URL =
+  Deno.env.get("SUPABASE_URL")!;
 
-    body{
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-    }
+const SUPABASE_SERVICE_ROLE_KEY =
+  Deno.env.get(
+    "SUPABASE_SERVICE_ROLE_KEY"
+  )!;
 
-    /* =========================================================
-       ใช้ภาพ mission-template.png เป็นหน้าหลัก
-       ขนาดภาพต้นฉบับ 1536 x 1024
-    ========================================================= */
-    #missionStage{
-      position:relative;
-      width:min(100vw,1536px);
-      aspect-ratio:1536 / 1024;
-      margin:0 auto;
-      overflow:hidden;
-      background:#fff;
-    }
+const LINE_LOGIN_CHANNEL_ID =
+  Deno.env.get(
+    "LINE_LOGIN_CHANNEL_ID"
+  )!;
 
-    #missionTemplate{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:fill;
-      z-index:1;
-      user-select:none;
-      pointer-events:none;
-    }
 
-    /* =========================================================
-       LIVE VALUES
-    ========================================================= */
-    .live{
-      position:absolute;
-      z-index:20;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      pointer-events:none;
-      white-space:nowrap;
-      text-shadow:0 1px 1px rgba(255,255,255,.7);
-    }
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-    #coinValue{
-      left:73.0%;
-      top:3.5%;
-      width:9.0%;
-      height:6.5%;
-      color:#0a2d70;
-      font-size:clamp(10px,1.55vw,25px);
-    }
+const supabase =
+  createClient(
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY
+  );
 
-    #energyValue{
-      left:86.8%;
-      top:3.5%;
-      width:10.8%;
-      height:6.5%;
-      color:#0a2d70;
-      font-size:clamp(10px,1.55vw,25px);
-    }
 
-    #missionPointValue{
-      left:89.3%;
-      top:16.2%;
-      width:7.5%;
-      height:4%;
-      color:#fff;
-      font-size:clamp(9px,1.15vw,18px);
-      text-shadow:0 2px 4px rgba(0,0,0,.35);
-    }
+/* =========================================================
+   CORS
+========================================================= */
 
-    .count{
-      color:#fff;
-      border-radius:9px;
-      min-width:4.8%;
-      height:4.8%;
-      font-size:clamp(9px,1.15vw,18px);
-      text-shadow:0 2px 3px rgba(0,0,0,.3);
-    }
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods":
+    "POST, OPTIONS"
+};
 
-    #dailyCount{
-      left:25.6%;
-      top:24.2%;
-      width:5.7%;
-    }
 
-    #weeklyCount{
-      left:57.9%;
-      top:24.2%;
-      width:5.7%;
-    }
+/* =========================================================
+   RESPONSE
+========================================================= */
 
-    #monthlyCount{
-      left:90.3%;
-      top:24.2%;
-      width:5.7%;
-    }
+function json(
+  data: unknown,
+  status = 200
+) {
 
-    #bonusCount{
-      left:25.7%;
-      top:56.6%;
-      width:5.7%;
-    }
-
-    /* Reward numbers */
-    .reward-live{
-      position:absolute;
-      z-index:21;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      pointer-events:none;
-      font-size:clamp(8px,.9vw,15px);
-    }
-
-    #dailyCoin{left:12.2%;top:39.0%;width:5%;height:3%}
-    #dailyEnergy{left:23.7%;top:39.0%;width:5%;height:3%}
-
-    #weeklyCoin{left:44.7%;top:39.0%;width:5%;height:3%}
-    #weeklyEnergy{left:56.2%;top:39.0%;width:5%;height:3%}
-
-    #monthlyCoin{left:77.1%;top:39.0%;width:5%;height:3%}
-    #monthlyEnergy{left:88.6%;top:39.0%;width:5%;height:3%}
-
-    #bonusCoin{left:11.6%;top:72.0%;width:5%;height:3%}
-    #bonusEnergy{left:23.8%;top:72.0%;width:5%;height:3%}
-
-    /* =========================================================
-       HOTSPOTS
-    ========================================================= */
-    .hotspot{
-      position:absolute;
-      z-index:40;
-      border:0;
-      background:transparent;
-      padding:0;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    .hotspot:active{
-      background:rgba(255,255,255,.08);
-    }
-
-    #dailyButton{left:2.0%;top:22.0%;width:30.8%;height:29.8%}
-    #weeklyButton{left:33.4%;top:22.0%;width:31.3%;height:29.8%}
-    #monthlyButton{left:65.5%;top:22.0%;width:32.2%;height:29.8%}
-    #bonusButton{left:1.8%;top:53.7%;width:30.8%;height:34.0%}
-
-    #nutritionButton{left:33.2%;top:53.2%;width:38.6%;height:35.5%}
-
-    #homeButton{left:1.5%;top:90.0%;width:30.5%;height:8.2%}
-    #missionButton{left:33.0%;top:90.0%;width:31.7%;height:8.2%}
-    #battleButton{left:65.8%;top:90.0%;width:32.8%;height:8.2%}
-
-    /* =========================================================
-       MODAL — รายการภารกิจจริง
-    ========================================================= */
-    #missionModal{
-      position:fixed;
-      inset:0;
-      z-index:1000;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      background:rgba(1,22,66,.72);
-      backdrop-filter:blur(4px);
-    }
-
-    #missionModal.show{
-      display:flex;
-    }
-
-    .modal-card{
-      width:min(94vw,760px);
-      max-height:86vh;
-      overflow:auto;
-      background:#f8fbff;
-      border-radius:24px;
-      padding:20px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
-    }
-
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:15px;
-      margin-bottom:14px;
-    }
-
-    #modalTitle{
-      margin:0;
-      color:#0b347d;
-      font-size:clamp(22px,4vw,34px);
-      font-weight:900;
-    }
-
-    #closeModal{
-      width:42px;
-      height:42px;
-      border:0;
-      border-radius:50%;
-      background:#e8eef9;
-      color:#123772;
-      font-size:24px;
-      font-weight:900;
-      cursor:pointer;
-    }
-
-    .mission-item{
-      margin:10px 0;
-      padding:16px;
-      border-radius:18px;
-      border:1px solid #dbe5f6;
-      background:#fff;
-      box-shadow:0 4px 14px rgba(11,52,125,.08);
-    }
-
-    .mission-item-title{
-      color:#0c3479;
-      font-weight:900;
-      font-size:18px;
-    }
-
-    .mission-item-desc{
-      margin-top:5px;
-      color:#64748b;
-      font-size:14px;
-    }
-
-    .mission-item-reward{
-      margin-top:10px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      font-weight:800;
-      color:#0c3479;
-    }
-
-    .chip{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#edf4ff;
-    }
-
-    .status-chip{
-      background:#fff1c7;
-    }
-
-    .empty{
-      padding:20px;
-      text-align:center;
-      color:#64748b;
-      font-weight:700;
-    }
-
-    /* =========================================================
-       LOADING / TOAST
-    ========================================================= */
-    #loading{
-      position:fixed;
-      inset:0;
-      z-index:2000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#eef4ff;
-      color:#0b347d;
-      font-weight:900;
-      font-size:20px;
-    }
-
-    #toast{
-      position:fixed;
-      z-index:3000;
-      left:50%;
-      bottom:20px;
-      transform:translateX(-50%);
-      display:none;
-      max-width:90vw;
-      padding:10px 18px;
-      border-radius:999px;
-      background:#0b58b8;
-      color:#fff;
-      font-weight:800;
-      text-align:center;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-    }
-
-    #toast.show{display:block}
-    #toast.error{background:#c81d25}
-
-    @media(max-width:700px){
-      #missionStage{
-        width:100vw;
+  return new Response(
+    JSON.stringify(data),
+    {
+      status,
+      headers: {
+        ...corsHeaders,
+        "Content-Type":
+          "application/json"
       }
     }
-  </style>
-</head>
-
-<body>
-
-<div id="missionStage">
-
-  <img
-    id="missionTemplate"
-    src="./mission-template.png?v=20260828-01"
-    alt="ROCK YOUR BODY 2026 MISSION"
-    draggable="false"
-  >
-
-  <!-- LIVE -->
-  <div id="coinValue" class="live">0</div>
-  <div id="energyValue" class="live">0 / 200</div>
-  <div id="missionPointValue" class="live">0 PTS</div>
-
-  <div id="dailyCount" class="live count">0 / 0</div>
-  <div id="weeklyCount" class="live count">0 / 0</div>
-  <div id="monthlyCount" class="live count">0 / 0</div>
-  <div id="bonusCount" class="live count">0 / 0</div>
-
-  <div id="dailyCoin" class="reward-live"></div>
-  <div id="dailyEnergy" class="reward-live"></div>
-  <div id="weeklyCoin" class="reward-live"></div>
-  <div id="weeklyEnergy" class="reward-live"></div>
-  <div id="monthlyCoin" class="reward-live"></div>
-  <div id="monthlyEnergy" class="reward-live"></div>
-  <div id="bonusCoin" class="reward-live"></div>
-  <div id="bonusEnergy" class="reward-live"></div>
-
-  <!-- CLICK AREAS -->
-  <button id="dailyButton" class="hotspot" aria-label="Daily Mission"></button>
-  <button id="weeklyButton" class="hotspot" aria-label="Weekly Mission"></button>
-  <button id="monthlyButton" class="hotspot" aria-label="Monthly Mission"></button>
-  <button id="bonusButton" class="hotspot" aria-label="Bonus Mission"></button>
-  <button id="nutritionButton" class="hotspot" aria-label="Nutrition"></button>
-
-  <button id="homeButton" class="hotspot" aria-label="Home"></button>
-  <button id="missionButton" class="hotspot" aria-label="Mission"></button>
-  <button id="battleButton" class="hotspot" aria-label="Battle"></button>
-
-</div>
-
-<div id="loading">กำลังโหลด MISSION...</div>
-<div id="toast"></div>
-
-<div id="missionModal">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h2 id="modalTitle">MISSION</h2>
-      <button id="closeModal" type="button">×</button>
-    </div>
-    <div id="modalList"></div>
-  </div>
-</div>
+  );
+}
 
 
-<script>
-(function(){
-  "use strict";
+/* =========================================================
+   VERIFY LINE ID TOKEN
+========================================================= */
 
-  const $ = id => document.getElementById(id);
+async function verifyLineIdToken(
+  idToken: string
+) {
 
-  const state = {
-    dashboard:null,
-    missions:{
-      daily:[],
-      weekly:[],
-      monthly:[],
-      bonus:[]
-    }
-  };
-
-  /* =========================================================
-     HELPERS
-  ========================================================= */
-
-  function num(value,fallback=0){
-    const n=Number(value);
-    return Number.isFinite(n)?n:fallback;
+  if (!idToken) {
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
   }
 
-  function fmt(value){
-    return Math.round(num(value,0)).toLocaleString("en-US");
-  }
 
-  function escapeHTML(value){
-    return String(value??"")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
+  const body =
+    new URLSearchParams();
 
-  function toast(message,error=false){
-    const el=$("toast");
-    el.textContent=message;
-    el.className=error?"show error":"show";
-    clearTimeout(window.__missionToastTimer);
-    window.__missionToastTimer=setTimeout(()=>{
-      el.className="";
-    },3500);
-  }
+  body.set(
+    "id_token",
+    idToken
+  );
 
-  function first(...values){
-    for(const value of values){
-      if(value!==undefined && value!==null && value!==""){
-        return value;
+  body.set(
+    "client_id",
+    LINE_LOGIN_CHANNEL_ID
+  );
+
+
+  const response =
+    await fetch(
+      "https://api.line.me/oauth2/v2.1/verify",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/x-www-form-urlencoded"
+        },
+
+        body
       }
-    }
-    return undefined;
+    );
+
+
+  const result =
+    await response.json();
+
+
+  if (!response.ok) {
+
+    console.error(
+      "LINE VERIFY ERROR:",
+      result
+    );
+
+    throw new Error(
+      result?.error_description ||
+      "LINE authentication failed"
+    );
   }
 
-  function normalizeArray(value){
-    return Array.isArray(value)?value:[];
+
+  if (!result?.sub) {
+    throw new Error(
+      "ไม่พบ LINE User ID"
+    );
   }
 
-  /* =========================================================
-     DASHBOARD
-  ========================================================= */
 
-  function normalizeDashboard(raw){
-    const d=raw?.data??raw?.dashboard??raw??{};
-    const user=d?.user??d?.player??{};
+  return result;
+}
 
-    const energyObject=
-      d?.energy && typeof d.energy==="object"
-        ? d.energy
-        : {};
 
-    return {
-      coin:num(first(
-        d?.rockCoin,
-        d?.rock_coin,
-        d?.coin,
-        user?.rockCoin,
-        user?.rock_coin,
-        user?.coin
-      ),0),
+/* =========================================================
+   PERIOD KEY
+========================================================= */
 
-      energy:num(first(
-        energyObject?.current,
-        d?.energyCurrent,
-        d?.currentEnergy,
-        user?.energy,
-        typeof d?.energy==="number"?d.energy:undefined
-      ),0),
+function getPeriodKey(
+  category: string
+) {
 
-      maxEnergy:num(first(
-        energyObject?.max,
-        d?.maxEnergy,
-        d?.max_energy,
-        user?.max_energy,
-        user?.maxEnergy,
-        window.APP_CONFIG?.MAX_ENERGY
-      ),200),
+  const now =
+    new Date();
 
-      missionPoint:num(first(
-        d?.missionPoint,
-        d?.mission_point,
-        d?.missionPoints,
-        d?.mission_points,
-        user?.missionPoint,
-        user?.mission_point,
-        user?.mission_points
-      ),0)
-    };
+
+  const yyyy =
+    now.getFullYear();
+
+  const mm =
+    String(
+      now.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+  const dd =
+    String(
+      now.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  if (
+    category === "daily"
+  ) {
+
+    return `${yyyy}-${mm}-${dd}`;
   }
 
-  function renderDashboard(){
-    const p=normalizeDashboard(state.dashboard);
 
-    $("coinValue").textContent=fmt(p.coin);
-    $("energyValue").textContent=
-      `${fmt(p.energy)} / ${fmt(p.maxEnergy)}`;
+  if (
+    category === "monthly"
+  ) {
 
-    $("missionPointValue").textContent=
-      `${fmt(p.missionPoint)} PTS`;
+    return `${yyyy}-${mm}`;
   }
 
-  /* =========================================================
-     MISSIONS NORMALIZER
-  ========================================================= */
 
-  function normalizeMissionResponse(raw){
-    const d=raw?.data??raw??{};
-
-    let source=
-      d?.missions ??
-      d?.missionStatus ??
-      d?.mission_status ??
-      {};
+  if (
+    category === "weekly" ||
+    category === "bonus"
+  ) {
 
     /*
-      รองรับกรณี API ส่ง array เดียว
+      ใช้ week แบบง่ายก่อน
+      ถ้าต้องการ ISO week เป๊ะ
+      ค่อยปรับภายหลัง
     */
-    if(Array.isArray(source)){
-      const grouped={
-        daily:[],
-        weekly:[],
-        monthly:[],
-        bonus:[]
-      };
 
-      source.forEach(item=>{
-        const type=String(
-          first(
-            item?.category,
-            item?.type,
-            item?.mission_type,
-            "daily"
-          )
-        ).toLowerCase();
+    const firstDay =
+      new Date(
+        yyyy,
+        0,
+        1
+      );
 
-        if(type.includes("week")){
-          grouped.weekly.push(item);
-        }else if(type.includes("month")){
-          grouped.monthly.push(item);
-        }else if(type.includes("bonus")||type.includes("extra")){
-          grouped.bonus.push(item);
-        }else{
-          grouped.daily.push(item);
-        }
-      });
+    const diff =
+      now.getTime() -
+      firstDay.getTime();
 
-      return grouped;
-    }
+    const week =
+      Math.ceil(
+        (
+          diff /
+          86400000 +
+          firstDay.getDay() +
+          1
+        ) / 7
+      );
 
-    return {
-      daily:normalizeArray(
-        first(source?.daily,d?.daily,[])
-      ),
-      weekly:normalizeArray(
-        first(source?.weekly,d?.weekly,[])
-      ),
-      monthly:normalizeArray(
-        first(source?.monthly,d?.monthly,[])
-      ),
-      bonus:normalizeArray(
-        first(source?.bonus,d?.bonus,d?.extra,[])
+    return (
+      `${yyyy}-W` +
+      String(week)
+        .padStart(2, "0")
+    );
+  }
+
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+
+/* =========================================================
+   FILE EXTENSION
+========================================================= */
+
+function getFileExtension(
+  file: File
+) {
+
+  const name =
+    file.name || "";
+
+  const dot =
+    name.lastIndexOf(".");
+
+  if (
+    dot >= 0
+  ) {
+
+    return name
+      .slice(dot + 1)
+      .toLowerCase();
+  }
+
+
+  const type =
+    file.type;
+
+
+  if (
+    type === "image/jpeg"
+  ) {
+    return "jpg";
+  }
+
+  if (
+    type === "image/png"
+  ) {
+    return "png";
+  }
+
+  if (
+    type === "image/webp"
+  ) {
+    return "webp";
+  }
+
+  if (
+    type === "video/mp4"
+  ) {
+    return "mp4";
+  }
+
+  if (
+    type === "video/quicktime"
+  ) {
+    return "mov";
+  }
+
+
+  return "bin";
+}
+
+
+/* =========================================================
+   ALLOWED FILE
+========================================================= */
+
+function validateFile(
+  file: File
+) {
+
+  const allowed =
+    new Set([
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "video/mp4",
+      "video/quicktime"
+    ]);
+
+
+  if (
+    !allowed.has(
+      file.type
+    )
+  ) {
+
+    throw new Error(
+      "ชนิดไฟล์ไม่รองรับ"
+    );
+  }
+
+
+  const maxSize =
+    50 *
+    1024 *
+    1024;
+
+
+  if (
+    file.size >
+    maxSize
+  ) {
+
+    throw new Error(
+      "ไฟล์ต้องมีขนาดไม่เกิน 50 MB"
+    );
+  }
+}
+
+
+/* =========================================================
+   GET NEXT ATTEMPT
+========================================================= */
+
+async function getNextAttemptNo(
+  lineUserId: string,
+  missionId: string,
+  periodKey: string
+) {
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from(
+        "mission_submissions"
       )
-    };
+      .select(
+        "attempt_no"
+      )
+      .eq(
+        "line_user_id",
+        lineUserId
+      )
+      .eq(
+        "mission_id",
+        missionId
+      )
+      .eq(
+        "period_key",
+        periodKey
+      )
+      .order(
+        "attempt_no",
+        {
+          ascending: false
+        }
+      )
+      .limit(1);
+
+
+  if (error) {
+    throw error;
   }
 
-  function missionDone(item){
-    return Boolean(
-      item?.completed ??
-      item?.done ??
-      item?.approved ??
-      item?.is_completed ??
-      String(item?.status??"").toLowerCase()==="approved" ??
-      false
-    );
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    return 1;
   }
 
-  function categoryStats(list){
-    const total=list.length;
-    const done=list.filter(missionDone).length;
 
-    const coin=list.reduce(
-      (sum,item)=>sum+num(first(
-        item?.rewardCoin,
-        item?.reward_coin,
-        item?.coin
-      ),0),
-      0
-    );
+  return (
+    Number(
+      data[0].attempt_no
+    ) || 0
+  ) + 1;
+}
 
-    const energy=list.reduce(
-      (sum,item)=>sum+num(first(
-        item?.rewardEnergy,
-        item?.reward_energy,
-        item?.energy
-      ),0),
-      0
-    );
 
-    return {total,done,coin,energy};
-  }
+/* =========================================================
+   MISSION REWARD MAP
+   Backend เป็นผู้กำหนดรางวัลเอง
+   ห้ามเชื่อค่ารางวัลจาก Frontend
+========================================================= */
 
-  function renderMissionSummary(){
-    const groups=[
-      ["daily","dailyCount","dailyCoin","dailyEnergy"],
-      ["weekly","weeklyCount","weeklyCoin","weeklyEnergy"],
-      ["monthly","monthlyCount","monthlyCoin","monthlyEnergy"],
-      ["bonus","bonusCount","bonusCoin","bonusEnergy"]
-    ];
+function getMissionReward(
+  missionId: string
+) {
 
-    groups.forEach(([key,countId,coinId,energyId])=>{
-      const stats=categoryStats(state.missions[key]);
+  const rewards:
+    Record<
+      string,
+      {
+        coin: number;
+        energy: number;
+        exp: number;
+      }
+    > = {
 
-      $(countId).textContent=
-        `${stats.done} / ${stats.total}`;
 
-      $(coinId).textContent=
-        stats.coin>0
-          ? `+${fmt(stats.coin)}`
-          : "";
+    /* DAILY */
 
-      $(energyId).textContent=
-        stats.energy>0
-          ? `+${fmt(stats.energy)}`
-          : "";
-    });
-  }
+    daily_move_more: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
 
-  /* =========================================================
-     MODAL
-  ========================================================= */
+    daily_sleep_well: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
 
-  const titles={
-    daily:"DAILY MISSION",
-    weekly:"WEEKLY MISSION",
-    monthly:"MONTHLY MISSION",
-    bonus:"BONUS MISSION"
+    daily_eat_smart: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+    daily_exercise_30: {
+      coin: 20,
+      energy: 20,
+      exp: 20
+    },
+
+    daily_extra_stair: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+    daily_extra_meal: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+    daily_extra_stretch: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+    daily_extra_break: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+    daily_extra_snack: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+    daily_extra_team: {
+      coin: 10,
+      energy: 10,
+      exp: 10
+    },
+
+
+    /* WEEKLY */
+
+    weekly_aerobic: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+    weekly_weight_training: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+    weekly_yoga: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+    weekly_badminton: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+    weekly_running_club: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+    weekly_nutrition: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+
+    /* MONTHLY */
+
+    monthly_tiktok: {
+      coin: 100,
+      energy: 100,
+      exp: 150
+    },
+
+
+    /* BONUS */
+
+    bonus_core_daily: {
+      coin: 20,
+      energy: 20,
+      exp: 20
+    },
+
+    bonus_perfect_day: {
+      coin: 30,
+      energy: 30,
+      exp: 30
+    },
+
+    bonus_weekly_four: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_walk_50k: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_exercise_150: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_stair_master: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_healthy_meal: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_sleep: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_active_break: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_team_move: {
+      coin: 50,
+      energy: 50,
+      exp: 50
+    },
+
+    bonus_tiktok: {
+      coin: 200,
+      energy: 200,
+      exp: 50
+    }
   };
 
-  function openMission(category){
-    const list=state.missions[category]||[];
 
-    $("modalTitle").textContent=
-      titles[category]||"MISSION";
+  const reward =
+    rewards[
+      missionId
+    ];
 
-    if(!list.length){
-      $("modalList").innerHTML=
-        `<div class="empty">ยังไม่มีภารกิจในหมวดนี้</div>`;
-    }else{
-      $("modalList").innerHTML=
-        list.map(item=>{
-          const title=first(
-            item?.title,
-            item?.name,
-            item?.missionTitle,
-            item?.mission_title,
-            item?.missionId,
-            item?.mission_id,
-            "MISSION"
-          );
 
-          const desc=first(
-            item?.description,
-            item?.detail,
-            item?.desc,
-            ""
-          );
+  if (!reward) {
 
-          const coin=num(first(
-            item?.rewardCoin,
-            item?.reward_coin,
-            item?.coin
-          ),0);
+    throw new Error(
+      "ไม่พบ Mission ID"
+    );
+  }
 
-          const energy=num(first(
-            item?.rewardEnergy,
-            item?.reward_energy,
-            item?.energy
-          ),0);
 
-          const exp=num(first(
-            item?.rewardExp,
-            item?.reward_exp,
-            item?.exp
-          ),0);
+  return reward;
+}
 
-          const status=first(
-            item?.status,
-            missionDone(item)?"completed":"pending"
-          );
 
-          return `
-            <div class="mission-item">
-              <div class="mission-item-title">${escapeHTML(title)}</div>
-              ${desc?`<div class="mission-item-desc">${escapeHTML(desc)}</div>`:""}
-              <div class="mission-item-reward">
-                ${coin?`<span class="chip">🪙 +${fmt(coin)} COIN</span>`:""}
-                ${energy?`<span class="chip">⚡ +${fmt(energy)} ENERGY</span>`:""}
-                ${exp?`<span class="chip">🏆 +${fmt(exp)} EXP</span>`:""}
-                <span class="chip status-chip">${escapeHTML(status)}</span>
-              </div>
-            </div>
-          `;
-        }).join("");
+/* =========================================================
+   SUBMIT EVIDENCE
+========================================================= */
+
+async function submitEvidence(
+  request: Request
+) {
+
+  const form =
+    await request
+      .formData();
+
+
+  const idToken =
+    String(
+      form.get(
+        "idToken"
+      ) || ""
+    );
+
+
+  const missionId =
+    String(
+      form.get(
+        "missionId"
+      ) || ""
+    ).trim();
+
+
+  const category =
+    String(
+      form.get(
+        "category"
+      ) || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  const note =
+    String(
+      form.get(
+        "note"
+      ) || ""
+    ).trim();
+
+
+  const evidenceLink =
+    String(
+      form.get(
+        "link"
+      ) || ""
+    ).trim();
+
+
+  const fileValue =
+    form.get(
+      "file"
+    );
+
+  /*
+   * DAILY HEALTH
+   * ต้องมีรูปภาพหลักฐานจริง
+   * ไม่อนุญาตส่ง Link อย่างเดียว
+   */
+  const dailyHealthMission =
+    missionId ===
+      "daily_move_more" ||
+    missionId ===
+      "daily_sleep_well";
+
+
+  if(dailyHealthMission){
+
+    if(
+      !(
+        fileValue instanceof
+        File
+      ) ||
+      fileValue.size <= 0
+    ){
+
+      throw new Error(
+        "DAILY_HEALTH_IMAGE_REQUIRED"
+      );
+
     }
 
-    $("missionModal").classList.add("show");
+
+    const healthEvidenceType =
+      String(
+        fileValue.type ||
+        ""
+      )
+        .toLowerCase();
+
+
+    if(
+      !healthEvidenceType
+        .startsWith(
+          "image/"
+        )
+    ){
+
+      throw new Error(
+        "DAILY_HEALTH_IMAGE_ONLY"
+      );
+
+    }
+
   }
 
-  function closeModal(){
-    $("missionModal").classList.remove("show");
+
+
+
+  const lineUser =
+    await verifyLineIdToken(
+      idToken
+    );
+
+
+  const lineUserId =
+    lineUser.sub;
+
+
+  if (
+    !missionId ||
+    !category
+  ) {
+
+    throw new Error(
+      "ข้อมูล Mission ไม่ครบ"
+    );
   }
 
-  /* =========================================================
-     LOAD
-  ========================================================= */
 
-  async function loadAll(){
-    try{
-      if(!window.ROCK){
-        throw new Error("common.js โหลดไม่สำเร็จ");
-      }
+  const reward =
+    getMissionReward(
+      missionId
+    );
 
-      const ready=await ROCK.initLiff();
 
-      if(ready===false){
-        return;
-      }
+  const periodKey =
+    getPeriodKey(
+      category
+    );
 
-      const results=await Promise.allSettled([
-        typeof ROCK.fetchDashboard==="function"
-          ? ROCK.fetchDashboard()
-          : Promise.resolve(null),
 
-        typeof ROCK.getMissions==="function"
-          ? ROCK.getMissions()
-          : Promise.resolve(null)
-      ]);
+  const attemptNo =
+    await getNextAttemptNo(
+      lineUserId,
+      missionId,
+      periodKey
+    );
 
-      if(results[0].status==="fulfilled"){
-        state.dashboard=results[0].value;
-      }else{
-        console.error(
-          "MISSION DASHBOARD ERROR:",
-          results[0].reason
+
+  let evidencePath:
+    string | null =
+      null;
+
+
+  let evidenceType:
+    string | null =
+      null;
+
+
+  /* =====================================================
+     UPLOAD FILE
+  ====================================================== */
+
+  if (
+    fileValue instanceof
+    File &&
+    fileValue.size > 0
+  ) {
+
+    validateFile(
+      fileValue
+    );
+
+
+    const ext =
+      getFileExtension(
+        fileValue
+      );
+
+
+    const submissionFolder =
+      crypto.randomUUID();
+
+
+    evidencePath =
+      [
+        lineUserId,
+        periodKey,
+        missionId,
+        submissionFolder,
+        `attempt-${attemptNo}.${ext}`
+      ]
+        .join("/");
+
+
+    const {
+      error:
+        uploadError
+    } =
+      await supabase
+        .storage
+        .from(
+          "mission-evidence"
+        )
+        .upload(
+          evidencePath,
+          fileValue,
+          {
+            contentType:
+              fileValue.type,
+
+            upsert:
+              false
+          }
+        );
+
+
+    if (
+      uploadError
+    ) {
+
+      console.error(
+        "UPLOAD ERROR:",
+        uploadError
+      );
+
+      throw new Error(
+        "อัปโหลดหลักฐานไม่สำเร็จ"
+      );
+    }
+
+
+    evidenceType =
+      fileValue.type;
+  }
+
+
+  if (
+    !evidencePath &&
+    !evidenceLink
+  ) {
+
+    throw new Error(
+      "กรุณาส่งรูป / VDO หรือ Link"
+    );
+  }
+
+
+  /* =====================================================
+     INSERT SUBMISSION
+  ====================================================== */
+
+  const {
+    data:
+      submission,
+
+    error:
+      insertError
+  } =
+    await supabase
+      .from(
+        "mission_submissions"
+      )
+      .insert({
+
+        line_user_id:
+          lineUserId,
+
+        mission_id:
+          missionId,
+
+        category,
+
+        period_type:
+          category,
+
+        period_key:
+          periodKey,
+
+        attempt_no:
+          attemptNo,
+
+        evidence_url:
+          evidencePath,
+
+        evidence_type:
+          evidenceType,
+
+        evidence_link:
+          evidenceLink ||
+          null,
+
+        note:
+          note ||
+          null,
+
+        status:
+          "pending",
+
+        reward_coin:
+          reward.coin,
+
+        reward_energy:
+          reward.energy,
+
+        reward_exp:
+          reward.exp,
+
+        reward_granted:
+          false,
+
+        submitted_at:
+          new Date()
+            .toISOString()
+
+      })
+      .select(
+        `
+          id,
+          mission_id,
+          category,
+          period_key,
+          attempt_no,
+          status,
+          submitted_at
+        `
+      )
+      .single();
+
+
+  if (
+    insertError
+  ) {
+
+    console.error(
+      "INSERT ERROR:",
+      insertError
+    );
+
+
+    /*
+      ถ้า insert fail หลัง upload
+      ลบไฟล์ทิ้ง
+    */
+
+    if (
+      evidencePath
+    ) {
+
+      await supabase
+        .storage
+        .from(
+          "mission-evidence"
+        )
+        .remove([
+          evidencePath
+        ]);
+    }
+
+
+    throw new Error(
+      "บันทึก Mission ไม่สำเร็จ"
+    );
+  }
+
+
+  return {
+    success: true,
+    submission
+  };
+}
+
+
+/* =========================================================
+   MY MISSION STATUS
+========================================================= */
+
+async function myMissionStatus(
+  body: any
+) {
+
+  const idToken =
+    String(
+      body?.idToken ||
+      ""
+    );
+
+
+  const lineUser =
+    await verifyLineIdToken(
+      idToken
+    );
+
+
+  const lineUserId =
+    lineUser.sub;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from(
+        "mission_submissions"
+      )
+      .select(
+        `
+          id,
+          mission_id,
+          category,
+          period_type,
+          period_key,
+          attempt_no,
+          evidence_url,
+          evidence_link,
+          status,
+          reward_coin,
+          reward_energy,
+          reward_exp,
+          reward_granted,
+          submitted_at,
+          reviewed_at,
+          approved_at,
+          reject_reason
+        `
+      )
+      .eq(
+        "line_user_id",
+        lineUserId
+      )
+      .order(
+        "submitted_at",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+    throw error;
+  }
+
+
+  return {
+    success: true,
+    submissions:
+      data || []
+  };
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+Deno.serve(
+  async (
+    request
+  ) => {
+
+    if (
+      request.method ===
+      "OPTIONS"
+    ) {
+
+      return new Response(
+        "ok",
+        {
+          headers:
+            corsHeaders
+        }
+      );
+    }
+
+
+    try {
+
+      if (
+        request.method !==
+        "POST"
+      ) {
+
+        return json(
+          {
+            success: false,
+            error:
+              "METHOD_NOT_ALLOWED"
+          },
+          405
         );
       }
 
-      if(results[1].status==="fulfilled"){
-        state.missions=
-          normalizeMissionResponse(
-            results[1].value
+
+      const contentType =
+        request.headers
+          .get(
+            "content-type"
+          ) || "";
+
+
+      /* ===================================================
+         FORM DATA
+      =================================================== */
+
+      if (
+        contentType.includes(
+          "multipart/form-data"
+        )
+      ) {
+
+        const result =
+          await submitEvidence(
+            request
           );
-      }else{
-        console.error(
-          "MISSION API ERROR:",
-          results[1].reason
-        );
-        toast(
-          results[1].reason?.message ||
-          "โหลดรายการ Mission ไม่สำเร็จ",
-          true
+
+
+        return json(
+          result
         );
       }
 
-      renderDashboard();
-      renderMissionSummary();
 
-      $("loading").style.display="none";
+      /* ===================================================
+         JSON
+      =================================================== */
 
-    }catch(error){
-      console.error("MISSION START ERROR:",error);
+      const body =
+        await request.json();
 
-      $("loading").innerHTML=
-        `ไม่สามารถโหลด Mission ได้<br><small>${escapeHTML(error?.message||error)}</small>`;
+
+      const action =
+        String(
+          body?.action ||
+          ""
+        );
+
+
+      if (
+        action ===
+        "myMissionStatus"
+      ) {
+
+        const result =
+          await myMissionStatus(
+            body
+          );
+
+
+        return json(
+          result
+        );
+      }
+
+
+      return json(
+        {
+          success: false,
+          error:
+            "UNKNOWN_ACTION"
+        },
+        400
+      );
+
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        "MISSION ERROR:",
+        error
+      );
+
+
+      return json(
+        {
+          success: false,
+
+          error:
+            error instanceof
+            Error
+              ? error.message
+              : String(error)
+        },
+        400
+      );
     }
   }
-
-  /* =========================================================
-     EVENTS
-  ========================================================= */
-
-  $("dailyButton").addEventListener(
-    "click",
-    ()=>openMission("daily")
-  );
-
-  $("weeklyButton").addEventListener(
-    "click",
-    ()=>openMission("weekly")
-  );
-
-  $("monthlyButton").addEventListener(
-    "click",
-    ()=>openMission("monthly")
-  );
-
-  $("bonusButton").addEventListener(
-    "click",
-    ()=>openMission("bonus")
-  );
-
-  $("nutritionButton").addEventListener(
-    "click",
-    ()=>{
-      toast("เมนูบันทึกโภชนาการกำลังเชื่อมต่อ");
-    }
-  );
-
-  $("homeButton").addEventListener(
-    "click",
-    ()=>{
-      window.location.href=
-        window.APP_CONFIG?.PAGE?.HOME ||
-        "./HOME.html";
-    }
-  );
-
-  $("missionButton").addEventListener(
-    "click",
-    ()=>window.location.reload()
-  );
-
-  $("battleButton").addEventListener(
-    "click",
-    ()=>{
-      window.location.href=
-        window.APP_CONFIG?.PAGE?.BATTLE ||
-        "./battle.html";
-    }
-  );
-
-  $("closeModal").addEventListener(
-    "click",
-    closeModal
-  );
-
-  $("missionModal").addEventListener(
-    "click",
-    event=>{
-      if(event.target===$("missionModal")){
-        closeModal();
-      }
-    }
-  );
-
-  document.addEventListener(
-    "visibilitychange",
-    ()=>{
-      if(document.visibilityState==="visible"){
-        loadAll();
-      }
-    }
-  );
-
-  loadAll();
-
-})();
-</script>
-
-</body>
-</html>
+);
