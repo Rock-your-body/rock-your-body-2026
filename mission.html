@@ -5642,7 +5642,45 @@ function goHome(){
     "./index.html";
 
 }
+function goHome(){
 
+  try{
+
+    if(
+      typeof ROCK?.goHome ===
+      "function"
+    ){
+
+      ROCK.goHome();
+      return;
+
+    }
+
+    if(
+      typeof ROCK?.navigate ===
+      "function"
+    ){
+
+      ROCK.navigate(
+        "index.html"
+      );
+
+      return;
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "ROCK HOME ERROR:",
+      error
+    );
+
+  }
+
+  window.location.href =
+    "./index.html";
+}
 
 /* =========================================================
    WAIT FOR ROCK / LIFF
