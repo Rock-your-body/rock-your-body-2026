@@ -791,3 +791,32 @@ button,input,select,textarea{font:inherit}
   .weight-card{padding:18px}
   .weight-button{min-height:56px}
 }
+/* =========================================================
+   NUTRITION APP CLICK AREA
+========================================================= */
+
+#missionStage .nutrition-card-button{
+  position:absolute;
+  z-index:45;
+
+  /* ช่อง NUTRITION กลางล่าง */
+  left:33.3%;
+  top:66.0%;
+  width:37.0%;
+  height:21.5%;
+
+  margin:0;
+  padding:0;
+
+  border:0;
+  outline:0;
+  background:transparent;
+
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+
+#missionStage .nutrition-card-button:active{
+  background:rgba(255,255,255,.06);
+}
