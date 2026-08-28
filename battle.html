@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#061d68" />
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
+  <!-- BATTLE LIVE v2026-08-28-05 : unified rock_users + current stage -->
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js?v=20260828-04"></script>
@@ -376,6 +377,24 @@
         <button class="tap mission" id="missionBtn" aria-label="Mission"></button>
         <button class="tap battle" id="battleBtn" aria-label="Battle"></button>
 
+
+        <div id="stageBadge" style="
+          position:absolute;
+          left:2.4%;
+          top:23.2%;
+          z-index:9;
+          min-width:120px;
+          padding:8px 16px;
+          border-radius:999px;
+          background:linear-gradient(180deg,#0a43a4,#06266f);
+          border:2px solid rgba(255,255,255,.75);
+          box-shadow:0 4px 12px rgba(0,0,0,.25);
+          font-weight:1000;
+          font-size:clamp(10px,1.25vw,20px);
+          text-align:center;
+          pointer-events:none;
+        ">STAGE --</div>
+
         <div class="loading" id="loading">
           <div class="loading-card">
             <div class="spinner"></div>
@@ -393,7 +412,8 @@
       player: null,
       stage: null,
       runs: [],
-      activeRun: null
+      activeRun: null,
+      currentStageId: 1
     };
 
     const $ = id => document.getElementById(id);
@@ -517,7 +537,8 @@
     }
 
     function getActiveRun(){
-      const stageId = Number(state.stage?.id);
+      const stageId = Number(state.currentStageId || 1);
+
       return (state.runs || []).find(run =>
         Number(run.stage_id) === stageId &&
         run.status === "active"
@@ -534,62 +555,291 @@
       const s = state.stage || {};
       const active = state.activeRun;
 
-      const coin = Number(p.rockCoin ?? p.rock_coin ?? 0);
-      const energy = Number(p.energy ?? 0);
-      const maxEnergy = Number(p.maxEnergy ?? p.max_energy ?? 200);
+      /*
+        Coin / Energy / EXP / Level
+        ต้องมาจาก battleStatus -> rock_users ชุดเดียวกับ HOME / MISSION
+      */
+      const coin = Number(
+        p.rockCoin ??
+        p.rock_coin ??
+        0
+      );
 
-      const hpMax = Number(active?.monster_max_hp ?? s.hp ?? 0);
-      const hp = Number(active?.monster_hp ?? hpMax);
-      const hpPct = hpMax > 0 ? Math.max(0,Math.min(100,(hp/hpMax)*100)) : 0;
-      const energyPct = maxEnergy > 0 ? Math.max(0,Math.min(100,(energy/maxEnergy)*100)) : 0;
+      const energy = Number(
+        p.energy ??
+        0
+      );
 
-      $("hudCoin").textContent = formatNumber(coin);
-      $("hudEnergy").textContent = `${formatNumber(energy)}/${formatNumber(maxEnergy)}`;
+      const maxEnergy = Number(
+        p.maxEnergy ??
+        p.max_energy ??
+        200
+      );
 
-      $("bossName").textContent = s.name || "BATTLE MONSTER";
-      $("bossStage").textContent = `STAGE ${s.id ?? p.unlockedStage ?? 1}`;
-      $("hpText").textContent = `${formatNumber(hp)} / ${formatNumber(hpMax)}`;
-      $("hpPercent").textContent = `${Math.round(hpPct)}%`;
-      $("hpFill").style.width = `${hpPct}%`;
+      /*
+        Stage ปัจจุบัน = unlockedStage จาก battle_player_state
+        Backend battleStatus จะคืน stage object ของ Stage นี้
+      */
+      const currentStageId = Number(
+        p.unlockedStage ??
+        p.unlocked_stage ??
+        s.id ??
+        1
+      );
 
-      $("energyBig").textContent = `${formatNumber(energy)} / ${formatNumber(maxEnergy)}`;
-      $("energyFill").style.width = `${energyPct}%`;
+      state.currentStageId =
+        Math.max(
+          1,
+          Math.min(
+            10,
+            currentStageId
+          )
+        );
 
-      const required = Number(s.energy ?? 0);
+      const hpMax = Number(
+        active?.monster_max_hp ??
+        s.hp ??
+        0
+      );
+
+      const hp = Number(
+        active?.monster_hp ??
+        hpMax
+      );
+
+      const hpPct =
+        hpMax > 0
+          ? Math.max(
+              0,
+              Math.min(
+                100,
+                (hp / hpMax) * 100
+              )
+            )
+          : 0;
+
+      const energyPct =
+        maxEnergy > 0
+          ? Math.max(
+              0,
+              Math.min(
+                100,
+                (energy / maxEnergy) * 100
+              )
+            )
+          : 0;
+
+
+      $("hudCoin").textContent =
+        formatNumber(coin);
+
+      $("hudEnergy").textContent =
+        `${formatNumber(energy)}/${formatNumber(maxEnergy)}`;
+
+
+      $("bossName").textContent =
+        s.name ||
+        `STAGE ${state.currentStageId}`;
+
+      $("bossStage").textContent =
+        `STAGE ${state.currentStageId}`;
+
+      $("stageBadge").textContent =
+        `STAGE ${state.currentStageId}`;
+
+
+      $("hpText").textContent =
+        `${formatNumber(hp)} / ${formatNumber(hpMax)}`;
+
+      $("hpPercent").textContent =
+        `${Math.round(hpPct)}%`;
+
+      $("hpFill").style.width =
+        `${hpPct}%`;
+
+
+      $("energyBig").textContent =
+        `${formatNumber(energy)} / ${formatNumber(maxEnergy)}`;
+
+      $("energyFill").style.width =
+        `${energyPct}%`;
+
+
+      const required =
+        Number(
+          s.energy ??
+          0
+        );
+
       if(required > 0){
+
         if(energy >= required){
-          $("energyNext").textContent = `พร้อมต่อสู้ • ใช้ ${formatNumber(required)} Energy`;
+
+          $("energyNext").textContent =
+            `พร้อมต่อสู้ Stage ${state.currentStageId} • ใช้ ${formatNumber(required)} Energy`;
+
         }else{
-          $("energyNext").textContent = `ต้องการอีก ${formatNumber(required-energy)} Energy`;
+
+          $("energyNext").textContent =
+            `Stage ${state.currentStageId} ต้องการอีก ${formatNumber(required - energy)} Energy`;
+
         }
+
       }else{
-        $("energyNext").textContent = "พลังงานปัจจุบันของคุณ";
+
+        $("energyNext").textContent =
+          `Stage ปัจจุบัน ${state.currentStageId}`;
+
       }
 
-      $("totalWins").textContent = formatNumber(p.totalWins ?? 0);
-      $("totalAttacks").textContent = formatNumber(p.totalAttacks ?? 0);
-      $("currentStage").textContent = formatNumber(p.unlockedStage ?? s.id ?? 1);
+
+      $("totalWins").textContent =
+        formatNumber(
+          p.totalWins ??
+          p.total_wins ??
+          0
+        );
+
+      $("totalAttacks").textContent =
+        formatNumber(
+          p.totalAttacks ??
+          p.total_attacks ??
+          0
+        );
+
+      $("currentStage").textContent =
+        String(
+          state.currentStageId
+        );
     }
 
     async function loadBattle(){
       setLoading(true);
+
       try{
-        const ready = await ensureLiff();
-        if(ready === false) return;
 
-        const data = await battleApi({action:"battleStatus"});
+        const ready =
+          await ensureLiff();
 
-        state.player = data?.player || {};
-        state.stage = data?.stage || null;
-        state.runs = Array.isArray(data?.runs) ? data.runs : [];
-        state.activeRun = getActiveRun();
+        if(ready === false){
+          return;
+        }
+
+
+        const data =
+          await battleApi({
+            action:"battleStatus"
+          });
+
+
+        /*
+          Backend unified-energy:
+          player.rockCoin / player.energy / player.maxEnergy
+          มาจาก rock_users โดยตรง
+          จึงเป็นข้อมูลเดียวกับ HOME และ MISSION
+        */
+        state.player =
+          data?.player ||
+          {};
+
+
+        const unlockedStage =
+          Number(
+            state.player?.unlockedStage ??
+            state.player?.unlocked_stage ??
+            data?.stage?.id ??
+            1
+          );
+
+
+        state.currentStageId =
+          Math.max(
+            1,
+            Math.min(
+              10,
+              unlockedStage
+            )
+          );
+
+
+        /*
+          stage ที่ backend คืนมา คือ Stage ปัจจุบัน
+        */
+        state.stage =
+          data?.stage ||
+          {
+            id:
+              state.currentStageId,
+
+            name:
+              `STAGE ${state.currentStageId}`,
+
+            energy:
+              0,
+
+            hp:
+              0,
+
+            damage:
+              0
+          };
+
+
+        state.runs =
+          Array.isArray(
+            data?.runs
+          )
+            ? data.runs
+            : [];
+
+
+        state.activeRun =
+          getActiveRun();
+
+
+        console.log(
+          "BATTLE LIVE DATA:",
+          {
+            rockCoin:
+              state.player?.rockCoin,
+
+            energy:
+              state.player?.energy,
+
+            maxEnergy:
+              state.player?.maxEnergy,
+
+            currentStage:
+              state.currentStageId,
+
+            stage:
+              state.stage,
+
+            activeRun:
+              state.activeRun
+          }
+        );
+
 
         render();
+
+
       }catch(error){
-        console.error("BATTLE LOAD ERROR", error);
-        toast(error?.message || "โหลดข้อมูล Battle ไม่สำเร็จ");
+
+        console.error(
+          "BATTLE LOAD ERROR",
+          error
+        );
+
+        toast(
+          error?.message ||
+          "โหลดข้อมูล Battle ไม่สำเร็จ"
+        );
+
       }finally{
+
         setLoading(false);
+
       }
     }
 
@@ -598,18 +848,51 @@
     }
 
     $("fightBtn").addEventListener("click",()=>{
-      const p = state.player || {};
-      const s = state.stage || {};
-      const stageId = Number(p.unlockedStage ?? s.id ?? 1);
-      const energy = Number(p.energy ?? 0);
-      const required = Number(s.energy ?? 0);
+      const p =
+        state.player ||
+        {};
 
-      if(required > 0 && energy < required){
-        toast(`Energy ไม่พอ ต้องใช้ ${formatNumber(required)} แต่มี ${formatNumber(energy)}`);
+      const s =
+        state.stage ||
+        {};
+
+      const stageId =
+        Number(
+          state.currentStageId ||
+          p.unlockedStage ||
+          s.id ||
+          1
+        );
+
+      const energy =
+        Number(
+          p.energy ??
+          0
+        );
+
+      const required =
+        Number(
+          s.energy ??
+          0
+        );
+
+
+      if(
+        required > 0 &&
+        energy < required
+      ){
+
+        toast(
+          `Energy ไม่พอสำหรับ Stage ${stageId} • ต้องใช้ ${formatNumber(required)} แต่มี ${formatNumber(energy)}`
+        );
+
         return;
       }
 
-      go(`./battle_stage.html?stage=${stageId}`);
+
+      go(
+        `./battle_stage.html?stage=${stageId}`
+      );
     });
 
     $("energyBtn").addEventListener("click",()=>{
