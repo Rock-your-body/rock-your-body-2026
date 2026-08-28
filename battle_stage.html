@@ -4,9 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - BATTLE STAGE</title>
+  <!-- battle-stage unified-energy + LIFF token fix 2026-08-28 -->
 
-  <script src="./app-config.js?v=20260824-07"></script>
-  <script src="./common.js?v=20260824-07"></script>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <script src="./app-config.js?v=20260828-03"></script>
+  <script src="./common.js?v=20260828-03"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -668,8 +671,8 @@ const STAGES = [
     id:1,
     name:"เจ้าจอมเอื่อย",
     energy:300,
-    hp:1200,
-    damage:300,
+    hp:100,
+    damage:25,
     coin:100,
     exp:50,
     image:"./battle-stage-01-bg.jpeg"
@@ -679,8 +682,8 @@ const STAGES = [
     id:2,
     name:"จอมหวาน",
     energy:900,
-    hp:1800,
-    damage:450,
+    hp:120,
+    damage:30,
     coin:200,
     exp:100,
     image:"./battle-stage-02-bg.jpeg"
@@ -690,8 +693,8 @@ const STAGES = [
     id:3,
     name:"ปีศาจของทอด",
     energy:1500,
-    hp:2400,
-    damage:600,
+    hp:140,
+    damage:35,
     coin:300,
     exp:150,
     image:"./battle-stage-03-bg.jpeg"
@@ -701,8 +704,8 @@ const STAGES = [
     id:4,
     name:"จอมเค็ม",
     energy:2100,
-    hp:3000,
-    damage:750,
+    hp:160,
+    damage:40,
     coin:400,
     exp:200,
     image:"./battle-stage-04-bg.jpeg"
@@ -712,8 +715,8 @@ const STAGES = [
     id:5,
     name:"ราชาอาหารไร้ประโยชน์",
     energy:2700,
-    hp:3600,
-    damage:900,
+    hp:180,
+    damage:45,
     coin:500,
     exp:250,
     image:"./battle-stage-05-bg.jpeg"
@@ -723,8 +726,8 @@ const STAGES = [
     id:6,
     name:"ปีศาจพักผ่อนน้อย",
     energy:3300,
-    hp:4200,
-    damage:1050,
+    hp:200,
+    damage:50,
     coin:600,
     exp:300,
     image:"./battle-stage-06-bg.jpeg"
@@ -734,8 +737,8 @@ const STAGES = [
     id:7,
     name:"จอมเนือยนิ่ง",
     energy:3900,
-    hp:4800,
-    damage:1200,
+    hp:220,
+    damage:55,
     coin:700,
     exp:350,
     image:"./battle-stage-07-bg.jpeg"
@@ -745,8 +748,8 @@ const STAGES = [
     id:8,
     name:"ปีศาจพฤติกรรมเสี่ยง",
     energy:4500,
-    hp:5400,
-    damage:1350,
+    hp:240,
+    damage:60,
     coin:800,
     exp:400,
     image:"./battle-stage-08-bg.jpeg"
@@ -756,8 +759,8 @@ const STAGES = [
     id:9,
     name:"ราชาความเสี่ยงสุขภาพ",
     energy:5100,
-    hp:6000,
-    damage:1500,
+    hp:270,
+    damage:70,
     coin:900,
     exp:450,
     image:"./battle-stage-09-bg.jpeg"
@@ -767,8 +770,8 @@ const STAGES = [
     id:10,
     name:"จอมมารโรคร้าย",
     energy:5700,
-    hp:7000,
-    damage:1750,
+    hp:320,
+    damage:80,
     coin:1000,
     exp:500,
     image:"./battle-stage-10-bg.jpeg",
@@ -1095,40 +1098,282 @@ function showDamage(
 
 
 /* =========================================================
+   LIFF / TOKEN
+========================================================= */
+
+const STAGE_RELOGIN_KEY =
+  "rock_battle_stage_relogin_at";
+
+
+function isJwtLike(token){
+
+  if(typeof token !== "string"){
+    return false;
+  }
+
+  const value = token.trim();
+
+  if(!value){
+    return false;
+  }
+
+  const parts = value.split(".");
+
+  return (
+    parts.length === 3 &&
+    parts.every(part => part.length > 0)
+  );
+}
+
+
+function decodeJwtPayloadSafe(token){
+
+  try{
+
+    if(!isJwtLike(token)){
+      return null;
+    }
+
+    let base64 =
+      token
+        .split(".")[1]
+        .replace(/-/g,"+")
+        .replace(/_/g,"/");
+
+    while(base64.length % 4 !== 0){
+      base64 += "=";
+    }
+
+    const binary = atob(base64);
+
+    const bytes = Uint8Array.from(
+      binary,
+      char => char.charCodeAt(0)
+    );
+
+    const json = new TextDecoder("utf-8")
+      .decode(bytes);
+
+    return JSON.parse(json);
+
+  }catch(error){
+
+    console.warn(
+      "BATTLE STAGE JWT DECODE ERROR:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+function tokenExpired(token, bufferSeconds = 45){
+
+  const payload =
+    decodeJwtPayloadSafe(token);
+
+  const exp =
+    Number(payload?.exp);
+
+  if(!Number.isFinite(exp)){
+    return false;
+  }
+
+  const now =
+    Math.floor(Date.now() / 1000);
+
+  return exp <= now + bufferSeconds;
+}
+
+
+function forceStageRelogin(reason = "TOKEN_INVALID"){
+
+  const now = Date.now();
+
+  const last = Number(
+    sessionStorage.getItem(
+      STAGE_RELOGIN_KEY
+    ) || "0"
+  );
+
+  console.warn(
+    "BATTLE STAGE RELOGIN:",
+    reason
+  );
+
+  if(
+    last > 0 &&
+    now - last < 10000
+  ){
+    throw new Error(
+      "LINE session ยังไม่พร้อม กรุณาปิดหน้านี้แล้วเปิด BATTLE ใหม่จาก LINE"
+    );
+  }
+
+  sessionStorage.setItem(
+    STAGE_RELOGIN_KEY,
+    String(now)
+  );
+
+  try{
+    if(
+      typeof liff !== "undefined" &&
+      liff.isLoggedIn()
+    ){
+      liff.logout();
+    }
+  }catch(error){
+    console.warn(
+      "LIFF LOGOUT ERROR:",
+      error
+    );
+  }
+
+  if(typeof liff === "undefined"){
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
+    );
+  }
+
+  liff.login({
+    redirectUri: window.location.href
+  });
+}
+
+
+async function prepareStageLiff(){
+
+  if(typeof liff === "undefined"){
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
+    );
+  }
+
+  const liffId =
+    window.APP_CONFIG?.LIFF_ID ||
+    window.ROCK?.CFG?.LIFF_ID ||
+    window.ROCK?.CFG?.LIFF?.HOME ||
+    undefined;
+
+  if(!liffId){
+    throw new Error(
+      "ไม่พบ LIFF_ID"
+    );
+  }
+
+  await liff.init({
+    liffId
+  });
+
+  if(!liff.isLoggedIn()){
+    liff.login({
+      redirectUri: window.location.href
+    });
+    return false;
+  }
+
+  const token =
+    liff.getIDToken();
+
+  console.log(
+    "BATTLE STAGE TOKEN CHECK:",
+    {
+      hasToken: Boolean(token),
+      jwtFormat: isJwtLike(token),
+      tokenLength: token ? token.length : 0,
+      loggedIn: liff.isLoggedIn(),
+      inClient: liff.isInClient()
+    }
+  );
+
+  if(
+    !token ||
+    !isJwtLike(token)
+  ){
+    forceStageRelogin(
+      "ID_TOKEN_JWS_FORMAT_INVALID"
+    );
+    return false;
+  }
+
+  if(tokenExpired(token,45)){
+    forceStageRelogin(
+      "ID_TOKEN_EXPIRED"
+    );
+    return false;
+  }
+
+  sessionStorage.removeItem(
+    STAGE_RELOGIN_KEY
+  );
+
+  return true;
+}
+
+
+function getStageIdToken(){
+
+  if(typeof liff === "undefined"){
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
+    );
+  }
+
+  if(!liff.isLoggedIn()){
+    throw new Error(
+      "LINE ยังไม่ได้ Login"
+    );
+  }
+
+  const token =
+    liff.getIDToken();
+
+  if(!token){
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+  if(!isJwtLike(token)){
+    const error = new Error(
+      "LINE ID Token format ไม่ถูกต้อง"
+    );
+    error.code = "JWS_FORMAT_ERROR";
+    throw error;
+  }
+
+  if(tokenExpired(token,30)){
+    const error = new Error(
+      "LINE ID Token หมดอายุ"
+    );
+    error.code = "TOKEN_EXPIRED";
+    throw error;
+  }
+
+  return token;
+}
+
+
+/* =========================================================
    BATTLE API
 ========================================================= */
 
-async function callBattleApi(
-  payload
-){
+async function callBattleApi(payload){
 
   const api =
     window.APP_CONFIG
       ?.API
       ?.BATTLE;
 
-
   if(!api){
-
     throw new Error(
       "ไม่พบ BATTLE API"
     );
   }
 
-
   const idToken =
-    window.ROCK
-      ?.getIdToken
-      ?.();
-
-
-  if(!idToken){
-
-    throw new Error(
-      "ไม่พบ LINE ID Token"
-    );
-  }
-
+    getStageIdToken();
 
   const response =
     await fetch(
@@ -1149,49 +1394,54 @@ async function callBattleApi(
       }
     );
 
-
   const raw =
     await response.text();
 
-
   let result = {};
 
-
   try{
-
     result =
       raw
         ? JSON.parse(raw)
         : {};
-
   }catch{
-
     throw new Error(
       `Battle API ตอบกลับไม่ถูกต้อง HTTP ${response.status}`
     );
   }
-
 
   if(
     !response.ok ||
     result?.success === false
   ){
 
+    const message = String(
+      result?.error ||
+      result?.message ||
+      `HTTP ${response.status}`
+    );
+
+    const lower =
+      message.toLowerCase();
+
+    if(
+      response.status === 401 ||
+      lower.includes("jws format") ||
+      lower.includes("idtoken expired") ||
+      lower.includes("authentication failed") ||
+      lower.includes("invalid id token")
+    ){
+      forceStageRelogin(message);
+      return await new Promise(() => {});
+    }
+
     const error =
-      new Error(
-        result?.error ||
-        result?.message ||
-        `HTTP ${response.status}`
-      );
+      new Error(message);
 
-
-    error.data =
-      result;
-
+    error.data = result;
 
     throw error;
   }
-
 
   return result;
 }
@@ -1230,6 +1480,9 @@ function syncEnergyFromError(error){
 
   const serverEnergy =
     Number(
+      error?.data?.player?.energy ??
+      error?.data?.user?.energy ??
+      error?.data?.currentEnergy ??
       error?.data?.player?.energy ??
       error?.data?.user?.energy ??
       error?.data?.energy?.current ??
@@ -1679,34 +1932,12 @@ async function attackMonster(){
       .textContent =
         `⚔️ Damage ${damage.toLocaleString("en-US")}`;
 
-
     /*
-      ถ้า Monster ยังไม่ตาย แต่ Energy หมด
-      = แพ้ทันที และแสดง mission_failed_stage_XX.png
+      Backend รุ่น unified-energy หักค่าเข้า Stage เพียงครั้งเดียว
+      ตอน startBattle ดังนั้น Energy = 0 หลังเริ่มต่อสู้
+      ไม่ได้หมายความว่าแพ้ทันที
+      แพ้จาก Energy เฉพาะเมื่อ Server คืน ENERGY_NOT_ENOUGH
     */
-    if(
-      !TEST_MODE &&
-      monsterHp > 0 &&
-      playerEnergy <= 0
-    ){
-
-      showEnergyFailed({
-        message:
-          "ENERGY_NOT_ENOUGH",
-
-        data:{
-          error:
-            "ENERGY_NOT_ENOUGH",
-
-          player:{
-            energy:
-              playerEnergy
-          }
-        }
-      });
-
-      return;
-    }
 
 
     if(
@@ -2249,7 +2480,70 @@ async function startStage(){
 
 document.addEventListener(
   "DOMContentLoaded",
-  startStage
+  async () => {
+
+    try{
+
+      renderStage();
+      startRegenTimer();
+
+      if(TEST_MODE){
+        return;
+      }
+
+      const ready =
+        await prepareStageLiff();
+
+      if(ready === false){
+        return;
+      }
+
+      /* ดึงสถานะจริงก่อนเริ่มโจมตี */
+      try{
+        const status =
+          await callBattleApi({
+            action:"battleStatus"
+          });
+
+        const serverEnergy =
+          Number(
+            status?.player?.energy
+          );
+
+        if(Number.isFinite(serverEnergy)){
+          playerEnergy =
+            Math.max(0,serverEnergy);
+
+          localStorage.setItem(
+            "rockEnergy",
+            String(playerEnergy)
+          );
+
+          updateEnergyUI();
+        }
+      }catch(error){
+        console.warn(
+          "BATTLE STATUS BEFORE STAGE:",
+          error
+        );
+      }
+
+    }catch(error){
+
+      console.error(
+        "BATTLE STAGE INIT ERROR:",
+        error
+      );
+
+      document
+        .getElementById(
+          "battleStatus"
+        )
+        .textContent =
+          error?.message ||
+          "เปิด Battle Stage ไม่สำเร็จ";
+    }
+  }
 );
 
 </script>
