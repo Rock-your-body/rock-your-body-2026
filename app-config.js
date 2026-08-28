@@ -1,7 +1,7 @@
 /* =========================================================
    ROCK YOUR BODY 2026
    APP CONFIG
-   Version: 2026-08-28-DAILY-HEALTH-MISSION-LINKS
+   Version: 2026-08-29-MISSION-ROUTES-V4
 ========================================================= */
 
 "use strict";
@@ -9,28 +9,28 @@
 
 window.APP_CONFIG = {
 
-  /* =====================================================
+  /* =======================================================
      APP
-  ====================================================== */
+  ======================================================= */
 
   APP_NAME:
     "ROCK YOUR BODY 2026",
 
   VERSION:
-    "2026-08-28-DAILY-HEALTH-MISSION-LINKS",
+    "2026-08-29-MISSION-ROUTES-V4",
 
 
-  /* =====================================================
+  /* =======================================================
      LINE LIFF
-  ====================================================== */
+  ======================================================= */
 
   LIFF_ID:
     "2011201679-uNWz5yqF",
 
 
-  /* =====================================================
+  /* =======================================================
      SUPABASE
-  ====================================================== */
+  ======================================================= */
 
   SUPABASE: {
 
@@ -43,90 +43,45 @@ window.APP_CONFIG = {
   },
 
 
-  /* =====================================================
+  /* =======================================================
      EDGE FUNCTIONS
-  ====================================================== */
+  ======================================================= */
 
   API: {
-
-    /* HOME */
 
     DASHBOARD:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
 
-
-    /* MISSION */
-
     MISSION:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
-
-
-    /* BATTLE */
 
     BATTLE:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
 
-
-    /* INBODY */
-
     INBODY:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/inbody",
-
-
-    /* PROJECT */
 
     PROJECT:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/project-settings",
 
-
-    /* DAILY HEALTH
-       เก็บ Steps / Calories / Sleep ของผู้ใช้รายวัน
-    */
-
     DAILY_HEALTH:
-      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/daily-health"
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/daily-health",
+
+    NUTRITION:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/nutrition"
 
   },
 
 
-  /* =====================================================
-     NORMAL PAGE URL
-  ====================================================== */
+  /* =======================================================
+     PAGE ROUTES
+  ======================================================= */
 
   PAGE: {
 
-    HOME:
-      "./dashboard.html",
-
-    MISSION:
-      "./mission.html",
-
-    BATTLE:
-      "./battle.html",
-
-    WEIGHT:
-      "./weight-check.html",
-
-    PROGRESS:
-      "./progress.html",
-
-    RANKING:
-      "./ranking.html",
-
-    REWARDS:
-      "./rewards.html",
-
-    PROJECT_SETTINGS:
-      "./project-settings.html"
-
-  },
-
-
-  /* =====================================================
-     BACKWARD COMPATIBLE PAGE URL
-  ====================================================== */
-
-  PAGES: {
+    /* -----------------------
+       MAIN
+    ----------------------- */
 
     HOME:
       "./dashboard.html",
@@ -150,94 +105,59 @@ window.APP_CONFIG = {
       "./rewards.html",
 
     PROJECT_SETTINGS:
-      "./project-settings.html"
+      "./project-settings.html",
 
-  },
+    NUTRITION:
+      "./nutrition.html",
 
 
-  /* =====================================================
-     DAILY MISSION DEEP LINKS
+    /* =====================================================
+       DAILY HEALTH → DAILY MISSION
+    ===================================================== */
 
-     ใช้สำหรับกดจาก HOME
 
-     Steps
-       → Daily Mission / MOVE MORE
-
-     Calories
-       → Daily Mission / MOVE MORE + Exercise
-
-     Sleep
-       → Daily Mission / SLEEP WELL
-  ====================================================== */
-
-  MISSION_LINK: {
-
-    /* ---------------------------------------------
+    /*
        STEPS
-    ---------------------------------------------- */
+       HOME → DAILY MISSION → MOVE MORE
+    */
+    DAILY_MOVE:
+      "./mission.html?category=daily&mission=daily_move_more",
 
-    STEPS:
-      "./mission.html?category=daily&mission=daily_move_more&metric=steps",
 
-
-    /* ---------------------------------------------
+    /*
        CALORIES
+       HOME → DAILY MISSION → EXERCISE
 
-       เปิด MOVE MORE
-       พร้อมบอก mission.html ว่าเข้ามาจาก Calories
-    ---------------------------------------------- */
-
-    CALORIES:
-      "./mission.html?category=daily&mission=daily_move_more&metric=calories&exercise=1",
+       mission.html ชุดล่าสุดรองรับ mission id นี้โดยตรง
+    */
+    DAILY_EXERCISE:
+      "./mission.html?category=daily&mission=daily_exercise_30",
 
 
-    /* ---------------------------------------------
+    /*
        SLEEP
-
-       เปิด SLEEP WELL
-    ---------------------------------------------- */
-
-    SLEEP:
-      "./mission.html?category=daily&mission=bonus_sleep&metric=sleep"
-
-  },
+       HOME → DAILY MISSION → SLEEP
+    */
+    DAILY_SLEEP:
+      "./mission.html?category=daily&mission=daily_sleep",
 
 
-  /* =====================================================
-     MISSION IDs
-
-     ใช้ชื่อเดียวกันทั้ง HOME / MISSION / BACKEND
-  ====================================================== */
-
-  MISSION_ID: {
-
-    MOVE_MORE:
-      "daily_move_more",
-
-    EAT_SMART:
-      "daily_eat_smart",
-
-    EXERCISE:
-      "daily_exercise_30",
-
-    SLEEP_WELL:
-      "bonus_sleep"
+    /*
+       EAT SMART
+       HOME / Nutrition → DAILY MISSION → EAT SMART
+    */
+    DAILY_EAT_SMART:
+      "./mission.html?category=daily&mission=daily_eat_smart"
 
   },
 
 
-  /* =====================================================
-     DAILY HEALTH DEFAULT VALUES
+  /* =======================================================
+     DAILY HEALTH DEFAULT
+     ไม่มีข้อมูล = 0
+  ======================================================= */
 
-     ถ้าไม่มีข้อมูลจริง:
-       Steps = 0
-       Calories = 0
-       Sleep = 0 นาที
-
-     ห้ามแสดง --
-  ====================================================== */
-
-  DAILY_DEFAULT: {
+  DAILY_HEALTH_DEFAULTS: {
 
     STEPS:
       0,
@@ -251,27 +171,17 @@ window.APP_CONFIG = {
   },
 
 
-  /* =====================================================
-     DAILY HEALTH GOALS
-
-     ใช้คำนวณ Progress Bar
-  ====================================================== */
+  /* =======================================================
+     DAILY GOALS
+  ======================================================= */
 
   DAILY_GOALS: {
-
-    /* 8,000 ก้าว */
 
     STEPS:
       8000,
 
-
-    /* 300 kcal */
-
     CALORIES:
       300,
-
-
-    /* 7 ชั่วโมง = 420 นาที */
 
     SLEEP_MINUTES:
       420
@@ -279,115 +189,9 @@ window.APP_CONFIG = {
   },
 
 
-  /* =====================================================
-     DAILY HEALTH DISPLAY
-  ====================================================== */
-
-  DAILY_DISPLAY: {
-
-    STEPS_EMPTY:
-      "0",
-
-    CALORIES_EMPTY:
-      "0 kcal",
-
-    SLEEP_EMPTY:
-      "0 ชม. 0 นาที"
-
-  },
-
-
-  /* =====================================================
-     MISSION EVIDENCE
-
-     ต้องมีหลักฐานก่อนส่ง Mission
-  ====================================================== */
-
-  MISSION_EVIDENCE: {
-
-    MOVE_MORE: {
-
-      REQUIRED:
-        true,
-
-      ALLOW_IMAGE:
-        true,
-
-      ALLOW_VIDEO:
-        true,
-
-      ALLOW_LINK:
-        false
-
-    },
-
-
-    EXERCISE: {
-
-      REQUIRED:
-        true,
-
-      ALLOW_IMAGE:
-        true,
-
-      ALLOW_VIDEO:
-        true,
-
-      ALLOW_LINK:
-        false
-
-    },
-
-
-    SLEEP_WELL: {
-
-      REQUIRED:
-        true,
-
-      ALLOW_IMAGE:
-        true,
-
-      ALLOW_VIDEO:
-        false,
-
-      ALLOW_LINK:
-        false
-
-    }
-
-  },
-
-
-  /* =====================================================
-     REWARD RULE
-
-     ส่งตัวเลขอย่างเดียว = ยังไม่ได้รางวัล
-
-     ต้อง:
-       1. กรอกข้อมูล
-       2. อัปโหลดหลักฐาน
-       3. ส่ง Mission
-       4. Admin Approve
-       5. Backend ให้ Coin / Energy / EXP
-  ====================================================== */
-
-  REWARD_RULE: {
-
-    REQUIRE_EVIDENCE:
-      true,
-
-    REQUIRE_ADMIN_APPROVAL:
-      true,
-
-    GRANT_ON_APPROVED:
-      true
-
-  },
-
-
-  /* =====================================================
-     GAME
-  ====================================================== */
+  /* =======================================================
+     GAME SETTINGS
+  ======================================================= */
 
   MAX_ENERGY:
     200,
@@ -399,9 +203,9 @@ window.APP_CONFIG = {
     30000,
 
 
-  /* =====================================================
+  /* =======================================================
      STORAGE
-  ====================================================== */
+  ======================================================= */
 
   STORAGE: {
 
@@ -411,51 +215,49 @@ window.APP_CONFIG = {
     INBODY_RESULTS:
       "inbody-results",
 
+    NUTRITION_EVIDENCE:
+      "nutrition-evidence",
+
     ROCK_ASSETS:
       "rock-assets"
-
-  },
-
-
-  /* =====================================================
-     ASSETS
-  ====================================================== */
-
-  ASSETS: {
-
-    HOME_TEMPLATE:
-      "./home-template.png",
-
-    MISSION_TEMPLATE:
-      "./mission-template.png",
-
-    BATTLE_TEMPLATE:
-      "./battle-template.png"
 
   }
 
 };
 
 
+
 /* =========================================================
-   BACKWARD COMPATIBILITY
+   COMPATIBILITY ALIAS
 ========================================================= */
+
+/*
+   รองรับไฟล์เก่าที่เรียก
+   APP_CONFIG.PAGES.xxx
+*/
+
+window.APP_CONFIG.PAGES =
+  window.APP_CONFIG.PAGE;
+
+
+/*
+   Base URL alias
+*/
 
 window.APP_CONFIG.API_BASE =
   window.APP_CONFIG.SUPABASE.BASE_URL;
 
 
+
 /* =========================================================
-   GET PAGE
+   PAGE HELPER
 ========================================================= */
 
 window.APP_CONFIG.getPage =
-  function getPage(name) {
+  function getPage(name){
 
     const key =
-      String(
-        name || ""
-      )
+      String(name || "")
         .trim()
         .toUpperCase();
 
@@ -468,17 +270,16 @@ window.APP_CONFIG.getPage =
   };
 
 
+
 /* =========================================================
-   GET API
+   API HELPER
 ========================================================= */
 
 window.APP_CONFIG.getApi =
-  function getApi(name) {
+  function getApi(name){
 
     const key =
-      String(
-        name || ""
-      )
+      String(name || "")
         .trim()
         .toUpperCase();
 
@@ -491,30 +292,81 @@ window.APP_CONFIG.getApi =
   };
 
 
+
 /* =========================================================
-   GET MISSION LINK
-
-   ตัวอย่าง:
-
-   APP_CONFIG.getMissionLink("STEPS")
-   APP_CONFIG.getMissionLink("CALORIES")
-   APP_CONFIG.getMissionLink("SLEEP")
+   DAILY HEALTH ROUTER
 ========================================================= */
 
-window.APP_CONFIG.getMissionLink =
-  function getMissionLink(name) {
+window.APP_CONFIG.getHealthRoute =
+  function getHealthRoute(metric){
 
     const key =
-      String(
-        name || ""
-      )
+      String(metric || "")
         .trim()
-        .toUpperCase();
+        .toLowerCase();
 
+
+    /* -----------------------
+       STEPS
+    ----------------------- */
+
+    if(
+      key === "steps" ||
+      key === "step"
+    ){
+
+      return (
+        window.APP_CONFIG
+          .PAGE
+          .DAILY_MOVE
+      );
+
+    }
+
+
+    /* -----------------------
+       CALORIES
+    ----------------------- */
+
+    if(
+      key === "calories" ||
+      key === "calorie" ||
+      key === "kcal" ||
+      key === "exercise"
+    ){
+
+      return (
+        window.APP_CONFIG
+          .PAGE
+          .DAILY_EXERCISE
+      );
+
+    }
+
+
+    /* -----------------------
+       SLEEP
+    ----------------------- */
+
+    if(
+      key === "sleep" ||
+      key === "sleep_minutes"
+    ){
+
+      return (
+        window.APP_CONFIG
+          .PAGE
+          .DAILY_SLEEP
+      );
+
+    }
+
+
+    /* -----------------------
+       FALLBACK
+    ----------------------- */
 
     return (
-      window.APP_CONFIG
-        .MISSION_LINK[key] ||
       window.APP_CONFIG
         .PAGE
         .MISSION
@@ -523,28 +375,81 @@ window.APP_CONFIG.getMissionLink =
   };
 
 
+
 /* =========================================================
-   DAILY DEFAULT HELPER
+   DAILY MISSION ROUTER
 ========================================================= */
 
-window.APP_CONFIG.getDailyDefault =
-  function getDailyDefault(name) {
+window.APP_CONFIG.getDailyMissionRoute =
+  function getDailyMissionRoute(mission){
 
     const key =
-      String(
-        name || ""
-      )
+      String(mission || "")
         .trim()
-        .toUpperCase();
+        .toLowerCase();
 
 
-    return (
-      window.APP_CONFIG
-        .DAILY_DEFAULT[key] ??
-      0
-    );
+    switch(key){
+
+      case "move":
+      case "move_more":
+      case "daily_move_more":
+      case "steps":
+
+        return (
+          window.APP_CONFIG
+            .PAGE
+            .DAILY_MOVE
+        );
+
+
+      case "exercise":
+      case "daily_exercise_30":
+      case "calories":
+      case "kcal":
+
+        return (
+          window.APP_CONFIG
+            .PAGE
+            .DAILY_EXERCISE
+        );
+
+
+      case "sleep":
+      case "sleep_well":
+      case "daily_sleep":
+
+        return (
+          window.APP_CONFIG
+            .PAGE
+            .DAILY_SLEEP
+        );
+
+
+      case "eat":
+      case "eat_smart":
+      case "daily_eat_smart":
+      case "nutrition":
+
+        return (
+          window.APP_CONFIG
+            .PAGE
+            .DAILY_EAT_SMART
+        );
+
+
+      default:
+
+        return (
+          window.APP_CONFIG
+            .PAGE
+            .MISSION
+        );
+
+    }
 
   };
+
 
 
 /* =========================================================
@@ -552,35 +457,43 @@ window.APP_CONFIG.getDailyDefault =
 ========================================================= */
 
 console.log(
-  "ROCK YOUR BODY CONFIG:",
-  {
+  "======================================"
+);
 
-    version:
-      window.APP_CONFIG.VERSION,
+console.log(
+  "ROCK YOUR BODY APP CONFIG READY"
+);
 
-    liffId:
-      window.APP_CONFIG.LIFF_ID,
+console.log(
+  "VERSION:",
+  window.APP_CONFIG.VERSION
+);
 
-    dailyHealthApi:
-      window.APP_CONFIG.API.DAILY_HEALTH,
+console.log(
+  "DAILY HEALTH API:",
+  window.APP_CONFIG.API.DAILY_HEALTH
+);
 
-    stepsMission:
-      window.APP_CONFIG.MISSION_LINK.STEPS,
+console.log(
+  "STEPS →",
+  window.APP_CONFIG.PAGE.DAILY_MOVE
+);
 
-    caloriesMission:
-      window.APP_CONFIG.MISSION_LINK.CALORIES,
+console.log(
+  "CALORIES →",
+  window.APP_CONFIG.PAGE.DAILY_EXERCISE
+);
 
-    sleepMission:
-      window.APP_CONFIG.MISSION_LINK.SLEEP,
+console.log(
+  "SLEEP →",
+  window.APP_CONFIG.PAGE.DAILY_SLEEP
+);
 
-    stepsDefault:
-      window.APP_CONFIG.DAILY_DEFAULT.STEPS,
+console.log(
+  "EAT SMART →",
+  window.APP_CONFIG.PAGE.DAILY_EAT_SMART
+);
 
-    caloriesDefault:
-      window.APP_CONFIG.DAILY_DEFAULT.CALORIES,
-
-    sleepDefault:
-      window.APP_CONFIG.DAILY_DEFAULT.SLEEP_MINUTES
-
-  }
+console.log(
+  "======================================"
 );
