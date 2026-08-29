@@ -518,16 +518,16 @@
     <div id="sleepTrack" class="bar"><i id="sleepBar"></i></div>
 
     <div id="stepsEntry" class="health-v212">
-      <button id="editStepsButton" type="button">กรอกก้าว</button>
+      <button id="editStepsButton" type="button">กรอกก้าววันนี้</button>
       <button id="moveMoreMissionButton" class="qualified" type="button" style="display:none">
-        ✓ MOVE MORE
+        ✓ ถึงเป้าหมาย
       </button>
     </div>
 
     <div id="sleepEntry" class="health-v212">
       <button id="editSleepButton" type="button">กรอกการนอน</button>
       <button id="sleepMissionButton" class="qualified" type="button" style="display:none">
-        ✓ SLEEP WELL
+        ✓ ถึงเป้าหมาย
       </button>
     </div>
 
@@ -2082,10 +2082,11 @@ async function fetchDashboard(){
       if(steps >= 8000){
         box.innerHTML =
           `<div style="margin-top:12px;color:#087438;font-weight:900">
-            ✅ ถึงเป้าหมาย MOVE MORE แล้ว ${steps.toLocaleString()} / 8,000 ก้าว
+            ✅ ภารกิจ MOVE MORE สำเร็จตามเป้าหมายแล้ว ${steps.toLocaleString()} / 8,000 ก้าว
           </div>
           <div style="margin-top:5px;font-size:13px;color:#61748c">
-            ต้องส่งรูปหลักฐานและรอ Admin อนุมัติก่อนจึงได้รับรางวัล
+            สถานะสุขภาพถือว่าถึงเป้าหมายแล้ว แต่ยังไม่ได้รับรางวัล
+            • หากต้องการ Coin / Energy / EXP ให้กดส่งหลักฐานด้านล่าง
           </div>`;
 
         evidence.style.display =
@@ -2255,10 +2256,11 @@ async function fetchDashboard(){
       if(total >= 420){
         box.innerHTML =
           `<div style="margin-top:12px;color:#087438;font-weight:900">
-            ✅ ถึงเป้าหมาย SLEEP WELL แล้ว ${Math.floor(total/60)} ชม. ${total%60} นาที
+            ✅ ภารกิจ SLEEP WELL สำเร็จตามเป้าหมายแล้ว ${Math.floor(total/60)} ชม. ${total%60} นาที
           </div>
           <div style="margin-top:5px;font-size:13px;color:#61748c">
-            ต้องส่งรูปหลักฐานและรอ Admin อนุมัติก่อนจึงได้รับรางวัล
+            สถานะสุขภาพถือว่าถึงเป้าหมายแล้ว แต่ยังไม่ได้รับรางวัล
+            • หากต้องการ Coin / Energy / EXP ให้กดส่งหลักฐานด้านล่าง
           </div>`;
 
         evidence.style.display =
@@ -2412,20 +2414,7 @@ async function fetchDashboard(){
       )
       ?.addEventListener(
         "click",
-        () => {
-          window.location.href =
-            missionUrlV212(
-              "daily_move_more",
-              {
-                steps:
-                  window.HOME_V212_HEALTH
-                    ?.steps ||
-                  0,
-                evidence:
-                  1
-              }
-            );
-        }
+        openStepsV212
       );
 
     document
@@ -2495,20 +2484,7 @@ async function fetchDashboard(){
       )
       ?.addEventListener(
         "click",
-        () => {
-          window.location.href =
-            missionUrlV212(
-              "daily_sleep",
-              {
-                sleepMinutes:
-                  window.HOME_V212_HEALTH
-                    ?.sleepMinutes ||
-                  0,
-                evidence:
-                  1
-              }
-            );
-        }
+        openSleepV212
       );
 
     document
