@@ -1,3 +1,118 @@
+Today 10:16 PM
+ปรับขนาดตัวหนังสือไม่หนา หนาแค่กิโล
+ตั้งค่าให้ตัวหนังสือและขนาดเหมือนรูปนี้แบบ 100 %  ที่ไหน
+ปรับลิงค์แอปให้ตรงกับรูปtemplate หน้าmission
+ปรับรูปให้อยู่ในช่องวกลม ที่ไหน
+ปรับชื่อเลื่อนลงมาในช่อง Rock hero ujwso
+Pasted text(20260829-161151).txt
+Document
+ปรับขนาดและตำแหน่งของข้อมูลให้ตรงตามภาพ ที่ไหน 
+ปรับรูปให้เล็กลงเท่ากับกรอบวงกลม
+เอากระดิ่งหน้าhome ออก ที่ไหน
+ไม่เห็นชื่อทีมแสดงในหน้า HOME ทำยังไง
+Pasted text(20260829-164713).txt
+Document
+เอากระดิ่งออก ขอdashboard.html  ก้อนใหม่
+สร้างแอปที่หน้าตาแบบนี้แทนหน้าbattle เอา template รูปภาพออก โดยลิงค์ข้อมูลจาก User id เหมือนหน้า home และหน้า mission 
+
+แก้ต่อเป็น battle_stage.html V3.1 ก้อนใหม่ทั้งไฟล์
+
+ควรล็อกปุ่มโจมตีเมื่อ Energy ไม่พอ แต่ผลออกมาว่าmission failed_ตามstage นั้นๆ ถ้าพลังงานเพียงพอ ถึงจะฆ่ามอนสเตอร์ success
+
+Pasted code(20260829-172606).ts
+TypeScript
+battle  ขอทั้งก้อนใหม่ ที่รวม เปิด Backend Patch V3.2  แล้ว
+
+อันนี้ปกติครับ เพราะคุณเปิด Battle Function URL ตรง ๆ แบบ POST/หรือหน้าเรียกโดยไม่มี idToken เลยได้:
+
+{
+  "success": false,
+  "service": "battle",
+  "version": "2026-08-30-BATTLE-V3.2-FULL",
+  "error": "ไม่พบ LINE ID Token"
+}
+
+แปลว่า Function deploy สำเร็จแล้ว และกำลังตรวจ LINE Token ถูกต้อง
+
+ถ้าจะเช็ก Health ให้เปิดแบบ GET โดยตรง ต้องได้ประมาณนี้:
+
+{
+  "success": true,
+  "service": "battle",
+  "version": "2026-08-30-BATTLE-V3.2-FULL",
+  "status": "ready",
+  "databaseConfigured": true,
+  "lineChannelConfigured": true
+}
+
+ส่วนการใช้งานจริง battle.html / battle_stage.html ต้องส่ง:
+
+idToken: liff.getIDToken()
+
+ไปกับ request เช่น:
+
+await fetch(
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
+  {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      action:"stageStatus",
+      idToken:liff.getIDToken()
+    })
+  }
+);
+
+ดังนั้นตอนนี้ Backend V3.2 ใช้งานได้แล้ว จุดที่ต้องทดสอบต่อคือเปิดผ่าน LIFF แล้วดูว่า battle_stage.html ส่ง idToken มาจริงหรือไม่
+
+ถ้ายังขึ้น "ไม่พบ LINE ID Token" ตอนเปิดจาก LIFF ให้เช็ก 3 จุดนี้:
+
+await liff.init({
+  liffId:"2011201679-uNWz5yqF"
+});
+
+if(!liff.isLoggedIn()){
+  liff.login();
+  return;
+}
+
+const idToken = liff.getIDToken();
+
+console.log("ID TOKEN:", Boolean(idToken));
+
+ถ้า console.log ได้ true แล้ว request ยัง error แปลว่าจุด fetch() ใน battle_stage.html ยังไม่ได้แนบ idToken ครับ.
+
+แก้ไขให้หน้าbettle เป็นหน้า battle-template และข้อมูลที่ดึงมาทับที่รูปtemplate 
+เขียนโค้ดให้สามารถดึงข้อมูลให้ตรงกับภาพโดยเชื่อมเหรียญและพลัง และuser ผู้เล่น กับหน้าHome และหน้า mission 
+
+ทำให้แล้วครับ เป็น BATTLE TEMPLATE V3.3 แบบใช้รูป battle-template.png เป็นพื้นหลัง แล้วดึงข้อมูลจริงมาวางทับตามตำแหน่งในภาพ
+
+ดาวน์โหลด battle.html ก้อนใหม่
+
+ดาวน์โหลด ZIP V3.3
+
+เวอร์ชันนี้เชื่อมข้อมูลแบบเดียวกับ HOME/MISSION: PLAYER action:"dashboard" สำหรับ ROCK COIN, ENERGY, ชื่อผู้เล่น, รูปโปรไฟล์, Level, EXP และใช้ BATTLE battleStatus/status/stageStatus สำหรับ Boss Name, Boss HP, Stage และ Ranking โดยใช้ LINE ID Token เดิมเป็นตัวเชื่อมผู้เล่น
+
+ให้เอารูป Battle ที่ต้องการใช้ตั้งชื่อว่า:
+
+battle-template.png
+
+แล้ววางไว้โฟลเดอร์เดียวกับ:
+
+battle.html
+
+โครงสร้างบน GitHub จะเป็น:
+
+/battle.html
+/battle-template.png
+/app-config.js
+
+ปุ่มเชื่อมไว้แล้ว: FIGHT MONSTER → battle_stage.html, Ranking → ranking.html, Boss Reward → rewards.html, HOME → dashboard.html, MISSION → mission.html
+
+ถ้าตำแหน่งตัวเลขหลังเปิดบนมือถือยังเหลื่อมจาก Template ผมจะปรับ left/top/font-size ของแต่ละช่องให้ตรงภาพแบบละเอียดต่อได้ครับ. 
+
 <!doctype html>
 <html lang="th">
 <head>
@@ -10,1374 +125,466 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260829-clean-v2"></script>
+  <script src="./app-config.js?v=20260830-battle-template-v33"></script>
 
   <style>
-    :root{
-      --navy:#062a73;
-      --navy-2:#00184f;
-      --blue:#005be7;
-      --blue-2:#02329f;
-      --light:#f4f8ff;
-      --line:#c9d9f1;
-      --text:#0b2f70;
-      --orange:#ff9d00;
-      --green:#17a84b;
-      --purple:#6023cc;
-      --red:#e72323;
-    }
-
     *{box-sizing:border-box}
 
     html,body{
       margin:0;
+      padding:0;
+      width:100%;
       min-height:100%;
       background:#eef4ff;
       font-family:"Prompt",Arial,sans-serif;
-      color:var(--text);
+      color:#092a68;
     }
 
     body{
       display:flex;
       justify-content:center;
-      padding:
-        env(safe-area-inset-top)
-        0
-        env(safe-area-inset-bottom);
+      align-items:flex-start;
+      overflow-x:hidden;
     }
 
-    button{
-      font:inherit;
-    }
-
-    #app{
-      width:min(100%,1280px);
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 50% 20%,#ffffff 0,#f7faff 35%,#eef4ff 100%);
-      overflow:hidden;
-    }
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
-    .header{
-      min-height:105px;
-      padding:14px 22px 12px;
-      display:grid;
-      grid-template-columns:220px 1fr 310px;
-      align-items:center;
-      gap:18px;
-      background:#fff;
-    }
-
-    .hospital{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      color:#0a2767;
-      font-weight:900;
-      line-height:.92;
-    }
-
-    .hospital-mark{
-      width:58px;
-      height:58px;
-      border-radius:15px;
-      background:
-        linear-gradient(180deg,#e60012 0 50%,#073a9b 50% 100%);
+    #battleStage{
       position:relative;
-      box-shadow:0 3px 10px rgba(0,0,0,.12);
-    }
-
-    .hospital-mark::before,
-    .hospital-mark::after{
-      content:"";
-      position:absolute;
-      background:#fff;
-      border-radius:3px;
-    }
-
-    .hospital-mark::before{
-      width:15px;
-      height:42px;
-      left:21px;
-      top:8px;
-    }
-
-    .hospital-mark::after{
-      width:42px;
-      height:15px;
-      left:8px;
-      top:21px;
-    }
-
-    .hospital-name{
-      font-size:24px;
-      letter-spacing:-1px;
-    }
-
-    .hospital-name small{
-      display:block;
-      margin-top:6px;
-      color:#707070;
-      font-size:17px;
-      text-align:center;
-    }
-
-    .brand{
-      text-align:center;
-      min-width:0;
-    }
-
-    .brand-title{
-      margin:0;
-      color:#0a256d;
-      font-size:clamp(32px,5.6vw,72px);
-      font-weight:900;
-      font-style:italic;
-      letter-spacing:-3px;
-      line-height:.95;
-      white-space:nowrap;
-    }
-
-    .brand-title .red{
-      color:#bc0d17;
-    }
-
-    .brand-title .year{
-      font-size:.48em;
-      font-style:normal;
-      letter-spacing:-1px;
-    }
-
-    .brand-sub{
-      margin-top:8px;
-      font-size:clamp(13px,2vw,25px);
-      font-weight:900;
-      letter-spacing:2px;
-      white-space:nowrap;
-    }
-
-    .brand-sub .move{color:#1342b7}
-    .brand-sub .eat{color:#f06b13}
-    .brand-sub .sleep{color:#4c26ad}
-    .brand-sub .health{color:#18873a}
-
-    .wallet{
-      min-height:76px;
-      border:1px solid #dbe4f0;
-      border-radius:17px;
-      background:#fff;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      box-shadow:0 5px 14px rgba(19,50,99,.16);
+      width:min(100vw,1536px);
+      aspect-ratio:1536 / 1024;
+      margin:0 auto;
       overflow:hidden;
+      background:#fff;
     }
 
-    .wallet-item{
+    .template{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:fill;
+      z-index:1;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .abs{
+      position:absolute;
+      z-index:20;
       display:flex;
       align-items:center;
       justify-content:center;
-      gap:10px;
-      padding:9px 10px;
-      min-width:0;
-    }
-
-    .wallet-item + .wallet-item{
-      border-left:1px solid #c9d2df;
-    }
-
-    .wallet-icon{
-      font-size:42px;
+      text-align:center;
       line-height:1;
-      filter:drop-shadow(0 2px 2px rgba(0,0,0,.15));
-    }
-
-    .wallet-value{
-      color:#09215f;
-      font-size:22px;
-      font-weight:600;
-      line-height:1.05;
-      white-space:nowrap;
-    }
-
-    .wallet-label{
-      margin-top:5px;
-      font-size:12px;
-      font-weight:800;
-      color:#0a2867;
-      white-space:nowrap;
-    }
-
-    /* =====================================================
-       BATTLE TITLE
-    ====================================================== */
-    .battle-title{
-      margin:0 12px;
-      height:66px;
-      border-radius:18px 18px 0 0;
-      background:linear-gradient(180deg,#083c9a,#001c5f);
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:16px;
-      font-size:clamp(26px,4vw,48px);
-      font-weight:900;
-      box-shadow:0 5px 12px rgba(0,35,100,.25);
-    }
-
-    .battle-title .icon{
-      font-size:46px;
-    }
-
-    /* =====================================================
-       MAIN ARENA
-    ====================================================== */
-    .arena{
-      margin:0 12px;
-      padding:16px;
-      border-radius:0 0 24px 24px;
-      background:
-        radial-gradient(circle at 35% 15%,#2a8bff 0,#0a62dc 27%,#0148bd 56%,#063b96 100%);
-      box-shadow:0 8px 20px rgba(0,47,128,.26);
-    }
-
-    .arena-top{
-      display:grid;
-      grid-template-columns:minmax(0,1.35fr) 250px 330px;
-      gap:14px;
-      min-height:350px;
-    }
-
-    .boss-panel{
-      min-width:0;
-      position:relative;
-      border-radius:20px;
-      overflow:hidden;
-      padding:16px 18px;
-      background:
-        radial-gradient(circle at 50% 42%,rgba(255,255,255,.18),transparent 30%),
-        linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,10,80,.08));
-    }
-
-    .boss-month{
-      display:inline-block;
-      padding:7px 17px;
-      border-radius:8px;
-      background:linear-gradient(180deg,#123f9c,#062d76);
-      color:#fff;
-      font-weight:900;
-      font-style:italic;
-      font-size:18px;
-      box-shadow:0 3px 7px rgba(0,0,0,.2);
-    }
-
-    .boss-name{
-      margin-top:10px;
-      max-width:42%;
-      color:#fff;
-      font-size:clamp(34px,4.3vw,66px);
-      font-weight:900;
-      font-style:italic;
-      line-height:.95;
-      text-shadow:0 4px 8px rgba(0,20,80,.4);
-      word-break:break-word;
-    }
-
-    .boss-visual{
-      position:absolute;
-      left:39%;
-      right:2%;
-      top:8%;
-      bottom:5%;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
       pointer-events:none;
     }
 
-    .monster{
-      width:min(92%,410px);
-      aspect-ratio:1.15/1;
-      position:relative;
-      border-radius:48% 52% 45% 45%;
-      background:
-        radial-gradient(circle at 33% 28%,#ff6672 0 2%,transparent 2.5%),
-        radial-gradient(circle at 57% 20%,#ffd84f 0 1.7%,transparent 2.2%),
-        radial-gradient(circle at 70% 35%,#67ddff 0 1.7%,transparent 2.2%),
-        radial-gradient(circle at 28% 55%,#79e565 0 1.7%,transparent 2.2%),
-        radial-gradient(circle at 77% 64%,#ffed6d 0 1.7%,transparent 2.2%),
-        radial-gradient(circle at 48% 72%,#67ddff 0 1.7%,transparent 2.2%),
-        linear-gradient(145deg,#ff4b62,#db1f3d 72%);
-      border:5px solid rgba(130,0,25,.72);
-      box-shadow:
-        inset 0 8px 12px rgba(255,255,255,.25),
-        inset 0 -12px 18px rgba(125,0,20,.22),
-        0 22px 30px rgba(0,18,70,.45);
+    /* =====================================================
+       TOP WALLET — ใช้ข้อมูลเดียวกับ HOME/MISSION
+    ====================================================== */
+
+    #coinValue{
+      left:78.4%;
+      top:3.7%;
+      width:7.4%;
+      height:4.6%;
+      font-size:clamp(10px,1.55vw,22px);
+      font-weight:600;
+      color:#071b5f;
     }
 
-    .monster::before,
-    .monster::after{
-      content:"";
-      position:absolute;
-      width:70px;
-      height:95px;
-      top:-52px;
-      background:linear-gradient(135deg,#6e2a12,#1e0a08);
-      clip-path:polygon(50% 0,100% 100%,0 100%);
-      z-index:-1;
-    }
-
-    .monster::before{
-      left:60px;
-      transform:rotate(-18deg);
-    }
-
-    .monster::after{
-      right:60px;
-      transform:rotate(18deg);
-    }
-
-    .eye{
-      position:absolute;
-      top:33%;
-      width:38px;
-      height:45px;
-      border-radius:50%;
-      background:#170a0b;
-      box-shadow:inset 0 6px 0 rgba(255,255,255,.2);
-    }
-
-    .eye.left{left:30%}
-    .eye.right{right:30%}
-
-    .brow{
-      position:absolute;
-      top:29%;
-      width:60px;
-      height:10px;
-      border-radius:10px;
-      background:#21090c;
-    }
-
-    .brow.left{
-      left:23%;
-      transform:rotate(17deg);
-    }
-
-    .brow.right{
-      right:23%;
-      transform:rotate(-17deg);
-    }
-
-    .mouth{
-      position:absolute;
-      left:29%;
-      right:29%;
-      top:53%;
-      height:28%;
-      border-radius:22px 22px 45% 45%;
-      background:#3f0810;
-      border:5px solid #8e0c1e;
-      overflow:hidden;
-    }
-
-    .tongue{
-      position:absolute;
-      left:24%;
-      right:24%;
-      bottom:-15%;
-      height:45%;
-      border-radius:50% 50% 0 0;
-      background:#ff6d72;
-    }
-
-    .tooth{
-      position:absolute;
-      top:-2px;
-      width:18px;
-      height:28px;
-      background:#fff;
-      clip-path:polygon(0 0,100% 0,50% 100%);
-    }
-
-    .tooth.t1{left:18%}
-    .tooth.t2{right:18%}
-
-    .platform{
-      position:absolute;
-      left:8%;
-      right:8%;
-      bottom:-5px;
-      height:54px;
-      border-radius:50%;
-      background:
-        radial-gradient(ellipse at center,#5f7493 0,#3c536f 42%,#172d4d 70%);
-      border:5px solid #a9b7c9;
-      box-shadow:0 10px 12px rgba(0,0,0,.28);
-      z-index:-2;
-    }
-
-    .hp-area{
-      position:absolute;
-      left:18px;
-      bottom:22px;
-      width:min(43%,340px);
-      color:#fff;
-    }
-
-    .hp-label{
-      font-size:20px;
-      font-weight:900;
-    }
-
-    .hp-row{
-      margin-top:6px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-
-    .hp-track{
-      flex:1;
-      height:20px;
-      border-radius:999px;
-      overflow:hidden;
-      background:#07358b;
-      border:1px solid rgba(255,255,255,.35);
-    }
-
-    .hp-fill{
-      width:0;
-      height:100%;
-      background:linear-gradient(180deg,#ff3f1f,#e00000);
-      border-radius:inherit;
-      transition:width .35s ease;
-    }
-
-    .hp-text{
-      margin-top:8px;
-      font-size:21px;
-      font-weight:700;
-    }
-
-    .hp-percent{
-      margin-top:4px;
-      font-size:38px;
-      font-weight:900;
+    #energyValue{
+      left:90.3%;
+      top:3.7%;
+      width:7.4%;
+      height:4.6%;
+      font-size:clamp(10px,1.55vw,22px);
+      font-weight:600;
+      color:#071b5f;
+      white-space:nowrap;
     }
 
     /* =====================================================
-       ENERGY CARD
+       BOSS
     ====================================================== */
-    .energy-panel{
-      padding:18px 15px;
-      border-radius:20px;
-      background:#fff;
-      box-shadow:0 5px 15px rgba(0,28,85,.2);
-      color:#0a2868;
-      min-width:0;
-    }
 
-    .energy-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:19px;
+    #bossName{
+      left:2.8%;
+      top:28.5%;
+      width:19.0%;
+      height:13.0%;
+      align-items:flex-start;
+      justify-content:flex-start;
+      text-align:left;
+      color:#fff;
+      font-size:clamp(22px,4.5vw,68px);
       font-weight:900;
+      font-style:italic;
+      line-height:.95;
+      text-shadow:0 4px 8px rgba(0,22,78,.5);
+      word-break:break-word;
     }
 
-    .energy-title .bolt{
-      font-size:55px;
-      color:#ff9d00;
-      filter:drop-shadow(0 2px 1px #9c4500);
+    #bossHpText{
+      left:3.1%;
+      top:47.8%;
+      width:19.8%;
+      height:4.8%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(13px,2.0vw,30px);
+      font-weight:700;
+      text-shadow:0 2px 4px rgba(0,0,0,.35);
     }
 
-    .energy-big{
-      margin:8px 0 10px;
-      text-align:center;
-      font-size:31px;
+    #bossHpPercent{
+      left:3.0%;
+      top:52.8%;
+      width:9.0%;
+      height:5.8%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(20px,3.5vw,52px);
+      font-weight:900;
+      text-shadow:0 2px 4px rgba(0,0,0,.35);
+    }
+
+    #bossHpTrack{
+      position:absolute;
+      z-index:18;
+      left:6.2%;
+      top:44.8%;
+      width:14.1%;
+      height:2.5%;
+      overflow:hidden;
+      border-radius:999px;
+      pointer-events:none;
+    }
+
+    #bossHpBar{
+      display:block;
+      width:0%;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(180deg,#ff401e,#df0000);
+      transition:width .35s ease;
+    }
+
+    /* =====================================================
+       MY ENERGY CARD
+    ====================================================== */
+
+    #battleEnergy{
+      left:58.6%;
+      top:29.5%;
+      width:9.0%;
+      height:5.0%;
+      color:#071b5f;
+      font-size:clamp(17px,2.35vw,35px);
       font-weight:700;
       white-space:nowrap;
     }
 
-    .energy-track{
-      height:25px;
-      border-radius:999px;
+    #battleEnergyTrack{
+      position:absolute;
+      z-index:18;
+      left:54.5%;
+      top:37.9%;
+      width:14.0%;
+      height:2.7%;
       overflow:hidden;
-      background:#dfe8f2;
-      border:1px solid #b8c7d9;
+      border-radius:999px;
+      pointer-events:none;
     }
 
-    .energy-fill{
-      width:0;
+    #battleEnergyBar{
+      display:block;
+      width:0%;
       height:100%;
-      background:linear-gradient(180deg,#ffb800,#ff8200);
+      border-radius:inherit;
+      background:linear-gradient(180deg,#ffb400,#ff8500);
       transition:width .35s ease;
     }
 
-    .energy-divider{
-      height:1px;
-      margin:22px 0;
-      background:#ccd6e3;
-    }
-
-    .recovery-label{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-size:14px;
+    #recoveryTime{
+      left:56.8%;
+      top:47.6%;
+      width:12.7%;
+      height:5.0%;
+      color:#071b5f;
+      font-size:clamp(14px,2.0vw,30px);
       font-weight:800;
-    }
-
-    .recovery-time{
-      margin-top:8px;
-      text-align:center;
-      font-size:28px;
-      font-weight:800;
-      letter-spacing:.5px;
+      white-space:nowrap;
     }
 
     /* =====================================================
-       SIDE ACTIONS
+       PLAYER — ใช้ข้อมูลเดียวกับ HOME/MISSION
     ====================================================== */
-    .actions{
-      display:grid;
-      grid-template-rows:1fr 1fr;
-      gap:14px;
-    }
 
-    .action-card{
-      width:100%;
-      border:2px solid #418dff;
-      border-radius:22px;
-      background:linear-gradient(160deg,#0d5bd7,#02359b);
-      color:#fff;
-      display:grid;
-      grid-template-columns:78px 1fr 28px;
-      align-items:center;
-      gap:10px;
-      padding:18px 15px;
-      text-align:left;
-      box-shadow:
-        inset 0 0 18px rgba(255,255,255,.08),
-        0 5px 12px rgba(0,29,100,.23);
-      cursor:pointer;
-    }
-
-    .action-icon{
-      font-size:56px;
-      line-height:1;
-      text-align:center;
-    }
-
-    .action-title{
-      font-size:22px;
-      font-weight:900;
-    }
-
-    .action-sub{
-      margin-top:4px;
-      font-size:15px;
-      font-weight:500;
-    }
-
-    .arrow{
-      font-size:34px;
-      font-weight:800;
-      text-align:right;
-    }
-
-    /* =====================================================
-       BOTTOM CARDS
-    ====================================================== */
-    .arena-bottom{
-      display:grid;
-      grid-template-columns:1.18fr .82fr;
-      gap:14px;
-      margin-top:14px;
-    }
-
-    .ranking-card,
-    .reward-card{
-      min-height:150px;
-      border-radius:20px;
-      color:#fff;
+    #playerPhoto{
+      position:absolute;
+      z-index:20;
+      left:2.8%;
+      top:61.1%;
+      width:11.4%;
+      aspect-ratio:1 / 1;
+      border-radius:50%;
+      object-fit:cover;
+      object-position:center center;
       overflow:hidden;
+      display:none;
+      border:2px solid rgba(255,255,255,.55);
     }
 
-    .ranking-card{
-      display:grid;
-      grid-template-columns:170px 1fr;
-      padding:16px;
-      background:linear-gradient(150deg,#0754c4,#032c82);
-      border:2px solid #4fa3ff;
-      cursor:pointer;
+    #playerName{
+      left:14.5%;
+      top:63.0%;
+      width:11.8%;
+      height:4.0%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(10px,1.45vw,21px);
+      font-weight:800;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
-    .ranking-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .ranking-trophy{
-      font-size:78px;
-    }
-
-    .ranking-title strong{
-      display:block;
-      font-size:25px;
-      line-height:1.15;
-    }
-
-    .ranking-title span{
-      display:block;
-      margin-top:6px;
-      font-size:16px;
-    }
-
-    .ranking-list{
-      align-self:center;
-      display:grid;
-      gap:9px;
-      padding-left:12px;
-    }
-
-    .rank-row{
-      min-height:34px;
-      display:grid;
-      grid-template-columns:40px 1fr auto;
-      align-items:center;
-      gap:9px;
-      font-size:16px;
+    #playerLevel{
+      left:14.5%;
+      top:68.7%;
+      width:8.0%;
+      height:3.6%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(10px,1.25vw,19px);
       font-weight:700;
-      border-bottom:1px solid rgba(255,255,255,.18);
     }
 
-    .rank-row:last-child{
-      border-bottom:0;
-    }
-
-    .rank-score{
+    #playerExp{
+      left:14.5%;
+      top:74.2%;
+      width:11.5%;
+      height:3.6%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(8px,1.05vw,16px);
       font-weight:600;
+      white-space:nowrap;
     }
 
-    .reward-card{
-      position:relative;
-      padding:24px 170px 20px 30px;
-      background:linear-gradient(150deg,#6822ca,#3d118e);
-      border:2px solid #8f51e8;
-      cursor:pointer;
-    }
-
-    .reward-title{
-      font-size:25px;
-      font-weight:900;
-    }
-
-    .reward-sub{
-      margin-top:8px;
-      font-size:17px;
-    }
-
-    .chest{
+    #playerExpTrack{
       position:absolute;
-      right:24px;
-      bottom:18px;
-      width:120px;
-      height:78px;
-      border-radius:16px 16px 24px 24px;
-      background:linear-gradient(180deg,#ffc34f,#d47200);
-      border:5px solid #7a3a05;
-      box-shadow:0 8px 12px rgba(0,0,0,.25);
+      z-index:18;
+      left:14.6%;
+      top:71.7%;
+      width:10.6%;
+      height:1.6%;
+      overflow:hidden;
+      border-radius:999px;
+      pointer-events:none;
     }
 
-    .chest::before{
-      content:"";
-      position:absolute;
-      left:-5px;
-      right:-5px;
-      top:-38px;
-      height:45px;
-      border-radius:50px 50px 5px 5px;
-      background:linear-gradient(180deg,#7e2b64,#4b1548);
-      border:5px solid #7a3a05;
-    }
-
-    .chest-lock{
-      position:absolute;
-      left:50%;
-      top:8px;
-      transform:translateX(-50%);
-      width:30px;
-      height:33px;
-      border-radius:6px;
-      background:#ffd43b;
-      border:4px solid #7a3a05;
-      z-index:2;
+    #playerExpBar{
+      display:block;
+      width:0%;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(180deg,#ffd84e,#f2aa00);
     }
 
     /* =====================================================
-       NAV
+       BATTLE RANKING
     ====================================================== */
-    .nav{
-      margin:14px 12px 12px;
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:12px;
-    }
 
-    .nav-btn{
-      min-height:110px;
-      border:2px solid #0746ad;
-      border-radius:20px;
-      background:linear-gradient(150deg,#063da7,#001f68);
+    #rank1Score,
+    #rank2Score,
+    #rank3Score{
       color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:15px;
+      font-size:clamp(8px,1.1vw,16px);
+      font-weight:700;
+      justify-content:flex-end;
+      white-space:nowrap;
+    }
+
+    #rank1Score{left:55.1%;top:64.7%;width:8.0%;height:3.0%}
+    #rank2Score{left:55.1%;top:69.7%;width:8.0%;height:3.0%}
+    #rank3Score{left:55.1%;top:74.6%;width:8.0%;height:3.0%}
+
+    /* =====================================================
+       HOTSPOTS
+    ====================================================== */
+
+    .hotspot{
+      position:absolute;
+      z-index:50;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
       cursor:pointer;
-      box-shadow:inset 0 0 18px rgba(255,255,255,.05);
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
     }
 
-    .nav-btn.active{
-      background:linear-gradient(150deg,#e11414,#9f0000);
-      border-color:#ef4040;
+    #fightButton{
+      left:71.4%;
+      top:23.6%;
+      width:26.0%;
+      height:16.0%;
     }
 
-    .nav-icon{
-      font-size:55px;
+    #myEnergyButton{
+      left:71.4%;
+      top:40.6%;
+      width:26.0%;
+      height:16.2%;
     }
 
-    .nav-main{
-      font-size:clamp(22px,3vw,42px);
-      font-weight:900;
-      font-style:italic;
-      line-height:1;
+    #rankingButton{
+      left:28.4%;
+      top:60.0%;
+      width:36.9%;
+      height:18.0%;
     }
 
-    .nav-sub{
-      margin-top:7px;
-      font-size:14px;
-      font-style:normal;
-      font-weight:500;
-      text-align:center;
+    #rewardButton{
+      left:66.4%;
+      top:60.0%;
+      width:31.0%;
+      height:18.0%;
+    }
+
+    #homeButton{
+      left:1.0%;
+      top:81.5%;
+      width:31.8%;
+      height:16.7%;
+    }
+
+    #missionButton{
+      left:33.8%;
+      top:81.5%;
+      width:31.8%;
+      height:16.7%;
+    }
+
+    #battleButton{
+      left:66.6%;
+      top:81.5%;
+      width:31.8%;
+      height:16.7%;
     }
 
     /* =====================================================
        STATUS
     ====================================================== */
+
     #status{
       position:fixed;
       left:50%;
-      bottom:max(18px,env(safe-area-inset-bottom));
+      bottom:max(20px,env(safe-area-inset-bottom));
       transform:translateX(-50%);
       z-index:99999;
-      max-width:calc(100vw - 28px);
-      padding:11px 17px;
-      border-radius:14px;
-      background:#153b70;
-      color:#fff;
-      text-align:center;
-      font-size:13px;
-      font-weight:700;
-      box-shadow:0 8px 25px rgba(0,0,0,.28);
       display:none;
+      width:max-content;
+      max-width:calc(100vw - 28px);
+      padding:12px 18px;
+      border-radius:16px;
+      background:rgba(7,59,147,.97);
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      text-align:center;
+      box-shadow:0 8px 28px rgba(0,0,0,.3);
     }
 
     #status.show{display:block}
     #status.error{background:#c62828}
 
-    /* =====================================================
-       MOBILE
-    ====================================================== */
-    @media(max-width:900px){
-      .header{
-        grid-template-columns:145px 1fr 230px;
-        gap:8px;
-        padding:9px 10px;
+    @media(max-width:700px){
+      #battleStage{
+        width:100vw;
       }
-
-      .hospital-mark{
-        width:44px;
-        height:44px;
-      }
-
-      .hospital-mark::before{
-        width:12px;
-        height:32px;
-        left:16px;
-        top:6px;
-      }
-
-      .hospital-mark::after{
-        width:32px;
-        height:12px;
-        left:6px;
-        top:16px;
-      }
-
-      .hospital-name{font-size:16px}
-      .hospital-name small{font-size:12px}
-
-      .wallet{
-        min-height:58px;
-      }
-
-      .wallet-icon{font-size:28px}
-      .wallet-value{font-size:14px}
-      .wallet-label{font-size:8px}
-
-      .arena-top{
-        grid-template-columns:minmax(0,1fr) 190px 245px;
-        min-height:300px;
-      }
-
-      .action-card{
-        grid-template-columns:55px 1fr 22px;
-        padding:12px 10px;
-      }
-
-      .action-icon{font-size:42px}
-      .action-title{font-size:17px}
-      .action-sub{font-size:12px}
-
-      .ranking-card{
-        grid-template-columns:120px 1fr;
-      }
-
-      .ranking-trophy{font-size:60px}
-      .ranking-title strong{font-size:18px}
-      .rank-row{font-size:13px}
-
-      .nav-btn{min-height:82px}
-      .nav-icon{font-size:40px}
-    }
-
-    @media(max-width:680px){
-      .header{
-        grid-template-columns:95px 1fr 148px;
-        padding:7px 6px;
-      }
-
-      .hospital{
-        gap:4px;
-      }
-
-      .hospital-mark{
-        width:34px;
-        height:34px;
-        border-radius:9px;
-      }
-
-      .hospital-mark::before{
-        width:8px;
-        height:24px;
-        left:13px;
-        top:5px;
-      }
-
-      .hospital-mark::after{
-        width:24px;
-        height:8px;
-        left:5px;
-        top:13px;
-      }
-
-      .hospital-name{
-        font-size:10px;
-        letter-spacing:-.4px;
-      }
-
-      .hospital-name small{
-        margin-top:3px;
-        font-size:8px;
-      }
-
-      .brand-title{
-        font-size:clamp(22px,7vw,34px);
-        letter-spacing:-1.5px;
-      }
-
-      .brand-sub{
-        margin-top:4px;
-        font-size:8px;
-        letter-spacing:.7px;
-      }
-
-      .wallet{
-        min-height:44px;
-        border-radius:10px;
-      }
-
-      .wallet-item{
-        gap:3px;
-        padding:4px 3px;
-      }
-
-      .wallet-icon{font-size:18px}
-      .wallet-value{font-size:10px}
-      .wallet-label{font-size:6px;margin-top:2px}
-
-      .battle-title{
-        margin:0 5px;
-        height:42px;
-        border-radius:10px 10px 0 0;
-        gap:8px;
-        font-size:22px;
-      }
-
-      .battle-title .icon{font-size:26px}
-
-      .arena{
-        margin:0 5px;
-        padding:7px;
-        border-radius:0 0 13px 13px;
-      }
-
-      .arena-top{
-        grid-template-columns:1fr 30% 36%;
-        gap:5px;
-        min-height:235px;
-      }
-
-      .boss-panel{
-        border-radius:10px;
-        padding:8px;
-      }
-
-      .boss-month{
-        padding:3px 7px;
-        font-size:8px;
-        border-radius:4px;
-      }
-
-      .boss-name{
-        margin-top:4px;
-        font-size:clamp(19px,6vw,28px);
-      }
-
-      .boss-visual{
-        left:35%;
-        right:-4%;
-        top:10%;
-      }
-
-      .monster{
-        border-width:3px;
-      }
-
-      .monster::before,
-      .monster::after{
-        width:35px;
-        height:48px;
-        top:-26px;
-      }
-
-      .monster::before{left:30px}
-      .monster::after{right:30px}
-
-      .eye{
-        width:20px;
-        height:23px;
-      }
-
-      .brow{
-        width:30px;
-        height:5px;
-      }
-
-      .mouth{
-        border-width:3px;
-      }
-
-      .tooth{
-        width:9px;
-        height:14px;
-      }
-
-      .platform{
-        height:28px;
-        border-width:3px;
-      }
-
-      .hp-area{
-        left:8px;
-        bottom:8px;
-        width:46%;
-      }
-
-      .hp-label{font-size:10px}
-      .hp-track{height:8px}
-      .hp-text{font-size:9px;margin-top:3px}
-      .hp-percent{font-size:20px;margin-top:0}
-
-      .energy-panel{
-        border-radius:10px;
-        padding:8px 6px;
-      }
-
-      .energy-title{
-        gap:3px;
-        font-size:9px;
-      }
-
-      .energy-title .bolt{
-        font-size:27px;
-      }
-
-      .energy-big{
-        margin:5px 0;
-        font-size:14px;
-      }
-
-      .energy-track{height:11px}
-      .energy-divider{margin:10px 0}
-      .recovery-label{font-size:7px;gap:3px}
-      .recovery-time{font-size:13px;margin-top:4px}
-
-      .actions{gap:5px}
-
-      .action-card{
-        grid-template-columns:32px 1fr 10px;
-        gap:3px;
-        padding:7px 5px;
-        border-radius:10px;
-        border-width:1px;
-      }
-
-      .action-icon{font-size:25px}
-      .action-title{font-size:10px}
-      .action-sub{font-size:7px;margin-top:2px}
-      .arrow{font-size:16px}
-
-      .arena-bottom{
-        grid-template-columns:1.18fr .82fr;
-        gap:5px;
-        margin-top:5px;
-      }
-
-      .ranking-card,
-      .reward-card{
-        min-height:92px;
-        border-radius:10px;
-      }
-
-      .ranking-card{
-        grid-template-columns:75px 1fr;
-        padding:7px;
-        border-width:1px;
-      }
-
-      .ranking-title{gap:3px}
-      .ranking-trophy{font-size:40px}
-      .ranking-title strong{font-size:10px}
-      .ranking-title span{font-size:7px;margin-top:2px}
-      .ranking-list{gap:2px;padding-left:3px}
-      .rank-row{
-        min-height:17px;
-        grid-template-columns:18px 1fr auto;
-        gap:3px;
-        font-size:7px;
-      }
-
-      .reward-card{
-        padding:13px 72px 10px 12px;
-        border-width:1px;
-      }
-
-      .reward-title{font-size:12px}
-      .reward-sub{font-size:8px;margin-top:3px}
-
-      .chest{
-        right:10px;
-        bottom:10px;
-        width:52px;
-        height:35px;
-        border-width:2px;
-        border-radius:7px 7px 10px 10px;
-      }
-
-      .chest::before{
-        left:-2px;
-        right:-2px;
-        top:-17px;
-        height:20px;
-        border-width:2px;
-      }
-
-      .chest-lock{
-        width:14px;
-        height:15px;
-        top:3px;
-        border-width:2px;
-      }
-
-      .nav{
-        margin:6px 5px 5px;
-        gap:5px;
-      }
-
-      .nav-btn{
-        min-height:61px;
-        gap:5px;
-        border-radius:10px;
-        border-width:1px;
-      }
-
-      .nav-icon{font-size:28px}
-      .nav-main{font-size:17px}
-      .nav-sub{font-size:7px;margin-top:2px}
     }
   </style>
 </head>
 
 <body>
-<div id="app">
 
-  <header class="header">
-    <div class="hospital">
-      <div class="hospital-mark"></div>
-      <div class="hospital-name">
-        BANGKOK<br>HOSPITAL
-        <small>UDON</small>
-      </div>
+  <div id="battleStage">
+
+    <!--
+      ให้นำรูป Template ที่ผู้ใช้ส่งมา
+      ตั้งชื่อไฟล์ battle-template.png
+      วางไว้โฟลเดอร์เดียวกับ battle.html
+    -->
+    <img
+      class="template"
+      src="./battle-template.png?v=20260830-v33"
+      alt="ROCK YOUR BODY 2026 BATTLE"
+      draggable="false"
+    >
+
+
+    <!-- WALLET -->
+    <div id="coinValue" class="abs">--</div>
+    <div id="energyValue" class="abs">--/--</div>
+
+
+    <!-- BOSS -->
+    <div id="bossName" class="abs">กำลังโหลด...</div>
+
+    <div id="bossHpTrack">
+      <i id="bossHpBar"></i>
     </div>
 
-    <div class="brand">
-      <h1 class="brand-title">
-        ROCK <span class="red">YOUR</span> BODY
-        <span class="year">2026</span>
-      </h1>
-      <div class="brand-sub">
-        <span class="move">MOVE</span> •
-        <span class="eat">EAT</span> •
-        <span class="sleep">SLEEP</span> •
-        <span class="health">HEALTH</span>
-      </div>
+    <div id="bossHpText" class="abs">-- / --</div>
+    <div id="bossHpPercent" class="abs">--%</div>
+
+
+    <!-- MY ENERGY -->
+    <div id="battleEnergy" class="abs">-- / --</div>
+
+    <div id="battleEnergyTrack">
+      <i id="battleEnergyBar"></i>
     </div>
 
-    <div class="wallet">
-      <div class="wallet-item">
-        <div class="wallet-icon">🪙</div>
-        <div>
-          <div id="coinValue" class="wallet-value">--</div>
-          <div class="wallet-label">ROCK COIN</div>
-        </div>
-      </div>
+    <div id="recoveryTime" class="abs">--:--:--</div>
 
-      <div class="wallet-item">
-        <div class="wallet-icon">⚡</div>
-        <div>
-          <div id="energyTop" class="wallet-value">-- / --</div>
-          <div class="wallet-label">ENERGY</div>
-        </div>
-      </div>
+
+    <!-- PLAYER -->
+    <img id="playerPhoto" alt="LINE Profile">
+
+    <div id="playerName" class="abs">--</div>
+    <div id="playerLevel" class="abs">Lv. --</div>
+
+    <div id="playerExpTrack">
+      <i id="playerExpBar"></i>
     </div>
-  </header>
+
+    <div id="playerExp" class="abs">EXP -- / --</div>
 
 
-  <div class="battle-title">
-    <span class="icon">⚔️</span>
-    <span>BATTLE</span>
+    <!-- RANKING -->
+    <div id="rank1Score" class="abs">--</div>
+    <div id="rank2Score" class="abs">--</div>
+    <div id="rank3Score" class="abs">--</div>
+
+
+    <!-- HOTSPOTS -->
+    <button id="fightButton" class="hotspot" type="button" aria-label="Fight Monster"></button>
+    <button id="myEnergyButton" class="hotspot" type="button" aria-label="My Energy"></button>
+    <button id="rankingButton" class="hotspot" type="button" aria-label="Battle Ranking"></button>
+    <button id="rewardButton" class="hotspot" type="button" aria-label="Boss Reward"></button>
+
+    <button id="homeButton" class="hotspot" type="button" aria-label="Home"></button>
+    <button id="missionButton" class="hotspot" type="button" aria-label="Mission"></button>
+    <button id="battleButton" class="hotspot" type="button" aria-label="Battle"></button>
+
   </div>
 
 
-  <main class="arena">
-
-    <section class="arena-top">
-
-      <div class="boss-panel">
-
-        <div class="boss-month">
-          BOSS OF THE MONTH
-        </div>
-
-        <div id="bossName" class="boss-name">
-          LOADING...
-        </div>
-
-        <div class="boss-visual">
-          <div class="monster">
-            <div class="brow left"></div>
-            <div class="brow right"></div>
-            <div class="eye left"></div>
-            <div class="eye right"></div>
-
-            <div class="mouth">
-              <div class="tooth t1"></div>
-              <div class="tooth t2"></div>
-              <div class="tongue"></div>
-            </div>
-
-            <div class="platform"></div>
-          </div>
-        </div>
-
-        <div class="hp-area">
-          <div class="hp-label">HP</div>
-
-          <div class="hp-row">
-            <div class="hp-track">
-              <div id="hpFill" class="hp-fill"></div>
-            </div>
-          </div>
-
-          <div id="hpText" class="hp-text">
-            -- / --
-          </div>
-
-          <div id="hpPercent" class="hp-percent">
-            --%
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="energy-panel">
-
-        <div class="energy-title">
-          <span class="bolt">⚡</span>
-          <span>MY ENERGY</span>
-        </div>
-
-        <div id="energyBig" class="energy-big">
-          -- / --
-        </div>
-
-        <div class="energy-track">
-          <div id="energyFill" class="energy-fill"></div>
-        </div>
-
-        <div class="energy-divider"></div>
-
-        <div class="recovery-label">
-          <span style="font-size:25px">◷</span>
-          <span>จะฟื้นพลังงานอีกใน</span>
-        </div>
-
-        <div id="recoveryTime" class="recovery-time">
-          --:--:--
-        </div>
-
-      </div>
-
-
-      <div class="actions">
-
-        <button id="fightButton" class="action-card" type="button">
-          <div class="action-icon">⚔️</div>
-          <div>
-            <div class="action-title">FIGHT MONSTER</div>
-            <div class="action-sub">ต่อสู้กับมอนสเตอร์</div>
-          </div>
-          <div class="arrow">›</div>
-        </button>
-
-        <button id="myEnergyButton" class="action-card" type="button">
-          <div class="action-icon">🔋</div>
-          <div>
-            <div class="action-title">MY ENERGY</div>
-            <div class="action-sub">พลังงานของฉัน</div>
-          </div>
-          <div class="arrow">›</div>
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <section class="arena-bottom">
-
-      <button id="rankingCard" class="ranking-card" type="button">
-
-        <div class="ranking-title">
-          <div class="ranking-trophy">🏆</div>
-          <div>
-            <strong>BATTLE<br>RANKING</strong>
-            <span>อันดับนักสู้</span>
-          </div>
-        </div>
-
-        <div class="ranking-list">
-          <div class="rank-row">
-            <div>👑</div>
-            <div>ROCK HERO</div>
-            <div id="rank1" class="rank-score">--</div>
-          </div>
-
-          <div class="rank-row">
-            <div>🥈</div>
-            <div>FIT WARRIOR</div>
-            <div id="rank2" class="rank-score">--</div>
-          </div>
-
-          <div class="rank-row">
-            <div>🥉</div>
-            <div>HEALTHY KING</div>
-            <div id="rank3" class="rank-score">--</div>
-          </div>
-        </div>
-
-      </button>
-
-
-      <button id="rewardCard" class="reward-card" type="button">
-        <div class="reward-title">
-          BOSS REWARD
-        </div>
-
-        <div class="reward-sub">
-          รางวัลจากบอส
-        </div>
-
-        <div class="chest">
-          <div class="chest-lock"></div>
-        </div>
-      </button>
-
-    </section>
-
-  </main>
-
-
-  <nav class="nav">
-
-    <button id="homeButton" class="nav-btn" type="button">
-      <div class="nav-icon">🏠</div>
-      <div>
-        <div class="nav-main">HOME</div>
-        <div class="nav-sub">หน้าหลัก</div>
-      </div>
-    </button>
-
-    <button id="missionButton" class="nav-btn" type="button">
-      <div class="nav-icon">🎯</div>
-      <div>
-        <div class="nav-main">MISSION</div>
-        <div class="nav-sub">ภารกิจ</div>
-      </div>
-    </button>
-
-    <button id="battleButton" class="nav-btn active" type="button">
-      <div class="nav-icon">⚔️</div>
-      <div>
-        <div class="nav-main">BATTLE</div>
-        <div class="nav-sub">ต่อสู้กับมอนสเตอร์</div>
-      </div>
-    </button>
-
-  </nav>
-
-</div>
-
-<div id="status"></div>
+  <div id="status"></div>
 
 
 <script>
@@ -1385,23 +592,33 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   BATTLE APP V3.0 — NO TEMPLATE IMAGE
-   Identity:
-   LINE ID Token -> Edge Function -> players -> player_id
+   BATTLE TEMPLATE V3.3
+
+   DATA ARCHITECTURE:
+   LINE ID Token
+   -> PLAYER dashboard = wallet/player เหมือน HOME/MISSION
+   -> BATTLE status = boss/hp/ranking
+
+   Frontend ไม่ส่ง line_user_id หรือ player_id เอง
 ========================================================= */
+
 
 const $ =
   id =>
     document.getElementById(id);
 
+
 const state = {
+  lineProfile:null,
   player:null,
-  stage:null,
-  runs:[],
-  activeRun:null,
-  ranking:[]
+  battle:null,
+  countdownTimer:null
 };
 
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function num(
   value,
@@ -1420,6 +637,7 @@ function pick(
   ...values
 ){
   for(const value of values){
+
     if(
       value !== undefined &&
       value !== null &&
@@ -1430,18 +648,6 @@ function pick(
   }
 
   return null;
-}
-
-
-function formatNumber(
-  value
-){
-  const n =
-    Number(value);
-
-  return Number.isFinite(n)
-    ? Math.round(n).toLocaleString("en-US")
-    : "--";
 }
 
 
@@ -1457,6 +663,37 @@ function clamp(
       num(value,0)
     )
   );
+}
+
+
+function fmtInt(
+  value
+){
+  return Math.round(
+    num(value,0)
+  ).toLocaleString(
+    "en-US"
+  );
+}
+
+
+function setBar(
+  id,
+  percent
+){
+  const el =
+    $(id);
+
+  if(!el){
+    return;
+  }
+
+  el.style.width =
+    `${clamp(
+      percent,
+      0,
+      100
+    )}%`;
 }
 
 
@@ -1480,10 +717,10 @@ function showStatus(
   );
 
   clearTimeout(
-    window.__battleStatusTimer
+    window.__battleTemplateToast
   );
 
-  window.__battleStatusTimer =
+  window.__battleTemplateToast =
     setTimeout(
       ()=>{
         el.classList.remove(
@@ -1491,7 +728,7 @@ function showStatus(
         );
       },
       isError
-        ? 5500
+        ? 5000
         : 2600
     );
 }
@@ -1500,6 +737,7 @@ function showStatus(
 function getApi(
   name
 ){
+
   if(
     window.APP_CONFIG?.getApi
   ){
@@ -1522,10 +760,10 @@ function getApi(
 
 
 /* =========================================================
-   LIFF
+   LIFF AUTH
 ========================================================= */
 
-async function ensureLiff(){
+async function initLINE(){
 
   if(
     typeof liff ===
@@ -1536,16 +774,28 @@ async function ensureLiff(){
     );
   }
 
+
+  const liffId =
+    window.APP_CONFIG?.LIFF_ID ||
+    "2011201679-uNWz5yqF";
+
+
+  if(!liffId){
+    throw new Error(
+      "ไม่พบ LIFF ID"
+    );
+  }
+
+
   await liff.init({
-    liffId:
-      window.APP_CONFIG?.LIFF_ID ||
-      "2011201679-uNWz5yqF"
+    liffId
   });
 
 
   if(
     !liff.isLoggedIn()
   ){
+
     liff.login({
       redirectUri:
         window.location.href
@@ -1559,16 +809,42 @@ async function ensureLiff(){
     liff.getIDToken();
 
   if(!token){
-    throw new Error(
-      "ไม่พบ LINE ID Token"
-    );
+
+    try{
+      liff.logout();
+    }catch{}
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
+    return false;
   }
+
+
+  try{
+
+    state.lineProfile =
+      await liff.getProfile();
+
+  }catch(error){
+
+    console.warn(
+      "LINE PROFILE ERROR:",
+      error
+    );
+
+    state.lineProfile =
+      null;
+  }
+
 
   return true;
 }
 
 
-function currentIdToken(){
+function idToken(){
 
   const token =
     liff.getIDToken();
@@ -1583,7 +859,11 @@ function currentIdToken(){
 }
 
 
-async function postApi(
+/* =========================================================
+   POST API
+========================================================= */
+
+async function postJson(
   url,
   payload={}
 ){
@@ -1604,14 +884,8 @@ async function postApi(
         body:
           JSON.stringify({
             ...payload,
-
-            /*
-              สำคัญ:
-              Frontend ไม่ส่ง line_user_id / player_id
-              Backend ต้อง verify LINE ID Token เอง
-            */
             idToken:
-              currentIdToken()
+              idToken()
           })
       }
     );
@@ -1623,11 +897,14 @@ async function postApi(
   let data = {};
 
   try{
+
     data =
       raw
         ? JSON.parse(raw)
         : {};
+
   }catch{
+
     throw new Error(
       `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
     );
@@ -1646,13 +923,14 @@ async function postApi(
         `HTTP ${response.status}`
       );
 
-    const low =
-      message.toLowerCase();
 
     if(
       response.status === 401 ||
-      low.includes("idtoken expired") ||
-      low.includes("token expired")
+      message
+        .toLowerCase()
+        .includes(
+          "idtoken expired"
+        )
     ){
 
       try{
@@ -1667,28 +945,32 @@ async function postApi(
       return await new Promise(()=>{});
     }
 
+
     throw new Error(
       message
     );
   }
+
 
   return data;
 }
 
 
 /* =========================================================
-   LOAD DATA
+   PLAYER DASHBOARD
+   ใช้ Wallet/User ชุดเดียวกับ HOME + MISSION
 ========================================================= */
 
 async function loadPlayerDashboard(){
 
   const result =
-    await postApi(
+    await postJson(
       getApi("PLAYER"),
       {
         action:"dashboard"
       }
     );
+
 
   const data =
     result?.data ??
@@ -1696,12 +978,14 @@ async function loadPlayerDashboard(){
     result ??
     {};
 
+
   const user =
     data?.user ??
     data?.player ??
     {};
 
-  const energy =
+
+  const energyObj =
     (
       data?.energy &&
       typeof data.energy ===
@@ -1710,91 +994,212 @@ async function loadPlayerDashboard(){
       ? data.energy
       : {};
 
-  return {
-    rockCoin:
+
+  const expObj =
+    (
+      data?.exp &&
+      typeof data.exp ===
+        "object"
+    )
+      ? data.exp
+      : {};
+
+
+  const totalExp =
+    num(
+      pick(
+        expObj.total,
+        expObj.current,
+        typeof data.exp ===
+          "number"
+          ? data.exp
+          : null,
+        user.exp,
+        user.experience
+      ),
+      0
+    );
+
+
+  const expPerLevel =
+    num(
+      window.APP_CONFIG?.EXP_PER_LEVEL,
+      500
+    ) ||
+    500;
+
+
+  const level =
+    Math.max(
+      1,
       num(
         pick(
-          data.rockCoin,
-          data.rock_coin,
-          data.coin,
-          user.rockCoin,
-          user.rock_coin,
-          user.coin
+          data.level,
+          user.level
         ),
-        0
+        Math.floor(
+          totalExp /
+          expPerLevel
+        ) + 1
+      )
+    );
+
+
+  const levelExp =
+    totalExp %
+    expPerLevel;
+
+
+  return {
+    coin:
+      Math.max(
+        0,
+        num(
+          pick(
+            data.rockCoin,
+            data.rock_coin,
+            data.coin,
+            user.rockCoin,
+            user.rock_coin,
+            user.coin
+          ),
+          0
+        )
       ),
 
     energy:
-      num(
-        pick(
-          energy.current,
-          data.energyCurrent,
-          data.current_energy,
-          typeof data.energy ===
-            "number"
-            ? data.energy
-            : null,
-          user.energy
-        ),
-        0
+      Math.max(
+        0,
+        num(
+          pick(
+            energyObj.current,
+            data.energyCurrent,
+            data.currentEnergy,
+            data.current_energy,
+            typeof data.energy ===
+              "number"
+              ? data.energy
+              : null,
+            user.energy
+          ),
+          0
+        )
       ),
 
     maxEnergy:
-      num(
-        pick(
-          energy.max,
-          data.maxEnergy,
-          data.max_energy,
-          user.maxEnergy,
-          user.max_energy,
-          window.APP_CONFIG?.MAX_ENERGY,
+      Math.max(
+        1,
+        num(
+          pick(
+            energyObj.max,
+            data.maxEnergy,
+            data.max_energy,
+            user.maxEnergy,
+            user.max_energy,
+            window.APP_CONFIG?.MAX_ENERGY,
+            200
+          ),
           200
-        ),
-        200
+        )
+      ),
+
+    level,
+
+    totalExp,
+
+    levelExp,
+
+    expPerLevel,
+
+    displayName:
+      pick(
+        user.display_name,
+        user.displayName,
+        user.name,
+        data.display_name,
+        data.displayName,
+        state.lineProfile?.displayName,
+        "ROCK HERO"
+      ),
+
+    pictureUrl:
+      pick(
+        user.picture_url,
+        user.pictureUrl,
+        data.picture_url,
+        data.pictureUrl,
+        state.lineProfile?.pictureUrl
+      ),
+
+    nextEnergyAt:
+      pick(
+        energyObj.nextEnergyAt,
+        energyObj.next_energy_at,
+        data.nextEnergyAt,
+        data.next_energy_at,
+        user.nextEnergyAt,
+        user.next_energy_at
       )
   };
 }
 
 
+/* =========================================================
+   BATTLE STATUS
+========================================================= */
+
 async function loadBattleStatus(){
 
-  try{
-
-    return await postApi(
-      getApi("BATTLE"),
-      {
-        action:
-          "battleStatus"
-      }
+  const api =
+    getApi(
+      "BATTLE"
     );
 
-  }catch(firstError){
 
-    const message =
-      String(
-        firstError?.message ||
-        ""
-      ).toLowerCase();
+  /*
+    V3.2 รองรับ stageStatus/battleStatus/status
+  */
+  for(
+    const action of
+    [
+      "battleStatus",
+      "status",
+      "stageStatus"
+    ]
+  ){
 
-    if(
-      message.includes(
-        "unknown action"
-      ) ||
-      message.includes(
-        "unsupported action"
-      )
-    ){
+    try{
 
-      return await postApi(
-        getApi("BATTLE"),
+      return await postJson(
+        api,
         {
-          action:"status"
+          action
         }
       );
-    }
 
-    throw firstError;
+    }catch(error){
+
+      const message =
+        String(
+          error?.message ||
+          ""
+        ).toLowerCase();
+
+
+      if(
+        !message.includes(
+          "unknown action"
+        )
+      ){
+        throw error;
+      }
+    }
   }
+
+
+  throw new Error(
+    "Battle API ไม่รองรับ status"
+  );
 }
 
 
@@ -1807,10 +1212,12 @@ function normalizeBattle(
     raw ??
     {};
 
+
   const player =
     data?.player ??
     data?.user ??
     {};
+
 
   const stage =
     data?.stage ??
@@ -1818,183 +1225,23 @@ function normalizeBattle(
     data?.monster ??
     {};
 
-  const runs =
-    Array.isArray(
-      data?.runs
-    )
-      ? data.runs
-      : [];
 
-  const stageId =
-    num(
-      pick(
-        player.unlockedStage,
-        player.unlocked_stage,
-        data.currentStage,
-        data.current_stage,
-        stage.id,
-        1
-      ),
-      1
-    );
-
-
-  return {
-    player:{
-      rockCoin:
-        num(
-          pick(
-            player.rockCoin,
-            player.rock_coin,
-            player.coin
-          ),
-          0
-        ),
-
-      energy:
-        num(
-          player.energy,
-          0
-        ),
-
-      maxEnergy:
-        num(
-          pick(
-            player.maxEnergy,
-            player.max_energy,
-            200
-          ),
-          200
-        ),
-
-      unlockedStage:
-        stageId,
-
-      totalWins:
-        num(
-          pick(
-            player.totalWins,
-            player.total_wins,
-            data.stats?.totalWins,
-            data.stats?.total_wins
-          ),
-          0
-        ),
-
-      totalAttacks:
-        num(
-          pick(
-            player.totalAttacks,
-            player.total_attacks,
-            data.stats?.totalAttacks,
-            data.stats?.total_attacks
-          ),
-          0
-        )
-    },
-
-    stage:{
-      id:
-        num(
-          pick(
-            stage.id,
-            stage.stage_id,
-            stageId
-          ),
-          stageId
-        ),
-
-      name:
-        pick(
-          stage.name,
-          stage.monster_name,
-          stage.monsterName,
-          `STAGE ${stageId}`
-        ),
-
-      hp:
-        num(
-          pick(
-            stage.hp,
-            stage.max_hp,
-            stage.maxHp,
-            stage.monster_max_hp
-          ),
-          0
-        ),
-
-      energy:
-        num(
-          pick(
-            stage.energy,
-            stage.energy_cost,
-            stage.energyCost,
-            stage.required_energy
-          ),
-          0
-        )
-    },
-
-    runs,
-
-    activeRun:
-      data?.activeRun ??
-      data?.active_run ??
-      null,
-
-    ranking:
+  const activeRun =
+    data?.activeRun ??
+    data?.active_run ??
+    (
       Array.isArray(
-        data?.ranking
+        data?.runs
       )
-        ? data.ranking
-        : (
-            Array.isArray(
-              data?.top3
-            )
-              ? data.top3
-              : []
+        ? data.runs.find(
+            row =>
+              String(
+                row?.status ||
+                ""
+              ).toLowerCase() ===
+              "active"
           )
-  };
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function render(){
-
-  const player =
-    state.player ??
-    {};
-
-  const stage =
-    state.stage ??
-    {};
-
-  const run =
-    state.activeRun;
-
-
-  const coin =
-    num(
-      player.rockCoin,
-      0
-    );
-
-  const energy =
-    num(
-      player.energy,
-      0
-    );
-
-  const maxEnergy =
-    Math.max(
-      1,
-      num(
-        player.maxEnergy,
-        200
-      )
+        : null
     );
 
 
@@ -2003,21 +1250,27 @@ function render(){
       0,
       num(
         pick(
-          run?.monster_max_hp,
-          run?.monsterMaxHp,
-          stage.hp
+          activeRun?.monster_max_hp,
+          activeRun?.monsterMaxHp,
+          stage.max_hp,
+          stage.maxHp,
+          stage.hp,
+          stage.monster_max_hp
         ),
         0
       )
     );
+
 
   const currentHp =
     Math.max(
       0,
       num(
         pick(
-          run?.monster_hp,
-          run?.monsterHp,
+          activeRun?.monster_hp,
+          activeRun?.monsterHp,
+          stage.current_hp,
+          stage.currentHp,
           maxHp
         ),
         maxHp
@@ -2025,191 +1278,348 @@ function render(){
     );
 
 
-  const hpPct =
-    maxHp > 0
-      ? clamp(
-          (
-            currentHp /
-            maxHp
-          ) * 100,
+  const ranking =
+    Array.isArray(
+      data?.ranking
+    )
+      ? data.ranking
+      : (
+          Array.isArray(
+            data?.top3
+          )
+            ? data.top3
+            : []
+        );
+
+
+  return {
+    stage:{
+      id:
+        Math.max(
+          1,
+          num(
+            pick(
+              stage.id,
+              stage.stage_id,
+              player.unlockedStage,
+              player.unlocked_stage,
+              1
+            ),
+            1
+          )
+        ),
+
+      name:
+        pick(
+          stage.name,
+          stage.monster_name,
+          stage.monsterName,
+          "SUGAR MONSTER"
+        ),
+
+      maxHp,
+
+      currentHp,
+
+      energyCost:
+        Math.max(
           0,
-          100
+          num(
+            pick(
+              stage.energy_cost,
+              stage.energyCost,
+              stage.required_energy,
+              stage.requiredEnergy,
+              stage.energy
+            ),
+            0
+          )
         )
-      : 0;
+    },
+
+    ranking,
+
+    stats:{
+      wins:
+        Math.max(
+          0,
+          num(
+            pick(
+              player.totalWins,
+              player.total_wins,
+              data.stats?.totalWins,
+              data.stats?.total_wins
+            ),
+            0
+          )
+        ),
+
+      attacks:
+        Math.max(
+          0,
+          num(
+            pick(
+              player.totalAttacks,
+              player.total_attacks,
+              data.stats?.totalAttacks,
+              data.stats?.total_attacks
+            ),
+            0
+          )
+        )
+    }
+  };
+}
 
 
-  const energyPct =
-    clamp(
-      (
-        energy /
-        maxEnergy
-      ) * 100,
-      0,
-      100
-    );
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderPlayer(){
+
+  const p =
+    state.player;
 
 
   $("coinValue")
     .textContent =
-      formatNumber(
-        coin
+      fmtInt(
+        p.coin
       );
 
-  $("energyTop")
+
+  $("energyValue")
     .textContent =
-      `${formatNumber(
-        energy
-      )}/${formatNumber(
-        maxEnergy
+      `${fmtInt(
+        p.energy
+      )}/${fmtInt(
+        p.maxEnergy
       )}`;
 
-  $("energyBig")
+
+  $("battleEnergy")
     .textContent =
-      `${formatNumber(
-        energy
-      )} / ${formatNumber(
-        maxEnergy
+      `${fmtInt(
+        p.energy
+      )}/${fmtInt(
+        p.maxEnergy
       )}`;
 
-  $("energyFill")
-    .style.width =
-      `${energyPct}%`;
+
+  setBar(
+    "battleEnergyBar",
+    (
+      p.energy /
+      p.maxEnergy
+    ) * 100
+  );
+
+
+  $("playerName")
+    .textContent =
+      p.displayName ||
+      "ROCK HERO";
+
+
+  $("playerLevel")
+    .textContent =
+      `Lv. ${
+        fmtInt(
+          p.level
+        )
+      }`;
+
+
+  $("playerExp")
+    .textContent =
+      `EXP ${
+        fmtInt(
+          p.levelExp
+        )
+      } / ${
+        fmtInt(
+          p.expPerLevel
+        )
+      }`;
+
+
+  setBar(
+    "playerExpBar",
+    (
+      p.levelExp /
+      p.expPerLevel
+    ) * 100
+  );
+
+
+  if(
+    p.pictureUrl
+  ){
+
+    $("playerPhoto")
+      .src =
+        p.pictureUrl;
+
+    $("playerPhoto")
+      .style.display =
+        "block";
+
+  }else{
+
+    $("playerPhoto")
+      .style.display =
+        "none";
+  }
+
+
+  startRecoveryCountdown(
+    p.nextEnergyAt
+  );
+}
+
+
+function renderBattle(){
+
+  const b =
+    state.battle;
 
 
   $("bossName")
     .textContent =
-      stage.name ||
-      `STAGE ${
-        player.unlockedStage ||
-        1
-      }`;
+      b.stage.name ||
+      "SUGAR MONSTER";
 
-  $("hpText")
+
+  $("bossHpText")
     .textContent =
-      maxHp > 0
-        ? `${formatNumber(
-            currentHp
-          )} / ${formatNumber(
-            maxHp
+      b.stage.maxHp > 0
+        ? `${fmtInt(
+            b.stage.currentHp
+          )} / ${fmtInt(
+            b.stage.maxHp
           )}`
-        : "ยังไม่มีข้อมูล HP";
+        : "-- / --";
 
-  $("hpPercent")
+
+  const hpPct =
+    b.stage.maxHp > 0
+      ? (
+          b.stage.currentHp /
+          b.stage.maxHp
+        ) * 100
+      : 0;
+
+
+  $("bossHpPercent")
     .textContent =
-      maxHp > 0
+      b.stage.maxHp > 0
         ? `${Math.round(
             hpPct
           )}%`
         : "--%";
 
-  $("hpFill")
-    .style.width =
-      `${hpPct}%`;
+
+  setBar(
+    "bossHpBar",
+    hpPct
+  );
 
 
-  /*
-    ถ้า Battle backend ยังไม่มี Ranking
-    แสดงสถิติผู้เล่นเป็น fallback
-  */
   const ranking =
-    state.ranking;
+    b.ranking;
+
+
+  const scoreOf =
+    row =>
+      pick(
+        row?.score,
+        row?.points,
+        row?.damage,
+        row?.total_damage,
+        row?.totalDamage,
+        row?.exp,
+        null
+      );
+
 
   if(
-    Array.isArray(ranking) &&
+    Array.isArray(
+      ranking
+    ) &&
     ranking.length
   ){
 
-    const scoreOf =
-      item =>
-        pick(
-          item.score,
-          item.points,
-          item.damage,
-          item.total_damage,
-          item.totalDamage,
-          item.exp,
-          "--"
-        );
-
-    $("rank1").textContent =
-      formatNumber(
-        scoreOf(
-          ranking[0]
-        )
-      );
-
-    $("rank2").textContent =
-      ranking[1]
-        ? formatNumber(
-            scoreOf(
-              ranking[1]
+    $("rank1Score")
+      .textContent =
+        ranking[0]
+          ? fmtInt(
+              scoreOf(
+                ranking[0]
+              )
             )
-          )
-        : "--";
+          : "--";
 
-    $("rank3").textContent =
-      ranking[2]
-        ? formatNumber(
-            scoreOf(
-              ranking[2]
+    $("rank2Score")
+      .textContent =
+        ranking[1]
+          ? fmtInt(
+              scoreOf(
+                ranking[1]
+              )
             )
-          )
-        : "--";
+          : "--";
+
+    $("rank3Score")
+      .textContent =
+        ranking[2]
+          ? fmtInt(
+              scoreOf(
+                ranking[2]
+              )
+            )
+          : "--";
 
   }else{
 
-    $("rank1").textContent =
-      formatNumber(
-        player.totalWins
-      );
+    /*
+      fallback ถ้า backend ยังไม่มี ranking array
+    */
+    $("rank1Score")
+      .textContent =
+        fmtInt(
+          b.stats.wins
+        );
 
-    $("rank2").textContent =
-      formatNumber(
-        player.totalAttacks
-      );
+    $("rank2Score")
+      .textContent =
+        fmtInt(
+          b.stats.attacks
+        );
 
-    $("rank3").textContent =
-      formatNumber(
-        player.unlockedStage
-      );
+    $("rank3Score")
+      .textContent =
+        fmtInt(
+          b.stage.id
+        );
   }
-
-
-  renderRecoveryCountdown(
-    player
-  );
 }
 
 
 /* =========================================================
-   ENERGY COUNTDOWN
+   ENERGY RECOVERY
 ========================================================= */
 
-let countdownTimer =
-  null;
-
-
-function renderRecoveryCountdown(
-  player
+function startRecoveryCountdown(
+  nextEnergyAt
 ){
 
   clearInterval(
-    countdownTimer
+    state.countdownTimer
   );
 
 
-  /*
-    รองรับ backend ที่มี next_energy_at ในอนาคต
-    ถ้ายังไม่มี field ใช้ข้อความพร้อมใช้งาน
-  */
-  const raw =
-    pick(
-      player?.nextEnergyAt,
-      player?.next_energy_at
-    );
-
-
-  if(!raw){
+  if(!nextEnergyAt){
 
     $("recoveryTime")
       .textContent =
@@ -2220,7 +1630,9 @@ function renderRecoveryCountdown(
 
 
   const target =
-    new Date(raw);
+    new Date(
+      nextEnergyAt
+    );
 
 
   if(
@@ -2247,26 +1659,31 @@ function renderRecoveryCountdown(
           Date.now()
         );
 
-      const totalSeconds =
+
+      const seconds =
         Math.floor(
-          diff / 1000
+          diff /
+          1000
         );
+
 
       const h =
         String(
           Math.floor(
-            totalSeconds / 3600
+            seconds /
+            3600
           )
         ).padStart(
           2,
           "0"
         );
 
+
       const m =
         String(
           Math.floor(
             (
-              totalSeconds %
+              seconds %
               3600
             ) /
             60
@@ -2276,14 +1693,16 @@ function renderRecoveryCountdown(
           "0"
         );
 
+
       const s =
         String(
-          totalSeconds %
+          seconds %
           60
         ).padStart(
           2,
           "0"
         );
+
 
       $("recoveryTime")
         .textContent =
@@ -2293,7 +1712,8 @@ function renderRecoveryCountdown(
 
   tick();
 
-  countdownTimer =
+
+  state.countdownTimer =
     setInterval(
       tick,
       1000
@@ -2302,7 +1722,7 @@ function renderRecoveryCountdown(
 
 
 /* =========================================================
-   MAIN LOAD
+   LOAD
 ========================================================= */
 
 async function load(){
@@ -2310,7 +1730,7 @@ async function load(){
   try{
 
     const ready =
-      await ensureLiff();
+      await initLINE();
 
     if(
       ready === false
@@ -2319,115 +1739,36 @@ async function load(){
     }
 
 
-    const results =
-      await Promise.allSettled([
+    const [
+      playerResult,
+      battleResult
+    ] =
+      await Promise.all([
         loadPlayerDashboard(),
         loadBattleStatus()
       ]);
 
 
-    let homePlayer =
-      null;
+    state.player =
+      playerResult;
+
+    state.battle =
+      normalizeBattle(
+        battleResult
+      );
 
 
-    if(
-      results[0].status ===
-      "fulfilled"
-    ){
-      homePlayer =
-        results[0].value;
-    }
-
-
-    if(
-      results[1].status ===
-      "fulfilled"
-    ){
-
-      const battle =
-        normalizeBattle(
-          results[1].value
-        );
-
-      state.player = {
-        ...battle.player,
-
-        /*
-          Wallet จาก HOME มี priority
-          เพื่อให้ Coin / Energy เหมือนหน้า HOME / MISSION
-        */
-        rockCoin:
-          homePlayer?.rockCoin ??
-          battle.player.rockCoin,
-
-        energy:
-          homePlayer?.energy ??
-          battle.player.energy,
-
-        maxEnergy:
-          homePlayer?.maxEnergy ??
-          battle.player.maxEnergy
-      };
-
-      state.stage =
-        battle.stage;
-
-      state.runs =
-        battle.runs;
-
-      state.activeRun =
-        battle.activeRun ||
-        battle.runs.find(
-          row =>
-            String(
-              row?.status ||
-              ""
-            ).toLowerCase() ===
-            "active"
-        ) ||
-        null;
-
-      state.ranking =
-        battle.ranking;
-
-      render();
-
-      return;
-    }
-
-
-    /*
-      Battle API fail แต่ HOME ยังโหลด Wallet ได้
-    */
-    if(homePlayer){
-
-      state.player =
-        homePlayer;
-
-      state.stage = {
-        id:1,
-        name:"ยังไม่มีข้อมูล Battle",
-        hp:0,
-        energy:0
-      };
-
-      render();
-
-      throw results[1].reason;
-    }
-
-
-    throw new Error(
-      "โหลดข้อมูล HOME และ BATTLE ไม่สำเร็จ"
-    );
+    renderPlayer();
+    renderBattle();
 
 
   }catch(error){
 
     console.error(
-      "BATTLE APP ERROR:",
+      "BATTLE PAGE ERROR:",
       error
     );
+
 
     showStatus(
       error?.message ||
@@ -2451,6 +1792,61 @@ function goPage(
     window.APP_CONFIG?.PAGE?.[key] ||
     fallback;
 }
+
+
+$("fightButton")
+  .addEventListener(
+    "click",
+    ()=>{
+      goPage(
+        "BATTLE_STAGE",
+        "./battle_stage.html"
+      );
+    }
+  );
+
+
+$("myEnergyButton")
+  .addEventListener(
+    "click",
+    ()=>{
+      showStatus(
+        `พลังงานปัจจุบัน ${
+          fmtInt(
+            state.player?.energy
+          )
+        } / ${
+          fmtInt(
+            state.player?.maxEnergy
+          )
+        }`
+      );
+    }
+  );
+
+
+$("rankingButton")
+  .addEventListener(
+    "click",
+    ()=>{
+      goPage(
+        "RANKING",
+        "./ranking.html"
+      );
+    }
+  );
+
+
+$("rewardButton")
+  .addEventListener(
+    "click",
+    ()=>{
+      goPage(
+        "REWARDS",
+        "./rewards.html"
+      );
+    }
+  );
 
 
 $("homeButton")
@@ -2480,79 +1876,21 @@ $("missionButton")
 $("battleButton")
   .addEventListener(
     "click",
-    ()=>{
-      load();
-    }
-  );
-
-
-$("fightButton")
-  .addEventListener(
-    "click",
-    ()=>{
-      goPage(
-        "BATTLE_STAGE",
-        "./battle_stage.html"
-      );
-    }
-  );
-
-
-$("myEnergyButton")
-  .addEventListener(
-    "click",
-    ()=>{
-      showStatus(
-        `พลังงานปัจจุบัน ${
-          formatNumber(
-            state.player?.energy
-          )
-        } / ${
-          formatNumber(
-            state.player?.maxEnergy
-          )
-        }`
-      );
-    }
-  );
-
-
-$("rankingCard")
-  .addEventListener(
-    "click",
-    ()=>{
-      goPage(
-        "RANKING",
-        "./ranking.html"
-      );
-    }
-  );
-
-
-$("rewardCard")
-  .addEventListener(
-    "click",
-    ()=>{
-      goPage(
-        "REWARDS",
-        "./rewards.html"
-      );
-    }
+    load
   );
 
 
 /* =========================================================
-   START / AUTO REFRESH
+   START
 ========================================================= */
 
 (async()=>{
 
   await load();
 
+
   setInterval(
-    ()=>{
-      load();
-    },
+    load,
     Number(
       window.APP_CONFIG?.REFRESH_MS ||
       30000
@@ -2564,3 +1902,5 @@ $("rewardCard")
 
 </body>
 </html>
+battle.html
+HTML
