@@ -1308,7 +1308,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-v2132"
+    src="./mission-template.png?v=20260829-v2133"
     alt=""
     draggable="false"
   >
@@ -2206,6 +2206,20 @@ const missionData = {
         passCondition:"≥ 30 นาที",
         evidence:"photo_or_video",
         reward:{coin:20,energy:20,exp:20}
+      },
+
+      {
+        section:"DAILY SECRET",
+        id:"daily_secret",
+        icon:"🎁",
+        name:"SECRET MISSION",
+        description:"สุ่มภารกิจลับประจำวัน 1 ภารกิจ",
+        userInput:"ตามภารกิจ Secret ที่สุ่มได้",
+        evidenceText:"ภาพ / Screenshot ตามเงื่อนไขของภารกิจ",
+        passCondition:"ทำภารกิจ Secret ที่สุ่มได้สำเร็จ",
+        evidence:"photo_or_video",
+        reward:{coin:20,energy:20,exp:20},
+        secretDaily:true
       }
 
     ]
@@ -2426,38 +2440,14 @@ const missionData = {
       "BONUS MISSION",
 
     subtitle:
-      "Secret • Golden • Streak • Achievement",
+      "Streak • Bonus • Achievement",
 
     icon:
       "🎁",
 
     missions:[
 
-      {
-        section:"SECRET MISSION",
-        id:"secret_daily",
-        icon:"🔒",
-        name:"TODAY'S SECRET MISSION",
-        description:"เปิดภารกิจลับได้ 1 ครั้งต่อวัน ระบบสุ่มภารกิจจาก Secret Mission Pool",
-        userInput:"ตามภารกิจที่สุ่มได้",
-        evidenceText:"ภาพ / Screenshot ตามเงื่อนไขของภารกิจ",
-        passCondition:"ทำ Secret Mission ที่สุ่มได้สำเร็จ",
-        evidence:"photo_or_video",
-        reward:{coin:20,energy:20,exp:20}
-      },
 
-      {
-        section:"RARE SECRET",
-        id:"golden_mission",
-        icon:"🌟",
-        name:"GOLDEN MISSION",
-        description:"Rare Secret Mission มีโอกาสสุ่มพบประมาณ 10%",
-        userInput:"ตาม Golden Mission ที่สุ่มได้",
-        evidenceText:"ภาพ / Screenshot ตามเงื่อนไข",
-        passCondition:"ทำ Golden Mission สำเร็จ",
-        evidence:"photo_or_video",
-        reward:{coin:50,energy:50,exp:50}
-      },
 
       {
         section:"WEEKLY BONUS",
@@ -2740,9 +2730,124 @@ function getCategoryMissions(
    OPEN CATEGORY
 ========================================================= */
 
+
+/* =========================================================
+   DAILY SECRET MISSION V2.13.3
+   1 mission per Bangkok day / no Golden Mission
+========================================================= */
+
+const DAILY_SECRET_POOL_V2133 = [
+  {id:"secret_stair_master",icon:"🪜",name:"STAIR MASTER",description:"ใช้บันไดอย่างน้อย 3 ชั้น",evidenceText:"ภาพบริเวณบันได / ชั้นปลายทาง"},
+  {id:"secret_after_meal_walk",icon:"🚶",name:"AFTER MEAL WALK",description:"เดินหลังอาหาร 10–15 นาที",evidenceText:"Screenshot Activity"},
+  {id:"secret_stretch_break",icon:"🧘",name:"STRETCH BREAK",description:"ยืดเหยียดอย่างน้อย 10 นาที",evidenceText:"ภาพกิจกรรม"},
+  {id:"secret_strength_boost",icon:"🏋️",name:"STRENGTH BOOST",description:"Squat / Wall Push-up / Weight Training อย่างน้อย 10 นาที",evidenceText:"ภาพ / Screenshot"},
+  {id:"secret_smart_snack",icon:"🍎",name:"SMART SNACK",description:"เลือกผลไม้หรือของว่างที่เหมาะสมแทนขนมหวาน",evidenceText:"รูปของว่าง"},
+  {id:"secret_team_move",icon:"👥",name:"TEAM MOVE",description:"ทำกิจกรรมสุขภาพกับเพื่อนร่วมงานอย่างน้อย 3 คน",evidenceText:"ภาพกิจกรรม"},
+  {id:"secret_walk_talk",icon:"🚶",name:"WALK & TALK",description:"เปลี่ยนการนั่งคุยกับเพื่อนเป็นเดินคุยอย่างน้อย 10 นาที",evidenceText:"ภาพ / Screenshot"},
+  {id:"secret_break_chair",icon:"🪑",name:"BREAK THE CHAIR",description:"ลุกเดิน / เคลื่อนไหวช่วงพักอย่างน้อย 10 นาที",evidenceText:"Screenshot / ภาพ"},
+  {id:"secret_no_sugar",icon:"🥤",name:"NO SUGAR TODAY",description:"เลือกเครื่องดื่มไม่เติมน้ำตาลตลอดวัน",evidenceText:"รูปเครื่องดื่ม"},
+  {id:"secret_green_plate",icon:"🥦",name:"GREEN PLATE",description:"มีผักอย่างน้อยครึ่งหนึ่งของจาน 1 มื้อ",evidenceText:"รูปอาหาร"},
+  {id:"secret_extra_2k",icon:"🚶‍♂️",name:"EXTRA 2K",description:"เดินเพิ่มจากเป้าหมาย Daily อีก 2,000 ก้าว รวมอย่างน้อย 10,000 ก้าว",evidenceText:"Screenshot Steps"},
+  {id:"secret_active_life",icon:"🧹",name:"ACTIVE LIFE",description:"ทำงานบ้าน / ทำสวน / กิจกรรมที่ต้องเคลื่อนไหวอย่างน้อย 20 นาที",evidenceText:"รูปกิจกรรม"}
+];
+
+function bangkokDateKeyV2133(){
+  const parts = new Intl.DateTimeFormat("en-CA",{
+    timeZone:"Asia/Bangkok",
+    year:"numeric",
+    month:"2-digit",
+    day:"2-digit"
+  }).formatToParts(new Date());
+
+  const map = {};
+  for(const part of parts){
+    if(["year","month","day"].includes(part.type)){
+      map[part.type] = part.value;
+    }
+  }
+  return `${map.year}-${map.month}-${map.day}`;
+}
+
+function fallbackSecretForTodayV2133(){
+  const key = bangkokDateKeyV2133();
+  let hash = 2166136261;
+  for(let i=0;i<key.length;i++){
+    hash ^= key.charCodeAt(i);
+    hash = Math.imul(hash,16777619) >>> 0;
+  }
+  return DAILY_SECRET_POOL_V2133[hash % DAILY_SECRET_POOL_V2133.length];
+}
+
+function getDailySecretAssignmentV2133(){
+  const apiSecret =
+    window.MISSION_SECRET_TODAY ||
+    missionCatalogState?.secretToday ||
+    missionCatalogState?.secret_today ||
+    null;
+
+  if(apiSecret){
+    const missionId =
+      apiSecret.mission_id ||
+      apiSecret.missionId ||
+      apiSecret.secret_mission_id ||
+      "";
+
+    const found =
+      DAILY_SECRET_POOL_V2133.find(x=>x.id===missionId);
+
+    if(found){
+      return {
+        ...found,
+        assignmentId:
+          apiSecret.assignment_id ||
+          apiSecret.assignmentId ||
+          apiSecret.id ||
+          null,
+        status:
+          apiSecret.status ||
+          "ready"
+      };
+    }
+  }
+
+  return {
+    ...fallbackSecretForTodayV2133(),
+    assignmentId:null,
+    status:"ready"
+  };
+}
+
+function hydrateDailySecretMissionV2133(){
+  const daily = missionData?.daily?.missions;
+  if(!Array.isArray(daily)) return;
+
+  let index = daily.findIndex(x=>x.secretDaily === true || x.id==="daily_secret");
+  if(index < 0) return;
+
+  const secret = getDailySecretAssignmentV2133();
+
+  daily[index] = {
+    ...daily[index],
+    id: secret.id,
+    icon: secret.icon,
+    name: `SECRET MISSION • ${secret.name}`,
+    description: secret.description,
+    evidenceText: secret.evidenceText,
+    passCondition: secret.description,
+    reward:{coin:20,energy:20,exp:20},
+    secretDaily:true,
+    secretMissionId:secret.id,
+    assignmentId:secret.assignmentId || null
+  };
+}
+
 function openCategory(
   category
 ){
+
+  if(category === "daily"){
+    hydrateDailySecretMissionV2133();
+  }
 
   if(
     !missionData[
@@ -4072,6 +4177,21 @@ async function submitEvidence(){
 
   const form =
     new FormData();
+
+  if(mission?.secretDaily){
+    form.append("secretDaily","1");
+    form.append(
+      "secretMissionId",
+      String(mission.secretMissionId || mission.id || "")
+    );
+
+    if(mission.assignmentId){
+      form.append(
+        "secretAssignmentId",
+        String(mission.assignmentId)
+      );
+    }
+  }
 
   /*
     DAILY: MOVE MORE
