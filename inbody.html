@@ -533,6 +533,40 @@
     </section>
 
 
+    <section
+      class="card"
+      id="adviceCard"
+      style="display:none"
+    >
+      <h2>
+        💬 คำแนะนำจากทีมสุขภาพ
+      </h2>
+
+      <p
+        class="sub"
+        id="adviceMeta"
+      ></p>
+
+      <div
+        id="adviceText"
+        style="
+          padding:13px;
+          border-radius:13px;
+          background:#eef8f4;
+          color:#285c49;
+          font-size:12px;
+          line-height:1.65;
+          white-space:pre-wrap;
+        "
+      ></div>
+
+      <div class="notice">
+        คำแนะนำนี้ใช้เพื่อสนับสนุน Wellness และการดูแลสุขภาพทั่วไปภายในโครงการ
+        หากมีอาการผิดปกติหรือมีโรคประจำตัว ควรปรึกษาแพทย์หรือบุคลากรสุขภาพที่ดูแลโดยตรง
+      </div>
+    </section>
+
+
     <section class="card">
       <h2>
         📈 ประวัติ InBody
@@ -948,6 +982,74 @@
     }
 
 
+    function renderAdvice(
+      latest
+    ){
+
+      const card =
+        $("adviceCard");
+
+      const advice =
+        String(
+          latest
+            ?.advice_note ||
+          ""
+        ).trim();
+
+      const status =
+        String(
+          latest
+            ?.advice_status ||
+          ""
+        );
+
+      if(
+        status ===
+          "pending_review" &&
+        !advice
+      ){
+
+        card.style.display =
+          "block";
+
+        $("adviceMeta")
+          .textContent =
+            "รูป InBody ถูกส่งแล้ว";
+
+        $("adviceText")
+          .textContent =
+            "📷 กำลังรอทีมสุขภาพอ่านผลและบันทึกคำแนะนำ";
+
+        return;
+      }
+
+      if(!advice){
+
+        card.style.display =
+          "none";
+
+        return;
+      }
+
+      card.style.display =
+        "block";
+
+      $("adviceMeta")
+        .textContent =
+          latest?.reviewed_at
+            ? `อัปเดต ${new Date(
+                latest.reviewed_at
+              ).toLocaleString(
+                "th-TH"
+              )}`
+            : "คำแนะนำล่าสุด";
+
+      $("adviceText")
+        .textContent =
+          advice;
+    }
+
+
     function renderHistory(
       rows
     ){
@@ -1016,6 +1118,10 @@
 
         renderGoals(
           result.goals
+        );
+
+        renderAdvice(
+          result.latest
         );
 
         renderHistory(
