@@ -142,8 +142,8 @@ button,input,select,textarea{font:inherit}
   --profile-top:17%;
   --profile-size:27%;
 
-  --coin-left:75%;
-  --coin-top:5%;
+  --coin-left:79%;
+  --coin-top:3%;
   --coin-width:6.7%;
   --coin-height:7%;
 
@@ -780,7 +780,7 @@ button,input,select,textarea{font:inherit}
 }
 
 .weight-save{margin-top:18px;color:#fff;background:#06c755}
-.weight-target{margin-top:15px;color:#073b93;background:#eaf3ff}
+.weight-target{margin-top:15px;color:#e60000;background:#eaf3ff}
 .weight-home{margin-top:18px;color:#fff;background:#075ac7}
 
 @media(max-width:600px){
