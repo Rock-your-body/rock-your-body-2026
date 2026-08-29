@@ -138,7 +138,7 @@ button,input,select,textarea{font:inherit}
    HOME SETTINGS
 ========================================================= */
 #homeStage{
-  --profile-left:2%;
+  --profile-left:5%;
   --profile-top:17%;
   --profile-size:27%;
 
