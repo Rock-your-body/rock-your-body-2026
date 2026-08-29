@@ -1388,6 +1388,22 @@
   font-weight:800;
 }
 
+
+    /* NUTRITION HOTSPOT V2.6 */
+    .nutrition-hotspot{
+      position:absolute;
+      z-index:550;
+      left:34.0%;
+      top:81.0%;
+      width:37.5%;
+      height:5.4%;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      pointer-events:auto;
+      -webkit-tap-highlight-color:transparent;
+    }
+
 </style>
 
 </head>
@@ -1412,7 +1428,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-v2135"
+    src="./mission-template.png?v=20260829-nutrition-v26"
     alt=""
     draggable="false"
   >
@@ -1611,6 +1627,16 @@
     "
     onclick="openCategory('bonus')"
     aria-label="Bonus Mission"
+  ></button>
+
+
+
+  <!-- NUTRITION: กดตรง "บันทึกการรับประทานอาหารของฉัน" -->
+  <button
+    type="button"
+    class="nutrition-hotspot"
+    onclick="goNutritionV26()"
+    aria-label="บันทึกการรับประทานอาหารของฉัน"
   ></button>
 
 
@@ -3251,6 +3277,17 @@ function closeMissionHistoryBackdropV2135(event){
   ){
     closeMissionHistoryV2135();
   }
+}
+
+
+
+function goNutritionV26(){
+  const url =
+    window.APP_CONFIG?.PAGE?.NUTRITION ||
+    "./nutrition.html";
+
+  window.location.href =
+    url;
 }
 
 
