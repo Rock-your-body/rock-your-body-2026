@@ -495,195 +495,54 @@
       if(el) el.style.width=clamp(pct,0,100)+"%";
     }
 
-   async function forceLineRelogin(){
-  console.warn("[LIFF] forcing re-login");
+   /* =====================================================
+   LINE LIFF AUTH
+   ===================================================== */
 
-  const guardKey="rock_line_relogin_at";
-  const last=Number(sessionStorage.getItem(guardKey)||0);
-  const now=Date.now();
+const LIFF_ID =
+  window.APP_CONFIG?.LIFF_ID ||
+  "2011201679-uNWz5yqF";
 
-  if(last && now-last<5000){
-    throw new Error("LINE authentication ไม่สำเร็จ กรุณาปิดหน้านี้แล้วเปิดจาก LINE ใหม่");
-  }
-
-  sessionStorage.setItem(guardKey,String(now));
-
-  const oldKeys=[
-    "idToken","id_token","lineIdToken","line_id_token",
-    "LINE_ID_TOKEN","liffIdToken","liff_id_token"
-  ];
-
-  for(const keyName of oldKeys){
-    try{ localStorage.removeItem(keyName); }catch{}
-    try{ sessionStorage.removeItem(keyName); }catch{}
-  }
-
-  try{
-    if(typeof liff!=="undefined" && liff.isLoggedIn()){
-      liff.logout();
-    }
-  }catch(error){
-    console.warn("[LIFF] logout:",error);
-  }
-
-  const freshLiffUrl=
-    "https://liff.line.me/2011201679-uNWz5yqF?reauth="+Date.now();
-
-  window.location.replace(freshLiffUrl);
-}
-
-   async function initLINE(){
+async function initLINE(){
 
   if(typeof liff === "undefined"){
-    throw new Error(
-      "LINE LIFF SDK ไม่พร้อม"
-    );
+    throw new Error("LINE LIFF SDK ไม่พร้อม");
   }
-
-  const liffId =
-    window.APP_CONFIG?.LIFF_ID ||
-    "2011201679-uNWz5yqF";
 
   await liff.init({
-    liffId
+    liffId: LIFF_ID
   });
 
-  console.log(
-    "[LIFF] initialized",
-    {
-      isInClient: liff.isInClient(),
-      isLoggedIn: liff.isLoggedIn()
-    }
-  );
+  console.log("[LIFF]", {
+    isInClient: liff.isInClient(),
+    isLoggedIn: liff.isLoggedIn()
+  });
 
   /*
-    ยังไม่ได้ Login
-  */
+   * เปิดจาก Rich Menu / LIFF:
+   * ถ้า session พร้อม จะไม่เปิดหน้า LINE Login
+   * ถ้ายังไม่ได้ login ให้ LIFF SDK จัดการ OAuth เอง
+   * ห้ามกำหนด access.line.me เอง
+   * ห้ามกำหนด redirectUri เป็น dashboard.html เอง
+   */
   if(!liff.isLoggedIn()){
-
-    console.log(
-      "[LIFF] login required"
-    );
-
-    liff.login({
-      redirectUri:
-        window.location.href
-    });
-
+    liff.login();
     return false;
   }
 
-
-  /*
-    ตรวจ ID Token ปัจจุบัน
-  */
-  const idToken =
-    liff.getIDToken();
+  const idToken = liff.getIDToken();
 
   if(!idToken){
-
-    console.warn(
-      "[LIFF] ID Token missing"
+    throw new Error(
+      "ไม่พบ LINE ID Token กรุณาปิดหน้านี้แล้วเปิดจากเมนู LINE ใหม่"
     );
-
-    await forceLineRelogin();
-
-    return false;
   }
-
-
-  /*
-    ตรวจ exp ใน JWT
-  */
-  try{
-
-    const parts =
-      idToken.split(".");
-
-    if(parts.length !== 3){
-      throw new Error(
-        "Invalid ID Token"
-      );
-    }
-
-    let payloadText =
-      parts[1]
-        .replace(/-/g, "+")
-        .replace(/_/g, "/");
-
-    while(
-      payloadText.length % 4
-    ){
-      payloadText += "=";
-    }
-
-    const payload =
-      JSON.parse(
-        decodeURIComponent(
-          Array.prototype.map
-            .call(
-              atob(payloadText),
-              c =>
-                "%" +
-                (
-                  "00" +
-                  c.charCodeAt(0)
-                    .toString(16)
-                ).slice(-2)
-            )
-            .join("")
-        )
-      );
-
-    const now =
-      Math.floor(
-        Date.now() / 1000
-      );
-
-    console.log(
-      "[LIFF] token exp:",
-      payload?.exp,
-      "now:",
-      now
-    );
-
-
-    /*
-      เผื่อเวลา 60 วินาที
-      ถ้า token ใกล้หมดอายุก็ login ใหม่
-    */
-    if(
-      !payload?.exp ||
-      payload.exp <= now + 60
-    ){
-
-      console.warn(
-        "[LIFF] ID Token expired"
-      );
-
-      await forceLineRelogin();
-
-      return false;
-    }
-
-
-  }catch(error){
-
-    console.warn(
-      "[LIFF] token validation error:",
-      error
-    );
-
-    await forceLineRelogin();
-
-    return false;
-  }
-
 
   return true;
 }
 
-    function getIdToken(){
+
+function getIdToken(){
       if(typeof liff === "undefined"){
         throw new Error("LINE LIFF SDK ไม่พร้อม");
       }
