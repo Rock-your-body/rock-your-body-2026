@@ -531,6 +531,37 @@
     }
 
 
+
+    .mission-detail-grid{
+      display:grid;
+      gap:7px;
+      margin-top:10px;
+      padding:10px 11px;
+      border-radius:13px;
+      background:#f7faff;
+      border:1px solid #e0eaf6;
+    }
+
+    .mission-detail-row{
+      display:grid;
+      grid-template-columns:88px minmax(0,1fr);
+      gap:8px;
+      align-items:start;
+      color:#425c82;
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .mission-detail-label{
+      color:#0b5ab8;
+      font-weight:900;
+    }
+
+    .mission-detail-value{
+      font-weight:600;
+      overflow-wrap:anywhere;
+    }
+
     /* =====================================================
        REWARD
     ====================================================== */
@@ -941,6 +972,68 @@
     }
 
 
+
+    .v2-input-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .v2-input-grid.one{
+      grid-template-columns:1fr;
+    }
+
+    .v2-field{
+      margin-bottom:12px;
+    }
+
+    .v2-field label{
+      display:block;
+      margin-bottom:6px;
+      color:#315b91;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .v2-field input,
+    .v2-field select,
+    .v2-field textarea{
+      width:100%;
+      border:1px solid #d9e5f2;
+      border-radius:12px;
+      padding:11px 12px;
+      background:#fff;
+      color:#173454;
+      font:inherit;
+      outline:none;
+      box-sizing:border-box;
+    }
+
+    .v2-field textarea{
+      min-height:82px;
+      resize:vertical;
+    }
+
+    .v2-hint{
+      margin:-3px 0 12px;
+      padding:9px 11px;
+      border-radius:12px;
+      background:#f6faff;
+      color:#4b6585;
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .v2-week-progress{
+      margin:8px 0 12px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#eef7ff;
+      color:#184f86;
+      font-size:12px;
+      font-weight:800;
+    }
+
     .submit-evidence-button:disabled{
 
       background:#b7c4d3;
@@ -1256,7 +1349,7 @@
     id="dailyCount"
     class="daily-count"
   >
-    0 / 4
+    0 / 5
   </div>
 
 
@@ -1623,6 +1716,13 @@
     <div
       id="evidenceMissionName"
       class="evidence-mission-name"
+    ></div>
+
+
+    <!-- MISSION V2 DYNAMIC INPUTS -->
+
+    <div
+      id="missionV2Fields"
     ></div>
 
 
@@ -2001,6 +2101,9 @@ function getDailyExtra(){
    MISSION DATA
 ========================================================= */
 
+let missionCatalogState = null;
+
+
 const missionData = {
 
 
@@ -2014,106 +2117,79 @@ const missionData = {
       "DAILY MISSION",
 
     subtitle:
-      "Core 3 ภารกิจ + Extra สุ่มวันละ 1 ภารกิจ",
+      "ภารกิจสุขภาพประจำวันที่ทำได้ทุกวัน",
 
     icon:
       "☀️",
 
-    get missions(){
+    missions:[
 
-      return [
+      {
+        section:"DAILY MISSION",
+        id:"daily_move_more",
+        icon:"🚶",
+        name:"MOVE MORE",
+        description:"เดินให้ได้อย่างน้อย 8,000 ก้าวต่อวัน",
+        userInput:"จำนวนก้าว",
+        evidenceText:"Screenshot Steps / Watch / Health App",
+        passCondition:"≥ 8,000 ก้าว",
+        evidence:"photo",
+        reward:{coin:10,energy:10,exp:10}
+      },
 
-        {
-          section:
-            "CORE DAILY",
+      {
+        section:"DAILY MISSION",
+        id:"daily_sleep",
+        icon:"😴",
+        name:"SLEEP WELL",
+        description:"นอนหลับพักผ่อนให้เพียงพออย่างน้อย 7 ชั่วโมง",
+        userInput:"ชั่วโมง + นาที + เวลานอน / เวลาตื่น",
+        evidenceText:"Screenshot Sleep จากมือถือ / Smart Watch",
+        passCondition:"≥ 7 ชั่วโมง",
+        evidence:"photo",
+        reward:{coin:10,energy:10,exp:10}
+      },
 
-          id:
-            "daily_move_more",
+      {
+        section:"DAILY MISSION",
+        id:"daily_eat_smart",
+        icon:"🥗",
+        name:"EAT SMART",
+        description:"เลือกรับประทานอาหารที่เหมาะสมและสอดคล้องกับเป้าหมายสุขภาพ",
+        userInput:"ชื่อมื้อ + เมนู + รายละเอียด",
+        evidenceText:"รูปอาหารจริง",
+        passCondition:"มื้ออาหารสอดคล้องกับภารกิจ",
+        evidence:"photo",
+        reward:{coin:10,energy:10,exp:10}
+      },
 
-          icon:
-            "🚶",
+      {
+        section:"DAILY MISSION",
+        id:"daily_hydrate",
+        icon:"💧",
+        name:"HYDRATE",
+        description:"ดื่มน้ำให้เพียงพอตลอดวัน",
+        userInput:"จำนวนแก้ว หรือปริมาณมิลลิลิตร",
+        evidenceText:"รูปขวดน้ำ / แก้ว / Screenshot แอป",
+        passCondition:"≥ 8 แก้ว หรือประมาณ 1.5–2 ลิตร",
+        evidence:"photo",
+        reward:{coin:5,energy:5,exp:5}
+      },
 
-          name:
-            "MOVE MORE",
+      {
+        section:"DAILY MISSION",
+        id:"daily_exercise_30",
+        icon:"🏃",
+        name:"EXERCISE",
+        description:"ออกกำลังกายหรือทำกิจกรรมทางกายอย่างน้อย 30 นาที",
+        userInput:"ประเภทกิจกรรม + จำนวนนาที",
+        evidenceText:"รูป / Screenshot กิจกรรม",
+        passCondition:"≥ 30 นาที",
+        evidence:"photo_or_video",
+        reward:{coin:20,energy:20,exp:20}
+      }
 
-          description:
-            "เดินให้ได้ 8,000 ก้าว หรือออกกำลังกายเผาผลาญ 300 kcal",
-
-          evidence:
-            "photo_or_video",
-
-          reward:{
-            coin:10,
-            energy:10,
-            exp:10
-          }
-        },
-
-
-        {
-          section:
-            "CORE DAILY",
-
-          id:
-            "daily_eat_smart",
-
-          icon:
-            "🥗",
-
-          name:
-            "EAT SMART",
-
-          description:
-            "รับประทานอาหารเหมาะสม และส่งรูปอาหารเป็นหลักฐาน",
-
-          evidence:
-            "photo",
-
-          reward:{
-            coin:10,
-            energy:10,
-            exp:10
-          }
-        },
-
-
-        {
-          section:
-            "CORE DAILY",
-
-          id:
-            "daily_exercise_30",
-
-          icon:
-            "🏃",
-
-          name:
-            "EXERCISE 30 MIN",
-
-          description:
-            "ออกกำลังกายอย่างน้อย 30 นาที พร้อมคลิป VDO",
-
-          evidence:
-            "video",
-
-          reward:{
-            coin:20,
-            energy:20,
-            exp:20
-          }
-        },
-
-
-        {
-          section:
-            "DAILY EXTRA",
-
-          ...getDailyExtra()
-        }
-
-      ];
-
-    }
+    ]
 
   },
 
@@ -2128,7 +2204,7 @@ const missionData = {
       "WEEKLY MISSION",
 
     subtitle:
-      "กิจกรรมสุขภาพประจำสัปดาห์",
+      "แอโรบิก 3 ครั้ง / สัปดาห์ และต้องไม่ซ้ำวันกัน",
 
     icon:
       "📅",
@@ -2136,146 +2212,16 @@ const missionData = {
     missions:[
 
       {
-        id:
-          "weekly_aerobic",
-
-        icon:
-          "🎵",
-
-        name:
-          "AEROBIC",
-
-        description:
-          "แอโรบิก 3 วัน/สัปดาห์ จันทร์ พุธ ศุกร์ เวลา 17.00 น. รับรางวัลต่อครั้ง",
-
-        evidence:
-          "photo_or_video",
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
-      },
-
-
-      {
-        id:
-          "weekly_weight_training",
-
-        icon:
-          "🏋️",
-
-        name:
-          "WEIGHT TRAINING",
-
-        description:
-          "เวท / เทรนนิ่ง อย่างน้อย 1 วันต่อสัปดาห์",
-
-        evidence:
-          "photo_or_video",
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
-      },
-
-
-      {
-        id:
-          "weekly_yoga",
-
-        icon:
-          "🧘",
-
-        name:
-          "YOGA",
-
-        description:
-          "เข้าร่วมโยคะ 1 ครั้ง/เดือน",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
-      },
-
-
-      {
-        id:
-          "weekly_badminton",
-
-        icon:
-          "🏸",
-
-        name:
-          "BADMINTON CLUB",
-
-        description:
-          "เข้าร่วมชมรมแบดมินตัน ทุกวันพฤหัสบดี เวลา 19.00 น.",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
-      },
-
-
-      {
-        id:
-          "weekly_running_club",
-
-        icon:
-          "🏃‍♂️",
-
-        name:
-          "RUNNING CLUB",
-
-        description:
-          "เข้าร่วมชมรมวิ่งของโรงพยาบาล และชวนเพื่อนวิ่งมากกว่า 3 คนขึ้นไป",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
-      },
-
-
-      {
-        id:
-          "weekly_nutrition",
-
-        icon:
-          "🍽️",
-
-        name:
-          "NUTRITION ACTIVITY",
-
-        description:
-          "เข้าร่วมกิจกรรมโภชนาการ 1 ครั้ง/สัปดาห์",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
+        section:"WEEKLY MISSION",
+        id:"weekly_aerobic",
+        icon:"🎵",
+        name:"AEROBIC 3 TIMES / WEEK",
+        description:"ออกกำลังกายแบบแอโรบิกให้ครบ 3 ครั้งภายในสัปดาห์ โดยแต่ละครั้งต้องเป็นคนละวัน",
+        userInput:"ประเภทกิจกรรม + จำนวนนาที",
+        evidenceText:"รูป / Screenshot / วิดีโอกิจกรรม",
+        passCondition:"ส่งได้ 3 ครั้งต่อสัปดาห์ และห้ามซ้ำวัน",
+        evidence:"photo_or_video",
+        reward:{coin:30,energy:30,exp:30}
       }
 
     ]
@@ -2293,7 +2239,7 @@ const missionData = {
       "MONTHLY MISSION",
 
     subtitle:
-      "HEALTHY TIKTOK CHALLENGE",
+      "ภารกิจประจำเดือน",
 
     icon:
       "📱",
@@ -2301,29 +2247,17 @@ const missionData = {
     missions:[
 
       {
-        id:
-          "monthly_tiktok",
-
-        icon:
-          "🎬",
-
-        name:
-          "HEALTHY TIKTOK CHALLENGE",
-
-        description:
-          "สร้างคลิป TikTok 15–60 วินาที เนื้อหาส่งเสริมสุขภาพ ใช้ #RockYourBody2026 ส่ง Screenshot + Link คลิปเป็นหลักฐาน เลือกหัวข้อ START YOUR MOVE / EAT SMART / HEALTHY LIFESTYLE",
-
-        evidence:
-          "photo_link",
-
-        requireLink:
-          true,
-
-        reward:{
-          coin:100,
-          energy:100,
-          exp:150
-        }
+        section:"MISSION ประจำเดือน",
+        id:"monthly_tiktok",
+        icon:"🎬",
+        name:"HEALTHY TIKTOK CHALLENGE",
+        description:"สร้างคลิป TikTok ความยาว 15–60 วินาที เพื่อส่งเสริมสุขภาพ เลือกหัวข้อ START YOUR MOVE / EAT SMART / HEALTHY LIFESTYLE และใช้ #RockYourBody2026",
+        userInput:"หัวข้อคลิป + รายละเอียดกิจกรรม + Link TikTok",
+        evidenceText:"Screenshot โพสต์ TikTok + Link คลิป",
+        passCondition:"คลิปตรงหัวข้อ ความยาว 15–60 วินาที มี #RockYourBody2026 และส่งหลักฐานครบ",
+        evidence:"photo_link",
+        requireLink:true,
+        reward:{coin:100,energy:100,exp:150}
       }
 
     ]
@@ -3026,7 +2960,7 @@ function renderCategory(){
       }
 
 
-      const canSubmit =
+      let canSubmit =
 
         !mission.auto &&
         !mission.adminOnly &&
@@ -3034,6 +2968,25 @@ function renderCategory(){
           "pending" &&
         state.status !==
           "approved";
+
+
+      if(
+        mission.id ===
+        "weekly_aerobic"
+      ){
+
+        canSubmit =
+          weeklyAerobicCanSubmit();
+
+        statusText =
+          weeklyAerobicProgressText();
+
+        statusClass =
+          canSubmit
+            ? "status-not-submitted"
+            : "status-pending";
+
+      }
 
 
       item.innerHTML = `
@@ -3054,6 +3007,39 @@ function renderCategory(){
 
             <div class="mission-description">
               ${mission.description}
+            </div>
+
+            <div class="mission-detail-grid">
+
+              <div class="mission-detail-row">
+                <div class="mission-detail-label">ผู้ใช้กรอก</div>
+                <div class="mission-detail-value">
+                  ${mission.userInput || "รายละเอียดกิจกรรม"}
+                </div>
+              </div>
+
+              <div class="mission-detail-row">
+                <div class="mission-detail-label">หลักฐาน</div>
+                <div class="mission-detail-value">
+                  ${mission.evidenceText || (
+                    mission.evidence === "video"
+                      ? "วิดีโอ"
+                      : mission.evidence === "photo_link"
+                        ? "รูปภาพ + Link"
+                        : mission.evidence === "photo_or_video"
+                          ? "รูปภาพ / วิดีโอ"
+                          : "รูปภาพ"
+                  )}
+                </div>
+              </div>
+
+              <div class="mission-detail-row">
+                <div class="mission-detail-label">ผ่านเมื่อ</div>
+                <div class="mission-detail-value">
+                  ${mission.passCondition || "Admin ตรวจสอบตามเงื่อนไขภารกิจ"}
+                </div>
+              </div>
+
             </div>
 
 
@@ -3175,8 +3161,480 @@ function renderCategory(){
 
 
 /* =========================================================
+   MISSION SYSTEM V2 CATALOG
+========================================================= */
+
+async function loadMissionCatalog(){
+
+  if(!MISSION_API){
+    return null;
+  }
+
+  try{
+
+    const idToken =
+      ROCK?.getIdToken?.() ||
+      window.liff?.getIDToken?.();
+
+    if(!idToken){
+      return null;
+    }
+
+    const response =
+      await fetch(
+        MISSION_API,
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            action:"missionCatalog",
+            idToken
+          })
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    let result = {};
+
+    try{
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+    }catch{
+      throw new Error(
+        `Mission Catalog JSON ไม่ถูกต้อง HTTP ${response.status}`
+      );
+    }
+
+    if(
+      !response.ok ||
+      result?.success === false
+    ){
+      throw new Error(
+        result?.error ||
+        result?.message ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    missionCatalogState =
+      result;
+
+    /*
+      MONTHLY:
+      แสดงเฉพาะหัวข้อของเดือนปัจจุบันจาก backend
+      ถ้าเดือนนี้ไม่มี schedule ให้ monthly เป็นรายการว่าง
+    */
+    if(result?.monthly){
+
+      const m =
+        result.monthly;
+
+      missionData.monthly.missions = [
+        {
+          section:"MISSION ประจำเดือน",
+          id:
+            m.mission_id ||
+            "monthly_tiktok",
+          icon:"🎬",
+          name:
+            m.mission_name ||
+            "HEALTHY TIKTOK CHALLENGE",
+          topic:
+            m.topic ||
+            "",
+          description:
+            `${m.description || "สร้างคลิป TikTok เกี่ยวกับการดูแลสุขภาพ"} หัวข้อประจำเดือน: ${m.topic || "-"}`,
+          userInput:
+            "รายละเอียดคลิป + Link TikTok",
+          evidenceText:
+            "Screenshot โพสต์ TikTok + Link คลิป",
+          passCondition:
+            `คลิป ${m.min_video_seconds || 15}–${m.max_video_seconds || 60} วินาที ตรงหัวข้อ ${m.topic || ""} และมี ${m.hashtag || "#RockYourBody2026"}`,
+          evidence:"photo_link",
+          requireLink:true,
+          reward:{
+            coin:Number(m.reward_coin || 100),
+            energy:Number(m.reward_energy || 100),
+            exp:Number(m.reward_exp || 150)
+          }
+        }
+      ];
+
+    }else{
+
+      missionData.monthly.missions = [];
+
+    }
+
+    if(
+      document
+        .getElementById("missionModal")
+        ?.classList
+        .contains("show")
+    ){
+      renderCategory();
+    }
+
+    updateTemplate();
+
+    return result;
+
+  }catch(error){
+
+    console.error(
+      "MISSION CATALOG ERROR:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+function weeklyAerobicCanSubmit(){
+
+  const weekly =
+    missionCatalogState?.weekly;
+
+  if(!weekly){
+    return true;
+  }
+
+  const currentDate =
+    missionCatalogState
+      ?.current
+      ?.date ||
+    "";
+
+  const submissions =
+    Array.isArray(
+      weekly.submissions
+    )
+      ? weekly.submissions
+      : [];
+
+  const sameDay =
+    submissions.some(
+      item =>
+        String(
+          item?.activity_date ||
+          ""
+        ) === currentDate
+    );
+
+  const submittedCount =
+    Number(
+      weekly.submittedCount ||
+      submissions.length ||
+      0
+    );
+
+  return (
+    !sameDay &&
+    submittedCount < 3
+  );
+}
+
+
+function weeklyAerobicProgressText(){
+
+  const weekly =
+    missionCatalogState?.weekly;
+
+  if(!weekly){
+    return "เป้าหมาย 3 ครั้ง / สัปดาห์";
+  }
+
+  const count =
+    Number(
+      weekly.submittedCount ||
+      0
+    );
+
+  return `ทำแล้ว ${count} / 3 ครั้งในสัปดาห์นี้`;
+}
+
+
+/* =========================================================
    EVIDENCE
 ========================================================= */
+
+function buildMissionV2Fields(
+  mission
+){
+
+  const host =
+    document
+      .getElementById(
+        "missionV2Fields"
+      );
+
+  if(!host){
+    return;
+  }
+
+  host.innerHTML = "";
+
+  if(
+    mission.id ===
+    "daily_move_more"
+  ){
+
+    host.innerHTML = `
+      <div class="v2-field">
+        <label>จำนวนก้าววันนี้</label>
+        <input
+          id="v2Steps"
+          type="number"
+          min="0"
+          step="1"
+          inputmode="numeric"
+          placeholder="เช่น 8500"
+        >
+      </div>
+
+      <div class="v2-hint">
+        เป้าหมาย ≥ 8,000 ก้าว • ระบบจะประมาณแคลอรี่ให้อัตโนมัติหลังส่ง
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if(
+    mission.id ===
+    "daily_sleep"
+  ){
+
+    host.innerHTML = `
+      <div class="v2-input-grid">
+
+        <div class="v2-field">
+          <label>ชั่วโมง</label>
+          <input
+            id="v2SleepHours"
+            type="number"
+            min="0"
+            max="24"
+            step="1"
+            placeholder="7"
+          >
+        </div>
+
+        <div class="v2-field">
+          <label>นาที</label>
+          <input
+            id="v2SleepMinutesPart"
+            type="number"
+            min="0"
+            max="59"
+            step="1"
+            placeholder="30"
+          >
+        </div>
+
+        <div class="v2-field">
+          <label>เวลานอน</label>
+          <input
+            id="v2BedTime"
+            type="time"
+          >
+        </div>
+
+        <div class="v2-field">
+          <label>เวลาตื่น</label>
+          <input
+            id="v2WakeTime"
+            type="time"
+          >
+        </div>
+
+      </div>
+
+      <div class="v2-hint">
+        เป้าหมาย ≥ 7 ชั่วโมง • เวลานอนจะเชื่อมไป HOME
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if(
+    mission.id ===
+    "daily_eat_smart"
+  ){
+
+    host.innerHTML = `
+      <div class="v2-field">
+        <label>มื้ออาหาร</label>
+        <select id="v2MealType">
+          <option value="">เลือกมื้อ</option>
+          <option value="breakfast">อาหารเช้า</option>
+          <option value="lunch">อาหารกลางวัน</option>
+          <option value="dinner">อาหารเย็น</option>
+          <option value="snack">ของว่าง</option>
+        </select>
+      </div>
+
+      <div class="v2-field">
+        <label>ชื่อเมนู</label>
+        <input
+          id="v2MealName"
+          type="text"
+          placeholder="เช่น ข้าวกล้อง อกไก่ ไข่ต้ม"
+        >
+      </div>
+
+      <div class="v2-field">
+        <label>รายละเอียดอาหาร</label>
+        <textarea
+          id="v2MealDescription"
+          placeholder="ระบุวัตถุดิบ ปริมาณ หรือรายละเอียดเพิ่มเติม"
+        ></textarea>
+      </div>
+
+      <div class="v2-hint">
+        ข้อมูลจะเชื่อมเข้า Nutrition เพื่อประเมินพลังงาน โปรตีน ไขมัน และคาร์โบไฮเดรต
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if(
+    mission.id ===
+    "daily_hydrate"
+  ){
+
+    host.innerHTML = `
+      <div class="v2-input-grid">
+
+        <div class="v2-field">
+          <label>ปริมาณ</label>
+          <input
+            id="v2WaterAmount"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="8"
+          >
+        </div>
+
+        <div class="v2-field">
+          <label>หน่วย</label>
+          <select id="v2WaterUnit">
+            <option value="glass">แก้ว</option>
+            <option value="ml">ml</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="v2-hint">
+        ระบบใช้ 1 แก้ว = 250 ml • เป้าหมายประมาณ 1.5–2 ลิตร/วัน
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if(
+    mission.id ===
+      "daily_exercise_30" ||
+    mission.id ===
+      "weekly_aerobic"
+  ){
+
+    host.innerHTML = `
+      ${
+        mission.id ===
+        "weekly_aerobic"
+          ? `
+            <div class="v2-week-progress">
+              ${weeklyAerobicProgressText()}
+            </div>
+          `
+          : ""
+      }
+
+      <div class="v2-field">
+        <label>ประเภทกิจกรรม</label>
+        <select id="v2ExerciseType">
+          ${
+            mission.id ===
+            "weekly_aerobic"
+              ? `
+                <option value="aerobic">แอโรบิก</option>
+                <option value="dance">เต้นแอโรบิก</option>
+                <option value="brisk walking">เดินเร็ว</option>
+                <option value="running">วิ่ง</option>
+                <option value="cycling">ปั่นจักรยาน</option>
+              `
+              : `
+                <option value="">เลือกกิจกรรม</option>
+                <option value="walking">เดิน</option>
+                <option value="brisk walking">เดินเร็ว</option>
+                <option value="running">วิ่ง</option>
+                <option value="aerobic">แอโรบิก</option>
+                <option value="cycling">ปั่นจักรยาน</option>
+                <option value="weight training">เวทเทรนนิ่ง</option>
+                <option value="yoga">โยคะ</option>
+                <option value="badminton">แบดมินตัน</option>
+                <option value="swimming">ว่ายน้ำ</option>
+              `
+          }
+        </select>
+      </div>
+
+      <div class="v2-field">
+        <label>ระยะเวลา (นาที)</label>
+        <input
+          id="v2ExerciseMinutes"
+          type="number"
+          min="1"
+          max="600"
+          step="1"
+          placeholder="30"
+        >
+      </div>
+
+      <div class="v2-hint">
+        ระบบจะใช้น้ำหนักล่าสุด + ประเภทกิจกรรม + เวลา เพื่อประมาณแคลอรี่ และส่งไป HOME
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if(
+    mission.id ===
+    "monthly_tiktok"
+  ){
+
+    host.innerHTML = `
+      <div class="v2-hint">
+        <strong>หัวข้อเดือนนี้:</strong>
+        ${mission.topic || "-"}
+        <br>
+        สร้างคลิป 15–60 วินาที และใช้ #RockYourBody2026
+      </div>
+    `;
+
+  }
+
+}
+
 
 function openEvidence(
   missionId
@@ -3203,6 +3661,11 @@ function openEvidence(
     )
     .textContent =
       mission.name;
+
+
+  buildMissionV2Fields(
+    mission
+  );
 
 
   document
@@ -3264,68 +3727,610 @@ function closeEvidence(){
    SUBMIT EVIDENCE
 ========================================================= */
 async function submitEvidence(){
-  const mission = findMission(activeMissionId);
-  if(!mission){ showMissionStatus('ไม่พบข้อมูลภารกิจ'); return; }
 
-  const fileInput = document.getElementById('evidenceFile');
-  const linkInput = document.getElementById('evidenceLink');
-  const noteInput = document.getElementById('evidenceNote');
-  const button = document.getElementById('submitEvidenceButton');
-  const file = fileInput?.files?.[0] || null;
-  const link = linkInput?.value?.trim() || '';
-  const note = noteInput?.value?.trim() || '';
+  const mission =
+    findMission(
+      activeMissionId
+    );
 
-  if(mission.requireLink && !link){ showMissionStatus('กรุณาใส่ Link TikTok'); return; }
-  if(!file && !link){ showMissionStatus('กรุณาเลือกรูป / VDO หรือใส่ Link'); return; }
-  if(!MISSION_API){ showMissionStatus('ไม่พบ MISSION API'); return; }
-  if(!button){ return; }
-  if(file && file.size > 50 * 1024 * 1024){ showMissionStatus('ไฟล์ต้องมีขนาดไม่เกิน 50 MB'); return; }
+  if(!mission){
+    showMissionStatus(
+      "ไม่พบข้อมูลภารกิจ"
+    );
+    return;
+  }
 
-  button.disabled = true;
-  button.textContent = 'กำลังส่งหลักฐาน...';
+  const fileInput =
+    document
+      .getElementById(
+        "evidenceFile"
+      );
 
-  try{
-    const idToken = ROCK?.getIdToken?.() || window.liff?.getIDToken?.();
-    if(!idToken) throw new Error('ไม่พบ LINE ID Token');
+  const linkInput =
+    document
+      .getElementById(
+        "evidenceLink"
+      );
 
-    const form = new FormData();
-    form.append('action','submitEvidence');
-    form.append('idToken',idToken);
-    form.append('missionId',String(mission.id));
-    form.append('category',String(activeCategory));
-    form.append('note',note);
-    form.append('link',link);
-    if(file) form.append('file',file,file.name);
+  const noteInput =
+    document
+      .getElementById(
+        "evidenceNote"
+      );
 
-    const response = await fetch(MISSION_API,{method:'POST',body:form});
-    const raw = await response.text();
-    let result = {};
-    try{ result = raw ? JSON.parse(raw) : {}; }
-    catch{ throw new Error(`Server ตอบกลับไม่ถูกต้อง HTTP ${response.status}`); }
+  const button =
+    document
+      .getElementById(
+        "submitEvidenceButton"
+      );
 
-    if(!response.ok || result?.success === false){
-      throw new Error(result?.error || result?.message || result?.details || `HTTP ${response.status}`);
+  const file =
+    fileInput
+      ?.files
+      ?.[0] ||
+    null;
+
+  const link =
+    linkInput
+      ?.value
+      ?.trim() ||
+    "";
+
+  let note =
+    noteInput
+      ?.value
+      ?.trim() ||
+    "";
+
+  if(
+    mission.requireLink &&
+    !link
+  ){
+    showMissionStatus(
+      "กรุณาใส่ Link TikTok"
+    );
+    return;
+  }
+
+  if(
+    !file &&
+    !link
+  ){
+    showMissionStatus(
+      "กรุณาเลือกรูป / VDO หรือใส่ Link"
+    );
+    return;
+  }
+
+  if(!MISSION_API){
+    showMissionStatus(
+      "ไม่พบ MISSION API"
+    );
+    return;
+  }
+
+  if(!button){
+    return;
+  }
+
+  if(
+    file &&
+    file.size >
+      50 * 1024 * 1024
+  ){
+    showMissionStatus(
+      "ไฟล์ต้องมีขนาดไม่เกิน 50 MB"
+    );
+    return;
+  }
+
+  const form =
+    new FormData();
+
+  /*
+    DAILY: MOVE MORE
+  */
+  if(
+    mission.id ===
+    "daily_move_more"
+  ){
+
+    const steps =
+      Number(
+        document
+          .getElementById(
+            "v2Steps"
+          )
+          ?.value ||
+        0
+      );
+
+    if(
+      !Number.isFinite(steps) ||
+      steps <= 0
+    ){
+      showMissionStatus(
+        "กรุณากรอกจำนวนก้าว"
+      );
+      return;
     }
 
-    const local = readLocal();
-    local[mission.id] = {
-      ...local[mission.id], status:'pending', submittedAt:new Date().toISOString(),
-      fileName:file?.name || '', link, note, approvedNotified:false
-    };
-    writeLocal(local);
-    closeEvidence();
-    updateTemplate();
-    if(document.getElementById('missionModal')?.classList.contains('show')) renderCategory();
-    showMissionStatus('✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ');
-    await refreshMissionStatus();
-  }catch(error){
-    console.error('MISSION SUBMIT ERROR:',error);
-    showMissionStatus('ERROR: ' + (error?.message || String(error) || 'UNKNOWN ERROR'));
-  }finally{
-    button.disabled = false;
-    button.textContent = 'ส่งหลักฐานให้ Admin ตรวจสอบ';
+    form.append(
+      "steps",
+      String(
+        Math.round(steps)
+      )
+    );
   }
+
+
+  /*
+    DAILY: SLEEP WELL
+  */
+  if(
+    mission.id ===
+    "daily_sleep"
+  ){
+
+    const hours =
+      Number(
+        document
+          .getElementById(
+            "v2SleepHours"
+          )
+          ?.value ||
+        0
+      );
+
+    const minutes =
+      Number(
+        document
+          .getElementById(
+            "v2SleepMinutesPart"
+          )
+          ?.value ||
+        0
+      );
+
+    const sleepTotal =
+      (
+        Math.max(
+          0,
+          Math.round(hours)
+        ) *
+        60
+      ) +
+      Math.max(
+        0,
+        Math.round(minutes)
+      );
+
+    if(
+      sleepTotal <= 0 ||
+      sleepTotal > 1440
+    ){
+      showMissionStatus(
+        "กรุณากรอกเวลานอนให้ถูกต้อง"
+      );
+      return;
+    }
+
+    const bedTime =
+      document
+        .getElementById(
+          "v2BedTime"
+        )
+        ?.value ||
+      "";
+
+    const wakeTime =
+      document
+        .getElementById(
+          "v2WakeTime"
+        )
+        ?.value ||
+      "";
+
+    form.append(
+      "sleepMinutes",
+      String(sleepTotal)
+    );
+
+    note =
+      [
+        note,
+        bedTime
+          ? `เวลานอน ${bedTime}`
+          : "",
+        wakeTime
+          ? `เวลาตื่น ${wakeTime}`
+          : ""
+      ]
+        .filter(Boolean)
+        .join(" | ");
+  }
+
+
+  /*
+    DAILY: EAT SMART
+  */
+  if(
+    mission.id ===
+    "daily_eat_smart"
+  ){
+
+    const mealType =
+      document
+        .getElementById(
+          "v2MealType"
+        )
+        ?.value ||
+      "";
+
+    const mealName =
+      document
+        .getElementById(
+          "v2MealName"
+        )
+        ?.value
+        ?.trim() ||
+      "";
+
+    const mealDescription =
+      document
+        .getElementById(
+          "v2MealDescription"
+        )
+        ?.value
+        ?.trim() ||
+      "";
+
+    if(
+      !mealType ||
+      !mealName
+    ){
+      showMissionStatus(
+        "กรุณาเลือกมื้อและกรอกชื่อเมนู"
+      );
+      return;
+    }
+
+    form.append(
+      "mealType",
+      mealType
+    );
+
+    form.append(
+      "mealName",
+      mealName
+    );
+
+    form.append(
+      "mealDescription",
+      mealDescription
+    );
+  }
+
+
+  /*
+    DAILY: HYDRATE
+  */
+  if(
+    mission.id ===
+    "daily_hydrate"
+  ){
+
+    const amount =
+      Number(
+        document
+          .getElementById(
+            "v2WaterAmount"
+          )
+          ?.value ||
+        0
+      );
+
+    const unit =
+      document
+        .getElementById(
+          "v2WaterUnit"
+        )
+        ?.value ||
+      "glass";
+
+    if(
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ){
+      showMissionStatus(
+        "กรุณากรอกปริมาณน้ำ"
+      );
+      return;
+    }
+
+    const waterMl =
+      unit === "glass"
+        ? Math.round(
+            amount * 250
+          )
+        : Math.round(
+            amount
+          );
+
+    form.append(
+      "waterMl",
+      String(waterMl)
+    );
+  }
+
+
+  /*
+    DAILY / WEEKLY EXERCISE
+  */
+  if(
+    mission.id ===
+      "daily_exercise_30" ||
+    mission.id ===
+      "weekly_aerobic"
+  ){
+
+    const exerciseType =
+      document
+        .getElementById(
+          "v2ExerciseType"
+        )
+        ?.value ||
+      "";
+
+    const exerciseMinutes =
+      Number(
+        document
+          .getElementById(
+            "v2ExerciseMinutes"
+          )
+          ?.value ||
+        0
+      );
+
+    if(!exerciseType){
+      showMissionStatus(
+        "กรุณาเลือกประเภทกิจกรรม"
+      );
+      return;
+    }
+
+    if(
+      !Number.isFinite(
+        exerciseMinutes
+      ) ||
+      exerciseMinutes <= 0
+    ){
+      showMissionStatus(
+        "กรุณากรอกระยะเวลาออกกำลังกาย"
+      );
+      return;
+    }
+
+    if(
+      mission.id ===
+        "daily_exercise_30" &&
+      exerciseMinutes < 30
+    ){
+      showMissionStatus(
+        "EXERCISE ต้องอย่างน้อย 30 นาที"
+      );
+      return;
+    }
+
+    form.append(
+      "exerciseType",
+      exerciseType
+    );
+
+    form.append(
+      "exerciseMinutes",
+      String(
+        Math.round(
+          exerciseMinutes
+        )
+      )
+    );
+  }
+
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "กำลังส่งหลักฐาน...";
+
+
+  try{
+
+    const idToken =
+      ROCK?.getIdToken?.() ||
+      window.liff?.getIDToken?.();
+
+    if(!idToken){
+      throw new Error(
+        "ไม่พบ LINE ID Token"
+      );
+    }
+
+
+    form.append(
+      "action",
+      "submitEvidence"
+    );
+
+    form.append(
+      "idToken",
+      idToken
+    );
+
+    form.append(
+      "missionId",
+      String(
+        mission.id
+      )
+    );
+
+    form.append(
+      "category",
+      String(
+        activeCategory
+      )
+    );
+
+    form.append(
+      "note",
+      note
+    );
+
+    form.append(
+      "link",
+      link
+    );
+
+    if(file){
+      form.append(
+        "file",
+        file,
+        file.name
+      );
+    }
+
+
+    const response =
+      await fetch(
+        MISSION_API,
+        {
+          method:"POST",
+          body:form
+        }
+      );
+
+
+    const raw =
+      await response.text();
+
+    let result = {};
+
+    try{
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+    }catch{
+      throw new Error(
+        `Server ตอบกลับไม่ถูกต้อง HTTP ${response.status}`
+      );
+    }
+
+
+    if(
+      !response.ok ||
+      result?.success === false
+    ){
+      throw new Error(
+        result?.error ||
+        result?.message ||
+        result?.details ||
+        `HTTP ${response.status}`
+      );
+    }
+
+
+    const local =
+      readLocal();
+
+    local[mission.id] = {
+      ...local[mission.id],
+      status:"pending",
+      submittedAt:
+        new Date()
+          .toISOString(),
+      fileName:
+        file?.name ||
+        "",
+      link,
+      note,
+      estimatedCalories:
+        result
+          ?.calculated
+          ?.estimatedCalories ??
+        null,
+      approvedNotified:false
+    };
+
+    writeLocal(
+      local
+    );
+
+    closeEvidence();
+
+    updateTemplate();
+
+    await loadMissionCatalog();
+
+    await loadMissionCatalog();
+
+    await refreshMissionStatus();
+
+    if(
+      document
+        .getElementById(
+          "missionModal"
+        )
+        ?.classList
+        .contains("show")
+    ){
+      renderCategory();
+    }
+
+    const calories =
+      Number(
+        result
+          ?.calculated
+          ?.estimatedCalories ||
+        0
+      );
+
+    showMissionStatus(
+      calories > 0
+        ? `✅ ส่งหลักฐานแล้ว • ประมาณ ${calories} kcal • รอ Admin ตรวจสอบ`
+        : "✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "MISSION SUBMIT ERROR:",
+      error
+    );
+
+    showMissionStatus(
+      "ERROR: " +
+      (
+        error?.message ||
+        String(error) ||
+        "UNKNOWN ERROR"
+      )
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "ส่งหลักฐานให้ Admin ตรวจสอบ";
+
+  }
+
 }
+
 
 /* =========================================================
    LOAD CURRENT-PERIOD STATUS FROM API
