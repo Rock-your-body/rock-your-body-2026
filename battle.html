@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#061d68" />
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
-  <!-- BATTLE LIVE v2026-08-28-06 : external battle-template.png + unified rock_users + current stage -->
+  <!-- BATTLE DATA LIVE V2.15 : transparent overlays + HOME unified wallet/energy + battle status -->
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260828-04"></script>
+  <script src="./app-config.js?v=20260829-v214"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -57,7 +57,7 @@
       width:9.2%;
       height:6.3%;
       color:#071b5e;
-      background:#fff;
+      background:transparent;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -90,7 +90,7 @@
       width:19%;
       height:15%;
       padding:1.2% 1.1%;
-      background:linear-gradient(90deg,rgba(26,125,255,.98),rgba(30,130,255,.86),rgba(30,130,255,0));
+      background:transparent;
       pointer-events:none;
     }
 
@@ -115,7 +115,7 @@
       top:43.6%;
       width:19.2%;
       height:14%;
-      background:linear-gradient(90deg,rgba(27,124,252,.98),rgba(27,124,252,.88),rgba(27,124,252,0));
+      background:transparent;
       padding:.5% .1%;
       pointer-events:none;
     }
@@ -231,8 +231,8 @@
       height:13%;
       border-radius:14px;
       padding:1.1% 1.4%;
-      background:linear-gradient(180deg,#082e83,#031f61);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+      background:transparent;
+      box-shadow:none;
       pointer-events:none;
       text-shadow:none;
     }
@@ -329,7 +329,24 @@
       .boss-name-box{top:26.6%}
       .hp-box{top:43.1%}
     }
-  </style>
+  
+    /* V2.15 — LIVE DATA DIRECTLY ON TEMPLATE */
+    .hud-coin,.hud-energy,.energy-card,.energy-next{
+      background:transparent !important;
+      box-shadow:none !important;
+    }
+    .boss-name-box,.hp-box,.record-card{
+      background:transparent !important;
+      box-shadow:none !important;
+    }
+    .hud-coin,.hud-energy,.energy-card,.energy-next{
+      color:#071b5e;
+    }
+    .live-data-value{
+      font-variant-numeric:tabular-nums;
+    }
+
+</style>
 </head>
 
 <body>
@@ -499,13 +516,29 @@
       return token;
     }
 
+    function getBattleApi(){
+      const api =
+        window.APP_CONFIG?.getApi
+          ? window.APP_CONFIG.getApi("BATTLE")
+          : window.APP_CONFIG?.API?.BATTLE;
+
+      if(!api){
+        throw new Error("ไม่พบ API.BATTLE ใน app-config.js");
+      }
+
+      return api;
+    }
+
     async function battleApi(payload){
-      const api = window.APP_CONFIG?.API?.BATTLE;
-      if(!api) throw new Error("ไม่พบ BATTLE API ใน app-config.js");
+      const api = getBattleApi();
 
       const response = await fetch(api,{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{
+          "Content-Type":"application/json",
+          "Cache-Control":"no-cache"
+        },
+        cache:"no-store",
         body:JSON.stringify({
           ...payload,
           idToken:getIdToken()
@@ -534,6 +567,82 @@
       }
 
       return data;
+    }
+
+
+    function pickNumber(...values){
+      for(const value of values){
+        const n = Number(value);
+        if(Number.isFinite(n)) return n;
+      }
+      return 0;
+    }
+
+    function normalizeBattlePlayer(raw={}){
+      return {
+        ...raw,
+        rockCoin: pickNumber(raw.rockCoin, raw.rock_coin, raw.coin, 0),
+        energy: pickNumber(raw.energy, 0),
+        maxEnergy: pickNumber(raw.maxEnergy, raw.max_energy, window.APP_CONFIG?.MAX_ENERGY, 200),
+        unlockedStage: pickNumber(raw.unlockedStage, raw.unlocked_stage, raw.currentStage, raw.current_stage, 1),
+        totalWins: pickNumber(raw.totalWins, raw.total_wins, raw.wins, 0),
+        totalAttacks: pickNumber(raw.totalAttacks, raw.total_attacks, raw.attacks, 0)
+      };
+    }
+
+    function normalizeBattleStage(raw={}, fallbackId=1){
+      return {
+        ...raw,
+        id: pickNumber(raw.id, raw.stageId, raw.stage_id, fallbackId),
+        name: raw.name || raw.monsterName || raw.monster_name || `STAGE ${fallbackId}`,
+        hp: pickNumber(raw.hp, raw.maxHp, raw.max_hp, raw.monster_max_hp, 0),
+        energy: pickNumber(raw.energy, raw.energyCost, raw.energy_cost, 0),
+        damage: pickNumber(raw.damage, raw.attackDamage, raw.attack_damage, 0)
+      };
+    }
+
+    function normalizeBattleRuns(raw){
+      if(!Array.isArray(raw)) return [];
+      return raw.map(run => ({
+        ...run,
+        stage_id: pickNumber(run.stage_id, run.stageId, 0),
+        monster_hp: pickNumber(run.monster_hp, run.monsterHp, 0),
+        monster_max_hp: pickNumber(run.monster_max_hp, run.monsterMaxHp, 0),
+        status: String(run.status || "").toLowerCase()
+      }));
+    }
+
+
+    async function playerApi(payload){
+      const api =
+        window.APP_CONFIG?.getApi
+          ? window.APP_CONFIG.getApi("PLAYER")
+          : window.APP_CONFIG?.API?.PLAYER;
+
+      if(!api) return null;
+
+      try{
+        const response = await fetch(api,{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json",
+            "Cache-Control":"no-cache"
+          },
+          cache:"no-store",
+          body:JSON.stringify({
+            ...payload,
+            idToken:getIdToken()
+          })
+        });
+
+        const raw = await response.text();
+        const data = raw ? JSON.parse(raw) : {};
+        if(!response.ok || data?.success === false) return null;
+        return data;
+      }catch(error){
+        console.warn("PLAYER API fallback skipped:", error);
+        return null;
+      }
     }
 
     function getActiveRun(){
@@ -726,10 +835,21 @@
         }
 
 
-        const data =
-          await battleApi({
-            action:"battleStatus"
-          });
+        const [data, homeData] =
+          await Promise.all([
+            battleApi({
+              action:"battleStatus"
+            }),
+            playerApi({
+              action:"dashboard"
+            })
+          ]);
+
+        const homePlayer =
+          homeData?.player ||
+          homeData?.user ||
+          homeData?.profile ||
+          {};
 
 
         /*
@@ -739,63 +859,63 @@
           จึงเป็นข้อมูลเดียวกับ HOME และ MISSION
         */
         state.player =
-          data?.player ||
-          {};
-
+          normalizeBattlePlayer({
+            ...(data?.player || data?.user || {}),
+            rockCoin:
+              homePlayer?.rockCoin ??
+              homePlayer?.rock_coin ??
+              data?.player?.rockCoin ??
+              data?.player?.rock_coin,
+            energy:
+              homePlayer?.energy ??
+              data?.player?.energy,
+            maxEnergy:
+              homePlayer?.maxEnergy ??
+              homePlayer?.max_energy ??
+              data?.player?.maxEnergy ??
+              data?.player?.max_energy,
+            totalWins:
+              data?.player?.totalWins ??
+              data?.player?.total_wins ??
+              data?.stats?.totalWins ??
+              data?.stats?.total_wins,
+            totalAttacks:
+              data?.player?.totalAttacks ??
+              data?.player?.total_attacks ??
+              data?.stats?.totalAttacks ??
+              data?.stats?.total_attacks
+          });
 
         const unlockedStage =
-          Number(
-            state.player?.unlockedStage ??
-            state.player?.unlocked_stage ??
-            data?.stage?.id ??
-            1
-          );
-
-
-        state.currentStageId =
           Math.max(
             1,
-            Math.min(
-              10,
-              unlockedStage
+            pickNumber(
+              state.player?.unlockedStage,
+              data?.stage?.id,
+              data?.currentStage,
+              1
             )
           );
 
+        state.currentStageId = unlockedStage;
 
-        /*
-          stage ที่ backend คืนมา คือ Stage ปัจจุบัน
-        */
         state.stage =
-          data?.stage ||
-          {
-            id:
-              state.currentStageId,
-
-            name:
-              `STAGE ${state.currentStageId}`,
-
-            energy:
-              0,
-
-            hp:
-              0,
-
-            damage:
-              0
-          };
-
+          normalizeBattleStage(
+            data?.stage ||
+            data?.boss ||
+            {},
+            state.currentStageId
+          );
 
         state.runs =
-          Array.isArray(
-            data?.runs
-          )
-            ? data.runs
-            : [];
+          normalizeBattleRuns(
+            data?.runs ||
+            data?.battleRuns ||
+            data?.battle_runs ||
+            []
+          );
 
-
-        state.activeRun =
-          getActiveRun();
-
+        state.activeRun = getActiveRun();
 
         console.log(
           "BATTLE LIVE DATA:",
@@ -902,11 +1022,39 @@
 
     $("rewardBtn").addEventListener("click",()=>go("./rewards.html"));
     $("rankingBtn").addEventListener("click",()=>go("./ranking.html"));
-    $("homeBtn").addEventListener("click",()=>go(window.APP_CONFIG?.PAGES?.HOME || "./HOME.html"));
-    $("missionBtn").addEventListener("click",()=>go(window.APP_CONFIG?.PAGES?.MISSION || "./mission.html"));
+    $("homeBtn").addEventListener("click",()=>go(window.APP_CONFIG?.PAGE?.HOME || "./dashboard.html"));
+    $("missionBtn").addEventListener("click",()=>go(window.APP_CONFIG?.PAGE?.MISSION || "./mission.html"));
     $("battleBtn").addEventListener("click",()=>loadBattle());
 
-    window.addEventListener("pageshow",()=>loadBattle());
+    let battleRefreshTimer = null;
+
+    function startBattleAutoRefresh(){
+      if(battleRefreshTimer){
+        clearInterval(battleRefreshTimer);
+      }
+
+      const refreshMs = Math.max(
+        15000,
+        Number(window.APP_CONFIG?.REFRESH_MS || 30000)
+      );
+
+      battleRefreshTimer = setInterval(()=>{
+        if(document.visibilityState === "visible"){
+          loadBattle();
+        }
+      }, refreshMs);
+    }
+
+    document.addEventListener("visibilitychange",()=>{
+      if(document.visibilityState === "visible"){
+        loadBattle();
+      }
+    });
+
+    window.addEventListener("pageshow", async ()=>{
+      await loadBattle();
+      startBattleAutoRefresh();
+    });
   </script>
 </body>
 </html>
