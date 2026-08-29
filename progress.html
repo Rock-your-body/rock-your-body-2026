@@ -1,1769 +1,1216 @@
 <!doctype html>
 <html lang="th">
-
 <head>
-
   <meta charset="utf-8">
-
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
-
-  <title>ROCK YOUR BODY 2026 - PROGRESS</title>
-
-
-  <!-- =====================================================
-       LINE LIFF
-  ====================================================== -->
+  <title>
+    ROCK YOUR BODY 2026 • Progress
+  </title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
-
-  <!-- =====================================================
-       CONFIG
-  ====================================================== -->
-
-  <script src="./app-config.js?v=20260827-01"></script>
-
-
-  <!-- =====================================================
-       COMMON CORE
-  ====================================================== -->
-
-  <script src="./common.js?v=20260827-01"></script>
-
+  <script src="./app-config.js"></script>
 
   <style>
+    *{box-sizing:border-box}
 
-    * {
-      box-sizing: border-box;
-    }
-
-
-    html,
-    body {
-
-      margin: 0;
-      padding: 0;
-
-      width: 100%;
-      min-height: 100%;
-
-      background: #eef4ff;
-
+    body{
+      margin:0;
+      min-height:100vh;
       font-family:
-        "Noto Sans Thai",
-        Tahoma,
         Arial,
+        "Noto Sans Thai",
         sans-serif;
-
-      color: #082b68;
-
+      color:#173454;
+      background:
+        linear-gradient(
+          180deg,
+          #ebf5ff 0%,
+          #f9fbff 52%,
+          #edf6ff 100%
+        );
     }
 
-
-    body {
-
-      display: flex;
-      justify-content: center;
-
+    .wrap{
+      width:min(820px,100%);
+      margin:auto;
+      padding:
+        calc(16px + env(safe-area-inset-top))
+        16px
+        calc(34px + env(safe-area-inset-bottom));
     }
 
-
-    /* =====================================================
-       LOADING
-    ====================================================== */
-
-    #loading {
-
-      position: fixed;
-
-      inset: 0;
-
-      z-index: 9999;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      text-align: center;
-
-      padding: 30px;
-
-      background: #eef4ff;
-
-      font-size: 20px;
-
-      font-weight: 800;
-
-    }
-
-
-    /* =====================================================
-       APP
-    ====================================================== */
-
-    #app {
-
-      display: none;
-
-      width: 100%;
-
-      max-width: 1100px;
-
-      padding: 20px;
-
-    }
-
-
-    /* =====================================================
-       HEADER
-    ====================================================== */
-
-    .header {
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      gap: 15px;
-
-      margin-bottom: 20px;
-
-    }
-
-
-    .title {
-
-      margin: 0;
-
-      font-size: 36px;
-
-      font-weight: 1000;
-
-      font-style: italic;
-
-      color: #102f78;
-
-    }
-
-
-    .title span {
-
-      color: #c91717;
-
-    }
-
-
-    .back-button {
-
-      border: 0;
-
-      border-radius: 14px;
-
-      padding: 12px 20px;
-
-      background: #102f78;
-
-      color: #fff;
-
-      font-size: 15px;
-
-      font-weight: 900;
-
-      cursor: pointer;
-
-    }
-
-
-    /* =====================================================
-       PROFILE
-    ====================================================== */
-
-    .profile-card {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 15px;
-
-      padding: 18px;
-
-      margin-bottom: 20px;
-
-      background: #fff;
-
-      border-radius: 22px;
-
+    .hero{
+      padding:20px;
+      border-radius:24px;
+      color:#fff;
+      background:
+        linear-gradient(
+          135deg,
+          #175fd6,
+          #0ba579
+        );
       box-shadow:
-        0 5px 20px rgba(0,0,0,.08);
-
+        0 12px 30px
+        rgba(40,80,125,.15);
+      margin-bottom:14px;
     }
 
-
-    #profileImage {
-
-      display: none;
-
-      width: 65px;
-
-      height: 65px;
-
-      object-fit: cover;
-
-      border-radius: 50%;
-
+    .hero h1{
+      margin:0 0 5px;
+      font-size:25px;
     }
 
-
-    .profile-name {
-
-      font-size: 21px;
-
-      font-weight: 900;
-
+    .hero p{
+      margin:0;
+      font-size:12px;
+      line-height:1.5;
+      opacity:.93;
     }
 
-
-    .profile-sub {
-
-      margin-top: 3px;
-
-      color: #65738b;
-
-      font-size: 14px;
-
-      font-weight: 700;
-
-    }
-
-
-    /* =====================================================
-       PROGRAM
-    ====================================================== */
-
-    .card {
-
-      background: #fff;
-
-      border-radius: 24px;
-
-      padding: 24px;
-
-      margin-bottom: 20px;
-
+    .section{
+      margin-bottom:14px;
+      padding:16px;
+      border:1px solid #dce8f4;
+      border-radius:21px;
+      background:#fff;
       box-shadow:
-        0 5px 20px rgba(0,0,0,.08);
-
+        0 5px 18px
+        rgba(45,80,120,.07);
     }
 
-
-    .card-title {
-
-      margin-bottom: 18px;
-
-      font-size: 23px;
-
-      font-weight: 1000;
-
+    .section h2{
+      margin:0 0 4px;
+      font-size:18px;
     }
 
+    .sub{
+      margin:0 0 13px;
+      color:#68809d;
+      font-size:11px;
+      line-height:1.5;
+    }
 
-    .program-grid {
-
-      display: grid;
-
+    .grid{
+      display:grid;
       grid-template-columns:
-        repeat(3, 1fr);
-
-      gap: 15px;
-
+        repeat(2,1fr);
+      gap:10px;
     }
 
-
-    .program-box {
-
-      padding: 20px;
-
-      background: #f3f6fc;
-
-      border-radius: 18px;
-
-      text-align: center;
-
+    .item{
+      padding:13px;
+      border-radius:16px;
+      background:#f5f9fd;
     }
 
-
-    .label {
-
-      color: #65738b;
-
-      font-size: 14px;
-
-      font-weight: 800;
-
+    .label{
+      color:#6c829c;
+      font-size:11px;
+      font-weight:900;
     }
 
-
-    .value {
-
-      margin-top: 5px;
-
-      font-size: 32px;
-
-      font-weight: 1000;
-
-      color: #102f78;
-
+    .value{
+      margin-top:5px;
+      font-size:21px;
+      font-weight:1000;
     }
 
-
-    /* =====================================================
-       PROGRESS BAR
-    ====================================================== */
-
-    .progress-wrap {
-
-      margin-top: 20px;
-
+    .goal{
+      margin-top:4px;
+      color:#6d8298;
+      font-size:10px;
     }
 
-
-    .progress-info {
-
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      margin-bottom: 8px;
-
-      font-size: 15px;
-
-      font-weight: 900;
-
+    .track{
+      width:100%;
+      height:8px;
+      margin-top:9px;
+      border-radius:999px;
+      overflow:hidden;
+      background:#e4edf5;
     }
 
-
-    .progress-track {
-
-      width: 100%;
-
-      height: 18px;
-
-      overflow: hidden;
-
-      background: #dfe5ee;
-
-      border-radius: 99px;
-
+    .bar{
+      height:100%;
+      width:0%;
+      border-radius:inherit;
+      background:
+        linear-gradient(
+          90deg,
+          #2b72ed,
+          #13a67f
+        );
     }
 
-
-    .progress-bar {
-
-      width: 0%;
-
-      height: 100%;
-
-      background: #102f78;
-
-      border-radius: 99px;
-
-      transition: width .5s ease;
-
-    }
-
-
-    /* =====================================================
-       WEIGHT
-    ====================================================== */
-
-    .weight-grid {
-
-      display: grid;
-
+    .inbody-grid{
+      display:grid;
       grid-template-columns:
-        repeat(4, 1fr);
-
-      gap: 15px;
-
+        repeat(3,1fr);
+      gap:8px;
     }
 
-
-    .weight-box {
-
-      padding: 20px;
-
-      background: #f3f6fc;
-
-      border-radius: 18px;
-
-      text-align: center;
-
+    .inbody-box{
+      padding:11px 7px;
+      border-radius:13px;
+      background:#f4f8fc;
+      text-align:center;
     }
 
-
-    .weight-number {
-
-      margin-top: 5px;
-
-      font-size: 30px;
-
-      font-weight: 1000;
-
+    .inbody-box .small{
+      color:#72869d;
+      font-size:9px;
+      font-weight:900;
     }
 
-
-    .unit {
-
-      color: #65738b;
-
-      font-size: 13px;
-
-      font-weight: 700;
-
+    .inbody-box b{
+      display:block;
+      margin-top:3px;
+      font-size:17px;
     }
 
+    .status{
+      display:inline-block;
+      margin-top:10px;
+      padding:6px 9px;
+      border-radius:999px;
+      background:#eef4fa;
+      color:#536b83;
+      font-size:10px;
+      font-weight:900;
+    }
 
-    /* =====================================================
-       HEALTH DATA
-    ====================================================== */
+    .status.pending{
+      background:#fff2d5;
+      color:#8a6200;
+    }
 
-    .health-grid {
+    .notice{
+      padding:10px 12px;
+      border-radius:12px;
+      background:#fff8e8;
+      color:#765a1d;
+      font-size:10px;
+      line-height:1.55;
+    }
 
-      display: grid;
-
+    .nav{
+      display:grid;
       grid-template-columns:
-        repeat(4, 1fr);
-
-      gap: 15px;
-
+        1fr 1fr;
+      gap:10px;
+      margin-top:6px;
     }
 
-
-    .health-box {
-
-      padding: 20px;
-
-      background: #f3f6fc;
-
-      border-radius: 18px;
-
-      text-align: center;
-
+    .btn{
+      border:0;
+      border-radius:13px;
+      padding:12px 14px;
+      font-weight:1000;
+      cursor:pointer;
+      background:#eaf2fa;
+      color:#173454;
     }
 
-
-    .health-score {
-
-      margin-top: 5px;
-
-      font-size: 30px;
-
-      font-weight: 1000;
-
+    #loading{
+      text-align:center;
+      padding:20px;
+      color:#68809d;
+      font-size:12px;
+      font-weight:900;
     }
 
-
-    /* =====================================================
-       EMPTY / ERROR
-    ====================================================== */
-
-    .empty {
-
-      padding: 30px;
-
-      background: #f3f6fc;
-
-      border-radius: 18px;
-
-      text-align: center;
-
-      color: #65738b;
-
-      font-weight: 800;
-
+    #toast{
+      position:fixed;
+      left:50%;
+      bottom:
+        calc(
+          20px +
+          env(safe-area-inset-bottom)
+        );
+      transform:translateX(-50%);
+      width:min(92vw,560px);
+      padding:11px 14px;
+      border-radius:14px;
+      background:rgba(18,45,74,.95);
+      color:#fff;
+      text-align:center;
+      font-size:12px;
+      font-weight:900;
+      display:none;
+      z-index:99;
     }
 
-
-    /* =====================================================
-       MOBILE
-    ====================================================== */
-
-    @media(max-width:750px){
-
-      #app {
-
-        padding: 12px;
-
-      }
-
-
-      .title {
-
-        font-size: 28px;
-
-      }
-
-
-      .program-grid,
-      .weight-grid,
-      .health-grid {
-
+    @media(max-width:520px){
+      .inbody-grid{
         grid-template-columns:
-          1fr 1fr;
-
+          repeat(2,1fr);
       }
-
     }
-
-
-    @media(max-width:480px){
-
-      .header {
-
-        align-items: flex-start;
-
-      }
-
-
-      .profile-card {
-
-        padding: 15px;
-
-      }
-
-
-      .card {
-
-        padding: 18px;
-
-      }
-
-
-      .value {
-
-        font-size: 26px;
-
-      }
-
-    }
-
   </style>
-
 </head>
-
 
 <body>
 
+  <main class="wrap">
 
-<!-- =======================================================
-     LOADING
-======================================================== -->
+    <section class="hero">
+      <h1>
+        📈 PROGRESS
+      </h1>
+      <p>
+        ภาพรวม Steps • Exercise • Nutrition • Water • Sleep • Weight • InBody
+        เทียบกับ Health Goals
+      </p>
+    </section>
 
-<div id="loading">
+    <div id="loading">
+      กำลังโหลดข้อมูล Progress...
+    </div>
 
-  กำลังโหลดข้อมูล Progress...
-
-</div>
-
-
-<!-- =======================================================
-     APP
-======================================================== -->
-
-<main id="app">
-
-
-  <!-- HEADER -->
-
-  <header class="header">
-
-    <h1 class="title">
-
-      ROCK <span>YOUR</span> BODY
-
-    </h1>
-
-
-    <button
-      class="back-button"
-      type="button"
-      onclick="window.ROCK.goHome()"
+    <div
+      id="content"
+      style="display:none"
     >
 
-      HOME
+      <section class="section">
+        <h2>
+          ☀️ วันนี้
+        </h2>
+        <p class="sub" id="todayDate"></p>
 
-    </button>
+        <div class="grid">
 
-  </header>
+          <div class="item">
+            <div class="label">🚶 Steps</div>
+            <div class="value" id="stepsValue">0</div>
+            <div class="goal" id="stepsGoal"></div>
+            <div class="track">
+              <div class="bar" id="stepsBar"></div>
+            </div>
+          </div>
 
+          <div class="item">
+            <div class="label">🔥 Calories Burned</div>
+            <div class="value" id="burnValue">0 kcal</div>
+            <div class="goal" id="burnGoal"></div>
+            <div class="track">
+              <div class="bar" id="burnBar"></div>
+            </div>
+          </div>
 
-  <!-- =====================================================
-       PROFILE
-  ====================================================== -->
+          <div class="item">
+            <div class="label">😴 Sleep</div>
+            <div class="value" id="sleepValue">0 ชม.</div>
+            <div class="goal" id="sleepGoal"></div>
+            <div class="track">
+              <div class="bar" id="sleepBar"></div>
+            </div>
+          </div>
 
-  <section class="profile-card">
-
-
-    <img
-      id="profileImage"
-      alt="LINE Profile"
-    >
-
-
-    <div>
-
-      <div
-        id="profileName"
-        class="profile-name"
-      >
-
-        สมาชิก ROCK YOUR BODY
-
-      </div>
-
-
-      <div
-        id="profileLine"
-        class="profile-sub"
-      >
-
-        ROCK YOUR BODY 2026
-
-      </div>
-
-    </div>
-
-
-  </section>
-
-
-  <!-- =====================================================
-       PROGRAM PROGRESS
-  ====================================================== -->
-
-  <section class="card">
-
-
-    <div class="card-title">
-
-      PROGRAM PROGRESS
-
-    </div>
-
-
-    <div class="program-grid">
-
-
-      <div class="program-box">
-
-        <div class="label">
-
-          วันที่ปัจจุบัน
+          <div class="item">
+            <div class="label">💧 Water</div>
+            <div class="value" id="waterValue">0 ml</div>
+            <div class="goal" id="waterGoal"></div>
+            <div class="track">
+              <div class="bar" id="waterBar"></div>
+            </div>
+          </div>
 
         </div>
+      </section>
 
 
-        <div
-          id="programDay"
-          class="value"
+      <section class="section">
+        <h2>
+          🏃 Exercise สัปดาห์นี้
+        </h2>
+        <p class="sub" id="weekPeriod"></p>
+
+        <div class="item">
+          <div class="label">
+            Weekly Exercise Minutes
+          </div>
+          <div
+            class="value"
+            id="exerciseValue"
+          >
+            0 นาที
+          </div>
+          <div
+            class="goal"
+            id="exerciseGoal"
+          ></div>
+          <div class="track">
+            <div
+              class="bar"
+              id="exerciseBar"
+            ></div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>
+          🥗 Nutrition วันนี้
+        </h2>
+        <p class="sub">
+          ค่าที่ไม่มีข้อมูลจริงจะไม่ถูกเดา
+        </p>
+
+        <div class="grid">
+
+          <div class="item">
+            <div class="label">
+              Calories
+            </div>
+            <div
+              class="value"
+              id="nutritionCalories"
+            >
+              —
+            </div>
+            <div
+              class="goal"
+              id="nutritionCaloriesGoal"
+            ></div>
+            <div class="track">
+              <div
+                class="bar"
+                id="nutritionCaloriesBar"
+              ></div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="label">
+              Protein
+            </div>
+            <div
+              class="value"
+              id="proteinValue"
+            >
+              —
+            </div>
+            <div
+              class="goal"
+              id="proteinGoal"
+            ></div>
+            <div class="track">
+              <div
+                class="bar"
+                id="proteinBar"
+              ></div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="label">
+              Carbs
+            </div>
+            <div
+              class="value"
+              id="carbsValue"
+            >
+              —
+            </div>
+            <div
+              class="goal"
+              id="carbsGoal"
+            ></div>
+            <div class="track">
+              <div
+                class="bar"
+                id="carbsBar"
+              ></div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="label">
+              Fat
+            </div>
+            <div
+              class="value"
+              id="fatValue"
+            >
+              —
+            </div>
+            <div
+              class="goal"
+              id="fatGoal"
+            ></div>
+            <div class="track">
+              <div
+                class="bar"
+                id="fatBar"
+              ></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>
+          ⚖️ Weight
+        </h2>
+        <p class="sub">
+          ใช้น้ำหนักล่าสุดจาก Weight Check / InBody
+        </p>
+
+        <div class="grid">
+
+          <div class="item">
+            <div class="label">เริ่มต้น</div>
+            <div
+              class="value"
+              id="startWeight"
+            >
+              —
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="label">ล่าสุด</div>
+            <div
+              class="value"
+              id="currentWeight"
+            >
+              —
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="label">เป้าหมาย</div>
+            <div
+              class="value"
+              id="targetWeight"
+            >
+              —
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="label">เปลี่ยนแปลง</div>
+            <div
+              class="value"
+              id="weightChange"
+            >
+              —
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>
+          🧬 InBody ล่าสุด
+        </h2>
+        <p
+          class="sub"
+          id="inbodyDate"
         >
-
-          0
-
-        </div>
-
-
-        <div class="unit">
-
-          DAY
-
-        </div>
-
-      </div>
-
-
-      <div class="program-box">
-
-        <div class="label">
-
-          ทั้งหมด
-
-        </div>
-
+          ยังไม่มีข้อมูล
+        </p>
 
         <div
-          id="programTotal"
-          class="value"
-        >
-
-          0
-
-        </div>
-
-
-        <div class="unit">
-
-          DAYS
-
-        </div>
-
-      </div>
-
-
-      <div class="program-box">
-
-        <div class="label">
-
-          ความคืบหน้า
-
-        </div>
-
-
-        <div
-          id="programPercent"
-          class="value"
-        >
-
-          0%
-
-        </div>
-
-
-        <div class="unit">
-
-          COMPLETE
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="progress-wrap">
-
-
-      <div class="progress-info">
-
-        <span>
-          Program Progress
-        </span>
-
-
-        <span id="programProgressText">
-          0%
-        </span>
-
-      </div>
-
-
-      <div class="progress-track">
-
-        <div
-          id="programProgressBar"
-          class="progress-bar"
+          class="inbody-grid"
+          id="inbodyGrid"
         ></div>
 
-      </div>
-
-
-    </div>
-
-
-  </section>
-
-
-  <!-- =====================================================
-       WEIGHT PROGRESS
-  ====================================================== -->
-
-  <section class="card">
-
-
-    <div class="card-title">
-
-      WEIGHT PROGRESS
-
-    </div>
-
-
-    <div class="weight-grid">
-
-
-      <div class="weight-box">
-
-        <div class="label">
-
-          น้ำหนักเริ่มต้น
-
-        </div>
-
-
         <div
-          id="startWeight"
-          class="weight-number"
-        >
-
-          --.-
-
-        </div>
-
-
-        <div class="unit">
-          kg
-        </div>
-
-      </div>
-
-
-      <div class="weight-box">
-
-        <div class="label">
-
-          น้ำหนักปัจจุบัน
-
-        </div>
-
-
-        <div
-          id="currentWeight"
-          class="weight-number"
-        >
-
-          --.-
-
-        </div>
-
-
-        <div class="unit">
-          kg
-        </div>
-
-      </div>
-
-
-      <div class="weight-box">
-
-        <div class="label">
-
-          เป้าหมาย
-
-        </div>
-
-
-        <div
-          id="targetWeight"
-          class="weight-number"
-        >
-
-          --.-
-
-        </div>
-
-
-        <div class="unit">
-          kg
-        </div>
-
-      </div>
-
-
-      <div class="weight-box">
-
-        <div class="label">
-
-          ลดไปแล้ว
-
-        </div>
-
-
-        <div
-          id="lostWeight"
-          class="weight-number"
-        >
-
-          0.0
-
-        </div>
-
-
-        <div class="unit">
-          kg
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="progress-wrap">
-
-
-      <div class="progress-info">
-
-        <span>
-          Weight Goal Progress
-        </span>
-
-
-        <span id="weightPercent">
-          0%
-        </span>
-
-      </div>
-
-
-      <div class="progress-track">
-
-        <div
-          id="weightProgressBar"
-          class="progress-bar"
+          id="adviceStatus"
         ></div>
+      </section>
+
+
+      <section class="notice">
+        Progress และ Health Goals เป็นข้อมูล Wellness สำหรับติดตามโครงการ
+        ไม่ใช่การวินิจฉัยหรือแผนรักษาทางการแพทย์
+      </section>
+
+
+      <div class="nav">
+
+        <button
+          class="btn"
+          type="button"
+          onclick="goHome()"
+        >
+          ← HOME
+        </button>
+
+        <button
+          class="btn"
+          type="button"
+          onclick="goInBody()"
+        >
+          INBODY →
+        </button>
 
       </div>
-
 
     </div>
 
-
-  </section>
-
-
-  <!-- =====================================================
-       HEALTH PROGRESS
-  ====================================================== -->
-
-  <section class="card">
+  </main>
 
 
-    <div class="card-title">
-
-      HEALTH PROGRESS
-
-    </div>
+  <div id="toast"></div>
 
 
-    <div class="health-grid">
+  <script>
+    "use strict";
+
+    const $ =
+      id =>
+        document
+          .getElementById(id);
 
 
-      <div class="health-box">
-
-        <div class="label">
-          Health Score
-        </div>
-
-
-        <div
-          id="healthScore"
-          class="health-score"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="health-box">
-
-        <div class="label">
-          InBody Score
-        </div>
-
-
-        <div
-          id="inbodyScore"
-          class="health-score"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="health-box">
-
-        <div class="label">
-          Steps
-        </div>
-
-
-        <div
-          id="steps"
-          class="health-score"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="health-box">
-
-        <div class="label">
-          Sleep
-        </div>
-
-
-        <div
-          id="sleep"
-          class="health-score"
-        >
-          0
-        </div>
-
-        <div class="unit">
-          ชั่วโมง
-        </div>
-
-      </div>
-
-
-    </div>
-
-  </section>
-
-
-</main>
-
-
-<script>
-
-(function(){
-
-  "use strict";
-
-
-  /* =====================================================
-     HELPERS
-  ====================================================== */
-
-
-  function get(
-    id
-  ){
-
-    return document.getElementById(id);
-
-  }
-
-
-  function setText(
-    id,
-    value
-  ){
-
-    const element =
-      get(id);
-
-
-    if(element){
-
-      element.textContent =
-        value;
-
-    }
-
-  }
-
-
-  function number(
-    value
-  ){
-
-    const n =
-      Number(value);
-
-
-    if(
-      !Number.isFinite(n)
+    function showToast(
+      text,
+      ms=4500
     ){
 
-      return "0";
+      const el =
+        $("toast");
 
-    }
+      el.textContent =
+        text;
 
-
-    return n.toLocaleString(
-      "en-US"
-    );
-
-  }
-
-
-  function decimal(
-    value
-  ){
-
-    const n =
-      Number(value);
-
-
-    if(
-      !Number.isFinite(n)
-    ){
-
-      return "--.-";
-
-    }
-
-
-    return n.toFixed(1);
-
-  }
-
-
-  function percent(
-    value
-  ){
-
-    const n =
-      Number(value);
-
-
-    if(
-      !Number.isFinite(n)
-    ){
-
-      return 0;
-
-    }
-
-
-    return Math.max(
-      0,
-      Math.min(
-        100,
-        n
-      )
-    );
-
-  }
-
-
-  /* =====================================================
-     PROFILE
-  ====================================================== */
-
-
-  async function loadProfile(){
-
-    try{
-
-      if(
-        typeof window.ROCK.getProfile !==
-        "function"
-      ){
-
-        console.warn(
-          "ROCK.getProfile() is not available."
-        );
-
-        return;
-
-      }
-
-
-      const profile =
-        await window.ROCK.getProfile();
-
-
-      if(!profile){
-
-        return;
-
-      }
-
-
-      setText(
-        "profileName",
-        profile.displayName ||
-        "สมาชิก ROCK YOUR BODY"
-      );
-
-
-      if(
-        profile.userId
-      ){
-
-        setText(
-          "profileLine",
-          "LINE ID: " +
-          profile.userId
-        );
-
-      }
-
-
-      if(
-        profile.pictureUrl
-      ){
-
-        const image =
-          get("profileImage");
-
-
-        image.src =
-          profile.pictureUrl;
-
-
-        image.style.display =
-          "block";
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        "PROFILE ERROR:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /* =====================================================
-     DASHBOARD DATA
-  ====================================================== */
-
-
-  async function loadProgress(){
-
-    /*
-      สำคัญ:
-
-      ใช้ ROCK.fetchDashboard()
-
-      ไม่ใช้
-      ROCK.getDashboard()
-
-      เพื่อให้หน้า Progress
-      ดึงข้อมูล player-dashboard
-      ชุดเดียวกับ HOME
-    */
-
-
-    if(
-      typeof window.ROCK.fetchDashboard !==
-      "function"
-    ){
-
-      throw new Error(
-        "ROCK.fetchDashboard() ไม่พบใน common.js"
-      );
-
-    }
-
-
-    const result =
-      await window.ROCK.fetchDashboard();
-
-
-    console.log(
-      "PROGRESS DATA:",
-      result
-    );
-
-
-    return (
-      result?.data ||
-      result?.dashboard ||
-      result
-    );
-
-  }
-
-
-  /* =====================================================
-     RENDER PROGRAM
-  ====================================================== */
-
-
-  function renderProgram(
-    data
-  ){
-
-    const program =
-      data?.program ||
-      {};
-
-
-    const currentDay =
-      Number(
-        program.currentDay ??
-        data?.programDay ??
-        data?.currentDay ??
-        0
-      );
-
-
-    const totalDays =
-      Number(
-        program.totalDays ??
-        data?.programTotalDays ??
-        data?.totalDays ??
-        90
-      );
-
-
-    const p =
-      totalDays > 0
-        ? (
-            currentDay /
-            totalDays
-          ) * 100
-        : 0;
-
-
-    const safePercent =
-      percent(p);
-
-
-    setText(
-      "programDay",
-      number(currentDay)
-    );
-
-
-    setText(
-      "programTotal",
-      number(totalDays)
-    );
-
-
-    setText(
-      "programPercent",
-      Math.round(
-        safePercent
-      ) + "%"
-    );
-
-
-    setText(
-      "programProgressText",
-      Math.round(
-        safePercent
-      ) + "%"
-    );
-
-
-    get(
-      "programProgressBar"
-    ).style.width =
-      safePercent + "%";
-
-  }
-
-
-  /* =====================================================
-     RENDER WEIGHT
-  ====================================================== */
-
-
-  function renderWeight(
-    data
-  ){
-
-    const weightData =
-      data?.weight ||
-      {};
-
-
-    const startWeight =
-      Number(
-        weightData.start ??
-        weightData.startWeight ??
-        data?.startWeight
-      );
-
-
-    const currentWeight =
-      Number(
-        weightData.current ??
-        weightData.currentWeight ??
-        data?.currentWeight
-      );
-
-
-    const targetWeight =
-      Number(
-        weightData.target ??
-        weightData.targetWeight ??
-        data?.targetWeight
-      );
-
-
-    setText(
-      "startWeight",
-      decimal(
-        startWeight
-      )
-    );
-
-
-    setText(
-      "currentWeight",
-      decimal(
-        currentWeight
-      )
-    );
-
-
-    setText(
-      "targetWeight",
-      decimal(
-        targetWeight
-      )
-    );
-
-
-    /* ---------------------------------------------
-       LOSS
-    --------------------------------------------- */
-
-
-    let lost =
-      0;
-
-
-    if(
-      Number.isFinite(
-        startWeight
-      ) &&
-      Number.isFinite(
-        currentWeight
-      )
-    ){
-
-      lost =
-        Math.max(
-          0,
-          startWeight -
-          currentWeight
-        );
-
-    }
-
-
-    setText(
-      "lostWeight",
-      decimal(lost)
-    );
-
-
-    /* ---------------------------------------------
-       GOAL PROGRESS
-    --------------------------------------------- */
-
-
-    let progress =
-      0;
-
-
-    if(
-      Number.isFinite(
-        startWeight
-      ) &&
-      Number.isFinite(
-        currentWeight
-      ) &&
-      Number.isFinite(
-        targetWeight
-      ) &&
-      startWeight !== targetWeight
-    ){
-
-      progress =
-        (
-          (
-            startWeight -
-            currentWeight
-          ) /
-          (
-            startWeight -
-            targetWeight
-          )
-        ) * 100;
-
-    }
-
-
-    progress =
-      percent(progress);
-
-
-    setText(
-      "weightPercent",
-      Math.round(
-        progress
-      ) + "%"
-    );
-
-
-    get(
-      "weightProgressBar"
-    ).style.width =
-      progress + "%";
-
-  }
-
-
-  /* =====================================================
-     RENDER HEALTH
-  ====================================================== */
-
-
-  function renderHealth(
-    data
-  ){
-
-    const health =
-      data?.health ||
-      {};
-
-
-    const inbody =
-      data?.inbody ||
-      {};
-
-
-    const steps =
-      data?.steps ||
-      {};
-
-
-    const sleep =
-      data?.sleep ||
-      {};
-
-
-    const healthScore =
-      Number(
-        health.score ??
-        data?.healthScore ??
-        0
-      );
-
-
-    const inbodyScore =
-      Number(
-        inbody.score ??
-        data?.inbodyScore ??
-        0
-      );
-
-
-    const stepValue =
-      Number(
-        steps.current ??
-        data?.steps ??
-        0
-      );
-
-
-    const sleepValue =
-      Number(
-        sleep.current ??
-        data?.sleep ??
-        0
-      );
-
-
-    setText(
-      "healthScore",
-      number(
-        healthScore
-      )
-    );
-
-
-    setText(
-      "inbodyScore",
-      number(
-        inbodyScore
-      )
-    );
-
-
-    setText(
-      "steps",
-      number(
-        stepValue
-      )
-    );
-
-
-    setText(
-      "sleep",
-      decimal(
-        sleepValue
-      )
-    );
-
-  }
-
-
-  /* =====================================================
-     START
-  ====================================================== */
-
-
-  async function start(){
-
-    const loading =
-      get("loading");
-
-
-    try{
-
-
-      /* -----------------------------------------------
-         ตรวจ ROCK
-      ----------------------------------------------- */
-
-
-      if(
-        !window.ROCK
-      ){
-
-        throw new Error(
-          "common.js โหลดไม่สำเร็จ"
-        );
-
-      }
-
-
-      /* -----------------------------------------------
-         LIFF
-      ----------------------------------------------- */
-
-
-      if(
-        typeof window.ROCK.initLiff ===
-        "function"
-      ){
-
-        const ready =
-          await window.ROCK.initLiff();
-
-
-        if(
-          ready === false
-        ){
-
-          return;
-
-        }
-
-      }
-
-
-      /* -----------------------------------------------
-         PROFILE
-      ----------------------------------------------- */
-
-
-      await loadProfile();
-
-
-      /* -----------------------------------------------
-         DATA
-      ----------------------------------------------- */
-
-
-      const data =
-        await loadProgress();
-
-
-      /* -----------------------------------------------
-         RENDER
-      ----------------------------------------------- */
-
-
-      renderProgram(
-        data
-      );
-
-
-      renderWeight(
-        data
-      );
-
-
-      renderHealth(
-        data
-      );
-
-
-      /* -----------------------------------------------
-         SHOW APP
-      ----------------------------------------------- */
-
-
-      loading.style.display =
-        "none";
-
-
-      get("app").style.display =
+      el.style.display =
         "block";
 
-
-    }catch(error){
-
-      console.error(
-        "PROGRESS ERROR:",
-        error
+      clearTimeout(
+        window.__progressToast
       );
 
-
-      loading.innerHTML =
-        `
-          <div>
-
-            ไม่สามารถโหลดข้อมูล Progress ได้
-
-            <br><br>
-
-            <small>
-              ${String(
-                error?.message ||
-                error
-              )}
-            </small>
-
-          </div>
-        `;
-
+      window.__progressToast =
+        setTimeout(
+          () => {
+            el.style.display =
+              "none";
+          },
+          ms
+        );
     }
 
-  }
+
+    function apiUrl(){
+
+      if(
+        APP_CONFIG
+          ?.getApi
+      ){
+        return APP_CONFIG
+          .getApi(
+            "PLAYER"
+          );
+      }
+
+      return APP_CONFIG
+        ?.API
+        ?.PLAYER;
+    }
 
 
-  /* =====================================================
-     RUN
-  ====================================================== */
+    async function getToken(){
 
-  start();
+      if(!liff.id){
+
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+      }
+
+      if(
+        !liff.isLoggedIn()
+      ){
+        liff.login();
+        throw new Error(
+          "กำลังเข้าสู่ระบบ LINE"
+        );
+      }
+
+      const idToken =
+        liff.getIDToken();
+
+      if(!idToken){
+        throw new Error(
+          "ไม่พบ LINE ID Token"
+        );
+      }
+
+      return idToken;
+    }
 
 
-})();
+    async function loadProgress(){
 
-</script>
+      const idToken =
+        await getToken();
+
+      const response =
+        await fetch(
+          apiUrl(),
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify({
+                action:"progress",
+                idToken
+              })
+          }
+        );
+
+      const raw =
+        await response.text();
+
+      let result = {};
+
+      try{
+        result =
+          raw
+            ? JSON.parse(raw)
+            : {};
+      }catch{
+        throw new Error(
+          `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
+        );
+      }
+
+      if(
+        !response.ok ||
+        result?.success === false
+      ){
+        throw new Error(
+          result?.error ||
+          `HTTP ${response.status}`
+        );
+      }
+
+      return result;
+    }
 
 
+    function numberOrNull(
+      value
+    ){
+
+      if(
+        value === null ||
+        value === undefined ||
+        value === ""
+      ){
+        return null;
+      }
+
+      const n =
+        Number(value);
+
+      return Number.isFinite(n)
+        ? n
+        : null;
+    }
+
+
+    function fmt(
+      value,
+      digits=0
+    ){
+
+      const n =
+        numberOrNull(value);
+
+      if(n === null){
+        return "—";
+      }
+
+      return n.toLocaleString(
+        "th-TH",
+        {
+          maximumFractionDigits:
+            digits
+        }
+      );
+    }
+
+
+    function pct(
+      value,
+      goal
+    ){
+
+      const v =
+        numberOrNull(value);
+
+      const g =
+        numberOrNull(goal);
+
+      if(
+        v === null ||
+        g === null ||
+        g <= 0
+      ){
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        Math.min(
+          100,
+          (v / g) * 100
+        )
+      );
+    }
+
+
+    function renderMetric(
+      valueId,
+      goalId,
+      barId,
+      value,
+      goal,
+      unit
+    ){
+
+      $(valueId)
+        .textContent =
+          value === null ||
+          value === undefined
+            ? "รอข้อมูล"
+            : `${fmt(value,1)} ${unit}`;
+
+      $(goalId)
+        .textContent =
+          goal === null ||
+          goal === undefined
+            ? "ยังไม่มีเป้าหมาย"
+            : `เป้าหมาย ${fmt(goal,1)} ${unit}`;
+
+      $(barId)
+        .style.width =
+          `${pct(
+            value,
+            goal
+          )}%`;
+    }
+
+
+    function sleepText(
+      minutes
+    ){
+
+      const total =
+        Math.max(
+          0,
+          Number(minutes || 0)
+        );
+
+      const h =
+        Math.floor(
+          total / 60
+        );
+
+      const m =
+        Math.round(
+          total % 60
+        );
+
+      return `${h} ชม. ${m} นาที`;
+    }
+
+
+    function renderInBody(
+      row
+    ){
+
+      if(!row){
+
+        $("inbodyDate")
+          .textContent =
+            "ยังไม่มีข้อมูล InBody";
+
+        $("inbodyGrid")
+          .innerHTML =
+            `
+              <div
+                class="inbody-box"
+                style="grid-column:1/-1"
+              >
+                <div class="small">
+                  ยังไม่มีผล InBody
+                </div>
+                <b>—</b>
+              </div>
+            `;
+
+        return;
+      }
+
+      $("inbodyDate")
+        .textContent =
+          row.measured_at
+            ? `วัดเมื่อ ${new Date(
+                row.measured_at
+              ).toLocaleString(
+                "th-TH"
+              )}`
+            : "";
+
+      const boxes = [
+        [
+          "Weight",
+          row.weight_kg,
+          "kg"
+        ],
+        [
+          "Muscle",
+          row.skeletal_muscle_mass_kg,
+          "kg"
+        ],
+        [
+          "Body Fat",
+          row.body_fat_percent,
+          "%"
+        ],
+        [
+          "BMI",
+          row.bmi,
+          ""
+        ],
+        [
+          "BMR",
+          row.bmr_kcal,
+          "kcal"
+        ],
+        [
+          "Visceral Fat Area",
+          row.visceral_fat_area_cm2,
+          "cm²"
+        ],
+        [
+          "InBody Score",
+          row.inbody_score,
+          ""
+        ]
+      ];
+
+      $("inbodyGrid")
+        .innerHTML =
+          boxes
+            .map(
+              ([label,value,unit]) =>
+                `
+                  <div class="inbody-box">
+                    <div class="small">
+                      ${label}
+                    </div>
+                    <b>
+                      ${
+                        value === null ||
+                        value === undefined
+                          ? "—"
+                          : `${fmt(value,1)}${unit ? ` ${unit}` : ""}`
+                      }
+                    </b>
+                  </div>
+                `
+            )
+            .join("");
+
+      const status =
+        String(
+          row.advice_status ||
+          ""
+        );
+
+      $("adviceStatus")
+        .innerHTML =
+          status ===
+            "pending_review"
+            ? `
+                <span class="status pending">
+                  📷 รูป InBody รออ่านผล / คำแนะนำ
+                </span>
+              `
+            : status
+              ? `
+                  <span class="status">
+                    ${status}
+                  </span>
+                `
+              : "";
+    }
+
+
+    function render(
+      data
+    ){
+
+      const today =
+        data.today || {};
+
+      const goals =
+        data.goals || {};
+
+      $("todayDate")
+        .textContent =
+          `ข้อมูลวันที่ ${data.date || "-"}`;
+
+      renderMetric(
+        "stepsValue",
+        "stepsGoal",
+        "stepsBar",
+        today.steps,
+        goals.steps,
+        "ก้าว"
+      );
+
+      renderMetric(
+        "burnValue",
+        "burnGoal",
+        "burnBar",
+        today.caloriesBurned,
+        goals.caloriesBurned,
+        "kcal"
+      );
+
+      $("sleepValue")
+        .textContent =
+          sleepText(
+            today.sleepMinutes
+          );
+
+      $("sleepGoal")
+        .textContent =
+          `เป้าหมาย ${sleepText(
+            goals.sleepMinutes
+          )}`;
+
+      $("sleepBar")
+        .style.width =
+          `${pct(
+            today.sleepMinutes,
+            goals.sleepMinutes
+          )}%`;
+
+      renderMetric(
+        "waterValue",
+        "waterGoal",
+        "waterBar",
+        today.waterMl,
+        goals.waterMl,
+        "ml"
+      );
+
+      $("weekPeriod")
+        .textContent =
+          data.weekly?.period
+            ? `${data.weekly.period.start} ถึง ${data.weekly.period.end}`
+            : "";
+
+      renderMetric(
+        "exerciseValue",
+        "exerciseGoal",
+        "exerciseBar",
+        data.weekly
+          ?.exerciseMinutes,
+        goals.exerciseMinutesWeek,
+        "นาที"
+      );
+
+      const nutrition =
+        today.nutrition || {};
+
+      renderMetric(
+        "nutritionCalories",
+        "nutritionCaloriesGoal",
+        "nutritionCaloriesBar",
+        nutrition.calories,
+        goals.nutritionCalories,
+        "kcal"
+      );
+
+      renderMetric(
+        "proteinValue",
+        "proteinGoal",
+        "proteinBar",
+        nutrition.proteinG,
+        goals.proteinG,
+        "g"
+      );
+
+      renderMetric(
+        "carbsValue",
+        "carbsGoal",
+        "carbsBar",
+        nutrition.carbsG,
+        goals.carbsG,
+        "g"
+      );
+
+      renderMetric(
+        "fatValue",
+        "fatGoal",
+        "fatBar",
+        nutrition.fatG,
+        goals.fatG,
+        "g"
+      );
+
+      const weight =
+        data.weight || {};
+
+      $("startWeight")
+        .textContent =
+          weight.start === null ||
+          weight.start === undefined
+            ? "—"
+            : `${fmt(
+                weight.start,
+                1
+              )} kg`;
+
+      $("currentWeight")
+        .textContent =
+          weight.current === null ||
+          weight.current === undefined
+            ? "—"
+            : `${fmt(
+                weight.current,
+                1
+              )} kg`;
+
+      $("targetWeight")
+        .textContent =
+          weight.target === null ||
+          weight.target === undefined
+            ? "ยังไม่ได้ตั้ง"
+            : `${fmt(
+                weight.target,
+                1
+              )} kg`;
+
+      if(
+        numberOrNull(
+          weight.start
+        ) !== null &&
+        numberOrNull(
+          weight.current
+        ) !== null
+      ){
+
+        const change =
+          Number(
+            weight.current
+          ) -
+          Number(
+            weight.start
+          );
+
+        $("weightChange")
+          .textContent =
+            `${change >= 0 ? "+" : ""}${fmt(
+              change,
+              1
+            )} kg`;
+
+      }else{
+
+        $("weightChange")
+          .textContent =
+            "—";
+      }
+
+      renderInBody(
+        data.inbody
+      );
+
+      $("loading")
+        .style.display =
+          "none";
+
+      $("content")
+        .style.display =
+          "block";
+    }
+
+
+    function goHome(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.HOME ||
+        "./dashboard.html";
+    }
+
+
+    function goInBody(){
+
+      location.href =
+        "./inbody.html";
+    }
+
+
+    async function init(){
+
+      try{
+
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+
+        if(
+          !liff.isLoggedIn()
+        ){
+          liff.login();
+          return;
+        }
+
+        const data =
+          await loadProgress();
+
+        render(data);
+
+      }catch(error){
+
+        console.error(
+          "PROGRESS ERROR:",
+          error
+        );
+
+        $("loading")
+          .textContent =
+            "โหลด Progress ไม่สำเร็จ";
+
+        showToast(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          6000
+        );
+      }
+    }
+
+
+    init();
+  </script>
 </body>
-
 </html>
