@@ -964,3 +964,64 @@ button,input,select,textarea{font:inherit}
   color: #11852f !important;
   line-height: 1 !important;
 }
+/* ===== CURRENT WEIGHT ===== */
+#currentWeight{
+  font-size: 52px !important;
+  font-weight: 800 !important;
+  color: #061d68 !important;
+  line-height: 1;
+}
+
+/* kg เล็กกว่า */
+#currentWeight .unit{
+  font-size: 26px !important;
+  font-weight: 800 !important;
+}
+
+/* ===== TARGET WEIGHT ===== */
+#targetWeight{
+  font-size: 52px !important;
+  font-weight: 800 !important;
+  color: #d71919 !important;
+  line-height: 1;
+}
+
+#targetWeight .unit{
+  font-size: 26px !important;
+  font-weight: 800 !important;
+}
+
+/* ===== WEIGHT PROGRESS ===== */
+#weightProgressPercent{
+  font-size: 35px !important;
+  font-weight: 800 !important;
+  color: #118529 !important;
+}
+
+/* ===== STEPS ===== */
+#todaySteps{
+  font-size: 38px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+/* ===== CALORIES ===== */
+#todayCalories{
+  font-size: 38px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+/* ===== SLEEP ===== */
+#todaySleep{
+  font-size: 38px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
+
+/* ===== HEALTH SCORE ===== */
+#healthScore{
+  font-size: 38px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+}
