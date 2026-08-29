@@ -1187,7 +1187,7 @@ async function fetchDashboard(){
       const raw = await postJson(
         window.APP_CONFIG.getApi("PLAYER"),
         {
-          action:"dashboard"
+          action:"dailyHealth"
         }
       );
 
@@ -1283,6 +1283,27 @@ async function fetchDashboard(){
           `${fmtInt(calories)} kcal`;
 
 
+      const calorieBreakdown =
+        health?.caloriesBreakdown ??
+        health?.calories_breakdown ??
+        {};
+
+      const stepsKcal =
+        num(
+          calorieBreakdown?.steps,
+          0
+        );
+
+      const exerciseKcal =
+        num(
+          calorieBreakdown?.exercise,
+          0
+        );
+
+      $("calories").title =
+        `Steps ${fmtInt(stepsKcal)} kcal + Exercise ${fmtInt(exerciseKcal)} kcal`;
+
+
       $("sleep")
         .textContent =
           sleepMinutes > 0
@@ -1291,6 +1312,46 @@ async function fetchDashboard(){
                   sleepMinutes
               })
             : "0 ชม. 0 นาที";
+
+
+      const waterMl =
+        num(
+          health?.waterMl ??
+          health?.water_ml,
+          0
+        );
+
+      const exerciseMinutes =
+        num(
+          health?.exerciseMinutes ??
+          health?.exercise_minutes,
+          0
+        );
+
+      document.body.dataset.todaySteps =
+        String(
+          Math.round(steps)
+        );
+
+      document.body.dataset.todayCalories =
+        String(
+          Math.round(calories)
+        );
+
+      document.body.dataset.todaySleepMinutes =
+        String(
+          Math.round(sleepMinutes)
+        );
+
+      document.body.dataset.todayWaterMl =
+        String(
+          Math.round(waterMl)
+        );
+
+      document.body.dataset.todayExerciseMinutes =
+        String(
+          Math.round(exerciseMinutes)
+        );
 
 
       setBar(
