@@ -587,6 +587,7 @@
     let currentTeamName = "HERO ROCK";
     let notificationItems = [];
     let notificationToastItem = null;
+    let dashboardUnreadNotifications = 0;
 
     function showStatus(message,isError=false){
       const el=$("status");
@@ -1057,7 +1058,7 @@ function renderNotificationBadge(){
   const badge =
     $("notificationBadge");
 
-  const unread =
+  const unreadFromItems =
     notificationItems
       .filter(
         item =>
@@ -1065,6 +1066,11 @@ function renderNotificationBadge(){
           false
       )
       .length;
+
+  const unread =
+    notificationItems.length > 0
+      ? unreadFromItems
+      : dashboardUnreadNotifications;
 
   badge.textContent =
     unread > 99
@@ -2356,6 +2362,8 @@ async function fetchDashboard(){
         if(ready===false) return;
 
         await loadHome();
+        renderNotificationBadge();
+
         await loadNotifications(
           true,
           false
