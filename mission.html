@@ -1284,6 +1284,110 @@
 
 
 
+
+/* =========================================================
+   DAILY MISSION HISTORY V2.13.5
+========================================================= */
+.history-open-btn{
+  width:100%;
+  margin:12px 0 2px;
+  min-height:46px;
+  border:0;
+  border-radius:14px;
+  background:#0b4eae;
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+.history-modal{
+  position:fixed;
+  inset:0;
+  z-index:100001;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,25,65,.62);
+  backdrop-filter:blur(3px);
+}
+.history-modal.show{display:flex}
+.history-panel{
+  width:min(100%,760px);
+  max-height:92vh;
+  overflow-y:auto;
+  border-radius:28px 28px 0 0;
+  background:#f5f8fd;
+  padding:16px 14px max(24px,env(safe-area-inset-bottom));
+  color:#123d77;
+}
+.history-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f5f8fd;
+  padding-bottom:10px;
+}
+.history-title{
+  font-size:22px;
+  font-weight:1000;
+}
+.history-close{
+  border:0;
+  border-radius:999px;
+  width:40px;
+  height:40px;
+  background:#e5edf8;
+  color:#123d77;
+  font-size:24px;
+  font-weight:900;
+  cursor:pointer;
+}
+.history-day{
+  margin-top:12px;
+  border:1px solid #dbe5f2;
+  border-radius:16px;
+  background:#fff;
+  overflow:hidden;
+}
+.history-day-head{
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  background:#eef5ff;
+  font-weight:900;
+}
+.history-item{
+  padding:11px 14px;
+  border-top:1px solid #edf1f6;
+}
+.history-item-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.history-status{
+  font-weight:900;
+}
+.history-approved{color:#138545}
+.history-pending{color:#b06b00}
+.history-rejected{color:#c93434}
+.history-note{
+  margin-top:4px;
+  font-size:12px;
+  color:#6b7d93;
+}
+.history-empty{
+  padding:28px 14px;
+  text-align:center;
+  color:#6b7d93;
+  font-weight:800;
+}
+
 </style>
 
 </head>
@@ -1308,7 +1412,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-v2134"
+    src="./mission-template.png?v=20260829-v2135"
     alt=""
     draggable="false"
   >
@@ -1686,6 +1790,13 @@
 
     </section>
 
+    <button
+      type="button"
+      class="history-open-btn"
+      onclick="openMissionHistoryV2135()"
+    >
+      📅 ดูประวัติการทำภารกิจรายวัน
+    </button>
 
     <section
       id="missionList"
@@ -1694,6 +1805,32 @@
 
   </section>
 
+</div>
+
+
+
+<!-- =========================================================
+     MISSION HISTORY MODAL V2.13.5
+========================================================= -->
+<div
+  id="missionHistoryModal"
+  class="history-modal"
+  onclick="closeMissionHistoryBackdropV2135(event)"
+>
+  <section class="history-panel">
+    <div class="history-head">
+      <div class="history-title">📅 ประวัติการทำภารกิจ</div>
+      <button
+        type="button"
+        class="history-close"
+        onclick="closeMissionHistoryV2135()"
+      >×</button>
+    </div>
+
+    <div id="missionHistoryBody">
+      <div class="history-empty">กำลังโหลดประวัติ...</div>
+    </div>
+  </section>
 </div>
 
 
@@ -2827,6 +2964,295 @@ function hydrateDailySecretMissionV2133(){
     assignmentId:secret.assignmentId || null
   };
 }
+
+
+/* =========================================================
+   MISSION HISTORY V2.13.5
+========================================================= */
+
+function historyStatusTextV2135(status){
+  const s = String(status || "").toLowerCase();
+
+  if(s === "approved"){
+    return {
+      label:"✅ อนุมัติแล้ว",
+      className:"history-approved"
+    };
+  }
+
+  if(s === "pending"){
+    return {
+      label:"⏳ รอตรวจสอบ",
+      className:"history-pending"
+    };
+  }
+
+  if(s === "rejected"){
+    return {
+      label:"❌ ไม่ผ่าน",
+      className:"history-rejected"
+    };
+  }
+
+  return {
+    label:s || "ยังไม่ทราบสถานะ",
+    className:""
+  };
+}
+
+
+function formatBangkokDateV2135(value){
+  if(!value) return "-";
+
+  try{
+    return new Intl.DateTimeFormat(
+      "th-TH",
+      {
+        timeZone:"Asia/Bangkok",
+        year:"numeric",
+        month:"short",
+        day:"numeric"
+      }
+    ).format(new Date(value));
+  }catch{
+    return String(value);
+  }
+}
+
+
+async function loadMissionHistoryV2135(){
+
+  const host =
+    document.getElementById(
+      "missionHistoryBody"
+    );
+
+  host.innerHTML =
+    `<div class="history-empty">
+      กำลังโหลดประวัติ...
+    </div>`;
+
+  try{
+
+    const api =
+      window.APP_CONFIG?.getApi
+        ? window.APP_CONFIG.getApi("MISSION")
+        : window.APP_CONFIG?.API?.MISSION;
+
+    if(!api){
+      throw new Error(
+        "ไม่พบ API.MISSION"
+      );
+    }
+
+    const response =
+      await fetch(
+        api,
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          cache:"no-store",
+          body:JSON.stringify({
+            action:"history",
+            idToken:liff.getIDToken(),
+            limit:90
+          })
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    const data =
+      raw
+        ? JSON.parse(raw)
+        : {};
+
+    if(
+      !response.ok ||
+      data?.success === false
+    ){
+      throw new Error(
+        data?.error ||
+        data?.message ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    const rows =
+      Array.isArray(data?.history)
+        ? data.history
+        : (
+            Array.isArray(data?.items)
+              ? data.items
+              : []
+          );
+
+    if(!rows.length){
+      host.innerHTML =
+        `<div class="history-empty">
+          ยังไม่มีประวัติการทำภารกิจ
+        </div>`;
+      return;
+    }
+
+    const byDate = {};
+
+    rows.forEach(item=>{
+      const key =
+        item.mission_date ||
+        item.activity_date ||
+        item.period_key ||
+        String(
+          item.submitted_at ||
+          item.created_at ||
+          ""
+        ).slice(0,10) ||
+        "unknown";
+
+      if(!byDate[key]){
+        byDate[key] = [];
+      }
+
+      byDate[key].push(item);
+    });
+
+    const dates =
+      Object.keys(byDate)
+        .sort((a,b)=>String(b).localeCompare(String(a)));
+
+    host.innerHTML =
+      dates.map(dateKey=>{
+
+        const items =
+          byDate[dateKey];
+
+        const approved =
+          items.filter(
+            x =>
+              String(x.status).toLowerCase() ===
+              "approved"
+          ).length;
+
+        return `
+          <section class="history-day">
+            <div class="history-day-head">
+              <span>${formatBangkokDateV2135(dateKey)}</span>
+              <span>${approved}/${items.length} ผ่าน</span>
+            </div>
+
+            ${
+              items.map(item=>{
+
+                const status =
+                  historyStatusTextV2135(
+                    item.status
+                  );
+
+                const rewardCoin =
+                  Number(
+                    item.reward_coin ??
+                    item.rewardCoin ??
+                    0
+                  );
+
+                const rewardEnergy =
+                  Number(
+                    item.reward_energy ??
+                    item.rewardEnergy ??
+                    0
+                  );
+
+                const rewardExp =
+                  Number(
+                    item.reward_exp ??
+                    item.rewardExp ??
+                    0
+                  );
+
+                const missionName =
+                  item.mission_name ||
+                  item.name ||
+                  item.mission_id ||
+                  "MISSION";
+
+                return `
+                  <div class="history-item">
+                    <div class="history-item-row">
+                      <strong>${item.icon || "🎯"} ${missionName}</strong>
+                      <span class="history-status ${status.className}">
+                        ${status.label}
+                      </span>
+                    </div>
+
+                    <div class="history-note">
+                      🎁 ${rewardCoin} Coin
+                      • ${rewardEnergy} Energy
+                      • ${rewardExp} EXP
+                      ${
+                        item.review_reason
+                          ? ` • เหตุผล: ${item.review_reason}`
+                          : ""
+                      }
+                    </div>
+                  </div>
+                `;
+              }).join("")
+            }
+          </section>
+        `;
+      }).join("");
+
+  }catch(error){
+
+    host.innerHTML =
+      `<div class="history-empty">
+        โหลดประวัติไม่สำเร็จ<br>
+        ${error?.message || error}
+      </div>`;
+  }
+}
+
+
+function openMissionHistoryV2135(){
+  document
+    .getElementById(
+      "missionHistoryModal"
+    )
+    ?.classList
+    .add("show");
+
+  document.body.style.overflow =
+    "hidden";
+
+  loadMissionHistoryV2135();
+}
+
+
+function closeMissionHistoryV2135(){
+  document
+    .getElementById(
+      "missionHistoryModal"
+    )
+    ?.classList
+    .remove("show");
+
+  document.body.style.overflow =
+    "";
+}
+
+
+function closeMissionHistoryBackdropV2135(event){
+  if(
+    event.target.id ===
+    "missionHistoryModal"
+  ){
+    closeMissionHistoryV2135();
+  }
+}
+
 
 function openCategory(
   category
