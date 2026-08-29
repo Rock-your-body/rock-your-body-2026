@@ -400,7 +400,81 @@
       opacity:.95;
     }
 
-  </style>
+  
+    /* HOME HEALTH INPUT + ACTIVITY MODAL V2.12 */
+    .health-v212{
+      position:absolute;
+      z-index:30;
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    #stepsEntry{left:62.0%;top:28.0%;width:15%}
+    #sleepEntry{left:62.0%;top:44.7%;width:15%}
+    .health-v212 button{
+      border:0;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:clamp(8px,1vw,13px);
+      font-weight:900;
+      cursor:pointer;
+      background:rgba(255,255,255,.94);
+      color:#0754ad;
+      box-shadow:0 2px 8px rgba(0,0,0,.14);
+    }
+    .health-v212 .qualified{
+      background:#dff8e8;
+      color:#087438;
+    }
+    #calories{
+      cursor:pointer;
+    }
+    .v212-modal-bg{
+      position:fixed;
+      z-index:10000;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(3,24,55,.62);
+    }
+    .v212-modal-bg.show{display:flex}
+    .v212-modal{
+      width:min(520px,100%);
+      max-height:88vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:24px;
+      padding:22px;
+      color:#0a376f;
+      box-shadow:0 24px 70px rgba(0,0,0,.3);
+    }
+    .v212-modal h3{margin:0 0 8px;font-size:24px}
+    .v212-field{margin-top:14px}
+    .v212-field label{display:block;margin-bottom:6px;font-weight:900}
+    .v212-field input{
+      width:100%;min-height:52px;border:2px solid #c9daf0;
+      border-radius:14px;padding:10px 14px;font-size:20px;font-weight:800;
+    }
+    .v212-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .v212-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    .v212-actions button{
+      min-height:48px;border:0;border-radius:14px;font-weight:900;font-size:16px;
+    }
+    .v212-cancel{background:#edf3fb;color:#16467f}
+    .v212-save{background:#0966d8;color:#fff}
+    .v212-mission{
+      width:100%;margin-top:12px;min-height:48px;border:0;border-radius:14px;
+      background:#0bbf64;color:#fff;font-weight:900;font-size:15px;
+    }
+    .v212-activity{
+      padding:12px 0;border-bottom:1px solid #e4edf8;
+    }
+    .v212-activity strong{display:block}
+    .v212-total{margin-top:14px;font-size:20px;font-weight:950}
+
+</style>
 </head>
 
 <body>
@@ -442,6 +516,20 @@
 
     <div id="sleep" class="abs">0 ชม. 0 นาที</div>
     <div id="sleepTrack" class="bar"><i id="sleepBar"></i></div>
+
+    <div id="stepsEntry" class="health-v212">
+      <button id="editStepsButton" type="button">กรอกก้าว</button>
+      <button id="moveMoreMissionButton" class="qualified" type="button" style="display:none">
+        ✓ MOVE MORE
+      </button>
+    </div>
+
+    <div id="sleepEntry" class="health-v212">
+      <button id="editSleepButton" type="button">กรอกการนอน</button>
+      <button id="sleepMissionButton" class="qualified" type="button" style="display:none">
+        ✓ SLEEP WELL
+      </button>
+    </div>
 
     <div id="healthScore" class="abs">-- / 100</div>
     <div id="healthTrack" class="bar"><i id="healthBar"></i></div>
@@ -1834,6 +1922,624 @@ async function fetchDashboard(){
       showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม InBody action",true);
     }
 
+
+    /* =====================================================
+       HOME -> MISSION AUTO QUALIFY V2.12
+    ====================================================== */
+
+    function closeV212(id){
+      document
+        .getElementById(id)
+        ?.classList
+        .remove("show");
+    }
+
+    window.closeV212 =
+      closeV212;
+
+
+    async function saveDailyHealthV212(
+      payload
+    ){
+      return await postJson(
+        window.APP_CONFIG.getApi("PLAYER"),
+        {
+          action:"saveDailyHealth",
+          ...payload
+        }
+      );
+    }
+
+
+    function missionUrlV212(
+      missionId,
+      params = {}
+    ){
+      const url =
+        new URL(
+          window.APP_CONFIG?.PAGE?.MISSION ||
+          "./mission.html",
+          window.location.href
+        );
+
+      url.searchParams.set(
+        "mission",
+        missionId
+      );
+
+      Object.entries(params)
+        .forEach(
+          ([key,value]) => {
+            if(
+              value !== undefined &&
+              value !== null
+            ){
+              url.searchParams.set(
+                key,
+                String(value)
+              );
+            }
+          }
+        );
+
+      return url.toString();
+    }
+
+
+    function renderHomeMissionQualificationV212(){
+
+      const h =
+        window.HOME_V212_HEALTH ||
+        {
+          steps:0,
+          sleepMinutes:0,
+          exerciseActivities:[]
+        };
+
+      const moveButton =
+        document.getElementById(
+          "moveMoreMissionButton"
+        );
+
+      const sleepButton =
+        document.getElementById(
+          "sleepMissionButton"
+        );
+
+      if(moveButton){
+        moveButton.style.display =
+          h.steps >= 8000
+            ? ""
+            : "none";
+      }
+
+      if(sleepButton){
+        sleepButton.style.display =
+          h.sleepMinutes >= 420
+            ? ""
+            : "none";
+      }
+    }
+
+
+    function openStepsV212(){
+
+      const h =
+        window.HOME_V212_HEALTH ||
+        {};
+
+      const input =
+        document.getElementById(
+          "stepsInputV212"
+        );
+
+      input.value =
+        Math.round(
+          Number(
+            h.steps ||
+            0
+          )
+        );
+
+      updateStepsQualifyV212();
+
+      document
+        .getElementById(
+          "stepsModalV212"
+        )
+        .classList
+        .add("show");
+    }
+
+
+    function updateStepsQualifyV212(){
+
+      const steps =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              document
+                .getElementById(
+                  "stepsInputV212"
+                )
+                ?.value ||
+              0
+            )
+          )
+        );
+
+      const box =
+        document.getElementById(
+          "stepsQualifyV212"
+        );
+
+      const evidence =
+        document.getElementById(
+          "stepsEvidenceV212"
+        );
+
+      if(steps >= 8000){
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#087438;font-weight:900">
+            ✅ ถึงเป้าหมาย MOVE MORE แล้ว ${steps.toLocaleString()} / 8,000 ก้าว
+          </div>
+          <div style="margin-top:5px;font-size:13px;color:#61748c">
+            ต้องส่งรูปหลักฐานและรอ Admin อนุมัติก่อนจึงได้รับรางวัล
+          </div>`;
+
+        evidence.style.display =
+          "";
+      }else{
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#6b7890;font-weight:800">
+            เหลืออีก ${(8000-steps).toLocaleString()} ก้าว
+          </div>`;
+
+        evidence.style.display =
+          "none";
+      }
+    }
+
+
+    async function saveStepsV212(){
+
+      const steps =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              document
+                .getElementById(
+                  "stepsInputV212"
+                )
+                ?.value ||
+              0
+            )
+          )
+        );
+
+      const btn =
+        document.getElementById(
+          "saveStepsV212"
+        );
+
+      btn.disabled = true;
+      btn.textContent =
+        "กำลังบันทึก...";
+
+      try{
+        await saveDailyHealthV212({
+          steps
+        });
+
+        closeV212(
+          "stepsModalV212"
+        );
+
+        await loadDailyHealth();
+
+      }catch(error){
+        alert(
+          error?.message ||
+          String(error)
+        );
+      }finally{
+        btn.disabled = false;
+        btn.textContent =
+          "บันทึกก้าว";
+      }
+    }
+
+
+    function openSleepV212(){
+
+      const total =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              window.HOME_V212_HEALTH
+                ?.sleepMinutes ||
+              0
+            )
+          )
+        );
+
+      document
+        .getElementById(
+          "sleepHoursV212"
+        )
+        .value =
+          Math.floor(
+            total /
+            60
+          );
+
+      document
+        .getElementById(
+          "sleepMinutesV212"
+        )
+        .value =
+          total %
+          60;
+
+      updateSleepQualifyV212();
+
+      document
+        .getElementById(
+          "sleepModalV212"
+        )
+        .classList
+        .add("show");
+    }
+
+
+    function getSleepMinutesV212(){
+
+      const h =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              document
+                .getElementById(
+                  "sleepHoursV212"
+                )
+                ?.value ||
+              0
+            )
+          )
+        );
+
+      const m =
+        Math.max(
+          0,
+          Math.min(
+            59,
+            Math.round(
+              Number(
+                document
+                  .getElementById(
+                    "sleepMinutesV212"
+                  )
+                  ?.value ||
+                0
+              )
+            )
+          )
+        );
+
+      return Math.min(
+        1440,
+        h * 60 + m
+      );
+    }
+
+
+    function updateSleepQualifyV212(){
+
+      const total =
+        getSleepMinutesV212();
+
+      const box =
+        document.getElementById(
+          "sleepQualifyV212"
+        );
+
+      const evidence =
+        document.getElementById(
+          "sleepEvidenceV212"
+        );
+
+      if(total >= 420){
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#087438;font-weight:900">
+            ✅ ถึงเป้าหมาย SLEEP WELL แล้ว ${Math.floor(total/60)} ชม. ${total%60} นาที
+          </div>
+          <div style="margin-top:5px;font-size:13px;color:#61748c">
+            ต้องส่งรูปหลักฐานและรอ Admin อนุมัติก่อนจึงได้รับรางวัล
+          </div>`;
+
+        evidence.style.display =
+          "";
+      }else{
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#6b7890;font-weight:800">
+            เหลืออีก ${420-total} นาที จึงถึงเป้าหมาย 7 ชั่วโมง
+          </div>`;
+
+        evidence.style.display =
+          "none";
+      }
+    }
+
+
+    async function saveSleepV212(){
+
+      const sleepMinutes =
+        getSleepMinutesV212();
+
+      const btn =
+        document.getElementById(
+          "saveSleepV212"
+        );
+
+      btn.disabled = true;
+      btn.textContent =
+        "กำลังบันทึก...";
+
+      try{
+        await saveDailyHealthV212({
+          sleepMinutes
+        });
+
+        closeV212(
+          "sleepModalV212"
+        );
+
+        await loadDailyHealth();
+
+      }catch(error){
+        alert(
+          error?.message ||
+          String(error)
+        );
+      }finally{
+        btn.disabled = false;
+        btn.textContent =
+          "บันทึกการนอน";
+      }
+    }
+
+
+    function openActivitiesV212(){
+
+      const rows =
+        window.HOME_V212_HEALTH
+          ?.exerciseActivities ||
+        [];
+
+      const list =
+        document.getElementById(
+          "activityListV212"
+        );
+
+      if(!rows.length){
+        list.innerHTML =
+          `<div style="padding:18px 0;color:#697b91">
+            วันนี้ยังไม่มีกิจกรรมออกกำลังกายจาก Daily / Weekly
+          </div>`;
+      }else{
+        list.innerHTML =
+          rows
+            .map(
+              (row,index) => `
+                <div class="v212-activity">
+                  <strong>
+                    ${index+1}. ${String(row.label || row.sourceType || "Exercise").toUpperCase()}
+                  </strong>
+                  <div>
+                    ${Math.round(Number(row.durationMinutes || 0))} นาที
+                    • ≈ ${Math.round(Number(row.estimatedCalories || 0))} kcal
+                  </div>
+                </div>
+              `
+            )
+            .join("");
+      }
+
+      const total =
+        rows.reduce(
+          (sum,row) =>
+            sum +
+            Math.max(
+              0,
+              Number(
+                row.estimatedCalories ||
+                0
+              )
+            ),
+          0
+        );
+
+      document
+        .getElementById(
+          "activityTotalV212"
+        )
+        .textContent =
+          `รวม ≈ ${Math.round(total).toLocaleString()} kcal`;
+
+      document
+        .getElementById(
+          "activityModalV212"
+        )
+        .classList
+        .add("show");
+    }
+
+
+    document
+      .getElementById(
+        "editStepsButton"
+      )
+      ?.addEventListener(
+        "click",
+        openStepsV212
+      );
+
+    document
+      .getElementById(
+        "stepsInputV212"
+      )
+      ?.addEventListener(
+        "input",
+        updateStepsQualifyV212
+      );
+
+    document
+      .getElementById(
+        "saveStepsV212"
+      )
+      ?.addEventListener(
+        "click",
+        saveStepsV212
+      );
+
+    document
+      .getElementById(
+        "moveMoreMissionButton"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            missionUrlV212(
+              "daily_move_more",
+              {
+                steps:
+                  window.HOME_V212_HEALTH
+                    ?.steps ||
+                  0,
+                evidence:
+                  1
+              }
+            );
+        }
+      );
+
+    document
+      .getElementById(
+        "stepsEvidenceV212"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            missionUrlV212(
+              "daily_move_more",
+              {
+                steps:
+                  document
+                    .getElementById(
+                      "stepsInputV212"
+                    )
+                    ?.value ||
+                  0,
+                evidence:
+                  1
+              }
+            );
+        }
+      );
+
+    document
+      .getElementById(
+        "editSleepButton"
+      )
+      ?.addEventListener(
+        "click",
+        openSleepV212
+      );
+
+    document
+      .getElementById(
+        "sleepHoursV212"
+      )
+      ?.addEventListener(
+        "input",
+        updateSleepQualifyV212
+      );
+
+    document
+      .getElementById(
+        "sleepMinutesV212"
+      )
+      ?.addEventListener(
+        "input",
+        updateSleepQualifyV212
+      );
+
+    document
+      .getElementById(
+        "saveSleepV212"
+      )
+      ?.addEventListener(
+        "click",
+        saveSleepV212
+      );
+
+    document
+      .getElementById(
+        "sleepMissionButton"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            missionUrlV212(
+              "daily_sleep",
+              {
+                sleepMinutes:
+                  window.HOME_V212_HEALTH
+                    ?.sleepMinutes ||
+                  0,
+                evidence:
+                  1
+              }
+            );
+        }
+      );
+
+    document
+      .getElementById(
+        "sleepEvidenceV212"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            missionUrlV212(
+              "daily_sleep",
+              {
+                sleepMinutes:
+                  getSleepMinutesV212(),
+                evidence:
+                  1
+              }
+            );
+        }
+      );
+
+    document
+      .getElementById(
+        "calories"
+      )
+      ?.addEventListener(
+        "click",
+        openActivitiesV212
+      );
+
     /* =====================================================
        LOAD ALL HOME DATA
     ====================================================== */
@@ -2015,6 +2721,28 @@ async function fetchDashboard(){
         String(
           Math.round(exerciseMinutes)
         );
+
+      window.HOME_V212_HEALTH = {
+        steps,
+        sleepMinutes,
+        calories,
+        exerciseActivities:
+          health?.exerciseActivities ??
+          health?.exercise_activities ??
+          [],
+        moveMoreQualified:
+          Boolean(
+            health?.moveMoreQualified ??
+            steps >= 8000
+          ),
+        sleepWellQualified:
+          Boolean(
+            health?.sleepWellQualified ??
+            sleepMinutes >= 420
+          )
+      };
+
+      renderHomeMissionQualificationV212();
 
 
       setBar(
@@ -2393,5 +3121,62 @@ async function fetchDashboard(){
 
     startApp();
   </script>
+
+<div id="stepsModalV212" class="v212-modal-bg">
+  <div class="v212-modal">
+    <h3>👣 จำนวนก้าววันนี้</h3>
+    <div class="v212-field">
+      <label for="stepsInputV212">จำนวนก้าว</label>
+      <input id="stepsInputV212" type="number" min="0" max="200000" step="1" inputmode="numeric">
+    </div>
+    <div id="stepsQualifyV212"></div>
+    <button id="stepsEvidenceV212" class="v212-mission" type="button" style="display:none">
+      📷 ส่งหลักฐาน MOVE MORE เพื่อรับรางวัล
+    </button>
+    <div class="v212-actions">
+      <button class="v212-cancel" type="button" onclick="closeV212('stepsModalV212')">ยกเลิก</button>
+      <button id="saveStepsV212" class="v212-save" type="button">บันทึกก้าว</button>
+    </div>
+  </div>
+</div>
+
+<div id="sleepModalV212" class="v212-modal-bg">
+  <div class="v212-modal">
+    <h3>😴 การนอนหลับเมื่อคืน</h3>
+    <div class="v212-grid">
+      <div class="v212-field">
+        <label for="sleepHoursV212">ชั่วโมง</label>
+        <input id="sleepHoursV212" type="number" min="0" max="24" step="1">
+      </div>
+      <div class="v212-field">
+        <label for="sleepMinutesV212">นาที</label>
+        <input id="sleepMinutesV212" type="number" min="0" max="59" step="1">
+      </div>
+    </div>
+    <div id="sleepQualifyV212"></div>
+    <button id="sleepEvidenceV212" class="v212-mission" type="button" style="display:none">
+      📷 ส่งหลักฐาน SLEEP WELL เพื่อรับรางวัล
+    </button>
+    <div class="v212-actions">
+      <button class="v212-cancel" type="button" onclick="closeV212('sleepModalV212')">ยกเลิก</button>
+      <button id="saveSleepV212" class="v212-save" type="button">บันทึกการนอน</button>
+    </div>
+  </div>
+</div>
+
+<div id="activityModalV212" class="v212-modal-bg">
+  <div class="v212-modal">
+    <h3>🔥 กิจกรรมออกกำลังกายวันนี้</h3>
+    <div style="font-size:13px;color:#63758d">
+      แคลอรี่เป็นค่าประมาณจากกิจกรรม Daily / Weekly ที่บันทึกในระบบ
+    </div>
+    <div id="activityListV212"></div>
+    <div id="activityTotalV212" class="v212-total">รวม 0 kcal</div>
+    <div class="v212-actions" style="grid-template-columns:1fr">
+      <button class="v212-cancel" type="button" onclick="closeV212('activityModalV212')">ปิด</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
