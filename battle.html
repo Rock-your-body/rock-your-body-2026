@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#061d68" />
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
-  <!-- BATTLE DATA LIVE V2.15 : transparent overlays + HOME unified wallet/energy + battle status -->
+  <!-- BATTLE DATA LIVE V2.16 : resilient HOME + BATTLE loader -->
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js?v=20260829-v214"></script>
@@ -28,7 +28,7 @@
       position:relative;
       width:min(100vw,1536px);
       aspect-ratio:1536/1024;
-      background-image:url("./battle-template.png?v=20260828-06");
+      background-image:url("./battle-template.png?v=20260829-v216");
       background-size:100% 100%;
       background-repeat:no-repeat;
       overflow:hidden;
@@ -356,6 +356,22 @@
 
         <div class="live hud-coin" id="hudCoin">--</div>
         <div class="live hud-energy" id="hudEnergy">--/--</div>
+        <div id="battleLiveStatus" style="
+          position:absolute;
+          right:2.2%;
+          top:10.8%;
+          z-index:30;
+          max-width:42%;
+          color:#fff;
+          background:rgba(2,24,72,.72);
+          border-radius:999px;
+          padding:5px 10px;
+          font-size:clamp(8px,.9vw,13px);
+          font-weight:800;
+          text-align:right;
+          pointer-events:none;
+          display:none;
+        "></div>
 
         <div class="boss-name-box">
           <div class="boss-name" id="bossName">กำลังโหลด...</div>
@@ -645,6 +661,97 @@
       }
     }
 
+
+    function unwrapPayload(raw){
+      if(!raw || typeof raw !== "object") return {};
+      if(raw.data && typeof raw.data === "object"){
+        return {
+          ...raw.data,
+          success:
+            raw.success ??
+            raw.data.success ??
+            true
+        };
+      }
+      return raw;
+    }
+
+    function normalizeHomeDashboard(raw={}){
+      const data = unwrapPayload(raw);
+
+      /*
+        player-dashboard V2.12 response จริง:
+        {
+          success:true,
+          user:{...},
+          rockCoin:123,
+          energy:{current:80,max:200,...}
+        }
+      */
+      return {
+        rockCoin: pickNumber(
+          data.rockCoin,
+          data.rock_coin,
+          data.wallet?.rockCoin,
+          data.wallet?.rock_coin,
+          0
+        ),
+
+        energy: pickNumber(
+          data.energy?.current,
+          data.energy_current,
+          typeof data.energy === "number"
+            ? data.energy
+            : undefined,
+          0
+        ),
+
+        maxEnergy: pickNumber(
+          data.energy?.max,
+          data.maxEnergy,
+          data.max_energy,
+          window.APP_CONFIG?.MAX_ENERGY,
+          200
+        ),
+
+        user:
+          data.user ||
+          data.player ||
+          data.profile ||
+          {}
+      };
+    }
+
+    async function loadBattleStatusSafe(){
+      try{
+        return await battleApi({
+          action:"battleStatus"
+        });
+      }catch(firstError){
+        const msg =
+          String(
+            firstError?.message ||
+            ""
+          ).toLowerCase();
+
+        /*
+          Compatibility fallback only when backend explicitly
+          says the action is unknown/not supported.
+        */
+        if(
+          msg.includes("unknown action") ||
+          msg.includes("invalid action") ||
+          msg.includes("unsupported action")
+        ){
+          return await battleApi({
+            action:"status"
+          });
+        }
+
+        throw firstError;
+      }
+    }
+
     function getActiveRun(){
       const stageId = Number(state.currentStageId || 1);
 
@@ -823,7 +930,11 @@
     }
 
     async function loadBattle(){
+
       setLoading(true);
+
+      let homeError = null;
+      let battleError = null;
 
       try{
 
@@ -834,114 +945,276 @@
           return;
         }
 
-
-        const [data, homeData] =
-          await Promise.all([
-            battleApi({
-              action:"battleStatus"
-            }),
+        /*
+          โหลด HOME และ BATTLE แยกกัน
+          ถ้า Battle ล้ม HOME Coin/Energy ยังต้องขึ้น
+          ถ้า HOME ล้ม Battle ยังต้องขึ้น
+        */
+        const results =
+          await Promise.allSettled([
             playerApi({
               action:"dashboard"
-            })
+            }),
+            loadBattleStatusSafe()
           ]);
 
-        const homePlayer =
-          homeData?.player ||
-          homeData?.user ||
-          homeData?.profile ||
-          {};
+        /* -----------------------------------------------
+           HOME / SHARED PLAYER STATE
+        ----------------------------------------------- */
+        if(
+          results[0].status ===
+          "fulfilled"
+        ){
 
+          const home =
+            normalizeHomeDashboard(
+              results[0].value ||
+              {}
+            );
 
-        /*
-          Backend unified-energy:
-          player.rockCoin / player.energy / player.maxEnergy
-          มาจาก rock_users โดยตรง
-          จึงเป็นข้อมูลเดียวกับ HOME และ MISSION
-        */
-        state.player =
-          normalizeBattlePlayer({
-            ...(data?.player || data?.user || {}),
-            rockCoin:
-              homePlayer?.rockCoin ??
-              homePlayer?.rock_coin ??
-              data?.player?.rockCoin ??
-              data?.player?.rock_coin,
-            energy:
-              homePlayer?.energy ??
-              data?.player?.energy,
-            maxEnergy:
-              homePlayer?.maxEnergy ??
-              homePlayer?.max_energy ??
-              data?.player?.maxEnergy ??
-              data?.player?.max_energy,
-            totalWins:
-              data?.player?.totalWins ??
-              data?.player?.total_wins ??
-              data?.stats?.totalWins ??
-              data?.stats?.total_wins,
-            totalAttacks:
-              data?.player?.totalAttacks ??
-              data?.player?.total_attacks ??
-              data?.stats?.totalAttacks ??
-              data?.stats?.total_attacks
-          });
+          state.player =
+            normalizeBattlePlayer({
+              ...(state.player || {}),
+              rockCoin:
+                home.rockCoin,
+              energy:
+                home.energy,
+              maxEnergy:
+                home.maxEnergy
+            });
 
-        const unlockedStage =
-          Math.max(
-            1,
-            pickNumber(
-              state.player?.unlockedStage,
-              data?.stage?.id,
-              data?.currentStage,
-              1
-            )
+          /*
+            Render ทันที ไม่รอ Battle
+          */
+          render();
+
+        }else{
+
+          homeError =
+            results[0].reason;
+
+          console.warn(
+            "HOME PLAYER DATA ERROR:",
+            homeError
           );
+        }
 
-        state.currentStageId = unlockedStage;
 
-        state.stage =
-          normalizeBattleStage(
-            data?.stage ||
-            data?.boss ||
-            {},
-            state.currentStageId
-          );
+        /* -----------------------------------------------
+           BATTLE STATE
+        ----------------------------------------------- */
+        if(
+          results[1].status ===
+          "fulfilled"
+        ){
 
-        state.runs =
-          normalizeBattleRuns(
-            data?.runs ||
-            data?.battleRuns ||
-            data?.battle_runs ||
-            []
-          );
+          const rawBattle =
+            unwrapPayload(
+              results[1].value ||
+              {}
+            );
 
-        state.activeRun = getActiveRun();
+          const battlePlayer =
+            rawBattle.player ||
+            rawBattle.user ||
+            rawBattle.battlePlayer ||
+            rawBattle.battle_player ||
+            {};
 
-        console.log(
-          "BATTLE LIVE DATA:",
-          {
-            rockCoin:
-              state.player?.rockCoin,
+          /*
+            ค่า Coin / Energy จาก HOME มี priority
+            แต่ถ้า HOME ไม่ได้ ให้ fallback จาก Battle
+          */
+          const existing =
+            state.player ||
+            {};
 
-            energy:
-              state.player?.energy,
+          state.player =
+            normalizeBattlePlayer({
+              ...battlePlayer,
 
-            maxEnergy:
-              state.player?.maxEnergy,
+              rockCoin:
+                Number.isFinite(
+                  Number(
+                    existing.rockCoin
+                  )
+                )
+                  ? existing.rockCoin
+                  : (
+                      battlePlayer.rockCoin ??
+                      battlePlayer.rock_coin
+                    ),
 
-            currentStage:
-              state.currentStageId,
+              energy:
+                Number.isFinite(
+                  Number(
+                    existing.energy
+                  )
+                )
+                  ? existing.energy
+                  : battlePlayer.energy,
 
-            stage:
-              state.stage,
+              maxEnergy:
+                Number.isFinite(
+                  Number(
+                    existing.maxEnergy
+                  )
+                ) &&
+                Number(
+                  existing.maxEnergy
+                ) > 0
+                  ? existing.maxEnergy
+                  : (
+                      battlePlayer.maxEnergy ??
+                      battlePlayer.max_energy
+                    ),
 
-            activeRun:
-              state.activeRun
+              totalWins:
+                battlePlayer.totalWins ??
+                battlePlayer.total_wins ??
+                rawBattle.stats?.totalWins ??
+                rawBattle.stats?.total_wins ??
+                rawBattle.totalWins ??
+                rawBattle.total_wins,
+
+              totalAttacks:
+                battlePlayer.totalAttacks ??
+                battlePlayer.total_attacks ??
+                rawBattle.stats?.totalAttacks ??
+                rawBattle.stats?.total_attacks ??
+                rawBattle.totalAttacks ??
+                rawBattle.total_attacks,
+
+              unlockedStage:
+                battlePlayer.unlockedStage ??
+                battlePlayer.unlocked_stage ??
+                rawBattle.currentStage ??
+                rawBattle.current_stage ??
+                rawBattle.stage?.id
+            });
+
+          state.currentStageId =
+            Math.max(
+              1,
+              pickNumber(
+                state.player.unlockedStage,
+                rawBattle.currentStage,
+                rawBattle.current_stage,
+                rawBattle.stage?.id,
+                1
+              )
+            );
+
+          state.stage =
+            normalizeBattleStage(
+              rawBattle.stage ||
+              rawBattle.boss ||
+              rawBattle.monster ||
+              {},
+              state.currentStageId
+            );
+
+          state.runs =
+            normalizeBattleRuns(
+              rawBattle.runs ||
+              rawBattle.battleRuns ||
+              rawBattle.battle_runs ||
+              []
+            );
+
+          state.activeRun =
+            getActiveRun();
+
+          render();
+
+          const liveStatus =
+            $("battleLiveStatus");
+
+          if(liveStatus){
+            liveStatus.textContent =
+              "LIVE • HOME + BATTLE";
+            liveStatus.style.display =
+              "";
           }
-        );
+
+          console.log(
+            "BATTLE V2.16 DATA:",
+            {
+              homePlayer:
+                state.player,
+              stage:
+                state.stage,
+              runs:
+                state.runs,
+              activeRun:
+                state.activeRun,
+              rawBattle
+            }
+          );
+
+        }else{
+
+          battleError =
+            results[1].reason;
+
+          console.error(
+            "BATTLE STATUS ERROR:",
+            battleError
+          );
+
+          /*
+            HOME ขึ้นแล้ว แม้ Battle backend มีปัญหา
+          */
+          if(state.player){
+            render();
+          }
+        }
 
 
-        render();
+        if(
+          homeError &&
+          battleError
+        ){
+          throw new Error(
+            `โหลดข้อมูลไม่สำเร็จ • HOME: ${
+              homeError?.message ||
+              homeError
+            } • BATTLE: ${
+              battleError?.message ||
+              battleError
+            }`
+          );
+        }
+
+
+        if(battleError){
+
+          $("bossName").textContent =
+            "ยังไม่มีข้อมูล Battle";
+
+          $("bossStage").textContent =
+            "ตรวจสอบ BATTLE API";
+
+          $("stageBadge").textContent =
+            "STAGE --";
+
+          const liveStatus =
+            $("battleLiveStatus");
+
+          if(liveStatus){
+            liveStatus.textContent =
+              "HOME LIVE • BATTLE API ERROR";
+            liveStatus.style.display =
+              "";
+          }
+
+          toast(
+            `ข้อมูล HOME โหลดแล้ว • Battle: ${
+              battleError?.message ||
+              "โหลดไม่สำเร็จ"
+            }`
+          );
+        }
 
 
       }catch(error){
