@@ -1386,7 +1386,25 @@ async function fetchDashboard(){
           ใช้ข้อมูลจริงจาก DAILY MISSION / DAILY_HEALTH
           ถ้าไม่มีข้อมูล renderDailyHealth() จะแสดง 0
         */
-        await loadDailyHealth();
+        /*
+          Daily Health รวมอยู่ใน action: dashboard แล้ว
+          ไม่ยิง player-dashboard ซ้ำรอบที่ 2
+        */
+        {
+          const data =
+            raw?.data ??
+            raw?.dashboard ??
+            raw ??
+            {};
+
+          renderDailyHealth({
+            health:
+              data?.activity ??
+              data?.health ??
+              data?.today ??
+              {}
+          });
+        }
 
         /*
           สำคัญ:
