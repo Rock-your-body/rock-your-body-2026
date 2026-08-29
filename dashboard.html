@@ -11,17 +11,35 @@
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js?v=20260829-clean-v2"></script>
-/* ===============================
-   HIDE NOTIFICATION BELL - HOME
-================================ */
-#notificationBell,
-#bell,
-.notification-bell,
-.bell,
-.bell-btn,
-.notification-btn,
-.notifications-btn{
-  display:none !important;
+/* =========================================
+   TEAM NAME — HOME
+========================================= */
+#teamName{
+  position:absolute !important;
+
+  /* แถบสีน้ำเงินใต้รูป */
+  left:7.5% !important;
+  top:52.0% !important;
+  width:20.5% !important;
+  height:4.5% !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  color:#ffffff !important;
+  font-size:clamp(11px,1.55vw,22px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+
+  text-align:center !important;
+  white-space:nowrap !important;
+
+  z-index:50 !important;
+  visibility:visible !important;
+  opacity:1 !important;
+
+  pointer-events:none !important;
 }
   <style>
     /* =====================================================
