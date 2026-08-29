@@ -937,3 +937,30 @@ button,input,select,textarea{font:inherit}
   --home-green:#008d3c;
   --home-white:#ffffff;
 }
+/* =========================================
+   HOME WEIGHT DISPLAY FIX
+========================================= */
+
+/* น้ำหนักปัจจุบัน */
+#currentWeight{
+  font-size: 25px !important;
+  font-weight: 900 !important;
+  color: #062b72 !important;
+  line-height: 1 !important;
+}
+
+/* น้ำหนักเป้าหมาย = สีแดง */
+#targetWeight{
+  font-size: 25px !important;
+  font-weight: 900 !important;
+  color: #e00000 !important;
+  line-height: 1 !important;
+}
+
+/* % ความคืบหน้า = สีเขียว */
+#weightProgressPercent{
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  color: #11852f !important;
+  line-height: 1 !important;
+}
