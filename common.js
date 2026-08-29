@@ -3,21 +3,23 @@
 /*
   ROCK YOUR BODY 2026
   common.js
-  Version: 2026-08-29-WEIGHT-HOTFIX-V2.11.1
+  Version: 2026-08-29-WEIGHT-HOTFIX-V2.11.2
 
-  Canonical architecture:
+  Canonical:
   GitHub Pages
   -> LINE LIFF ID Token
   -> Supabase Edge Functions
   -> Supabase DB
 
-  สำคัญ:
-  - ไม่ใช้ line_user_id จาก localStorage เป็น identity
-  - ใช้ LINE ID Token สดทุกครั้งที่เรียก API
-  - Dashboard / Weight ใช้ APP_CONFIG.API.PLAYER
+  Fix:
+  - API.PLAYER
+  - ROCK.fmtWeight()
+  - ROCK.CFG compatibility
+  - Weight save / target / history
+  - ไม่ใช้ line_user_id ใน localStorage เป็น identity
 */
 
-(function(){
+(function () {
 
   const CFG =
     window.APP_CONFIG ||
@@ -33,9 +35,8 @@
      BASIC
   ========================================================= */
 
-  function text(
-    value
-  ){
+  function text(value) {
+
     return String(
       value ??
       ""
@@ -46,7 +47,7 @@
   function number(
     value,
     fallback = 0
-  ){
+  ) {
 
     const n =
       Number(value);
@@ -57,19 +58,42 @@
   }
 
 
+  function fmtWeight(value) {
+
+    if (
+      value === null ||
+      value === undefined ||
+      value === ""
+    ) {
+      return "--.-";
+    }
+
+    const n =
+      Number(value);
+
+    if (
+      !Number.isFinite(n)
+    ) {
+      return "--.-";
+    }
+
+    return n.toFixed(1);
+  }
+
+
   function save(
     key,
     value
-  ){
+  ) {
 
-    try{
+    try {
 
       localStorage.setItem(
         key,
         JSON.stringify(value)
       );
 
-    }catch(error){
+    } catch (error) {
 
       console.warn(
         "LOCAL STORAGE SAVE ERROR:",
@@ -82,22 +106,22 @@
   function load(
     key,
     fallback = null
-  ){
+  ) {
 
-    try{
+    try {
 
       const raw =
         localStorage.getItem(
           key
         );
 
-      if(!raw){
+      if (!raw) {
         return fallback;
       }
 
       return JSON.parse(raw);
 
-    }catch(error){
+    } catch (error) {
 
       console.warn(
         "LOCAL STORAGE LOAD ERROR:",
@@ -110,14 +134,12 @@
 
 
   /* =========================================================
-     PAGE
+     PAGE NAVIGATION
   ========================================================= */
 
-  function go(
-    target
-  ){
+  function go(target) {
 
-    if(!target){
+    if (!target) {
       return;
     }
 
@@ -135,7 +157,8 @@
   }
 
 
-  function goHome(){
+  function goHome() {
+
     go(
       CFG.PAGE?.HOME ||
       "./dashboard.html"
@@ -143,7 +166,8 @@
   }
 
 
-  function goMission(){
+  function goMission() {
+
     go(
       CFG.PAGE?.MISSION ||
       "./mission.html"
@@ -151,7 +175,8 @@
   }
 
 
-  function goBattle(){
+  function goBattle() {
+
     go(
       CFG.PAGE?.BATTLE ||
       "./battle.html"
@@ -159,7 +184,8 @@
   }
 
 
-  function goReward(){
+  function goReward() {
+
     go(
       CFG.PAGE?.REWARDS ||
       "./rewards.html"
@@ -167,7 +193,8 @@
   }
 
 
-  function goRanking(){
+  function goRanking() {
+
     go(
       CFG.PAGE?.RANKING ||
       "./ranking.html"
@@ -175,7 +202,8 @@
   }
 
 
-  function goProgress(){
+  function goProgress() {
+
     go(
       CFG.PAGE?.PROGRESS ||
       "./progress.html"
@@ -183,7 +211,8 @@
   }
 
 
-  function goWeight(){
+  function goWeight() {
+
     go(
       CFG.PAGE?.WEIGHT ||
       "./weight-check.html"
@@ -191,7 +220,8 @@
   }
 
 
-  function goNutrition(){
+  function goNutrition() {
+
     go(
       CFG.PAGE?.NUTRITION ||
       "./nutrition.html"
@@ -199,7 +229,8 @@
   }
 
 
-  function goInBody(){
+  function goInBody() {
+
     go(
       CFG.PAGE?.INBODY ||
       "./inbody.html"
@@ -211,71 +242,82 @@
      LIFF
   ========================================================= */
 
-  async function initLiff(){
+  async function initLiff() {
 
-    if(
+    if (
       typeof liff ===
       "undefined"
-    ){
+    ) {
+
       throw new Error(
         "LINE LIFF SDK ไม่พร้อม"
       );
     }
+
 
     const liffId =
       text(
         CFG.LIFF_ID
       );
 
-    if(!liffId){
+
+    if (!liffId) {
+
       throw new Error(
         "ไม่พบ LIFF_ID"
       );
     }
 
+
     await liff.init({
       liffId
     });
 
-    if(
+
+    if (
       !liff.isLoggedIn()
-    ){
+    ) {
 
       liff.login();
 
       return false;
     }
 
+
     return true;
   }
 
 
-  async function getIdToken(){
+  async function getIdToken() {
 
     const ready =
       await initLiff();
 
-    if(
-      ready ===
-      false
-    ){
+
+    if (
+      ready === false
+    ) {
       return null;
     }
+
 
     const token =
       liff.getIDToken();
 
-    if(!token){
+
+    if (!token) {
+
       throw new Error(
         "ไม่พบ LINE ID Token"
       );
     }
 
+
     return token;
   }
 
 
-  async function getProfile(){
+  async function getProfile() {
 
     const cached =
       load(
@@ -283,22 +325,25 @@
         null
       );
 
-    try{
+
+    try {
 
       const ready =
         await initLiff();
 
-      if(
-        ready ===
-        false
-      ){
+
+      if (
+        ready === false
+      ) {
         return cached;
       }
+
 
       const profile =
         await liff.getProfile();
 
-      if(profile){
+
+      if (profile) {
 
         save(
           STORAGE.LINE_PROFILE,
@@ -306,9 +351,11 @@
         );
       }
 
+
       return profile;
 
-    }catch(error){
+
+    } catch (error) {
 
       console.warn(
         "LINE PROFILE ERROR:",
@@ -324,9 +371,7 @@
      API
   ========================================================= */
 
-  function apiUrl(
-    name
-  ){
+  function apiUrl(name) {
 
     const key =
       String(
@@ -336,23 +381,29 @@
         .trim()
         .toUpperCase();
 
-    if(
+
+    if (
       typeof CFG.getApi ===
       "function"
-    ){
+    ) {
+
       return CFG.getApi(
         key
       );
     }
 
+
     const url =
       CFG.API?.[key];
 
-    if(!url){
+
+    if (!url) {
+
       throw new Error(
         "ไม่พบ Supabase Edge Function URL"
       );
     }
+
 
     return url;
   }
@@ -361,14 +412,16 @@
   async function postJson(
     url,
     payload = {}
-  ){
+  ) {
 
     const idToken =
       await getIdToken();
 
-    if(!idToken){
+
+    if (!idToken) {
       return null;
     }
+
 
     const response =
       await fetch(
@@ -377,7 +430,7 @@
           method:
             "POST",
 
-          headers:{
+          headers: {
             "Content-Type":
               "application/json"
           },
@@ -390,29 +443,33 @@
         }
       );
 
+
     const raw =
       await response.text();
 
+
     let data = {};
 
-    try{
+
+    try {
 
       data =
         raw
           ? JSON.parse(raw)
           : {};
 
-    }catch{
+    } catch (error) {
 
       throw new Error(
         `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
       );
     }
 
-    if(
+
+    if (
       !response.ok ||
       data?.success === false
-    ){
+    ) {
 
       throw new Error(
         data?.error ||
@@ -420,6 +477,7 @@
         `HTTP ${response.status}`
       );
     }
+
 
     return data;
   }
@@ -429,7 +487,7 @@
      PLAYER DASHBOARD
   ========================================================= */
 
-  async function fetchDashboard(){
+  async function fetchDashboard() {
 
     return await postJson(
       apiUrl(
@@ -443,7 +501,7 @@
   }
 
 
-  async function fetchDailyHealth(){
+  async function fetchDailyHealth() {
 
     return await postJson(
       apiUrl(
@@ -461,21 +519,23 @@
      WEIGHT
   ========================================================= */
 
-  async function saveWeight(
-    weight
-  ){
+  async function saveWeight(weight) {
 
     const value =
       Number(weight);
 
-    if(
+
+    if (
       !Number.isFinite(value) ||
-      value <= 0
-    ){
+      value < 20 ||
+      value > 400
+    ) {
+
       throw new Error(
-        "กรุณากรอกน้ำหนักให้ถูกต้อง"
+        "กรุณากรอกน้ำหนักระหว่าง 20 - 400 kg"
       );
     }
+
 
     return await postJson(
       apiUrl(
@@ -494,21 +554,25 @@
 
   async function setTarget(
     targetWeight
-  ){
+  ) {
 
     const value =
       Number(
         targetWeight
       );
 
-    if(
+
+    if (
       !Number.isFinite(value) ||
-      value <= 0
-    ){
+      value < 20 ||
+      value > 400
+    ) {
+
       throw new Error(
-        "กรุณากรอกน้ำหนักเป้าหมายให้ถูกต้อง"
+        "กรุณากรอกเป้าหมายน้ำหนักระหว่าง 20 - 400 kg"
       );
     }
+
 
     return await postJson(
       apiUrl(
@@ -525,7 +589,7 @@
   }
 
 
-  async function getWeightHistory(){
+  async function getWeightHistory() {
 
     return await postJson(
       apiUrl(
@@ -543,7 +607,7 @@
      PROJECT SETTINGS
   ========================================================= */
 
-  async function fetchProjectSettings(){
+  async function fetchProjectSettings() {
 
     return await postJson(
       apiUrl(
@@ -564,7 +628,7 @@
   async function missionApi(
     action,
     payload = {}
-  ){
+  ) {
 
     return await postJson(
       apiUrl(
@@ -585,7 +649,7 @@
   async function nutritionApi(
     action,
     payload = {}
-  ){
+  ) {
 
     return await postJson(
       apiUrl(
@@ -606,7 +670,7 @@
   async function inbodyApi(
     action,
     payload = {}
-  ){
+  ) {
 
     return await postJson(
       apiUrl(
@@ -621,16 +685,28 @@
 
 
   /* =========================================================
-     GLOBAL
+     GLOBAL EXPORT
   ========================================================= */
 
   window.ROCK = {
 
     VERSION:
-      "2026-08-29-WEIGHT-HOTFIX-V2.11.1",
+      "2026-08-29-WEIGHT-HOTFIX-V2.11.2",
+
+
+    /*
+      Compatibility สำหรับหน้าเก่า
+      เช่น weight-check.html
+      ที่เรียก ROCK.CFG.PAGE.HOME
+    */
+
+    CFG,
 
     config:
       CFG,
+
+
+    /* LINE */
 
     initLiff,
 
@@ -638,19 +714,33 @@
 
     getProfile,
 
+
+    /* API */
+
     apiUrl,
 
     postJson,
 
+
+    /* PLAYER */
+
     fetchDashboard,
 
     fetchDailyHealth,
+
+
+    /* WEIGHT */
 
     saveWeight,
 
     setTarget,
 
     getWeightHistory,
+
+    fmtWeight,
+
+
+    /* OTHER */
 
     fetchProjectSettings,
 
@@ -659,6 +749,9 @@
     nutritionApi,
 
     inbodyApi,
+
+
+    /* NAVIGATION */
 
     go,
 
@@ -679,6 +772,9 @@
     goNutrition,
 
     goInBody,
+
+
+    /* UTIL */
 
     number
   };
