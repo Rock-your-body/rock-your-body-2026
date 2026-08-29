@@ -5,7 +5,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
   <title>ROCK YOUR BODY 2026</title>
@@ -15,7 +15,24 @@
     content="#eef5ff"
   >
 
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
+
     *{
       box-sizing:border-box;
     }
@@ -23,15 +40,11 @@
     html,
     body{
       margin:0;
-      padding:0;
       width:100%;
       min-height:100%;
+      font-family:"Prompt",Arial,sans-serif;
       background:#eef5ff;
-      font-family:
-        "Prompt",
-        Arial,
-        "Noto Sans Thai",
-        sans-serif;
+      color:#06276c;
     }
 
     body{
@@ -41,20 +54,19 @@
       display:flex;
       align-items:center;
       justify-content:center;
-
-      color:#06276c;
     }
 
     .loading{
+      width:min(90vw,420px);
       text-align:center;
-      padding:24px;
+      padding:28px;
     }
 
     .spinner{
-      width:46px;
-      height:46px;
+      width:48px;
+      height:48px;
 
-      margin:0 auto 16px;
+      margin:0 auto 18px;
 
       border:5px solid #dce8f8;
       border-top-color:#075ac7;
@@ -68,23 +80,29 @@
       font-weight:900;
     }
 
-    .sub{
-      margin-top:6px;
+    .status{
+      margin-top:7px;
+
       font-size:14px;
       font-weight:700;
-      opacity:.65;
+
+      opacity:.7;
     }
 
     .error{
       display:none;
-      margin-top:14px;
-      max-width:320px;
+
+      margin-top:18px;
+      padding:12px 14px;
+
+      border-radius:12px;
+
+      background:#ffe9e9;
+      color:#b42318;
 
       font-size:13px;
       font-weight:700;
-      line-height:1.6;
-
-      color:#b42318;
+      line-height:1.55;
     }
 
     @keyframes spin{
@@ -92,261 +110,262 @@
         transform:rotate(360deg);
       }
     }
+
   </style>
 </head>
 
 <body>
 
   <div class="loading">
-    <div class="spinner"></div>
+
+    <div
+      class="spinner"
+      id="spinner"
+    ></div>
 
     <div class="title">
       ROCK YOUR BODY 2026
     </div>
 
-    <div class="sub" id="statusText">
+    <div
+      class="status"
+      id="status"
+    >
       กำลังเชื่อมต่อ LINE...
     </div>
 
     <div
       class="error"
-      id="errorText"
+      id="error"
     ></div>
+
   </div>
 
 
-  <!-- LINE LIFF SDK -->
   <script
     src="https://static.line-scdn.net/liff/edge/2/sdk.js"
   ></script>
 
+  <script
+    src="./app-config.js?v=20260829-render-v1"
+  ></script>
+
 
   <script>
-    (() => {
+    "use strict";
 
-      const LIFF_ID =
-        "2011201679-uNWz5yqF";
-
-      const DASHBOARD_URL =
-        "./dashboard.html?v=20260829-home-v11";
+    const $ =
+      id =>
+        document.getElementById(id);
 
 
-      const statusText =
-        document.getElementById(
-          "statusText"
+    function setStatus(text){
+
+      $("status").textContent =
+        text;
+
+    }
+
+
+    function showError(error){
+
+      console.error(
+        "INDEX ERROR:",
+        error
+      );
+
+      $("spinner").style.display =
+        "none";
+
+      $("status").textContent =
+        "เปิด ROCK YOUR BODY ไม่สำเร็จ";
+
+      $("error").style.display =
+        "block";
+
+      $("error").textContent =
+        error?.message ||
+        String(error) ||
+        "Unknown error";
+
+    }
+
+
+    async function postJson(
+      url,
+      payload
+    ){
+
+      const response =
+        await fetch(
+          url,
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(payload)
+          }
         );
 
-      const errorText =
-        document.getElementById(
-          "errorText"
+
+      const text =
+        await response.text();
+
+
+      let data = {};
+
+      try{
+
+        data =
+          text
+            ? JSON.parse(text)
+            : {};
+
+      }catch{
+
+        throw new Error(
+          `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
         );
 
-
-      function setStatus(message) {
-        if (statusText) {
-          statusText.textContent =
-            message;
-        }
       }
 
 
-      function showError(error) {
+      if(
+        !response.ok ||
+        data?.success === false
+      ){
 
-        console.error(
-          "[INDEX LIFF ERROR]",
-          error
+        throw new Error(
+          data?.error ||
+          data?.message ||
+          `HTTP ${response.status}`
         );
 
-        if (statusText) {
-          statusText.textContent =
-            "ไม่สามารถเชื่อมต่อ LINE ได้";
-        }
-
-        if (errorText) {
-
-          errorText.style.display =
-            "block";
-
-          errorText.textContent =
-            error?.message ||
-            String(error);
-        }
       }
 
 
-      function clearOldAuthCache() {
-
-        /*
-          ล้างเฉพาะ key ที่มีแนวโน้ม
-          เป็น token เก่าของระบบ
-
-          ไม่ใช้ localStorage.clear()
-          เพราะอาจลบข้อมูลอื่นของแอป
-        */
-
-        const keys = [
-          "idToken",
-          "id_token",
-          "lineIdToken",
-          "line_id_token",
-          "LINE_ID_TOKEN",
-          "liffIdToken",
-          "liff_id_token"
-        ];
-
-        keys.forEach((key) => {
-
-          try {
-            localStorage.removeItem(key);
-          } catch (_) {}
-
-          try {
-            sessionStorage.removeItem(key);
-          } catch (_) {}
-
-        });
-      }
+      return data;
+    }
 
 
-      async function startApp() {
+    async function start(){
 
-        try {
+      try{
 
-          setStatus(
-            "กำลังเริ่มต้น LINE..."
+        const config =
+          window.APP_CONFIG;
+
+
+        if(!config?.LIFF_ID){
+
+          throw new Error(
+            "ไม่พบ LIFF_ID"
           );
 
+        }
 
-          await liff.init({
-            liffId: LIFF_ID
+
+        setStatus(
+          "กำลังเริ่มต้น LINE..."
+        );
+
+
+        await liff.init({
+          liffId:
+            config.LIFF_ID
+        });
+
+
+        if(
+          !liff.isLoggedIn()
+        ){
+
+          setStatus(
+            "กำลังเข้าสู่ระบบ LINE..."
+          );
+
+          liff.login({
+            redirectUri:
+              window.location.href
           });
 
+          return;
+        }
 
-          console.log(
-            "[LIFF] initialized"
+
+        const idToken =
+          liff.getIDToken();
+
+
+        if(!idToken){
+
+          throw new Error(
+            "ไม่พบ LINE ID Token"
           );
-
-          console.log(
-            "[LIFF] inClient:",
-            liff.isInClient()
-          );
-
-          console.log(
-            "[LIFF] loggedIn:",
-            liff.isLoggedIn()
-          );
-
-
-          /*
-            ถ้ายังไม่ได้ login
-            ให้ LINE ทำ authentication ก่อน
-          */
-          if (!liff.isLoggedIn()) {
-
-            setStatus(
-              "กำลังเข้าสู่ระบบ LINE..."
-            );
-
-            liff.login({
-              redirectUri:
-                window.location.href
-            });
-
-            return;
-          }
-
-
-          setStatus(
-            "กำลังตรวจสอบบัญชี LINE..."
-          );
-
-
-          /*
-            ขอ ID Token จาก LIFF session
-            ปัจจุบัน
-          */
-          const idToken =
-            liff.getIDToken();
-
-
-          if (!idToken) {
-
-            /*
-              ถ้า session ผิดปกติ
-              ให้ login ใหม่
-            */
-
-            clearOldAuthCache();
-
-            setStatus(
-              "กำลังยืนยันตัวตนใหม่..."
-            );
-
-            liff.logout();
-
-            liff.login({
-              redirectUri:
-                window.location.href
-            });
-
-            return;
-          }
-
-
-          /*
-            ไม่บันทึก ID Token ลง
-            localStorage แบบถาวร
-
-            ใช้ sessionStorage ชั่วคราว
-            เผื่อ dashboard ต้องอ่านต่อ
-          */
-          try {
-
-            sessionStorage.setItem(
-              "line_id_token",
-              idToken
-            );
-
-          } catch (_) {}
-
-
-          /*
-            ลบ token เก่าที่อาจอยู่ใน key เดิม
-          */
-          try {
-            localStorage.removeItem(
-              "line_id_token"
-            );
-          } catch (_) {}
-
-
-          setStatus(
-            "กำลังเปิด HOME..."
-          );
-
-
-          /*
-            replace()
-            เพื่อไม่ให้กดย้อนกลับ
-            กลับมาหน้า index
-          */
-          window.location.replace(
-            DASHBOARD_URL
-          );
-
-
-        } catch (error) {
-
-          showError(error);
 
         }
 
+
+        setStatus(
+          "กำลังโหลดข้อมูลสมาชิก..."
+        );
+
+
+        /*
+          POST /api/me
+
+          Server ต้อง verify
+          ID Token กับ LINE
+
+          แล้วใช้ sub เป็น lineUserId
+        */
+        const me =
+          await postJson(
+            config.apiUrl("ME"),
+            {
+              idToken
+            }
+          );
+
+
+        console.log(
+          "ME:",
+          me
+        );
+
+
+        /*
+          ไม่เก็บ ID Token
+          ลง localStorage
+        */
+
+
+        setStatus(
+          "กำลังเปิด HOME..."
+        );
+
+
+        window.location.replace(
+          "./dashboard.html?v=20260829-render-v1"
+        );
+
+
+      }catch(error){
+
+        showError(error);
+
       }
 
+    }
 
-      startApp();
 
-    })();
+    start();
+
   </script>
 
 </body>
