@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+  <meta
+    name="theme-color"
+    content="#eef6ff"
+  >
+  <title>
+    ROCK YOUR BODY 2026 • Nutrition
+  </title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js"></script>
+  <script src="./common.js"></script>
+
+  <style>
+    *{
+      box-sizing:border-box;
+    }
+
+    :root{
+      --bg:#eef6ff;
+      --card:#ffffff;
+      --ink:#173454;
+      --muted:#68809d;
+      --line:#dce8f5;
+      --blue:#2563eb;
+      --green:#0f9f78;
+      --orange:#ea8a16;
+      --shadow:
+        0 12px 32px
+        rgba(45,83,130,.12);
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(
+          180deg,
+          #eaf5ff 0%,
+          #f7fbff 45%,
+          #eef6ff 100%
+        );
+    }
+
+    button,
+    input,
+    select,
+    textarea{
+      font:inherit;
+    }
+
+    .wrap{
+      width:min(
+        720px,
+        100%
+      );
+      margin:auto;
+      padding:
+        calc(16px + env(safe-area-inset-top))
+        16px
+        calc(30px + env(safe-area-inset-bottom));
+    }
+
+    .hero{
+      padding:18px;
+      border-radius:24px;
+      background:
+        linear-gradient(
+          135deg,
+          #0d67d8,
+          #20a985
+        );
+      color:#fff;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+
+    .hero h1{
+      margin:0 0 4px;
+      font-size:24px;
+    }
+
+    .hero p{
+      margin:0;
+      opacity:.9;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:
+        repeat(2,1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .metric{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:
+        0 5px 18px
+        rgba(50,85,120,.07);
+    }
+
+    .metric .label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .metric .value{
+      margin-top:5px;
+      font-size:22px;
+      font-weight:1000;
+    }
+
+    .metric .goal{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .progress{
+      height:8px;
+      margin-top:9px;
+      overflow:hidden;
+      border-radius:100px;
+      background:#e8f0f8;
+    }
+
+    .progress > div{
+      height:100%;
+      width:0%;
+      border-radius:inherit;
+      background:
+        linear-gradient(
+          90deg,
+          #2e7df5,
+          #1caf83
+        );
+      transition:
+        width .25s ease;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:
+        0 5px 20px
+        rgba(50,85,120,.08);
+      margin-bottom:14px;
+    }
+
+    .card h2{
+      margin:0 0 4px;
+      font-size:18px;
+    }
+
+    .sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .water-row{
+      display:grid;
+      grid-template-columns:
+        1fr auto;
+      gap:10px;
+      align-items:end;
+    }
+
+    .field{
+      margin-bottom:11px;
+    }
+
+    .field label{
+      display:block;
+      margin-bottom:6px;
+      font-size:12px;
+      font-weight:900;
+      color:#315b91;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border:1px solid #d5e2ef;
+      border-radius:12px;
+      padding:11px 12px;
+      background:#fff;
+      color:var(--ink);
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:78px;
+      resize:vertical;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:10px;
+    }
+
+    .btn{
+      border:0;
+      border-radius:13px;
+      padding:12px 15px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      color:#fff;
+      background:var(--green);
+    }
+
+    .btn.blue{
+      color:#fff;
+      background:var(--blue);
+    }
+
+    .btn.ghost{
+      color:var(--ink);
+      background:#edf4fb;
+    }
+
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .quick-water{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .quick-water button{
+      border:1px solid #d7e4f2;
+      border-radius:999px;
+      background:#f5f9fd;
+      color:#315b91;
+      padding:8px 11px;
+      font-size:12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .meal-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .meal{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px;
+      background:#fbfdff;
+    }
+
+    .meal-top{
+      display:flex;
+      justify-content:
+        space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .meal-name{
+      font-weight:1000;
+      font-size:15px;
+    }
+
+    .meal-type{
+      color:var(--muted);
+      font-size:11px;
+      margin-top:3px;
+    }
+
+    .badge{
+      white-space:nowrap;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      background:#edf4fb;
+      color:#496682;
+    }
+
+    .badge.pending{
+      background:#fff4d8;
+      color:#996800;
+    }
+
+    .badge.approved{
+      background:#e7f8ef;
+      color:#08744f;
+    }
+
+    .badge.rejected{
+      background:#ffe9e9;
+      color:#a83c3c;
+    }
+
+    .meal-desc{
+      margin-top:8px;
+      color:#536e8c;
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .macro-row{
+      display:grid;
+      grid-template-columns:
+        repeat(4,1fr);
+      gap:6px;
+      margin-top:10px;
+    }
+
+    .macro{
+      border-radius:10px;
+      background:#eff6fc;
+      padding:8px 5px;
+      text-align:center;
+    }
+
+    .macro b{
+      display:block;
+      font-size:12px;
+    }
+
+    .macro span{
+      font-size:9px;
+      color:var(--muted);
+    }
+
+    .empty{
+      padding:20px 12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .notice{
+      padding:10px 12px;
+      border-radius:12px;
+      background:#fff8e9;
+      color:#7e5d19;
+      font-size:11px;
+      line-height:1.5;
+      margin-bottom:12px;
+    }
+
+    #status{
+      position:fixed;
+      left:50%;
+      bottom:
+        calc(
+          20px +
+          env(safe-area-inset-bottom)
+        );
+      transform:
+        translateX(-50%);
+      width:
+        min(
+          92vw,
+          560px
+        );
+      padding:11px 14px;
+      border-radius:14px;
+      background:
+        rgba(
+          18,
+          45,
+          74,
+          .95
+        );
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+      display:none;
+      z-index:50;
+    }
+
+    .nav{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:10px;
+      margin-top:6px;
+    }
+
+    @media(
+      max-width:460px
+    ){
+      .macro-row{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <h1>
+        🥗 NUTRITION
+      </h1>
+      <p>
+        อาหาร น้ำ และสารอาหารของวันนี้
+        เชื่อมกับ EAT SMART และ HYDRATE
+      </p>
+    </section>
+
+
+    <section class="summary-grid">
+
+      <article class="metric">
+        <div class="label">
+          🔥 Calories
+        </div>
+        <div
+          class="value"
+          id="caloriesValue"
+        >
+          —
+        </div>
+        <div
+          class="goal"
+          id="caloriesGoal"
+        >
+          เป้าหมาย —
+        </div>
+        <div class="progress">
+          <div
+            id="caloriesBar"
+          ></div>
+        </div>
+      </article>
+
+
+      <article class="metric">
+        <div class="label">
+          🥩 Protein
+        </div>
+        <div
+          class="value"
+          id="proteinValue"
+        >
+          —
+        </div>
+        <div
+          class="goal"
+          id="proteinGoal"
+        >
+          เป้าหมาย —
+        </div>
+        <div class="progress">
+          <div
+            id="proteinBar"
+          ></div>
+        </div>
+      </article>
+
+
+      <article class="metric">
+        <div class="label">
+          🍚 Carbs
+        </div>
+        <div
+          class="value"
+          id="carbsValue"
+        >
+          —
+        </div>
+        <div
+          class="goal"
+          id="carbsGoal"
+        >
+          เป้าหมาย —
+        </div>
+        <div class="progress">
+          <div
+            id="carbsBar"
+          ></div>
+        </div>
+      </article>
+
+
+      <article class="metric">
+        <div class="label">
+          🥑 Fat
+        </div>
+        <div
+          class="value"
+          id="fatValue"
+        >
+          —
+        </div>
+        <div
+          class="goal"
+          id="fatGoal"
+        >
+          เป้าหมาย —
+        </div>
+        <div class="progress">
+          <div
+            id="fatBar"
+          ></div>
+        </div>
+      </article>
+
+    </section>
+
+
+    <section class="card">
+      <h2>
+        💧 น้ำวันนี้
+      </h2>
+      <p class="sub">
+        HYDRATE จาก Mission จะเข้าหน้านี้อัตโนมัติ
+        และสามารถเติมน้ำที่ดื่มเพิ่มได้
+      </p>
+
+      <div class="water-row">
+        <div>
+          <div
+            class="value"
+            id="waterValue"
+            style="
+              font-size:26px;
+              font-weight:1000;
+            "
+          >
+            0 ml
+          </div>
+          <div
+            class="goal"
+            id="waterGoal"
+            style="
+              margin-top:4px;
+              color:#68809d;
+              font-size:11px;
+            "
+          >
+            เป้าหมาย 2,000 ml
+          </div>
+        </div>
+
+        <button
+          class="btn primary"
+          id="addWaterButton"
+          type="button"
+          onclick="addWaterFromInput()"
+        >
+          + น้ำ
+        </button>
+      </div>
+
+      <div class="progress">
+        <div id="waterBar"></div>
+      </div>
+
+      <div class="quick-water">
+        <button
+          onclick="quickWater(250)"
+        >
+          +250 ml
+        </button>
+        <button
+          onclick="quickWater(500)"
+        >
+          +500 ml
+        </button>
+        <button
+          onclick="quickWater(750)"
+        >
+          +750 ml
+        </button>
+      </div>
+
+      <div
+        class="field"
+        style="margin-top:12px"
+      >
+        <label>
+          ปริมาณที่ดื่มเพิ่ม (ml)
+        </label>
+        <input
+          id="waterInput"
+          type="number"
+          min="1"
+          max="5000"
+          step="1"
+          inputmode="numeric"
+          placeholder="เช่น 250"
+        >
+      </div>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        🍽️ บันทึกอาหารเอง
+      </h2>
+      <p class="sub">
+        ใช้สำหรับข้อมูลจากฉลากอาหาร
+        หรือค่าที่ผู้ใช้ทราบอยู่แล้ว
+      </p>
+
+      <div class="notice">
+        ระบบยังไม่สร้างค่าพลังงาน/โปรตีน/ไขมัน/คาร์บจากชื่ออาหารแบบเดาเอง
+        ถ้า EAT SMART ยังไม่มีค่าธาตุอาหาร จะแสดง “รอประเมิน”
+        เพื่อไม่ให้ข้อมูลสุขภาพคลาดเคลื่อน
+      </div>
+
+      <div class="field">
+        <label>
+          มื้ออาหาร
+        </label>
+        <select id="mealType">
+          <option value="">
+            เลือกมื้อ
+          </option>
+          <option value="breakfast">
+            อาหารเช้า
+          </option>
+          <option value="lunch">
+            อาหารกลางวัน
+          </option>
+          <option value="dinner">
+            อาหารเย็น
+          </option>
+          <option value="snack">
+            ของว่าง
+          </option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>
+          ชื่อเมนู
+        </label>
+        <input
+          id="mealName"
+          type="text"
+          placeholder="เช่น ข้าวกล้อง + อกไก่"
+        >
+      </div>
+
+      <div class="field">
+        <label>
+          รายละเอียด
+        </label>
+        <textarea
+          id="mealDescription"
+          placeholder="ปริมาณ / วัตถุดิบ / หมายเหตุ"
+        ></textarea>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>
+            Calories (kcal)
+          </label>
+          <input
+            id="mealCalories"
+            type="number"
+            min="0"
+            step="1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Protein (g)
+          </label>
+          <input
+            id="mealProtein"
+            type="number"
+            min="0"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Fat (g)
+          </label>
+          <input
+            id="mealFat"
+            type="number"
+            min="0"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Carbs (g)
+          </label>
+          <input
+            id="mealCarbs"
+            type="number"
+            min="0"
+            step="0.1"
+          >
+        </div>
+      </div>
+
+      <button
+        class="btn blue"
+        id="saveMealButton"
+        type="button"
+        onclick="saveManualMeal()"
+        style="width:100%"
+      >
+        บันทึกอาหาร
+      </button>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        📋 รายการอาหารวันนี้
+      </h2>
+      <p
+        class="sub"
+        id="todayLabel"
+      >
+        กำลังโหลด...
+      </p>
+
+      <div
+        class="meal-list"
+        id="mealList"
+      >
+        <div class="empty">
+          กำลังโหลดข้อมูล
+        </div>
+      </div>
+    </section>
+
+
+    <div class="nav">
+      <button
+        class="btn ghost"
+        type="button"
+        onclick="goHome()"
+      >
+        ← HOME
+      </button>
+
+      <button
+        class="btn ghost"
+        type="button"
+        onclick="goMission()"
+      >
+        MISSION →
+      </button>
+    </div>
+
+  </main>
+
+
+  <div id="status"></div>
+
+
+  <script>
+    "use strict";
+
+    const $ =
+      id =>
+        document
+          .getElementById(
+            id
+          );
+
+
+    function nutritionApi(){
+
+      if(
+        window
+          .APP_CONFIG
+          ?.getApi
+      ){
+        return window
+          .APP_CONFIG
+          .getApi(
+            "NUTRITION"
+          );
+      }
+
+      const direct =
+        window
+          .APP_CONFIG
+          ?.API
+          ?.NUTRITION;
+
+      if(direct){
+        return direct;
+      }
+
+      throw new Error(
+        "ไม่พบ NUTRITION API"
+      );
+    }
+
+
+    function showStatus(
+      text,
+      ms=2800
+    ){
+
+      const el =
+        $("status");
+
+      el.textContent =
+        text;
+
+      el.style.display =
+        "block";
+
+      clearTimeout(
+        window
+          .__nutritionStatusTimer
+      );
+
+      window
+        .__nutritionStatusTimer =
+          setTimeout(
+            () => {
+              el.style.display =
+                "none";
+            },
+            ms
+          );
+    }
+
+
+    async function getFreshIdToken(){
+
+      if(
+        !window.liff
+      ){
+        throw new Error(
+          "ไม่พบ LIFF SDK"
+        );
+      }
+
+      if(
+        !liff.id
+      ){
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+      }
+
+      if(
+        !liff.isLoggedIn()
+      ){
+        liff.login();
+        throw new Error(
+          "กำลังเข้าสู่ระบบ LINE"
+        );
+      }
+
+      const token =
+        liff.getIDToken();
+
+      if(!token){
+        throw new Error(
+          "ไม่พบ LINE ID Token"
+        );
+      }
+
+      return token;
+    }
+
+
+    async function api(
+      action,
+      extra={}
+    ){
+
+      const idToken =
+        await getFreshIdToken();
+
+      const response =
+        await fetch(
+          nutritionApi(),
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify({
+                action,
+                idToken,
+                ...extra
+              })
+          }
+        );
+
+      const raw =
+        await response
+          .text();
+
+      let result = {};
+
+      try{
+        result =
+          raw
+            ? JSON.parse(raw)
+            : {};
+      }catch{
+        throw new Error(
+          `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
+        );
+      }
+
+      if(
+        !response.ok ||
+        result
+          ?.success ===
+          false
+      ){
+        throw new Error(
+          result?.error ||
+          result?.message ||
+          `HTTP ${response.status}`
+        );
+      }
+
+      return result;
+    }
+
+
+    function num(
+      value
+    ){
+
+      const n =
+        Number(value);
+
+      return Number
+        .isFinite(n)
+          ? n
+          : null;
+    }
+
+
+    function fmt(
+      value,
+      digits=0
+    ){
+
+      const n =
+        num(value);
+
+      if(n === null){
+        return "—";
+      }
+
+      return n
+        .toLocaleString(
+          "th-TH",
+          {
+            maximumFractionDigits:
+              digits
+          }
+        );
+    }
+
+
+    function percent(
+      value,
+      goal
+    ){
+
+      const v =
+        num(value);
+
+      const g =
+        num(goal);
+
+      if(
+        v === null ||
+        g === null ||
+        g <= 0
+      ){
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        Math.min(
+          100,
+          (v / g) * 100
+        )
+      );
+    }
+
+
+    function setMetric(
+      key,
+      value,
+      goal,
+      unit
+    ){
+
+      $(
+        `${key}Value`
+      ).textContent =
+        value === null ||
+        value === undefined
+          ? "รอประเมิน"
+          : `${fmt(value,1)} ${unit}`;
+
+      $(
+        `${key}Goal`
+      ).textContent =
+        goal === null ||
+        goal === undefined
+          ? "ยังไม่มีเป้าหมาย"
+          : `เป้าหมาย ${fmt(goal,1)} ${unit}`;
+
+      $(
+        `${key}Bar`
+      ).style.width =
+        `${percent(value,goal)}%`;
+    }
+
+
+    function mealTypeLabel(
+      value
+    ){
+
+      const map = {
+        breakfast:
+          "อาหารเช้า",
+        lunch:
+          "อาหารกลางวัน",
+        dinner:
+          "อาหารเย็น",
+        snack:
+          "ของว่าง"
+      };
+
+      return map[
+        String(
+          value ||
+          ""
+        )
+          .toLowerCase()
+      ] ||
+      String(
+        value ||
+        "มื้ออาหาร"
+      );
+    }
+
+
+    function escapeHtml(
+      value
+    ){
+
+      return String(
+        value ??
+        ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+    }
+
+
+    function macroBox(
+      label,
+      value,
+      unit
+    ){
+
+      return `
+        <div class="macro">
+          <b>
+            ${
+              value === null ||
+              value === undefined
+                ? "—"
+                : escapeHtml(
+                    fmt(
+                      value,
+                      1
+                    )
+                  )
+            }
+          </b>
+          <span>
+            ${escapeHtml(label)}
+            ${
+              value === null ||
+              value === undefined
+                ? " • รอประเมิน"
+                : ` • ${escapeHtml(unit)}`
+            }
+          </span>
+        </div>
+      `;
+    }
+
+
+    function renderMeals(
+      meals
+    ){
+
+      const host =
+        $("mealList");
+
+      if(
+        !Array.isArray(
+          meals
+        ) ||
+        meals.length === 0
+      ){
+        host.innerHTML = `
+          <div class="empty">
+            วันนี้ยังไม่มีรายการอาหาร
+            <br>
+            ส่ง EAT SMART หรือบันทึกอาหารด้านบนได้เลย
+          </div>
+        `;
+        return;
+      }
+
+      host.innerHTML =
+        meals
+          .map(
+            meal => {
+
+              const status =
+                meal
+                  ?.missionStatus ||
+                "";
+
+              const badge =
+                meal
+                  ?.mission_submission_id
+                  ? `
+                    <span
+                      class="badge ${escapeHtml(status)}"
+                    >
+                      MISSION ${
+                        status
+                          ? escapeHtml(
+                              status
+                                .toUpperCase()
+                            )
+                          : ""
+                      }
+                    </span>
+                  `
+                  : `
+                    <span class="badge">
+                      MANUAL
+                    </span>
+                  `;
+
+              return `
+                <article class="meal">
+
+                  <div class="meal-top">
+
+                    <div>
+                      <div class="meal-name">
+                        ${escapeHtml(
+                          meal
+                            ?.meal_name ||
+                          "รายการอาหาร"
+                        )}
+                      </div>
+
+                      <div class="meal-type">
+                        ${escapeHtml(
+                          mealTypeLabel(
+                            meal
+                              ?.meal_type
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    ${badge}
+
+                  </div>
+
+                  ${
+                    meal
+                      ?.meal_description
+                      ? `
+                        <div class="meal-desc">
+                          ${escapeHtml(
+                            meal
+                              .meal_description
+                          )}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                  <div class="macro-row">
+                    ${macroBox(
+                      "Calories",
+                      meal?.calories,
+                      "kcal"
+                    )}
+                    ${macroBox(
+                      "Protein",
+                      meal?.protein_g,
+                      "g"
+                    )}
+                    ${macroBox(
+                      "Fat",
+                      meal?.fat_g,
+                      "g"
+                    )}
+                    ${macroBox(
+                      "Carbs",
+                      meal?.carbs_g,
+                      "g"
+                    )}
+                  </div>
+
+                </article>
+              `;
+            }
+          )
+          .join("");
+    }
+
+
+    async function loadToday(){
+
+      try{
+
+        const result =
+          await api(
+            "today"
+          );
+
+        const totals =
+          result
+            ?.totals ||
+          {};
+
+        const goals =
+          result
+            ?.goals ||
+          {};
+
+        setMetric(
+          "calories",
+          totals?.calories,
+          goals?.calories,
+          "kcal"
+        );
+
+        setMetric(
+          "protein",
+          totals?.proteinG,
+          goals?.proteinG,
+          "g"
+        );
+
+        setMetric(
+          "carbs",
+          totals?.carbsG,
+          goals?.carbsG,
+          "g"
+        );
+
+        setMetric(
+          "fat",
+          totals?.fatG,
+          goals?.fatG,
+          "g"
+        );
+
+        const water =
+          Number(
+            result
+              ?.water
+              ?.totalMl ||
+            0
+          );
+
+        const waterGoal =
+          Number(
+            goals?.waterMl ||
+            2000
+          );
+
+        $("waterValue")
+          .textContent =
+            `${fmt(water)} ml`;
+
+        $("waterGoal")
+          .textContent =
+            `เป้าหมาย ${fmt(waterGoal)} ml`;
+
+        $("waterBar")
+          .style
+          .width =
+            `${percent(
+              water,
+              waterGoal
+            )}%`;
+
+        $("todayLabel")
+          .textContent =
+            `วันที่ ${result?.date || "-"}`;
+
+        renderMeals(
+          result?.meals
+        );
+
+      }catch(error){
+
+        console.error(
+          "LOAD NUTRITION ERROR:",
+          error
+        );
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+      }
+    }
+
+
+    async function addWater(
+      waterMl
+    ){
+
+      const button =
+        $("addWaterButton");
+
+      button.disabled =
+        true;
+
+      try{
+
+        const result =
+          await api(
+            "addWater",
+            {
+              waterMl
+            }
+          );
+
+        $("waterInput")
+          .value =
+            "";
+
+        showStatus(
+          `✅ น้ำวันนี้ ${fmt(result?.waterMl || 0)} ml`
+        );
+
+        await loadToday();
+
+      }catch(error){
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+      }
+    }
+
+
+    function quickWater(
+      amount
+    ){
+
+      addWater(
+        amount
+      );
+    }
+
+
+    function addWaterFromInput(){
+
+      const value =
+        Number(
+          $("waterInput")
+            .value ||
+          0
+        );
+
+      if(
+        !Number.isFinite(value) ||
+        value <= 0
+      ){
+        showStatus(
+          "กรุณากรอกปริมาณน้ำ"
+        );
+        return;
+      }
+
+      addWater(
+        Math.round(value)
+      );
+    }
+
+
+    async function saveManualMeal(){
+
+      const button =
+        $("saveMealButton");
+
+      const payload = {
+        mealType:
+          $("mealType")
+            .value,
+        mealName:
+          $("mealName")
+            .value
+            .trim(),
+        description:
+          $("mealDescription")
+            .value
+            .trim(),
+        calories:
+          $("mealCalories")
+            .value,
+        proteinG:
+          $("mealProtein")
+            .value,
+        fatG:
+          $("mealFat")
+            .value,
+        carbsG:
+          $("mealCarbs")
+            .value
+      };
+
+      if(
+        !payload
+          .mealType
+      ){
+        showStatus(
+          "กรุณาเลือกมื้ออาหาร"
+        );
+        return;
+      }
+
+      if(
+        !payload
+          .mealName
+      ){
+        showStatus(
+          "กรุณากรอกชื่อเมนู"
+        );
+        return;
+      }
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+
+      try{
+
+        await api(
+          "addManualMeal",
+          payload
+        );
+
+        [
+          "mealName",
+          "mealDescription",
+          "mealCalories",
+          "mealProtein",
+          "mealFat",
+          "mealCarbs"
+        ]
+          .forEach(
+            id => {
+              $(id).value =
+                "";
+            }
+          );
+
+        $("mealType")
+          .value =
+            "";
+
+        showStatus(
+          "✅ บันทึกอาหารแล้ว"
+        );
+
+        await loadToday();
+
+      }catch(error){
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "บันทึกอาหาร";
+      }
+    }
+
+
+    function goHome(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.HOME ||
+        "./dashboard.html";
+    }
+
+
+    function goMission(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.MISSION ||
+        "./mission.html";
+    }
+
+
+    async function init(){
+
+      try{
+
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+
+        if(
+          !liff.isLoggedIn()
+        ){
+          liff.login();
+          return;
+        }
+
+        await loadToday();
+
+      }catch(error){
+
+        console.error(
+          "NUTRITION INIT ERROR:",
+          error
+        );
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          6000
+        );
+      }
+    }
+
+
+    init();
+  </script>
+
+</body>
+</html>
