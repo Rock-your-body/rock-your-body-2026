@@ -11,36 +11,6 @@
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js?v=20260829-clean-v2"></script>
-/* =========================================
-   TEAM NAME — HOME
-========================================= */
-#teamName{
-  position:absolute !important;
-
-  /* แถบสีน้ำเงินใต้รูป */
-  left:7.5% !important;
-  top:52.0% !important;
-  width:20.5% !important;
-  height:4.5% !important;
-
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  color:#ffffff !important;
-  font-size:clamp(11px,1.55vw,22px) !important;
-  font-weight:700 !important;
-  line-height:1 !important;
-
-  text-align:center !important;
-  white-space:nowrap !important;
-
-  z-index:50 !important;
-  visibility:visible !important;
-  opacity:1 !important;
-
-  pointer-events:none !important;
-}
   <style>
     /* =====================================================
    HOME TEMPLATE — PROFILE + FONT SIZE FIX
@@ -808,12 +778,52 @@
       pointer-events:none !important;
     }
 
+
+    /* =====================================================
+       TEAM NAME — FINAL POSITION
+    ===================================================== */
+    #teamName{
+      position:absolute !important;
+      left:7.0% !important;
+      top:47.3% !important;
+      width:22% !important;
+      height:3.5% !important;
+
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+
+      color:#ffffff !important;
+      font-size:clamp(8px,1vw,15px) !important;
+      font-weight:500 !important;
+      line-height:1 !important;
+
+      text-align:center !important;
+      white-space:nowrap !important;
+      overflow:hidden !important;
+      text-overflow:ellipsis !important;
+
+      z-index:70 !important;
+      visibility:visible !important;
+      opacity:1 !important;
+      pointer-events:auto !important;
+      cursor:pointer !important;
+    }
+
+    /* HOME — no notification bell */
+    #notificationBell,
+    #notificationBadge{
+      display:none !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+    }
+
 </style>
 </head>
 
 <body>
   <div id="homeStage">
-    <img class="template" src="./home-template.png?v=20260829-align-v219" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
+    <img class="template" src="./home-template.png?v=20260829-home-fix-v220" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
     <img id="profileImage" alt="LINE Profile">
 
     <div id="teamName" class="abs" title="แตะเพื่อเปลี่ยนชื่อทีม">กำลังโหลด...</div>
