@@ -13,170 +13,7 @@
   <script src="./app-config.js?v=20260829-clean-v2"></script>
 
   <style>
-    /* =========================================
-   ROCK COIN + ENERGY
-   ตัวเลขเล็กลง / บางลง
-========================================= */
-
-/* ROCK COIN */
-#coinValue,
-#rockCoin,
-.coin-value{
-  font-size: 16px !important;
-  font-weight: 500 !important;
-  line-height: 1 !important;
-}
-
-/* ENERGY */
-#energyValue,
-#energy,
-.energy-value{
-  font-size: 16px !important;
-  font-weight: 500 !important;
-  line-height: 1 !important;
-}
-
-/* ตัวเลข Max เช่น / 200 */
-#energyMax,
-.energy-max{
-  font-size: 12px !important;
-  font-weight: 400 !important;
-}
-/* =========================================
-   PLAYER NAME POSITION
-   เลื่อนชื่อลงมาในช่อง ROCK HERO
-========================================= */
-
-#playerName,
-#displayName,
-.player-name{
-  position: absolute !important;
-
-  /* ตำแหน่งแนวนอน */
-  left: 8% !important;
-  width: 24% !important;
-
-  /* เลื่อนลงมาอยู่ในช่อง ROCK HERO */
-  top: 60% !important;
-
-  text-align: center !important;
-
-  /* รูปแบบตัวหนังสือ */
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  line-height: 1.1 !important;
-  color: #ffffff !important;
-
-  /* ให้อยู่เหนือ template */
-  z-index: 30 !important;
-
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-   /* =========================================
-   PROFILE PHOTO — FIT CIRCLE
-========================================= */
-
-#profileImage,
-#profilePhoto,
-.profile-image,
-.profile-photo{
-  position: absolute !important;
-
-  /* ปรับ 4 ค่านี้ให้ตรงวงกลมใน Template */
-  left: 4.3% !important;
-  top: 16.0% !important;
-  width: 24.0% !important;
-  aspect-ratio: 1 / 1 !important;
-
-  /* สำคัญ */
-  height: auto !important;
-  object-fit: cover !important;
-  object-position: center center !important;
-  border-radius: 50% !important;
-
-  overflow: hidden !important;
-} 
-    /* น้ำหนักปัจจุบัน */
-#currentWeight{
-  position:absolute;
-  left:45.5%;
-  top:21.5%;
-
-  font-size:52px;
-  font-weight:700;
-  color:#071b65;
-  line-height:1;
-}
-
-/* เป้าหมายน้ำหนัก */
-#targetWeight{
-  position:absolute;
-  left:45.5%;
-  top:35.0%;
-
-  font-size:52px;
-  font-weight:700;
-  color:#d71919 !important;
-  line-height:1;
-}
-
-/* % ความคืบหน้า */
-#weightProgressPercent{
-  position:absolute;
-  left:54.0%;
-  top:48.2%;
-
-  font-size:34px;
-  font-weight:800;
-  color:#118529 !important;
-}
-
-/* Steps */
-#todaySteps{
-  position:absolute;
-  left:68.0%;
-  top:20.0%;
-
-  font-size:38px;
-  font-weight:700;
-  color:#fff;
-}
-
-/* Calories */
-#todayCalories{
-  position:absolute;
-  left:87.0%;
-  top:20.0%;
-
-  font-size:38px;
-  font-weight:700;
-  color:#fff;
-}
-
-/* Sleep */
-#todaySleep{
-  position:absolute;
-  left:68.0%;
-  top:35.5%;
-
-  font-size:38px;
-  font-weight:700;
-  color:#fff;
-}
-
-/* Health Score */
-#healthScore{
-  position:absolute;
-  left:87.0%;
-  top:35.5%;
-
-  font-size:38px;
-  font-weight:700;
-  color:#fff;
-}
+    /* HOME TEMPLATE ALIGN V2.19 — canonical CSS only */
     *{box-sizing:border-box}
     html,body{
       margin:0;padding:0;width:100%;min-height:100%;
@@ -199,10 +36,34 @@
 
     /* PROFILE */
     #profileImage{
-      position:absolute;z-index:10;left:8.1%;top:17.3%;width:23.2%;height:28.4%;
-      object-fit:cover;object-position:center top;border-radius:50%;display:none
+      position:absolute;
+      z-index:10;
+      left:4.4%;
+      top:15.7%;
+      width:26.1%;
+      aspect-ratio:1/1;
+      height:auto;
+      object-fit:cover;
+      object-position:center center;
+      border-radius:50%;
+      overflow:hidden;
+      display:none
     }
-    #teamName{left:8.1%;top:45.5%;width:18.5%;height:3.6%;font-size:clamp(8px,1vw,15px);color:#fff;pointer-events:auto;cursor:pointer;z-index:70}
+    #teamName{
+      left:7.0%;
+      top:47.3%;
+      width:22.5%;
+      height:3.5%;
+      font-size:clamp(9px,1.15vw,17px);
+      font-weight:600;
+      color:#fff;
+      pointer-events:auto;
+      cursor:pointer;
+      z-index:70;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis
+    }
     #teamEditModal{
       position:fixed;inset:0;z-index:40000;display:none;align-items:center;justify-content:center;
       padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
@@ -218,8 +79,23 @@
     #teamSave{background:#0d5bd7;color:#fff}
 
     /* TOP */
-    #coin{left:75.9%;top:4.9%;width:8%;height:5%;font-size:clamp(12px,2vw,22px)}
-    #energy{left:89.9%;top:5.9%;width:15%;height:5%;font-size:clamp(12px,2vw,22px)}
+    #coin{
+      left:78.0%;
+      top:4.55%;
+      width:7.2%;
+      height:4.6%;
+      font-size:clamp(10px,1.45vw,19px);
+      font-weight:500
+    }
+    #energy{
+      left:89.3%;
+      top:4.55%;
+      width:8.8%;
+      height:4.6%;
+      font-size:clamp(10px,1.45vw,19px);
+      font-weight:500;
+      white-space:nowrap
+    }
     #level{left:25.1%;top:52.8%;width:6.3%;height:4.8%;font-size:clamp(14px,1.8vw,28px);color:#fff}
     #expText{left:23.1%;top:61.3%;width:7.5%;height:3%;font-size:clamp(10px,1.2vw,17px)}
     .bar{
@@ -229,31 +105,119 @@
     #expTrack{left:7.4%;top:61.0%;width:15.2%}
 
     /* WEIGHT */
-    #currentWeight{left:42.6%;top:20.9%;width:24%;height:5.2%;font-size:clamp(19px,2.9vw,43px)}
-    #targetWeight{left:42.6%;top:34.2%;width:24%;height:5.2%;font-size:clamp(19px,2.9vw,43px)}
-    #weightProgressPct{left:36.2%;top:49.3%;width:5%;height:5%;font-size:clamp(12px,1.5vw,22px)}
+    #currentWeight{
+      left:42.6%;
+      top:20.0%;
+      width:17.3%;
+      height:6.2%;
+      font-size:clamp(22px,3.45vw,50px);
+      font-weight:700;
+      color:#071b65;
+      line-height:1
+    }
+    #targetWeight{
+      left:42.6%;
+      top:34.0%;
+      width:17.3%;
+      height:6.2%;
+      font-size:clamp(22px,3.45vw,50px);
+      font-weight:700;
+      color:#d71919;
+      line-height:1
+    }
+    #weightProgressPct{
+      left:53.0%;
+      top:47.2%;
+      width:6.0%;
+      height:4.5%;
+      font-size:clamp(16px,2.25vw,33px);
+      font-weight:800;
+      color:#118529
+    }
     #weightProgressTrack{left:42.6%;top:49.4%;width:11.8%;height:1.7%}
     #lost{left:36.1%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
     #remaining{left:51.2%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
 
     /* HEALTH CARDS */
-    #steps{left:68.5%;top:20.3%;width:9%;height:5%;font-size:clamp(17px,2.5vw,38px);color:#fff}
+    #steps{
+      left:67.8%;
+      top:19.8%;
+      width:10.0%;
+      height:5.0%;
+      font-size:clamp(18px,2.55vw,38px);
+      font-weight:700;
+      color:#fff
+    }
     #stepsTrack{left:62.2%;top:25.8%;width:12.2%;height:1.5%}
-    #calories{left:89.0%;top:20.3%;width:9%;height:5%;font-size:clamp(17px,2.5vw,38px);color:#fff}
+    #calories{
+      left:86.2%;
+      top:19.8%;
+      width:11.5%;
+      height:5.0%;
+      font-size:clamp(18px,2.55vw,38px);
+      font-weight:700;
+      color:#fff
+    }
     #caloriesTrack{left:81.0%;top:25.8%;width:14.0%;height:1.5%}
-    #sleep{left:68.4%;top:36.4%;width:10%;height:5%;font-size:clamp(14px,2.1vw,31px);color:#fff}
+    #sleep{
+      left:67.4%;
+      top:35.4%;
+      width:11.0%;
+      height:5.2%;
+      font-size:clamp(15px,2.15vw,31px);
+      font-weight:700;
+      color:#fff;
+      white-space:nowrap
+    }
     #sleepTrack{left:62.2%;top:42.5%;width:12.2%;height:1.5%}
-    #healthScore{left:89.0%;top:36.4%;width:10%;height:5%;font-size:clamp(17px,2.5vw,38px);color:#fff}
+    #healthScore{
+      left:86.5%;
+      top:35.4%;
+      width:11.2%;
+      height:5.2%;
+      font-size:clamp(18px,2.55vw,38px);
+      font-weight:700;
+      color:#fff;
+      white-space:nowrap
+    }
     #healthTrack{left:81.0%;top:42.5%;width:14.0%;height:1.5%}
 
     /* REWARDS */
-    #rewardCoin{left:66.3%;top:60.0%;width:8%;height:4%;font-size:clamp(13px,1.8vw,27px)}
-    #rewardEnergy{left:79.3%;top:60.0%;width:9%;height:4%;font-size:clamp(13px,1.8vw,27px)}
+    #rewardCoin{
+      left:66.0%;
+      top:59.7%;
+      width:8.2%;
+      height:4.2%;
+      font-size:clamp(12px,1.65vw,24px);
+      font-weight:600
+    }
+    #rewardEnergy{
+      left:79.0%;
+      top:59.7%;
+      width:9.0%;
+      height:4.2%;
+      font-size:clamp(12px,1.65vw,24px);
+      font-weight:600
+    }
     #rewardBadge{left:91.8%;top:60.2%;width:10%;height:4%;font-size:clamp(8px,1.05vw,15px)}
 
     /* INBODY */
-    #inbodyDate{left:36.8%;top:68.7%;width:10%;height:2.4%;font-size:clamp(7px,.85vw,12px)}
-    #inbodyScore{left:36.8%;top:73.0%;width:7%;height:4.2%;font-size:clamp(17px,2.4vw,35px)}
+    #inbodyDate{
+      left:36.1%;
+      top:67.9%;
+      width:11.2%;
+      height:2.5%;
+      font-size:clamp(7px,.78vw,11px);
+      font-weight:600
+    }
+    #inbodyScore{
+      left:35.5%;
+      top:72.3%;
+      width:8.2%;
+      height:4.6%;
+      font-size:clamp(18px,2.55vw,37px);
+      font-weight:700
+    }
     #inbodyChart{
       position:absolute;z-index:22;left:33.4%;top:76.4%;width:12.2%;height:7.0%;
       pointer-events:none;overflow:visible
@@ -265,14 +229,49 @@
     }
 
     /* PROJECT */
-    #projectRange{left:55.4%;top:73.0%;width:14%;height:3.3%;font-size:clamp(8px,1.05vw,15px)}
-    #projectElapsed{left:52.6%;top:78.4%;width:8%;height:4.4%;font-size:clamp(18px,2.2vw,32px)}
+    #projectRange{
+      left:53.7%;
+      top:72.4%;
+      width:13.5%;
+      height:3.4%;
+      font-size:clamp(9px,1.1vw,16px);
+      font-weight:600
+    }
+    #projectElapsed{
+      left:51.8%;
+      top:77.6%;
+      width:9.2%;
+      height:4.6%;
+      font-size:clamp(19px,2.45vw,36px);
+      font-weight:700
+    }
     #projectTrack{left:50.6%;top:81.1%;width:11.8%;height:1.5%}
-    #projectRemaining{left:52.7%;top:86.5%;width:8%;height:4%;font-size:clamp(12px,1.45vw,21px)}
+    #projectRemaining{
+      left:51.8%;
+      top:85.2%;
+      width:9.2%;
+      height:3.8%;
+      font-size:clamp(11px,1.35vw,20px);
+      font-weight:600
+    }
 
     /* RANKING */
-    #myRank{left:70.0%;top:76.7%;width:7%;height:6%;font-size:clamp(24px,3vw,45px)}
-    #participantCount{left:70.0%;top:84.2%;width:9%;height:4%;font-size:clamp(12px,1.55vw,22px)}
+    #myRank{
+      left:69.2%;
+      top:75.6%;
+      width:9.0%;
+      height:6.0%;
+      font-size:clamp(24px,3.0vw,45px);
+      font-weight:800
+    }
+    #participantCount{
+      left:68.3%;
+      top:83.7%;
+      width:11.2%;
+      height:3.5%;
+      font-size:clamp(9px,1.2vw,17px);
+      font-weight:600
+    }
     #top1Score{left:87.7%;top:85.7%;width:8%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
     #top2Score{left:81.2%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
     #top3Score{left:94.0%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
@@ -573,8 +572,8 @@
       gap:6px;
       align-items:center;
     }
-    #stepsEntry{left:62.0%;top:28.0%;width:15%}
-    #sleepEntry{left:62.0%;top:44.7%;width:15%}
+    #stepsEntry{left:62.0%;top:27.8%;width:15%}
+    #sleepEntry{left:62.0%;top:43.9%;width:15%}
     .health-v212 button{
       border:0;
       border-radius:999px;
@@ -643,7 +642,7 @@
 
 <body>
   <div id="homeStage">
-    <img class="template" src="./home-template.png" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
+    <img class="template" src="./home-template.png?v=20260829-align-v219" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
 
     <button
       id="notificationBell"
