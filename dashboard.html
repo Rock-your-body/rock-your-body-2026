@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260829-render-v2"></script>
+  <script src="./app-config.js?v=20260829-clean-v2"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -680,7 +680,7 @@ async function fetchDashboard(){
 
   const api =
     window.APP_CONFIG
-      .apiUrl("PLAYER");
+      .getApi("PLAYER");
 
   return await postJson(
     api,
@@ -1168,7 +1168,7 @@ async function fetchDashboard(){
     }
 
    async function saveInbody(){
-      showStatus("❌ Render API รุ่นนี้ยังไม่มี InBody endpoint/action",true);
+      showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม InBody action",true);
     }
 
     /* =====================================================
@@ -1185,7 +1185,7 @@ async function fetchDashboard(){
     async function fetchDailyHealth(){
 
       const raw = await postJson(
-        window.APP_CONFIG.apiUrl("PLAYER"),
+        window.APP_CONFIG.getApi("PLAYER"),
         {
           action:"dashboard"
         }
@@ -1420,7 +1420,7 @@ async function fetchDashboard(){
     }
 
     async function saveTeamName(){
-      showStatus("❌ Render API contract รุ่นนี้ยังไม่มี action สำหรับเปลี่ยนชื่อทีม",true);
+      showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม action สำหรับเปลี่ยนชื่อทีม",true);
     }
 
     function goPage(name){
@@ -1508,7 +1508,7 @@ async function fetchDashboard(){
     $("battleButton").addEventListener("click",()=>goPage("BATTLE"));
 
     $("inbodyViewButton").addEventListener("click",()=>goPage("PROGRESS"));
-    $("inbodyUpload").addEventListener("click",()=>showStatus("❌ Render API รุ่นนี้ยังไม่มี InBody endpoint/action",true));
+    $("inbodyUpload").addEventListener("click",()=>showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม InBody action",true));
     $("inbodyCancel").addEventListener("click",closeInbodyModal);
     $("inbodySave").addEventListener("click",saveInbody);
 
