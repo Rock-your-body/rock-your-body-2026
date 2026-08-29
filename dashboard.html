@@ -13,6 +13,139 @@
   <script src="./app-config.js?v=20260829-clean-v2"></script>
 
   <style>
+    /* =====================================================
+   HOME TEMPLATE — PROFILE + FONT SIZE FIX
+   วางท้าย <style>
+===================================================== */
+
+/* 1. รูปโปรไฟล์ — ลดให้พอดีกับวงกลม */
+#profileImage{
+  position:absolute !important;
+
+  left:6.4% !important;
+  top:17.2% !important;
+
+  width:21.8% !important;
+  height:auto !important;
+  aspect-ratio:1 / 1 !important;
+
+  border-radius:50% !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+
+  overflow:hidden !important;
+  z-index:10 !important;
+}
+
+/* 2. ชื่อผู้เล่นใต้รูป */
+#teamName{
+  left:7.0% !important;
+  top:47.3% !important;
+  width:22% !important;
+
+  font-size:clamp(8px,1vw,15px) !important;
+  font-weight:500 !important;
+
+  color:#fff !important;
+  text-align:center !important;
+
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+
+  z-index:30 !important;
+}
+
+/* 3. ROCK COIN มุมขวาบน */
+#coin{
+  font-size:clamp(9px,1.25vw,18px) !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+}
+
+/* 4. ENERGY มุมขวาบน */
+#energy{
+  font-size:clamp(9px,1.25vw,18px) !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+}
+
+/* 5. น้ำหนักปัจจุบัน */
+#currentWeight{
+  font-size:clamp(20px,3.1vw,46px) !important;
+  font-weight:700 !important;
+  color:#071b65 !important;
+  line-height:1 !important;
+}
+
+/* 6. น้ำหนักเป้าหมาย */
+#targetWeight{
+  font-size:clamp(20px,3.1vw,46px) !important;
+  font-weight:700 !important;
+  color:#d71919 !important;
+  line-height:1 !important;
+}
+
+/* 7. % ความคืบหน้า */
+#weightProgressPct{
+  font-size:clamp(15px,2.1vw,31px) !important;
+  font-weight:700 !important;
+  color:#118529 !important;
+}
+
+/* 8. จำนวนก้าว */
+#steps{
+  font-size:clamp(17px,2.35vw,35px) !important;
+  font-weight:600 !important;
+}
+
+/* 9. Calories */
+#calories{
+  font-size:clamp(17px,2.35vw,35px) !important;
+  font-weight:600 !important;
+}
+
+/* 10. Sleep */
+#sleep{
+  font-size:clamp(15px,2vw,29px) !important;
+  font-weight:600 !important;
+}
+
+/* 11. Health Score */
+#healthScore{
+  font-size:clamp(17px,2.35vw,35px) !important;
+  font-weight:600 !important;
+}
+
+/* 12. Reward Coin */
+#rewardCoin{
+  font-size:clamp(11px,1.5vw,22px) !important;
+  font-weight:600 !important;
+}
+
+/* 13. Reward Energy */
+#rewardEnergy{
+  font-size:clamp(11px,1.5vw,22px) !important;
+  font-weight:600 !important;
+}
+
+/* 14. InBody Score */
+#inbodyScore{
+  font-size:clamp(17px,2.3vw,34px) !important;
+  font-weight:600 !important;
+}
+
+/* 15. Project */
+#projectElapsed{
+  font-size:clamp(18px,2.3vw,34px) !important;
+  font-weight:600 !important;
+}
+
+/* 16. Ranking */
+#myRank{
+  font-size:clamp(22px,2.8vw,42px) !important;
+  font-weight:700 !important;
+}
     /* HOME TEMPLATE ALIGN V2.19 — canonical CSS only */
     *{box-sizing:border-box}
     html,body{
