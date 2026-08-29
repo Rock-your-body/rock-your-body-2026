@@ -13,6 +13,39 @@
   <script src="./app-config.js?v=20260829-clean-v2"></script>
 
   <style>
+/* =========================================
+   PLAYER NAME POSITION
+   เลื่อนชื่อลงมาในช่อง ROCK HERO
+========================================= */
+
+#playerName,
+#displayName,
+.player-name{
+  position: absolute !important;
+
+  /* ตำแหน่งแนวนอน */
+  left: 8% !important;
+  width: 20% !important;
+
+  /* เลื่อนลงมาอยู่ในช่อง ROCK HERO */
+  top: 51.5% !important;
+
+  text-align: center !important;
+
+  /* รูปแบบตัวหนังสือ */
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: #ffffff !important;
+
+  /* ให้อยู่เหนือ template */
+  z-index: 30 !important;
+
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
    /* =========================================
    PROFILE PHOTO — FIT CIRCLE
 ========================================= */
