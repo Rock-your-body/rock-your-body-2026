@@ -4,19 +4,25 @@
    ROCK YOUR BODY 2026
    CENTRAL APP CONFIG
    Supabase Edge Functions ONLY
+
+   Version: 2026-08-29-STEP3
 ============================================================ */
 
 window.APP_CONFIG = {
 
-  APP_NAME: "ROCK YOUR BODY 2026",
+  APP_NAME:
+    "ROCK YOUR BODY 2026",
 
-  VERSION: "2026-08-29-clean-v2",
+  VERSION:
+    "2026-08-29-STEP3",
+
 
   /* ==========================================================
      LINE LIFF
   ========================================================== */
 
-  LIFF_ID: "2011201679-uNWz5yqF",
+  LIFF_ID:
+    "2011201679-uNWz5yqF",
 
   LIFF_URL:
     "https://liff.line.me/2011201679-uNWz5yqF",
@@ -40,6 +46,10 @@ window.APP_CONFIG = {
 
   /* ==========================================================
      EDGE FUNCTIONS
+
+     หมายเหตุ:
+     DAILY HEALTH + WEIGHT
+     รวมเข้า PLAYER แล้ว
   ========================================================== */
 
   API: {
@@ -64,6 +74,7 @@ window.APP_CONFIG = {
 
     PROJECT_SETTINGS:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/project-settings"
+
   },
 
 
@@ -105,18 +116,29 @@ window.APP_CONFIG = {
 
     ADMIN:
       "./admin.html"
+
   },
 
 
   /* ==========================================================
-     GAME SETTINGS
+     DAILY MISSION ROUTES
   ========================================================== */
 
-  MAX_ENERGY: 200,
+  MISSION_ROUTE: {
 
-  EXP_PER_LEVEL: 500,
+    MOVE_MORE:
+      "./mission.html?category=daily&mission=daily_move_more",
 
-  REFRESH_MS: 30000,
+    EXERCISE:
+      "./mission.html?category=daily&mission=daily_exercise_30",
+
+    EAT_SMART:
+      "./nutrition.html?from=mission&mission=daily_eat_smart",
+
+    SLEEP:
+      "./mission.html?category=daily&mission=daily_sleep"
+
+  },
 
 
   /* ==========================================================
@@ -125,36 +147,150 @@ window.APP_CONFIG = {
 
   DAILY_GOALS: {
 
-    STEPS: 8000,
+    STEPS:
+      8000,
 
-    CALORIES: 300,
+    CALORIES:
+      300,
 
-    SLEEP_MINUTES: 420
+    SLEEP_MINUTES:
+      420
+
+  },
+
+
+  /* ==========================================================
+     GAME SETTINGS
+  ========================================================== */
+
+  MAX_ENERGY:
+    200,
+
+  EXP_PER_LEVEL:
+    500,
+
+  REFRESH_MS:
+    30000,
+
+
+  /* ==========================================================
+     STORAGE
+  ========================================================== */
+
+  STORAGE: {
+
+    MISSION_EVIDENCE:
+      "mission-evidence",
+
+    INBODY_RESULTS:
+      "inbody-results",
+
+    NUTRITION_EVIDENCE:
+      "nutrition-evidence",
+
+    ROCK_ASSETS:
+      "rock-assets"
+
   }
 
 };
 
 
 /* ============================================================
-   SIMPLE API GETTER
+   GET API
 
-   ใช้:
+   ตัวอย่าง:
    APP_CONFIG.getApi("PLAYER")
+   APP_CONFIG.getApi("player")
 ============================================================ */
 
-window.APP_CONFIG.getApi = function(name){
+window.APP_CONFIG.getApi =
+  function getApi(name) {
 
-  const url =
-    window.APP_CONFIG.API?.[name];
+    const key =
+      String(
+        name || ""
+      )
+        .trim()
+        .toUpperCase();
 
-  if(!url){
+    const url =
+      window.APP_CONFIG
+        ?.API
+        ?.[key];
 
-    throw new Error(
-      "ไม่พบ API configuration: " + name
+    if (!url) {
+
+      throw new Error(
+        "ไม่พบ API configuration: " +
+        key
+      );
+
+    }
+
+    return url;
+
+  };
+
+
+/* ============================================================
+   GET PAGE
+
+   ตัวอย่าง:
+   APP_CONFIG.getPage("HOME")
+============================================================ */
+
+window.APP_CONFIG.getPage =
+  function getPage(name) {
+
+    const key =
+      String(
+        name || ""
+      )
+        .trim()
+        .toUpperCase();
+
+    return (
+      window.APP_CONFIG
+        ?.PAGE
+        ?.[key]
+      ||
+      window.APP_CONFIG.PAGE.HOME
     );
 
-  }
+  };
 
-  return url;
 
-};
+/* ============================================================
+   GET MISSION ROUTE
+============================================================ */
+
+window.APP_CONFIG.getMissionRoute =
+  function getMissionRoute(name) {
+
+    const key =
+      String(
+        name || ""
+      )
+        .trim()
+        .toUpperCase();
+
+    return (
+      window.APP_CONFIG
+        ?.MISSION_ROUTE
+        ?.[key]
+      ||
+      window.APP_CONFIG.PAGE.MISSION
+    );
+
+  };
+
+
+/* ============================================================
+   COMPATIBILITY ALIAS
+
+   รองรับไฟล์เดิมที่อาจเรียก APP_CONFIG.PAGES
+============================================================ */
+
+window.APP_CONFIG.PAGES =
+  window.APP_CONFIG.PAGE;
