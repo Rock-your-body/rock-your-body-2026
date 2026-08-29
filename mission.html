@@ -85,32 +85,33 @@
       -webkit-tap-highlight-color:transparent;
     }
 
+    /* V2.13.2 — CLICK เฉพาะปุ่ม "ไปทำภารกิจ" บน mission-template */
     .mission-card-button.daily{
       left:2.8%;
-      top:38.4%;
+      top:55.0%;
       width:28.8%;
-      height:5.5%;
+      height:6.4%;
     }
 
     .mission-card-button.weekly{
       left:35.0%;
-      top:38.4%;
+      top:55.0%;
       width:29.8%;
-      height:5.5%;
+      height:6.4%;
     }
 
     .mission-card-button.monthly{
       left:67.4%;
-      top:38.4%;
+      top:55.0%;
       width:31.0%;
-      height:5.5%;
+      height:6.4%;
     }
 
     .mission-card-button.bonus{
       left:2.8%;
-      top:67.5%;
+      top:82.0%;
       width:28.8%;
-      height:5.5%;
+      height:6.3%;
     }
 
     /* =====================================================
@@ -1282,98 +1283,6 @@
     }
 
 
-/* =========================================================
-   MISSION HUB UI V2.13
-========================================================= */
-.v213-hub{
-  margin:14px 0 18px;
-}
-.v213-hub-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-.v213-card{
-  position:relative;
-  overflow:hidden;
-  border-radius:22px;
-  padding:16px;
-  min-height:155px;
-  box-shadow:0 10px 24px rgba(15,38,76,.12);
-  border:1px solid rgba(255,255,255,.7);
-}
-.v213-card.daily{background:linear-gradient(135deg,#fff7ed,#fff)}
-.v213-card.weekly{background:linear-gradient(135deg,#eef6ff,#fff)}
-.v213-card.monthly{background:linear-gradient(135deg,#f7efff,#fff)}
-.v213-card.bonus{background:linear-gradient(135deg,#effaf0,#fff)}
-.v213-card-head{display:flex;align-items:center;gap:10px}
-.v213-icon{
-  width:52px;height:52px;border-radius:50%;
-  display:grid;place-items:center;font-size:28px;
-  background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.12)
-}
-.v213-card h3{margin:0;font-size:20px;line-height:1.05}
-.v213-card small{display:block;margin-top:3px;font-weight:700;color:#53657c}
-.v213-progress{
-  height:8px;background:rgba(30,62,105,.1);
-  border-radius:999px;margin:14px 0 10px;overflow:hidden
-}
-.v213-progress i{display:block;height:100%;width:0;border-radius:999px}
-.daily .v213-progress i{background:#ff5a0a}
-.weekly .v213-progress i{background:#075ee8}
-.monthly .v213-progress i{background:#6b16b8}
-.bonus .v213-progress i{background:#098a27}
-.v213-meta{display:flex;justify-content:space-between;gap:8px;font-weight:900}
-.v213-open{
-  width:100%;border:0;border-radius:13px;min-height:42px;
-  margin-top:12px;color:#fff;font-weight:900;font-size:15px;cursor:pointer
-}
-.daily .v213-open{background:linear-gradient(90deg,#ff5708,#e91f0b)}
-.weekly .v213-open{background:linear-gradient(90deg,#0967ed,#0629a9)}
-.monthly .v213-open{background:linear-gradient(90deg,#7a24c9,#40108d)}
-.bonus .v213-open{background:linear-gradient(90deg,#16a23a,#05751e)}
-.v213-section{
-  display:none;margin-top:16px;padding:16px;border-radius:22px;
-  background:#fff;box-shadow:0 10px 28px rgba(12,41,82,.12)
-}
-.v213-section.show{display:block}
-.v213-section-title{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;
-  margin-bottom:12px
-}
-.v213-section-title h2{margin:0;font-size:22px}
-.v213-close{
-  border:0;background:#edf3fa;color:#234c7c;border-radius:999px;
-  padding:8px 12px;font-weight:900;cursor:pointer
-}
-.v213-item{
-  padding:13px;border:1px solid #e1eaf4;border-radius:16px;margin-top:9px;
-  background:#fff
-}
-.v213-item-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.v213-item strong{font-size:16px}
-.v213-status{font-size:12px;font-weight:900;border-radius:999px;padding:5px 8px;background:#eef3f8}
-.v213-reward{margin-top:7px;font-size:12px;font-weight:800;color:#56697e}
-.v213-detail-btn{
-  margin-top:9px;width:100%;border:0;border-radius:11px;padding:9px 10px;
-  background:#0a5fd7;color:#fff;font-weight:900;cursor:pointer
-}
-.v213-secret{
-  border:2px dashed #15943b;background:#f3fff5
-}
-.v213-golden{
-  border:2px solid #f1b400;
-  background:linear-gradient(135deg,#fff7c8,#fff);
-  box-shadow:0 8px 22px rgba(210,156,0,.16)
-}
-.v213-note{font-size:12px;color:#64758a;margin-top:7px}
-@media(max-width:640px){
-  .v213-hub-grid{grid-template-columns:1fr 1fr;gap:8px}
-  .v213-card{padding:12px;min-height:145px}
-  .v213-icon{width:44px;height:44px;font-size:24px}
-  .v213-card h3{font-size:16px}
-  .v213-meta{font-size:12px}
-}
 
 </style>
 
@@ -1382,95 +1291,6 @@
 
 <body>
 
-<section class="v213-hub" id="missionHubV213">
-  <div class="v213-hub-grid">
-
-    <article class="v213-card daily">
-      <div class="v213-card-head">
-        <div class="v213-icon">☀️</div>
-        <div>
-          <h3>DAILY MISSION</h3>
-          <small>ภารกิจประจำวัน</small>
-        </div>
-      </div>
-      <div class="v213-progress"><i id="v213DailyBar"></i></div>
-      <div class="v213-meta">
-        <span id="v213DailyCount">0 / 5 สำเร็จ</span>
-        <span>⭐ Daily</span>
-      </div>
-      <button class="v213-open" type="button" onclick="openHubV213('daily')">ไปทำภารกิจ ›</button>
-    </article>
-
-    <article class="v213-card weekly">
-      <div class="v213-card-head">
-        <div class="v213-icon">🗓️</div>
-        <div>
-          <h3>WEEKLY MISSION</h3>
-          <small>ภารกิจประจำสัปดาห์</small>
-        </div>
-      </div>
-      <div class="v213-progress"><i id="v213WeeklyBar"></i></div>
-      <div class="v213-meta">
-        <span id="v213WeeklyCount">กิจกรรมประจำสัปดาห์</span>
-        <span>⭐ + ⚡</span>
-      </div>
-      <button class="v213-open" type="button" onclick="openHubV213('weekly')">ไปทำภารกิจ ›</button>
-    </article>
-
-    <article class="v213-card monthly">
-      <div class="v213-card-head">
-        <div class="v213-icon">🔥</div>
-        <div>
-          <h3>MONTHLY MISSION</h3>
-          <small>ภารกิจประจำเดือน</small>
-        </div>
-      </div>
-      <div class="v213-progress"><i id="v213MonthlyBar"></i></div>
-      <div class="v213-meta">
-        <span id="v213MonthlyCount">Theme + Boss</span>
-        <span>🏆 Special</span>
-      </div>
-      <button class="v213-open" type="button" onclick="openHubV213('monthly')">ไปทำภารกิจ ›</button>
-    </article>
-
-    <article class="v213-card bonus">
-      <div class="v213-card-head">
-        <div class="v213-icon">🎁</div>
-        <div>
-          <h3>BONUS MISSION</h3>
-          <small>Secret • Streak • Achievement</small>
-        </div>
-      </div>
-      <div class="v213-progress"><i id="v213BonusBar"></i></div>
-      <div class="v213-meta">
-        <span id="v213BonusCount">🔒 Secret วันนี้</span>
-        <span>🌟 Rare</span>
-      </div>
-      <button class="v213-open" type="button" onclick="openHubV213('bonus')">ไปทำภารกิจ ›</button>
-    </article>
-
-  </div>
-
-  <div id="v213DailySection" class="v213-section">
-    <div class="v213-section-title"><h2>🟠 DAILY MISSION</h2><button class="v213-close" onclick="closeHubV213()">ปิด</button></div>
-    <div id="v213DailyList"></div>
-  </div>
-
-  <div id="v213WeeklySection" class="v213-section">
-    <div class="v213-section-title"><h2>🔵 WEEKLY MISSION</h2><button class="v213-close" onclick="closeHubV213()">ปิด</button></div>
-    <div id="v213WeeklyList"></div>
-  </div>
-
-  <div id="v213MonthlySection" class="v213-section">
-    <div class="v213-section-title"><h2>🟣 MONTHLY MISSION</h2><button class="v213-close" onclick="closeHubV213()">ปิด</button></div>
-    <div id="v213MonthlyList"></div>
-  </div>
-
-  <div id="v213BonusSection" class="v213-section">
-    <div class="v213-section-title"><h2>🟢 BONUS MISSION</h2><button class="v213-close" onclick="closeHubV213()">ปิด</button></div>
-    <div id="v213BonusList"></div>
-  </div>
-</section>
 
 
 
@@ -1488,7 +1308,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-mission-period-reset-01"
+    src="./mission-template.png?v=20260829-v2132"
     alt=""
     draggable="false"
   >
@@ -1578,7 +1398,7 @@
     id="weeklyCount"
     class="weekly-count"
   >
-    0 / 6
+    0 / 9
   </div>
 
 
@@ -1608,7 +1428,7 @@
     id="monthlyCount"
     class="monthly-count"
   >
-    0 / 1
+    0 / 3
   </div>
 
 
@@ -1638,7 +1458,7 @@
     id="bonusCount"
     class="bonus-count"
   >
-    0 / 9
+    0 / 6
   </div>
 
 
@@ -2403,7 +2223,7 @@ const missionData = {
       "WEEKLY MISSION",
 
     subtitle:
-      "แอโรบิก 3 ครั้ง / สัปดาห์ และต้องไม่ซ้ำวันกัน",
+      "กิจกรรมประจำสัปดาห์ • Club • Social Activity",
 
     icon:
       "📅",
@@ -2413,12 +2233,116 @@ const missionData = {
       {
         section:"WEEKLY MISSION",
         id:"weekly_aerobic",
-        icon:"🎵",
-        name:"AEROBIC 3 TIMES / WEEK",
-        description:"ออกกำลังกายแบบแอโรบิกให้ครบ 3 ครั้งภายในสัปดาห์ โดยแต่ละครั้งต้องเป็นคนละวัน",
-        userInput:"ประเภทกิจกรรม + จำนวนนาที",
-        evidenceText:"รูป / Screenshot / วิดีโอกิจกรรม",
-        passCondition:"ส่งได้ 3 ครั้งต่อสัปดาห์ และห้ามซ้ำวัน",
+        icon:"💃",
+        name:"AEROBIC CLUB",
+        description:"เข้าร่วม Aerobic Club วันจันทร์ / พุธ / ศุกร์ เวลา 17:00 น.",
+        userInput:"ประเภทกิจกรรม + ระยะเวลา",
+        evidenceText:"ภาพ / Screenshot / Video กิจกรรม",
+        passCondition:"ทำได้ไม่เกิน 1 ครั้ง/วัน และสูงสุด 3 ครั้ง/สัปดาห์",
+        evidence:"photo_or_video",
+        reward:{coin:30,energy:30,exp:30}
+      },
+
+      {
+        section:"WEEKLY MISSION",
+        id:"weekly_weight_training",
+        icon:"🏋️",
+        name:"WEIGHT TRAINING",
+        description:"เข้าร่วม Weight Training ตามกิจกรรมที่กำหนด",
+        userInput:"ระยะเวลา",
+        evidenceText:"ภาพ / Screenshot กิจกรรม",
+        passCondition:"เข้าร่วมกิจกรรมและส่งหลักฐานครบ",
+        evidence:"photo_or_video",
+        reward:{coin:30,energy:30,exp:30}
+      },
+
+      {
+        section:"WEEKLY MISSION",
+        id:"weekly_nutrition",
+        icon:"🥗",
+        name:"NUTRITION MISSION",
+        description:"เข้าร่วมกิจกรรมหรือ Workshop ด้านโภชนาการ",
+        userInput:"รายละเอียดกิจกรรม / คะแนน Quiz (ถ้ามี)",
+        evidenceText:"ภาพกิจกรรม / Screenshot",
+        passCondition:"เข้าร่วมกิจกรรมตามที่กำหนด",
+        evidence:"photo",
+        reward:{coin:30,energy:30,exp:30}
+      },
+
+      {
+        section:"WEEKLY MISSION",
+        id:"weekly_badminton",
+        icon:"🏸",
+        name:"BADMINTON NIGHT",
+        description:"เข้าร่วม Badminton Night ทุกวันพฤหัสบดี เวลา 19:00 น.",
+        userInput:"ระยะเวลา",
+        evidenceText:"ภาพกิจกรรม",
+        passCondition:"เข้าร่วมกิจกรรมและส่งหลักฐานครบ",
+        evidence:"photo",
+        reward:{coin:30,energy:30,exp:30}
+      },
+
+      {
+        section:"WEEKLY MISSION",
+        id:"weekly_run_together",
+        icon:"🏃",
+        name:"RUN TOGETHER",
+        description:"เข้าร่วมชมรมวิ่งกับเพื่อนอย่างน้อย 3 คน",
+        userInput:"ระยะเวลา + ระยะทาง + จำนวนคน",
+        evidenceText:"ภาพกลุ่ม + Screenshot Activity",
+        passCondition:"กลุ่ม ≥ 3 คน",
+        evidence:"photo_or_video",
+        reward:{coin:30,energy:30,exp:30}
+      },
+
+      {
+        section:"WEEKLY MISSION",
+        id:"weekly_yoga",
+        icon:"🧘",
+        name:"YOGA FLOW",
+        description:"เข้าร่วมกิจกรรม Yoga",
+        userInput:"ระยะเวลา",
+        evidenceText:"ภาพกิจกรรม",
+        passCondition:"เข้าร่วมกิจกรรมและส่งหลักฐานครบ",
+        evidence:"photo",
+        reward:{coin:30,energy:30,exp:30}
+      },
+
+      {
+        section:"WEEKLY SOCIAL",
+        id:"weekly_bring_buddy",
+        icon:"👥",
+        name:"BRING YOUR BUDDY",
+        description:"ชวนเพื่อนที่ยังไม่เคยเข้ากิจกรรมมา Exercise ด้วยกัน 1 ครั้ง",
+        userInput:"ชื่อกิจกรรม + จำนวนคน",
+        evidenceText:"ภาพกิจกรรมร่วมกัน",
+        passCondition:"มีเพื่อนใหม่เข้าร่วมกิจกรรม",
+        evidence:"photo",
+        reward:{coin:40,energy:40,exp:40}
+      },
+
+      {
+        section:"WEEKLY SOCIAL",
+        id:"weekly_team_of_5",
+        icon:"👨‍👩‍👧‍👦",
+        name:"TEAM OF 5",
+        description:"รวมทีมอย่างน้อย 5 คน ทำกิจกรรมทางกายอย่างน้อย 30 นาที",
+        userInput:"กิจกรรม + ระยะเวลา + จำนวนคน",
+        evidenceText:"ภาพกลุ่ม / Screenshot Activity",
+        passCondition:"≥ 5 คน และ ≥ 30 นาที",
+        evidence:"photo_or_video",
+        reward:{coin:50,energy:50,exp:50}
+      },
+
+      {
+        section:"WEEKLY SOCIAL",
+        id:"weekly_lunch_walk_crew",
+        icon:"🚶",
+        name:"LUNCH WALK CREW",
+        description:"รวมเพื่อนอย่างน้อย 3 คน เดินช่วงพักกลางวัน 15 นาที",
+        userInput:"ระยะเวลา + จำนวนคน",
+        evidenceText:"ภาพกลุ่ม / Screenshot Activity",
+        passCondition:"≥ 3 คน และ ≥ 15 นาที",
         evidence:"photo_or_video",
         reward:{coin:30,energy:30,exp:30}
       }
@@ -2438,25 +2362,53 @@ const missionData = {
       "MONTHLY MISSION",
 
     subtitle:
-      "ภารกิจประจำเดือน",
+      "TikTok Challenge • Monthly Theme • Boss Mission",
 
     icon:
-      "📱",
+      "🔥",
 
     missions:[
 
       {
-        section:"MISSION ประจำเดือน",
+        section:"MONTHLY MISSION",
         id:"monthly_tiktok",
-        icon:"🎬",
+        icon:"📱",
         name:"HEALTHY TIKTOK CHALLENGE",
-        description:"สร้างคลิป TikTok ความยาว 15–60 วินาที เพื่อส่งเสริมสุขภาพ เลือกหัวข้อ START YOUR MOVE / EAT SMART / HEALTHY LIFESTYLE และใช้ #RockYourBody2026",
-        userInput:"หัวข้อคลิป + รายละเอียดกิจกรรม + Link TikTok",
-        evidenceText:"Screenshot โพสต์ TikTok + Link คลิป",
-        passCondition:"คลิปตรงหัวข้อ ความยาว 15–60 วินาที มี #RockYourBody2026 และส่งหลักฐานครบ",
+        description:"สร้างคลิป TikTok ความยาว 15–60 วินาที ตาม Theme สุขภาพของเดือน",
+        userInput:"ชื่อคลิป + แนวคิด + รายละเอียดกิจกรรม + Link",
+        evidenceText:"Screenshot โพสต์ + Link คลิป",
+        passCondition:"คลิปตรง Theme ความยาว 15–60 วินาที และส่งหลักฐานครบ",
         evidence:"photo_link",
         requireLink:true,
-        reward:{coin:100,energy:100,exp:150}
+        reward:{coin:50,energy:50,exp:50}
+      },
+
+      {
+        section:"MONTHLY BOSS",
+        id:"monthly_boss",
+        icon:"👹",
+        name:"MONTHLY BOSS",
+        description:"ภารกิจสะสมประจำเดือน ระบบจะเปลี่ยนเป้าหมายอัตโนมัติตามเดือน",
+        userInput:"ระบบติดตามอัตโนมัติ",
+        evidenceText:"ไม่ต้องส่งหลักฐานเพิ่ม หากข้อมูลอยู่ในระบบแล้ว",
+        passCondition:"ผ่านเงื่อนไข Boss ของเดือน",
+        evidence:"none",
+        auto:true,
+        reward:{coin:300,energy:0,exp:0}
+      },
+
+      {
+        section:"MONTHLY SPECIAL",
+        id:"top_health_creator",
+        icon:"🏆",
+        name:"TOP HEALTH CREATOR OF THE MONTH",
+        description:"รางวัลพิเศษสำหรับคลิป Healthy TikTok ที่ผ่านเกณฑ์ตามโครงการ",
+        userInput:"ใช้ผลงานจาก Healthy TikTok Challenge",
+        evidenceText:"ใช้หลักฐานจาก TikTok Mission",
+        passCondition:"พิจารณาโดยคณะกรรมการ / ระบบโครงการ",
+        evidence:"none",
+        auto:true,
+        reward:{coin:200,energy:0,exp:0}
       }
 
     ]
@@ -2474,7 +2426,7 @@ const missionData = {
       "BONUS MISSION",
 
     subtitle:
-      "ภารกิจพิเศษและ Achievement",
+      "Secret • Golden • Streak • Achievement",
 
     icon:
       "🎁",
@@ -2482,266 +2434,169 @@ const missionData = {
     missions:[
 
       {
-        id:
-          "bonus_core_daily",
-
-        icon:
-          "⭐",
-
-        name:
-          "CORE DAILY 3/3",
-
-        description:
-          "ทำ Core DAILY MISSION ครบทั้ง 3 ภารกิจ",
-
-        auto:
-          true,
-
-        reward:{
-          coin:20,
-          energy:20,
-          exp:20
-        }
+        section:"SECRET MISSION",
+        id:"secret_daily",
+        icon:"🔒",
+        name:"TODAY'S SECRET MISSION",
+        description:"เปิดภารกิจลับได้ 1 ครั้งต่อวัน ระบบสุ่มภารกิจจาก Secret Mission Pool",
+        userInput:"ตามภารกิจที่สุ่มได้",
+        evidenceText:"ภาพ / Screenshot ตามเงื่อนไขของภารกิจ",
+        passCondition:"ทำ Secret Mission ที่สุ่มได้สำเร็จ",
+        evidence:"photo_or_video",
+        reward:{coin:20,energy:20,exp:20}
       },
 
-
       {
-        id:
-          "bonus_perfect_day",
-
-        icon:
-          "🌟",
-
-        name:
-          "PERFECT DAY",
-
-        description:
-          "ทำ Core Daily 3 ภารกิจ + Daily Extra ครบทั้งหมด",
-
-        auto:
-          true,
-
-        reward:{
-          coin:30,
-          energy:30,
-          exp:30
-        }
+        section:"RARE SECRET",
+        id:"golden_mission",
+        icon:"🌟",
+        name:"GOLDEN MISSION",
+        description:"Rare Secret Mission มีโอกาสสุ่มพบประมาณ 10%",
+        userInput:"ตาม Golden Mission ที่สุ่มได้",
+        evidenceText:"ภาพ / Screenshot ตามเงื่อนไข",
+        passCondition:"ทำ Golden Mission สำเร็จ",
+        evidence:"photo_or_video",
+        reward:{coin:50,energy:50,exp:50}
       },
 
-
       {
-        id:
-          "bonus_weekly_four",
-
-        icon:
-          "🏆",
-
-        name:
-          "WEEKLY 4 MISSIONS",
-
-        description:
-          "ทำ WEEKLY MISSION สำเร็จอย่างน้อย 4 กิจกรรมในสัปดาห์",
-
-        auto:
-          true,
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"WEEKLY BONUS",
+        id:"aerobic_perfect_week",
+        icon:"🔥",
+        name:"AEROBIC PERFECT WEEK",
+        description:"เข้าร่วม AEROBIC CLUB ครบ 3 วันภายในสัปดาห์",
+        auto:true,
+        reward:{coin:100,energy:100,exp:100}
       },
 
-
       {
-        id:
-          "bonus_walk_50k",
-
-        icon:
-          "👟",
-
-        name:
-          "WALK 50K",
-
-        description:
-          "เดินสะสม 50,000 ก้าวต่อสัปดาห์",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"STREAK BONUS",
+        id:"five_day_streak",
+        icon:"🔥",
+        name:"5 DAY STREAK",
+        description:"ผ่าน Daily Mission อย่างน้อย 3 Mission/วัน ติดต่อกัน 5 วัน",
+        auto:true,
+        reward:{coin:50,energy:0,exp:50}
       },
 
-
       {
-        id:
-          "bonus_exercise_150",
-
-        icon:
-          "🏃",
-
-        name:
-          "EXERCISE 150 MIN",
-
-        description:
-          "ออกกำลังกายรวม 150 นาทีต่อสัปดาห์",
-
-        evidence:
-          "photo_or_video",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"WEEKLY BONUS",
+        id:"perfect_week",
+        icon:"👑",
+        name:"PERFECT WEEK",
+        description:"ผ่าน Daily ≥ 3 Mission อย่างน้อย 6 จาก 7 วัน",
+        auto:true,
+        reward:{coin:100,energy:0,exp:100}
       },
 
-
       {
-        id:
-          "bonus_stair_master",
-
-        icon:
-          "🪜",
-
-        name:
-          "STAIR MASTER",
-
-        description:
-          "เดินขึ้น–ลงบันไดสะสม 30 ชั้นต่อสัปดาห์",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"DAILY BONUS",
+        id:"all_clear",
+        icon:"💎",
+        name:"ALL CLEAR",
+        description:"ผ่าน Daily Mission ทั้ง 5 รายการภายในวันเดียว",
+        auto:true,
+        reward:{coin:30,energy:0,exp:0}
       },
 
-
       {
-        id:
-          "bonus_healthy_meal",
-
-        icon:
-          "🥗",
-
-        name:
-          "HEALTHY MEAL WEEK",
-
-        description:
-          "ส่งรูปอาหารสุขภาพอย่างน้อย 5 มื้อต่อสัปดาห์",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"ACHIEVEMENT",
+        id:"achievement_first_step",
+        icon:"🚶",
+        name:"FIRST STEP",
+        description:"ผ่าน Mission ครั้งแรก",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
       },
 
-
       {
-        id:
-          "bonus_sleep",
-
-        icon:
-          "😴",
-
-        name:
-          "SLEEP WELL",
-
-        description:
-          "นอนอย่างน้อย 7 ชั่วโมง จำนวน 5 คืนต่อสัปดาห์",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"ACHIEVEMENT",
+        id:"achievement_on_fire",
+        icon:"🔥",
+        name:"ON FIRE",
+        description:"Mission ติดต่อกัน 7 วัน",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
       },
 
-
       {
-        id:
-          "bonus_active_break",
-
-        icon:
-          "🧍",
-
-        name:
-          "ACTIVE BREAK",
-
-        description:
-          "ลุกเดินหรือยืดตัวระหว่างงานอย่างน้อย 5 วัน",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"ACHIEVEMENT",
+        id:"achievement_century_club",
+        icon:"💯",
+        name:"CENTURY CLUB",
+        description:"ทำ Mission ครบ 100 ครั้ง",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
       },
 
-
       {
-        id:
-          "bonus_team_move",
-
-        icon:
-          "👥",
-
-        name:
-          "TEAM MOVE",
-
-        description:
-          "ทำกิจกรรมสุขภาพร่วมกับเพื่อนร่วมงานอย่างน้อย 3 ครั้ง/สัปดาห์ พร้อมรูปกลุ่ม",
-
-        evidence:
-          "photo",
-
-        reward:{
-          coin:50,
-          energy:50,
-          exp:50
-        }
+        section:"ACHIEVEMENT",
+        id:"achievement_100k_walker",
+        icon:"👟",
+        name:"100K WALKER",
+        description:"สะสมครบ 100,000 ก้าว",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
       },
 
+      {
+        section:"ACHIEVEMENT",
+        id:"achievement_move_master",
+        icon:"🏃",
+        name:"MOVE MASTER",
+        description:"Exercise ครบ 10 ครั้ง",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
+      },
 
       {
-        id:
-          "bonus_tiktok",
+        section:"ACHIEVEMENT",
+        id:"achievement_smart_eater",
+        icon:"🥗",
+        name:"SMART EATER",
+        description:"EAT SMART ครบ 20 ครั้ง",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
+      },
 
-        icon:
-          "👑",
+      {
+        section:"ACHIEVEMENT",
+        id:"achievement_team_player",
+        icon:"👥",
+        name:"TEAM PLAYER",
+        description:"Group Mission ครบ 5 ครั้ง",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
+      },
 
-        name:
-          "TIKTOK SPECIAL BONUS",
+      {
+        section:"ACHIEVEMENT",
+        id:"achievement_secret_hunter",
+        icon:"🌟",
+        name:"SECRET HUNTER",
+        description:"Secret Mission ครบ 10 ครั้ง",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
+      },
 
-        description:
-          "คลิปสร้างสรรค์ยอดเยี่ยม / Team Challenge / Popular Choice",
+      {
+        section:"ACHIEVEMENT",
+        id:"achievement_secret_master",
+        icon:"👑",
+        name:"SECRET MASTER",
+        description:"Secret Mission ครบ 30 ครั้ง",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
+      },
 
-        adminOnly:
-          true,
-
-        reward:{
-          coin:200,
-          energy:200,
-          exp:50
-        }
+      {
+        section:"ACHIEVEMENT",
+        id:"achievement_perfect_day",
+        icon:"💎",
+        name:"PERFECT DAY",
+        description:"Daily Mission ครบทั้ง 5 ภายในวันเดียว",
+        auto:true,
+        reward:{coin:50,energy:50,exp:50}
       }
 
     ]
@@ -5197,147 +5052,6 @@ if(document.readyState === 'loading'){
 </style>
 
 
-<script>
-/* =========================================================
-   MISSION HUB UI V2.13
-========================================================= */
-const HUB_DAILY_V213 = [
-  ["daily_move_more","🚶","MOVE MORE","≥ 8,000 ก้าว","+10 Coin / +10 Energy / +10 EXP"],
-  ["daily_sleep","😴","SLEEP WELL","≥ 7 ชั่วโมง","+10 / +10 / +10"],
-  ["daily_eat_smart","🥗","EAT SMART","Healthy Meal + ภาพอาหาร","+10 / +10 / +10"],
-  ["daily_hydrate","💧","HYDRATE","≥ 8 แก้ว / 2,000 ml","+5 / +5 / +5"],
-  ["daily_exercise_30","🏃","EXERCISE","≥ 30 นาที","+20 / +20 / +20"]
-];
-
-const HUB_WEEKLY_V213 = [
-  ["weekly_aerobic","💃","AEROBIC CLUB","จันทร์ / พุธ / ศุกร์ 17:00","+30 / +30 / +30 ต่อครั้ง"],
-  ["weekly_weight_training","🏋️","WEIGHT TRAINING","เข้าร่วมกิจกรรมตามกำหนด","+30 / +30 / +30"],
-  ["weekly_nutrition","🥗","NUTRITION MISSION","Workshop + Mini Quiz","+30 / +30 / +30"],
-  ["weekly_badminton","🏸","BADMINTON NIGHT","พฤหัสบดี 19:00","+30 / +30 / +30"],
-  ["weekly_run_together","🏃","RUN TOGETHER","วิ่งกับเพื่อน ≥ 3 คน","+30 / +30 / +30"],
-  ["weekly_yoga","🧘","YOGA FLOW","เข้าร่วม Yoga","+30 / +30 / +30"],
-  ["weekly_bring_buddy","👥","BRING YOUR BUDDY","ชวนเพื่อนใหม่มา Exercise","+40 / +40 / +40"],
-  ["weekly_team_of_5","👨‍👩‍👧‍👦","TEAM OF 5","ทีม ≥ 5 คน / ≥ 30 นาที","+50 / +50 / +50"],
-  ["weekly_lunch_walk_crew","🚶","LUNCH WALK CREW","เพื่อน ≥ 3 คน / 15 นาที","+30 / +30 / +30"]
-];
-
-const HUB_MONTHLY_V213 = [
-  ["monthly_tiktok","📱","HEALTHY TIKTOK CHALLENGE","คลิปสุขภาพ 15–60 วินาที","+50 / +50 / +50"],
-  ["monthly_boss","👹","MONTHLY BOSS","เป้าหมายใหญ่ประจำเดือน","Badge + Boss Reward"],
-  ["top_creator","🏆","TOP HEALTH CREATOR","รางวัลพิเศษประจำเดือน","+200 ROCK COIN"]
-];
-
-const HUB_BONUS_V213 = [
-  ["secret_daily","🔒","TODAY'S SECRET MISSION","สุ่มได้ 1 ภารกิจ / วัน","+20 / +20 / +20"],
-  ["golden","🌟","GOLDEN MISSION","Rare Secret Mission","+50 / +50 / +50"],
-  ["five_day_streak","🔥","5 DAY STREAK","Daily ≥ 3 Mission × 5 วัน","+50 Coin / +50 EXP"],
-  ["perfect_week","👑","PERFECT WEEK","Daily ≥ 3 Mission อย่างน้อย 6/7 วัน","+100 Coin / +100 EXP"],
-  ["all_clear","💎","ALL CLEAR","Daily Mission ครบทั้ง 5","+30 ROCK COIN"],
-  ["achievements","🏆","ACHIEVEMENTS","ปลดล็อกจากพฤติกรรมในระบบ","+50 / +50 / +50"]
-];
-
-function hubStatusV213(id){
-  const source =
-    window.MISSION_STATUS_MAP ||
-    window.missionStatusMap ||
-    {};
-  const raw = String(source[id]?.status || source[id] || "").toLowerCase();
-  if(raw === "approved") return ["✅","อนุมัติแล้ว"];
-  if(raw === "pending") return ["⏳","รอตรวจ"];
-  if(raw === "rejected") return ["❌","ส่งใหม่ได้"];
-  if(raw === "qualified") return ["🎯","ถึงเป้าหมาย"];
-  return ["⬜","ยังไม่ทำ"];
-}
-
-function hubItemV213(row, special=""){
-  const [id,icon,name,target,reward] = row;
-  const [statusIcon,statusText] = hubStatusV213(id);
-  return `
-    <div class="v213-item ${special}">
-      <div class="v213-item-row">
-        <div>
-          <strong>${icon} ${name}</strong>
-          <div class="v213-note">${target}</div>
-        </div>
-        <span class="v213-status">${statusIcon} ${statusText}</span>
-      </div>
-      <div class="v213-reward">🎁 ${reward}</div>
-      <button class="v213-detail-btn" type="button" onclick="openMissionDetailV213('${id}')">
-        ดูรายละเอียด / ทำภารกิจ
-      </button>
-    </div>`;
-}
-
-function renderHubV213(){
-  document.getElementById("v213DailyList").innerHTML =
-    HUB_DAILY_V213.map(r=>hubItemV213(r)).join("");
-
-  document.getElementById("v213WeeklyList").innerHTML =
-    HUB_WEEKLY_V213.map(r=>hubItemV213(r)).join("") +
-    hubItemV213(["aerobic_perfect_week","🔥","AEROBIC PERFECT WEEK","AEROBIC ครบ 3 วันในสัปดาห์","+100 / +100 / +100"]);
-
-  const month = new Intl.DateTimeFormat("en-CA",{
-    timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit"
-  }).format(new Date()).slice(0,7);
-
-  const theme = {
-    "2026-09":"🏃 START YOUR MOVE • Show Your Move • STEP BOSS",
-    "2026-10":"🥗 EAT SMART • My Healthy Plate • SMART EATER BOSS",
-    "2026-11":"❤️ HEALTHY LIFESTYLE • My Healthy Day • LIFESTYLE BOSS"
-  }[month] || "Monthly Theme";
-
-  document.getElementById("v213MonthlyList").innerHTML =
-    `<div class="v213-item"><strong>${theme}</strong><div class="v213-note">ธีมจะเปลี่ยนตามเดือนกรุงเทพฯ</div></div>` +
-    HUB_MONTHLY_V213.map(r=>hubItemV213(r)).join("");
-
-  document.getElementById("v213BonusList").innerHTML =
-    HUB_BONUS_V213.map(r=>{
-      const cls = r[0] === "secret_daily" ? "v213-secret" : (r[0] === "golden" ? "v213-golden" : "");
-      return hubItemV213(r,cls);
-    }).join("");
-
-  const approved = HUB_DAILY_V213.filter(r=>hubStatusV213(r[0])[1] === "อนุมัติแล้ว").length;
-  document.getElementById("v213DailyCount").textContent = `${approved} / 5 สำเร็จ`;
-  document.getElementById("v213DailyBar").style.width = `${approved/5*100}%`;
-}
-
-function openHubV213(type){
-  ["daily","weekly","monthly","bonus"].forEach(k=>{
-    document.getElementById(`v213${k[0].toUpperCase()+k.slice(1)}Section`)?.classList.remove("show");
-  });
-  const id = `v213${type[0].toUpperCase()+type.slice(1)}Section`;
-  document.getElementById(id)?.classList.add("show");
-  document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-function closeHubV213(){
-  document.querySelectorAll(".v213-section").forEach(x=>x.classList.remove("show"));
-  document.getElementById("missionHubV213")?.scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-function openMissionDetailV213(id){
-  if(id === "secret_daily" || id === "golden"){
-    // V2.13 backend will replace this with unlockSecret/status.
-    alert("Secret Mission: เชื่อมระบบ Unlock/Golden กับ Mission API V2.13 ในขั้น backend ถัดไป");
-    return;
-  }
-  if(["five_day_streak","perfect_week","all_clear","achievements","aerobic_perfect_week","monthly_boss","top_creator"].includes(id)){
-    alert("ภารกิจนี้ตรวจความคืบหน้าอัตโนมัติจากระบบ และจะแสดงรายละเอียดเมื่อเชื่อม Mission API V2.13");
-    return;
-  }
-
-  const url = new URL(window.location.href);
-  url.searchParams.set("mission",id);
-  url.searchParams.set("detail","1");
-  window.location.href = url.toString();
-}
-
-window.openHubV213 = openHubV213;
-window.closeHubV213 = closeHubV213;
-window.openMissionDetailV213 = openMissionDetailV213;
-
-document.addEventListener("DOMContentLoaded",renderHubV213);
-</script>
 
 </body>
 </html>
