@@ -14,7 +14,6 @@
   <title>
     ROCK YOUR BODY 2026 - MISSION
   </title>
-  <!-- DAILY V3: steps-only move, multi exercise, nutrition link -->
 
 
   <!-- =====================================================
@@ -52,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260829-step4"
+    src="./app-config.js?v=20260829-mission-click-fix-01"
   ></script>
 
 
@@ -68,65 +67,50 @@
 
   <style>
 
-   /* =====================================================
-   MISSION CLICK AREA
-   ตรงเฉพาะปุ่ม "ไปทำภารกิจ"
-===================================================== */
+    /* =====================================================
+       MISSION CLICK AREA - FIX CURRENT TEMPLATE
+    ====================================================== */
 
-.mission-card-button{
-  position:absolute;
-  z-index:40;
-  border:0;
-  background:transparent;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
-
-/* DAILY - ปุ่มสีส้ม */
-.mission-card-button.daily{
-  left:3.0%;
-  top:59.3%;
-  width:29.0%;
-  height:6.3%;
-}
-
-/* WEEKLY - ปุ่มสีน้ำเงิน */
-.mission-card-button.weekly{
-  left:35.4%;
-  top:59.3%;
-  width:29.0%;
-  height:6.3%;
-}
-
-/* MONTHLY - ปุ่มสีม่วง */
-.mission-card-button.monthly{
-  left:67.5%;
-  top:59.3%;
-  width:29.0%;
-  height:6.3%;
-}
-
-/* BONUS - ปุ่มสีเขียว */
-.mission-card-button.bonus{
-  left:3.2%;
-  top:85.5%;
-  width:28.0%;
-  height:6.0%;
-}
-
-
-    /* NUTRITION APP - พื้นที่กดบนการ์ด Nutrition */
-    .nutrition-card-button{
+    .mission-card-button{
       position:absolute;
-      z-index:45;
-      left:35.4%;
-      top:85.5%;
-      width:29.0%;
-      height:6.0%;
+      z-index:500;
+      display:block;
+      margin:0;
+      padding:0;
       border:0;
-      background:transparent;
+      background:rgba(0,0,0,0);
       cursor:pointer;
+      pointer-events:auto;
+      touch-action:manipulation;
       -webkit-tap-highlight-color:transparent;
+    }
+
+    .mission-card-button.daily{
+      left:2.8%;
+      top:38.4%;
+      width:28.8%;
+      height:5.5%;
+    }
+
+    .mission-card-button.weekly{
+      left:35.0%;
+      top:38.4%;
+      width:29.8%;
+      height:5.5%;
+    }
+
+    .mission-card-button.monthly{
+      left:67.4%;
+      top:38.4%;
+      width:31.0%;
+      height:5.5%;
+    }
+
+    .mission-card-button.bonus{
+      left:2.8%;
+      top:67.5%;
+      width:28.8%;
+      height:5.5%;
     }
 
     /* =====================================================
@@ -1212,7 +1196,7 @@
 
   <img
     class="template"
-    src="./mission-template.png"
+    src="./mission-template.png?v=20260829-mission-click-fix-01"
     alt=""
     draggable="false"
   >
@@ -1412,19 +1396,14 @@
     onclick="openCategory('bonus')"
     aria-label="Bonus Mission"
   ></button>
-<!-- =====================================================
-     NUTRITION APP CLICK AREA
-====================================================== -->
 
-<button
-  type="button"
-  class="nutrition-card-button"
-  onclick="goNutrition()"
-  aria-label="Nutrition App"
-></button>
+
+  <!-- =====================================================
+       BOTTOM NAVIGATION HOTSPOTS
+       กดตรงปุ่ม HOME / MISSION / BATTLE บน Template ได้จริง
+  ====================================================== -->
 
   <!-- HOME -->
-
   <button
     type="button"
     class="hotspot"
@@ -1436,6 +1415,36 @@
     "
     onclick="goHome()"
     aria-label="Home"
+  ></button>
+
+
+  <!-- MISSION -->
+  <button
+    type="button"
+    class="hotspot"
+    style="
+      left:33%;
+      top:88%;
+      width:32%;
+      height:11%;
+    "
+    onclick="openCategory('daily')"
+    aria-label="Mission"
+  ></button>
+
+
+  <!-- BATTLE -->
+  <button
+    type="button"
+    class="hotspot"
+    style="
+      left:66%;
+      top:88%;
+      width:33%;
+      height:11%;
+    "
+    onclick="goBattle()"
+    aria-label="Battle"
   ></button>
 
 
@@ -1617,276 +1626,7 @@
     ></div>
 
 
-
-    <!-- DAILY HEALTH METRICS -->
-
-    <div
-      id="dailyHealthMetricFields"
-      style="
-        display:none;
-        margin:14px 0;
-        padding:14px;
-        border-radius:16px;
-        background:#f4f8ff;
-        border:1px solid #d6e4f7;
-      "
-    >
-
-      <div
-        style="
-          font-weight:900;
-          color:#0b4a9c;
-          margin-bottom:10px;
-        "
-      >
-        บันทึกข้อมูลสุขภาพวันนี้
-      </div>
-
-
-      <div
-        id="moveMetricFields"
-        style="display:none"
-      >
-
-        <label
-          style="
-            display:block;
-            font-weight:800;
-            margin-bottom:6px;
-          "
-        >
-          จำนวนก้าววันนี้
-        </label>
-
-        <input
-          id="dailyStepsInput"
-          class="evidence-input"
-          type="number"
-          min="0"
-          max="200000"
-          inputmode="numeric"
-          placeholder="เช่น 7564"
-        >
-
-
-        <label
-          style="
-            display:block;
-            font-weight:800;
-            margin:12px 0 6px;
-          "
-        >
-          Calories ที่เผาผลาญ
-        </label>
-
-        <input
-          id="dailyCaloriesInput" style="display:none"
-          class="evidence-input"
-          type="number"
-          min="0"
-          max="20000"
-          inputmode="numeric"
-          placeholder="เช่น 320"
-        >
-
-      </div>
-
-
-      <div
-        id="sleepMetricFields"
-        style="display:none"
-      >
-
-        <label
-          style="
-            display:block;
-            font-weight:800;
-            margin-bottom:6px;
-          "
-        >
-          ชั่วโมงการนอน
-        </label>
-
-        <input
-          id="dailySleepHoursInput"
-          class="evidence-input"
-          type="number"
-          min="0"
-          max="24"
-          inputmode="numeric"
-          placeholder="เช่น 7"
-        >
-
-
-        <label
-          style="
-            display:block;
-            font-weight:800;
-            margin:12px 0 6px;
-          "
-        >
-          นาที
-        </label>
-
-        <input
-          id="dailySleepMinutesInput"
-          class="evidence-input"
-          type="number"
-          min="0"
-          max="59"
-          inputmode="numeric"
-          placeholder="เช่น 30"
-        >
-
-      </div>
-
-    </div>
-
-
-
-      <!-- EXERCISE -->
-      <div
-        id="exerciseMetricFields"
-        style="display:none"
-      >
-
-        <label
-          class="form-label"
-          for="exerciseTypeInput"
-        >
-          ประเภทการออกกำลังกาย
-        </label>
-
-        <select
-          id="exerciseTypeInput"
-          class="evidence-input"
-        >
-          <option value="">-- เลือกประเภท --</option>
-          <option value="walking_brisk" data-met="4.3">เดินเร็ว</option>
-          <option value="running" data-met="8.3">วิ่ง</option>
-          <option value="cycling" data-met="6.8">ปั่นจักรยาน</option>
-          <option value="aerobic" data-met="7.3">แอโรบิก</option>
-          <option value="weight_training" data-met="6.0">เวทเทรนนิ่ง</option>
-          <option value="yoga" data-met="3.0">โยคะ</option>
-          <option value="badminton" data-met="5.5">แบดมินตัน</option>
-          <option value="swimming" data-met="7.0">ว่ายน้ำ</option>
-          <option value="dance" data-met="5.0">เต้น / Dance</option>
-          <option value="stairs" data-met="8.8">ขึ้น-ลงบันได</option>
-          <option value="football" data-met="7.0">ฟุตบอล / ฟุตซอล</option>
-          <option value="other" data-met="5.0">อื่น ๆ</option>
-        </select>
-
-        <label
-          class="form-label"
-          for="exerciseMinutesInput"
-          style="margin-top:12px"
-        >
-          ระยะเวลา (นาที)
-        </label>
-
-        <input
-          id="exerciseMinutesInput"
-          class="evidence-input"
-          type="number"
-          min="1"
-          max="360"
-          step="1"
-          inputmode="numeric"
-          placeholder="เช่น 30"
-        >
-
-        <div
-          class="form-note"
-          style="margin-top:10px"
-        >
-          ระบบใช้ MET × น้ำหนักปัจจุบัน × ระยะเวลา เพื่อประมาณ Calories
-        </div>
-
-        <div
-          style="
-            margin-top:10px;
-            padding:12px;
-            border-radius:14px;
-            background:#eef6ff;
-            font-weight:900;
-            color:#0b4ba5;
-          "
-        >
-          น้ำหนักที่ใช้คำนวณ:
-          <span id="exerciseWeightText">70.0</span> kg
-          <br>
-          Calories โดยประมาณ:
-          <span id="exerciseCaloriesText">0</span> kcal
-        </div>
-
-      </div>
-
-
-      <!-- EAT SMART -->
-      <div
-        id="nutritionMissionFields"
-        style="display:none"
-      >
-
-        <div
-          style="
-            padding:12px;
-            border-radius:14px;
-            background:#eefaf1;
-            color:#176b37;
-            font-weight:800;
-          "
-        >
-          รูปอาหารที่แนบในภารกิจนี้จะส่งเป็นหลักฐานให้ Admin และบันทึกเชื่อมกับ Nutrition
-        </div>
-
-        <label
-          class="form-label"
-          for="nutritionMealType"
-          style="margin-top:12px"
-        >
-          มื้ออาหาร
-        </label>
-
-        <select
-          id="nutritionMealType"
-          class="evidence-input"
-        >
-          <option value="breakfast">อาหารเช้า</option>
-          <option value="lunch">อาหารกลางวัน</option>
-          <option value="dinner">อาหารเย็น</option>
-          <option value="snack">ของว่าง</option>
-        </select>
-
-        <label
-          class="form-label"
-          for="nutritionMealName"
-          style="margin-top:12px"
-        >
-          ชื่ออาหาร
-        </label>
-
-        <input
-          id="nutritionMealName"
-          class="evidence-input"
-          type="text"
-          placeholder="เช่น ข้าวกล้อง + อกไก่ + ผัก"
-        >
-
-        <button
-          id="openNutritionButton"
-          type="button"
-          class="mission-submit-button"
-          style="margin-top:12px"
-        >
-          เปิด Nutrition App
-        </button>
-
-      </div>
-
-
     <!-- FILE -->
-
 
     <div
       class="form-group"
@@ -1903,7 +1643,10 @@
         id="evidenceFile"
         class="file-input"
         type="file"
-        accept="image/*"
+        accept="
+          image/*,
+          video/*
+        "
       >
 
 
@@ -2051,8 +1794,6 @@ const ROCK =
 
 
 const MISSION_API =
-  window.APP_CONFIG?.getApi?.("MISSION") ||
-  window.APP_CONFIG?.API?.MISSION ||
   ROCK?.CFG?.API?.MISSION ||
   "";
 
@@ -2273,7 +2014,7 @@ const missionData = {
       "DAILY MISSION",
 
     subtitle:
-      "Core 4 ภารกิจ + Extra สุ่มวันละ 1 ภารกิจ",
+      "Core 3 ภารกิจ + Extra สุ่มวันละ 1 ภารกิจ",
 
     icon:
       "☀️",
@@ -2296,16 +2037,10 @@ const missionData = {
             "MOVE MORE",
 
           description:
-            "เดินให้ได้อย่างน้อย 8,000 ก้าวต่อวัน พร้อมแนบรูปภาพหลักฐาน",
+            "เดินให้ได้ 8,000 ก้าว หรือออกกำลังกายเผาผลาญ 300 kcal",
 
           evidence:
-            "photo",
-
-          requireImage:
-            true,
-
-          healthMetric:
-            "move_more",
+            "photo_or_video",
 
           reward:{
             coin:10,
@@ -2322,12 +2057,6 @@ const missionData = {
           id:
             "daily_eat_smart",
 
-          requireImage:
-            true,
-
-          nutritionMission:
-            true,
-
           icon:
             "🥗",
 
@@ -2339,12 +2068,6 @@ const missionData = {
 
           evidence:
             "photo",
-
-          requireImage:
-            true,
-
-          healthMetric:
-            "eat_smart",
 
           reward:{
             coin:10,
@@ -2361,64 +2084,22 @@ const missionData = {
           id:
             "daily_exercise_30",
 
-          healthMetric:
-            "exercise",
-
-          allowMultiple:
-            true,
-
-          requireImage:
-            true,
-
           icon:
             "🏃",
 
           name:
-            "EXERCISE",
+            "EXERCISE 30 MIN",
 
           description:
-            "เลือกประเภทการออกกำลังกาย + ระยะเวลา ระบบคำนวณ Calories อัตโนมัติ ทำได้หลายประเภทต่อวัน แต่ประเภทเดิมทำซ้ำในวันเดียวกันไม่ได้ และต้องแนบรูปภาพหลักฐาน",
+            "ออกกำลังกายอย่างน้อย 30 นาที พร้อมคลิป VDO",
 
           evidence:
-            "photo",
+            "video",
 
           reward:{
             coin:20,
             energy:20,
             exp:20
-          }
-        },
-
-
-        {
-          section:
-            "CORE DAILY",
-
-          id:
-            "daily_sleep",
-
-          icon:
-            "😴",
-
-          name:
-            "SLEEP",
-
-          description:
-            "บันทึกเวลานอนของวันนี้ และแนบรูปภาพหลักฐาน",
-
-          evidence:
-            "photo",
-
-          requireImage:
-            true,
-
-          healthMetric:
-            "sleep",
-
-          reward:{
-            coin:10,
-            energy:10,
-            exp:10
           }
         },
 
@@ -3349,15 +3030,10 @@ function renderCategory(){
 
         !mission.auto &&
         !mission.adminOnly &&
-        (
-          mission.allowMultiple === true ||
-          (
-            state.status !==
-              "pending" &&
-            state.status !==
-              "approved"
-          )
-        );
+        state.status !==
+          "pending" &&
+        state.status !==
+          "approved";
 
 
       item.innerHTML = `
@@ -3428,13 +3104,7 @@ function renderCategory(){
                         )
                       "
                     >
-                      ${
-                        mission.healthMetric === "exercise"
-                          ? "เพิ่ม Exercise"
-                          : mission.nutritionMission
-                            ? "บันทึก EAT SMART"
-                            : "ส่งหลักฐาน"
-                      }
+                      ส่งหลักฐาน
                     </button>
 
                   `
@@ -3535,123 +3205,6 @@ function openEvidence(
       mission.name;
 
 
-  const healthFields =
-    document.getElementById(
-      "dailyHealthMetricFields"
-    );
-
-
-  const moveFields =
-    document.getElementById(
-      "moveMetricFields"
-    );
-
-
-  const sleepFields =
-    document.getElementById(
-      "sleepMetricFields"
-    );
-
-
-  const exerciseFields =
-    document.getElementById(
-      "exerciseMetricFields"
-    );
-
-
-  const nutritionFields =
-    document.getElementById(
-      "nutritionMissionFields"
-    );
-
-
-  if(healthFields){
-    healthFields.style.display =
-      mission.healthMetric
-        ? "block"
-        : "none";
-  }
-
-
-  if(moveFields){
-    moveFields.style.display =
-      mission.healthMetric ===
-      "move_more"
-        ? "block"
-        : "none";
-  }
-
-
-  if(sleepFields){
-    sleepFields.style.display =
-      mission.healthMetric ===
-      "sleep"
-        ? "block"
-        : "none";
-  }
-
-
-  if(exerciseFields){
-    exerciseFields.style.display =
-      mission.healthMetric ===
-      "exercise"
-        ? "block"
-        : "none";
-  }
-
-
-  if(nutritionFields){
-    nutritionFields.style.display =
-      mission.nutritionMission
-        ? "block"
-        : "none";
-  }
-
-
-  const evidenceFile =
-    document.getElementById(
-      "evidenceFile"
-    );
-
-
-  if(evidenceFile){
-
-    evidenceFile.accept =
-      mission.requireImage ||
-      mission.healthMetric === "exercise" ||
-      mission.nutritionMission
-        ? "image/*"
-        : "image/*,video/*";
-
-  }
-
-
-  [
-    "dailyStepsInput",
-    "dailyCaloriesInput",
-    "dailySleepHoursInput",
-    "dailySleepMinutesInput",
-    "exerciseTypeInput",
-    "exerciseMinutesInput",
-    "nutritionMealName"
-  ]
-    .forEach(
-      id => {
-
-        const el =
-          document.getElementById(
-            id
-          );
-
-        if(el){
-          el.value =
-            "";
-        }
-
-      }
-    );
-
-
   document
     .getElementById(
       "evidenceFile"
@@ -3685,17 +3238,6 @@ function openEvidence(
       "show"
     );
 
-
-  if(
-    mission.healthMetric ===
-    "exercise"
-  ){
-    loadExerciseWeight()
-      .then(
-        calculateExerciseCalories
-      );
-  }
-
 }
 
 
@@ -3717,2580 +3259,433 @@ function closeEvidence(){
 }
 
 
+
 /* =========================================================
    SUBMIT EVIDENCE
 ========================================================= */
-
-
-/* =========================================================
-   DAILY HEALTH SAVE
-   ใช้ข้อมูลเดียวกับ HOME
-========================================================= */
-
-
-let exerciseWeightKg = 70;
-
-
-async function loadExerciseWeight(){
-
-  try{
-
-    const api =
-      window.APP_CONFIG
-        ?.API
-        ?.DASHBOARD;
-
-    if(!api){
-      return;
-    }
-
-    const idToken =
-      ROCK.getIdToken();
-
-    if(!idToken){
-      return;
-    }
-
-    const response =
-      await fetch(
-        api,
-        {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify({
-            action:"dashboard",
-            idToken
-          })
-        }
-      );
-
-    const result =
-      await response.json();
-
-    const data =
-      result?.data ??
-      result?.dashboard ??
-      result ??
-      {};
-
-    const user =
-      data?.user ??
-      data?.player ??
-      {};
-
-    const weight =
-      data?.weight &&
-      typeof data.weight === "object"
-        ? data.weight
-        : {};
-
-    const value =
-      Number(
-        weight?.current ??
-        weight?.currentWeight ??
-        weight?.current_weight ??
-        data?.currentWeight ??
-        data?.current_weight ??
-        user?.currentWeight ??
-        user?.current_weight
-      );
-
-    if(
-      Number.isFinite(value) &&
-      value > 20 &&
-      value < 300
-    ){
-      exerciseWeightKg =
-        value;
-    }
-
-  }catch(error){
-
-    console.warn(
-      "EXERCISE WEIGHT:",
-      error
-    );
-
-  }
-
-
-  const el =
-    document.getElementById(
-      "exerciseWeightText"
-    );
-
-  if(el){
-    el.textContent =
-      exerciseWeightKg
-        .toFixed(1);
-  }
-
-}
-
-
-function calculateExerciseCalories(){
-
-  const select =
-    document.getElementById(
-      "exerciseTypeInput"
-    );
-
-  const minutes =
-    Number(
-      document.getElementById(
-        "exerciseMinutesInput"
-      )?.value ||
-      0
-    );
-
-  const option =
-    select?.selectedOptions?.[0];
-
-  const met =
-    Number(
-      option?.dataset?.met ||
-      0
-    );
-
-  let calories = 0;
-
-  if(
-    met > 0 &&
-    minutes > 0 &&
-    exerciseWeightKg > 0
-  ){
-    calories =
-      Math.round(
-        (
-          met *
-          3.5 *
-          exerciseWeightKg /
-          200
-        ) *
-        minutes
-      );
-  }
-
-  const output =
-    document.getElementById(
-      "exerciseCaloriesText"
-    );
-
-  if(output){
-    output.textContent =
-      String(
-        Math.max(
-          0,
-          calories
-        )
-      );
-  }
-
-  return Math.max(
-    0,
-    calories
-  );
-}
-
-
-document
-  .getElementById(
-    "exerciseTypeInput"
-  )
-  ?.addEventListener(
-    "change",
-    calculateExerciseCalories
-  );
-
-
-document
-  .getElementById(
-    "exerciseMinutesInput"
-  )
-  ?.addEventListener(
-    "input",
-    calculateExerciseCalories
-  );
-
-
-document
-  .getElementById(
-    "openNutritionButton"
-  )
-  ?.addEventListener(
-    "click",
-    () => {
-
-      const url =
-        window.APP_CONFIG
-          ?.PAGE
-          ?.NUTRITION ||
-        "./nutrition.html";
-
-      window.location.href =
-        url +
-        (
-          url.includes("?")
-            ? "&"
-            : "?"
-        ) +
-        "from=mission&mission=daily_eat_smart";
-
-    }
-  );
-
-
-async function saveDailyHealthMetric(
-  mission
-){
-
-  const api =
-    window.APP_CONFIG
-      ?.API
-      ?.DAILY_HEALTH;
-
-
-  if(
-    !api ||
-    !mission?.healthMetric
-  ){
-    return;
-  }
-
-
-  const idToken =
-    ROCK.getIdToken();
-
-
-  if(!idToken){
-    throw new Error(
-      "ไม่พบ LINE ID Token"
-    );
-  }
-
-
-  const body = {
-    action:
-      "saveToday",
-
-    idToken
-  };
-
-
-  if(
-    mission.healthMetric ===
-    "move_more"
-  ){
-
-    const steps =
-      Number(
-        document
-          .getElementById(
-            "dailyStepsInput"
-          )
-          ?.value ||
-        0
-      );
-
-    if(
-      steps < 8000
-    ){
-
-      showMissionStatus(
-        "MOVE MORE ต้องเดินอย่างน้อย 8,000 ก้าว"
-      );
-
-      return;
-    }
-
-  }
-
-
-  if(
-    mission.healthMetric ===
-    "exercise"
-  ){
-
-    const exerciseType =
-      document
-        .getElementById(
-          "exerciseTypeInput"
-        )
-        ?.value ||
-      "";
-
-    const exerciseMinutes =
-      Number(
-        document
-          .getElementById(
-            "exerciseMinutesInput"
-          )
-          ?.value ||
-        0
-      );
-
-    if(!exerciseType){
-
-      showMissionStatus(
-        "กรุณาเลือกประเภทการออกกำลังกาย"
-      );
-
-      return;
-    }
-
-    if(
-      exerciseMinutes <= 0
-    ){
-
-      showMissionStatus(
-        "กรุณากรอกระยะเวลาออกกำลังกาย"
-      );
-
-      return;
-    }
-
-  }
-
-
-  if(
-    mission.healthMetric ===
-    "sleep"
-  ){
-
-    const sleepHours =
-      Number(
-        document
-          .getElementById(
-            "dailySleepHoursInput"
-          )
-          ?.value ||
-        0
-      );
-
-
-    const sleepMinutesPart =
-      Number(
-        document
-          .getElementById(
-            "dailySleepMinutesInput"
-          )
-          ?.value ||
-        0
-      );
-
-
-    if(
-      sleepHours <= 0 &&
-      sleepMinutesPart <= 0
-    ){
-      throw new Error(
-        "กรุณากรอกเวลานอน"
-      );
-    }
-
-
-    body.sleepHours =
-      Math.max(
-        0,
-        Math.min(
-          24,
-          Math.floor(
-            sleepHours
-          )
-        )
-      );
-
-
-    body.sleepMinutesPart =
-      Math.max(
-        0,
-        Math.min(
-          59,
-          Math.floor(
-            sleepMinutesPart
-          )
-        )
-      );
-
-  }
-
-
-  const response =
-    await fetch(
-      api,
-      {
-        method:
-          "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(
-            body
-          )
-      }
-    );
-
-
-  const raw =
-    await response.text();
-
-
-  let result = {};
-
-
-  try{
-
-    result =
-      raw
-        ? JSON.parse(
-            raw
-          )
-        : {};
-
-  }catch{
-
-    throw new Error(
-      "Daily Health API ตอบกลับไม่ใช่ JSON"
-    );
-
-  }
-
-
-  if(
-    !response.ok ||
-    result?.success ===
-      false
-  ){
-
-    throw new Error(
-      result?.error ||
-      result?.message ||
-      `Daily Health HTTP ${response.status}`
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   DEEP LINK FROM HOME
-   Steps:
-   mission.html?category=daily&mission=daily_move_more
-
-   Calories:
-   mission.html?category=daily&mission=daily_move_more&section=exercise
-   -> opens daily_exercise_30
-
-   Sleep:
-   mission.html?category=daily&mission=daily_sleep
-========================================================= */
-
-function openMissionFromUrl(){
-
-  try{
-
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-
-    const category =
-      params.get(
-        "category"
-      );
-
-
-    let missionId =
-      params.get(
-        "mission"
-      );
-
-
-    const section =
-      params.get(
-        "section"
-      );
-
-
-    /*
-      HOME Calories deep link:
-      daily_move_more + section=exercise
-      ต้องเปิด EXERCISE จริง ไม่ใช่ MOVE MORE
-    */
-    if(
-      category === "daily" &&
-      missionId === "daily_move_more" &&
-      section === "exercise"
-    ){
-      missionId =
-        "daily_exercise_30";
-    }
-
-
-    if(
-      category &&
-      missionData[
-        category
-      ]
-    ){
-
-      openCategory(
-        category
-      );
-
-
-      if(
-        missionId &&
-        findMission(
-          missionId
-        )
-      ){
-
-        setTimeout(
-          () => {
-
-            openEvidence(
-              missionId
-            );
-
-          },
-          180
-        );
-
-      }
-
-    }
-
-  }catch(error){
-
-    console.warn(
-      "MISSION DEEP LINK ERROR:",
-      error
-    );
-
-  }
-
-}
-
-
 async function submitEvidence(){
-
-  const mission =
-    findMission(
-      activeMissionId
-    );
-
-
-  if(!mission){
-
-    showMissionStatus(
-      "ไม่พบข้อมูลภารกิจ"
-    );
-
-    return;
-  }
-
-
-  /* =====================================================
-     INPUT
-  ====================================================== */
-
-  const fileInput =
-    document.getElementById(
-      "evidenceFile"
-    );
-
-
-  const linkInput =
-    document.getElementById(
-      "evidenceLink"
-    );
-
-
-  const noteInput =
-    document.getElementById(
-      "evidenceNote"
-    );
-
-
-  const button =
-    document.getElementById(
-      "submitEvidenceButton"
-    );
-
-
-  const file =
-    fileInput?.files?.[0] ||
-    null;
-
-
-  const link =
-    linkInput?.value
-      ?.trim() ||
-    "";
-
-
-  const note =
-    noteInput?.value
-      ?.trim() ||
-    "";
-
-
-  /* =====================================================
-     VALIDATE
-  ====================================================== */
-
-
-  /*
-   * MOVE MORE / EAT SMART / SLEEP
-   * ต้องเป็นรูปภาพเท่านั้น
-   */
-  if(
-    mission.requireImage
-  ){
-
-    if(!file){
-
-      showMissionStatus(
-        "ภารกิจนี้ต้องแนบรูปภาพหลักฐาน"
-      );
-
-      return;
-    }
-
-
-    if(
-      !String(
-        file.type ||
-        ""
-      )
-        .toLowerCase()
-        .startsWith(
-          "image/"
-        )
-    ){
-
-      showMissionStatus(
-        "กรุณาแนบไฟล์รูปภาพเท่านั้น"
-      );
-
-      return;
-    }
-
-  }
-
-
-  if(
-    mission.healthMetric ===
-    "move_more"
-  ){
-
-    const steps =
-      Number(
-        document
-          .getElementById(
-            "dailyStepsInput"
-          )
-          ?.value ||
-        0
-      );
-
-
-    const calories =
-      Number(
-        document
-          .getElementById(
-            "dailyCaloriesInput"
-          )
-          ?.value ||
-        0
-      );
-
-
-    if(
-      steps <= 0 &&
-      calories <= 0
-    ){
-
-      showMissionStatus(
-        "กรุณากรอกจำนวนก้าว หรือ Calories"
-      );
-
-      return;
-    }
-
-  }
-
-
-  if(
-    mission.healthMetric ===
-    "sleep"
-  ){
-
-    const hours =
-      Number(
-        document
-          .getElementById(
-            "dailySleepHoursInput"
-          )
-          ?.value ||
-        0
-      );
-
-
-    const minutes =
-      Number(
-        document
-          .getElementById(
-            "dailySleepMinutesInput"
-          )
-          ?.value ||
-        0
-      );
-
-
-    if(
-      hours <= 0 &&
-      minutes <= 0
-    ){
-
-      showMissionStatus(
-        "กรุณากรอกเวลานอน"
-      );
-
-      return;
-    }
-
-  }
-
-  if(
-    mission.requireLink &&
-    !link
-  ){
-
-    showMissionStatus(
-      "กรุณาใส่ Link TikTok"
-    );
-
-    return;
-  }
-
-
-  if(
-    !file &&
-    !link
-  ){
-
-    showMissionStatus(
-      "กรุณาเลือกรูป / VDO หรือใส่ Link"
-    );
-
-    return;
-  }
-
-
-  if(!MISSION_API){
-
-    showMissionStatus(
-      "ไม่พบ MISSION API"
-    );
-
-    return;
-  }
-
-
-  if(!button){
-
-    showMissionStatus(
-      "ไม่พบปุ่มส่งหลักฐาน"
-    );
-
-    return;
-  }
-
-
-  /* =====================================================
-     FILE VALIDATION
-  ====================================================== */
-
-  if(file){
-
-    const MAX_FILE_SIZE =
-      50 * 1024 * 1024;
-
-
-    if(
-      file.size >
-      MAX_FILE_SIZE
-    ){
-
-      showMissionStatus(
-        "ไฟล์ต้องมีขนาดไม่เกิน 50 MB"
-      );
-
-      return;
-    }
-
-  }
-
-
-  /* =====================================================
-     BUTTON LOADING
-  ====================================================== */
-
-  button.disabled =
-    true;
-
-
-  button.textContent =
-    "กำลังส่งหลักฐาน...";
-
+  const mission = findMission(activeMissionId);
+  if(!mission){ showMissionStatus('ไม่พบข้อมูลภารกิจ'); return; }
+
+  const fileInput = document.getElementById('evidenceFile');
+  const linkInput = document.getElementById('evidenceLink');
+  const noteInput = document.getElementById('evidenceNote');
+  const button = document.getElementById('submitEvidenceButton');
+  const file = fileInput?.files?.[0] || null;
+  const link = linkInput?.value?.trim() || '';
+  const note = noteInput?.value?.trim() || '';
+
+  if(mission.requireLink && !link){ showMissionStatus('กรุณาใส่ Link TikTok'); return; }
+  if(!file && !link){ showMissionStatus('กรุณาเลือกรูป / VDO หรือใส่ Link'); return; }
+  if(!MISSION_API){ showMissionStatus('ไม่พบ MISSION API'); return; }
+  if(!button){ return; }
+  if(file && file.size > 50 * 1024 * 1024){ showMissionStatus('ไฟล์ต้องมีขนาดไม่เกิน 50 MB'); return; }
+
+  button.disabled = true;
+  button.textContent = 'กำลังส่งหลักฐาน...';
 
   try{
-
-    /* =====================================================
-       LINE TOKEN
-    ====================================================== */
-
-    const idToken =
-      ROCK.getIdToken();
-
-
-    if(!idToken){
-
-      throw new Error(
-        "ไม่พบ LINE ID Token"
-      );
-
-    }
-
-
-    /* =====================================================
-       FORM DATA
-    ====================================================== */
-
-    const form =
-      new FormData();
-
-
-    form.append(
-      "action",
-      "submitEvidence"
-    );
-
-
-    form.append(
-      "idToken",
-      idToken
-    );
-
-
-    form.append(
-      "missionId",
-      String(
-        mission.id
-      )
-    );
-
-
-    form.append(
-      "category",
-      String(
-        activeCategory
-      )
-    );
-
-
-    form.append(
-      "note",
-      note
-    );
-
-
-    form.append(
-      "link",
-      link
-    );
-
-
-    if(file){
-
-      form.append(
-        "file",
-        file,
-        file.name
-      );
-
-    }
-
-
-    /* =====================================================
-       DAILY HEALTH / EXERCISE FIELDS
-    ====================================================== */
-
-    if(
-      mission.healthMetric ===
-      "move_more"
-    ){
-
-      const steps =
-        Math.max(
-          0,
-          Math.round(
-            Number(
-              document
-                .getElementById(
-                  "dailyStepsInput"
-                )
-                ?.value ||
-              0
-            )
-          )
-        );
-
-      form.append(
-        "metricSteps",
-        String(steps)
-      );
-
-    }
-
-
-    if(
-      mission.healthMetric ===
-      "sleep"
-    ){
-
-      const hours =
-        Math.max(
-          0,
-          Math.floor(
-            Number(
-              document
-                .getElementById(
-                  "dailySleepHoursInput"
-                )
-                ?.value ||
-              0
-            )
-          )
-        );
-
-      const minutes =
-        Math.max(
-          0,
-          Math.min(
-            59,
-            Math.floor(
-              Number(
-                document
-                  .getElementById(
-                    "dailySleepMinutesInput"
-                  )
-                  ?.value ||
-                0
-              )
-            )
-          )
-        );
-
-      form.append(
-        "metricSleepMinutes",
-        String(
-          Math.min(
-            1440,
-            hours * 60 +
-            minutes
-          )
-        )
-      );
-
-    }
-
-
-    if(
-      mission.healthMetric ===
-      "exercise"
-    ){
-
-      const exerciseType =
-        document
-          .getElementById(
-            "exerciseTypeInput"
-          )
-          ?.value ||
-        "";
-
-      const exerciseMinutes =
-        Math.max(
-          0,
-          Math.round(
-            Number(
-              document
-                .getElementById(
-                  "exerciseMinutesInput"
-                )
-                ?.value ||
-              0
-            )
-          )
-        );
-
-      const calories =
-        calculateExerciseCalories();
-
-      form.append(
-        "exerciseType",
-        exerciseType
-      );
-
-      form.append(
-        "exerciseMinutes",
-        String(
-          exerciseMinutes
-        )
-      );
-
-      form.append(
-        "metricCalories",
-        String(
-          calories
-        )
-      );
-
-    }
-
-
-    if(
-      mission.nutritionMission
-    ){
-
-      form.append(
-        "nutritionMealType",
-        document
-          .getElementById(
-            "nutritionMealType"
-          )
-          ?.value ||
-        "lunch"
-      );
-
-      form.append(
-        "nutritionMealName",
-        document
-          .getElementById(
-            "nutritionMealName"
-          )
-          ?.value
-          ?.trim() ||
-        ""
-      );
-
-    }
-
-
-    /* =====================================================
-       DEBUG
-    ====================================================== */
-
-    console.log(
-      "MISSION SUBMIT:",
-      {
-
-        action:
-          "submitEvidence",
-
-        missionId:
-          mission.id,
-
-        category:
-          activeCategory,
-
-        fileName:
-          file?.name ||
-          "",
-
-        fileType:
-          file?.type ||
-          "",
-
-        fileSize:
-          file?.size ||
-          0,
-
-        hasLink:
-          Boolean(link),
-
-        hasNote:
-          Boolean(note)
-
-      }
-    );
-
-
-    /* =====================================================
-       SEND API
-
-       สำคัญ:
-       ห้ามใส่ Content-Type เอง
-       Browser จะสร้าง multipart/form-data
-    ====================================================== */
-
-    const response =
-      await fetch(
-        MISSION_API,
-        {
-
-          method:
-            "POST",
-
-          body:
-            form
-
-        }
-      );
-
-
-    /* =====================================================
-       READ RESPONSE
-    ====================================================== */
-
-    const raw =
-      await response.text();
-
-
-    console.log(
-      "MISSION HTTP:",
-      response.status
-    );
-
-
-    console.log(
-      "MISSION RAW RESPONSE:",
-      raw
-    );
-
-
+    const idToken = ROCK?.getIdToken?.() || window.liff?.getIDToken?.();
+    if(!idToken) throw new Error('ไม่พบ LINE ID Token');
+
+    const form = new FormData();
+    form.append('action','submitEvidence');
+    form.append('idToken',idToken);
+    form.append('missionId',String(mission.id));
+    form.append('category',String(activeCategory));
+    form.append('note',note);
+    form.append('link',link);
+    if(file) form.append('file',file,file.name);
+
+    const response = await fetch(MISSION_API,{method:'POST',body:form});
+    const raw = await response.text();
     let result = {};
+    try{ result = raw ? JSON.parse(raw) : {}; }
+    catch{ throw new Error(`Server ตอบกลับไม่ถูกต้อง HTTP ${response.status}`); }
 
-
-    try{
-
-      result =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    }catch(error){
-
-      console.error(
-        "MISSION JSON PARSE ERROR:",
-        error
-      );
-
-
-      throw new Error(
-        `Server ตอบกลับไม่ถูกต้อง HTTP ${response.status}`
-      );
-
+    if(!response.ok || result?.success === false){
+      throw new Error(result?.error || result?.message || result?.details || `HTTP ${response.status}`);
     }
 
-
-    /* =====================================================
-       API ERROR
-    ====================================================== */
-
-    if(
-      !response.ok ||
-      result?.success === false
-    ){
-
-      const message =
-
-        result?.error ||
-
-        result?.message ||
-
-        result?.details ||
-
-        `HTTP ${response.status}`;
-
-
-      throw new Error(
-        message
-      );
-
-    }
-
-
-    /* =====================================================
-       SAVE LOCAL PENDING
-    ====================================================== */
-
-    const local =
-      readLocal();
-
-
-    local[
-      mission.id
-    ] = {
-
-      ...local[
-        mission.id
-      ],
-
-      status:
-        "pending",
-
-      submittedAt:
-        new Date()
-          .toISOString(),
-
-      fileName:
-        file?.name ||
-        "",
-
-      link,
-
-      note,
-
-      approvedNotified:
-        false
-
+    const local = readLocal();
+    local[mission.id] = {
+      ...local[mission.id], status:'pending', submittedAt:new Date().toISOString(),
+      fileName:file?.name || '', link, note, approvedNotified:false
     };
-
-
-    writeLocal(
-      local
-    );
-
-
-    /* =====================================================
-       SUCCESS
-    ====================================================== */
-
-    /*
-     * บันทึก Steps / Calories / Sleep
-     * หลังส่งหลักฐาน Mission สำเร็จ
-     *
-     * เหรียญ / พลัง / EXP ยังได้เฉพาะตอน Admin approve
-     * ตามระบบ Mission เดิม
-     */
-    if(
-      mission.healthMetric
-    ){
-}
-
-
+    writeLocal(local);
     closeEvidence();
-
-
-    renderCategory();
-
-
     updateTemplate();
-
-
-    showMissionStatus(
-      "✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ"
-    );
-
-
-    /* =====================================================
-       GET LATEST STATUS
-    ====================================================== */
-
-    try{
-
-      await refreshMissionStatus();
-
-    }catch(error){
-
-      console.warn(
-        "REFRESH AFTER SUBMIT:",
-        error
-      );
-
-    }
-
-
+    if(document.getElementById('missionModal')?.classList.contains('show')) renderCategory();
+    showMissionStatus('✅ ส่งหลักฐานแล้ว รอ Admin ตรวจสอบ');
+    await refreshMissionStatus();
   }catch(error){
-    /* =====================================================
-       ERROR
-    ====================================================== */
-
-    console.error(
-      "MISSION SUBMIT ERROR:",
-      error
-    );
-
-    showMissionStatus(
-      "ERROR: " +
-      (
-        error?.message ||
-        String(error) ||
-        "UNKNOWN ERROR"
-      )
-    );
-
+    console.error('MISSION SUBMIT ERROR:',error);
+    showMissionStatus('ERROR: ' + (error?.message || String(error) || 'UNKNOWN ERROR'));
   }finally{
-
-    /* =====================================================
-       RESTORE BUTTON
-    ====================================================== */
-
     button.disabled = false;
-    button.textContent = "ส่งหลักฐานให้ Admin ตรวจสอบ";
+    button.textContent = 'ส่งหลักฐานให้ Admin ตรวจสอบ';
   }
 }
 
 /* =========================================================
    LOAD STATUS FROM API
 ========================================================= */
-
 async function refreshMissionStatus(){
-
-  /* =====================================================
-     NO API
-  ====================================================== */
-
-  if(!MISSION_API){
-
-    updateAutoBonus();
-
-    checkApprovedMessage();
-
-    updateTemplate();
-
-    return;
-  }
-
-
+  if(!MISSION_API){ updateTemplate(); return null; }
   try{
+    const idToken = ROCK?.getIdToken?.() || window.liff?.getIDToken?.();
+    if(!idToken) return null;
 
-    /* =====================================================
-       TOKEN
-    ====================================================== */
-
-    const idToken =
-      ROCK.getIdToken();
-
-
-    if(!idToken){
-
-      throw new Error(
-        "ไม่พบ LINE ID Token"
-      );
-
-    }
-
-
-    /* =====================================================
-       REQUEST
-    ====================================================== */
-
-    const response =
-      await fetch(
-        MISSION_API,
-        {
-
-          method:
-            "POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              action:
-                "myMissionStatus",
-
-              idToken:
-                idToken
-
-            })
-
-        }
-      );
-
-
-    /* =====================================================
-       RESPONSE
-    ====================================================== */
-
-    const raw =
-      await response.text();
-
-
-    console.log(
-      "MISSION STATUS HTTP:",
-      response.status
-    );
-
-
-    console.log(
-      "MISSION STATUS RAW:",
-      raw
-    );
-
-
+    const response = await fetch(MISSION_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'myMissionStatus',idToken})
+    });
+    const raw = await response.text();
     let result = {};
-
-
-    try{
-
-      result =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    }catch(error){
-
-      throw new Error(
-        `Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`
-      );
-
+    try{ result = raw ? JSON.parse(raw) : {}; }
+    catch{ throw new Error(`Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`); }
+    if(!response.ok || result?.success === false){
+      throw new Error(result?.error || result?.message || `HTTP ${response.status}`);
     }
 
-
-    if(
-      !response.ok ||
-      result?.success === false
-    ){
-
-      throw new Error(
-
-        result?.error ||
-
-        result?.message ||
-
-        `โหลด Mission ไม่สำเร็จ HTTP ${response.status}`
-
-      );
-
-    }
-
-
-    /* =====================================================
-       UPDATE LOCAL STATUS
-    ====================================================== */
-
-    const local =
-      readLocal();
-
-
-    const submissions =
-      Array.isArray(
-        result?.submissions
-      )
-        ? result.submissions
-        : [];
-
-
-    submissions
-      .forEach(
-        item => {
-
-          const missionId =
-
-            item?.mission_id ||
-
-            item?.missionId;
-
-
-          if(!missionId){
-            return;
-          }
-
-
-          local[
-            missionId
-          ] = {
-
-            ...local[
-              missionId
-            ],
-
-            status:
-              item?.status ||
-              "pending",
-
-            approvedAt:
-              item?.approved_at ||
-              item?.approvedAt ||
-              null,
-
-            reviewedAt:
-              item?.reviewed_at ||
-              item?.reviewedAt ||
-              null,
-
-            rejectReason:
-              item?.reject_reason ||
-              item?.rejected_reason ||
-              item?.rejectReason ||
-              "",
-
-            rewardGranted:
-              item?.reward_granted ===
-              true,
-
-            submittedAt:
-              item?.submitted_at ||
-              local[
-                missionId
-              ]?.submittedAt ||
-              null
-
-          };
-
-        }
-      );
-
-
-    writeLocal(
-      local
-    );
-
-
-    /* =====================================================
-       AUTO BONUS
-    ====================================================== */
-
-    updateAutoBonus();
-
-
-    /* =====================================================
-       CONGRATULATION
-    ====================================================== */
-
-    checkApprovedMessage();
-
-
-    /* =====================================================
-       UPDATE TEMPLATE
-    ====================================================== */
-
+    const local = readLocal();
+    const submissions = Array.isArray(result?.submissions) ? result.submissions : [];
+    submissions.forEach(item=>{
+      const missionId = item?.mission_id || item?.missionId;
+      if(!missionId) return;
+      const old = local[missionId] || {};
+      local[missionId] = {
+        ...old,
+        status:item?.status || 'pending',
+        approvedAt:item?.approved_at || item?.approvedAt || null,
+        reviewedAt:item?.reviewed_at || item?.reviewedAt || null,
+        rejectReason:item?.reject_reason || item?.rejected_reason || item?.rejectReason || '',
+        rewardGranted:item?.reward_granted === true,
+        submittedAt:item?.submitted_at || item?.submittedAt || old?.submittedAt || null
+      };
+    });
+    writeLocal(local);
     updateTemplate();
-
-
-    /* =====================================================
-       REFRESH OPEN CATEGORY
-    ====================================================== */
-
-    const modal =
-      document.getElementById(
-        "missionModal"
-      );
-
-
-    if(
-      modal &&
-      modal.classList.contains(
-        "show"
-      )
-    ){
-
-      renderCategory();
-
-    }
-
-
+    checkApprovedMessage();
+    if(document.getElementById('missionModal')?.classList.contains('show')) renderCategory();
     return result;
-
-
   }catch(error){
-
-    console.error(
-      "MISSION STATUS ERROR:",
-      error
-    );
-
-
-    /*
-      ไม่แสดง Toast ทุก 30 วินาที
-      เพื่อไม่รบกวนผู้เล่น
-    */
-
+    console.error('MISSION STATUS ERROR:',error);
     return null;
-
   }
-
 }
 
 /* =========================================================
-   FINAL INITIALIZER
-========================================================= */
-
-    /* =========================================================
-   MISSION PAGE FIX / FINAL INITIALIZER
-========================================================= */
-
-/* =========================================================
-   SAFE NUMBER
-========================================================= */
-function missionNumber(value, fallback = 0){
-
-  const number =
-    Number(value);
-
-  return Number.isFinite(number)
-    ? number
-    : fallback;
-}
-
-
-/* =========================================================
-   COUNT APPROVED
+   MAIN PROGRESS
 ========================================================= */
 function countApprovedMission(category){
-
-  const missions =
-    getCategoryMissions(category);
-
-  return missions.filter(
-    mission =>
-      getMissionStatus(mission.id)
-        ?.status === "approved"
-  ).length;
+  return getCategoryMissions(category).filter(m=>getMissionStatus(m.id)?.status === 'approved').length;
 }
 
-
-/* =========================================================
-   UPDATE MAIN MISSION TEMPLATE
-========================================================= */
 function updateTemplate(){
-
-  try{
-
-    const daily =
-      getCategoryMissions("daily");
-
-    const weekly =
-      getCategoryMissions("weekly");
-
-    const monthly =
-      getCategoryMissions("monthly");
-
-    const bonus =
-      getCategoryMissions("bonus");
-
-
-    const dailyApproved =
-      countApprovedMission("daily");
-
-    const weeklyApproved =
-      countApprovedMission("weekly");
-
-    const monthlyApproved =
-      countApprovedMission("monthly");
-
-    const bonusApproved =
-      countApprovedMission("bonus");
-
-
-    /* ================= DAILY ================= */
-
-    const dailyCount =
-      document.getElementById(
-        "dailyCount"
-      );
-
-    const dailyProgress =
-      document.getElementById(
-        "dailyProgress"
-      );
-
-    if(dailyCount){
-
-      dailyCount.textContent =
-        `${dailyApproved} / ${daily.length}`;
-
-    }
-
-    if(dailyProgress){
-
-      dailyProgress.style.width =
-        daily.length
-          ? `${Math.min(
-              100,
-              (
-                dailyApproved /
-                daily.length
-              ) * 100
-            )}%`
-          : "0%";
-
-    }
-
-
-    /* ================= WEEKLY ================= */
-
-    const weeklyCount =
-      document.getElementById(
-        "weeklyCount"
-      );
-
-    const weeklyProgress =
-      document.getElementById(
-        "weeklyProgress"
-      );
-
-    if(weeklyCount){
-
-      weeklyCount.textContent =
-        `${weeklyApproved} / ${weekly.length}`;
-
-    }
-
-    if(weeklyProgress){
-
-      weeklyProgress.style.width =
-        weekly.length
-          ? `${Math.min(
-              100,
-              (
-                weeklyApproved /
-                weekly.length
-              ) * 100
-            )}%`
-          : "0%";
-
-    }
-
-
-    /* ================= MONTHLY ================= */
-
-    const monthlyCount =
-      document.getElementById(
-        "monthlyCount"
-      );
-
-    const monthlyProgress =
-      document.getElementById(
-        "monthlyProgress"
-      );
-
-    if(monthlyCount){
-
-      monthlyCount.textContent =
-        `${monthlyApproved} / ${monthly.length}`;
-
-    }
-
-    if(monthlyProgress){
-
-      monthlyProgress.style.width =
-        monthly.length
-          ? `${Math.min(
-              100,
-              (
-                monthlyApproved /
-                monthly.length
-              ) * 100
-            )}%`
-          : "0%";
-
-    }
-
-
-    /* ================= BONUS ================= */
-
-    const bonusCount =
-      document.getElementById(
-        "bonusCount"
-      );
-
-    const bonusProgress =
-      document.getElementById(
-        "bonusProgress"
-      );
-
-    if(bonusCount){
-
-      bonusCount.textContent =
-        `${bonusApproved} / ${bonus.length}`;
-
-    }
-
-    if(bonusProgress){
-
-      bonusProgress.style.width =
-        bonus.length
-          ? `${Math.min(
-              100,
-              (
-                bonusApproved /
-                bonus.length
-              ) * 100
-            )}%`
-          : "0%";
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "MISSION TEMPLATE ERROR:",
-      error
-    );
-
-  }
-
+  ['daily','weekly','monthly','bonus'].forEach(category=>{
+    const total = getCategoryMissions(category).length;
+    const approved = countApprovedMission(category);
+    const count = document.getElementById(`${category}Count`);
+    const progress = document.getElementById(`${category}Progress`);
+    if(count) count.textContent = `${approved} / ${total}`;
+    if(progress) progress.style.width = `${total ? Math.min(100,(approved/total)*100) : 0}%`;
+  });
 }
 
-
 /* =========================================================
-   AUTO BONUS
-   ตอนนี้ยังไม่เปลี่ยนสถานะภารกิจเอง
-   เพื่อไม่ให้ client ปลอมการอนุมัติได้
-========================================================= */
-function updateAutoBonus(){
-
-  /*
-    Mission ที่เป็น auto
-    ควรให้ Server เป็นผู้ยืนยันสถานะ
-
-    ตรงนี้จึงไม่ set approved เอง
-  */
-
-}
-
-
-/* =========================================================
-   APPROVED SUCCESS MESSAGE
+   SUCCESS MODAL
 ========================================================= */
 function checkApprovedMessage(){
-
-  try{
-
-    const local =
-      readLocal();
-
-    let changed =
-      false;
-
-    for(
-      const categoryName
-      of Object.keys(missionData)
-    ){
-
-      const missions =
-        getCategoryMissions(
-          categoryName
-        );
-
-      for(
-        const mission
-        of missions
-      ){
-
-        const state =
-          local[mission.id];
-
-        if(
-          !state ||
-          state.status !== "approved" ||
-          state.approvedNotified === true
-        ){
-          continue;
-        }
-
-
-        state.approvedNotified =
-          true;
-
-        changed =
-          true;
-
-
-        const nameElement =
-          document.getElementById(
-            "successMissionName"
-          );
-
-        const rewardElement =
-          document.getElementById(
-            "successReward"
-          );
-
-        const modal =
-          document.getElementById(
-            "successModal"
-          );
-
-
-        if(nameElement){
-
-          nameElement.textContent =
-            mission.name;
-
-        }
-
-
-        if(rewardElement){
-
-          rewardElement.textContent =
-            `⭐ +${mission.reward.coin} ROCK COIN   ⚡ +${mission.reward.energy} ENERGY   🏆 +${mission.reward.exp} EXP`;
-
-        }
-
-
-        if(modal){
-
-          modal.classList.add(
-            "show"
-          );
-
-        }
-
-
-        break;
-
-      }
-
+  const local = readLocal();
+  for(const category of Object.keys(missionData)){
+    for(const mission of getCategoryMissions(category)){
+      const state = local[mission.id];
+      if(!state || state.status !== 'approved' || state.approvedNotified === true) continue;
+      const name = document.getElementById('successMissionName');
+      const reward = document.getElementById('successReward');
+      if(name) name.textContent = mission.name;
+      if(reward) reward.innerHTML = `⭐ +${mission.reward.coin} ROCK COIN<br>⚡ +${mission.reward.energy} ENERGY<br>🏆 +${mission.reward.exp} EXP`;
+      document.getElementById('successModal')?.classList.add('show');
+      local[mission.id] = {...state,approvedNotified:true};
+      writeLocal(local);
+      return;
     }
-
-
-    if(changed){
-
-      writeLocal(
-        local
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "MISSION APPROVED MESSAGE ERROR:",
-      error
-    );
-
   }
-
 }
-
-
-/* =========================================================
-   CLOSE SUCCESS
-========================================================= */
-function closeSuccess(){
-
-  const modal =
-    document.getElementById(
-      "successModal"
-    );
-
-  if(modal){
-
-    modal.classList.remove(
-      "show"
-    );
-
-  }
-
-}
-
+function closeSuccess(){ document.getElementById('successModal')?.classList.remove('show'); }
 
 /* =========================================================
    STATUS MESSAGE
 ========================================================= */
-let missionStatusTimer =
-  null;
-
-
+let missionStatusTimer = null;
 function showMissionStatus(message){
-
-  const element =
-    document.getElementById(
-      "missionStatus"
-    );
-
-  if(!element){
-
-    console.log(
-      "MISSION STATUS:",
-      message
-    );
-
-    return;
-
-  }
-
-
-  element.textContent =
-    String(message || "");
-
-
-  element.style.display =
-    "block";
-
-
-  if(missionStatusTimer){
-
-    clearTimeout(
-      missionStatusTimer
-    );
-
-  }
-
-
-  missionStatusTimer =
-    setTimeout(
-      () => {
-
-        element.style.display =
-          "none";
-
-      },
-      5000
-    );
-
+  const el = document.getElementById('missionStatus');
+  if(!el){ console.log(message); return; }
+  el.textContent = String(message || '');
+  el.classList.add('show');
+  if(missionStatusTimer) clearTimeout(missionStatusTimer);
+  missionStatusTimer = setTimeout(()=>el.classList.remove('show'),3500);
 }
 
-
 /* =========================================================
-   DASHBOARD DATA
+   DASHBOARD / COIN / ENERGY
 ========================================================= */
-function applyMissionDashboard(data){
-
-  if(!data){
-    return;
-  }
-
-
-  /*
-    รองรับชื่อ field หลายแบบ
-    เพื่อให้เข้ากับ response ของ Dashboard
-  */
-
-  const coin =
-    missionNumber(
-      data.coin ??
-      data.coins ??
-      data.rockCoin ??
-      data.rock_coin ??
-      data.wallet?.coin ??
-      data.wallet?.coins ??
-      0
-    );
-
-
-  const energy =
-    missionNumber(
-      data.energy ??
-      data.currentEnergy ??
-      data.current_energy ??
-      data.wallet?.energy ??
-      0
-    );
-
-
-  const maxEnergy =
-    missionNumber(
-      data.maxEnergy ??
-      data.max_energy ??
-      data.energyMax ??
-      data.energy_max ??
-      200,
-      200
-    );
-
-
-  const coinElement =
-    document.getElementById(
-      "missionCoin"
-    );
-
-  const energyElement =
-    document.getElementById(
-      "missionEnergy"
-    );
-
-
-  if(coinElement){
-
-    coinElement.textContent =
-      coin.toLocaleString();
-
-  }
-
-
-  if(energyElement){
-
-    energyElement.textContent =
-      `${energy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
-
-  }
-
+function applyMissionDashboard(raw){
+  const d = raw?.data || raw?.dashboard || raw;
+  if(!d) return;
+  const coin = Number(d?.rockCoin ?? d?.rock_coin ?? d?.coin ?? 0) || 0;
+  const current = Number(d?.energy?.current ?? d?.currentEnergy ?? d?.current_energy ?? d?.energy ?? 0) || 0;
+  const max = Number(d?.energy?.max ?? d?.maxEnergy ?? d?.max_energy ?? window.APP_CONFIG?.MAX_ENERGY ?? 200) || 200;
+  const coinEl = document.getElementById('missionCoin');
+  const energyEl = document.getElementById('missionEnergy');
+  if(coinEl) coinEl.textContent = coin.toLocaleString('en-US');
+  if(energyEl) energyEl.textContent = `${current.toLocaleString('en-US')} / ${max.toLocaleString('en-US')}`;
 }
 
-
-/* =========================================================
-   LOAD PLAYER / DASHBOARD DATA
-========================================================= */
 async function loadMissionDashboard(){
-
   try{
-
-    /*
-      ใช้ ROCK function ก่อน
-      ถ้า common.js มี Dashboard loader อยู่แล้ว
-    */
-
-    if(
-      typeof ROCK?.getDashboard ===
-      "function"
-    ){
-
-      const data =
-        await ROCK.getDashboard();
-
-      applyMissionDashboard(
-        data?.data ||
-        data
-      );
-
-      return;
-
-    }
-
-
-    if(
-      typeof ROCK?.loadDashboard ===
-      "function"
-    ){
-
-      const data =
-        await ROCK.loadDashboard();
-
-      applyMissionDashboard(
-        data?.data ||
-        data
-      );
-
-      return;
-
-    }
-
-
-    /*
-      ถ้า common.js เก็บข้อมูลผู้เล่นไว้
-    */
-
-    if(
-      ROCK?.player ||
-      ROCK?.user ||
-      ROCK?.profile
-    ){
-
-      applyMissionDashboard(
-        ROCK.player ||
-        ROCK.user ||
-        ROCK.profile
-      );
-
-    }
-
+    let data = null;
+    if(typeof ROCK?.dashboard === 'function') data = await ROCK.dashboard();
+    else if(typeof ROCK?.fetchDashboard === 'function') data = await ROCK.fetchDashboard();
+    else if(typeof ROCK?.getDashboard === 'function') data = await ROCK.getDashboard();
+    if(data) applyMissionDashboard(data);
+    return data;
   }catch(error){
-
-    console.warn(
-      "MISSION DASHBOARD ERROR:",
-      error
-    );
-
+    console.error('MISSION DASHBOARD ERROR:',error);
+    return null;
   }
-
 }
 
-
 /* =========================================================
-   HOME
+   NAVIGATION
 ========================================================= */
 function goHome(){
 
-  /*
-    ถ้า common.js มี navigation กลาง
-    ให้ใช้ก่อน
-  */
-
-  try{
-
-    if(
-      typeof ROCK?.goHome ===
-      "function"
-    ){
-
-      ROCK.goHome();
-
-      return;
-
-    }
-
-
-    if(
-      typeof ROCK?.navigate ===
-      "function"
-    ){
-
-      ROCK.navigate(
-        "index.html"
-      );
-
-      return;
-
-    }
-
-  }catch(error){
-
-    console.warn(
-      "ROCK HOME ERROR:",
-      error
-    );
-
-  }
-
-
-  window.location.href =
-    "./index.html";
-
-}
-
-
-
-/* =========================================================
-   NUTRITION
-========================================================= */
-
-function goNutrition(){
-
-  const baseUrl =
-    window.APP_CONFIG
-      ?.PAGE
-      ?.NUTRITION ||
-    window.APP_CONFIG
-      ?.PAGES
-      ?.NUTRITION ||
-    "./nutrition.html";
-
-  const separator =
-    baseUrl.includes("?")
-      ? "&"
-      : "?";
-
-  window.location.href =
-    baseUrl +
-    separator +
-    "from=mission&mission=daily_eat_smart";
-}
-
-
-/* =========================================================
-   WAIT FOR ROCK / LIFF
-========================================================= */
-/* =========================================================
-   WAIT FOR ROCK / LIFF
-========================================================= */
-async function waitMissionReady(){
+  const url =
+    window.APP_CONFIG?.PAGE?.HOME ||
+    "./dashboard.html";
 
   /*
-    common.js ถูกโหลดก่อน script นี้
-    แต่ LIFF อาจยัง initialize ไม่เสร็จ
+    ใช้ location.href ตรง ๆ
+    ไม่ส่งคำว่า "HOME" เข้า ROCK.go()
+    เพราะ ROCK.go() ควรได้รับ URL จริง ไม่ใช่ key
   */
-
-  const timeout =
-    Date.now() + 10000;
-
-
-  while(
-    Date.now() <
-    timeout
-  ){
-
-    try{
-
-      if(
-        window.ROCK &&
-        typeof ROCK.getIdToken ===
-          "function"
-      ){
-
-        const token =
-          ROCK.getIdToken();
-
-        if(token){
-          return true;
-        }
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        "WAIT ROCK:",
-        error
-      );
-
-    }
-
-
-    await new Promise(
-      resolve =>
-        setTimeout(
-          resolve,
-          200
-        )
-    );
-
-  }
-
-
-  return false;
-
+  window.location.href =
+    url;
 }
 
 
-/* =========================================================
-   INITIALIZE MISSION PAGE
-========================================================= */
-let missionPageStarted =
-  false;
+function goBattle(){
 
+  const url =
+    window.APP_CONFIG?.PAGE?.BATTLE ||
+    "./battle.html";
+
+  /*
+    ใช้ location.href ตรง ๆ เพื่อให้ทำงานได้
+    แม้ common.js / ROCK navigation มีปัญหา
+  */
+  window.location.href =
+    url;
+}
+
+/* =========================================================
+   INITIALIZE LIFF
+========================================================= */
+async function prepareMissionApp(){
+  if(!window.ROCK) throw new Error('common.js โหลดไม่สำเร็จ');
+  if(typeof ROCK.initLiff === 'function'){
+    const liffId = window.APP_CONFIG?.LIFF_ID || ROCK?.CFG?.LIFF?.HOME || undefined;
+    const ready = await ROCK.initLiff(liffId);
+    if(ready === false) return false;
+  }
+  return true;
+}
+
+/* =========================================================
+   START PAGE
+========================================================= */
+let missionPageStarted = false;
+let missionRefreshTimer = null;
 
 async function initMissionPage(){
-
-  if(missionPageStarted){
-    return;
-  }
-
-  missionPageStarted =
-    true;
-
-
-  console.log(
-    "MISSION INIT START"
-  );
-
-
-  /*
-    1. แสดง UI จาก Local ก่อน
-    ทำให้หน้าไม่ค้างรอ Network
-  */
-
-  try{
-
-    updateAutoBonus();
-
-    updateTemplate();
-
-  }catch(error){
-
-    console.error(
-      "MISSION LOCAL INIT ERROR:",
-      error
-    );
-
-  }
-
-
-  /*
-    2. รอ common.js / LIFF
-  */
-
-  const ready =
-    await waitMissionReady();
-
-
-  console.log(
-    "MISSION LIFF READY:",
-    ready
-  );
-
-
-  /*
-    3. โหลด Coin / Energy
-  */
-
-  try{
-
-    await loadMissionDashboard();
-
-  }catch(error){
-
-    console.warn(
-      "MISSION DASHBOARD INIT:",
-      error
-    );
-
-  }
-
-
-  /*
-    4. โหลดสถานะ Mission จาก Server
-  */
-
-  if(ready){
-
-    try{
-
-      await refreshMissionStatus();
-
-    }catch(error){
-
-      console.warn(
-        "MISSION STATUS INIT:",
-        error
-      );
-
-    }
-
-  }
-
-
-  /*
-    5. Render ครั้งสุดท้าย
-  */
-
+  if(missionPageStarted) return;
+  missionPageStarted = true;
   updateTemplate();
-
-
-  console.log(
-    "MISSION INIT COMPLETE"
-  );
-
+  try{
+    const ready = await prepareMissionApp();
+    if(ready === false) return;
+    await Promise.allSettled([loadMissionDashboard(),refreshMissionStatus()]);
+    updateTemplate();
+    checkApprovedMessage();
+  }catch(error){
+    console.error('MISSION INIT ERROR:',error);
+    showMissionStatus(error?.message || 'ระบบยังไม่พร้อม');
+  }
 }
-
-
-/* =========================================================
-   AUTO REFRESH MISSION
-========================================================= */
-let missionRefreshTimer =
-  null;
-
 
 function startMissionRefresh(){
-
-  if(missionRefreshTimer){
-
-    clearInterval(
-      missionRefreshTimer
-    );
-
-  }
-
-
-  missionRefreshTimer =
-    setInterval(
-      async () => {
-
-        if(
-          document.visibilityState !==
-          "visible"
-        ){
-          return;
-        }
-
-
-        try{
-
-          await refreshMissionStatus();
-
-          await loadMissionDashboard();
-
-        }catch(error){
-
-          console.warn(
-            "MISSION AUTO REFRESH:",
-            error
-          );
-
-        }
-
-      },
-      30000
-    );
-
+  if(missionRefreshTimer) clearInterval(missionRefreshTimer);
+  const ms = Number(window.APP_CONFIG?.REFRESH_MS || ROCK?.CFG?.REFRESH_MS) || 30000;
+  missionRefreshTimer = setInterval(async()=>{
+    if(document.visibilityState !== 'visible') return;
+    await Promise.allSettled([loadMissionDashboard(),refreshMissionStatus()]);
+  },ms);
 }
 
-
-/* =========================================================
-   PAGE VISIBILITY
-========================================================= */
-document.addEventListener(
-  "visibilitychange",
-  async () => {
-
-    if(
-      document.visibilityState !==
-      "visible"
-    ){
-      return;
-    }
-
-
-    try{
-
-      await refreshMissionStatus();
-
-      await loadMissionDashboard();
-
-    }catch(error){
-
-      console.warn(
-        "MISSION RESUME:",
-        error
-      );
-
-    }
-
+document.addEventListener('visibilitychange',async()=>{
+  if(document.visibilityState === 'visible'){
+    await Promise.allSettled([loadMissionDashboard(),refreshMissionStatus()]);
   }
-);
+});
 
-
-/* =========================================================
-   DOM READY
-========================================================= */
-if(
-  document.readyState ===
-  "loading"
-){
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-      await initMissionPage();
-
-      startMissionRefresh();
-
-    },
-    {
-      once:true
-    }
-  );
-
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded',async()=>{
+    await initMissionPage();
+    startMissionRefresh();
+  },{once:true});
 }else{
+  initMissionPage().then(startMissionRefresh);
+}
+</script>
 
-  initMissionPage()
-    .then(
-      () =>
-        startMissionRefresh()
-    );
+<style>
+/* =========================================================
+   MISSION MODAL - BIGGER TEXT
+========================================================= */
 
+.mission-modal,
+.mission-modal *{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
-</script>
+
+/* หัวข้อ DAILY MISSION / WEEKLY MISSION */
+.mission-modal h1,
+.mission-modal h2,
+.mission-modal .modal-title,
+.mission-modal .category-title{
+  font-size:clamp(24px,4vw,34px) !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+}
+
+
+/* คำอธิบายใต้หัวข้อ */
+.mission-modal .modal-subtitle,
+.mission-modal .category-subtitle{
+  font-size:clamp(13px,2vw,18px) !important;
+  line-height:1.45 !important;
+}
+
+
+/* ตัวเลขสรุปด้านบน */
+.mission-modal .summary-value,
+.mission-modal .stat-value,
+.mission-modal .mission-summary strong{
+  font-size:clamp(22px,3vw,30px) !important;
+  font-weight:900 !important;
+}
+
+
+/* คำใต้ตัวเลข เช่น อนุมัติแล้ว / ทั้งหมด / ความสำเร็จ */
+.mission-modal .summary-label,
+.mission-modal .stat-label{
+  font-size:clamp(12px,1.8vw,16px) !important;
+  font-weight:700 !important;
+}
+
+
+/* CORE DAILY / DAILY EXTRA */
+.mission-modal .section-title,
+.mission-modal .mission-section-title{
+  font-size:clamp(17px,2.5vw,22px) !important;
+  font-weight:900 !important;
+}
+
+
+/* ชื่อ Mission เช่น MOVE MORE */
+.mission-modal .mission-name,
+.mission-modal .mission-card strong,
+.mission-modal .mission-title{
+  font-size:clamp(18px,2.8vw,24px) !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+}
+
+
+/* รายละเอียดภารกิจ */
+.mission-modal .mission-description,
+.mission-modal .mission-card p,
+.mission-modal .mission-desc{
+  font-size:clamp(14px,2vw,18px) !important;
+  line-height:1.5 !important;
+}
+
+
+/* Reward badge */
+.mission-modal .reward-chip,
+.mission-modal .reward-badge,
+.mission-modal .mission-reward{
+  font-size:clamp(12px,1.8vw,16px) !important;
+  font-weight:800 !important;
+}
+
+
+/* สถานะ ยังไม่ได้ส่งหลักฐาน */
+.mission-modal .status-badge,
+.mission-modal .mission-status-badge{
+  font-size:clamp(12px,1.8vw,16px) !important;
+  font-weight:800 !important;
+}
+
+
+/* ปุ่มส่งหลักฐาน */
+.mission-modal button,
+.mission-modal .submit-button,
+.mission-modal .evidence-button{
+  font-size:clamp(14px,2vw,18px) !important;
+  font-weight:900 !important;
+}
+
+
+/* เพิ่มความสูง Card ให้รองรับตัวหนังสือใหญ่ */
+.mission-modal .mission-card{
+  padding:18px !important;
+  min-height:120px !important;
+}
+
+
+/* มือถือ */
+@media (max-width:600px){
+
+  .mission-modal{
+    width:96vw !important;
+  }
+
+  .mission-modal .mission-card{
+    padding:16px !important;
+  }
+
+  .mission-modal .mission-name,
+  .mission-modal .mission-title{
+    font-size:18px !important;
+  }
+
+  .mission-modal .mission-description,
+  .mission-modal .mission-desc{
+    font-size:14px !important;
+  }
+
+  .mission-modal button{
+    font-size:14px !important;
+    min-height:40px !important;
+  }
+}
+</style>
+
 </body>
 </html>
