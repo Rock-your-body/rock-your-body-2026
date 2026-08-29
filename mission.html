@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260829-mission-click-fix-01"
+    src="./app-config.js?v=20260829-mission-period-reset-01"
   ></script>
 
 
@@ -1196,7 +1196,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-mission-click-fix-01"
+    src="./mission-template.png?v=20260829-mission-period-reset-01"
     alt=""
     draggable="false"
   >
@@ -3328,50 +3328,163 @@ async function submitEvidence(){
 }
 
 /* =========================================================
-   LOAD STATUS FROM API
+   LOAD CURRENT-PERIOD STATUS FROM API
+   STEP 4.2
 ========================================================= */
-async function refreshMissionStatus(){
-  if(!MISSION_API){ updateTemplate(); return null; }
-  try{
-    const idToken = ROCK?.getIdToken?.() || window.liff?.getIDToken?.();
-    if(!idToken) return null;
 
-    const response = await fetch(MISSION_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'myMissionStatus',idToken})
-    });
-    const raw = await response.text();
-    let result = {};
-    try{ result = raw ? JSON.parse(raw) : {}; }
-    catch{ throw new Error(`Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`); }
-    if(!response.ok || result?.success === false){
-      throw new Error(result?.error || result?.message || `HTTP ${response.status}`);
+async function refreshMissionStatus(){
+
+  if(!MISSION_API){
+    updateTemplate();
+    return null;
+  }
+
+  try{
+
+    const idToken =
+      ROCK?.getIdToken?.() ||
+      window.liff?.getIDToken?.();
+
+    if(!idToken){
+      return null;
     }
 
-    const local = readLocal();
-    const submissions = Array.isArray(result?.submissions) ? result.submissions : [];
+    const response = await fetch(
+      MISSION_API,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          action:"myMissionStatus",
+          idToken
+        })
+      }
+    );
+
+    const raw = await response.text();
+    let result = {};
+
+    try{
+      result = raw ? JSON.parse(raw) : {};
+    }catch{
+      throw new Error(
+        `Mission Status JSON ไม่ถูกต้อง HTTP ${response.status}`
+      );
+    }
+
+    if(!response.ok || result?.success === false){
+      throw new Error(
+        result?.error ||
+        result?.message ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    /* =====================================================
+       RESET CURRENT UI STATUS
+       ล้างสถานะเก่าก่อน เพื่อไม่ให้ Approved/Pending
+       จาก period ก่อนหน้าค้างใน localStorage
+    ====================================================== */
+
+    const oldLocal = readLocal();
+    const local = {};
+
+    for(const category of Object.keys(missionData)){
+      for(const mission of getCategoryMissions(category)){
+        local[mission.id] = {
+          status:"not_submitted",
+          approvedNotified:false
+        };
+      }
+    }
+
+    /* =====================================================
+       APPLY CURRENT PERIOD DATA FROM BACKEND
+    ====================================================== */
+
+    const submissions = Array.isArray(result?.submissions)
+      ? result.submissions
+      : [];
+
     submissions.forEach(item=>{
-      const missionId = item?.mission_id || item?.missionId;
-      if(!missionId) return;
-      const old = local[missionId] || {};
+
+      const missionId =
+        item?.mission_id ||
+        item?.missionId;
+
+      if(!missionId){
+        return;
+      }
+
+      const old = oldLocal[missionId] || {};
+
       local[missionId] = {
-        ...old,
-        status:item?.status || 'pending',
-        approvedAt:item?.approved_at || item?.approvedAt || null,
-        reviewedAt:item?.reviewed_at || item?.reviewedAt || null,
-        rejectReason:item?.reject_reason || item?.rejected_reason || item?.rejectReason || '',
-        rewardGranted:item?.reward_granted === true,
-        submittedAt:item?.submitted_at || item?.submittedAt || old?.submittedAt || null
+        ...local[missionId],
+
+        status:
+          item?.status ||
+          "pending",
+
+        periodKey:
+          item?.period_key ||
+          null,
+
+        approvedAt:
+          item?.approved_at ||
+          item?.approvedAt ||
+          null,
+
+        reviewedAt:
+          item?.reviewed_at ||
+          item?.reviewedAt ||
+          null,
+
+        rejectReason:
+          item?.reject_reason ||
+          item?.rejected_reason ||
+          item?.rejectReason ||
+          "",
+
+        rewardGranted:
+          item?.reward_granted === true,
+
+        submittedAt:
+          item?.submitted_at ||
+          item?.submittedAt ||
+          null,
+
+        approvedNotified:
+          (
+            old?.periodKey === item?.period_key &&
+            old?.approvedNotified === true
+          )
       };
     });
+
     writeLocal(local);
     updateTemplate();
     checkApprovedMessage();
-    if(document.getElementById('missionModal')?.classList.contains('show')) renderCategory();
+
+    if(
+      document
+        .getElementById("missionModal")
+        ?.classList
+        .contains("show")
+    ){
+      renderCategory();
+    }
+
     return result;
+
   }catch(error){
-    console.error('MISSION STATUS ERROR:',error);
+
+    console.error(
+      "MISSION STATUS ERROR:",
+      error
+    );
+
     return null;
   }
 }
