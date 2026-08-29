@@ -1267,7 +1267,21 @@
 
     }
 
-  </style>
+  
+    #v2DynamicFields select{
+      width:100%;
+      min-height:52px;
+      border:2px solid #d2deef;
+      border-radius:14px;
+      padding:10px 12px;
+      background:#fff;
+      color:#103b70;
+      font-size:16px;
+      font-weight:800;
+      box-sizing:border-box;
+    }
+
+</style>
 
 </head>
 
@@ -3361,6 +3375,194 @@ function weeklyAerobicProgressText(){
 }
 
 
+
+function getHomePrefillV212(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return {
+    mission:
+      params.get(
+        "mission"
+      ) ||
+      "",
+
+    steps:
+      Number(
+        params.get(
+          "steps"
+        ) ||
+        0
+      ),
+
+    sleepMinutes:
+      Number(
+        params.get(
+          "sleepMinutes"
+        ) ||
+        0
+      ),
+
+    evidence:
+      params.get(
+        "evidence"
+      ) ===
+      "1"
+  };
+}
+
+
+
+/* =========================================================
+   EXERCISE AUTO CALORIE V2.12.1
+   Wellness estimate:
+   kcal ≈ MET × weight(kg) × hours
+========================================================= */
+
+const EXERCISE_MET_V2121 = {
+  walking: 4.0,
+  aerobic: 6.5,
+  running: 8.5,
+  cycling: 7.0,
+  weight_training: 5.0,
+  yoga: 3.0,
+  badminton: 6.0,
+  swimming: 6.0,
+  dance: 5.5,
+  football: 7.0,
+  basketball: 6.5,
+  other: 5.0
+};
+
+function exerciseLabelV2121(value){
+  const map = {
+    walking:"เดินออกกำลังกาย",
+    aerobic:"แอโรบิก",
+    running:"วิ่ง",
+    cycling:"ปั่นจักรยาน",
+    weight_training:"เวทเทรนนิ่ง",
+    yoga:"โยคะ",
+    badminton:"แบดมินตัน",
+    swimming:"ว่ายน้ำ",
+    dance:"เต้น / Dance",
+    football:"ฟุตบอล",
+    basketball:"บาสเกตบอล",
+    other:"กิจกรรมอื่น ๆ"
+  };
+  return map[value] || value || "กิจกรรม";
+}
+
+function getExerciseWeightV2121(){
+  const candidates = [
+    window.MISSION_LATEST_WEIGHT,
+    window.latestWeight,
+    window.playerWeight,
+    localStorage.getItem("latest_weight")
+  ];
+
+  for(const raw of candidates){
+    const n = Number(raw);
+    if(Number.isFinite(n) && n >= 20 && n <= 400){
+      return n;
+    }
+  }
+
+  // Same fallback rule as mission backend V2.2.
+  return 70;
+}
+
+function calculateExerciseCaloriesV2121(){
+  const type =
+    document.getElementById("v2ExerciseType")?.value ||
+    "other";
+
+  const minutes =
+    Math.max(
+      0,
+      Number(
+        document.getElementById("v2ExerciseMinutes")?.value ||
+        0
+      )
+    );
+
+  const met =
+    Number(
+      EXERCISE_MET_V2121[type] ||
+      EXERCISE_MET_V2121.other
+    );
+
+  const weight =
+    getExerciseWeightV2121();
+
+  const calories =
+    Math.max(
+      0,
+      Math.round(
+        met *
+        weight *
+        (minutes / 60)
+      )
+    );
+
+  const output =
+    document.getElementById("v2ExerciseCalories");
+
+  if(output){
+    output.innerHTML = minutes > 0
+      ? `🔥 เผาผลาญโดยประมาณ <strong>${calories.toLocaleString()} kcal</strong>
+         <div style="margin-top:4px;font-size:12px;color:#6b7890">
+           ${exerciseLabelV2121(type)} • ${minutes} นาที • MET ${met} • ใช้น้ำหนัก ${weight.toFixed(1)} kg
+         </div>`
+      : `🔥 กรอกประเภทกิจกรรมและระยะเวลา เพื่อคำนวณแคลอรี่อัตโนมัติ`;
+  }
+
+  const hidden =
+    document.getElementById("v2EstimatedCalories");
+
+  if(hidden){
+    hidden.value =
+      String(calories);
+  }
+
+  return {
+    type,
+    minutes,
+    met,
+    weight,
+    calories
+  };
+}
+
+function bindExerciseCalculatorV2121(){
+  const type =
+    document.getElementById("v2ExerciseType");
+
+  const minutes =
+    document.getElementById("v2ExerciseMinutes");
+
+  if(type && !type.dataset.calorieBound){
+    type.dataset.calorieBound = "1";
+    type.addEventListener(
+      "change",
+      calculateExerciseCaloriesV2121
+    );
+  }
+
+  if(minutes && !minutes.dataset.calorieBound){
+    minutes.dataset.calorieBound = "1";
+    minutes.addEventListener(
+      "input",
+      calculateExerciseCaloriesV2121
+    );
+  }
+
+  calculateExerciseCaloriesV2121();
+}
+
+
 /* =========================================================
    EVIDENCE
 ========================================================= */
@@ -3386,6 +3588,9 @@ function buildMissionV2Fields(
     "daily_move_more"
   ){
 
+    const prefill =
+      getHomePrefillV212();
+
     host.innerHTML = `
       <div class="v2-field">
         <label>จำนวนก้าววันนี้</label>
@@ -3396,11 +3601,12 @@ function buildMissionV2Fields(
           step="1"
           inputmode="numeric"
           placeholder="เช่น 8500"
+          value="${prefill.mission === "daily_move_more" && prefill.steps > 0 ? Math.round(prefill.steps) : ""}"
         >
       </div>
 
       <div class="v2-hint">
-        เป้าหมาย ≥ 8,000 ก้าว • ระบบจะประมาณแคลอรี่ให้อัตโนมัติหลังส่ง
+        เป้าหมาย ≥ 8,000 ก้าว • ต้องแนบรูปหลักฐานและรอ Admin อนุมัติก่อนรับรางวัล
       </div>
     `;
 
@@ -3847,10 +4053,10 @@ async function submitEvidence(){
 
     if(
       !Number.isFinite(steps) ||
-      steps <= 0
+      steps < 8000
     ){
       showMissionStatus(
-        "กรุณากรอกจำนวนก้าว"
+        "MOVE MORE ต้องมีอย่างน้อย 8,000 ก้าวก่อนส่งหลักฐาน"
       );
       return;
     }
