@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-battle-template-v33"></script>
+  <script src="./app-config.js?v=20260830-battle-template-v34"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -391,7 +391,26 @@
         width:100vw;
       }
     }
-  </style>
+  
+    /* =====================================================
+       DYNAMIC STAGE IMAGE V3.4
+       วางภาพ Stage ทับเฉพาะพื้นที่ Boss Arena
+    ====================================================== */
+    #stageImage{
+      position:absolute;
+      z-index:8;
+      left:0%;
+      top:20.8%;
+      width:52.5%;
+      height:39.8%;
+      object-fit:cover;
+      object-position:center center;
+      pointer-events:none;
+      user-select:none;
+      display:none;
+    }
+
+</style>
 </head>
 
 <body>
@@ -405,8 +424,18 @@
     -->
     <img
       class="template"
-      src="./battle-template.png?v=20260830-v33"
+      src="./battle-template.png?v=20260830-v34"
       alt="ROCK YOUR BODY 2026 BATTLE"
+      draggable="false"
+    >
+
+
+    <!-- ภาพ Stage เปลี่ยนตาม Stage ปัจจุบัน -->
+    <img
+      id="stageImage"
+      class="stage-image"
+      src=""
+      alt="Battle Stage"
       draggable="false"
     >
 
@@ -477,7 +506,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   BATTLE TEMPLATE V3.3
+   BATTLE TEMPLATE V3.4
 
    DATA ARCHITECTURE:
    LINE ID Token
@@ -1258,6 +1287,59 @@ function normalizeBattle(
 
 
 /* =========================================================
+   STAGE IMAGE V3.4
+   ตั้งชื่อไฟล์:
+   battle-stage-1.png
+   battle-stage-2.png
+   battle-stage-3.png
+   ...
+========================================================= */
+
+function getStageImageUrl(stageId){
+
+  const id =
+    Math.max(
+      1,
+      Number(stageId) || 1
+    );
+
+  return `./battle-stage-${id}.png?v=20260830-v34`;
+}
+
+
+function renderStageImage(){
+
+  const img =
+    $("stageImage");
+
+  const stageId =
+    state.battle?.stage?.id ||
+    1;
+
+  img.onload =
+    ()=>{
+      img.style.display =
+        "block";
+    };
+
+  img.onerror =
+    ()=>{
+      /*
+        ถ้าไม่มีไฟล์ของ Stage นั้น
+        ซ่อน layer และให้ battle-template เดิมเป็น fallback
+      */
+      img.style.display =
+        "none";
+    };
+
+  img.src =
+    getStageImageUrl(
+      stageId
+    );
+}
+
+
+/* =========================================================
    RENDER
 ========================================================= */
 
@@ -1368,6 +1450,9 @@ function renderBattle(){
 
   const b =
     state.battle;
+
+
+  renderStageImage();
 
 
   $("bossName")
