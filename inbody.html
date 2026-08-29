@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+  <title>
+    ROCK YOUR BODY 2026 • InBody
+  </title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js"></script>
+
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+      color:#173454;
+      background:
+        linear-gradient(
+          180deg,
+          #edf6ff,
+          #f9fbff
+        );
+    }
+    .wrap{
+      width:min(760px,100%);
+      margin:auto;
+      padding:
+        calc(16px + env(safe-area-inset-top))
+        16px
+        calc(30px + env(safe-area-inset-bottom));
+    }
+    .hero{
+      padding:20px;
+      border-radius:24px;
+      color:#fff;
+      background:
+        linear-gradient(
+          135deg,
+          #235fd7,
+          #0fa67b
+        );
+      box-shadow:
+        0 12px 30px
+        rgba(45,80,120,.15);
+      margin-bottom:14px;
+    }
+    .hero h1{
+      margin:0 0 5px;
+      font-size:25px;
+    }
+    .hero p{
+      margin:0;
+      font-size:12px;
+      line-height:1.5;
+      opacity:.92;
+    }
+    .card{
+      padding:16px;
+      border:1px solid #dce8f4;
+      border-radius:20px;
+      background:#fff;
+      margin-bottom:14px;
+      box-shadow:
+        0 5px 18px
+        rgba(45,80,120,.07);
+    }
+    .card h2{
+      margin:0 0 5px;
+      font-size:18px;
+    }
+    .sub{
+      margin:0 0 14px;
+      color:#68809d;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:10px;
+    }
+    .field{
+      margin-bottom:10px;
+    }
+    .field label{
+      display:block;
+      margin-bottom:5px;
+      color:#315b91;
+      font-size:11px;
+      font-weight:900;
+    }
+    .field input,
+    .field textarea{
+      width:100%;
+      border:1px solid #d5e2ef;
+      border-radius:11px;
+      padding:10px 11px;
+      background:#fff;
+      color:#173454;
+      font:inherit;
+      outline:none;
+    }
+    .field textarea{
+      min-height:72px;
+      resize:vertical;
+    }
+    .btn{
+      width:100%;
+      border:0;
+      border-radius:13px;
+      padding:12px 14px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+    .btn.primary{
+      color:#fff;
+      background:#0e9f77;
+    }
+    .btn.ghost{
+      color:#173454;
+      background:#edf4fb;
+    }
+    .btn:disabled{
+      opacity:.6;
+    }
+    .metrics{
+      display:grid;
+      grid-template-columns:
+        repeat(3,1fr);
+      gap:8px;
+    }
+    .metric{
+      padding:12px 8px;
+      border-radius:14px;
+      background:#f3f7fb;
+      text-align:center;
+    }
+    .metric .label{
+      color:#6a819d;
+      font-size:10px;
+      font-weight:800;
+    }
+    .metric .value{
+      margin-top:4px;
+      font-size:18px;
+      font-weight:1000;
+    }
+    .goal-list{
+      display:grid;
+      gap:8px;
+    }
+    .goal-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#f5f9fd;
+      font-size:12px;
+    }
+    .goal-row b{
+      white-space:nowrap;
+    }
+    .notice{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#fff7e5;
+      color:#7a5b1e;
+      font-size:11px;
+      line-height:1.5;
+    }
+    .history{
+      display:grid;
+      gap:8px;
+    }
+    .history-row{
+      display:grid;
+      grid-template-columns:
+        1.4fr repeat(3,1fr);
+      gap:6px;
+      padding:10px;
+      border-radius:12px;
+      background:#f7faff;
+      font-size:11px;
+      align-items:center;
+    }
+    .muted{
+      color:#68809d;
+    }
+    #status{
+      position:fixed;
+      left:50%;
+      bottom:
+        calc(
+          20px +
+          env(safe-area-inset-bottom)
+        );
+      transform:translateX(-50%);
+      width:min(92vw,560px);
+      padding:11px 14px;
+      border-radius:14px;
+      background:rgba(18,45,74,.95);
+      color:#fff;
+      text-align:center;
+      font-size:12px;
+      font-weight:900;
+      display:none;
+      z-index:99;
+    }
+    .nav{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:10px;
+    }
+    @media(max-width:520px){
+      .metrics{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+
+    <section class="hero">
+      <h1>
+        🧬 INBODY & HEALTH GOALS
+      </h1>
+      <p>
+        บันทึกค่าจากใบ InBody แล้วสร้าง Wellness Goal
+        สำหรับ Nutrition, HOME และ Progress
+      </p>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        ผลล่าสุด
+      </h2>
+      <p
+        class="sub"
+        id="latestDate"
+      >
+        ยังไม่มีข้อมูล
+      </p>
+
+      <div
+        class="metrics"
+        id="latestMetrics"
+      >
+        <div class="metric">
+          <div class="label">Weight</div>
+          <div class="value">—</div>
+        </div>
+        <div class="metric">
+          <div class="label">Muscle</div>
+          <div class="value">—</div>
+        </div>
+        <div class="metric">
+          <div class="label">Body Fat</div>
+          <div class="value">—</div>
+        </div>
+        <div class="metric">
+          <div class="label">BMI</div>
+          <div class="value">—</div>
+        </div>
+        <div class="metric">
+          <div class="label">BMR</div>
+          <div class="value">—</div>
+        </div>
+        <div class="metric">
+          <div class="label">Score</div>
+          <div class="value">—</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        🎯 Wellness Goals
+      </h2>
+      <p class="sub">
+        ระบบสร้าง Snapshot ใหม่ทุกครั้งที่บันทึก InBody
+      </p>
+
+      <div
+        class="goal-list"
+        id="goalList"
+      >
+        <div class="muted">
+          ยังไม่มี Goal
+        </div>
+      </div>
+
+      <div class="notice">
+        ค่า Calories / Protein / Water ที่สร้างอัตโนมัติเป็นค่าประมาณเพื่อการติดตาม Wellness
+        ไม่ใช่คำวินิจฉัยหรือแผนรักษาทางการแพทย์
+        ระบบจะไม่ตั้งเป้าลดน้ำหนักหรือเปอร์เซ็นต์ไขมันให้อัตโนมัติ
+      </div>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        ➕ บันทึก InBody
+      </h2>
+      <p class="sub">
+        กรอกตามค่าที่อยู่บนใบ InBody หรืออัปโหลดรูป 1–2 แผ่นถ้าอ่านค่าไม่เป็น — ช่องที่ไม่มีข้อมูลเว้นว่างได้
+      </p>
+
+      <div class="grid">
+
+        <div class="field">
+          <label>
+            วันที่วัด
+          </label>
+          <input
+            id="measuredAt"
+            type="datetime-local"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Weight (kg)
+          </label>
+          <input
+            id="weightKg"
+            type="number"
+            min="20"
+            max="400"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Skeletal Muscle Mass (kg)
+          </label>
+          <input
+            id="muscleKg"
+            type="number"
+            min="1"
+            max="150"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Body Fat Mass (kg)
+          </label>
+          <input
+            id="fatMassKg"
+            type="number"
+            min="0"
+            max="250"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Body Fat (%)
+          </label>
+          <input
+            id="fatPercent"
+            type="number"
+            min="1"
+            max="75"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            BMI
+          </label>
+          <input
+            id="bmi"
+            type="number"
+            min="8"
+            max="80"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            BMR (kcal)
+          </label>
+          <input
+            id="bmrKcal"
+            type="number"
+            min="500"
+            max="5000"
+            step="1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Visceral Fat Area (cm²)
+          </label>
+          <input
+            id="visceralFatArea"
+            type="number"
+            min="0"
+            max="1000"
+            step="0.1"
+            placeholder="เช่น 92.4"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            InBody Score
+          </label>
+          <input
+            id="inbodyScore"
+            type="number"
+            min="0"
+            max="200"
+            step="0.1"
+          >
+        </div>
+
+      </div>
+
+      <div
+        style="
+          margin:10px 0 14px;
+          padding:14px;
+          border:1px solid #dce8f4;
+          border-radius:14px;
+          background:#f8fbff;
+        "
+      >
+        <div
+          style="
+            font-size:14px;
+            font-weight:1000;
+            margin-bottom:5px;
+          "
+        >
+          📷 อ่าน InBody ไม่เป็น? อัปโหลดรูปได้ 2 แผ่น
+        </div>
+
+        <div
+          style="
+            font-size:11px;
+            line-height:1.5;
+            color:#68809d;
+            margin-bottom:12px;
+          "
+        >
+          ถ่ายให้เห็นตัวเลขและตารางชัดเจน สามารถอัปโหลดแผ่นที่ 1 และแผ่นที่ 2
+          เพื่อเก็บไว้สำหรับช่วยอ่านผลและให้คำแนะนำด้าน Wellness
+        </div>
+
+        <div class="grid">
+
+          <div class="field">
+            <label>
+              รูป InBody แผ่นที่ 1
+            </label>
+            <input
+              id="inbodyImage1"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
+            >
+          </div>
+
+          <div class="field">
+            <label>
+              รูป InBody แผ่นที่ 2
+            </label>
+            <input
+              id="inbodyImage2"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
+            >
+          </div>
+
+        </div>
+
+        <div
+          style="
+            font-size:10px;
+            line-height:1.45;
+            color:#7a5b1e;
+          "
+        >
+          รองรับ JPG / PNG / WEBP / HEIC / HEIF ไม่เกิน 15 MB ต่อรูป
+          • รูปใช้สำหรับการช่วยอ่านผล ไม่ใช่การวินิจฉัยทางการแพทย์
+        </div>
+      </div>
+
+
+      <div class="field">
+        <label>
+          หมายเหตุ
+        </label>
+        <textarea
+          id="note"
+          placeholder="รายละเอียดเพิ่มเติม"
+        ></textarea>
+      </div>
+
+      <button
+        id="saveButton"
+        class="btn primary"
+        type="button"
+        onclick="saveInBody()"
+      >
+        บันทึก InBody และสร้าง Goal
+      </button>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        📈 ประวัติ InBody
+      </h2>
+      <p class="sub">
+        แสดงสูงสุด 12 รายการล่าสุด
+      </p>
+
+      <div
+        class="history"
+        id="historyList"
+      >
+        <div class="muted">
+          ยังไม่มีข้อมูล
+        </div>
+      </div>
+    </section>
+
+
+    <div class="nav">
+      <button
+        class="btn ghost"
+        type="button"
+        onclick="goHome()"
+      >
+        ← HOME
+      </button>
+
+      <button
+        class="btn ghost"
+        type="button"
+        onclick="goProgress()"
+      >
+        PROGRESS →
+      </button>
+    </div>
+
+  </main>
+
+  <div id="status"></div>
+
+
+  <script>
+    "use strict";
+
+    const $ =
+      id =>
+        document.getElementById(
+          id
+        );
+
+
+    function showStatus(
+      text,
+      ms=3200
+    ){
+
+      const el =
+        $("status");
+
+      el.textContent =
+        text;
+
+      el.style.display =
+        "block";
+
+      clearTimeout(
+        window
+          .__inbodyTimer
+      );
+
+      window
+        .__inbodyTimer =
+          setTimeout(
+            () => {
+              el.style.display =
+                "none";
+            },
+            ms
+          );
+    }
+
+
+    function apiUrl(){
+
+      if(
+        APP_CONFIG
+          ?.getApi
+      ){
+        return APP_CONFIG
+          .getApi(
+            "INBODY"
+          );
+      }
+
+      return APP_CONFIG
+        ?.API
+        ?.INBODY;
+    }
+
+
+    async function token(){
+
+      if(!liff.id){
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+      }
+
+      if(
+        !liff.isLoggedIn()
+      ){
+        liff.login();
+        throw new Error(
+          "กำลังเข้าสู่ระบบ LINE"
+        );
+      }
+
+      const value =
+        liff.getIDToken();
+
+      if(!value){
+        throw new Error(
+          "ไม่พบ LINE ID Token"
+        );
+      }
+
+      return value;
+    }
+
+
+    async function api(
+      action,
+      extra={}
+    ){
+
+      const idToken =
+        await token();
+
+      const response =
+        await fetch(
+          apiUrl(),
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify({
+                action,
+                idToken,
+                ...extra
+              })
+          }
+        );
+
+      const raw =
+        await response.text();
+
+      let result={};
+
+      try{
+        result =
+          raw
+            ? JSON.parse(raw)
+            : {};
+      }catch{
+        throw new Error(
+          `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
+        );
+      }
+
+      if(
+        !response.ok ||
+        result?.success === false
+      ){
+        throw new Error(
+          result?.error ||
+          `HTTP ${response.status}`
+        );
+      }
+
+      return result;
+    }
+
+
+    function fmt(
+      value,
+      digits=1
+    ){
+
+      const x =
+        Number(value);
+
+      return Number.isFinite(x)
+        ? x.toLocaleString(
+            "th-TH",
+            {
+              maximumFractionDigits:
+                digits
+            }
+          )
+        : "—";
+    }
+
+
+    function metric(
+      label,
+      value,
+      unit=""
+    ){
+
+      return `
+        <div class="metric">
+          <div class="label">
+            ${label}
+          </div>
+          <div class="value">
+            ${
+              value === null ||
+              value === undefined
+                ? "—"
+                : `${fmt(value)}${unit ? ` ${unit}` : ""}`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+
+    function renderLatest(
+      latest
+    ){
+
+      if(!latest){
+
+        $("latestDate")
+          .textContent =
+            "ยังไม่มีข้อมูล InBody";
+
+        return;
+      }
+
+      $("latestDate")
+        .textContent =
+          latest.measured_at
+            ? new Date(
+                latest.measured_at
+              )
+                .toLocaleString(
+                  "th-TH"
+                )
+            : "—";
+
+      $("latestMetrics")
+        .innerHTML =
+          [
+            metric(
+              "Weight",
+              latest.weight_kg,
+              "kg"
+            ),
+            metric(
+              "Muscle",
+              latest
+                .skeletal_muscle_mass_kg,
+              "kg"
+            ),
+            metric(
+              "Body Fat",
+              latest.body_fat_percent,
+              "%"
+            ),
+            metric(
+              "BMI",
+              latest.bmi
+            ),
+            metric(
+              "BMR",
+              latest.bmr_kcal,
+              "kcal"
+            ),
+            metric(
+              "Visceral Fat Area",
+              latest
+                .visceral_fat_area_cm2,
+              "cm²"
+            ),
+            metric(
+              "Score",
+              latest.inbody_score
+            )
+          ].join("");
+    }
+
+
+    function goalRow(
+      label,
+      value
+    ){
+
+      return `
+        <div class="goal-row">
+          <span>${label}</span>
+          <b>${value}</b>
+        </div>
+      `;
+    }
+
+
+    function renderGoals(
+      goals
+    ){
+
+      const host =
+        $("goalList");
+
+      if(!goals){
+        host.innerHTML =
+          `<div class="muted">ยังไม่มี Goal</div>`;
+        return;
+      }
+
+      host.innerHTML =
+        [
+          goalRow(
+            "Steps / วัน",
+            `${
+              fmt(
+                goals.target_steps,
+                0
+              )
+            } ก้าว`
+          ),
+          goalRow(
+            "Sleep / วัน",
+            `${
+              fmt(
+                Number(
+                  goals.target_sleep_minutes ||
+                  0
+                ) / 60,
+                1
+              )
+            } ชม.`
+          ),
+          goalRow(
+            "Water / วัน",
+            `${
+              fmt(
+                goals.target_water_ml,
+                0
+              )
+            } ml`
+          ),
+          goalRow(
+            "Exercise / สัปดาห์",
+            `${
+              fmt(
+                goals
+                  .target_exercise_minutes_week,
+                0
+              )
+            } นาที`
+          ),
+          goalRow(
+            "Calories / วัน",
+            goals.target_calories
+              ? `${
+                  fmt(
+                    goals.target_calories,
+                    0
+                  )
+                } kcal`
+              : "รอข้อมูล BMR"
+          ),
+          goalRow(
+            "Protein / วัน",
+            goals.target_protein_g
+              ? `${
+                  fmt(
+                    goals.target_protein_g,
+                    1
+                  )
+                } g`
+              : "รอข้อมูลน้ำหนัก"
+          ),
+          goalRow(
+            "Carbs / วัน",
+            goals.target_carbs_g
+              ? `${
+                  fmt(
+                    goals.target_carbs_g,
+                    0
+                  )
+                } g`
+              : "รอข้อมูล BMR"
+          ),
+          goalRow(
+            "Fat / วัน",
+            goals.target_fat_g
+              ? `${
+                  fmt(
+                    goals.target_fat_g,
+                    0
+                  )
+                } g`
+              : "รอข้อมูล BMR"
+          )
+        ].join("");
+    }
+
+
+    function renderHistory(
+      rows
+    ){
+
+      const host =
+        $("historyList");
+
+      if(
+        !Array.isArray(rows) ||
+        rows.length === 0
+      ){
+        host.innerHTML =
+          `<div class="muted">ยังไม่มีข้อมูล</div>`;
+        return;
+      }
+
+      host.innerHTML =
+        rows
+          .map(
+            row => `
+              <div class="history-row">
+                <div>
+                  ${
+                    row.measured_at
+                      ? new Date(
+                          row.measured_at
+                        )
+                          .toLocaleDateString(
+                            "th-TH"
+                          )
+                      : "—"
+                  }
+                </div>
+                <div>
+                  ${fmt(row.weight_kg)} kg
+                </div>
+                <div>
+                  BF ${fmt(row.body_fat_percent)}%
+                </div>
+                <div>
+                  ${
+                    row.advice_status === "pending_review"
+                      ? "📷 รออ่านผล"
+                      : `Muscle ${fmt(row.skeletal_muscle_mass_kg)}`
+                  }
+                </div>
+              </div>
+            `
+          )
+          .join("");
+    }
+
+
+    async function loadSummary(){
+
+      try{
+
+        const result =
+          await api(
+            "summary"
+          );
+
+        renderLatest(
+          result.latest
+        );
+
+        renderGoals(
+          result.goals
+        );
+
+        renderHistory(
+          result.history
+        );
+
+      }catch(error){
+
+        console.error(
+          "INBODY SUMMARY ERROR:",
+          error
+        );
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+      }
+    }
+
+
+    function inputNumber(
+      id
+    ){
+
+      const value =
+        $(id).value;
+
+      if(value === ""){
+        return null;
+      }
+
+      const x =
+        Number(value);
+
+      return Number.isFinite(x)
+        ? x
+        : null;
+    }
+
+
+    async function saveInBody(){
+
+      const button =
+        $("saveButton");
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+
+      try{
+
+        const idToken =
+          await token();
+
+        const measured =
+          $("measuredAt")
+            .value;
+
+        const form =
+          new FormData();
+
+        form.append(
+          "action",
+          "saveResult"
+        );
+
+        form.append(
+          "idToken",
+          idToken
+        );
+
+        form.append(
+          "measuredAt",
+          measured
+            ? new Date(
+                measured
+              )
+                .toISOString()
+            : new Date()
+                .toISOString()
+        );
+
+        const appendNumber =
+          (
+            key,
+            id
+          ) => {
+
+            const value =
+              $(id).value;
+
+            if(
+              value !== ""
+            ){
+              form.append(
+                key,
+                value
+              );
+            }
+          };
+
+        appendNumber(
+          "weightKg",
+          "weightKg"
+        );
+
+        appendNumber(
+          "skeletalMuscleMassKg",
+          "muscleKg"
+        );
+
+        appendNumber(
+          "bodyFatMassKg",
+          "fatMassKg"
+        );
+
+        appendNumber(
+          "bodyFatPercent",
+          "fatPercent"
+        );
+
+        appendNumber(
+          "bmi",
+          "bmi"
+        );
+
+        appendNumber(
+          "bmrKcal",
+          "bmrKcal"
+        );
+
+        appendNumber(
+          "visceralFatAreaCm2",
+          "visceralFatArea"
+        );
+
+        appendNumber(
+          "inbodyScore",
+          "inbodyScore"
+        );
+
+        form.append(
+          "note",
+          $("note")
+            .value
+            .trim()
+        );
+
+        const image1 =
+          $("inbodyImage1")
+            .files
+            ?.[0] ||
+          null;
+
+        const image2 =
+          $("inbodyImage2")
+            .files
+            ?.[0] ||
+          null;
+
+        const maxSize =
+          15 *
+          1024 *
+          1024;
+
+        for(
+          const file of
+          [image1,image2]
+        ){
+          if(
+            file &&
+            file.size > maxSize
+          ){
+            throw new Error(
+              "รูป InBody แต่ละไฟล์ต้องไม่เกิน 15 MB"
+            );
+          }
+        }
+
+        if(image1){
+          form.append(
+            "image1",
+            image1,
+            image1.name
+          );
+        }
+
+        if(image2){
+          form.append(
+            "image2",
+            image2,
+            image2.name
+          );
+        }
+
+        const response =
+          await fetch(
+            apiUrl(),
+            {
+              method:"POST",
+              body:form
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let result = {};
+
+        try{
+          result =
+            raw
+              ? JSON.parse(raw)
+              : {};
+        }catch{
+          throw new Error(
+            `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
+          );
+        }
+
+        if(
+          !response.ok ||
+          result?.success === false
+        ){
+          throw new Error(
+            result?.error ||
+            `HTTP ${response.status}`
+          );
+        }
+
+        showStatus(
+          result?.adviceRequested
+            ? "✅ บันทึกแล้ว • รูป InBody อยู่ในสถานะรออ่านผล/คำแนะนำ"
+            : "✅ บันทึก InBody และสร้าง Wellness Goal แล้ว",
+          5000
+        );
+
+        $("inbodyImage1")
+          .value =
+            "";
+
+        $("inbodyImage2")
+          .value =
+            "";
+
+        await loadSummary();
+
+      }catch(error){
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "บันทึก InBody และสร้าง Goal";
+      }
+    }
+
+
+    function goHome(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.HOME ||
+        "./dashboard.html";
+    }
+
+
+    function goProgress(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.PROGRESS ||
+        "./progress.html";
+    }
+
+
+    async function init(){
+
+      try{
+
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+
+        if(!liff.isLoggedIn()){
+          liff.login();
+          return;
+        }
+
+        /*
+          Local date/time default.
+        */
+        const now =
+          new Date();
+
+        const local =
+          new Date(
+            now.getTime() -
+            now.getTimezoneOffset() *
+            60000
+          )
+            .toISOString()
+            .slice(0,16);
+
+        $("measuredAt")
+          .value =
+            local;
+
+        await loadSummary();
+
+      }catch(error){
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          6000
+        );
+      }
+    }
+
+
+    init();
+  </script>
+</body>
+</html>
