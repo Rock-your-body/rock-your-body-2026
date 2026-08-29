@@ -206,12 +206,216 @@
     @media(max-width:700px){
       #homeStage{width:100vw}
     }
+
+    /* =====================================================
+       NOTIFICATION V2.9
+    ====================================================== */
+
+    #notificationBell{
+      position:absolute;
+      z-index:30;
+      top:2.1%;
+      right:2.2%;
+      width:42px;
+      height:42px;
+      border:0;
+      border-radius:50%;
+      background:
+        rgba(255,255,255,.94);
+      box-shadow:
+        0 4px 12px
+        rgba(0,0,0,.2);
+      font-size:21px;
+      cursor:pointer;
+    }
+
+    #notificationBadge{
+      position:absolute;
+      z-index:31;
+      top:-5px;
+      right:-5px;
+      min-width:20px;
+      height:20px;
+      padding:0 5px;
+      border-radius:999px;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:#e4202a;
+      color:#fff;
+      border:2px solid #fff;
+      font-size:10px;
+      font-weight:1000;
+      line-height:16px;
+    }
+
+    #notificationPanel{
+      position:fixed;
+      z-index:1200;
+      inset:0;
+      display:none;
+      align-items:flex-start;
+      justify-content:center;
+      padding:
+        calc(70px + env(safe-area-inset-top))
+        14px
+        20px;
+      background:
+        rgba(8,27,53,.45);
+      backdrop-filter:blur(3px);
+    }
+
+    #notificationPanel.show{
+      display:flex;
+    }
+
+    .notification-card{
+      width:min(560px,100%);
+      max-height:75vh;
+      overflow:auto;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:
+        0 18px 50px
+        rgba(0,0,0,.25);
+      padding:14px;
+    }
+
+    .notification-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .notification-head h2{
+      margin:0;
+      color:#12376d;
+      font-size:18px;
+    }
+
+    .notification-head-actions{
+      display:flex;
+      gap:6px;
+    }
+
+    .notification-head button{
+      border:0;
+      border-radius:10px;
+      padding:8px 10px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    #notificationList{
+      display:grid;
+      gap:8px;
+    }
+
+    .notification-item{
+      width:100%;
+      border:1px solid #dce8f4;
+      border-radius:14px;
+      padding:11px 12px;
+      background:#f8fbff;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .notification-item.unread{
+      border-color:#63a7ee;
+      background:#eef7ff;
+      box-shadow:
+        inset 4px 0 0
+        #1671d8;
+    }
+
+    .notification-title{
+      color:#163a6a;
+      font-size:13px;
+      font-weight:1000;
+    }
+
+    .notification-message{
+      margin-top:4px;
+      color:#516d89;
+      font-size:11px;
+      line-height:1.45;
+    }
+
+    .notification-time{
+      margin-top:5px;
+      color:#8294a7;
+      font-size:9px;
+    }
+
+    #notificationToast{
+      position:fixed;
+      z-index:1190;
+      left:50%;
+      top:
+        calc(
+          12px +
+          env(safe-area-inset-top)
+        );
+      transform:
+        translateX(-50%);
+      width:min(92vw,560px);
+      display:none;
+      gap:10px;
+      align-items:center;
+      padding:11px 13px;
+      border-radius:15px;
+      background:
+        linear-gradient(
+          135deg,
+          #0d62c7,
+          #14916f
+        );
+      color:#fff;
+      box-shadow:
+        0 10px 28px
+        rgba(0,0,0,.24);
+      cursor:pointer;
+    }
+
+    #notificationToast.show{
+      display:flex;
+    }
+
+    #notificationToastIcon{
+      font-size:24px;
+    }
+
+    #notificationToastTitle{
+      font-size:12px;
+      font-weight:1000;
+    }
+
+    #notificationToastMessage{
+      margin-top:2px;
+      font-size:10px;
+      line-height:1.35;
+      opacity:.95;
+    }
+
   </style>
 </head>
 
 <body>
   <div id="homeStage">
     <img class="template" src="./home-template.png" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
+
+    <button
+      id="notificationBell"
+      type="button"
+      aria-label="Notifications"
+      title="Notifications"
+    >
+      🔔
+      <span id="notificationBadge">0</span>
+    </button>
 
     <img id="profileImage" alt="LINE Profile">
 
@@ -273,6 +477,56 @@
     <button id="battleButton" class="hotspot" aria-label="Battle"></button>
   </div>
 
+  <div
+    id="notificationToast"
+    role="button"
+    tabindex="0"
+  >
+    <div id="notificationToastIcon">💬</div>
+    <div>
+      <div id="notificationToastTitle">
+        มีการแจ้งเตือนใหม่
+      </div>
+      <div id="notificationToastMessage"></div>
+    </div>
+  </div>
+
+
+  <div id="notificationPanel">
+    <div class="notification-card">
+
+      <div class="notification-head">
+        <h2>
+          🔔 การแจ้งเตือน
+        </h2>
+
+        <div class="notification-head-actions">
+          <button
+            id="markAllNotificationsButton"
+            type="button"
+          >
+            อ่านทั้งหมด
+          </button>
+
+          <button
+            id="closeNotificationsButton"
+            type="button"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div id="notificationList">
+        <div class="notification-item">
+          กำลังโหลด...
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
   <div id="teamEditModal">
     <div class="modal-card">
       <h2>ข้อมูล HERO / ทีม</h2>
@@ -331,6 +585,8 @@
     let refreshTimer = null;
     let currentLineProfile = null;
     let currentTeamName = "HERO ROCK";
+    let notificationItems = [];
+    let notificationToastItem = null;
 
     function showStatus(message,isError=false){
       const el=$("status");
@@ -669,6 +925,407 @@ async function postJson(url,payload={}){
   }
 
   return data;
+}
+
+
+/* =====================================================
+   NOTIFICATIONS V2.9
+===================================================== */
+
+async function fetchNotifications(
+  onlyUnread=false
+){
+
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
+
+  return await postJson(
+    api,
+    {
+      action:
+        "notifications",
+      onlyUnread
+    }
+  );
+}
+
+
+async function markNotificationRead(
+  notificationId
+){
+
+  if(!notificationId){
+    return;
+  }
+
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
+
+  await postJson(
+    api,
+    {
+      action:
+        "markNotificationRead",
+      notificationId
+    }
+  );
+}
+
+
+async function markAllNotificationsRead(){
+
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
+
+  await postJson(
+    api,
+    {
+      action:
+        "markAllNotificationsRead"
+    }
+  );
+}
+
+
+function notificationDate(
+  value
+){
+
+  if(!value){
+    return "";
+  }
+
+  const d =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+    return "";
+  }
+
+  return d.toLocaleString(
+    "th-TH",
+    {
+      day:"numeric",
+      month:"short",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+}
+
+
+function escapeNotificationHtml(
+  value
+){
+
+  return String(
+    value ??
+    ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+}
+
+
+function renderNotificationBadge(){
+
+  const badge =
+    $("notificationBadge");
+
+  const unread =
+    notificationItems
+      .filter(
+        item =>
+          item?.is_read ===
+          false
+      )
+      .length;
+
+  badge.textContent =
+    unread > 99
+      ? "99+"
+      : String(unread);
+
+  badge.style.display =
+    unread > 0
+      ? "flex"
+      : "none";
+}
+
+
+function renderNotificationList(){
+
+  const host =
+    $("notificationList");
+
+  if(
+    !Array.isArray(
+      notificationItems
+    ) ||
+    notificationItems.length === 0
+  ){
+
+    host.innerHTML =
+      `
+        <div
+          class="notification-item"
+          style="cursor:default;text-align:center;color:#71869b"
+        >
+          ยังไม่มีการแจ้งเตือน
+        </div>
+      `;
+
+    return;
+  }
+
+  host.innerHTML =
+    notificationItems
+      .map(
+        item => `
+          <button
+            class="notification-item ${
+              item?.is_read
+                ? ""
+                : "unread"
+            }"
+            type="button"
+            data-notification-id="${
+              escapeNotificationHtml(
+                item.id
+              )
+            }"
+          >
+            <div class="notification-title">
+              ${
+                escapeNotificationHtml(
+                  item.title ||
+                  "การแจ้งเตือน"
+                )
+              }
+            </div>
+
+            <div class="notification-message">
+              ${
+                escapeNotificationHtml(
+                  item.message ||
+                  ""
+                )
+              }
+            </div>
+
+            <div class="notification-time">
+              ${
+                escapeNotificationHtml(
+                  notificationDate(
+                    item.created_at
+                  )
+                )
+              }
+            </div>
+          </button>
+        `
+      )
+      .join("");
+
+  host
+    .querySelectorAll(
+      "[data-notification-id]"
+    )
+    .forEach(
+      button => {
+
+        button
+          .addEventListener(
+            "click",
+            async () => {
+
+              const id =
+                button.dataset
+                  .notificationId;
+
+              const item =
+                notificationItems
+                  .find(
+                    x =>
+                      x.id === id
+                  );
+
+              if(!item){
+                return;
+              }
+
+              try{
+
+                if(
+                  item.is_read ===
+                  false
+                ){
+
+                  await markNotificationRead(
+                    item.id
+                  );
+
+                  item.is_read =
+                    true;
+
+                  renderNotificationBadge();
+                }
+
+              }catch(error){
+
+                console.warn(
+                  "MARK NOTIFICATION READ ERROR:",
+                  error
+                );
+              }
+
+              const target =
+                item.target_page ||
+                "./inbody.html";
+
+              window.location.href =
+                target;
+            }
+          );
+      }
+    );
+}
+
+
+function showNotificationToast(
+  item
+){
+
+  if(!item){
+    return;
+  }
+
+  notificationToastItem =
+    item;
+
+  $("notificationToastTitle")
+    .textContent =
+      item.title ||
+      "มีการแจ้งเตือนใหม่";
+
+  $("notificationToastMessage")
+    .textContent =
+      item.message ||
+      "";
+
+  $("notificationToast")
+    .classList.add(
+      "show"
+    );
+}
+
+
+function hideNotificationToast(){
+
+  $("notificationToast")
+    .classList.remove(
+      "show"
+    );
+
+  notificationToastItem =
+    null;
+}
+
+
+async function openNotifications(){
+
+  $("notificationPanel")
+    .classList.add(
+      "show"
+    );
+
+  await loadNotifications(
+    false,
+    false
+  );
+}
+
+
+function closeNotifications(){
+
+  $("notificationPanel")
+    .classList.remove(
+      "show"
+    );
+}
+
+
+async function loadNotifications(
+  showToast=true,
+  unreadOnly=false
+){
+
+  try{
+
+    const result =
+      await fetchNotifications(
+        unreadOnly
+      );
+
+    notificationItems =
+      Array.isArray(
+        result?.notifications
+      )
+        ? result.notifications
+        : [];
+
+    renderNotificationBadge();
+    renderNotificationList();
+
+    const latestUnread =
+      notificationItems
+        .find(
+          item =>
+            item?.is_read ===
+            false
+        );
+
+    if(
+      showToast &&
+      latestUnread
+    ){
+      showNotificationToast(
+        latestUnread
+      );
+    }
+
+  }catch(error){
+
+    console.warn(
+      "LOAD NOTIFICATIONS ERROR:",
+      error
+    );
+  }
 }
 
 
@@ -1586,14 +2243,110 @@ async function fetchDashboard(){
     $("missionButton").addEventListener("click",()=>goPage("MISSION"));
     $("battleButton").addEventListener("click",()=>goPage("BATTLE"));
 
-    $("inbodyViewButton").addEventListener("click",()=>goPage("PROGRESS"));
-    $("inbodyUpload").addEventListener("click",()=>showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม InBody action",true));
+    $("inbodyViewButton").addEventListener("click",()=>goConfiguredPage("INBODY","./inbody.html"));
+    $("inbodyUpload").addEventListener("click",()=>goConfiguredPage("INBODY","./inbody.html"));
     $("inbodyCancel").addEventListener("click",closeInbodyModal);
     $("inbodySave").addEventListener("click",saveInbody);
 
     $("inbodyModal").addEventListener("click",event=>{
       if(event.target===$("inbodyModal")) closeInbodyModal();
     });
+
+    $("notificationBell")
+      ?.addEventListener(
+        "click",
+        openNotifications
+      );
+
+    $("closeNotificationsButton")
+      ?.addEventListener(
+        "click",
+        closeNotifications
+      );
+
+    $("notificationPanel")
+      ?.addEventListener(
+        "click",
+        event => {
+          if(
+            event.target ===
+            $("notificationPanel")
+          ){
+            closeNotifications();
+          }
+        }
+      );
+
+    $("markAllNotificationsButton")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          try{
+
+            await markAllNotificationsRead();
+
+            notificationItems =
+              notificationItems
+                .map(
+                  item => ({
+                    ...item,
+                    is_read:true
+                  })
+                );
+
+            renderNotificationBadge();
+            renderNotificationList();
+
+          }catch(error){
+
+            showStatus(
+              error?.message ||
+              "อัปเดต Notification ไม่สำเร็จ",
+              true
+            );
+          }
+        }
+      );
+
+    $("notificationToast")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          const item =
+            notificationToastItem;
+
+          if(!item){
+            return;
+          }
+
+          try{
+
+            if(
+              item.is_read ===
+              false
+            ){
+              await markNotificationRead(
+                item.id
+              );
+            }
+
+          }catch(error){
+            console.warn(
+              "TOAST MARK READ ERROR:",
+              error
+            );
+          }
+
+          hideNotificationToast();
+
+          window.location.href =
+            item.target_page ||
+            "./inbody.html";
+        }
+      );
+
 
     async function startApp(){
       try{
@@ -1603,9 +2356,26 @@ async function fetchDashboard(){
         if(ready===false) return;
 
         await loadHome();
+        await loadNotifications(
+          true,
+          false
+        );
 
         const ms=num(window.APP_CONFIG?.REFRESH_MS,30000);
-        refreshTimer=setInterval(loadHome,Math.max(10000,ms));
+        refreshTimer =
+          setInterval(
+            async () => {
+              await loadHome();
+              await loadNotifications(
+                false,
+                false
+              );
+            },
+            Math.max(
+              10000,
+              ms
+            )
+          );
 
       }catch(error){
         console.error("START APP ERROR:",error);
