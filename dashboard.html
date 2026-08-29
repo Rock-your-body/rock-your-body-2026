@@ -13,6 +13,30 @@
   <script src="./app-config.js?v=20260829-clean-v2"></script>
 
   <style>
+   /* =========================================
+   PROFILE PHOTO — FIT CIRCLE
+========================================= */
+
+#profileImage,
+#profilePhoto,
+.profile-image,
+.profile-photo{
+  position: absolute !important;
+
+  /* ปรับ 4 ค่านี้ให้ตรงวงกลมใน Template */
+  left: 4.3% !important;
+  top: 16.0% !important;
+  width: 24.0% !important;
+  aspect-ratio: 1 / 1 !important;
+
+  /* สำคัญ */
+  height: auto !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 50% !important;
+
+  overflow: hidden !important;
+} 
     /* น้ำหนักปัจจุบัน */
 #currentWeight{
   position:absolute;
