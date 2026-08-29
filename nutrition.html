@@ -423,7 +423,51 @@
           repeat(2,1fr);
       }
     }
-  </style>
+  
+    /* NUTRITION SMART V2.6 */
+    .adequacy{
+      margin-top:6px;
+      font-size:12px;
+      font-weight:900;
+    }
+    .adequacy.ok{color:#168246}
+    .adequacy.low{color:#b46a00}
+    .adequacy.high{color:#b73333}
+
+    .goal-source{
+      margin:0 0 14px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#eef6ff;
+      color:#315d90;
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    .mission-qualify{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      background:#f0fff5;
+      border:1px solid #bce9cb;
+      color:#126d36;
+      display:none;
+    }
+    .mission-qualify.show{display:block}
+    .mission-qualify strong{display:block;font-size:16px}
+    .mission-qualify p{margin:6px 0 10px;font-size:12px;line-height:1.5}
+    .mission-qualify button{
+      width:100%;
+      border:0;
+      border-radius:12px;
+      min-height:44px;
+      background:#0a73df;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+</style>
 </head>
 
 <body>
@@ -439,6 +483,13 @@
         เชื่อมกับ EAT SMART และ HYDRATE
       </p>
     </section>
+
+    <div class="goal-source" id="goalSourceNote">
+      🎯 เป้าหมายโภชนาการจะใช้ค่าจาก InBody ล่าสุดเมื่อมีข้อมูล:
+      Calories ≈ BMR × 1.35 • Protein ≈ 1.2 g/kg • Fat ≈ 25% ของพลังงาน
+      • Carbs = พลังงานที่เหลือ • Water ≈ 30 ml/kg
+      <br>*เป็น Wellness Estimate ไม่ใช่คำวินิจฉัยหรือแผนรักษาทางการแพทย์
+    </div>
 
 
     <section class="summary-grid">
@@ -459,10 +510,9 @@
         >
           เป้าหมาย —
         </div>
+        <div id="caloriesAdequacy" class="adequacy">—</div>
         <div class="progress">
-          <div
-            id="caloriesBar"
-          ></div>
+          <div id="caloriesBar"></div>
         </div>
       </article>
 
@@ -483,10 +533,9 @@
         >
           เป้าหมาย —
         </div>
+        <div id="proteinAdequacy" class="adequacy">—</div>
         <div class="progress">
-          <div
-            id="proteinBar"
-          ></div>
+          <div id="proteinBar"></div>
         </div>
       </article>
 
@@ -507,10 +556,9 @@
         >
           เป้าหมาย —
         </div>
+        <div id="carbsAdequacy" class="adequacy">—</div>
         <div class="progress">
-          <div
-            id="carbsBar"
-          ></div>
+          <div id="carbsBar"></div>
         </div>
       </article>
 
@@ -531,10 +579,9 @@
         >
           เป้าหมาย —
         </div>
+        <div id="fatAdequacy" class="adequacy">—</div>
         <div class="progress">
-          <div
-            id="fatBar"
-          ></div>
+          <div id="fatBar"></div>
         </div>
       </article>
 
@@ -604,6 +651,17 @@
           onclick="quickWater(750)"
         >
           +750 ml
+        </button>
+      </div>
+
+      <div id="hydrateQualified" class="mission-qualify">
+        <strong>💧 HYDRATE ถึงเป้าหมายแล้ว</strong>
+        <p>
+          การดื่มน้ำครบตามเงื่อนไขถือว่าทำกิจกรรมสำเร็จแล้ว
+          แต่ Reward จะได้รับหลังส่งหลักฐานและ Admin อนุมัติเท่านั้น
+        </p>
+        <button type="button" onclick="sendMissionEvidenceV26('daily_hydrate')">
+          📷 ส่งหลักฐาน HYDRATE เพื่อรับรางวัล
         </button>
       </div>
 
@@ -746,6 +804,17 @@
         บันทึกอาหาร
       </button>
     </section>
+    <section id="eatSmartQualified" class="mission-qualify">
+      <strong>🥗 EAT SMART ทำกิจกรรมแล้ว</strong>
+      <p>
+        เมื่อมีการบันทึกมื้ออาหารวันนี้ ระบบถือว่ามีการทำกิจกรรม EAT SMART แล้ว
+        แต่ยังไม่ได้ Reward จนกว่าจะส่งภาพอาหารจริงและ Admin อนุมัติ
+      </p>
+      <button type="button" onclick="sendMissionEvidenceV26('daily_eat_smart')">
+        📷 ส่งหลักฐาน EAT SMART เพื่อรับรางวัล
+      </button>
+    </section>
+
 
 
     <section class="card">
@@ -1287,6 +1356,105 @@
     }
 
 
+
+    function adequacyTextV26(
+      value,
+      goal,
+      unit
+    ){
+      const v = Number(value);
+      const g = Number(goal);
+
+      if(
+        !Number.isFinite(v) ||
+        !Number.isFinite(g) ||
+        g <= 0
+      ){
+        return {
+          text:"ยังประเมินไม่ได้",
+          cls:"low"
+        };
+      }
+
+      const diff = v - g;
+
+      if(Math.abs(diff) <= g * 0.10){
+        return {
+          text:`✅ ใกล้เคียงเป้าหมาย (${fmt(v,1)} / ${fmt(g,1)} ${unit})`,
+          cls:"ok"
+        };
+      }
+
+      if(diff < 0){
+        return {
+          text:`ขาดอีก ${fmt(Math.abs(diff),1)} ${unit}`,
+          cls:"low"
+        };
+      }
+
+      return {
+        text:`เกินเป้าหมาย ${fmt(diff,1)} ${unit}`,
+        cls:"high"
+      };
+    }
+
+
+    function renderAdequacyV26(
+      key,
+      value,
+      goal,
+      unit
+    ){
+      const el =
+        document.getElementById(
+          `${key}Adequacy`
+        );
+
+      if(!el) return;
+
+      const result =
+        adequacyTextV26(
+          value,
+          goal,
+          unit
+        );
+
+      el.className =
+        `adequacy ${result.cls}`;
+
+      el.textContent =
+        result.text;
+    }
+
+
+    function sendMissionEvidenceV26(
+      missionId
+    ){
+      const url =
+        new URL(
+          window.APP_CONFIG?.PAGE?.MISSION ||
+          "./mission.html",
+          window.location.href
+        );
+
+      url.searchParams.set(
+        "mission",
+        missionId
+      );
+
+      url.searchParams.set(
+        "evidence",
+        "1"
+      );
+
+      window.location.href =
+        url.toString();
+    }
+
+    window.sendMissionEvidenceV26 =
+      sendMissionEvidenceV26;
+
+
     async function loadToday(){
 
       try{
@@ -1334,6 +1502,34 @@
           "g"
         );
 
+        renderAdequacyV26(
+          "calories",
+          totals?.calories,
+          goals?.calories,
+          "kcal"
+        );
+
+        renderAdequacyV26(
+          "protein",
+          totals?.proteinG,
+          goals?.proteinG,
+          "g"
+        );
+
+        renderAdequacyV26(
+          "carbs",
+          totals?.carbsG,
+          goals?.carbsG,
+          "g"
+        );
+
+        renderAdequacyV26(
+          "fat",
+          totals?.fatG,
+          goals?.fatG,
+          "g"
+        );
+
         const water =
           Number(
             result
@@ -1363,6 +1559,56 @@
               water,
               waterGoal
             )}%`;
+
+        const hydrateBox =
+          $("hydrateQualified");
+
+        if(hydrateBox){
+          hydrateBox.classList.toggle(
+            "show",
+            Boolean(
+              result?.qualifications?.hydrate?.qualified ??
+              water >= 2000
+            )
+          );
+        }
+
+        const eatSmartBox =
+          $("eatSmartQualified");
+
+        if(eatSmartBox){
+          eatSmartBox.classList.toggle(
+            "show",
+            Boolean(
+              result?.qualifications?.eatSmart?.qualified ??
+              (
+                Array.isArray(result?.meals) &&
+                result.meals.length > 0
+              )
+            )
+          );
+        }
+
+        const source =
+          result?.goalSource ||
+          result?.goals?.source ||
+          null;
+
+        if(source){
+          const note =
+            $("goalSourceNote");
+
+          if(note){
+            note.innerHTML =
+              `🎯 เป้าหมายจาก <strong>${source}</strong><br>
+               Calories ${goals?.calories ?? "—"} kcal •
+               Protein ${goals?.proteinG ?? "—"} g •
+               Fat ${goals?.fatG ?? "—"} g •
+               Carbs ${goals?.carbsG ?? "—"} g •
+               Water ${goals?.waterMl ?? "—"} ml
+               <br>*เป็น Wellness Estimate ไม่ใช่คำวินิจฉัยหรือแผนรักษาทางการแพทย์`;
+          }
+        }
 
         $("todayLabel")
           .textContent =
@@ -1559,7 +1805,7 @@
             "";
 
         showStatus(
-          "✅ บันทึกอาหารแล้ว"
+          "✅ บันทึกอาหารแล้ว • EAT SMART พร้อมส่งหลักฐาน"
         );
 
         await loadToday();
