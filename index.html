@@ -1,372 +1,97 @@
-<!doctype html>
-<html lang="th">
-<head>
-  <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
-
-  <title>ROCK YOUR BODY 2026</title>
-
-  <meta
-    name="theme-color"
-    content="#eef5ff"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
-  >
-
-  <style>
-
-    *{
-      box-sizing:border-box;
-    }
-
-    html,
-    body{
-      margin:0;
-      width:100%;
-      min-height:100%;
-      font-family:"Prompt",Arial,sans-serif;
-      background:#eef5ff;
-      color:#06276c;
-    }
-
-    body{
-      min-height:100vh;
-      min-height:100dvh;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .loading{
-      width:min(90vw,420px);
-      text-align:center;
-      padding:28px;
-    }
-
-    .spinner{
-      width:48px;
-      height:48px;
-
-      margin:0 auto 18px;
-
-      border:5px solid #dce8f8;
-      border-top-color:#075ac7;
-      border-radius:50%;
-
-      animation:spin .75s linear infinite;
-    }
-
-    .title{
-      font-size:22px;
-      font-weight:900;
-    }
-
-    .status{
-      margin-top:7px;
-
-      font-size:14px;
-      font-weight:700;
-
-      opacity:.7;
-    }
-
-    .error{
-      display:none;
-
-      margin-top:18px;
-      padding:12px 14px;
-
-      border-radius:12px;
-
-      background:#ffe9e9;
-      color:#b42318;
-
-      font-size:13px;
-      font-weight:700;
-      line-height:1.55;
-    }
-
-    @keyframes spin{
-      to{
-        transform:rotate(360deg);
-      }
-    }
-
-  </style>
-</head>
-
-<body>
-
-  <div class="loading">
-
-    <div
-      class="spinner"
-      id="spinner"
-    ></div>
-
-    <div class="title">
-      ROCK YOUR BODY 2026
-    </div>
-
-    <div
-      class="status"
-      id="status"
-    >
-      กำลังเชื่อมต่อ LINE...
-    </div>
-
-    <div
-      class="error"
-      id="error"
-    ></div>
-
-  </div>
-
-
-  <script
-    src="https://static.line-scdn.net/liff/edge/2/sdk.js"
-  ></script>
-
-  <script
-    src="./app-config.js?v=20260829-render-v1"
-  ></script>
-
-
-  <script>
-    "use strict";
-
-    const $ =
-      id =>
-        document.getElementById(id);
-
-
-    function setStatus(text){
-
-      $("status").textContent =
-        text;
-
-    }
-
-
-    function showError(error){
-
-      console.error(
-        "INDEX ERROR:",
-        error
-      );
-
-      $("spinner").style.display =
-        "none";
-
-      $("status").textContent =
-        "เปิด ROCK YOUR BODY ไม่สำเร็จ";
-
-      $("error").style.display =
-        "block";
-
-      $("error").textContent =
-        error?.message ||
-        String(error) ||
-        "Unknown error";
-
-    }
-
-
-    async function postJson(
-      url,
-      payload
-    ){
-
-      const response =
-        await fetch(
-          url,
-          {
-            method:"POST",
-
-            headers:{
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify(payload)
-          }
-        );
-
-
-      const text =
-        await response.text();
-
-
-      let data = {};
-
-      try{
-
-        data =
-          text
-            ? JSON.parse(text)
-            : {};
-
-      }catch{
-
-        throw new Error(
-          `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
-        );
-
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+<script>
+const LIFF_ID = "2011201679-uNWz5yqF";
+const LIFF_URL = "https://liff.line.me/2011201679-uNWz5yqF";
+const DASHBOARD_URL =
+  "https://rock-your-body.github.io/rock-your-body-2026/dashboard.html";
+
+async function startApp() {
+  try {
+    // ลบ token เก่าที่อาจค้าง
+    localStorage.removeItem("idToken");
+    localStorage.removeItem("line_id_token");
+    localStorage.removeItem("LINE_ID_TOKEN");
+
+    sessionStorage.removeItem("idToken");
+    sessionStorage.removeItem("line_id_token");
+    sessionStorage.removeItem("LINE_ID_TOKEN");
+
+    await liff.init({
+      liffId: LIFF_ID
+    });
+
+    // ถ้าเปิดจาก LINE/LIFF แต่ session ยังไม่พร้อม
+    // ให้กลับเข้า LIFF ใหม่ แทนการพาไป access.line.me เอง
+    if (!liff.isLoggedIn()) {
+      if (liff.isInClient()) {
+        window.location.replace(LIFF_URL);
+        return;
       }
 
-
-      if(
-        !response.ok ||
-        data?.success === false
-      ){
-
-        throw new Error(
-          data?.error ||
-          data?.message ||
-          `HTTP ${response.status}`
-        );
-
-      }
-
-
-      return data;
+      // กรณีเปิดจาก Safari/Chrome ภายนอก LINE
+      liff.login({
+        redirectUri: DASHBOARD_URL
+      });
+      return;
     }
 
+    const idToken = liff.getIDToken();
 
-    async function start(){
-
-      try{
-
-        const config =
-          window.APP_CONFIG;
-
-
-        if(!config?.LIFF_ID){
-
-          throw new Error(
-            "ไม่พบ LIFF_ID"
-          );
-
-        }
-
-
-        setStatus(
-          "กำลังเริ่มต้น LINE..."
-        );
-
-
-        await liff.init({
-          liffId:
-            config.LIFF_ID
-        });
-
-
-        if(
-          !liff.isLoggedIn()
-        ){
-
-          setStatus(
-            "กำลังเข้าสู่ระบบ LINE..."
-          );
-
-          liff.login({
-            redirectUri:
-              window.location.href
-          });
-
-          return;
-        }
-
-
-        const idToken =
-          liff.getIDToken();
-
-
-        if(!idToken){
-
-          throw new Error(
-            "ไม่พบ LINE ID Token"
-          );
-
-        }
-
-
-        setStatus(
-          "กำลังโหลดข้อมูลสมาชิก..."
-        );
-
-
-        /*
-          POST /api/me
-
-          Server ต้อง verify
-          ID Token กับ LINE
-
-          แล้วใช้ sub เป็น lineUserId
-        */
-        const me =
-          await postJson(
-            config.apiUrl("ME"),
-            {
-              idToken
-            }
-          );
-
-
-        console.log(
-          "ME:",
-          me
-        );
-
-
-        /*
-          ไม่เก็บ ID Token
-          ลง localStorage
-        */
-
-
-        setStatus(
-          "กำลังเปิด HOME..."
-        );
-
-
-        window.location.replace(
-          "./dashboard.html?v=20260829-render-v1"
-        );
-
-
-      }catch(error){
-
-        showError(error);
-
-      }
-
+    if (!idToken) {
+      window.location.replace(LIFF_URL);
+      return;
     }
 
+    // ใช้ sessionStorage เท่านั้น
+    // ไม่เก็บถาวรใน localStorage
+    sessionStorage.setItem("LINE_ID_TOKEN", idToken);
 
-    start();
+    window.location.replace("./dashboard.html");
 
-  </script>
+  } catch (err) {
+    console.error("LIFF INIT ERROR:", err);
 
-</body>
-</html>
+    // ห้าม redirect ไป access.line.me โดยตรง
+    document.body.innerHTML = `
+      <div style="
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-family:Arial,sans-serif;
+        text-align:center;
+        padding:24px;
+      ">
+        <div>
+          <div style="font-size:22px;font-weight:800;">
+            ROCK YOUR BODY 2026
+          </div>
+
+          <div style="margin-top:12px;">
+            กรุณาเปิดแอปจากเมนูใน LINE อีกครั้ง
+          </div>
+
+          <button
+            onclick="window.location.replace('${LIFF_URL}')"
+            style="
+              margin-top:20px;
+              border:0;
+              border-radius:14px;
+              padding:14px 24px;
+              font-size:16px;
+              font-weight:700;
+              background:#06c755;
+              color:#fff;
+            "
+          >
+            เปิด ROCK YOUR BODY
+          </button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+startApp();
+</script>
