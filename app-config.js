@@ -52,7 +52,7 @@ window.APP_CONFIG = {
       "/api/me",
 
     PLAYER:
-      "/api/player",
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard"
 
     MISSION:
       "/api/mission",
