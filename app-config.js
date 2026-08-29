@@ -4,53 +4,32 @@
    ROCK YOUR BODY 2026
    CENTRAL APP CONFIG
    Supabase Edge Functions ONLY
-
-   Version: 2026-08-29-STEP3
 ============================================================ */
 
 window.APP_CONFIG = {
 
-  APP_NAME:
-    "ROCK YOUR BODY 2026",
+  APP_NAME: "ROCK YOUR BODY 2026",
 
-  VERSION:
-    "2026-08-29-STEP3",
+  VERSION: "2026-08-29-step4",
 
+  /* ===================== LINE LIFF ===================== */
 
-  /* ==========================================================
-     LINE LIFF
-  ========================================================== */
-
-  LIFF_ID:
-    "2011201679-uNWz5yqF",
+  LIFF_ID: "2011201679-uNWz5yqF",
 
   LIFF_URL:
     "https://liff.line.me/2011201679-uNWz5yqF",
 
-
-  /* ==========================================================
-     FRONTEND
-  ========================================================== */
+  /* ===================== FRONTEND ====================== */
 
   FRONTEND_URL:
     "https://rock-your-body.github.io/rock-your-body-2026",
 
-
-  /* ==========================================================
-     SUPABASE
-  ========================================================== */
+  /* ===================== SUPABASE ====================== */
 
   SUPABASE_URL:
     "https://nztvqdzatdpauufpvdaa.supabase.co",
 
-
-  /* ==========================================================
-     EDGE FUNCTIONS
-
-     หมายเหตุ:
-     DAILY HEALTH + WEIGHT
-     รวมเข้า PLAYER แล้ว
-  ========================================================== */
+  /* ================= EDGE FUNCTIONS =================== */
 
   API: {
 
@@ -77,10 +56,7 @@ window.APP_CONFIG = {
 
   },
 
-
-  /* ==========================================================
-     PAGES
-  ========================================================== */
+  /* ======================= PAGES ======================= */
 
   PAGE: {
 
@@ -116,66 +92,45 @@ window.APP_CONFIG = {
 
     ADMIN:
       "./admin.html"
-
   },
 
-
-  /* ==========================================================
-     DAILY MISSION ROUTES
-  ========================================================== */
+  /* ================= MISSION ROUTES ==================== */
 
   MISSION_ROUTE: {
 
     MOVE_MORE:
       "./mission.html?category=daily&mission=daily_move_more",
 
-    EXERCISE:
-      "./mission.html?category=daily&mission=daily_exercise_30",
-
     EAT_SMART:
       "./nutrition.html?from=mission&mission=daily_eat_smart",
 
+    EXERCISE:
+      "./mission.html?category=daily&mission=daily_exercise_30",
+
     SLEEP:
       "./mission.html?category=daily&mission=daily_sleep"
-
   },
 
+  /* ==================== GAME =========================== */
 
-  /* ==========================================================
-     DAILY GOALS
-  ========================================================== */
+  MAX_ENERGY: 200,
+
+  EXP_PER_LEVEL: 500,
+
+  REFRESH_MS: 30000,
+
+  /* ================= DAILY GOALS ======================= */
 
   DAILY_GOALS: {
 
-    STEPS:
-      8000,
+    STEPS: 8000,
 
-    CALORIES:
-      300,
+    CALORIES: 300,
 
-    SLEEP_MINUTES:
-      420
-
+    SLEEP_MINUTES: 420
   },
 
-
-  /* ==========================================================
-     GAME SETTINGS
-  ========================================================== */
-
-  MAX_ENERGY:
-    200,
-
-  EXP_PER_LEVEL:
-    500,
-
-  REFRESH_MS:
-    30000,
-
-
-  /* ==========================================================
-     STORAGE
-  ========================================================== */
+  /* =================== STORAGE ========================= */
 
   STORAGE: {
 
@@ -190,7 +145,6 @@ window.APP_CONFIG = {
 
     ROCK_ASSETS:
       "rock-assets"
-
   }
 
 };
@@ -198,98 +152,75 @@ window.APP_CONFIG = {
 
 /* ============================================================
    GET API
-
-   ตัวอย่าง:
-   APP_CONFIG.getApi("PLAYER")
-   APP_CONFIG.getApi("player")
 ============================================================ */
 
-window.APP_CONFIG.getApi =
-  function getApi(name) {
+window.APP_CONFIG.getApi = function(name) {
 
-    const key =
-      String(
-        name || ""
-      )
-        .trim()
-        .toUpperCase();
+  const key =
+    String(name || "")
+      .trim()
+      .toUpperCase();
 
-    const url =
-      window.APP_CONFIG
-        ?.API
-        ?.[key];
+  const url =
+    window.APP_CONFIG.API?.[key];
 
-    if (!url) {
+  if (!url) {
 
-      throw new Error(
-        "ไม่พบ API configuration: " +
-        key
-      );
+    throw new Error(
+      "ไม่พบ API configuration: " + key
+    );
 
-    }
+  }
 
-    return url;
+  return url;
 
-  };
+};
 
 
 /* ============================================================
    GET PAGE
-
-   ตัวอย่าง:
-   APP_CONFIG.getPage("HOME")
 ============================================================ */
 
-window.APP_CONFIG.getPage =
-  function getPage(name) {
+window.APP_CONFIG.getPage = function(name) {
 
-    const key =
-      String(
-        name || ""
-      )
-        .trim()
-        .toUpperCase();
+  const key =
+    String(name || "")
+      .trim()
+      .toUpperCase();
 
-    return (
-      window.APP_CONFIG
-        ?.PAGE
-        ?.[key]
-      ||
-      window.APP_CONFIG.PAGE.HOME
-    );
+  return (
+    window.APP_CONFIG.PAGE?.[key]
+    ||
+    window.APP_CONFIG.PAGE.HOME
+  );
 
-  };
+};
 
 
 /* ============================================================
    GET MISSION ROUTE
 ============================================================ */
 
-window.APP_CONFIG.getMissionRoute =
-  function getMissionRoute(name) {
+window.APP_CONFIG.getMissionRoute = function(name) {
 
-    const key =
-      String(
-        name || ""
-      )
-        .trim()
-        .toUpperCase();
+  const key =
+    String(name || "")
+      .trim()
+      .toUpperCase();
 
-    return (
-      window.APP_CONFIG
-        ?.MISSION_ROUTE
-        ?.[key]
-      ||
-      window.APP_CONFIG.PAGE.MISSION
-    );
+  return (
+    window.APP_CONFIG.MISSION_ROUTE?.[key]
+    ||
+    window.APP_CONFIG.PAGE.MISSION
+  );
 
-  };
+};
 
 
 /* ============================================================
-   COMPATIBILITY ALIAS
+   LEGACY COMPATIBILITY
 
-   รองรับไฟล์เดิมที่อาจเรียก APP_CONFIG.PAGES
+   รองรับหน้าเก่าที่ยังเรียก APP_CONFIG.PAGES
 ============================================================ */
 
 window.APP_CONFIG.PAGES =
