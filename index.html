@@ -75,6 +75,18 @@
       opacity:.65;
     }
 
+    .error{
+      display:none;
+      margin-top:14px;
+      max-width:320px;
+
+      font-size:13px;
+      font-weight:700;
+      line-height:1.6;
+
+      color:#b42318;
+    }
+
     @keyframes spin{
       to{
         transform:rotate(360deg);
@@ -92,25 +104,247 @@
       ROCK YOUR BODY 2026
     </div>
 
-    <div class="sub">
-      กำลังเปิด HOME...
+    <div class="sub" id="statusText">
+      กำลังเชื่อมต่อ LINE...
     </div>
+
+    <div
+      class="error"
+      id="errorText"
+    ></div>
   </div>
+
+
+  <!-- LINE LIFF SDK -->
+  <script
+    src="https://static.line-scdn.net/liff/edge/2/sdk.js"
+  ></script>
 
 
   <script>
     (() => {
 
-      const target =
-        "./dashboard.html?v=20260829-home-v10";
+      const LIFF_ID =
+        "2011201679-uNWz5yqF";
 
-      /*
-        ใช้ replace()
-        เพื่อไม่ให้กดย้อนกลับมา index.html
-      */
-      window.location.replace(
-        target
-      );
+      const DASHBOARD_URL =
+        "./dashboard.html?v=20260829-home-v11";
+
+
+      const statusText =
+        document.getElementById(
+          "statusText"
+        );
+
+      const errorText =
+        document.getElementById(
+          "errorText"
+        );
+
+
+      function setStatus(message) {
+        if (statusText) {
+          statusText.textContent =
+            message;
+        }
+      }
+
+
+      function showError(error) {
+
+        console.error(
+          "[INDEX LIFF ERROR]",
+          error
+        );
+
+        if (statusText) {
+          statusText.textContent =
+            "ไม่สามารถเชื่อมต่อ LINE ได้";
+        }
+
+        if (errorText) {
+
+          errorText.style.display =
+            "block";
+
+          errorText.textContent =
+            error?.message ||
+            String(error);
+        }
+      }
+
+
+      function clearOldAuthCache() {
+
+        /*
+          ล้างเฉพาะ key ที่มีแนวโน้ม
+          เป็น token เก่าของระบบ
+
+          ไม่ใช้ localStorage.clear()
+          เพราะอาจลบข้อมูลอื่นของแอป
+        */
+
+        const keys = [
+          "idToken",
+          "id_token",
+          "lineIdToken",
+          "line_id_token",
+          "LINE_ID_TOKEN",
+          "liffIdToken",
+          "liff_id_token"
+        ];
+
+        keys.forEach((key) => {
+
+          try {
+            localStorage.removeItem(key);
+          } catch (_) {}
+
+          try {
+            sessionStorage.removeItem(key);
+          } catch (_) {}
+
+        });
+      }
+
+
+      async function startApp() {
+
+        try {
+
+          setStatus(
+            "กำลังเริ่มต้น LINE..."
+          );
+
+
+          await liff.init({
+            liffId: LIFF_ID
+          });
+
+
+          console.log(
+            "[LIFF] initialized"
+          );
+
+          console.log(
+            "[LIFF] inClient:",
+            liff.isInClient()
+          );
+
+          console.log(
+            "[LIFF] loggedIn:",
+            liff.isLoggedIn()
+          );
+
+
+          /*
+            ถ้ายังไม่ได้ login
+            ให้ LINE ทำ authentication ก่อน
+          */
+          if (!liff.isLoggedIn()) {
+
+            setStatus(
+              "กำลังเข้าสู่ระบบ LINE..."
+            );
+
+            liff.login({
+              redirectUri:
+                window.location.href
+            });
+
+            return;
+          }
+
+
+          setStatus(
+            "กำลังตรวจสอบบัญชี LINE..."
+          );
+
+
+          /*
+            ขอ ID Token จาก LIFF session
+            ปัจจุบัน
+          */
+          const idToken =
+            liff.getIDToken();
+
+
+          if (!idToken) {
+
+            /*
+              ถ้า session ผิดปกติ
+              ให้ login ใหม่
+            */
+
+            clearOldAuthCache();
+
+            setStatus(
+              "กำลังยืนยันตัวตนใหม่..."
+            );
+
+            liff.logout();
+
+            liff.login({
+              redirectUri:
+                window.location.href
+            });
+
+            return;
+          }
+
+
+          /*
+            ไม่บันทึก ID Token ลง
+            localStorage แบบถาวร
+
+            ใช้ sessionStorage ชั่วคราว
+            เผื่อ dashboard ต้องอ่านต่อ
+          */
+          try {
+
+            sessionStorage.setItem(
+              "line_id_token",
+              idToken
+            );
+
+          } catch (_) {}
+
+
+          /*
+            ลบ token เก่าที่อาจอยู่ใน key เดิม
+          */
+          try {
+            localStorage.removeItem(
+              "line_id_token"
+            );
+          } catch (_) {}
+
+
+          setStatus(
+            "กำลังเปิด HOME..."
+          );
+
+
+          /*
+            replace()
+            เพื่อไม่ให้กดย้อนกลับ
+            กลับมาหน้า index
+          */
+          window.location.replace(
+            DASHBOARD_URL
+          );
+
+
+        } catch (error) {
+
+          showError(error);
+
+        }
+
+      }
+
+
+      startApp();
 
     })();
   </script>
