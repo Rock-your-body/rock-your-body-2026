@@ -1388,6 +1388,107 @@
   font-weight:800;
 }
 
+
+    /* NUTRITION CTA HOTSPOT V2.13.8 */
+    .nutrition-hotspot{
+      position:absolute;
+      z-index:560;
+      left:34.2%;
+      top:81.0%;
+      width:37.5%;
+      height:5.7%;
+      border:0;
+      margin:0;
+      padding:0;
+      background:transparent;
+      cursor:pointer;
+      pointer-events:auto;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+
+/* =========================================================
+   MISSION TEMPLATE HOTSPOTS V2.13.9
+   Template ใหม่:
+   Nutrition ซ้าย / Daily Weekly Monthly Bonus ขวา
+========================================================= */
+.template-stage{
+  position:relative;
+}
+
+/* Nutrition CTA */
+.nutrition-hotspot{
+  position:absolute !important;
+  z-index:700 !important;
+  left:3.2% !important;
+  top:80.8% !important;
+  width:35.8% !important;
+  height:6.1% !important;
+  background:transparent !important;
+  border:0 !important;
+  cursor:pointer !important;
+}
+
+/* Mission cards - กดเฉพาะแถบ "ไปทำภารกิจ" */
+.hotspot-daily{
+  left:42.4% !important;
+  top:59.0% !important;
+  width:24.0% !important;
+  height:5.7% !important;
+}
+.hotspot-weekly{
+  left:69.8% !important;
+  top:59.0% !important;
+  width:26.1% !important;
+  height:5.7% !important;
+}
+.hotspot-monthly{
+  left:42.4% !important;
+  top:81.7% !important;
+  width:24.0% !important;
+  height:5.4% !important;
+}
+.hotspot-bonus{
+  left:69.8% !important;
+  top:81.7% !important;
+  width:26.1% !important;
+  height:5.4% !important;
+}
+
+/* Bottom navigation */
+.hotspot-home{
+  left:1.5% !important;
+  top:89.0% !important;
+  width:31.8% !important;
+  height:8.5% !important;
+}
+.hotspot-mission{
+  left:34.3% !important;
+  top:89.0% !important;
+  width:31.8% !important;
+  height:8.5% !important;
+}
+.hotspot-battle{
+  left:67.1% !important;
+  top:89.0% !important;
+  width:31.5% !important;
+  height:8.5% !important;
+}
+
+
+.category-hotspot{
+  position:absolute;
+  z-index:700;
+  border:0;
+  padding:0;
+  margin:0;
+  background:transparent;
+  cursor:pointer;
+  pointer-events:auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
 </style>
 
 </head>
@@ -1412,7 +1513,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-v2137"
+    src="./mission-template.png?v=20260829-v2139"
     alt=""
     draggable="false"
   >
@@ -1575,7 +1676,7 @@
     class="
       mission-card-button
       daily
-    "
+     hotspot-daily"
     onclick="openCategory('daily')"
     aria-label="Daily Mission"
   ></button>
@@ -1586,7 +1687,7 @@
     class="
       mission-card-button
       weekly
-    "
+     hotspot-weekly"
     onclick="openCategory('weekly')"
     aria-label="Weekly Mission"
   ></button>
@@ -1597,7 +1698,7 @@
     class="
       mission-card-button
       monthly
-    "
+     hotspot-monthly"
     onclick="openCategory('monthly')"
     aria-label="Monthly Mission"
   ></button>
@@ -1608,9 +1709,19 @@
     class="
       mission-card-button
       bonus
-    "
+     hotspot-bonus"
     onclick="openCategory('bonus')"
     aria-label="Bonus Mission"
+  ></button>
+
+
+
+  <!-- NUTRITION CTA: กดตรงปุ่ม "บันทึกการรับประทานอาหารของฉัน" -->
+  <button
+    type="button"
+    class="nutrition-hotspot"
+    onclick="goNutritionV2138()"
+    aria-label="บันทึกการรับประทานอาหารของฉัน"
   ></button>
 
 
@@ -3282,6 +3393,18 @@ function closeMissionHistoryBackdropV2135(event){
   ){
     closeMissionHistoryV2135();
   }
+}
+
+
+
+function goNutritionV2138(){
+
+  const url =
+    window.APP_CONFIG?.PAGE?.NUTRITION ||
+    "./nutrition.html";
+
+  window.location.href =
+    url;
 }
 
 
