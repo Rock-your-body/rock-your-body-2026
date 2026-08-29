@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ROCK YOUR BODY 2026 - Admin</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js"></script>
+  <style>
+    body{font-family:system-ui,-apple-system,sans-serif;margin:0;background:#f5f5f5;color:#111}
+    header{padding:18px;background:#111;color:#fff;position:sticky;top:0}
+    main{max-width:980px;margin:auto;padding:16px}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .primary{background:#111;color:#fff}.danger{background:#d32f2f;color:#fff}.muted{background:#ddd}
+    .card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.08)}
+    .meta{font-size:13px;color:#666}.reward{font-weight:700;margin:8px 0}.status{padding:10px;border-radius:10px;background:#fff3cd;margin-bottom:12px}
+    img.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:10px}
+    .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    input{padding:10px;border:1px solid #ccc;border-radius:10px;width:min(320px,100%)}
+    a{color:#0b57d0;word-break:break-all}
+  </style>
+</head>
+<body>
+<header><strong>ROCK YOUR BODY 2026 — ADMIN</strong></header>
+<main>
+  <div id="status" class="status">กำลังเชื่อมต่อ LINE...</div>
+  <div class="toolbar">
+    <button class="primary" onclick="loadQueue()">รีเฟรช Mission Queue</button>
+  </div>
+  <div id="queue"></div>
+</main>
+<script>
+let idToken = "";
+
+function esc(v){return String(v ?? "").replace(/[&<>"']/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[s]));}
+function setStatus(t){document.getElementById("status").textContent=t;}
+
+async function api(action, extra={}){
+  const url = window.APP_CONFIG.getApi("ADMIN");
+  const r = await fetch(url,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({action,idToken,...extra})
+  });
+  const data = await r.json().catch(()=>({success:false,error:`HTTP ${r.status}`}));
+  if(!r.ok || data?.success === false) throw new Error(data?.error || data?.message || `HTTP ${r.status}`);
+  return data;
+}
+
+async function loadQueue(){
+  try{
+    setStatus("กำลังโหลด Mission Queue...");
+    const data = await api("missionQueue");
+    renderQueue(data.submissions || []);
+    setStatus(`Mission รอตรวจ ${data.submissions?.length || 0} รายการ`);
+  }catch(e){setStatus("ERROR: "+(e?.message||e));}
+}
+
+function renderQueue(items){
+  const root=document.getElementById("queue");
+  if(!items.length){root.innerHTML='<div class="card">ไม่มี Mission รอตรวจ</div>';return;}
+  root.innerHTML=items.map(x=>{
+    const p=x.players||{};
+    const evidence=x.evidence_link ? `<div><a target="_blank" href="${esc(x.evidence_link)}">เปิด Link หลักฐาน</a></div>` : (x.evidence_url ? `<div class="meta">Storage: ${esc(x.evidence_url)}</div>` : "");
+    return `<div class="card" id="card-${x.id}">
+      <div class="row"><div>
+        ${p.picture_url?`<img class="avatar" src="${esc(p.picture_url)}">`:""}
+        <strong>${esc(p.line_display_name || x.line_user_id || "Player")}</strong>
+        <div class="meta">${esc(x.mission_id)} • ${esc(x.category)} • ${esc(x.period_key)}</div>
+      </div><div class="meta">${esc(x.submitted_at)}</div></div>
+      <div class="reward">🪙 ${Number(x.reward_coin||0)} | ⚡ ${Number(x.reward_energy||0)} | EXP ${Number(x.reward_exp||0)}</div>
+      ${x.metric_steps?`<div>Steps: ${Number(x.metric_steps)}</div>`:""}
+      ${x.metric_calories?`<div>Calories: ${Number(x.metric_calories)}</div>`:""}
+      ${x.metric_sleep_minutes?`<div>Sleep: ${Number(x.metric_sleep_minutes)} นาที</div>`:""}
+      ${x.exercise_minutes?`<div>Exercise: ${esc(x.exercise_type||"")} ${Number(x.exercise_minutes)} นาที</div>`:""}
+      ${x.note?`<div>Note: ${esc(x.note)}</div>`:""}
+      ${evidence}
+      <div class="toolbar" style="margin-top:12px">
+        <button class="primary" onclick="approve('${x.id}')">Approve</button>
+        <input id="reason-${x.id}" placeholder="เหตุผล Reject" />
+        <button class="danger" onclick="rejectMission('${x.id}')">Reject</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function approve(id){
+  if(!confirm("Approve Mission นี้และแจก Reward?")) return;
+  try{
+    const data=await api("approveMission",{submissionId:id});
+    alert(data?.alreadyApproved ? "รายการนี้อนุมัติไว้แล้ว — ไม่มีการแจกซ้ำ" : (data?.rewardGranted ? "Approve + แจก Reward สำเร็จ" : "Approve สำเร็จ"));
+    await loadQueue();
+  }catch(e){alert(e?.message||e);}
+}
+
+async function rejectMission(id){
+  const reason=document.getElementById("reason-"+id)?.value||"";
+  if(!confirm("Reject Mission นี้?")) return;
+  try{await api("rejectMission",{submissionId:id,reason});await loadQueue();}
+  catch(e){alert(e?.message||e);}
+}
+
+(async()=>{
+  try{
+    await liff.init({liffId:window.APP_CONFIG.LIFF_ID});
+    if(!liff.isLoggedIn()){liff.login();return;}
+    idToken=liff.getIDToken()||"";
+    if(!idToken) throw new Error("ไม่พบ LINE ID Token");
+    await loadQueue();
+  }catch(e){setStatus("ERROR: "+(e?.message||e));}
+})();
+</script>
+</body>
+</html>
