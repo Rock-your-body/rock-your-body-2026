@@ -52,7 +52,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260829-mission-nutrition-final-v1"
+    src="./app-config.js?v=20260829-step4"
   ></script>
 
 
@@ -2051,6 +2051,8 @@ const ROCK =
 
 
 const MISSION_API =
+  window.APP_CONFIG?.getApi?.("MISSION") ||
+  window.APP_CONFIG?.API?.MISSION ||
   ROCK?.CFG?.API?.MISSION ||
   "";
 
