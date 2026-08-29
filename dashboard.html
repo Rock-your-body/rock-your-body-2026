@@ -497,7 +497,7 @@
 
    /* =====================================================
    LINE LIFF AUTH
-   ===================================================== */
+===================================================== */
 
 const LIFF_ID =
   window.APP_CONFIG?.LIFF_ID ||
@@ -518,19 +518,17 @@ async function initLINE(){
     isLoggedIn: liff.isLoggedIn()
   });
 
-  /*
-   * เปิดจาก Rich Menu / LIFF:
-   * ถ้า session พร้อม จะไม่เปิดหน้า LINE Login
-   * ถ้ายังไม่ได้ login ให้ LIFF SDK จัดการ OAuth เอง
-   * ห้ามกำหนด access.line.me เอง
-   * ห้ามกำหนด redirectUri เป็น dashboard.html เอง
-   */
   if(!liff.isLoggedIn()){
     liff.login();
     return false;
   }
 
   const idToken = liff.getIDToken();
+
+  console.log(
+    "[LIFF] token available:",
+    Boolean(idToken)
+  );
 
   if(!idToken){
     throw new Error(
@@ -542,66 +540,155 @@ async function initLINE(){
 }
 
 
-function getIdToken(){
-      if(typeof liff === "undefined"){
-        throw new Error("LINE LIFF SDK ไม่พร้อม");
-      }
+/* =====================================================
+   GET CURRENT ID TOKEN
+===================================================== */
 
-      if(!liff.isLoggedIn()){
-        throw new Error("LINE session หมดอายุ กรุณาเข้าสู่ระบบใหม่");
-      }
+async function getIdToken(){
 
-      const token=liff.getIDToken();
+  if(typeof liff === "undefined"){
+    throw new Error("LINE LIFF SDK ไม่พร้อม");
+  }
 
-      if(!token){
-        throw new Error("ไม่พบ LINE ID Token กรุณาเข้าใหม่ผ่าน LINE");
-      }
+  if(!liff.isLoggedIn()){
+    liff.login();
+    return null;
+  }
 
-      return token;
+  const token = liff.getIDToken();
+
+  if(!token){
+    throw new Error("ไม่พบ LINE ID Token");
+  }
+
+  return token;
+}
+
+
+/* =====================================================
+   LINE PROFILE
+===================================================== */
+
+async function getLineProfileSafe(){
+  if(currentLineProfile) return currentLineProfile;
+
+  try{
+    currentLineProfile = await liff.getProfile();
+  }catch(error){
+    console.warn("LINE PROFILE ERROR:",error);
+    currentLineProfile = {};
+  }
+
+  return currentLineProfile;
+}
+
+
+/* =====================================================
+   POST JSON
+   เติม idToken ปัจจุบันจาก LIFF ให้อัตโนมัติทุกครั้ง
+===================================================== */
+
+async function postJson(url,payload={}){
+
+  const idToken = await getIdToken();
+
+  if(!idToken){
+    return null;
+  }
+
+  const requestBody = {
+    ...payload,
+    idToken
+  };
+
+  console.log(
+    "[API REQUEST]",
+    url,
+    {
+      action: requestBody.action,
+      hasIdToken: Boolean(idToken),
+      tokenLength: idToken?.length || 0
     }
+  );
 
-    async function getLineProfileSafe(){
-      if(currentLineProfile) return currentLineProfile;
-      try{
-        currentLineProfile = await liff.getProfile();
-      }catch(error){
-        console.warn("LINE PROFILE ERROR:",error);
-        currentLineProfile = {};
-      }
-      return currentLineProfile;
+  let response;
+
+  try{
+    response = await fetch(url,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(requestBody)
+    });
+  }catch(error){
+    console.error("[FETCH NETWORK ERROR]",error);
+    throw new Error("เชื่อมต่อ API ไม่สำเร็จ");
+  }
+
+  const text = await response.text();
+  let data = {};
+
+  try{
+    data = text ? JSON.parse(text) : {};
+  }catch{
+    console.error("[API RAW RESPONSE]",text);
+    throw new Error(
+      `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
+    );
+  }
+
+  console.log(
+    "[API RESPONSE]",
+    response.status,
+    data
+  );
+
+  if(
+    response.status === 401 &&
+    (
+      data?.code === "LINE_TOKEN_MISSING" ||
+      data?.code === "LINE_AUTH_FAILED"
+    )
+  ){
+    throw new Error(
+      data?.error ||
+      "LINE authentication ไม่สำเร็จ"
+    );
+  }
+
+  if(
+    !response.ok ||
+    data?.success === false
+  ){
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      `HTTP ${response.status}`
+    );
+  }
+
+  return data;
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+async function fetchDashboard(){
+
+  const api =
+    window.APP_CONFIG
+      .apiUrl("PLAYER");
+
+  return await postJson(
+    api,
+    {
+      action:"dashboard"
     }
-
-    async function postJson(url,payload){
-      const response=await fetch(url,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-      });
-
-      const text=await response.text();
-      let data={};
-
-      try{
-        data=text?JSON.parse(text):{};
-      }catch{
-        throw new Error(`API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`);
-      }
-
-      if(!response.ok || data?.success===false){
-        throw new Error(data?.error || data?.message || `HTTP ${response.status}`);
-      }
-
-      return data;
-    }
-
-    async function fetchDashboard(){
-      const api=window.APP_CONFIG.apiUrl("PLAYER");
-
-      return postJson(api,{
-        action:"dashboard",
-        idToken:getIdToken()
-      });
-    }
+  );
+}
 
     function normalizeDashboard(raw){
       const data=raw?.data ?? raw?.dashboard ?? raw ?? {};
@@ -1096,12 +1183,26 @@ function getIdToken(){
     ====================================================== */
 
     async function fetchDailyHealth(){
+
       const raw = await postJson(
         window.APP_CONFIG.apiUrl("PLAYER"),
-        { action:"dashboard", idToken:getIdToken() }
+        {
+          action:"dashboard"
+        }
       );
-      const data = raw?.data ?? raw?.dashboard ?? raw ?? {};
-      const health = data?.activity ?? data?.today ?? data?.health ?? {};
+
+      const data =
+        raw?.data ??
+        raw?.dashboard ??
+        raw ??
+        {};
+
+      const health =
+        data?.activity ??
+        data?.today ??
+        data?.health ??
+        {};
+
       return { health };
     }
 
