@@ -3,27 +3,30 @@
 /*
   ROCK YOUR BODY 2026
   common.js
-  Version: 2026-08-29-WEIGHT-HOTFIX-V2.11.2
+  Version: 2026-08-29-WEIGHT-V2.11.3
 
-  Canonical:
+  Canonical architecture:
   GitHub Pages
   -> LINE LIFF ID Token
   -> Supabase Edge Functions
   -> Supabase DB
 
-  Fix:
-  - API.PLAYER
-  - ROCK.fmtWeight()
-  - ROCK.CFG compatibility
-  - Weight save / target / history
+  WEIGHT V2.11.3
+  - Current Weight = saveWeight()
+  - Starting Weight = setStartWeight()
+  - Target Weight = setTarget()
+  - Starting/Target ไม่ใช้เป็น daily weight history
+  - ใช้ API.PLAYER
   - ไม่ใช้ line_user_id ใน localStorage เป็น identity
 */
+
 
 (function () {
 
   const CFG =
     window.APP_CONFIG ||
     {};
+
 
   const STORAGE = {
     LINE_PROFILE:
@@ -65,17 +68,22 @@
       value === undefined ||
       value === ""
     ) {
+
       return "--.-";
     }
+
 
     const n =
       Number(value);
 
+
     if (
       !Number.isFinite(n)
     ) {
+
       return "--.-";
     }
+
 
     return n.toFixed(1);
   }
@@ -115,11 +123,15 @@
           key
         );
 
+
       if (!raw) {
+
         return fallback;
       }
 
+
       return JSON.parse(raw);
+
 
     } catch (error) {
 
@@ -127,6 +139,7 @@
         "LOCAL STORAGE LOAD ERROR:",
         error
       );
+
 
       return fallback;
     }
@@ -140,17 +153,21 @@
   function go(target) {
 
     if (!target) {
+
       return;
     }
+
 
     const key =
       String(target)
         .trim()
         .toUpperCase();
 
+
     const url =
       CFG.PAGE?.[key] ||
       target;
+
 
     window.location.href =
       url;
@@ -238,6 +255,15 @@
   }
 
 
+  function goProjectSettings() {
+
+    go(
+      CFG.PAGE?.PROJECT_SETTINGS ||
+      "./project-settings.html"
+    );
+  }
+
+
   /* =========================================================
      LIFF
   ========================================================= */
@@ -297,6 +323,7 @@
     if (
       ready === false
     ) {
+
       return null;
     }
 
@@ -335,6 +362,7 @@
       if (
         ready === false
       ) {
+
         return cached;
       }
 
@@ -362,13 +390,14 @@
         error
       );
 
+
       return cached;
     }
   }
 
 
   /* =========================================================
-     API
+     API URL
   ========================================================= */
 
   function apiUrl(name) {
@@ -382,6 +411,11 @@
         .toUpperCase();
 
 
+    /*
+      Canonical app-config.js
+      มี APP_CONFIG.getApi()
+    */
+
     if (
       typeof CFG.getApi ===
       "function"
@@ -392,6 +426,10 @@
       );
     }
 
+
+    /*
+      Fallback สำหรับ config รุ่นเดิม
+    */
 
     const url =
       CFG.API?.[key];
@@ -409,6 +447,10 @@
   }
 
 
+  /* =========================================================
+     POST JSON
+  ========================================================= */
+
   async function postJson(
     url,
     payload = {}
@@ -419,6 +461,7 @@
 
 
     if (!idToken) {
+
       return null;
     }
 
@@ -438,6 +481,12 @@
           body:
             JSON.stringify({
               ...payload,
+
+              /*
+                Canonical identity
+                LINE ID Token เท่านั้น
+              */
+
               idToken
             })
         }
@@ -458,7 +507,14 @@
           ? JSON.parse(raw)
           : {};
 
+
     } catch (error) {
+
+      console.error(
+        "API RAW RESPONSE:",
+        raw
+      );
+
 
       throw new Error(
         `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
@@ -516,7 +572,10 @@
 
 
   /* =========================================================
-     WEIGHT
+     CURRENT WEIGHT
+
+     น้ำหนักวันนี้
+     -> สร้าง weight_logs
   ========================================================= */
 
   async function saveWeight(weight) {
@@ -551,6 +610,57 @@
     );
   }
 
+
+  /* =========================================================
+     STARTING WEIGHT
+
+     Baseline
+     -> ไม่สร้าง weight_logs
+  ========================================================= */
+
+  async function setStartWeight(
+    startWeight
+  ) {
+
+    const value =
+      Number(
+        startWeight
+      );
+
+
+    if (
+      !Number.isFinite(value) ||
+      value < 20 ||
+      value > 400
+    ) {
+
+      throw new Error(
+        "กรุณากรอกน้ำหนักเริ่มต้นระหว่าง 20 - 400 kg"
+      );
+    }
+
+
+    return await postJson(
+      apiUrl(
+        "PLAYER"
+      ),
+      {
+        action:
+          "setStartWeight",
+
+        startWeight:
+          value
+      }
+    );
+  }
+
+
+  /* =========================================================
+     TARGET WEIGHT
+
+     เป้าหมาย
+     -> ไม่สร้าง weight_logs
+  ========================================================= */
 
   async function setTarget(
     targetWeight
@@ -588,6 +698,10 @@
     );
   }
 
+
+  /* =========================================================
+     WEIGHT HISTORY
+  ========================================================= */
 
   async function getWeightHistory() {
 
@@ -636,6 +750,7 @@
       ),
       {
         action,
+
         ...payload
       }
     );
@@ -657,6 +772,7 @@
       ),
       {
         action,
+
         ...payload
       }
     );
@@ -678,6 +794,51 @@
       ),
       {
         action,
+
+        ...payload
+      }
+    );
+  }
+
+
+  /* =========================================================
+     BATTLE
+  ========================================================= */
+
+  async function battleApi(
+    action,
+    payload = {}
+  ) {
+
+    return await postJson(
+      apiUrl(
+        "BATTLE"
+      ),
+      {
+        action,
+
+        ...payload
+      }
+    );
+  }
+
+
+  /* =========================================================
+     ADMIN
+  ========================================================= */
+
+  async function adminApi(
+    action,
+    payload = {}
+  ) {
+
+    return await postJson(
+      apiUrl(
+        "ADMIN"
+      ),
+      {
+        action,
+
         ...payload
       }
     );
@@ -691,13 +852,16 @@
   window.ROCK = {
 
     VERSION:
-      "2026-08-29-WEIGHT-HOTFIX-V2.11.2",
+      "2026-08-29-WEIGHT-V2.11.3",
 
 
     /*
-      Compatibility สำหรับหน้าเก่า
-      เช่น weight-check.html
-      ที่เรียก ROCK.CFG.PAGE.HOME
+      Compatibility
+
+      หน้า weight-check.html
+      สามารถใช้:
+
+      ROCK.CFG.PAGE.HOME
     */
 
     CFG,
@@ -706,7 +870,9 @@
       CFG,
 
 
-    /* LINE */
+    /* -------------------------
+       LINE
+    ------------------------- */
 
     initLiff,
 
@@ -715,23 +881,31 @@
     getProfile,
 
 
-    /* API */
+    /* -------------------------
+       API
+    ------------------------- */
 
     apiUrl,
 
     postJson,
 
 
-    /* PLAYER */
+    /* -------------------------
+       PLAYER
+    ------------------------- */
 
     fetchDashboard,
 
     fetchDailyHealth,
 
 
-    /* WEIGHT */
+    /* -------------------------
+       WEIGHT
+    ------------------------- */
 
     saveWeight,
+
+    setStartWeight,
 
     setTarget,
 
@@ -740,7 +914,9 @@
     fmtWeight,
 
 
-    /* OTHER */
+    /* -------------------------
+       OTHER API
+    ------------------------- */
 
     fetchProjectSettings,
 
@@ -750,8 +926,14 @@
 
     inbodyApi,
 
+    battleApi,
 
-    /* NAVIGATION */
+    adminApi,
+
+
+    /* -------------------------
+       NAVIGATION
+    ------------------------- */
 
     go,
 
@@ -773,12 +955,22 @@
 
     goInBody,
 
+    goProjectSettings,
 
-    /* UTIL */
 
-    number
+    /* -------------------------
+       UTIL
+    ------------------------- */
+
+    number,
+
+    text
   };
 
+
+  /* =========================================================
+     READY
+  ========================================================= */
 
   console.log(
     "[ROCK COMMON]",
