@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260829-line-name-team-v1"></script>
+  <script src="./app-config.js?v=20260829-render-v2"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -736,8 +736,7 @@
     }
 
     async function fetchDashboard(){
-      const api=window.APP_CONFIG?.API?.DASHBOARD;
-      if(!api) throw new Error("ไม่พบ API.DASHBOARD ใน app-config.js");
+      const api=window.APP_CONFIG.apiUrl("PLAYER");
 
       return postJson(api,{
         action:"dashboard",
@@ -869,8 +868,8 @@
       const sleepPercent = num(pick(
         activity.sleepPercent,activity.sleep_percent,
         data.sleepPercent,data.sleep_percent,
-        Number.isFinite(sleepMinutes)?(sleepMinutes/480)*100:null,
-        Number.isFinite(sleepHours)?(sleepHours/8)*100:null
+        Number.isFinite(sleepMinutes)?(sleepMinutes/420)*100:null,
+        Number.isFinite(sleepHours)?(sleepHours/7)*100:null
       ),0);
 
       const healthScore=num(pick(
@@ -1192,16 +1191,8 @@
     }
 
     async function fetchInbodyHistory(){
-      const api=window.APP_CONFIG?.API?.INBODY;
-
-      if(!api){
-        return {success:true,inbodyHistory:[]};
-      }
-
-      return postJson(api,{
-        action:"list",
-        idToken:getIdToken()
-      });
+      // Render API contract รุ่นนี้ยังไม่มี InBody action
+      return {success:true,inbodyHistory:[]};
     }
 
     async function loadInbodyHistory(){
@@ -1231,387 +1222,8 @@
     }
 
    async function saveInbody(){
-
-  const measuredDate =
-    $("inbodyMeasuredDate")
-      ?.value ||
-    "";
-
-  const score =
-    Number(
-      $("inbodyScoreInput")
-        ?.value
-    );
-
-  const file =
-    $("inbodyFileInput")
-      ?.files?.[0] ||
-    null;
-
-  const api =
-    window.APP_CONFIG
-      ?.API
-      ?.INBODY ||
-    "";
-
-  const button =
-    $("inbodySave");
-
-
-  /* =====================================================
-     VALIDATE
-  ====================================================== */
-
-  if(!api){
-
-    showStatus(
-      "❌ ไม่พบ API.INBODY ใน app-config.js",
-      true
-    );
-
-    return;
-  }
-
-
-  if(!measuredDate){
-
-    showStatus(
-      "❌ กรุณาเลือกวันที่ตรวจ",
-      true
-    );
-
-    return;
-  }
-
-
-  if(
-    !Number.isFinite(score) ||
-    score < 0 ||
-    score > 150
-  ){
-
-    showStatus(
-      "❌ กรุณากรอก InBody Score 0-150",
-      true
-    );
-
-    return;
-  }
-
-
-  if(!file){
-
-    showStatus(
-      "❌ กรุณาเลือกรูป/PDF ผล InBody",
-      true
-    );
-
-    return;
-  }
-
-
-  /* =====================================================
-     FILE
-  ====================================================== */
-
-  console.log(
-    "INBODY FILE:",
-    {
-      name:file.name,
-      type:file.type,
-      size:file.size
+      showStatus("❌ Render API รุ่นนี้ยังไม่มี InBody endpoint/action",true);
     }
-  );
-
-
-  /*
-     Edge Function ปัจจุบันรับสูงสุด 10 MB
-  */
-
-  if(
-    file.size >
-    10 * 1024 * 1024
-  ){
-
-    showStatus(
-      "❌ ไฟล์ InBody ต้องไม่เกิน 10 MB",
-      true
-    );
-
-    return;
-  }
-
-
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "application/pdf"
-  ];
-
-
-  if(
-    file.type &&
-    !allowedTypes.includes(
-      file.type
-    )
-  ){
-
-    showStatus(
-      `❌ ไม่รองรับไฟล์ชนิด ${file.type}`,
-      true
-    );
-
-    return;
-  }
-
-
-  /* =====================================================
-     UPLOAD
-  ====================================================== */
-
-  try{
-
-    if(button){
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "กำลังบันทึก...";
-
-    }
-
-
-    showStatus(
-      "กำลังอัปโหลดผล InBody..."
-    );
-
-
-    /* ===============================
-       LINE TOKEN
-    =============================== */
-
-    const idToken =
-      getIdToken();
-
-
-    if(!idToken){
-
-      throw new Error(
-        "ไม่พบ LINE ID Token กรุณาเปิดแอปผ่าน LINE ใหม่"
-      );
-
-    }
-
-
-    /* ===============================
-       FORM DATA
-    =============================== */
-
-    const form =
-      new FormData();
-
-
-    form.append(
-      "action",
-      "upload"
-    );
-
-
-    form.append(
-      "idToken",
-      idToken
-    );
-
-
-    form.append(
-      "score",
-      String(score)
-    );
-
-
-    form.append(
-      "measuredDate",
-      measuredDate
-    );
-
-
-    form.append(
-      "file",
-      file,
-      file.name
-    );
-
-
-    console.log(
-      "INBODY UPLOAD START:",
-      {
-        api,
-        measuredDate,
-        score,
-        fileName:file.name,
-        fileType:file.type,
-        fileSize:file.size
-      }
-    );
-
-
-    /* ===============================
-       REQUEST
-    =============================== */
-
-    const response =
-      await fetch(
-        api,
-        {
-          method:"POST",
-
-          /*
-             ห้ามกำหนด Content-Type เอง
-             Browser จะสร้าง multipart boundary
-          */
-
-          body:form
-        }
-      );
-
-
-    const raw =
-      await response.text();
-
-
-    console.log(
-      "INBODY HTTP:",
-      response.status
-    );
-
-
-    console.log(
-      "INBODY RESPONSE:",
-      raw
-    );
-
-
-    /* ===============================
-       JSON
-    =============================== */
-
-    let result = {};
-
-
-    try{
-
-      result =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    }catch(error){
-
-      console.error(
-        "INBODY JSON ERROR:",
-        error
-      );
-
-
-      throw new Error(
-        `InBody API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
-      );
-
-    }
-
-
-    /* ===============================
-       SERVER ERROR
-    =============================== */
-
-    if(
-      !response.ok ||
-      result?.success === false
-    ){
-
-      const serverMessage =
-        result?.error ||
-        result?.message ||
-        result?.details ||
-        `InBody HTTP ${response.status}`;
-
-
-      throw new Error(
-        serverMessage
-      );
-
-    }
-
-
-    /* ===============================
-       SUCCESS
-    =============================== */
-
-    closeInbodyModal();
-
-
-    showStatus(
-      "✅ บันทึกผล InBody สำเร็จ"
-    );
-
-
-    try{
-
-      await loadInbodyHistory();
-
-    }catch(error){
-
-      console.warn(
-        "RELOAD INBODY:",
-        error
-      );
-
-    }
-
-
-    setTimeout(
-      hideStatus,
-      2200
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "INBODY SAVE ERROR:",
-      error
-    );
-
-
-    const message =
-      error?.message ||
-      String(error) ||
-      "อัปโหลด InBody ไม่สำเร็จ";
-
-
-    showStatus(
-      "❌ " + message,
-      true
-    );
-
-
-  }finally{
-
-    if(button){
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "บันทึกผล";
-
-    }
-
-  }
-
-}
 
     /* =====================================================
        LOAD ALL HOME DATA
@@ -1625,31 +1237,13 @@
     ====================================================== */
 
     async function fetchDailyHealth(){
-
-      const api =
-        window.APP_CONFIG
-          ?.API
-          ?.DAILY_HEALTH;
-
-
-      if(!api){
-        throw new Error(
-          "ไม่พบ API.DAILY_HEALTH"
-        );
-      }
-
-
-      return await postJson(
-        api,
-        {
-          action:
-            "today",
-
-          idToken:
-            getIdToken()
-        }
+      const raw = await postJson(
+        window.APP_CONFIG.apiUrl("PLAYER"),
+        { action:"dashboard", idToken:getIdToken() }
       );
-
+      const data = raw?.data ?? raw?.dashboard ?? raw ?? {};
+      const health = data?.activity ?? data?.today ?? data?.health ?? {};
+      return { health };
     }
 
 
@@ -1813,73 +1407,8 @@
 
 
     async function loadProjectSettings(){
-
-      const api =
-        window.APP_CONFIG
-          ?.API
-          ?.PROJECT;
-
-
-      if(!api){
-        return;
-      }
-
-
-      try{
-
-        const result =
-          await postJson(
-            api,
-            {
-              action:
-                "get"
-            }
-          );
-
-
-        const project =
-          result?.project ??
-          {};
-
-
-        if(
-          project.start_date ||
-          project.end_date
-        ){
-
-          $("projectRange")
-            .textContent =
-              `${fmtDateShort(project.start_date)} - ${fmtDateShort(project.end_date)}`;
-
-        }
-
-
-        $("projectElapsed")
-          .textContent =
-            `${fmtInt(project.elapsedDays ?? 0)} วัน`;
-
-
-        $("projectRemaining")
-          .textContent =
-            `${fmtInt(project.remainingDays ?? 0)} วัน`;
-
-
-        setBar(
-          "projectBar",
-          project.percent ??
-          0
-        );
-
-
-      }catch(error){
-
-        console.warn(
-          "PROJECT SETTINGS ERROR:",
-          error
-        );
-
-      }
-
+      // Project data แสดงจาก payload ของ action:dashboard ใน renderHome() แล้ว
+      return;
     }
 
 
@@ -1931,51 +1460,7 @@
     }
 
     async function saveTeamName(){
-      const teamName=String($("teamNameInput")?.value || "").trim();
-      const button=$("teamSave");
-
-      if(!teamName){
-        showStatus("❌ กรุณากรอกชื่อทีม",true);
-        return;
-      }
-      if(teamName.length>30){
-        showStatus("❌ ชื่อทีมต้องไม่เกิน 30 ตัวอักษร",true);
-        return;
-      }
-
-      const api=window.APP_CONFIG?.API?.DASHBOARD;
-      if(!api){
-        showStatus("❌ ไม่พบ API.DASHBOARD",true);
-        return;
-      }
-
-      try{
-        button.disabled=true;
-        button.textContent="กำลังบันทึก...";
-
-        const result=await postJson(api,{
-          action:"update_team_name",
-          idToken:getIdToken(),
-          teamName
-        });
-
-        currentTeamName=
-          result?.player?.team_name ||
-          result?.data?.team_name ||
-          result?.team_name ||
-          teamName;
-
-        closeTeamEditModal();
-        showStatus("✅ บันทึกชื่อทีมแล้ว");
-        setTimeout(hideStatus,1800);
-        await loadHome();
-      }catch(error){
-        console.error("TEAM NAME SAVE ERROR:",error);
-        showStatus("❌ "+(error?.message || "บันทึกชื่อทีมไม่สำเร็จ"),true);
-      }finally{
-        button.disabled=false;
-        button.textContent="บันทึกชื่อทีม";
-      }
+      showStatus("❌ Render API contract รุ่นนี้ยังไม่มี action สำหรับเปลี่ยนชื่อทีม",true);
     }
 
     function goPage(name){
@@ -2063,7 +1548,7 @@
     $("battleButton").addEventListener("click",()=>goPage("BATTLE"));
 
     $("inbodyViewButton").addEventListener("click",()=>goPage("PROGRESS"));
-    $("inbodyUpload").addEventListener("click",openInbodyModal);
+    $("inbodyUpload").addEventListener("click",()=>showStatus("❌ Render API รุ่นนี้ยังไม่มี InBody endpoint/action",true));
     $("inbodyCancel").addEventListener("click",closeInbodyModal);
     $("inbodySave").addEventListener("click",saveInbody);
 
