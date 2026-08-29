@@ -10,7 +10,8 @@
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
 
-  <title>
+  <!-- WEIGHT V2.11.3 -->
+<title>
     ROCK YOUR BODY 2026 - Weight Check
   </title>
 
@@ -212,11 +213,11 @@
     <section class="weight-card">
 
       <h2>
-        🎯 เป้าหมายน้ำหนัก
+        🎯 ตั้งค่าน้ำหนัก
       </h2>
 
       <div class="weight-desc">
-        ตั้งหรือแก้ไขเป้าหมายน้ำหนักของคุณ
+        ตั้งหรือแก้ไขน้ำหนักเริ่มต้นและเป้าหมายน้ำหนัก
       </div>
 
       <button
@@ -225,7 +226,7 @@
         type="button"
         disabled
       >
-        ตั้ง / แก้ไขเป้าหมาย
+        ตั้ง / แก้ไขน้ำหนัก
       </button>
 
     </section>
@@ -247,62 +248,37 @@
 </div>
 
 
-<!-- TARGET MODAL -->
-
-<div
-  id="targetModal"
-  class="weight-modal-bg"
->
-
+<!-- WEIGHT SETTINGS MODAL -->
+<div id="targetModal" class="weight-modal-bg">
   <div class="weight-modal">
+    <h2>🎯 ตั้งค่าน้ำหนัก</h2>
+    <p class="weight-modal-note">
+      น้ำหนักเริ่มต้นเป็น Baseline สำหรับคำนวณความก้าวหน้า
+      การแก้ไขค่านี้จะไม่เพิ่มรายการในประวัติน้ำหนักรายวัน
+    </p>
 
-    <h2>
-      🎯 ตั้งเป้าหมายน้ำหนัก
-    </h2>
-
-    <div class="weight-input-box">
-
-      <input
-        id="targetInput"
-        type="number"
-        min="20"
-        max="400"
-        step="0.1"
-        inputmode="decimal"
-        placeholder="0.0"
-      >
-
-      <span class="weight-unit">
-        kg
-      </span>
-
+    <div class="weight-field">
+      <label for="startInput">น้ำหนักเริ่มต้น</label>
+      <div class="weight-input-box">
+        <input id="startInput" type="number" min="20" max="400" step="0.1" inputmode="decimal" placeholder="0.0">
+        <span class="weight-unit">kg</span>
+      </div>
     </div>
 
+    <div class="weight-field">
+      <label for="targetInput">เป้าหมายน้ำหนัก</label>
+      <div class="weight-input-box">
+        <input id="targetInput" type="number" min="20" max="400" step="0.1" inputmode="decimal" placeholder="0.0">
+        <span class="weight-unit">kg</span>
+      </div>
+    </div>
 
     <div class="weight-modal-actions">
-
-      <button
-        id="cancelTargetButton"
-        class="weight-cancel"
-        type="button"
-      >
-        ยกเลิก
-      </button>
-
-      <button
-        id="saveTargetButton"
-        class="weight-confirm"
-        type="button"
-      >
-        บันทึก
-      </button>
-
+      <button id="cancelTargetButton" class="weight-cancel" type="button">ยกเลิก</button>
+      <button id="saveTargetButton" class="weight-confirm" type="button">บันทึก</button>
     </div>
-
   </div>
-
 </div>
-
 
 <!-- สำคัญ: โหลด common.js ก่อนโค้ดของหน้า -->
 <script src="./common.js"></script>
@@ -359,6 +335,9 @@
 
   const targetModal =
     $("targetModal");
+
+  const startInput =
+    $("startInput");
 
   const targetInput =
     $("targetInput");
@@ -451,13 +430,19 @@
 
 
     if (
+      start !== null &&
+      start !== undefined
+    ) {
+      startInput.value =
+        Number(start).toFixed(1);
+    }
+
+    if (
       target !== null &&
       target !== undefined
     ) {
-
       targetInput.value =
-        Number(target)
-          .toFixed(1);
+        Number(target).toFixed(1);
     }
 
 
@@ -775,61 +760,59 @@
 
   async function saveTarget() {
 
-    const value =
-      Number(
-        targetInput.value
-      );
+    const startValue =
+      Number(startInput.value);
 
+    const targetValue =
+      Number(targetInput.value);
 
     if (
-      !Number.isFinite(value) ||
-      value < 20 ||
-      value > 400
+      !Number.isFinite(startValue) ||
+      startValue < 20 ||
+      startValue > 400
     ) {
-
-      alert(
-        "กรุณากรอกเป้าหมายน้ำหนักระหว่าง 20 - 400 kg"
-      );
-
+      alert("กรุณากรอกน้ำหนักเริ่มต้นระหว่าง 20 - 400 kg");
       return;
     }
 
+    if (
+      !Number.isFinite(targetValue) ||
+      targetValue < 20 ||
+      targetValue > 400
+    ) {
+      alert("กรุณากรอกเป้าหมายน้ำหนักระหว่าง 20 - 400 kg");
+      return;
+    }
 
-    saveTargetButton.disabled =
-      true;
-
+    saveTargetButton.disabled = true;
+    saveTargetButton.textContent = "กำลังบันทึก...";
 
     try {
+      const oldStart = dashboardData?.weight?.start;
+      const oldTarget = dashboardData?.weight?.target;
 
-      await ROCK.setTarget(
-        value
-      );
+      if (Number(oldStart) !== startValue) {
+        await ROCK.setStartWeight(startValue);
+      }
 
+      if (Number(oldTarget) !== targetValue) {
+        await ROCK.setTarget(targetValue);
+      }
 
       closeTarget();
-
-
       await loadDashboard();
 
-
       showStatus(
-        "✅ บันทึกเป้าหมายเรียบร้อยแล้ว",
+        "✅ บันทึกน้ำหนักเริ่มต้นและเป้าหมายเรียบร้อยแล้ว",
         "success"
       );
 
-
     } catch (error) {
-
-      alert(
-        error?.message ||
-        String(error)
-      );
-
+      alert(error?.message || String(error));
 
     } finally {
-
-      saveTargetButton.disabled =
-        false;
+      saveTargetButton.disabled = false;
+      saveTargetButton.textContent = "บันทึก";
     }
   }
 
