@@ -1,115 +1,1260 @@
 <!doctype html>
 <html lang="th">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ROCK YOUR BODY 2026 - Admin</title>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+  <title>
+    ROCK YOUR BODY 2026 • Admin
+  </title>
+
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js"></script>
+
   <style>
-    body{font-family:system-ui,-apple-system,sans-serif;margin:0;background:#f5f5f5;color:#111}
-    header{padding:18px;background:#111;color:#fff;position:sticky;top:0}
-    main{max-width:980px;margin:auto;padding:16px}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-    button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .primary{background:#111;color:#fff}.danger{background:#d32f2f;color:#fff}.muted{background:#ddd}
-    .card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 5px rgba(0,0,0,.08)}
-    .meta{font-size:13px;color:#666}.reward{font-weight:700;margin:8px 0}.status{padding:10px;border-radius:10px;background:#fff3cd;margin-bottom:12px}
-    img.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:10px}
-    .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-    input{padding:10px;border:1px solid #ccc;border-radius:10px;width:min(320px,100%)}
-    a{color:#0b57d0;word-break:break-all}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+      color:#183653;
+      background:#eef5fb;
+    }
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding:
+        calc(13px + env(safe-area-inset-top))
+        16px
+        13px;
+      color:#fff;
+      background:
+        linear-gradient(
+          135deg,
+          #0d3c7c,
+          #147c68
+        );
+      box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.14);
+    }
+    header b{font-size:17px}
+    main{
+      max-width:1000px;
+      margin:auto;
+      padding:15px;
+    }
+    .status{
+      padding:11px 13px;
+      border-radius:13px;
+      margin-bottom:12px;
+      background:#fff;
+      box-shadow:
+        0 3px 12px
+        rgba(50,80,110,.07);
+      font-size:12px;
+      font-weight:900;
+    }
+    .tabs{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:8px;
+      margin-bottom:13px;
+    }
+    button{
+      border:0;
+      border-radius:11px;
+      padding:10px 13px;
+      font:inherit;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .primary{
+      color:#fff;
+      background:#145fc2;
+    }
+    .green{
+      color:#fff;
+      background:#0b986f;
+    }
+    .danger{
+      color:#fff;
+      background:#c83232;
+    }
+    .muted{
+      color:#274968;
+      background:#dfeaf4;
+    }
+    .tab.active{
+      color:#fff;
+      background:#123f80;
+    }
+    .card{
+      padding:14px;
+      margin-bottom:12px;
+      border:1px solid #dce7f1;
+      border-radius:18px;
+      background:#fff;
+      box-shadow:
+        0 4px 16px
+        rgba(50,80,110,.07);
+    }
+    .row{
+      display:flex;
+      justify-content:
+        space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:flex-start;
+    }
+    .meta{
+      color:#698098;
+      font-size:11px;
+      line-height:1.45;
+    }
+    .avatar{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      object-fit:cover;
+      vertical-align:middle;
+      margin-right:8px;
+    }
+    .reward{
+      margin:7px 0;
+      font-weight:900;
+    }
+    .tools{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:11px;
+    }
+    input,
+    textarea{
+      width:100%;
+      border:1px solid #cfdeea;
+      border-radius:10px;
+      padding:9px 10px;
+      font:inherit;
+      color:#183653;
+      background:#fff;
+    }
+    textarea{
+      min-height:90px;
+      resize:vertical;
+    }
+    .review-grid{
+      display:grid;
+      grid-template-columns:
+        repeat(4,1fr);
+      gap:7px;
+      margin-top:10px;
+    }
+    .field label{
+      display:block;
+      margin-bottom:4px;
+      color:#55718d;
+      font-size:9px;
+      font-weight:900;
+    }
+    .images{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+    .images a{
+      display:block;
+      border:1px solid #d9e5ef;
+      border-radius:13px;
+      overflow:hidden;
+      background:#f4f8fb;
+    }
+    .images img{
+      display:block;
+      width:100%;
+      max-height:360px;
+      object-fit:contain;
+      background:#f4f8fb;
+    }
+    .advice{
+      margin-top:10px;
+    }
+    .badge{
+      display:inline-block;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:9px;
+      font-weight:900;
+      background:#eef3f8;
+      color:#526a82;
+    }
+    .badge.pending{
+      background:#fff1d1;
+      color:#896000;
+    }
+    .badge.reviewed{
+      background:#e4f8ef;
+      color:#08704f;
+    }
+    .old-advice{
+      margin-top:9px;
+      padding:9px 10px;
+      border-radius:10px;
+      background:#edf8f3;
+      color:#2b604c;
+      font-size:11px;
+      line-height:1.5;
+      white-space:pre-wrap;
+    }
+    a{
+      color:#0c57bb;
+      word-break:break-all;
+    }
+    @media(max-width:700px){
+      .review-grid{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+      .images{
+        grid-template-columns:1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-<header><strong>ROCK YOUR BODY 2026 — ADMIN</strong></header>
+
+<header>
+  <b>
+    ROCK YOUR BODY 2026 — ADMIN
+  </b>
+</header>
+
 <main>
-  <div id="status" class="status">กำลังเชื่อมต่อ LINE...</div>
-  <div class="toolbar">
-    <button class="primary" onclick="loadQueue()">รีเฟรช Mission Queue</button>
+
+  <div
+    id="status"
+    class="status"
+  >
+    กำลังเชื่อมต่อ LINE...
   </div>
-  <div id="queue"></div>
+
+  <div class="tabs">
+    <button
+      id="missionTab"
+      class="tab active"
+      onclick="showTab('mission')"
+    >
+      🎯 Mission Queue
+    </button>
+
+    <button
+      id="inbodyTab"
+      class="tab"
+      onclick="showTab('inbody')"
+    >
+      🧬 InBody Review
+    </button>
+  </div>
+
+
+  <section id="missionSection">
+
+    <div class="tools">
+      <button
+        class="primary"
+        onclick="loadMissionQueue()"
+      >
+        รีเฟรช Mission
+      </button>
+    </div>
+
+    <div id="missionQueue"></div>
+
+  </section>
+
+
+  <section
+    id="inbodySection"
+    style="display:none"
+  >
+
+    <div class="tools">
+      <button
+        class="green"
+        onclick="loadInBodyQueue()"
+      >
+        รีเฟรช InBody
+      </button>
+    </div>
+
+    <div id="inbodyQueue"></div>
+
+  </section>
+
 </main>
+
+
 <script>
-let idToken = "";
+  "use strict";
 
-function esc(v){return String(v ?? "").replace(/[&<>"']/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[s]));}
-function setStatus(t){document.getElementById("status").textContent=t;}
+  let idToken = "";
 
-async function api(action, extra={}){
-  const url = window.APP_CONFIG.getApi("ADMIN");
-  const r = await fetch(url,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({action,idToken,...extra})
-  });
-  const data = await r.json().catch(()=>({success:false,error:`HTTP ${r.status}`}));
-  if(!r.ok || data?.success === false) throw new Error(data?.error || data?.message || `HTTP ${r.status}`);
-  return data;
-}
 
-async function loadQueue(){
-  try{
-    setStatus("กำลังโหลด Mission Queue...");
-    const data = await api("missionQueue");
-    renderQueue(data.submissions || []);
-    setStatus(`Mission รอตรวจ ${data.submissions?.length || 0} รายการ`);
-  }catch(e){setStatus("ERROR: "+(e?.message||e));}
-}
+  function $(
+    id
+  ){
+    return document
+      .getElementById(id);
+  }
 
-function renderQueue(items){
-  const root=document.getElementById("queue");
-  if(!items.length){root.innerHTML='<div class="card">ไม่มี Mission รอตรวจ</div>';return;}
-  root.innerHTML=items.map(x=>{
-    const p=x.players||{};
-    const evidence=x.evidence_link ? `<div><a target="_blank" href="${esc(x.evidence_link)}">เปิด Link หลักฐาน</a></div>` : (x.evidence_url ? `<div class="meta">Storage: ${esc(x.evidence_url)}</div>` : "");
-    return `<div class="card" id="card-${x.id}">
-      <div class="row"><div>
-        ${p.picture_url?`<img class="avatar" src="${esc(p.picture_url)}">`:""}
-        <strong>${esc(p.line_display_name || x.line_user_id || "Player")}</strong>
-        <div class="meta">${esc(x.mission_id)} • ${esc(x.category)} • ${esc(x.period_key)}</div>
-      </div><div class="meta">${esc(x.submitted_at)}</div></div>
-      <div class="reward">🪙 ${Number(x.reward_coin||0)} | ⚡ ${Number(x.reward_energy||0)} | EXP ${Number(x.reward_exp||0)}</div>
-      ${x.metric_steps?`<div>Steps: ${Number(x.metric_steps)}</div>`:""}
-      ${x.metric_calories?`<div>Calories: ${Number(x.metric_calories)}</div>`:""}
-      ${x.metric_sleep_minutes?`<div>Sleep: ${Number(x.metric_sleep_minutes)} นาที</div>`:""}
-      ${x.exercise_minutes?`<div>Exercise: ${esc(x.exercise_type||"")} ${Number(x.exercise_minutes)} นาที</div>`:""}
-      ${x.note?`<div>Note: ${esc(x.note)}</div>`:""}
-      ${evidence}
-      <div class="toolbar" style="margin-top:12px">
-        <button class="primary" onclick="approve('${x.id}')">Approve</button>
-        <input id="reason-${x.id}" placeholder="เหตุผล Reject" />
-        <button class="danger" onclick="rejectMission('${x.id}')">Reject</button>
+
+  function esc(
+    value
+  ){
+
+    return String(
+      value ??
+      ""
+    )
+      .replace(
+        /[&<>"']/g,
+        char => ({
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#39;"
+        }[char])
+      );
+  }
+
+
+  function setStatus(
+    text
+  ){
+    $("status")
+      .textContent =
+        text;
+  }
+
+
+  async function api(
+    action,
+    extra={}
+  ){
+
+    const response =
+      await fetch(
+        APP_CONFIG
+          .getApi(
+            "ADMIN"
+          ),
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:
+            JSON.stringify({
+              action,
+              idToken,
+              ...extra
+            })
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    let data={};
+
+    try{
+      data =
+        raw
+          ? JSON.parse(raw)
+          : {};
+    }catch{
+      throw new Error(
+        `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
+      );
+    }
+
+    if(
+      !response.ok ||
+      data?.success === false
+    ){
+      throw new Error(
+        data?.error ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    return data;
+  }
+
+
+  function showTab(
+    tab
+  ){
+
+    const mission =
+      tab ===
+      "mission";
+
+    $("missionSection")
+      .style.display =
+        mission
+          ? "block"
+          : "none";
+
+    $("inbodySection")
+      .style.display =
+        mission
+          ? "none"
+          : "block";
+
+    $("missionTab")
+      .classList
+      .toggle(
+        "active",
+        mission
+      );
+
+    $("inbodyTab")
+      .classList
+      .toggle(
+        "active",
+        !mission
+      );
+
+    if(!mission){
+      loadInBodyQueue();
+    }
+  }
+
+
+  /* =====================================================
+     MISSION
+  ===================================================== */
+
+  async function loadMissionQueue(){
+
+    try{
+
+      setStatus(
+        "กำลังโหลด Mission Queue..."
+      );
+
+      const data =
+        await api(
+          "missionQueue"
+        );
+
+      renderMissionQueue(
+        data.submissions ||
+        []
+      );
+
+      setStatus(
+        `Mission รอตรวจ ${
+          data.submissions
+            ?.length ||
+          0
+        } รายการ`
+      );
+
+    }catch(error){
+
+      setStatus(
+        "ERROR: " +
+        (
+          error?.message ||
+          error
+        )
+      );
+    }
+  }
+
+
+  function renderMissionQueue(
+    items
+  ){
+
+    const root =
+      $("missionQueue");
+
+    if(!items.length){
+
+      root.innerHTML =
+        `<div class="card">ไม่มี Mission รอตรวจ</div>`;
+
+      return;
+    }
+
+    root.innerHTML =
+      items
+        .map(
+          item => {
+
+            const player =
+              item.players ||
+              {};
+
+            const evidence =
+              item.evidence_link
+                ? `
+                    <div>
+                      <a
+                        target="_blank"
+                        href="${esc(item.evidence_link)}"
+                      >
+                        เปิด Link หลักฐาน
+                      </a>
+                    </div>
+                  `
+                : item.evidence_url
+                  ? `
+                      <div class="meta">
+                        Storage: ${esc(item.evidence_url)}
+                      </div>
+                    `
+                  : "";
+
+            return `
+              <div
+                class="card"
+                id="mission-${item.id}"
+              >
+
+                <div class="row">
+                  <div>
+                    ${
+                      player.picture_url
+                        ? `
+                            <img
+                              class="avatar"
+                              src="${esc(player.picture_url)}"
+                            >
+                          `
+                        : ""
+                    }
+
+                    <strong>
+                      ${esc(
+                        player.line_display_name ||
+                        item.line_user_id ||
+                        "Player"
+                      )}
+                    </strong>
+
+                    <div class="meta">
+                      ${esc(item.mission_id)}
+                      • ${esc(item.category)}
+                      • ${esc(item.period_key)}
+                    </div>
+                  </div>
+
+                  <div class="meta">
+                    ${esc(item.submitted_at)}
+                  </div>
+                </div>
+
+                <div class="reward">
+                  🪙 ${Number(item.reward_coin || 0)}
+                  | ⚡ ${Number(item.reward_energy || 0)}
+                  | EXP ${Number(item.reward_exp || 0)}
+                </div>
+
+                ${
+                  item.metric_steps
+                    ? `<div>Steps: ${Number(item.metric_steps)}</div>`
+                    : ""
+                }
+
+                ${
+                  item.metric_calories
+                    ? `<div>Calories: ${Number(item.metric_calories)}</div>`
+                    : ""
+                }
+
+                ${
+                  item.metric_sleep_minutes
+                    ? `<div>Sleep: ${Number(item.metric_sleep_minutes)} นาที</div>`
+                    : ""
+                }
+
+                ${
+                  item.exercise_minutes
+                    ? `<div>Exercise: ${esc(item.exercise_type || "")} ${Number(item.exercise_minutes)} นาที</div>`
+                    : ""
+                }
+
+                ${
+                  item.note
+                    ? `<div>Note: ${esc(item.note)}</div>`
+                    : ""
+                }
+
+                ${evidence}
+
+                <div class="tools">
+
+                  <button
+                    class="primary"
+                    onclick="approveMission('${item.id}')"
+                  >
+                    Approve
+                  </button>
+
+                  <input
+                    id="reason-${item.id}"
+                    placeholder="เหตุผล Reject"
+                    style="max-width:320px"
+                  >
+
+                  <button
+                    class="danger"
+                    onclick="rejectMission('${item.id}')"
+                  >
+                    Reject
+                  </button>
+
+                </div>
+
+              </div>
+            `;
+          }
+        )
+        .join("");
+  }
+
+
+  async function approveMission(
+    id
+  ){
+
+    if(
+      !confirm(
+        "Approve Mission นี้และแจก Reward?"
+      )
+    ){
+      return;
+    }
+
+    try{
+
+      const data =
+        await api(
+          "approveMission",
+          {
+            submissionId:id
+          }
+        );
+
+      alert(
+        data?.alreadyApproved
+          ? "รายการนี้อนุมัติไว้แล้ว — ไม่มีการแจกซ้ำ"
+          : (
+              data?.rewardGranted
+                ? "Approve + แจก Reward สำเร็จ"
+                : "Approve สำเร็จ"
+            )
+      );
+
+      await loadMissionQueue();
+
+    }catch(error){
+
+      alert(
+        error?.message ||
+        error
+      );
+    }
+  }
+
+
+  async function rejectMission(
+    id
+  ){
+
+    const reason =
+      $(
+        "reason-" +
+        id
+      )
+        ?.value ||
+      "";
+
+    if(
+      !confirm(
+        "Reject Mission นี้?"
+      )
+    ){
+      return;
+    }
+
+    try{
+
+      await api(
+        "rejectMission",
+        {
+          submissionId:id,
+          reason
+        }
+      );
+
+      await loadMissionQueue();
+
+    }catch(error){
+
+      alert(
+        error?.message ||
+        error
+      );
+    }
+  }
+
+
+  /* =====================================================
+     INBODY REVIEW
+  ===================================================== */
+
+  function reviewField(
+    id,
+    label,
+    value,
+    step="0.1"
+  ){
+
+    return `
+      <div class="field">
+        <label>${label}</label>
+        <input
+          id="${id}"
+          type="number"
+          step="${step}"
+          value="${
+            value === null ||
+            value === undefined
+              ? ""
+              : esc(value)
+          }"
+        >
       </div>
-    </div>`;
-  }).join("");
-}
+    `;
+  }
 
-async function approve(id){
-  if(!confirm("Approve Mission นี้และแจก Reward?")) return;
-  try{
-    const data=await api("approveMission",{submissionId:id});
-    alert(data?.alreadyApproved ? "รายการนี้อนุมัติไว้แล้ว — ไม่มีการแจกซ้ำ" : (data?.rewardGranted ? "Approve + แจก Reward สำเร็จ" : "Approve สำเร็จ"));
-    await loadQueue();
-  }catch(e){alert(e?.message||e);}
-}
 
-async function rejectMission(id){
-  const reason=document.getElementById("reason-"+id)?.value||"";
-  if(!confirm("Reject Mission นี้?")) return;
-  try{await api("rejectMission",{submissionId:id,reason});await loadQueue();}
-  catch(e){alert(e?.message||e);}
-}
+  async function loadInBodyQueue(){
 
-(async()=>{
-  try{
-    await liff.init({liffId:window.APP_CONFIG.LIFF_ID});
-    if(!liff.isLoggedIn()){liff.login();return;}
-    idToken=liff.getIDToken()||"";
-    if(!idToken) throw new Error("ไม่พบ LINE ID Token");
-    await loadQueue();
-  }catch(e){setStatus("ERROR: "+(e?.message||e));}
-})();
+    try{
+
+      setStatus(
+        "กำลังโหลด InBody Review Queue..."
+      );
+
+      const data =
+        await api(
+          "inbodyQueue"
+        );
+
+      renderInBodyQueue(
+        data.items ||
+        []
+      );
+
+      const pending =
+        (
+          data.items ||
+          []
+        )
+          .filter(
+            item =>
+              item.advice_status ===
+              "pending_review"
+          )
+          .length;
+
+      setStatus(
+        `InBody รออ่านผล ${pending} รายการ • แสดงทั้งหมด ${
+          data.items
+            ?.length ||
+          0
+        }`
+      );
+
+    }catch(error){
+
+      setStatus(
+        "ERROR: " +
+        (
+          error?.message ||
+          error
+        )
+      );
+    }
+  }
+
+
+  function renderInBodyQueue(
+    items
+  ){
+
+    const root =
+      $("inbodyQueue");
+
+    if(!items.length){
+
+      root.innerHTML =
+        `<div class="card">ยังไม่มี InBody ที่ส่งรูปมาให้ตรวจ</div>`;
+
+      return;
+    }
+
+    root.innerHTML =
+      items
+        .map(
+          item => {
+
+            const player =
+              item.players ||
+              {};
+
+            const status =
+              item.advice_status ||
+              "pending_review";
+
+            return `
+              <article
+                class="card"
+                id="inbody-${item.id}"
+              >
+
+                <div class="row">
+
+                  <div>
+
+                    ${
+                      player.picture_url
+                        ? `
+                            <img
+                              class="avatar"
+                              src="${esc(player.picture_url)}"
+                            >
+                          `
+                        : ""
+                    }
+
+                    <strong>
+                      ${esc(
+                        player.line_display_name ||
+                        "Player"
+                      )}
+                    </strong>
+
+                    <div class="meta">
+                      ${
+                        item.measured_at
+                          ? new Date(
+                              item.measured_at
+                            )
+                              .toLocaleString(
+                                "th-TH"
+                              )
+                          : ""
+                      }
+                      ${
+                        player.team_name
+                          ? ` • ทีม ${esc(player.team_name)}`
+                          : ""
+                      }
+                    </div>
+
+                  </div>
+
+                  <span
+                    class="badge ${esc(status)}"
+                  >
+                    ${esc(status)}
+                  </span>
+
+                </div>
+
+
+                <div class="images">
+
+                  ${
+                    item.image1Url
+                      ? `
+                          <a
+                            href="${esc(item.image1Url)}"
+                            target="_blank"
+                          >
+                            <img
+                              src="${esc(item.image1Url)}"
+                              alt="InBody sheet 1"
+                            >
+                          </a>
+                        `
+                      : `
+                          <div class="meta">
+                            ไม่มีรูปแผ่นที่ 1
+                          </div>
+                        `
+                  }
+
+                  ${
+                    item.image2Url
+                      ? `
+                          <a
+                            href="${esc(item.image2Url)}"
+                            target="_blank"
+                          >
+                            <img
+                              src="${esc(item.image2Url)}"
+                              alt="InBody sheet 2"
+                            >
+                          </a>
+                        `
+                      : `
+                          <div class="meta">
+                            ไม่มีรูปแผ่นที่ 2
+                          </div>
+                        `
+                  }
+
+                </div>
+
+
+                <div class="review-grid">
+
+                  ${reviewField(
+                    `weight-${item.id}`,
+                    "Weight kg",
+                    item.weight_kg
+                  )}
+
+                  ${reviewField(
+                    `muscle-${item.id}`,
+                    "Skeletal Muscle kg",
+                    item.skeletal_muscle_mass_kg
+                  )}
+
+                  ${reviewField(
+                    `fatmass-${item.id}`,
+                    "Body Fat Mass kg",
+                    item.body_fat_mass_kg
+                  )}
+
+                  ${reviewField(
+                    `fatpct-${item.id}`,
+                    "Body Fat %",
+                    item.body_fat_percent
+                  )}
+
+                  ${reviewField(
+                    `bmi-${item.id}`,
+                    "BMI",
+                    item.bmi
+                  )}
+
+                  ${reviewField(
+                    `bmr-${item.id}`,
+                    "BMR kcal",
+                    item.bmr_kcal,
+                    "1"
+                  )}
+
+                  ${reviewField(
+                    `vfa-${item.id}`,
+                    "Visceral Fat Area cm²",
+                    item.visceral_fat_area_cm2
+                  )}
+
+                  ${reviewField(
+                    `score-${item.id}`,
+                    "InBody Score",
+                    item.inbody_score
+                  )}
+
+                </div>
+
+
+                <div class="advice">
+
+                  <div
+                    class="field"
+                  >
+                    <label>
+                      คำแนะนำสำหรับผู้เข้าร่วม
+                    </label>
+
+                    <textarea
+                      id="advice-${item.id}"
+                      placeholder="สรุปค่าที่สำคัญ สิ่งที่ทำได้ดี และสิ่งที่ควรปรับในด้าน Move • Eat • Sleep • Health"
+                    >${esc(item.advice_note || "")}</textarea>
+                  </div>
+
+                </div>
+
+
+                ${
+                  item.advice_note
+                    ? `
+                        <div class="old-advice">
+                          <b>คำแนะนำล่าสุด</b>
+                          <br>
+                          ${esc(item.advice_note)}
+                        </div>
+                      `
+                    : ""
+                }
+
+
+                <div class="tools">
+
+                  <button
+                    class="green"
+                    onclick="saveInBodyReview('${item.id}')"
+                  >
+                    ✅ บันทึกผล + คำแนะนำ
+                  </button>
+
+                  ${
+                    status ===
+                      "reviewed"
+                      ? `
+                          <button
+                            class="muted"
+                            onclick="reopenInBody('${item.id}')"
+                          >
+                            เปิดตรวจใหม่
+                          </button>
+                        `
+                      : ""
+                  }
+
+                </div>
+
+              </article>
+            `;
+          }
+        )
+        .join("");
+  }
+
+
+  function fieldNumber(
+    id
+  ){
+
+    const value =
+      $(id)
+        ?.value;
+
+    if(
+      value === undefined ||
+      value === null ||
+      value === ""
+    ){
+      return null;
+    }
+
+    const n =
+      Number(value);
+
+    return Number.isFinite(n)
+      ? n
+      : null;
+  }
+
+
+  async function saveInBodyReview(
+    id
+  ){
+
+    const advice =
+      $(
+        `advice-${id}`
+      )
+        ?.value
+        .trim() ||
+      "";
+
+    if(!advice){
+
+      alert(
+        "กรุณากรอกคำแนะนำก่อนบันทึก"
+      );
+
+      return;
+    }
+
+    if(
+      !confirm(
+        "ยืนยันบันทึกค่าที่อ่านจาก InBody และส่งคำแนะนำให้ผู้เข้าร่วม?"
+      )
+    ){
+      return;
+    }
+
+    try{
+
+      await api(
+        "reviewInBody",
+        {
+          inbodyId:id,
+
+          weightKg:
+            fieldNumber(
+              `weight-${id}`
+            ),
+
+          skeletalMuscleMassKg:
+            fieldNumber(
+              `muscle-${id}`
+            ),
+
+          bodyFatMassKg:
+            fieldNumber(
+              `fatmass-${id}`
+            ),
+
+          bodyFatPercent:
+            fieldNumber(
+              `fatpct-${id}`
+            ),
+
+          bmi:
+            fieldNumber(
+              `bmi-${id}`
+            ),
+
+          bmrKcal:
+            fieldNumber(
+              `bmr-${id}`
+            ),
+
+          visceralFatAreaCm2:
+            fieldNumber(
+              `vfa-${id}`
+            ),
+
+          inbodyScore:
+            fieldNumber(
+              `score-${id}`
+            ),
+
+          advice
+        }
+      );
+
+      alert(
+        "บันทึก InBody Review และคำแนะนำสำเร็จ"
+      );
+
+      await loadInBodyQueue();
+
+    }catch(error){
+
+      alert(
+        error?.message ||
+        error
+      );
+    }
+  }
+
+
+  async function reopenInBody(
+    id
+  ){
+
+    if(
+      !confirm(
+        "เปิดรายการนี้ให้ตรวจใหม่?"
+      )
+    ){
+      return;
+    }
+
+    try{
+
+      await api(
+        "reopenInBody",
+        {
+          inbodyId:id
+        }
+      );
+
+      await loadInBodyQueue();
+
+    }catch(error){
+
+      alert(
+        error?.message ||
+        error
+      );
+    }
+  }
+
+
+  /* =====================================================
+     INIT
+  ===================================================== */
+
+  (
+    async () => {
+
+      try{
+
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+
+        if(
+          !liff.isLoggedIn()
+        ){
+          liff.login();
+          return;
+        }
+
+        idToken =
+          liff.getIDToken() ||
+          "";
+
+        if(!idToken){
+          throw new Error(
+            "ไม่พบ LINE ID Token"
+          );
+        }
+
+        await loadMissionQueue();
+
+      }catch(error){
+
+        setStatus(
+          "ERROR: " +
+          (
+            error?.message ||
+            error
+          )
+        );
+      }
+    }
+  )();
 </script>
+
 </body>
 </html>
