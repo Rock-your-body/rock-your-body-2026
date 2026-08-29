@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#061d68" />
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
-  <!-- BATTLE DATA LIVE V2.16 : resilient HOME + BATTLE loader -->
+  <!-- BATTLE DATA LIVE V2.17 : CORS connection fix + diagnostics -->
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js?v=20260829-v214"></script>
@@ -28,7 +28,7 @@
       position:relative;
       width:min(100vw,1536px);
       aspect-ratio:1536/1024;
-      background-image:url("./battle-template.png?v=20260829-v216");
+      background-image:url("./battle-template.png?v=20260829-v217");
       background-size:100% 100%;
       background-repeat:no-repeat;
       overflow:hidden;
@@ -456,7 +456,7 @@
       el.textContent = message;
       el.classList.add("show");
       clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => el.classList.remove("show"), 2600);
+      window.__toastTimer = setTimeout(() => el.classList.remove("show"), 5200);
     }
 
     function setLoading(show){
@@ -546,39 +546,122 @@
     }
 
     async function battleApi(payload){
-      const api = getBattleApi();
 
-      const response = await fetch(api,{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Cache-Control":"no-cache"
-        },
-        cache:"no-store",
-        body:JSON.stringify({
-          ...payload,
-          idToken:getIdToken()
-        })
-      });
+      const api =
+        getBattleApi();
 
-      const text = await response.text();
+      let response;
+
+      try{
+
+        response =
+          await fetch(
+            api,
+            {
+              method:"POST",
+
+              mode:"cors",
+
+              headers:{
+                "Content-Type":
+                  "application/json",
+
+                "Accept":
+                  "application/json"
+              },
+
+              cache:"no-store",
+
+              body:
+                JSON.stringify({
+                  ...payload,
+                  idToken:
+                    getIdToken()
+                })
+            }
+          );
+
+      }catch(error){
+
+        console.error(
+          "BATTLE FETCH NETWORK ERROR:",
+          {
+            api,
+            error
+          }
+        );
+
+        throw new Error(
+          "เชื่อม BATTLE API ไม่สำเร็จ (CORS/Edge Function/Verify JWT)"
+        );
+      }
+
+
+      const text =
+        await response.text();
+
       let data = {};
-      try{ data = text ? JSON.parse(text) : {}; }
-      catch{ throw new Error("Battle API ตอบกลับไม่ใช่ JSON"); }
 
-      if(!response.ok || data?.success === false){
-        const msg = String(data?.error || data?.message || `HTTP ${response.status}`);
-        const low = msg.toLowerCase();
+      try{
+        data =
+          text
+            ? JSON.parse(text)
+            : {};
+      }catch{
+        throw new Error(
+          `Battle API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
+        );
+      }
+
+
+      if(
+        !response.ok ||
+        data?.success === false
+      ){
+
+        const msg =
+          String(
+            data?.error ||
+            data?.message ||
+            `HTTP ${response.status}`
+          );
+
+        const low =
+          msg.toLowerCase();
+
         if(
           response.status === 401 ||
           low.includes("jws format") ||
           low.includes("authentication failed") ||
           low.includes("idtoken expired")
         ){
-          try{ liff.logout(); }catch{}
-          liff.login({redirectUri:window.location.href});
+
+          /*
+            LINE token issue -> login ใหม่
+            ถ้าเป็น Supabase Verify JWT จะไม่ logout วน
+          */
+          if(
+            low.includes("jws format") ||
+            low.includes("invalid jwt") ||
+            low.includes("missing authorization")
+          ){
+            throw new Error(
+              "BATTLE Edge Function ยังเปิด Verify JWT อยู่ กรุณาปิด Verify JWT"
+            );
+          }
+
+          try{
+            liff.logout();
+          }catch{}
+
+          liff.login({
+            redirectUri:
+              window.location.href
+          });
+
           return await new Promise(()=>{});
         }
+
         throw new Error(msg);
       }
 
@@ -1203,7 +1286,7 @@
 
           if(liveStatus){
             liveStatus.textContent =
-              "HOME LIVE • BATTLE API ERROR";
+              "HOME LIVE • BATTLE CONNECTION ERROR";
             liveStatus.style.display =
               "";
           }
