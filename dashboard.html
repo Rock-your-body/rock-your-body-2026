@@ -3,1342 +3,1060 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026</title>
+  <title>ROCK YOUR BODY 2026 - HOME</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260829-clean-v2"></script>
+  <script src="./app-config.js?v=20260830-home-v50"></script>
+
   <style>
-    /* =====================================================
-   HOME TEMPLATE — PROFILE + FONT SIZE FIX
-   วางท้าย <style>
-===================================================== */
+    :root{
+      --navy:#062a73;
+      --navy2:#001b5e;
+      --blue:#0a53d4;
+      --blue2:#00359f;
+      --green:#0ba33d;
+      --purple:#5b11d4;
+      --pink:#e8144b;
+      --red:#d91515;
+      --line:#c9d8ec;
+      --bg:#eef4ff;
+      --text:#0a2f72;
+    }
 
-/* 1. รูปโปรไฟล์ — ลดให้พอดีกับวงกลม */
-#profileImage{
-  position:absolute !important;
-
-  left:4.6% !important;
-  top:17.0% !important;
-
-  width:21.8% !important;
-  height:auto !important;
-  aspect-ratio:1 / 1 !important;
-
-  border-radius:50% !important;
-  object-fit:cover !important;
-  object-position:center center !important;
-
-  overflow:hidden !important;
-  z-index:10 !important;
-}
-
-/* 2. ชื่อผู้เล่นใต้รูป */
-#teamName{
-  left:7.0% !important;
-  top:47.3% !important;
-  width:22% !important;
-
-  font-size:clamp(8px,1vw,15px) !important;
-  font-weight:500 !important;
-
-  color:#fff !important;
-  text-align:center !important;
-
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-
-  z-index:30 !important;
-}
-
-/* 3. ROCK COIN มุมขวาบน */
-#coin{
-  font-size:clamp(9px,1.25vw,18px) !important;
-  font-weight:500 !important;
-  line-height:1 !important;
-}
-
-/* 4. ENERGY มุมขวาบน */
-#energy{
-  font-size:clamp(9px,1.25vw,18px) !important;
-  font-weight:500 !important;
-  line-height:1 !important;
-}
-
-/* 5. น้ำหนักปัจจุบัน */
-#currentWeight{
-  font-size:clamp(18px,3vw,44px) !important;
-  font-weight:700 !important;
-  color:#071b65 !important;
-  line-height:1 !important;
-}
-
-/* 6. น้ำหนักเป้าหมาย */
-#targetWeight{
-  font-size:clamp(18px,3vw,44px) !important;
-  font-weight:700 !important;
-  color:#d71919 !important;
-  line-height:1 !important;
-}
-
-/* 7. % ความคืบหน้า */
-#weightProgressPct{
-  font-size:clamp(15px,2.1vw,31px) !important;
-  font-weight:700 !important;
-  color:#118529 !important;
-}
-
-/* 8. จำนวนก้าว */
-#steps{
-  font-size:clamp(15px,2.35vw,35px) !important;
-  font-weight:600 !important;
-}
-
-/* 9. Calories */
-#calories{
-  font-size:clamp(15px,2.35vw,35px) !important;
-  font-weight:600 !important;
-}
-
-/* 10. Sleep */
-#sleep{
-  font-size:clamp(12px,2vw,24px) !important;
-  font-weight:600 !important;
-}
-
-/* 11. Health Score */
-#healthScore{
-  font-size:clamp(15px,2.35vw,35px) !important;
-  font-weight:600 !important;
-}
-
-/* 12. Reward Coin */
-#rewardCoin{
-  font-size:clamp(10px,1.5vw,20px) !important;
-  font-weight:600 !important;
-}
-
-/* 13. Reward Energy */
-#rewardEnergy{
-  font-size:clamp(10px,1.5vw,20px) !important;
-  font-weight:600 !important;
-}
-
-/* 14. InBody Score */
-#inbodyScore{
-  font-size:clamp(17px,2.3vw,34px) !important;
-  font-weight:600 !important;
-}
-
-/* 15. Project */
-#projectElapsed{
-  font-size:clamp(18px,2.3vw,34px) !important;
-  font-weight:600 !important;
-}
-
-/* 16. Ranking */
-#myRank{
-  font-size:clamp(22px,2.8vw,42px) !important;
-  font-weight:700 !important;
-}
-    /* HOME TEMPLATE ALIGN V2.19 — canonical CSS only */
     *{box-sizing:border-box}
     html,body{
-      margin:0;padding:0;width:100%;min-height:100%;
-      background:#eef4ff;font-family:"Prompt",Arial,sans-serif;color:#082b68
-    }
-    body{display:flex;justify-content:center;align-items:flex-start;overflow-x:hidden}
-    #homeStage{
-      position:relative;width:min(100vw,1280px);aspect-ratio:1536/1024;
-      overflow:hidden;background:#fff;margin:0 auto
-    }
-    .template{
-      position:absolute;inset:0;width:100%;height:100%;
-      object-fit:fill;z-index:1;pointer-events:none;user-select:none
+      margin:0;
+      min-height:100%;
+      background:var(--bg);
+      font-family:"Prompt",Arial,sans-serif;
+      color:var(--text);
     }
 
-    .abs{
-      position:absolute;z-index:20;display:flex;align-items:center;justify-content:center;
-      text-align:center;font-weight:900;line-height:1.05;pointer-events:none
+    body{
+      display:flex;
+      justify-content:center;
+      padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
     }
 
-    /* PROFILE */
-    #profileImage{
+    button,input{
+      font:inherit;
+    }
+
+    #app{
+      width:min(100vw,1536px);
+      min-height:100vh;
+      background:linear-gradient(180deg,#fff 0,#f8fbff 68%,#eef4ff 100%);
+      overflow:hidden;
+    }
+
+    /* HEADER */
+    .header{
+      min-height:132px;
+      padding:14px 26px 10px;
+      display:grid;
+      grid-template-columns:260px 1fr 360px;
+      gap:18px;
+      align-items:center;
+      background:#fff;
+    }
+
+    .hospital{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#0b2a72;
+      font-weight:900;
+      line-height:.92;
+    }
+
+    .hospital-mark{
+      width:72px;
+      height:72px;
+      border-radius:17px;
+      background:linear-gradient(180deg,#e40012 0 50%,#06389a 50% 100%);
+      position:relative;
+      box-shadow:0 4px 10px rgba(0,0,0,.12);
+      flex:none;
+    }
+
+    .hospital-mark:before,
+    .hospital-mark:after{
+      content:"";
       position:absolute;
-      z-index:10;
-      left:4.4%;
-      top:15.7%;
-      width:26.1%;
+      background:#fff;
+      border-radius:4px;
+    }
+    .hospital-mark:before{width:18px;height:52px;left:27px;top:10px}
+    .hospital-mark:after{width:52px;height:18px;left:10px;top:27px}
+
+    .hospital-name{
+      font-size:31px;
+      letter-spacing:-1px;
+    }
+    .hospital-name small{
+      display:block;
+      color:#6d6d6d;
+      font-size:21px;
+      margin-top:7px;
+      text-align:center;
+    }
+
+    .brand{
+      text-align:center;
+      min-width:0;
+    }
+    .brand-title{
+      margin:0;
+      color:#0b2a72;
+      font-size:clamp(42px,5.4vw,82px);
+      font-weight:900;
+      font-style:italic;
+      letter-spacing:-4px;
+      line-height:.95;
+      white-space:nowrap;
+    }
+    .brand-title .red{color:#b81217}
+    .brand-title .year{
+      font-size:.46em;
+      font-style:normal;
+      letter-spacing:-1px;
+    }
+    .brand-sub{
+      margin-top:7px;
+      font-size:clamp(15px,1.7vw,28px);
+      font-weight:900;
+      letter-spacing:2px;
+      white-space:nowrap;
+    }
+    .move{color:#1344c4}
+    .eat{color:#f06a16}
+    .sleep{color:#5b1bc1}
+    .health{color:#10833a}
+
+    .wallet{
+      min-height:94px;
+      background:#fff;
+      border:1px solid #d5dfec;
+      border-radius:22px;
+      box-shadow:0 5px 15px rgba(25,55,100,.16);
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      overflow:hidden;
+    }
+    .wallet-item{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px;
+    }
+    .wallet-item + .wallet-item{border-left:1px solid #c7d1de}
+    .wallet-icon{font-size:48px;line-height:1}
+    .wallet-value{font-size:23px;font-weight:700;line-height:1}
+    .wallet-label{font-size:12px;font-weight:800;margin-top:5px}
+
+    /* MAIN */
+    .main{
+      padding:10px 20px 12px;
+      display:grid;
+      grid-template-columns:30% 29% 1fr;
+      gap:16px;
+    }
+
+    .profile-card{
+      min-height:640px;
+      border-radius:28px;
+      overflow:hidden;
+      padding:18px 18px 16px;
+      background:
+        linear-gradient(180deg,rgba(0,91,237,.07),rgba(0,91,237,.02)),
+        linear-gradient(180deg,#0a73ee,#0b4fc6 58%,#75b8ff);
+      border:2px solid #89c2ff;
+      box-shadow:0 7px 18px rgba(19,64,126,.2);
+      position:relative;
+    }
+
+    .photo-ring{
+      width:92%;
       aspect-ratio:1/1;
-      height:auto;
+      margin:0 auto;
+      border-radius:50%;
+      padding:10px;
+      background:radial-gradient(circle,#9fd8ff 0,#e6f7ff 48%,#4cb1ff 68%,#0d67d7 69%);
+      box-shadow:0 0 0 4px #b6e7ff,0 0 22px rgba(255,255,255,.65);
+      position:relative;
+      overflow:hidden;
+    }
+
+    #profileImage{
+      width:100%;
+      height:100%;
+      border-radius:50%;
       object-fit:cover;
       object-position:center center;
-      border-radius:50%;
-      overflow:hidden;
-      display:none
+      display:none;
+      background:#0a4aa8;
     }
-    #teamName{
-      left:7.0%;
-      top:47.3%;
-      width:18%;
-      height:3.5%;
-      font-size:clamp(8px,1.15vw,16px);
-      font-weight:600;
+
+    .profile-placeholder{
+      position:absolute;
+      inset:10px;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 50% 30%,#163b85 0 17%,transparent 18%),
+        radial-gradient(ellipse at 50% 78%,#173b83 0 34%,transparent 35%),
+        linear-gradient(180deg,#dff3ff,#4fa8f8);
+    }
+
+    .camera{
+      position:absolute;
+      left:50%;
+      top:58%;
+      transform:translate(-50%,-50%);
+      width:92px;
+      height:92px;
+      border-radius:50%;
+      border:4px solid #fff;
+      background:#0b2c70;
       color:#fff;
-      pointer-events:auto;
-      cursor:pointer;
-      z-index:70;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:42px;
+      box-shadow:0 5px 15px rgba(0,0,0,.25);
+      z-index:3;
+    }
+
+    .profile-caption{
+      position:absolute;
+      left:0;right:0;
+      bottom:15%;
+      text-align:center;
+      color:#fff;
+      font-size:18px;
+      font-weight:700;
+      z-index:3;
+    }
+
+    .hero-row{
+      margin-top:14px;
+      min-height:78px;
+      border-radius:18px;
+      background:linear-gradient(180deg,#0a3c99,#031d63);
+      border:2px solid #74aaff;
+      box-shadow:0 5px 10px rgba(0,24,85,.25);
+      display:grid;
+      grid-template-columns:62px 1fr 86px;
+      gap:8px;
+      align-items:center;
+      padding:10px 12px;
+      color:#fff;
+    }
+
+    .shield{
+      font-size:42px;
+      text-align:center;
+    }
+
+    #lineName{
+      font-size:clamp(14px,1.45vw,24px);
+      font-weight:700;
       white-space:nowrap;
       overflow:hidden;
-      text-overflow:ellipsis
+      text-overflow:ellipsis;
     }
-    #teamEditModal{
-      position:fixed;inset:0;z-index:40000;display:none;align-items:center;justify-content:center;
-      padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
-    }
-    #teamEditModal.show{display:flex}
-    #teamEditModal .modal-card{width:min(92vw,430px)}
-    #lineDisplayNameBox{
-      padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;background:#f3f6fb;
-      color:#173b76;font-weight:800
-    }
-    #teamNameInput{width:100%;padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;font:inherit}
-    #teamCancel{background:#e9eef8;color:#173b76}
-    #teamSave{background:#0d5bd7;color:#fff}
 
-    /* TOP */
-    #coin{
-      left:78.0%;
-      top:4.55%;
-      width:7.2%;
-      height:4.6%;
-      font-size:clamp(10px,1.45vw,19px);
-      font-weight:500
+    #level{
+      border-radius:11px;
+      background:linear-gradient(180deg,#ff3b2a,#c90000);
+      color:#fff;
+      text-align:center;
+      font-size:clamp(16px,1.8vw,29px);
+      font-weight:900;
+      padding:8px 5px;
+      box-shadow:0 4px 8px rgba(130,0,0,.3);
     }
-    #energy{
-      left:89.3%;
-      top:4.55%;
-      width:8.8%;
-      height:4.6%;
-      font-size:clamp(10px,1.45vw,19px);
-      font-weight:500;
-      white-space:nowrap
+
+    .exp-row{
+      margin-top:10px;
+      min-height:58px;
+      border:2px solid #8ab8f0;
+      border-radius:14px;
+      background:#fff;
+      display:grid;
+      grid-template-columns:62px 1fr 105px;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
     }
-    #level{left:25.1%;top:52.8%;width:6.3%;height:4.8%;font-size:clamp(14px,1.8vw,28px);color:#fff}
-    #expText{left:23.1%;top:61.3%;width:7.5%;height:3%;font-size:clamp(10px,1.2vw,17px)}
-    .bar{
-      position:absolute;z-index:18;height:1.45%;border-radius:999px;overflow:hidden;pointer-events:none
+    .exp-label{font-size:20px;font-weight:900}
+    .exp-track{
+      height:18px;
+      border-radius:999px;
+      background:#d9e8f8;
+      overflow:hidden;
     }
-    .bar>i{display:block;height:100%;width:0;border-radius:inherit;background:#1267f5}
-    #expTrack{left:7.4%;top:61.0%;width:15.2%}
+    #expFill{
+      height:100%;
+      width:0;
+      border-radius:999px;
+      background:linear-gradient(90deg,#0868ed,#1048c4);
+      transition:width .35s ease;
+    }
+    #expText{
+      text-align:right;
+      font-size:17px;
+      font-weight:800;
+      white-space:nowrap;
+    }
 
     /* WEIGHT */
-    #currentWeight{
-      left:42.6%;
-      top:20.0%;
-      width:17.3%;
-      height:6.2%;
-      font-size:clamp(22px,3.45vw,50px);
-      font-weight:700;
-      color:#071b65;
-      line-height:1
+    .weight-card{
+      min-height:640px;
+      background:#fff;
+      border:2px solid #d2dfef;
+      border-radius:28px;
+      box-shadow:0 7px 18px rgba(23,54,99,.13);
+      padding:24px 24px 18px;
+      display:grid;
+      grid-template-rows:1fr 1fr 1.18fr;
+      gap:10px;
     }
-    #targetWeight{
-      left:42.6%;
-      top:34.0%;
-      width:17.3%;
-      height:6.2%;
-      font-size:clamp(22px,3.45vw,50px);
+
+    .weight-section{
+      display:grid;
+      grid-template-columns:130px 1fr;
+      align-items:center;
+      gap:14px;
+      border-bottom:1px solid #cbd9eb;
+    }
+    .weight-section:last-child{border-bottom:0}
+    .weight-icon{font-size:92px;text-align:center}
+    .weight-label{font-size:22px;font-weight:800}
+    .weight-value{
+      margin-top:4px;
+      font-size:clamp(38px,4vw,65px);
       font-weight:700;
-      color:#d71919;
-      line-height:1
+      line-height:1;
+      white-space:nowrap;
+      color:#0b2c78;
+    }
+    .weight-value.target{color:#d41d14}
+
+    .progress-box{
+      border:1px solid #cbd8e9;
+      border-radius:18px;
+      padding:16px;
+      align-self:center;
+    }
+    .progress-title{font-size:18px;font-weight:800}
+    .progress-main{
+      display:grid;
+      grid-template-columns:1fr 95px;
+      align-items:center;
+      gap:10px;
+      margin-top:14px;
+    }
+    .progress-track{
+      height:18px;
+      border-radius:999px;
+      background:#d7e4f3;
+      overflow:hidden;
+    }
+    #weightProgressFill{
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,#0a61eb,#1e89ff);
+      border-radius:inherit;
+      transition:width .35s ease;
     }
     #weightProgressPct{
-      left:53.0%;
-      top:47.2%;
-      width:6.0%;
-      height:4.5%;
-      font-size:clamp(16px,2.25vw,33px);
-      font-weight:800;
-      color:#118529
+      color:#14842e;
+      font-size:34px;
+      font-weight:900;
+      text-align:right;
     }
-    #weightProgressTrack{left:42.6%;top:49.4%;width:11.8%;height:1.7%}
-    #lost{left:36.1%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
-    #remaining{left:51.2%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
-
-    /* HEALTH CARDS */
-    #steps{
-      left:67.8%;
-      top:19.8%;
-      width:10.0%;
-      height:5.0%;
-      font-size:clamp(18px,2.55vw,38px);
-      font-weight:700;
-      color:#fff
-    }
-    #stepsTrack{left:62.2%;top:25.8%;width:12.2%;height:1.5%}
-    #calories{
-      left:86.2%;
-      top:19.8%;
-      width:11.5%;
-      height:5.0%;
-      font-size:clamp(18px,2.55vw,38px);
-      font-weight:700;
-      color:#fff
-    }
-    #caloriesTrack{left:81.0%;top:25.8%;width:14.0%;height:1.5%}
-    #sleep{
-      left:67.4%;
-      top:35.4%;
-      width:11.0%;
-      height:5.2%;
-      font-size:clamp(15px,2.15vw,31px);
-      font-weight:700;
-      color:#fff;
-      white-space:nowrap
-    }
-    #sleepTrack{left:62.2%;top:42.5%;width:12.2%;height:1.5%}
-    #healthScore{
-      left:86.5%;
-      top:35.4%;
-      width:11.2%;
-      height:5.2%;
-      font-size:clamp(18px,2.55vw,38px);
-      font-weight:700;
-      color:#fff;
-      white-space:nowrap
-    }
-    #healthTrack{left:81.0%;top:42.5%;width:14.0%;height:1.5%}
-
-    /* REWARDS */
-    #rewardCoin{
-      left:66.0%;
-      top:59.7%;
-      width:8.2%;
-      height:4.2%;
-      font-size:clamp(12px,1.65vw,24px);
-      font-weight:600
-    }
-    #rewardEnergy{
-      left:79.0%;
-      top:59.7%;
-      width:9.0%;
-      height:4.2%;
-      font-size:clamp(12px,1.65vw,24px);
-      font-weight:600
-    }
-    #rewardBadge{left:91.8%;top:60.2%;width:10%;height:4%;font-size:clamp(8px,1.05vw,15px)}
-
-    /* INBODY */
-    #inbodyDate{
-      left:36.1%;
-      top:67.9%;
-      width:11.2%;
-      height:2.5%;
-      font-size:clamp(7px,.78vw,11px);
-      font-weight:600
-    }
-    #inbodyScore{
-      left:35.5%;
-      top:72.3%;
-      width:8.2%;
-      height:4.6%;
-      font-size:clamp(18px,2.55vw,37px);
-      font-weight:700
-    }
-    #inbodyChart{
-      position:absolute;z-index:22;left:33.4%;top:76.4%;width:12.2%;height:7.0%;
-      pointer-events:none;overflow:visible
-    }
-    #inbodyUpload{
-      position:absolute;z-index:30;left:44.7%;top:72.8%;width:2.6%;aspect-ratio:1;
-      border:none;border-radius:50%;background:#16a63d;color:#fff;font-weight:900;
-      font-size:clamp(16px,2vw,29px);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)
-    }
-
-    /* PROJECT */
-    #projectRange{
-      left:53.7%;
-      top:72.4%;
-      width:13.5%;
-      height:3.4%;
-      font-size:clamp(9px,1.1vw,16px);
-      font-weight:600
-    }
-    #projectElapsed{
-      left:51.8%;
-      top:77.6%;
-      width:9.2%;
-      height:4.6%;
-      font-size:clamp(19px,2.45vw,36px);
-      font-weight:700
-    }
-    #projectTrack{left:50.6%;top:81.1%;width:11.8%;height:1.5%}
-    #projectRemaining{
-      left:51.8%;
-      top:85.2%;
-      width:9.2%;
-      height:3.8%;
-      font-size:clamp(11px,1.35vw,20px);
-      font-weight:600
-    }
-
-    /* RANKING */
-    #myRank{
-      left:69.2%;
-      top:75.6%;
-      width:9.0%;
-      height:6.0%;
-      font-size:clamp(24px,3.0vw,45px);
-      font-weight:800
-    }
-    #participantCount{
-      left:68.3%;
-      top:83.7%;
-      width:11.2%;
-      height:3.5%;
-      font-size:clamp(9px,1.2vw,17px);
-      font-weight:600
-    }
-    #top1Score{left:87.7%;top:85.7%;width:8%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
-    #top2Score{left:81.2%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
-    #top3Score{left:94.0%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
-
-    /* HEALTH CARD LINKS */
-    #steps,
-    #calories,
-    #sleep{
-      pointer-events:auto;
-      cursor:pointer;
-      z-index:60;
-    }
-
-    /* HOTSPOTS */
-    .hotspot{position:absolute;z-index:40;background:transparent;border:0;cursor:pointer}
-    #weightButton{left:1.2%;top:66.7%;width:14.4%;height:21.0%}
-    #progressButton{left:16.7%;top:66.7%;width:14.5%;height:21.0%}
-    #inbodyViewButton{left:33.2%;top:83.3%;width:13.8%;height:4.5%}
-    #projectSettingsButton{left:48.0%;top:66.7%;width:14.2%;height:21.0%}
-    #rankingButton{left:64.7%;top:66.7%;width:33.8%;height:21.0%}
-    #rewardsButton{left:61.0%;top:47.7%;width:37.5%;height:17.8%}
-    #homeButton{left:1.0%;top:89.1%;width:31.8%;height:8.9%}
-    #missionButton{left:34.0%;top:89.1%;width:30.1%;height:8.9%}
-    #battleButton{left:65.0%;top:89.1%;width:33.0%;height:8.9%}
-
-   /* =========================================================
-   STATUS / ERROR
-   ต้องอยู่เหนือ InBody Modal
-========================================================= */
-
-#status{
-  position:fixed;
-
-  left:50%;
-  bottom:max(
-    22px,
-    env(safe-area-inset-bottom)
-  );
-
-  transform:translateX(-50%);
-
-  z-index:120000 !important;
-
-  display:none;
-
-  width:max-content;
-  max-width:calc(100vw - 28px);
-
-  padding:12px 18px;
-
-  border-radius:16px;
-
-  background:rgba(7,59,147,.97);
-
-  color:#fff;
-
-  font-size:14px;
-  font-weight:800;
-  line-height:1.45;
-
-  text-align:center;
-
-  box-shadow:0 8px 28px rgba(0,0,0,.30);
-}
-
-#status.show{
-  display:block !important;
-}
-
-#status.error{
-  display:block !important;
-  background:#c62828 !important;
-}
-
-    /* MODAL */
-    #inbodyModal{
-      position:fixed;inset:0;z-index:30000;display:none;align-items:center;justify-content:center;
-      padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
-    }
-    #inbodyModal.show{display:flex}
-    .modal-card{
-      width:min(92vw,430px);padding:20px;background:#fff;border-radius:22px;
-      box-shadow:0 18px 55px rgba(0,0,0,.3)
-    }
-    .modal-card h2{margin:0 0 14px;font-size:20px}
-    .field{margin-bottom:12px}
-    .field label{display:block;margin-bottom:5px;font-size:13px;font-weight:800}
-    .field input{width:100%;padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;font:inherit}
-    .modal-actions{display:grid;grid-template-columns:1fr 1.3fr;gap:10px;margin-top:16px}
-    .modal-actions button{min-height:44px;border:0;border-radius:12px;font:inherit;font-weight:900;cursor:pointer}
-    #inbodyCancel{background:#e9eef8;color:#173b76}
-    #inbodySave{background:#0d5bd7;color:#fff}
-    #inbodySave:disabled{opacity:.55}
-
-    @media(max-width:700px){
-      #homeStage{width:100vw}
-    }
-
-    /* =====================================================
-       NOTIFICATION V2.9
-    ====================================================== */
-
-    #notificationBell{
-      position:absolute;
-      z-index:30;
-      top:2.1%;
-      right:2.2%;
-      width:42px;
-      height:42px;
-      border:0;
-      border-radius:50%;
-      background:
-        rgba(255,255,255,.94);
-      box-shadow:
-        0 4px 12px
-        rgba(0,0,0,.2);
-      font-size:21px;
-      cursor:pointer;
-    }
-
-    #notificationBadge{
-      position:absolute;
-      z-index:31;
-      top:-5px;
-      right:-5px;
-      min-width:20px;
-      height:20px;
-      padding:0 5px;
-      border-radius:999px;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background:#e4202a;
-      color:#fff;
-      border:2px solid #fff;
-      font-size:10px;
-      font-weight:1000;
-      line-height:16px;
-    }
-
-    #notificationPanel{
-      position:fixed;
-      z-index:1200;
-      inset:0;
-      display:none;
-      align-items:flex-start;
-      justify-content:center;
-      padding:
-        calc(70px + env(safe-area-inset-top))
-        14px
-        20px;
-      background:
-        rgba(8,27,53,.45);
-      backdrop-filter:blur(3px);
-    }
-
-    #notificationPanel.show{
+    .progress-foot{
       display:flex;
-    }
-
-    .notification-card{
-      width:min(560px,100%);
-      max-height:75vh;
-      overflow:auto;
-      border-radius:20px;
-      background:#fff;
-      box-shadow:
-        0 18px 50px
-        rgba(0,0,0,.25);
-      padding:14px;
-    }
-
-    .notification-head{
-      display:flex;
-      align-items:center;
       justify-content:space-between;
       gap:10px;
-      margin-bottom:10px;
+      margin-top:17px;
+      font-size:15px;
+      font-weight:700;
     }
 
-    .notification-head h2{
-      margin:0;
-      color:#12376d;
-      font-size:18px;
-    }
-
-    .notification-head-actions{
-      display:flex;
-      gap:6px;
-    }
-
-    .notification-head button{
-      border:0;
-      border-radius:10px;
-      padding:8px 10px;
-      font-weight:900;
-      cursor:pointer;
-    }
-
-    #notificationList{
+    /* RIGHT */
+    .right-column{
       display:grid;
-      gap:8px;
+      grid-template-rows:auto auto;
+      gap:16px;
     }
 
-    .notification-item{
-      width:100%;
-      border:1px solid #dce8f4;
-      border-radius:14px;
-      padding:11px 12px;
-      background:#f8fbff;
-      text-align:left;
-      cursor:pointer;
+    .health-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
     }
 
-    .notification-item.unread{
-      border-color:#63a7ee;
-      background:#eef7ff;
-      box-shadow:
-        inset 4px 0 0
-        #1671d8;
-    }
-
-    .notification-title{
-      color:#163a6a;
-      font-size:13px;
-      font-weight:1000;
-    }
-
-    .notification-message{
-      margin-top:4px;
-      color:#516d89;
-      font-size:11px;
-      line-height:1.45;
-    }
-
-    .notification-time{
-      margin-top:5px;
-      color:#8294a7;
-      font-size:9px;
-    }
-
-    #notificationToast{
-      position:fixed;
-      z-index:1190;
-      left:50%;
-      top:
-        calc(
-          12px +
-          env(safe-area-inset-top)
-        );
-      transform:
-        translateX(-50%);
-      width:min(92vw,560px);
-      display:none;
-      gap:10px;
-      align-items:center;
-      padding:11px 13px;
-      border-radius:15px;
-      background:
-        linear-gradient(
-          135deg,
-          #0d62c7,
-          #14916f
-        );
+    .health-card{
+      min-height:195px;
+      border-radius:23px;
       color:#fff;
-      box-shadow:
-        0 10px 28px
-        rgba(0,0,0,.24);
-      cursor:pointer;
-    }
-
-    #notificationToast.show{
-      display:flex;
-    }
-
-    #notificationToastIcon{
-      font-size:24px;
-    }
-
-    #notificationToastTitle{
-      font-size:12px;
-      font-weight:1000;
-    }
-
-    #notificationToastMessage{
-      margin-top:2px;
-      font-size:10px;
-      line-height:1.35;
-      opacity:.95;
-    }
-
-  
-    /* HOME HEALTH INPUT + ACTIVITY MODAL V2.12 */
-    .health-v212{
-      position:absolute;
-      z-index:30;
-      display:flex;
-      gap:6px;
+      position:relative;
+      overflow:hidden;
+      border:2px solid rgba(255,255,255,.28);
+      box-shadow:0 6px 13px rgba(0,30,90,.22);
+      padding:22px 20px 18px;
+      display:grid;
+      grid-template-columns:95px 1fr;
       align-items:center;
+      cursor:default;
     }
-    #stepsEntry{left:62.0%;top:27.8%;width:15%}
-    #sleepEntry{left:62.0%;top:43.9%;width:15%}
-    .health-v212 button{
-      border:0;
-      border-radius:999px;
-      padding:5px 9px;
-      font-size:clamp(8px,1vw,13px);
-      font-weight:900;
-      cursor:pointer;
-      background:rgba(255,255,255,.94);
-      color:#0754ad;
-      box-shadow:0 2px 8px rgba(0,0,0,.14);
+    .health-card.clickable{cursor:pointer}
+    .health-card.clickable:active{transform:scale(.99)}
+
+    .steps-card{background:linear-gradient(150deg,#0d70ff,#0036a8)}
+    .calories-card{background:linear-gradient(150deg,#15ba42,#006a1c)}
+    .sleep-card{background:linear-gradient(150deg,#8a1df0,#3900a0)}
+    .score-card{background:linear-gradient(150deg,#ff2a68,#c9023f)}
+
+    .health-icon{font-size:68px;text-align:center}
+    .health-title{font-size:18px;font-weight:600}
+    .health-value{
+      margin-top:6px;
+      font-size:clamp(28px,3.1vw,52px);
+      font-weight:700;
+      line-height:1;
+      white-space:nowrap;
     }
-    .health-v212 .qualified{
-      background:#dff8e8;
-      color:#087438;
+    .health-unit{
+      font-size:.48em;
+      font-weight:500;
     }
-    #calories{
-      cursor:pointer;
+
+    .action-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
     }
-    .v212-modal-bg{
-      position:fixed;
-      z-index:10000;
-      inset:0;
-      display:none;
+    .action-card{
+      min-height:270px;
+      border-radius:23px;
+      border:2px solid rgba(255,255,255,.3);
+      color:#fff;
+      box-shadow:0 6px 13px rgba(0,30,90,.22);
+      display:flex;
+      flex-direction:column;
       align-items:center;
       justify-content:center;
       padding:18px;
-      background:rgba(3,24,55,.62);
+      cursor:pointer;
+      position:relative;
     }
-    .v212-modal-bg.show{display:flex}
-    .v212-modal{
-      width:min(520px,100%);
-      max-height:88vh;
-      overflow:auto;
+    .weight-check{background:linear-gradient(150deg,#0e66df,#04256d)}
+    .progress-card{background:linear-gradient(150deg,#13b72d,#056f18)}
+    .action-icon{font-size:86px}
+    .action-title{margin-top:10px;font-size:28px;font-weight:900}
+    .action-sub{font-size:17px;margin-top:3px}
+    .action-arrow{
+      position:absolute;
+      right:18px;
+      bottom:16px;
+      width:36px;height:36px;
+      border-radius:50%;
+      border:2px solid #fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:25px;
+    }
+
+    /* NAV */
+    .nav{
+      padding:0 20px 18px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:14px;
+    }
+    .nav-btn{
+      min-height:112px;
+      border-radius:22px;
+      border:2px solid #094ab5;
+      color:#fff;
+      background:linear-gradient(150deg,#0946b7,#001f68);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      box-shadow:0 6px 14px rgba(0,30,90,.23);
+      cursor:pointer;
+    }
+    .nav-btn.mission{
+      background:linear-gradient(150deg,#ec1b14,#9e0000);
+      border-color:#f2574c;
+    }
+    .nav-icon{font-size:60px}
+    .nav-main{
+      font-size:clamp(25px,3vw,48px);
+      font-weight:900;
+      font-style:italic;
+      line-height:1;
+    }
+    .nav-sub{
+      margin-top:6px;
+      text-align:center;
+      font-size:15px;
+      font-style:normal;
+      font-weight:500;
+    }
+
+    /* MODALS */
+    .modal-bg{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:rgba(0,12,40,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      backdrop-filter:blur(4px);
+    }
+    .modal-bg.show{display:flex}
+    .modal{
+      width:min(92vw,520px);
       background:#fff;
-      border-radius:24px;
+      color:#183866;
+      border-radius:22px;
       padding:22px;
-      color:#0a376f;
-      box-shadow:0 24px 70px rgba(0,0,0,.3);
+      box-shadow:0 20px 50px rgba(0,0,0,.35);
     }
-    .v212-modal h3{margin:0 0 8px;font-size:24px}
-    .v212-field{margin-top:14px}
-    .v212-field label{display:block;margin-bottom:6px;font-weight:900}
-    .v212-field input{
-      width:100%;min-height:52px;border:2px solid #c9daf0;
-      border-radius:14px;padding:10px 14px;font-size:20px;font-weight:800;
+    .modal h3{margin:0 0 16px;font-size:24px}
+    .field{margin-top:12px}
+    .field label{display:block;font-weight:800;margin-bottom:6px}
+    .field input{
+      width:100%;
+      min-height:52px;
+      border:1px solid #c7d6e8;
+      border-radius:13px;
+      padding:10px 13px;
+      font-size:19px;
     }
-    .v212-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .v212-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-    .v212-actions button{
-      min-height:48px;border:0;border-radius:14px;font-weight:900;font-size:16px;
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .modal-status{
+      margin-top:12px;
+      padding:12px;
+      border-radius:12px;
+      background:#f2f7ff;
+      font-size:14px;
+      line-height:1.55;
+      font-weight:700;
     }
-    .v212-cancel{background:#edf3fb;color:#16467f}
-    .v212-save{background:#0966d8;color:#fff}
-    .v212-mission{
-      width:100%;margin-top:12px;min-height:48px;border:0;border-radius:14px;
-      background:#0bbf64;color:#fff;font-weight:900;font-size:15px;
+    .modal-status.success{
+      color:#087438;
+      background:#eaf9ef;
+      border:1px solid #b9e5c6;
     }
-    .v212-activity{
-      padding:12px 0;border-bottom:1px solid #e4edf8;
+    .modal-status.warning{
+      color:#815800;
+      background:#fff7e9;
+      border:1px solid #f0d39a;
     }
-    .v212-activity strong{display:block}
-    .v212-total{margin-top:14px;font-size:20px;font-weight:950}
-
-
-    /* HOME V2.20 — hide notification bell on HOME */
-    #notificationBell,
-    #notificationBadge{
-      display:none !important;
-      visibility:hidden !important;
-      pointer-events:none !important;
+    .evidence-btn{
+      display:none;
+      width:100%;
+      min-height:48px;
+      margin-top:12px;
+      border:0;
+      border-radius:12px;
+      background:#0a65dc;
+      color:#fff;
+      font-weight:900;
     }
-
-
-    /* =====================================================
-       TEAM NAME — FINAL POSITION
-    ===================================================== */
-    #teamName{
-      position:absolute !important;
-      left:7.0% !important;
-      top:47.3% !important;
-      width:22% !important;
-      height:3.5% !important;
-
-      display:flex !important;
-      align-items:center !important;
-      justify-content:center !important;
-
-      color:#ffffff !important;
-      font-size:clamp(8px,1vw,15px) !important;
-      font-weight:500 !important;
-      line-height:1 !important;
-
-      text-align:center !important;
-      white-space:nowrap !important;
-      overflow:hidden !important;
-      text-overflow:ellipsis !important;
-
-      z-index:70 !important;
-      visibility:visible !important;
-      opacity:1 !important;
-      pointer-events:auto !important;
-      cursor:pointer !important;
+    .modal-actions{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
     }
-
-    /* HOME — no notification bell */
-    #notificationBell,
-    #notificationBadge{
-      display:none !important;
-      visibility:hidden !important;
-      pointer-events:none !important;
+    .modal-actions button{
+      min-height:48px;
+      border:0;
+      border-radius:12px;
+      font-weight:900;
     }
+    .cancel{background:#e9eef5;color:#315072}
+    .save{background:#0a9b48;color:#fff}
 
-</style>
+    #toast{
+      position:fixed;
+      left:50%;
+      bottom:max(18px,env(safe-area-inset-bottom));
+      transform:translateX(-50%);
+      z-index:10000;
+      display:none;
+      max-width:calc(100vw - 28px);
+      padding:11px 16px;
+      border-radius:14px;
+      background:#173c70;
+      color:#fff;
+      text-align:center;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:0 8px 24px rgba(0,0,0,.28);
+    }
+    #toast.show{display:block}
+    #toast.error{background:#c62828}
+
+    @media(max-width:900px){
+      .header{
+        min-height:92px;
+        grid-template-columns:150px 1fr 230px;
+        gap:8px;
+        padding:8px 10px;
+      }
+      .hospital-mark{width:46px;height:46px}
+      .hospital-mark:before{width:11px;height:34px;left:17px;top:6px}
+      .hospital-mark:after{width:34px;height:11px;left:6px;top:17px}
+      .hospital-name{font-size:17px}
+      .hospital-name small{font-size:12px}
+      .wallet{min-height:60px;border-radius:14px}
+      .wallet-icon{font-size:28px}
+      .wallet-value{font-size:15px}
+      .wallet-label{font-size:8px}
+
+      .main{
+        padding:5px 7px 8px;
+        grid-template-columns:31% 31% 1fr;
+        gap:6px;
+      }
+      .profile-card,.weight-card{min-height:470px;border-radius:15px}
+      .profile-card{padding:8px}
+      .photo-ring{padding:5px}
+      .camera{width:52px;height:52px;font-size:24px}
+      .profile-caption{font-size:9px}
+      .hero-row{min-height:49px;grid-template-columns:34px 1fr 50px;padding:5px;gap:2px}
+      .shield{font-size:25px}
+      #lineName{font-size:9px}
+      #level{font-size:11px;padding:5px 2px}
+      .exp-row{min-height:38px;grid-template-columns:30px 1fr 55px;padding:5px}
+      .exp-label{font-size:10px}
+      .exp-track{height:9px}
+      #expText{font-size:8px}
+
+      .weight-card{padding:10px}
+      .weight-section{grid-template-columns:62px 1fr;gap:4px}
+      .weight-icon{font-size:45px}
+      .weight-label{font-size:11px}
+      .weight-value{font-size:24px}
+      .progress-box{padding:8px;border-radius:10px}
+      .progress-title{font-size:9px}
+      .progress-main{grid-template-columns:1fr 40px;margin-top:6px}
+      .progress-track{height:8px}
+      #weightProgressPct{font-size:17px}
+      .progress-foot{font-size:7px;margin-top:8px}
+
+      .health-grid{gap:6px}
+      .health-card{min-height:130px;border-radius:12px;padding:8px;grid-template-columns:40px 1fr}
+      .health-icon{font-size:34px}
+      .health-title{font-size:9px}
+      .health-value{font-size:20px}
+      .action-grid{gap:6px}
+      .action-card{min-height:205px;border-radius:12px;padding:8px}
+      .action-icon{font-size:48px}
+      .action-title{font-size:14px}
+      .action-sub{font-size:8px}
+      .action-arrow{width:22px;height:22px;font-size:14px;right:8px;bottom:8px}
+
+      .nav{padding:0 7px 8px;gap:6px}
+      .nav-btn{min-height:68px;border-radius:12px;gap:7px}
+      .nav-icon{font-size:31px}
+      .nav-main{font-size:19px}
+      .nav-sub{font-size:8px;margin-top:2px}
+    }
+  </style>
 </head>
 
 <body>
-  <div id="homeStage">
-    <img class="template" src="./home-template.png?v=20260830-home-single-api-v40" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
-    <img id="profileImage" alt="LINE Profile">
+<div id="app">
 
-    <div id="teamName" class="abs" title="แตะเพื่อเปลี่ยนชื่อทีม">กำลังโหลด...</div>
-
-    <div id="coin" class="abs">0</div>
-    <div id="energy" class="abs">0 / 200</div>
-    <div id="level" class="abs">Lv.1</div>
-    <div id="expTrack" class="bar"><i id="expBar"></i></div>
-    <div id="expText" class="abs">0 / 500</div>
-
-    <div id="currentWeight" class="abs">--.- kg</div>
-    <div id="targetWeight" class="abs">--.- kg</div>
-    <div id="weightProgressPct" class="abs">0%</div>
-    <div id="weightProgressTrack" class="bar"><i id="weightProgressBar"></i></div>
-    <div id="lost" class="abs">--.- kg</div>
-    <div id="remaining" class="abs">--.- kg</div>
-
-    <div id="steps" class="abs">0</div>
-    <div id="stepsTrack" class="bar"><i id="stepsBar"></i></div>
-
-    <div id="calories" class="abs">0 kcal</div>
-    <div id="caloriesTrack" class="bar"><i id="caloriesBar"></i></div>
-
-    <div id="sleep" class="abs">0 ชม. 0 นาที</div>
-    <div id="sleepTrack" class="bar"><i id="sleepBar"></i></div>
-
-    <div id="stepsEntry" class="health-v212">
-      <button id="editStepsButton" type="button">กรอกก้าววันนี้</button>
-      <button id="moveMoreMissionButton" class="qualified" type="button" style="display:none">
-        ✓ ถึงเป้าหมาย
-      </button>
-    </div>
-
-    <div id="sleepEntry" class="health-v212">
-      <button id="editSleepButton" type="button">กรอกการนอน</button>
-      <button id="sleepMissionButton" class="qualified" type="button" style="display:none">
-        ✓ ถึงเป้าหมาย
-      </button>
-    </div>
-
-    <div id="healthScore" class="abs">-- / 100</div>
-    <div id="healthTrack" class="bar"><i id="healthBar"></i></div>
-
-    <div id="rewardCoin" class="abs">0</div>
-    <div id="rewardEnergy" class="abs">0 / 200</div>
-    <div id="rewardBadge" class="abs">--</div>
-
-    <div id="inbodyDate" class="abs">ยังไม่มีข้อมูล</div>
-    <div id="inbodyScore" class="abs">--</div>
-    <svg id="inbodyChart" viewBox="0 0 220 80" preserveAspectRatio="none"></svg>
-    <button id="inbodyUpload" type="button" aria-label="อัปโหลด InBody">+</button>
-
-    <div id="projectRange" class="abs">--</div>
-    <div id="projectElapsed" class="abs">-- วัน</div>
-    <div id="projectTrack" class="bar"><i id="projectBar"></i></div>
-    <div id="projectRemaining" class="abs">-- วัน</div>
-
-    <div id="myRank" class="abs"># --</div>
-    <div id="participantCount" class="abs">-- คน</div>
-    <div id="top1Score" class="abs"></div>
-    <div id="top2Score" class="abs"></div>
-    <div id="top3Score" class="abs"></div>
-
-    <button id="weightButton" class="hotspot" aria-label="Weight Check"></button>
-    <button id="progressButton" class="hotspot" aria-label="My Progress"></button>
-    <button id="inbodyViewButton" class="hotspot" aria-label="ดูผล InBody ทั้งหมด"></button>
-    <button id="projectSettingsButton" class="hotspot" aria-label="Project Settings"></button>
-    <button id="rankingButton" class="hotspot" aria-label="Ranking"></button>
-    <button id="rewardsButton" class="hotspot" aria-label="Rewards"></button>
-    <button id="homeButton" class="hotspot" aria-label="Home"></button>
-    <button id="missionButton" class="hotspot" aria-label="Mission"></button>
-    <button id="battleButton" class="hotspot" aria-label="Battle"></button>
-  </div>
-
-  <div
-    id="notificationToast"
-    role="button"
-    tabindex="0"
-  >
-    <div id="notificationToastIcon">💬</div>
-    <div>
-      <div id="notificationToastTitle">
-        มีการแจ้งเตือนใหม่
+  <header class="header">
+    <div class="hospital">
+      <div class="hospital-mark"></div>
+      <div class="hospital-name">
+        BANGKOK<br>HOSPITAL
+        <small>UDON</small>
       </div>
-      <div id="notificationToastMessage"></div>
     </div>
-  </div>
 
+    <div class="brand">
+      <h1 class="brand-title">
+        ROCK <span class="red">YOUR</span> BODY <span class="year">2026</span>
+      </h1>
+      <div class="brand-sub">
+        <span class="move">MOVE</span> •
+        <span class="eat">EAT</span> •
+        <span class="sleep">SLEEP</span> •
+        <span class="health">HEALTH</span>
+      </div>
+    </div>
 
-  <div id="notificationPanel">
-    <div class="notification-card">
-
-      <div class="notification-head">
-        <h2>
-          🔔 การแจ้งเตือน
-        </h2>
-
-        <div class="notification-head-actions">
-          <button
-            id="markAllNotificationsButton"
-            type="button"
-          >
-            อ่านทั้งหมด
-          </button>
-
-          <button
-            id="closeNotificationsButton"
-            type="button"
-          >
-            ✕
-          </button>
+    <div class="wallet">
+      <div class="wallet-item">
+        <div class="wallet-icon">🪙</div>
+        <div>
+          <div id="coin" class="wallet-value">--</div>
+          <div class="wallet-label">ROCK COIN</div>
         </div>
       </div>
 
-      <div id="notificationList">
-        <div class="notification-item">
-          กำลังโหลด...
+      <div class="wallet-item">
+        <div class="wallet-icon">⚡</div>
+        <div>
+          <div id="energy" class="wallet-value">-- / --</div>
+          <div class="wallet-label">ENERGY</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="main">
+
+    <section class="profile-card">
+      <div class="photo-ring">
+        <div id="profilePlaceholder" class="profile-placeholder"></div>
+        <img id="profileImage" alt="LINE Profile">
+        <div class="camera">📷</div>
+        <div class="profile-caption">อัปโหลดรูปของคุณ</div>
+      </div>
+
+      <div class="hero-row">
+        <div class="shield">🛡️</div>
+        <div id="lineName">กำลังโหลด...</div>
+        <div id="level">Lv.1</div>
+      </div>
+
+      <div class="exp-row">
+        <div class="exp-label">EXP</div>
+        <div class="exp-track"><div id="expFill"></div></div>
+        <div id="expText">0 / 500</div>
+      </div>
+    </section>
+
+
+    <section class="weight-card">
+
+      <div class="weight-section">
+        <div class="weight-icon">⚖️</div>
+        <div>
+          <div class="weight-label">น้ำหนักปัจจุบัน</div>
+          <div id="currentWeight" class="weight-value">-- kg</div>
         </div>
       </div>
 
+      <div class="weight-section">
+        <div class="weight-icon">🎯</div>
+        <div>
+          <div class="weight-label">เป้าหมาย</div>
+          <div id="targetWeight" class="weight-value target">-- kg</div>
+        </div>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress-title">ความคืบหน้าเป้าหมายน้ำหนัก</div>
+
+        <div class="progress-main">
+          <div class="progress-track"><div id="weightProgressFill"></div></div>
+          <div id="weightProgressPct">0%</div>
+        </div>
+
+        <div class="progress-foot">
+          <span>ลดไปแล้ว <strong id="lostWeight">-- kg</strong></span>
+          <span>เหลืออีก <strong id="remainingWeight">-- kg</strong></span>
+        </div>
+      </div>
+
+    </section>
+
+
+    <section class="right-column">
+
+      <div class="health-grid">
+
+        <button id="stepsCard" class="health-card steps-card clickable" type="button">
+          <div class="health-icon">👣</div>
+          <div>
+            <div class="health-title">วันนี้ก้าวไปแล้ว</div>
+            <div class="health-value">
+              <span id="steps">0</span>
+              <span class="health-unit">ก้าว</span>
+            </div>
+          </div>
+        </button>
+
+        <div class="health-card calories-card">
+          <div class="health-icon">🔥</div>
+          <div>
+            <div class="health-title">แคลอรี่เผาผลาญ</div>
+            <div class="health-value">
+              <span id="calories">0</span>
+              <span class="health-unit">kcal</span>
+            </div>
+          </div>
+        </div>
+
+        <button id="sleepCard" class="health-card sleep-card clickable" type="button">
+          <div class="health-icon">🌙</div>
+          <div>
+            <div class="health-title">นอนหลับ</div>
+            <div id="sleep" class="health-value">0 ชม. 0 นาที</div>
+          </div>
+        </button>
+
+        <div class="health-card score-card">
+          <div class="health-icon">❤️</div>
+          <div>
+            <div class="health-title">คะแนนสุขภาพรวม</div>
+            <div id="healthScore" class="health-value">-- / 100</div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="action-grid">
+
+        <button id="weightCheckButton" class="action-card weight-check" type="button">
+          <div class="action-icon">⚖️</div>
+          <div class="action-title">WEIGHT CHECK</div>
+          <div class="action-sub">ชั่งน้ำหนัก</div>
+          <div class="action-arrow">›</div>
+        </button>
+
+        <button id="progressButton" class="action-card progress-card" type="button">
+          <div class="action-icon">📈</div>
+          <div class="action-title">MY PROGRESS</div>
+          <div class="action-sub">ความก้าวหน้าของฉัน</div>
+          <div class="action-arrow">›</div>
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <nav class="nav">
+
+    <button class="nav-btn" type="button">
+      <div class="nav-icon">🏠</div>
+      <div>
+        <div class="nav-main">HOME</div>
+        <div class="nav-sub">หน้าหลัก</div>
+      </div>
+    </button>
+
+    <button id="missionButton" class="nav-btn mission" type="button">
+      <div class="nav-icon">🎯</div>
+      <div>
+        <div class="nav-main">MISSION</div>
+        <div class="nav-sub">ภารกิจ</div>
+      </div>
+    </button>
+
+    <button id="battleButton" class="nav-btn" type="button">
+      <div class="nav-icon">⚔️</div>
+      <div>
+        <div class="nav-main">BATTLE</div>
+        <div class="nav-sub">ต่อสู้กับมอนสเตอร์</div>
+      </div>
+    </button>
+
+  </nav>
+
+</div>
+
+
+<!-- STEPS MODAL -->
+<div id="stepsModal" class="modal-bg">
+  <div class="modal">
+    <h3>👣 วันนี้ก้าวไปแล้ว</h3>
+
+    <div class="field">
+      <label for="stepsInput">จำนวนก้าววันนี้</label>
+      <input id="stepsInput" type="number" min="0" step="1" inputmode="numeric">
+    </div>
+
+    <div id="stepsStatus" class="modal-status warning">
+      เป้าหมาย MOVE MORE = 8,000 ก้าว
+    </div>
+
+    <button id="stepsEvidence" class="evidence-btn" type="button">
+      📷 แนบหลักฐาน MOVE MORE เพื่อรับรางวัล
+    </button>
+
+    <div class="modal-actions">
+      <button class="cancel" type="button" onclick="closeModal('stepsModal')">ปิด</button>
+      <button id="saveStepsButton" class="save" type="button">บันทึกก้าว</button>
     </div>
   </div>
+</div>
 
 
-  <div id="teamEditModal">
-    <div class="modal-card">
-      <h2>ข้อมูล HERO / ทีม</h2>
+<!-- SLEEP MODAL -->
+<div id="sleepModal" class="modal-bg">
+  <div class="modal">
+    <h3>😴 บันทึกการนอนหลับ</h3>
 
+    <div class="grid2">
       <div class="field">
-        <label>ชื่อ HERO จาก LINE</label>
-        <div id="lineDisplayNameBox">--</div>
+        <label for="sleepStart">เวลานอน</label>
+        <input id="sleepStart" type="time" value="22:00">
       </div>
 
       <div class="field">
-        <label for="teamNameInput">ชื่อทีม</label>
-        <input id="teamNameInput" type="text" maxlength="30" placeholder="เช่น HERO ROCK">
-      </div>
-
-      <div class="modal-actions">
-        <button id="teamCancel" type="button">ยกเลิก</button>
-        <button id="teamSave" type="button">บันทึกชื่อทีม</button>
+        <label for="sleepWake">เวลาตื่น</label>
+        <input id="sleepWake" type="time" value="06:00">
       </div>
     </div>
-  </div>
 
-  <div id="status"></div>
+    <div id="sleepDuration" style="margin-top:12px;text-align:center;font-size:24px;font-weight:900;color:#4c20ab">
+      8 ชม. 0 นาที
+    </div>
 
-  <div id="inbodyModal">
-    <div class="modal-card">
-      <h2>อัปโหลดผล InBody</h2>
+    <div id="sleepStatus" class="modal-status">
+      ระบบจะคำนวณระยะเวลานอนอัตโนมัติ
+    </div>
 
-      <div class="field">
-        <label for="inbodyMeasuredDate">วันที่ตรวจ</label>
-        <input id="inbodyMeasuredDate" type="date">
-      </div>
+    <button id="sleepEvidence" class="evidence-btn" type="button">
+      📷 แนบหลักฐาน SLEEP WELL เพื่อรับรางวัล
+    </button>
 
-      <div class="field">
-        <label for="inbodyScoreInput">InBody Score</label>
-        <input id="inbodyScoreInput" type="number" min="0" max="150" step="1" inputmode="numeric" placeholder="เช่น 72">
-      </div>
-
-      <div class="field">
-        <label for="inbodyFileInput">รูป/PDF ผล InBody</label>
-        <input id="inbodyFileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">
-      </div>
-
-      <div class="modal-actions">
-        <button id="inbodyCancel" type="button">ยกเลิก</button>
-        <button id="inbodySave" type="button">บันทึกผล</button>
-      </div>
+    <div class="modal-actions">
+      <button class="cancel" type="button" onclick="closeModal('sleepModal')">ปิด</button>
+      <button id="saveSleepButton" class="save" type="button">บันทึกการนอน</button>
     </div>
   </div>
+</div>
 
-  <script>
-    "use strict";
+<div id="toast"></div>
 
-    const $ = id => document.getElementById(id);
 
-    let loading = false;
-    let refreshTimer = null;
-    let currentLineProfile = null;
-    let currentTeamName = "HERO ROCK";
-    let notificationItems = [];
-    let notificationToastItem = null;
-    let dashboardUnreadNotifications = 0;
+<script>
+"use strict";
 
-    function showStatus(message,isError=false){
-      const el=$("status");
-      el.textContent=message;
-      el.classList.toggle("error",!!isError);
-      el.style.display="block";
+/* =========================================================
+   HOME V5.0 — SINGLE API
+   LIFF ID Token -> player-dashboard action=dashboard
+   หน้า HOME ยิง PLAYER API หลักเพียงครั้งเดียวต่อ refresh
+========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const state = {
+  dashboard:null
+};
+
+function n(value,fallback=0){
+  const x = Number(value);
+  return Number.isFinite(x) ? x : fallback;
+}
+
+function pick(...values){
+  for(const value of values){
+    if(value !== undefined && value !== null && value !== ""){
+      return value;
     }
+  }
+  return null;
+}
 
-    function hideStatus(){
-      $("status").style.display="none";
-    }
+function fmt(value){
+  return Math.round(n(value,0)).toLocaleString("en-US");
+}
 
-    function num(value,fallback=0){
-      const n=Number(value);
-      return Number.isFinite(n)?n:fallback;
-    }
+function fmtWeight(value){
+  const x = Number(value);
+  return Number.isFinite(x) ? `${x.toFixed(1)} kg` : "-- kg";
+}
 
-    function pick(...values){
-      for(const v of values){
-        if(v!==undefined && v!==null && v!=="") return v;
-      }
-      return null;
-    }
+function clamp(value,min,max){
+  return Math.max(min,Math.min(max,n(value,0)));
+}
 
-    function clamp(value,min,max){
-      return Math.max(min,Math.min(max,num(value,0)));
-    }
+function getApi(name){
+  if(window.APP_CONFIG?.getApi){
+    return window.APP_CONFIG.getApi(name);
+  }
 
-    function fmtInt(v){
-      return Math.round(num(v,0)).toLocaleString("en-US");
-    }
+  const url = window.APP_CONFIG?.API?.[name];
+  if(!url) throw new Error("ไม่พบ API." + name);
+  return url;
+}
 
-    function fmtWeight(v){
-      const n=Number(v);
-      return Number.isFinite(n)?n.toFixed(1):"--.-";
-    }
+function toast(message,isError=false){
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.toggle("error",!!isError);
+  el.classList.add("show");
 
-    function fmtDate(value){
-      if(!value) return "--";
-      const d=new Date(value);
-      if(Number.isNaN(d.getTime())) return String(value);
-      return d.toLocaleDateString("th-TH",{day:"2-digit",month:"short",year:"numeric"});
-    }
+  clearTimeout(window.__homeToast);
+  window.__homeToast = setTimeout(()=>{
+    el.classList.remove("show");
+  },isError ? 5000 : 2800);
+}
 
-    function fmtDateShort(value){
-      if(!value) return "--";
-      const d=new Date(value);
-      if(Number.isNaN(d.getTime())) return String(value);
-      return d.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
-    }
-
-    function fmtSleep(value){
-
-      if(
-        value === null ||
-        value === undefined ||
-        value === ""
-      ){
-        return "0 ชม. 0 นาที";
-      }
-
-      if(
-        typeof value ===
-        "object"
-      ){
-        const totalMinutes =
-          Number(
-            value?.totalMinutes ??
-            value?.total_minutes ??
-            value?.sleepMinutes ??
-            value?.sleep_minutes
-          );
-
-        if(
-          Number.isFinite(
-            totalMinutes
-          )
-        ){
-          const h =
-            Math.floor(
-              totalMinutes /
-              60
-            );
-
-          const m =
-            Math.round(
-              totalMinutes %
-              60
-            );
-
-          return (
-            `${h} ชม. ${m} นาที`
-          );
-        }
-
-        const h =
-          Number(
-            value?.hours ??
-            0
-          );
-
-        const m =
-          Number(
-            value?.minutes ??
-            0
-          );
-
-        if(
-          Number.isFinite(h) &&
-          Number.isFinite(m)
-        ){
-          return (
-            `${Math.floor(h)} ชม. ${Math.round(m)} นาที`
-          );
-        }
-
-        return "--";
-      }
-
-      const n =
-        Number(value);
-
-      if(
-        Number.isFinite(n)
-      ){
-        if(n > 24){
-          const h =
-            Math.floor(
-              n /
-              60
-            );
-
-          const m =
-            Math.round(
-              n %
-              60
-            );
-
-          return (
-            `${h} ชม. ${m} นาที`
-          );
-        }
-
-        const h =
-          Math.floor(n);
-
-        const m =
-          Math.round(
-            (n - h) * 60
-          );
-
-        return (
-          `${h} ชม. ${m} นาที`
-        );
-      }
-
-      return String(value);
-    }
-
-    function setBar(id,pct){
-      const el=$(id);
-      if(el) el.style.width=clamp(pct,0,100)+"%";
-    }
-
-   /* =====================================================
-   LINE LIFF AUTH
-===================================================== */
-
-const LIFF_ID =
-  window.APP_CONFIG?.LIFF_ID ||
-  "2011201679-uNWz5yqF";
-
-async function initLINE(){
-
+async function initLiff(){
   if(typeof liff === "undefined"){
     throw new Error("LINE LIFF SDK ไม่พร้อม");
   }
 
   await liff.init({
-    liffId: LIFF_ID
-  });
-
-  console.log("[LIFF]", {
-    isInClient: liff.isInClient(),
-    isLoggedIn: liff.isLoggedIn()
+    liffId:window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
   });
 
   if(!liff.isLoggedIn()){
-    liff.login();
+    liff.login({redirectUri:window.location.href});
     return false;
   }
 
-  const idToken = liff.getIDToken();
-
-  console.log(
-    "[LIFF] token available:",
-    Boolean(idToken)
-  );
-
-  if(!idToken){
-    throw new Error(
-      "ไม่พบ LINE ID Token กรุณาปิดหน้านี้แล้วเปิดจากเมนู LINE ใหม่"
-    );
+  if(!liff.getIDToken()){
+    throw new Error("ไม่พบ LINE ID Token");
   }
 
   return true;
 }
 
-
-/* =====================================================
-   GET CURRENT ID TOKEN
-===================================================== */
-
-async function getIdToken(){
-
-  if(typeof liff === "undefined"){
-    throw new Error("LINE LIFF SDK ไม่พร้อม");
-  }
-
-  if(!liff.isLoggedIn()){
-    liff.login();
-    return null;
-  }
-
-  const token = liff.getIDToken();
-
-  if(!token){
-    throw new Error("ไม่พบ LINE ID Token");
-  }
-
-  return token;
-}
-
-
-/* =====================================================
-   LINE PROFILE
-===================================================== */
-
-async function getLineProfileSafe(){
-  if(currentLineProfile) return currentLineProfile;
-
-  try{
-    currentLineProfile = await liff.getProfile();
-  }catch(error){
-    console.warn("LINE PROFILE ERROR:",error);
-    currentLineProfile = {};
-  }
-
-  return currentLineProfile;
-}
-
-
-/* =====================================================
-   POST JSON
-   เติม idToken ปัจจุบันจาก LIFF ให้อัตโนมัติทุกครั้ง
-===================================================== */
-
-async function postJson(url,payload={}){
-
-  const idToken = await getIdToken();
-
-  if(!idToken){
-    return null;
-  }
-
-  const requestBody = {
-    ...payload,
-    idToken
-  };
-
-  console.log(
-    "[API REQUEST]",
-    url,
+async function playerApi(payload){
+  const response = await fetch(
+    getApi("PLAYER"),
     {
-      action: requestBody.action,
-      hasIdToken: Boolean(idToken),
-      tokenLength: idToken?.length || 0
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      cache:"no-store",
+      body:JSON.stringify({
+        ...payload,
+        idToken:liff.getIDToken()
+      })
     }
   );
 
-  let response;
-
-  try{
-    response = await fetch(url,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify(requestBody)
-    });
-  }catch(error){
-    console.error("[FETCH NETWORK ERROR]",error);
-    throw new Error("เชื่อมต่อ API ไม่สำเร็จ");
-  }
-
-  const text = await response.text();
+  const raw = await response.text();
   let data = {};
 
   try{
-    data = text ? JSON.parse(text) : {};
+    data = raw ? JSON.parse(raw) : {};
   }catch{
-    console.error("[API RAW RESPONSE]",text);
-    throw new Error(
-      `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
-    );
+    throw new Error("PLAYER API ตอบกลับไม่ใช่ JSON");
   }
 
-  console.log(
-    "[API RESPONSE]",
-    response.status,
-    data
-  );
-
-  if(
-    response.status === 401 &&
-    (
-      data?.code === "LINE_TOKEN_MISSING" ||
-      data?.code === "LINE_AUTH_FAILED"
-    )
-  ){
-    throw new Error(
-      data?.error ||
-      "LINE authentication ไม่สำเร็จ"
-    );
-  }
-
-  if(
-    !response.ok ||
-    data?.success === false
-  ){
+  if(!response.ok || data?.success === false){
     throw new Error(
       data?.error ||
       data?.message ||
@@ -1346,2176 +1064,507 @@ async function postJson(url,payload={}){
     );
   }
 
-  return data;
+  return data?.data ?? data?.dashboard ?? data;
 }
 
-
-/* =====================================================
-   NOTIFICATIONS V2.9
-===================================================== */
-
-async function fetchNotifications(
-  onlyUnread=false
-){
-
-  const api =
-    window.APP_CONFIG
-      .getApi("PLAYER");
-
-  return await postJson(
-    api,
-    {
-      action:
-        "notifications",
-      onlyUnread
-    }
-  );
-}
-
-
-async function markNotificationRead(
-  notificationId
-){
-
-  if(!notificationId){
-    return;
-  }
-
-  const api =
-    window.APP_CONFIG
-      .getApi("PLAYER");
-
-  await postJson(
-    api,
-    {
-      action:
-        "markNotificationRead",
-      notificationId
-    }
-  );
-}
-
-
-async function markAllNotificationsRead(){
-
-  const api =
-    window.APP_CONFIG
-      .getApi("PLAYER");
-
-  await postJson(
-    api,
-    {
-      action:
-        "markAllNotificationsRead"
-    }
-  );
-}
-
-
-function notificationDate(
-  value
-){
-
-  if(!value){
-    return "";
-  }
-
-  const d =
-    new Date(value);
-
-  if(
-    Number.isNaN(
-      d.getTime()
-    )
-  ){
-    return "";
-  }
-
-  return d.toLocaleString(
-    "th-TH",
-    {
-      day:"numeric",
-      month:"short",
-      hour:"2-digit",
-      minute:"2-digit"
-    }
-  );
-}
-
-
-function escapeNotificationHtml(
-  value
-){
-
-  return String(
-    value ??
-    ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-}
-
-
-function renderNotificationBadge(){
-
-  const badge =
-    $("notificationBadge");
-
-  const unreadFromItems =
-    notificationItems
-      .filter(
-        item =>
-          item?.is_read ===
-          false
-      )
-      .length;
-
-  const unread =
-    notificationItems.length > 0
-      ? unreadFromItems
-      : dashboardUnreadNotifications;
-
-  badge.textContent =
-    unread > 99
-      ? "99+"
-      : String(unread);
-
-  badge.style.display =
-    unread > 0
-      ? "flex"
-      : "none";
-}
-
-
-function renderNotificationList(){
-
-  const host =
-    $("notificationList");
-
-  if(
-    !Array.isArray(
-      notificationItems
-    ) ||
-    notificationItems.length === 0
-  ){
-
-    host.innerHTML =
-      `
-        <div
-          class="notification-item"
-          style="cursor:default;text-align:center;color:#71869b"
-        >
-          ยังไม่มีการแจ้งเตือน
-        </div>
-      `;
-
-    return;
-  }
-
-  host.innerHTML =
-    notificationItems
-      .map(
-        item => `
-          <button
-            class="notification-item ${
-              item?.is_read
-                ? ""
-                : "unread"
-            }"
-            type="button"
-            data-notification-id="${
-              escapeNotificationHtml(
-                item.id
-              )
-            }"
-          >
-            <div class="notification-title">
-              ${
-                escapeNotificationHtml(
-                  item.title ||
-                  "การแจ้งเตือน"
-                )
-              }
-            </div>
-
-            <div class="notification-message">
-              ${
-                escapeNotificationHtml(
-                  item.message ||
-                  ""
-                )
-              }
-            </div>
-
-            <div class="notification-time">
-              ${
-                escapeNotificationHtml(
-                  notificationDate(
-                    item.created_at
-                  )
-                )
-              }
-            </div>
-          </button>
-        `
-      )
-      .join("");
-
-  host
-    .querySelectorAll(
-      "[data-notification-id]"
-    )
-    .forEach(
-      button => {
-
-        button
-          .addEventListener(
-            "click",
-            async () => {
-
-              const id =
-                button.dataset
-                  .notificationId;
-
-              const item =
-                notificationItems
-                  .find(
-                    x =>
-                      x.id === id
-                  );
-
-              if(!item){
-                return;
-              }
-
-              try{
-
-                if(
-                  item.is_read ===
-                  false
-                ){
-
-                  await markNotificationRead(
-                    item.id
-                  );
-
-                  item.is_read =
-                    true;
-
-                  renderNotificationBadge();
-                }
-
-              }catch(error){
-
-                console.warn(
-                  "MARK NOTIFICATION READ ERROR:",
-                  error
-                );
-              }
-
-              const target =
-                item.target_page ||
-                "./inbody.html";
-
-              window.location.href =
-                target;
-            }
-          );
-      }
-    );
-}
-
-
-function showNotificationToast(
-  item
-){
-
-  if(!item){
-    return;
-  }
-
-  notificationToastItem =
-    item;
-
-  $("notificationToastTitle")
-    .textContent =
-      item.title ||
-      "มีการแจ้งเตือนใหม่";
-
-  $("notificationToastMessage")
-    .textContent =
-      item.message ||
-      "";
-
-  $("notificationToast")
-    .classList.add(
-      "show"
-    );
-}
-
-
-function hideNotificationToast(){
-
-  $("notificationToast")
-    .classList.remove(
-      "show"
-    );
-
-  notificationToastItem =
-    null;
-}
-
-
-async function openNotifications(){
-
-  $("notificationPanel")
-    .classList.add(
-      "show"
-    );
-
-  await loadNotifications(
-    false,
-    false
-  );
-}
-
-
-function closeNotifications(){
-
-  $("notificationPanel")
-    .classList.remove(
-      "show"
-    );
-}
-
-
-async function loadNotifications(
-  showToast=true,
-  unreadOnly=false
-){
-
-  try{
-
-    const result =
-      await fetchNotifications(
-        unreadOnly
-      );
-
-    notificationItems =
-      Array.isArray(
-        result?.notifications
-      )
-        ? result.notifications
-        : [];
-
-    renderNotificationBadge();
-    renderNotificationList();
-
-    const latestUnread =
-      notificationItems
-        .find(
-          item =>
-            item?.is_read ===
-            false
-        );
-
-    if(
-      showToast &&
-      latestUnread
-    ){
-      showNotificationToast(
-        latestUnread
-      );
-    }
-
-  }catch(error){
-
-    console.warn(
-      "LOAD NOTIFICATIONS ERROR:",
-      error
-    );
-  }
-}
-
-
-/* =====================================================
-   DASHBOARD
-===================================================== */
+/* =========================================================
+   SINGLE DASHBOARD REQUEST
+========================================================= */
 
 async function fetchDashboard(){
-
-  const api =
-    window.APP_CONFIG
-      .getApi("PLAYER");
-
-  const timeoutMs =
-    12000;
-
   return await Promise.race([
-    postJson(
-      api,
-      {
-        action:"dashboard"
-      }
-    ),
+    playerApi({action:"dashboard"}),
 
-    new Promise(
-      (_,reject) =>
-        setTimeout(
-          () =>
-            reject(
-              new Error(
-                "PLAYER API ใช้เวลานานเกิน 12 วินาที"
-              )
-            ),
-          timeoutMs
-        )
-    )
+    new Promise((_,reject)=>{
+      setTimeout(()=>{
+        reject(new Error("PLAYER API ใช้เวลานานเกิน 12 วินาที"));
+      },12000);
+    })
   ]);
 }
 
-    function normalizeDashboard(raw){
-      const data=raw?.data ?? raw?.dashboard ?? raw ?? {};
-      const user=data?.user ?? data?.player ?? {};
-      const weight=(data?.weight && typeof data.weight==="object")?data.weight:{};
-      const energy=(data?.energy && typeof data.energy==="object")?data.energy:{};
-      const activity=data?.activity ?? data?.today ?? data?.health ?? {};
-      const rewards=data?.rewards ?? data?.myRewards ?? data?.my_rewards ?? {};
-      const project=data?.project ?? data?.campaign ?? {};
-      const ranking=data?.ranking ?? data?.leaderboard ?? {};
-      const expObj=(data?.exp && typeof data.exp==="object")?data.exp:{};
-
-      const coin=num(pick(
-        data.rockCoin,data.rock_coin,data.coin,
-        user.rockCoin,user.rock_coin,user.coin
-      ),0);
-
-      const currentEnergy=num(pick(
-        energy.current,data.energyCurrent,data.currentEnergy,data.current_energy,
-        user.energy,typeof data.energy==="number"?data.energy:null
-      ),0);
-
-      const maxEnergy=num(pick(
-        energy.max,data.maxEnergy,data.max_energy,user.maxEnergy,user.max_energy,
-        window.APP_CONFIG?.MAX_ENERGY,200
-      ),200);
-
-      const currentWeight=pick(
-        weight.current,weight.currentWeight,weight.current_weight,
-        data.currentWeight,data.current_weight,user.currentWeight,user.current_weight
-      );
-
-      const targetWeight=pick(
-        weight.target,weight.targetWeight,weight.target_weight,
-        data.targetWeight,data.target_weight,user.targetWeight,user.target_weight
-      );
-
-      const startWeight=pick(
-        weight.start,weight.startWeight,weight.start_weight,
-        data.startWeight,data.start_weight,user.startWeight,user.start_weight
-      );
-
-      const totalExp=num(pick(
-        expObj.total,expObj.current,
-        typeof data.exp==="number"?data.exp:null,
-        user.exp,user.experience
-      ),0);
-
-      const expPerLevel=num(window.APP_CONFIG?.EXP_PER_LEVEL,500) || 500;
-      const level=num(pick(data.level,user.level),Math.floor(totalExp/expPerLevel)+1) || 1;
-
-      const steps=num(pick(
-        activity.steps,data.steps,data.todaySteps,data.today_steps,
-        user.steps
-      ),0);
-
-      const stepsGoal=num(pick(
-        activity.stepsGoal,activity.steps_goal,data.stepsGoal,data.steps_goal,10000
-      ),10000);
-
-      const calories=num(pick(
-        activity.calories,activity.kcal,data.calories,data.kcal,
-        data.caloriesBurned,data.calories_burned
-      ),0);
-
-      const caloriesGoal=num(pick(
-        activity.caloriesGoal,activity.calories_goal,
-        data.caloriesGoal,data.calories_goal,2000
-      ),2000);
-
-      const sleepValue=pick(
-        activity.sleep,data.sleep,data.sleepMinutes,data.sleep_minutes,
-        data.sleepHours,data.sleep_hours
-      );
-
-      /*
-         IMPORTANT:
-         typeof null === "object"
-         จึงต้องเช็ก sleepValue !== null ก่อนอ่าน .minutes / .hours
-      */
-      const sleepIsObject =
-        sleepValue !== null &&
-        typeof sleepValue === "object";
-
-      const sleepMinutes =
-        sleepIsObject
-          ? num(
-              pick(
-                sleepValue?.minutes,
-                sleepValue?.totalMinutes,
-                sleepValue?.total_minutes,
-                sleepValue?.sleepMinutes,
-                sleepValue?.sleep_minutes
-              ),
-              0
-            )
-          : num(
-              pick(
-                data.sleepMinutes,
-                data.sleep_minutes
-              ),
-              NaN
-            );
-
-      const sleepHours =
-        sleepIsObject
-          ? num(
-              pick(
-                sleepValue?.hours,
-                sleepValue?.totalHours,
-                sleepValue?.total_hours
-              ),
-              0
-            )
-          : num(
-              pick(
-                data.sleepHours,
-                data.sleep_hours
-              ),
-              NaN
-            );
-
-      const sleepPercent = num(pick(
-        activity.sleepPercent,activity.sleep_percent,
-        data.sleepPercent,data.sleep_percent,
-        Number.isFinite(sleepMinutes)?(sleepMinutes/420)*100:null,
-        Number.isFinite(sleepHours)?(sleepHours/7)*100:null
-      ),0);
-
-      const healthScore=num(pick(
-        activity.healthScore,activity.health_score,
-        data.healthScore,data.health_score,
-        data.overallHealthScore,data.overall_health_score
-      ),0);
-
-      const rewardCoin=num(pick(
-        rewards.coin,rewards.rockCoin,rewards.rock_coin,
-        data.rewardCoin,data.reward_coin,coin
-      ),coin);
-
-      const rewardEnergy=num(pick(
-        rewards.energy,data.rewardEnergy,data.reward_energy,currentEnergy
-      ),currentEnergy);
-
-      const rewardBadge=pick(
-        rewards.badge,rewards.badgeName,rewards.badge_name,
-        data.badge,data.badgeName,data.badge_name,
-        user.badge,user.badge_name
-      ) ?? "--";
-
-      const projectStart=pick(
-        project.startDate,project.start_date,data.projectStartDate,data.project_start_date
-      );
-
-      const projectEnd=pick(
-        project.endDate,project.end_date,data.projectEndDate,data.project_end_date
-      );
-
-      const elapsedDays=num(pick(
-        project.elapsedDays,project.elapsed_days,data.elapsedDays,data.elapsed_days
-      ),NaN);
-
-      const remainingDays=num(pick(
-        project.remainingDays,project.remaining_days,data.projectRemainingDays,data.project_remaining_days
-      ),NaN);
-
-      const totalDays=num(pick(
-        project.totalDays,project.total_days,data.projectTotalDays,data.project_total_days
-      ),NaN);
-
-      const myRank=num(pick(
-        ranking.myRank,ranking.my_rank,ranking.rank,
-        data.myRank,data.my_rank,data.rank
-      ),0);
-
-      const participantCount=num(pick(
-        ranking.totalParticipants,ranking.total_participants,ranking.participantCount,
-        data.totalParticipants,data.total_participants,data.participantCount,data.participant_count
-      ),0);
-
-      const top = Array.isArray(ranking.top3)
-        ? ranking.top3
-        : Array.isArray(ranking.top)
-          ? ranking.top
-          : Array.isArray(data.top3)
-            ? data.top3
-            : [];
-
-      return {
-        raw:data,
-        coin,
-        energy:currentEnergy,
-        maxEnergy,
-        currentWeight,
-        targetWeight,
-        startWeight,
-        level,
-        totalExp,
-        expPerLevel,
-
-        picture:pick(
-          user.pictureUrl,user.picture_url,data.pictureUrl,data.picture_url
-        ) ?? "",
-
-        lineDisplayName:pick(
-          user.lineDisplayName,user.line_display_name,
-          user.displayName,user.display_name,
-          data.lineDisplayName,data.line_display_name,
-          data.displayName,data.display_name
-        ) ?? "",
-
-        teamName:pick(
-          user.teamName,user.team_name,data.teamName,data.team_name,"HERO ROCK"
-        ) ?? "HERO ROCK",
-
-        steps,
-        stepsGoal,
-        calories,
-        caloriesGoal,
-
-        sleepValue,
-        sleepPercent,
-        healthScore,
-
-        rewardCoin,
-        rewardEnergy,
-        rewardBadge,
-
-        projectStart,
-        projectEnd,
-        elapsedDays,
-        remainingDays,
-        totalDays,
-
-        myRank,
-        participantCount,
-        top
-      };
-    }
-
-    async function renderProfile(url){
-      const image=$("profileImage");
-
-      let finalUrl=url;
-
-      if(!finalUrl){
-        try{
-          const profile=await liff.getProfile();
-          finalUrl=profile?.pictureUrl || "";
-        }catch{}
-      }
-
-      if(!finalUrl){
-        image.style.display="none";
-        return;
-      }
-
-      image.onload=()=>image.style.display="block";
-      image.onerror=()=>image.style.display="none";
-      image.src=finalUrl;
-    }
-
-    function calculateProject(p){
-      const now=new Date();
-      const start=p.projectStart?new Date(p.projectStart):null;
-      const end=p.projectEnd?new Date(p.projectEnd):null;
-
-      let total=p.totalDays;
-      let elapsed=p.elapsedDays;
-      let remaining=p.remainingDays;
-
-      if(start && end && !Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())){
-        if(!Number.isFinite(total)){
-          total=Math.max(1,Math.ceil((end-start)/86400000)+1);
-        }
-        if(!Number.isFinite(elapsed)){
-          elapsed=clamp(Math.floor((now-start)/86400000)+1,0,total);
-        }
-        if(!Number.isFinite(remaining)){
-          remaining=Math.max(0,total-elapsed);
-        }
-      }
-
-      return {total,elapsed,remaining};
-    }
-
-    async function renderHome(raw){
-      const p=normalizeDashboard(raw);
-
-      await renderProfile(p.picture);
-
-      const lineProfile = await getLineProfileSafe();
-      const heroDisplayName =
-        p.lineDisplayName ||
-        lineProfile?.displayName ||
-        "HERO";
-
-      currentTeamName = p.teamName || "HERO ROCK";
-
-      // ตำแหน่ง HERO ROCK บน template แสดงชื่อจาก LINE
-      $("teamName").textContent = heroDisplayName;
-      $("teamName").title = `Team: ${currentTeamName} • แตะเพื่อเปลี่ยนชื่อทีม`;
-
-      $("coin").textContent=fmtInt(p.coin);
-      $("energy").textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;
-
-      $("level").textContent=`Lv.${fmtInt(p.level)}`;
-
-      const expInLevel=((p.totalExp%p.expPerLevel)+p.expPerLevel)%p.expPerLevel;
-      $("expText").textContent=`${fmtInt(expInLevel)} / ${fmtInt(p.expPerLevel)}`;
-      setBar("expBar",(expInLevel/p.expPerLevel)*100);
-
-      $("currentWeight").textContent=`${fmtWeight(p.currentWeight)} kg`;
-      $("targetWeight").textContent=`${fmtWeight(p.targetWeight)} kg`;
-
-      const current=Number(p.currentWeight);
-      const target=Number(p.targetWeight);
-      const start=Number(p.startWeight);
-
-      let lost=NaN;
-      let remaining=NaN;
-      let weightPct=0;
-
-      if(Number.isFinite(start) && Number.isFinite(current)){
-        lost=Math.max(0,start-current);
-      }
-      if(Number.isFinite(current) && Number.isFinite(target)){
-        remaining=Math.max(0,current-target);
-      }
-      if(Number.isFinite(start) && Number.isFinite(target) && Number.isFinite(current) && start!==target){
-        weightPct=clamp(((start-current)/(start-target))*100,0,100);
-      }
-
-      $("lost").textContent=Number.isFinite(lost)?`${lost.toFixed(1)} kg`:"--.- kg";
-      $("remaining").textContent=Number.isFinite(remaining)?`${remaining.toFixed(1)} kg`:"--.- kg";
-      $("weightProgressPct").textContent=`${Math.round(weightPct)}%`;
-      setBar("weightProgressBar",weightPct);
-
-      $("steps").textContent=fmtInt(p.steps);
-      setBar("stepsBar",p.stepsGoal>0?(p.steps/p.stepsGoal)*100:0);
-
-      $("calories").textContent=`${fmtInt(p.calories)} kcal`;
-      setBar("caloriesBar",p.caloriesGoal>0?(p.calories/p.caloriesGoal)*100:0);
-
-      $("sleep").textContent=fmtSleep(p.sleepValue);
-      setBar("sleepBar",p.sleepPercent);
-
-      $("healthScore").textContent=`${fmtInt(p.healthScore)} / 100`;
-      setBar("healthBar",p.healthScore);
-
-      $("rewardCoin").textContent=fmtInt(p.rewardCoin);
-      $("rewardEnergy").textContent=`${fmtInt(p.rewardEnergy)} / ${fmtInt(p.maxEnergy)}`;
-      $("rewardBadge").textContent=String(p.rewardBadge);
-
-      if(p.projectStart || p.projectEnd){
-        $("projectRange").textContent=`${fmtDateShort(p.projectStart)} - ${fmtDateShort(p.projectEnd)}`;
-      }else{
-        $("projectRange").textContent="--";
-      }
-
-      const proj=calculateProject(p);
-      $("projectElapsed").textContent=Number.isFinite(proj.elapsed)?`${fmtInt(proj.elapsed)} วัน`:"-- วัน";
-      $("projectRemaining").textContent=Number.isFinite(proj.remaining)?`${fmtInt(proj.remaining)} วัน`:"-- วัน";
-      setBar("projectBar",Number.isFinite(proj.total)&&proj.total>0&&Number.isFinite(proj.elapsed)?(proj.elapsed/proj.total)*100:0);
-
-      $("myRank").textContent=p.myRank>0?`# ${fmtInt(p.myRank)}`:"# --";
-      $("participantCount").textContent=p.participantCount>0?`${fmtInt(p.participantCount)} คน`:"-- คน";
-
-      const top=p.top || [];
-      $("top1Score").textContent=top[0]?.score!=null?fmtInt(top[0].score):"";
-      $("top2Score").textContent=top[1]?.score!=null?fmtInt(top[1].score):"";
-      $("top3Score").textContent=top[2]?.score!=null?fmtInt(top[2].score):"";
-    }
-
-    /* =====================================================
-       INBODY
-    ====================================================== */
-
-    function normalizeInbodyHistory(raw){
-      const data=raw?.data ?? raw ?? {};
-      const list=data?.inbodyHistory ?? data?.inbody_history ?? data?.history ?? [];
-
-      if(!Array.isArray(list)) return [];
-
-      return list.map(item=>({
-        score:num(pick(item.score,item.inbody_score,item.inbodyScore),NaN),
-        measuredAt:pick(item.measuredAt,item.measured_at,item.date)
-      }))
-      .filter(item=>Number.isFinite(item.score) && item.measuredAt)
-      .sort((a,b)=>new Date(a.measuredAt)-new Date(b.measuredAt));
-    }
-
-    function drawInbodyChart(history){
-      const svg=$("inbodyChart");
-      svg.innerHTML="";
-
-      if(!history.length) return;
-
-      const list=history.slice(-7);
-      const scores=list.map(x=>x.score);
-      let min=Math.min(...scores);
-      let max=Math.max(...scores);
-
-      if(max===min){min-=5;max+=5}
-      else{
-        const pad=Math.max(2,(max-min)*.15);
-        min-=pad;max+=pad;
-      }
-
-      const W=220,H=80,L=8,R=8,T=8,B=8;
-
-      const points=list.map((item,index)=>{
-        const x=list.length===1?W/2:L+(index/(list.length-1))*(W-L-R);
-        const y=H-B-((item.score-min)/(max-min))*(H-T-B);
-        return {x,y,score:item.score};
-      });
-
-      const poly=document.createElementNS("http://www.w3.org/2000/svg","polyline");
-      poly.setAttribute("points",points.map(p=>`${p.x},${p.y}`).join(" "));
-      poly.setAttribute("fill","none");
-      poly.setAttribute("stroke","#6736e8");
-      poly.setAttribute("stroke-width","3");
-      poly.setAttribute("stroke-linecap","round");
-      poly.setAttribute("stroke-linejoin","round");
-      svg.appendChild(poly);
-
-      points.forEach(p=>{
-        const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
-        c.setAttribute("cx",p.x);
-        c.setAttribute("cy",p.y);
-        c.setAttribute("r","4");
-        c.setAttribute("fill","#fff");
-        c.setAttribute("stroke","#6736e8");
-        c.setAttribute("stroke-width","2.5");
-        svg.appendChild(c);
-      });
-    }
-
-    function renderInbody(raw){
-      const history=normalizeInbodyHistory(raw);
-      const latest=history.length?history[history.length-1]:null;
-
-      $("inbodyScore").textContent=latest?fmtInt(latest.score):"--";
-      $("inbodyDate").textContent=latest?`(${fmtDateShort(latest.measuredAt)})`:"ยังไม่มีข้อมูล";
-      drawInbodyChart(history);
-    }
-
-    async function fetchInbodyHistory(){
-      // Render API contract รุ่นนี้ยังไม่มี InBody action
-      return {success:true,inbodyHistory:[]};
-    }
-
-    async function loadInbodyHistory(){
-      try{
-        const result=await fetchInbodyHistory();
-        renderInbody(result);
-      }catch(error){
-        console.warn("INBODY HISTORY ERROR:",error);
-        renderInbody({inbodyHistory:[]});
-      }
-    }
-
-    function openInbodyModal(){
-      const d=new Date();
-      $("inbodyMeasuredDate").value=[
-        d.getFullYear(),
-        String(d.getMonth()+1).padStart(2,"0"),
-        String(d.getDate()).padStart(2,"0")
-      ].join("-");
-      $("inbodyScoreInput").value="";
-      $("inbodyFileInput").value="";
-      $("inbodyModal").classList.add("show");
-    }
-
-    function closeInbodyModal(){
-      $("inbodyModal").classList.remove("show");
-    }
-
-   async function saveInbody(){
-      showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม InBody action",true);
-    }
-
-
-    /* =====================================================
-       HOME -> MISSION AUTO QUALIFY V2.12
-    ====================================================== */
-
-    function closeV212(id){
-      document
-        .getElementById(id)
-        ?.classList
-        .remove("show");
-    }
-
-    window.closeV212 =
-      closeV212;
-
-
-    async function saveDailyHealthV212(
-      payload
-    ){
-      return await postJson(
-        window.APP_CONFIG.getApi("PLAYER"),
-        {
-          action:"saveDailyHealth",
-          ...payload
-        }
-      );
-    }
-
-
-    function missionUrlV212(
-      missionId,
-      params = {}
-    ){
-      const url =
-        new URL(
-          window.APP_CONFIG?.PAGE?.MISSION ||
-          "./mission.html",
-          window.location.href
-        );
-
-      url.searchParams.set(
-        "mission",
-        missionId
-      );
-
-      Object.entries(params)
-        .forEach(
-          ([key,value]) => {
-            if(
-              value !== undefined &&
-              value !== null
-            ){
-              url.searchParams.set(
-                key,
-                String(value)
-              );
-            }
-          }
-        );
-
-      return url.toString();
-    }
-
-
-    function renderHomeMissionQualificationV212(){
-
-      const h =
-        window.HOME_V212_HEALTH ||
-        {
-          steps:0,
-          sleepMinutes:0,
-          exerciseActivities:[]
-        };
-
-      const moveButton =
-        document.getElementById(
-          "moveMoreMissionButton"
-        );
-
-      const sleepButton =
-        document.getElementById(
-          "sleepMissionButton"
-        );
-
-      if(moveButton){
-        moveButton.style.display =
-          h.steps >= 8000
-            ? ""
-            : "none";
-      }
-
-      if(sleepButton){
-        sleepButton.style.display =
-          h.sleepMinutes >= 420
-            ? ""
-            : "none";
-      }
-    }
-
-
-    function openStepsV212(){
-
-      const h =
-        window.HOME_V212_HEALTH ||
-        {};
-
-      const input =
-        document.getElementById(
-          "stepsInputV212"
-        );
-
-      input.value =
-        Math.round(
-          Number(
-            h.steps ||
-            0
-          )
-        );
-
-      updateStepsQualifyV212();
-
-      document
-        .getElementById(
-          "stepsModalV212"
-        )
-        .classList
-        .add("show");
-    }
-
-
-    function updateStepsQualifyV212(){
-
-      const steps =
-        Math.max(
-          0,
-          Math.round(
-            Number(
-              document
-                .getElementById(
-                  "stepsInputV212"
-                )
-                ?.value ||
-              0
-            )
-          )
-        );
-
-      const box =
-        document.getElementById(
-          "stepsQualifyV212"
-        );
-
-      const evidence =
-        document.getElementById(
-          "stepsEvidenceV212"
-        );
-
-      if(steps >= 8000){
-        box.innerHTML =
-          `<div style="margin-top:12px;color:#087438;font-weight:900">
-            ✅ ภารกิจ MOVE MORE สำเร็จตามเป้าหมายแล้ว ${steps.toLocaleString()} / 8,000 ก้าว
-          </div>
-          <div style="margin-top:5px;font-size:13px;color:#61748c">
-            สถานะสุขภาพถือว่าถึงเป้าหมายแล้ว แต่ยังไม่ได้รับรางวัล
-            • หากต้องการ Coin / Energy / EXP ให้กดส่งหลักฐานด้านล่าง
-          </div>`;
-
-        evidence.style.display =
-          "";
-      }else{
-        box.innerHTML =
-          `<div style="margin-top:12px;color:#6b7890;font-weight:800">
-            เหลืออีก ${(8000-steps).toLocaleString()} ก้าว
-          </div>`;
-
-        evidence.style.display =
-          "none";
-      }
-    }
-
-
-    async function saveStepsV212(){
-
-      const steps =
-        Math.max(
-          0,
-          Math.round(
-            Number(
-              document
-                .getElementById(
-                  "stepsInputV212"
-                )
-                ?.value ||
-              0
-            )
-          )
-        );
-
-      const btn =
-        document.getElementById(
-          "saveStepsV212"
-        );
-
-      btn.disabled = true;
-      btn.textContent =
-        "กำลังบันทึก...";
-
-      try{
-        await saveDailyHealthV212({
-          steps
-        });
-
-        closeV212(
-          "stepsModalV212"
-        );
-
-        await loadDailyHealth();
-
-      }catch(error){
-        alert(
-          error?.message ||
-          String(error)
-        );
-      }finally{
-        btn.disabled = false;
-        btn.textContent =
-          "บันทึกก้าว";
-      }
-    }
-
-
-    function openSleepV212(){
-
-      const total =
-        Math.max(
-          0,
-          Math.round(
-            Number(
-              window.HOME_V212_HEALTH
-                ?.sleepMinutes ||
-              0
-            )
-          )
-        );
-
-      document
-        .getElementById(
-          "sleepHoursV212"
-        )
-        .value =
-          Math.floor(
-            total /
-            60
-          );
-
-      document
-        .getElementById(
-          "sleepMinutesV212"
-        )
-        .value =
-          total %
-          60;
-
-      updateSleepQualifyV212();
-
-      document
-        .getElementById(
-          "sleepModalV212"
-        )
-        .classList
-        .add("show");
-    }
-
-
-    function getSleepMinutesV212(){
-
-      const h =
-        Math.max(
-          0,
-          Math.round(
-            Number(
-              document
-                .getElementById(
-                  "sleepHoursV212"
-                )
-                ?.value ||
-              0
-            )
-          )
-        );
-
-      const m =
-        Math.max(
-          0,
-          Math.min(
-            59,
-            Math.round(
-              Number(
-                document
-                  .getElementById(
-                    "sleepMinutesV212"
-                  )
-                  ?.value ||
-                0
-              )
-            )
-          )
-        );
-
-      return Math.min(
-        1440,
-        h * 60 + m
-      );
-    }
-
-
-    function updateSleepQualifyV212(){
-
-      const total =
-        getSleepMinutesV212();
-
-      const box =
-        document.getElementById(
-          "sleepQualifyV212"
-        );
-
-      const evidence =
-        document.getElementById(
-          "sleepEvidenceV212"
-        );
-
-      if(total >= 420){
-        box.innerHTML =
-          `<div style="margin-top:12px;color:#087438;font-weight:900">
-            ✅ ภารกิจ SLEEP WELL สำเร็จตามเป้าหมายแล้ว ${Math.floor(total/60)} ชม. ${total%60} นาที
-          </div>
-          <div style="margin-top:5px;font-size:13px;color:#61748c">
-            สถานะสุขภาพถือว่าถึงเป้าหมายแล้ว แต่ยังไม่ได้รับรางวัล
-            • หากต้องการ Coin / Energy / EXP ให้กดส่งหลักฐานด้านล่าง
-          </div>`;
-
-        evidence.style.display =
-          "";
-      }else{
-        box.innerHTML =
-          `<div style="margin-top:12px;color:#6b7890;font-weight:800">
-            เหลืออีก ${420-total} นาที จึงถึงเป้าหมาย 7 ชั่วโมง
-          </div>`;
-
-        evidence.style.display =
-          "none";
-      }
-    }
-
-
-    async function saveSleepV212(){
-
-      const sleepMinutes =
-        getSleepMinutesV212();
-
-      const btn =
-        document.getElementById(
-          "saveSleepV212"
-        );
-
-      btn.disabled = true;
-      btn.textContent =
-        "กำลังบันทึก...";
-
-      try{
-        await saveDailyHealthV212({
-          sleepMinutes
-        });
-
-        closeV212(
-          "sleepModalV212"
-        );
-
-        await loadDailyHealth();
-
-      }catch(error){
-        alert(
-          error?.message ||
-          String(error)
-        );
-      }finally{
-        btn.disabled = false;
-        btn.textContent =
-          "บันทึกการนอน";
-      }
-    }
-
-
-    function openActivitiesV212(){
-
-      const rows =
-        window.HOME_V212_HEALTH
-          ?.exerciseActivities ||
-        [];
-
-      const list =
-        document.getElementById(
-          "activityListV212"
-        );
-
-      if(!rows.length){
-        list.innerHTML =
-          `<div style="padding:18px 0;color:#697b91">
-            วันนี้ยังไม่มีกิจกรรมออกกำลังกายจาก Daily / Weekly
-          </div>`;
-      }else{
-        list.innerHTML =
-          rows
-            .map(
-              (row,index) => `
-                <div class="v212-activity">
-                  <strong>
-                    ${index+1}. ${String(row.label || row.sourceType || "Exercise").toUpperCase()}
-                  </strong>
-                  <div>
-                    ${Math.round(Number(row.durationMinutes || 0))} นาที
-                    • ≈ ${Math.round(Number(row.estimatedCalories || 0))} kcal
-                  </div>
-                </div>
-              `
-            )
-            .join("");
-      }
-
-      const total =
-        rows.reduce(
-          (sum,row) =>
-            sum +
-            Math.max(
-              0,
-              Number(
-                row.estimatedCalories ||
-                0
-              )
-            ),
-          0
-        );
-
-      document
-        .getElementById(
-          "activityTotalV212"
-        )
-        .textContent =
-          `รวม ≈ ${Math.round(total).toLocaleString()} kcal`;
-
-      document
-        .getElementById(
-          "activityModalV212"
-        )
-        .classList
-        .add("show");
-    }
-
-
-    document
-      .getElementById(
-        "editStepsButton"
+function normalizeDashboard(data){
+  const player = data?.player ?? data?.user ?? {};
+  const wallet = data?.wallet ?? {};
+  const weight = data?.weight ?? {};
+  const today = data?.today ?? data?.health ?? data?.activity ?? {};
+  const energyObj =
+    data?.energy && typeof data.energy === "object"
+      ? data.energy
+      : {};
+
+  const currentWeight =
+    pick(
+      weight.current,
+      weight.currentWeight,
+      data.currentWeight,
+      data?.weight?.current_weight
+    );
+
+  const startWeight =
+    pick(
+      weight.start,
+      weight.startWeight,
+      data.startWeight,
+      data?.weight?.start_weight
+    );
+
+  const targetWeight =
+    pick(
+      weight.target,
+      weight.targetWeight,
+      data.targetWeight,
+      data?.weight?.target_weight
+    );
+
+  const c = Number(currentWeight);
+  const s = Number(startWeight);
+  const t = Number(targetWeight);
+
+  let weightProgress = n(
+    pick(
+      weight.progressPercent,
+      data.weightProgressPct
+    ),
+    0
+  );
+
+  let lostWeight = null;
+  let remainingWeight = null;
+
+  if(Number.isFinite(c) && Number.isFinite(s)){
+    lostWeight = Math.max(0,s-c);
+  }
+
+  if(Number.isFinite(c) && Number.isFinite(t)){
+    remainingWeight = Math.max(0,c-t);
+  }
+
+  if(
+    Number.isFinite(s) &&
+    Number.isFinite(c) &&
+    Number.isFinite(t) &&
+    s !== t
+  ){
+    weightProgress = clamp(
+      ((s-c)/(s-t))*100,
+      0,
+      100
+    );
+  }
+
+  return {
+    player:{
+      displayName:
+        pick(
+          player.displayName,
+          player.lineDisplayName,
+          player.line_display_name,
+          data.lineDisplayName
+        ) || "ROCK HERO",
+
+      pictureUrl:
+        pick(
+          player.pictureUrl,
+          player.picture_url,
+          data.pictureUrl
+        ) || "",
+
+      level:n(
+        pick(
+          player.level,
+          data.level
+        ),
+        1
       )
-      ?.addEventListener(
-        "click",
-        openStepsV212
-      );
+    },
 
-    document
-      .getElementById(
-        "stepsInputV212"
+    wallet:{
+      rockCoin:n(
+        pick(
+          wallet.rockCoin,
+          wallet.rock_coin,
+          data.rockCoin,
+          data.rock_coin
+        ),
+        0
+      ),
+
+      energy:n(
+        pick(
+          wallet.energy,
+          energyObj.current,
+          typeof data.energy === "number" ? data.energy : null
+        ),
+        0
+      ),
+
+      maxEnergy:n(
+        pick(
+          wallet.maxEnergy,
+          energyObj.max,
+          data.maxEnergy,
+          window.APP_CONFIG?.MAX_ENERGY
+        ),
+        200
       )
-      ?.addEventListener(
-        "input",
-        updateStepsQualifyV212
-      );
+    },
 
-    document
-      .getElementById(
-        "saveStepsV212"
+    exp:{
+      current:n(
+        pick(
+          data.exp,
+          player.exp,
+          data?.experience?.current
+        ),
+        0
+      ),
+
+      max:n(
+        pick(
+          data.nextLevelExp,
+          data.expNext,
+          data?.experience?.max,
+          window.APP_CONFIG?.EXP_PER_LEVEL
+        ),
+        500
       )
-      ?.addEventListener(
-        "click",
-        saveStepsV212
-      );
+    },
 
-    document
-      .getElementById(
-        "moveMoreMissionButton"
+    weight:{
+      start:startWeight,
+      current:currentWeight,
+      target:targetWeight,
+      progress:weightProgress,
+      lost:lostWeight,
+      remaining:remainingWeight
+    },
+
+    today:{
+      steps:n(
+        pick(
+          today.steps,
+          data.steps
+        ),
+        0
+      ),
+
+      calories:n(
+        pick(
+          today.calories,
+          today.caloriesBurned,
+          today.calories_burned,
+          data.calories
+        ),
+        0
+      ),
+
+      sleepMinutes:n(
+        pick(
+          today.sleepMinutes,
+          today.sleep_minutes,
+          data.sleepMinutes
+        ),
+        0
+      ),
+
+      healthScore:pick(
+        today.healthScore,
+        today.health_score,
+        data.healthScore
       )
-      ?.addEventListener(
-        "click",
-        openStepsV212
-      );
-
-    document
-      .getElementById(
-        "stepsEvidenceV212"
-      )
-      ?.addEventListener(
-        "click",
-        () => {
-          window.location.href =
-            missionUrlV212(
-              "daily_move_more",
-              {
-                steps:
-                  document
-                    .getElementById(
-                      "stepsInputV212"
-                    )
-                    ?.value ||
-                  0,
-                evidence:
-                  1
-              }
-            );
-        }
-      );
-
-    document
-      .getElementById(
-        "editSleepButton"
-      )
-      ?.addEventListener(
-        "click",
-        openSleepV212
-      );
-
-    document
-      .getElementById(
-        "sleepHoursV212"
-      )
-      ?.addEventListener(
-        "input",
-        updateSleepQualifyV212
-      );
-
-    document
-      .getElementById(
-        "sleepMinutesV212"
-      )
-      ?.addEventListener(
-        "input",
-        updateSleepQualifyV212
-      );
-
-    document
-      .getElementById(
-        "saveSleepV212"
-      )
-      ?.addEventListener(
-        "click",
-        saveSleepV212
-      );
-
-    document
-      .getElementById(
-        "sleepMissionButton"
-      )
-      ?.addEventListener(
-        "click",
-        openSleepV212
-      );
-
-    document
-      .getElementById(
-        "sleepEvidenceV212"
-      )
-      ?.addEventListener(
-        "click",
-        () => {
-          window.location.href =
-            missionUrlV212(
-              "daily_sleep",
-              {
-                sleepMinutes:
-                  getSleepMinutesV212(),
-                evidence:
-                  1
-              }
-            );
-        }
-      );
-
-    document
-      .getElementById(
-        "calories"
-      )
-      ?.addEventListener(
-        "click",
-        openActivitiesV212
-      );
-
-    /* =====================================================
-       LOAD ALL HOME DATA
-    ====================================================== */
-
-
-
-    /* =====================================================
-       DAILY HEALTH
-       ข้อมูลมาจาก DAILY MISSION
-    ====================================================== */
-
-    async function fetchDailyHealth(){
-
-      const raw = await postJson(
-        window.APP_CONFIG.getApi("PLAYER"),
-        {
-          action:"dailyHealth"
-        }
-      );
-
-      const data =
-        raw?.data ??
-        raw?.dashboard ??
-        raw ??
-        {};
-
-      const health =
-        data?.activity ??
-        data?.today ??
-        data?.health ??
-        {};
-
-      return { health };
     }
-
-
-    function renderDailyHealth(
-      raw
-    ){
-
-      const health =
-        raw?.health ??
-        raw?.data?.health ??
-        {};
-
-
-      const steps =
-        num(
-          health?.steps,
-          0
-        );
-
-
-      const calories =
-        num(
-          health?.calories,
-          0
-        );
-
-
-      const sleepMinutes =
-        num(
-          health?.sleepMinutes ??
-          health?.sleep_minutes ??
-          health?.sleep?.totalMinutes ??
-          health?.sleep?.total_minutes,
-          0
-        );
-
-
-      const stepsGoal =
-        num(
-          health?.goals?.steps ??
-          window.APP_CONFIG
-            ?.DAILY_GOALS
-            ?.STEPS,
-          8000
-        );
-
-
-      const caloriesGoal =
-        num(
-          health?.goals?.calories ??
-          window.APP_CONFIG
-            ?.DAILY_GOALS
-            ?.CALORIES,
-          300
-        );
-
-
-      const sleepGoal =
-        num(
-          health?.goals?.sleepMinutes ??
-          window.APP_CONFIG
-            ?.DAILY_GOALS
-            ?.SLEEP_MINUTES,
-          420
-        );
-
-
-      $("steps")
-        .textContent =
-          fmtInt(
-            steps
-          );
-
-
-      $("calories")
-        .textContent =
-          `${fmtInt(calories)} kcal`;
-
-
-      const calorieBreakdown =
-        health?.caloriesBreakdown ??
-        health?.calories_breakdown ??
-        {};
-
-      const stepsKcal =
-        num(
-          calorieBreakdown?.steps,
-          0
-        );
-
-      const exerciseKcal =
-        num(
-          calorieBreakdown?.exercise,
-          0
-        );
-
-      $("calories").title =
-        `Steps ${fmtInt(stepsKcal)} kcal + Exercise ${fmtInt(exerciseKcal)} kcal`;
-
-
-      $("sleep")
-        .textContent =
-          sleepMinutes > 0
-            ? fmtSleep({
-                totalMinutes:
-                  sleepMinutes
-              })
-            : "0 ชม. 0 นาที";
-
-
-      const waterMl =
-        num(
-          health?.waterMl ??
-          health?.water_ml,
-          0
-        );
-
-      const exerciseMinutes =
-        num(
-          health?.exerciseMinutes ??
-          health?.exercise_minutes,
-          0
-        );
-
-      document.body.dataset.todaySteps =
-        String(
-          Math.round(steps)
-        );
-
-      document.body.dataset.todayCalories =
-        String(
-          Math.round(calories)
-        );
-
-      document.body.dataset.todaySleepMinutes =
-        String(
-          Math.round(sleepMinutes)
-        );
-
-      document.body.dataset.todayWaterMl =
-        String(
-          Math.round(waterMl)
-        );
-
-      document.body.dataset.todayExerciseMinutes =
-        String(
-          Math.round(exerciseMinutes)
-        );
-
-      window.HOME_V212_HEALTH = {
-        steps,
-        sleepMinutes,
-        calories,
-        exerciseActivities:
-          health?.exerciseActivities ??
-          health?.exercise_activities ??
-          [],
-        moveMoreQualified:
-          Boolean(
-            health?.moveMoreQualified ??
-            steps >= 8000
-          ),
-        sleepWellQualified:
-          Boolean(
-            health?.sleepWellQualified ??
-            sleepMinutes >= 420
-          )
-      };
-
-      renderHomeMissionQualificationV212();
-
-
-      setBar(
-        "stepsBar",
-        stepsGoal > 0
-          ? (
-              steps /
-              stepsGoal
-            ) * 100
-          : 0
-      );
-
-
-      setBar(
-        "caloriesBar",
-        caloriesGoal > 0
-          ? (
-              calories /
-              caloriesGoal
-            ) * 100
-          : 0
-      );
-
-
-      setBar(
-        "sleepBar",
-        sleepGoal > 0
-          ? (
-              sleepMinutes /
-              sleepGoal
-            ) * 100
-          : 0
-      );
-
-    }
-
-
-    async function loadDailyHealth(){
-
-      try{
-
-        const result =
-          await fetchDailyHealth();
-
-
-        renderDailyHealth(
-          result
-        );
-
-
-      }catch(error){
-
-        console.warn(
-          "DAILY HEALTH ERROR:",
-          error
-        );
-
-
-        /*
-         * Daily Mission มีปัญหา
-         * HOME ส่วนอื่นยังต้องทำงานต่อ
-         */
-        renderDailyHealth({
-          health: {
-            steps: 0,
-            calories: 0,
-            sleepMinutes: 0
-          }
-        });
-
-      }
-
-    }
-
-
-    async function loadProjectSettings(){
-      // Project data แสดงจาก payload ของ action:dashboard ใน renderHome() แล้ว
-      return;
-    }
-
-
-    async function loadHome(){
-      if(loading) return;
-      loading=true;
-
-      try{
-        const raw=await fetchDashboard();
-
-        await renderHome(raw);
-
-        /*
-          Steps / Calories / Sleep
-          ใช้ข้อมูลจริงจาก DAILY MISSION / DAILY_HEALTH
-          ถ้าไม่มีข้อมูล renderDailyHealth() จะแสดง 0
-        */
-        /*
-          Daily Health รวมอยู่ใน action: dashboard แล้ว
-          ไม่ยิง player-dashboard ซ้ำรอบที่ 2
-        */
-        {
-          const data =
-            raw?.data ??
-            raw?.dashboard ??
-            raw ??
-            {};
-
-          renderDailyHealth({
-            health:
-              data?.activity ??
-              data?.health ??
-              data?.today ??
-              {}
-          });
-        }
-
-        /*
-          สำคัญ:
-          InBody โหลดแยกจาก Dashboard
-          ต่อให้ InBody error ก็ไม่ทำให้ HOME ทั้งหน้าล้ม
-        */
-        /*
-          HOME SINGLE API V4.0:
-          InBody / Project / Ranking อยู่ใน action:dashboard แล้ว
-          ไม่ยิง API เพิ่ม
-        */
-        {
-          const data =
-            raw?.data ??
-            raw?.dashboard ??
-            raw ??
-            {};
-
-          renderInbody({
-            inbodyHistory:
-              data?.inbodyHistory ??
-              data?.inbody_history ??
-              []
-          });
-        }
-
-        hideStatus();
-
-      }catch(error){
-        console.error("HOME LOAD ERROR:",error);
-        showStatus(error?.message || "โหลดข้อมูล HOME ไม่สำเร็จ",true);
-      }finally{
-        loading=false;
-      }
-    }
-
-
-    function openTeamEditModal(){
-      const modal=$("teamEditModal");
-      const profile=currentLineProfile || {};
-      $("lineDisplayNameBox").textContent=profile?.displayName || $("teamName")?.textContent || "--";
-      $("teamNameInput").value=currentTeamName || "";
-      modal.classList.add("show");
-    }
-
-    function closeTeamEditModal(){
-      $("teamEditModal").classList.remove("show");
-    }
-
-    async function saveTeamName(){
-      showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม action สำหรับเปลี่ยนชื่อทีม",true);
-    }
-
-    function goPage(name){
-      const page=window.APP_CONFIG?.PAGE?.[name] ?? window.APP_CONFIG?.PAGES?.[name];
-      if(!page){
-        showStatus("ไม่พบหน้า "+name,true);
-        return;
-      }
-      window.location.href=page;
-    }
-
-
-    function goConfiguredPage(
-      name,
-      fallback
-    ){
-
-      const url =
-        window.APP_CONFIG
-          ?.PAGE
-          ?.[name] ||
-        window.APP_CONFIG
-          ?.PAGES
-          ?.[name] ||
-        fallback;
-
-      if(url){
-        window.location.href =
-          url;
-      }
-
-    }
-
-
-    $("steps")
-      ?.addEventListener(
-        "click",
-        () => {
-          goConfiguredPage(
-            "DAILY_MOVE",
-            "./mission.html?category=daily&mission=daily_move_more"
-          );
-        }
-      );
-
-
-    $("calories")
-      ?.addEventListener(
-        "click",
-        () => {
-          goConfiguredPage(
-            "DAILY_EXERCISE",
-            "./mission.html?category=daily&mission=daily_exercise_30"
-          );
-        }
-      );
-
-
-    $("sleep")
-      ?.addEventListener(
-        "click",
-        () => {
-          goConfiguredPage(
-            "DAILY_SLEEP",
-            "./mission.html?category=daily&mission=daily_sleep"
-          );
-        }
-      );
-
-
-    $("teamName").addEventListener("click",openTeamEditModal);
-    $("teamCancel").addEventListener("click",closeTeamEditModal);
-    $("teamSave").addEventListener("click",saveTeamName);
-    $("teamEditModal").addEventListener("click",event=>{
-      if(event.target===$("teamEditModal")) closeTeamEditModal();
+  };
+}
+
+function renderDashboard(raw){
+  const data = normalizeDashboard(raw);
+  state.dashboard = data;
+
+  $("coin").textContent = fmt(data.wallet.rockCoin);
+  $("energy").textContent =
+    `${fmt(data.wallet.energy)} / ${fmt(data.wallet.maxEnergy)}`;
+
+  $("lineName").textContent = data.player.displayName;
+  $("level").textContent = `Lv.${Math.max(1,Math.round(data.player.level))}`;
+
+  if(data.player.pictureUrl){
+    $("profileImage").src = data.player.pictureUrl;
+    $("profileImage").style.display = "block";
+    $("profilePlaceholder").style.display = "none";
+  }
+
+  const expMax = Math.max(1,data.exp.max);
+  const expPct = clamp(data.exp.current/expMax*100,0,100);
+  $("expFill").style.width = expPct + "%";
+  $("expText").textContent = `${fmt(data.exp.current)} / ${fmt(expMax)}`;
+
+  $("currentWeight").textContent = fmtWeight(data.weight.current);
+  $("targetWeight").textContent = fmtWeight(data.weight.target);
+
+  const wp = clamp(data.weight.progress,0,100);
+  $("weightProgressFill").style.width = wp + "%";
+  $("weightProgressPct").textContent = `${Math.round(wp)}%`;
+
+  $("lostWeight").textContent =
+    data.weight.lost == null ? "-- kg" : `${Number(data.weight.lost).toFixed(1)} kg`;
+
+  $("remainingWeight").textContent =
+    data.weight.remaining == null ? "-- kg" : `${Number(data.weight.remaining).toFixed(1)} kg`;
+
+  $("steps").textContent = fmt(data.today.steps);
+  $("calories").textContent = fmt(data.today.calories);
+
+  const sleepMinutes = Math.max(0,Math.round(data.today.sleepMinutes));
+  const h = Math.floor(sleepMinutes/60);
+  const m = sleepMinutes%60;
+  $("sleep").textContent = `${h} ชม. ${m} นาที`;
+
+  $("healthScore").textContent =
+    data.today.healthScore == null
+      ? "-- / 100"
+      : `${Math.round(n(data.today.healthScore,0))} / 100`;
+}
+
+/* =========================================================
+   STEPS / SLEEP SAVE
+   ใช้ PLAYER function ตัวเดิม
+========================================================= */
+
+async function saveDailyHealth(payload){
+  /*
+    เป็น PLAYER API เดียวกัน แต่เป็น write action
+    หลัง save จะเรียก dashboard เพียง 1 ครั้งเพื่อ refresh
+  */
+  return await playerApi({
+    action:"saveDailyHealth",
+    ...payload
+  });
+}
+
+function openModal(id){
+  $(id).classList.add("show");
+}
+
+function closeModal(id){
+  $(id).classList.remove("show");
+}
+
+function updateStepsStatus(){
+  const steps = Math.max(0,Math.round(n($("stepsInput").value,0)));
+  const status = $("stepsStatus");
+  const evidence = $("stepsEvidence");
+
+  if(steps >= 8000){
+    status.className = "modal-status success";
+    status.innerHTML =
+      `✅ MOVE MORE สำเร็จแล้ว<br>
+       ${steps.toLocaleString()} / 8,000 ก้าว<br>
+       <small>หากต้องการรางวัล ต้องแนบหลักฐานและส่งให้ Admin ตรวจ</small>`;
+
+    evidence.style.display = "block";
+  }else{
+    status.className = "modal-status warning";
+    status.innerHTML =
+      `วันนี้เดินแล้ว ${steps.toLocaleString()} ก้าว<br>
+       เหลืออีก ${(8000-steps).toLocaleString()} ก้าว`;
+
+    evidence.style.display = "none";
+  }
+}
+
+function clockToMinutes(value){
+  const m = String(value || "").match(/^(\d{1,2}):(\d{2})$/);
+  if(!m) return null;
+  const h = Number(m[1]);
+  const min = Number(m[2]);
+  if(h<0 || h>23 || min<0 || min>59) return null;
+  return h*60+min;
+}
+
+function getSleepMinutes(){
+  const start = clockToMinutes($("sleepStart").value);
+  const wake = clockToMinutes($("sleepWake").value);
+
+  if(start == null || wake == null) return 0;
+
+  let total = wake-start;
+  if(total <= 0) total += 24*60;
+
+  return Math.max(0,Math.min(1440,total));
+}
+
+function updateSleepStatus(){
+  const total = getSleepMinutes();
+  const h = Math.floor(total/60);
+  const m = total%60;
+
+  $("sleepDuration").textContent = `${h} ชม. ${m} นาที`;
+
+  const status = $("sleepStatus");
+  const evidence = $("sleepEvidence");
+
+  if(total >= 420){
+    status.className = "modal-status success";
+    status.innerHTML =
+      `✅ SLEEP WELL สำเร็จแล้ว<br>
+       นอนทั้งหมด ${h} ชม. ${m} นาที<br>
+       <small>หากต้องการรางวัล ต้องแนบหลักฐานและส่งให้ Admin ตรวจ</small>`;
+
+    evidence.style.display = "block";
+  }else{
+    status.className = "modal-status warning";
+    status.innerHTML =
+      `ยังไม่ถึงเป้าหมาย 7 ชั่วโมง<br>
+       เหลืออีก ${Math.max(0,420-total)} นาที`;
+
+    evidence.style.display = "none";
+  }
+}
+
+async function refreshHome(){
+  const raw = await fetchDashboard();
+  renderDashboard(raw);
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("stepsCard").addEventListener("click",()=>{
+  $("stepsInput").value = state.dashboard?.today?.steps ?? 0;
+  updateStepsStatus();
+  openModal("stepsModal");
+});
+
+$("sleepCard").addEventListener("click",()=>{
+  updateSleepStatus();
+  openModal("sleepModal");
+});
+
+$("stepsInput").addEventListener("input",updateStepsStatus);
+$("sleepStart").addEventListener("input",updateSleepStatus);
+$("sleepWake").addEventListener("input",updateSleepStatus);
+
+$("saveStepsButton").addEventListener("click",async()=>{
+  const btn = $("saveStepsButton");
+  const steps = Math.max(0,Math.round(n($("stepsInput").value,0)));
+
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+
+  try{
+    await saveDailyHealth({steps});
+    await refreshHome();
+    updateStepsStatus();
+
+    toast(
+      steps >= 8000
+        ? "✅ MOVE MORE สำเร็จ • แนบหลักฐานเพื่อรับรางวัล"
+        : `บันทึก ${steps.toLocaleString()} ก้าวแล้ว`
+    );
+  }catch(error){
+    toast(error?.message || "บันทึกก้าวไม่สำเร็จ",true);
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "บันทึกก้าว";
+  }
+});
+
+$("saveSleepButton").addEventListener("click",async()=>{
+  const btn = $("saveSleepButton");
+  const sleepMinutes = getSleepMinutes();
+  const sleepStart = $("sleepStart").value;
+  const sleepWake = $("sleepWake").value;
+
+  btn.disabled = true;
+  btn.textContent = "กำลังบันทึก...";
+
+  try{
+    await saveDailyHealth({
+      sleepMinutes,
+      sleepStart,
+      sleepWake
     });
 
-    $("weightButton").addEventListener("click",()=>goPage("WEIGHT"));
-    $("progressButton").addEventListener("click",()=>goPage("PROGRESS"));
-    $("projectSettingsButton").addEventListener("click",()=>goPage("PROJECT_SETTINGS"));
-    $("rankingButton").addEventListener("click",()=>goPage("RANKING"));
-    $("rewardsButton").addEventListener("click",()=>goPage("REWARDS"));
-    $("homeButton").addEventListener("click",()=>goPage("HOME"));
-    $("missionButton").addEventListener("click",()=>goPage("MISSION"));
-    $("battleButton").addEventListener("click",()=>goPage("BATTLE"));
+    await refreshHome();
+    updateSleepStatus();
 
-    $("inbodyViewButton").addEventListener("click",()=>goConfiguredPage("INBODY","./inbody.html"));
-    $("inbodyUpload").addEventListener("click",()=>goConfiguredPage("INBODY","./inbody.html"));
-    $("inbodyCancel").addEventListener("click",closeInbodyModal);
-    $("inbodySave").addEventListener("click",saveInbody);
+    const h = Math.floor(sleepMinutes/60);
+    const m = sleepMinutes%60;
 
-    $("inbodyModal").addEventListener("click",event=>{
-      if(event.target===$("inbodyModal")) closeInbodyModal();
-    });
+    toast(
+      sleepMinutes >= 420
+        ? `✅ SLEEP WELL สำเร็จ • ${h} ชม. ${m} นาที • แนบหลักฐานเพื่อรับรางวัล`
+        : `บันทึกการนอน ${h} ชม. ${m} นาทีแล้ว`
+    );
+  }catch(error){
+    toast(error?.message || "บันทึกการนอนไม่สำเร็จ",true);
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "บันทึกการนอน";
+  }
+});
 
-    $("notificationBell")
-      ?.addEventListener(
-        "click",
-        openNotifications
-      );
+$("stepsEvidence").addEventListener("click",()=>{
+  window.location.href =
+    (window.APP_CONFIG?.PAGE?.MISSION || "./mission.html") +
+    "?category=daily&mission=daily_move_more&evidence=1&source=home";
+});
 
-    $("closeNotificationsButton")
-      ?.addEventListener(
-        "click",
-        closeNotifications
-      );
+$("sleepEvidence").addEventListener("click",()=>{
+  window.location.href =
+    (window.APP_CONFIG?.PAGE?.MISSION || "./mission.html") +
+    "?category=daily&mission=daily_sleep&evidence=1&source=home";
+});
 
-    $("notificationPanel")
-      ?.addEventListener(
-        "click",
-        event => {
-          if(
-            event.target ===
-            $("notificationPanel")
-          ){
-            closeNotifications();
-          }
-        }
-      );
+$("weightCheckButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.WEIGHT ||
+    "./weight-check.html";
+});
 
-    $("markAllNotificationsButton")
-      ?.addEventListener(
-        "click",
-        async () => {
+$("progressButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.PROGRESS ||
+    "./progress.html";
+});
 
-          try{
+$("missionButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.MISSION ||
+    "./mission.html";
+});
 
-            await markAllNotificationsRead();
+$("battleButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.BATTLE ||
+    "./battle.html";
+});
 
-            notificationItems =
-              notificationItems
-                .map(
-                  item => ({
-                    ...item,
-                    is_read:true
-                  })
-                );
+/* =========================================================
+   START
+========================================================= */
 
-            renderNotificationBadge();
-            renderNotificationList();
+(async()=>{
+  try{
+    const ready = await initLiff();
+    if(ready === false) return;
 
-          }catch(error){
+    await refreshHome();
 
-            showStatus(
-              error?.message ||
-              "อัปเดต Notification ไม่สำเร็จ",
-              true
-            );
-          }
-        }
-      );
+    setInterval(()=>{
+      refreshHome().catch(error=>{
+        console.warn("HOME REFRESH:",error);
+      });
+    },Number(window.APP_CONFIG?.REFRESH_MS || 30000));
 
-    $("notificationToast")
-      ?.addEventListener(
-        "click",
-        async () => {
-
-          const item =
-            notificationToastItem;
-
-          if(!item){
-            return;
-          }
-
-          try{
-
-            if(
-              item.is_read ===
-              false
-            ){
-              await markNotificationRead(
-                item.id
-              );
-            }
-
-          }catch(error){
-            console.warn(
-              "TOAST MARK READ ERROR:",
-              error
-            );
-          }
-
-          hideNotificationToast();
-
-          window.location.href =
-            item.target_page ||
-            "./inbody.html";
-        }
-      );
-
-
-    async function startApp(){
-      try{
-        showStatus("กำลังเชื่อมต่อ LINE...");
-
-        const ready=await initLINE();
-        if(ready===false) return;
-
-        await loadHome();
-        renderNotificationBadge();
-
-        /*
-          HOME V4.0 เรียกข้อมูลหลักจาก PLAYER API เพียงครั้งเดียว
-          ไม่ยิง notifications แยกในหน้า HOME
-        */
-        const ms=num(window.APP_CONFIG?.REFRESH_MS,30000);
-        refreshTimer =
-          setInterval(
-            async () => {
-              await loadHome();
-            },
-            Math.max(
-              10000,
-              ms
-            )
-          );
-
-      }catch(error){
-        console.error("START APP ERROR:",error);
-        showStatus(error?.message || "เปิดแอปไม่สำเร็จ",true);
-      }
-    }
-
-    startApp();
-  </script>
-
-<div id="stepsModalV212" class="v212-modal-bg">
-  <div class="v212-modal">
-    <h3>👣 จำนวนก้าววันนี้</h3>
-    <div class="v212-field">
-      <label for="stepsInputV212">จำนวนก้าว</label>
-      <input id="stepsInputV212" type="number" min="0" max="200000" step="1" inputmode="numeric">
-    </div>
-    <div id="stepsQualifyV212"></div>
-    <button id="stepsEvidenceV212" class="v212-mission" type="button" style="display:none">
-      📷 ส่งหลักฐาน MOVE MORE เพื่อรับรางวัล
-    </button>
-    <div class="v212-actions">
-      <button class="v212-cancel" type="button" onclick="closeV212('stepsModalV212')">ยกเลิก</button>
-      <button id="saveStepsV212" class="v212-save" type="button">บันทึกก้าว</button>
-    </div>
-  </div>
-</div>
-
-<div id="sleepModalV212" class="v212-modal-bg">
-  <div class="v212-modal">
-    <h3>😴 การนอนหลับเมื่อคืน</h3>
-    <div class="v212-grid">
-      <div class="v212-field">
-        <label for="sleepHoursV212">ชั่วโมง</label>
-        <input id="sleepHoursV212" type="number" min="0" max="24" step="1">
-      </div>
-      <div class="v212-field">
-        <label for="sleepMinutesV212">นาที</label>
-        <input id="sleepMinutesV212" type="number" min="0" max="59" step="1">
-      </div>
-    </div>
-    <div id="sleepQualifyV212"></div>
-    <button id="sleepEvidenceV212" class="v212-mission" type="button" style="display:none">
-      📷 ส่งหลักฐาน SLEEP WELL เพื่อรับรางวัล
-    </button>
-    <div class="v212-actions">
-      <button class="v212-cancel" type="button" onclick="closeV212('sleepModalV212')">ยกเลิก</button>
-      <button id="saveSleepV212" class="v212-save" type="button">บันทึกการนอน</button>
-    </div>
-  </div>
-</div>
-
-<div id="activityModalV212" class="v212-modal-bg">
-  <div class="v212-modal">
-    <h3>🔥 กิจกรรมออกกำลังกายวันนี้</h3>
-    <div style="font-size:13px;color:#63758d">
-      แคลอรี่เป็นค่าประมาณจากกิจกรรม Daily / Weekly ที่บันทึกในระบบ
-    </div>
-    <div id="activityListV212"></div>
-    <div id="activityTotalV212" class="v212-total">รวม 0 kcal</div>
-    <div class="v212-actions" style="grid-template-columns:1fr">
-      <button class="v212-cancel" type="button" onclick="closeV212('activityModalV212')">ปิด</button>
-    </div>
-  </div>
-</div>
+  }catch(error){
+    console.error("HOME INIT:",error);
+    toast(error?.message || "โหลดข้อมูล HOME ไม่สำเร็จ",true);
+  }
+})();
+</script>
 
 </body>
 </html>
