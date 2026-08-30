@@ -251,7 +251,7 @@
     }
   
     /* =========================================================
-       PROGRESS V3.3 SAVE-FIX — EXP / WEIGHT STATUS / INBODY FILTER
+       PROGRESS V4.0 FULL-FLOW — EXP / WEIGHT STATUS / INBODY FILTER
     ========================================================= */
 
     .status-grid{
@@ -445,7 +445,7 @@
 
 
     /* =========================================================
-       PROGRESS V3.3 SAVE-FIX — INBODY MANUAL ENTRY
+       PROGRESS V4.0 FULL-FLOW — INBODY MANUAL ENTRY
     ========================================================= */
 
     .inbody-entry-box{
@@ -542,6 +542,184 @@
         grid-column:span 1;
       }
     }
+
+
+    /* =========================================================
+       PROGRESS V3.4 — INBODY GOAL PLANNER
+    ========================================================= */
+
+    .goal-planner{
+      margin-top:16px;
+      padding:16px;
+      border:1px solid #cbdcf0;
+      border-radius:17px;
+      background:linear-gradient(180deg,#ffffff,#f7fbff);
+    }
+
+    .goal-planner h3{
+      margin:0;
+      color:#123d73;
+      font-size:18px;
+    }
+
+    .goal-planner-sub{
+      margin:5px 0 12px;
+      color:#687f98;
+      font-size:11px;
+      line-height:1.55;
+    }
+
+    .goal-plan-selects{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .goal-plan-selects label{
+      display:block;
+      margin-bottom:5px;
+      color:#31577f;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .goal-plan-selects select{
+      width:100%;
+      min-height:44px;
+      border:1px solid #cfdeec;
+      border-radius:11px;
+      padding:8px 10px;
+      background:#fff;
+      color:#173b67;
+      font-weight:700;
+    }
+
+    .goal-plan-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .goal-plan-meta > div{
+      padding:10px 12px;
+      border-radius:12px;
+      background:#eef5fd;
+      color:#294f7b;
+      font-size:11px;
+    }
+
+    .goal-plan-meta b{
+      display:block;
+      margin-top:2px;
+      color:#082f70;
+      font-size:17px;
+    }
+
+    .goal-target-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .goal-target-card{
+      padding:11px 8px;
+      border-radius:13px;
+      background:#fff;
+      border:1px solid #dbe7f3;
+      text-align:center;
+    }
+
+    .goal-target-card span{
+      display:block;
+      color:#6a7f95;
+      font-size:10px;
+      font-weight:800;
+    }
+
+    .goal-target-card b{
+      display:block;
+      margin-top:3px;
+      color:#072e6e;
+      font-size:18px;
+    }
+
+    .goal-target-card small{
+      display:block;
+      margin-top:4px;
+      color:#526c86;
+      font-size:10px;
+    }
+
+    .goal-activity-box{
+      margin-top:11px;
+      padding:11px 12px;
+      border-radius:12px;
+      background:#effaf3;
+      color:#286142;
+      font-size:11px;
+      line-height:1.6;
+    }
+
+    .goal-disclaimer{
+      margin-top:9px;
+      color:#7b6a3d;
+      font-size:9px;
+      line-height:1.5;
+    }
+
+    .goal-save-row{
+      margin-top:12px;
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .nutrition-goal-badge{
+      display:none;
+      margin:0 0 10px;
+      padding:9px 11px;
+      border-radius:11px;
+      background:#eff8f3;
+      color:#16623a;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .nutrition-goal-badge.show{
+      display:block;
+    }
+
+    @media(max-width:650px){
+      .goal-plan-selects,
+      .goal-plan-meta{
+        grid-template-columns:1fr;
+      }
+
+      .goal-target-grid{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+
+    /* =========================================================
+       PROGRESS V4.0 — ACTIVITY BURN FLOW
+    ========================================================= */
+    .activity-flow-card{margin-top:12px;padding:16px;border:1px solid #d7e4f1;border-radius:18px;background:#fff}
+    .activity-flow-top{display:flex;justify-content:space-between;gap:10px;align-items:end}
+    .activity-flow-top h3{margin:0;color:#173d73;font-size:18px}
+    .activity-flow-number{color:#0a3e7e;font-size:16px;font-weight:1000;white-space:nowrap}
+    .activity-flow-track{margin-top:12px;height:16px;border-radius:999px;background:#dce8f4;overflow:hidden}
+    .activity-flow-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#ff9d00,#ff5000);transition:width .3s ease}
+    .activity-flow-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+    .activity-flow-stat{padding:10px;border-radius:12px;background:#f5f9fd;text-align:center}
+    .activity-flow-stat span{display:block;color:#6c8095;font-size:10px;font-weight:800}
+    .activity-flow-stat b{display:block;margin-top:3px;color:#143e72;font-size:17px}
+    .activity-example-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .activity-example-card{padding:10px;border:1px solid #dce7f2;border-radius:12px;background:#fbfdff;color:#536b84;font-size:10px;line-height:1.5}
+    .activity-example-card b{display:block;color:#173e72;font-size:12px}
+    @media(max-width:650px){.activity-example-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:430px){.activity-flow-stats,.activity-example-grid{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -721,6 +899,13 @@
           ค่าที่ไม่มีข้อมูลจริงจะไม่ถูกเดา
         </p>
 
+        <div
+          id="nutritionGoalBadge"
+          class="nutrition-goal-badge"
+        >
+          ยังไม่ได้ตั้งเป้าหมายจาก InBody
+        </div>
+
         <div class="grid">
 
           <div class="item">
@@ -865,6 +1050,50 @@
             </div>
           </div>
 
+        </div>
+      </section>
+
+
+
+      <section class="section">
+        <h2>🔥 Activity / Calories Burned</h2>
+        <p class="sub">
+          เป้าหมายเผาผลาญไม่ใช่ TDEE • คำนวณจาก Weight + Goal + Activity Factor
+          และกิจกรรมแต่ละชนิดประมาณจาก MET × Weight × ชั่วโมง
+        </p>
+
+        <div class="activity-flow-card">
+          <div class="activity-flow-top">
+            <div>
+              <h3 id="activityGoalName">เป้าหมายกิจกรรมวันนี้</h3>
+              <div id="activityFactorText" class="sub">ยังไม่ได้เลือก Goal</div>
+            </div>
+            <div class="activity-flow-number">
+              <span id="activityDoneTop">0</span> /
+              <span id="activityTargetTop">0</span> kcal
+            </div>
+          </div>
+
+          <div class="activity-flow-track">
+            <div id="activityFlowFill" class="activity-flow-fill"></div>
+          </div>
+
+          <div class="activity-flow-stats">
+            <div class="activity-flow-stat">
+              <span>เผาผลาญแล้ว</span>
+              <b id="activityDone">0 kcal</b>
+            </div>
+            <div class="activity-flow-stat">
+              <span>เป้าหมาย</span>
+              <b id="activityTarget">0 kcal</b>
+            </div>
+            <div class="activity-flow-stat">
+              <span>เหลืออีก</span>
+              <b id="activityRemaining">0 kcal</b>
+            </div>
+          </div>
+
+          <div id="activityExamples" class="activity-example-grid"></div>
         </div>
       </section>
 
@@ -1198,6 +1427,143 @@
 
         </div>
 
+
+        <div
+          id="inbodyGoalPlanner"
+          class="goal-planner"
+        >
+          <h3>
+            🎯 เลือกเป้าหมายหลัง InBody
+          </h3>
+
+          <p class="goal-planner-sub">
+            ระบบจะใช้ Weight และ BMR จาก InBody ล่าสุด คำนวณ
+            TDEE = BMR × Activity Factor แล้วตั้งเป้าหมาย Nutrition วันนี้
+          </p>
+
+          <div class="goal-plan-selects">
+
+            <div>
+              <label for="goalPlanType">
+                เป้าหมายของคุณ
+              </label>
+
+              <select id="goalPlanType">
+                <option value="fat_loss">
+                  🔥 ลดไขมัน / ลดน้ำหนัก
+                </option>
+                <option value="muscle_gain">
+                  💪 เพิ่มกล้ามเนื้อ
+                </option>
+                <option value="recomposition">
+                  ⚖️ ปรับรูปร่าง (Body Recomposition)
+                </option>
+                <option value="maintain">
+                  💚 รักษาน้ำหนักเพื่อสุขภาพ
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label for="goalActivityFactor">
+                ระดับกิจกรรม
+              </label>
+
+              <select id="goalActivityFactor">
+                <option value="1.2">
+                  1.20 • นั่งทำงาน / ออกกำลังน้อย
+                </option>
+                <option value="1.375">
+                  1.375 • กิจกรรมเบา 1–3 วัน/สัปดาห์
+                </option>
+                <option
+                  value="1.55"
+                  selected
+                >
+                  1.55 • กิจกรรมปานกลาง 3–5 วัน/สัปดาห์
+                </option>
+                <option value="1.725">
+                  1.725 • กิจกรรมมาก 6–7 วัน/สัปดาห์
+                </option>
+                <option value="1.9">
+                  1.90 • กิจกรรมหนักมาก
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+
+          <div class="goal-plan-meta">
+
+            <div>
+              BMR จาก InBody
+              <b id="goalPlanBMR">0 kcal</b>
+            </div>
+
+            <div>
+              TDEE โดยประมาณ
+              <b id="goalPlanTDEE">0 kcal</b>
+            </div>
+
+          </div>
+
+
+          <div class="goal-target-grid">
+
+            <div class="goal-target-card">
+              <span>Calories</span>
+              <b id="goalCaloriesDaily">0 kcal</b>
+              <small id="goalCaloriesMeal">0 kcal / มื้อ</small>
+            </div>
+
+            <div class="goal-target-card">
+              <span>Protein</span>
+              <b id="goalProteinDaily">0 g</b>
+              <small id="goalProteinMeal">0 g / มื้อ</small>
+            </div>
+
+            <div class="goal-target-card">
+              <span>Carbs</span>
+              <b id="goalCarbsDaily">0 g</b>
+              <small id="goalCarbsMeal">0 g / มื้อ</small>
+            </div>
+
+            <div class="goal-target-card">
+              <span>Fat</span>
+              <b id="goalFatDaily">0 g</b>
+              <small id="goalFatMeal">0 g / มื้อ</small>
+            </div>
+
+          </div>
+
+
+          <div
+            id="goalActivityRecommendation"
+            class="goal-activity-box"
+          >
+            กรุณาเลือกเป้าหมายและระดับกิจกรรม
+          </div>
+
+
+          <div class="goal-disclaimer">
+            * เป็น Wellness Estimate จาก InBody BMR และ Activity Factor
+            ไม่ใช่การวินิจฉัยหรือแผนรักษาทางการแพทย์
+          </div>
+
+
+          <div class="goal-save-row">
+            <button
+              id="saveGoalPlanButton"
+              class="mini-btn"
+              type="button"
+            >
+              ✅ ใช้เป้าหมายนี้กับ Nutrition
+            </button>
+          </div>
+
+        </div>
+
       </section>
 
 
@@ -1244,7 +1610,9 @@
           .getElementById(id);
 
     let progressState = {
-      inbodyHistory:[]
+      inbodyHistory:[],
+      latestInbody:null,
+      goalPlan:null
     };
 
 
@@ -2415,6 +2783,541 @@
     }
 
 
+
+    const GOAL_PLAN_PREVIEW = {
+
+      fat_loss:{
+        label:"ลดไขมัน / ลดน้ำหนัก",
+        calorieMultiplier:0.85,
+        proteinPerKg:1.9,
+        fatPerKg:0.9,
+        activity:
+          "แนะนำ: เดิน 8,000–10,000 ก้าว/วัน + เวท 2–3 วัน/สัปดาห์ + แอโรบิกปานกลางรวมประมาณ 150–300 นาที/สัปดาห์"
+      },
+
+      muscle_gain:{
+        label:"เพิ่มกล้ามเนื้อ",
+        calorieMultiplier:1.08,
+        proteinPerKg:1.8,
+        fatPerKg:1.0,
+        activity:
+          "แนะนำ: เวท 3–4 วัน/สัปดาห์ เน้นเพิ่มแรงต้านทีละน้อย + เดิน 7,000–9,000 ก้าว/วัน + คาร์ดิโอเบา 1–2 วัน/สัปดาห์"
+      },
+
+      recomposition:{
+        label:"ปรับรูปร่าง (Body Recomposition)",
+        calorieMultiplier:0.95,
+        proteinPerKg:2.0,
+        fatPerKg:0.9,
+        activity:
+          "แนะนำ: เวทอย่างน้อย 3 วัน/สัปดาห์ + เดินประมาณ 8,000 ก้าว/วัน + แอโรบิกปานกลางรวมประมาณ 150 นาที/สัปดาห์"
+      },
+
+      maintain:{
+        label:"รักษาน้ำหนักเพื่อสุขภาพ",
+        calorieMultiplier:1.0,
+        proteinPerKg:1.6,
+        fatPerKg:0.9,
+        activity:
+          "แนะนำ: เดินประมาณ 8,000 ก้าว/วัน + แอโรบิกปานกลางอย่างน้อย 150 นาที/สัปดาห์ + ฝึกกล้ามเนื้ออย่างน้อย 2 วัน/สัปดาห์"
+      }
+
+    };
+
+
+    function previewGoalPlan(){
+
+      const latest =
+        progressState
+          .latestInbody ||
+        {};
+
+
+      const weight =
+        Number(
+          latest
+            ?.weight_kg ||
+          0
+        );
+
+
+      const bmr =
+        Number(
+          latest
+            ?.bmr_kcal ||
+          0
+        );
+
+
+      const type =
+        $("goalPlanType")
+          ?.value ||
+        "fat_loss";
+
+
+      const activityFactor =
+        Number(
+          $("goalActivityFactor")
+            ?.value ||
+          1.55
+        );
+
+
+      const config =
+        GOAL_PLAN_PREVIEW[
+          type
+        ] ||
+        GOAL_PLAN_PREVIEW
+          .fat_loss;
+
+
+      $("goalPlanBMR").textContent =
+        `${fmt(bmr,0)} kcal`;
+
+
+      if(
+        weight <= 0 ||
+        bmr <= 0
+      ){
+
+        $("goalPlanTDEE").textContent =
+          "0 kcal";
+
+        $("goalCaloriesDaily").textContent =
+          "0 kcal";
+
+        $("goalCaloriesMeal").textContent =
+          "0 kcal / มื้อ";
+
+        $("goalProteinDaily").textContent =
+          "0 g";
+
+        $("goalProteinMeal").textContent =
+          "0 g / มื้อ";
+
+        $("goalCarbsDaily").textContent =
+          "0 g";
+
+        $("goalCarbsMeal").textContent =
+          "0 g / มื้อ";
+
+        $("goalFatDaily").textContent =
+          "0 g";
+
+        $("goalFatMeal").textContent =
+          "0 g / มื้อ";
+
+        $("goalActivityRecommendation").textContent =
+          "กรุณาบันทึก InBody ที่มี Weight และ BMR ก่อนตั้งเป้าหมาย";
+
+        return;
+      }
+
+
+      const tdee =
+        Math.round(
+          bmr *
+          activityFactor
+        );
+
+
+      const calories =
+        Math.max(
+          Math.round(
+            bmr
+          ),
+          Math.round(
+            (
+              tdee *
+              config
+                .calorieMultiplier
+            ) /
+            10
+          ) *
+          10
+        );
+
+
+      const protein =
+        Math.round(
+          weight *
+          config
+            .proteinPerKg
+        );
+
+
+      const fat =
+        Math.round(
+          weight *
+          config
+            .fatPerKg
+        );
+
+
+      const carbs =
+        Math.max(
+          0,
+          Math.round(
+            (
+              calories -
+              protein * 4 -
+              fat * 9
+            ) /
+            4
+          )
+        );
+
+
+      $("goalPlanTDEE").textContent =
+        `${fmt(tdee,0)} kcal`;
+
+      $("goalCaloriesDaily").textContent =
+        `${fmt(calories,0)} kcal`;
+
+      $("goalCaloriesMeal").textContent =
+        `${fmt(calories/3,0)} kcal / มื้อ`;
+
+      $("goalProteinDaily").textContent =
+        `${fmt(protein,0)} g`;
+
+      $("goalProteinMeal").textContent =
+        `${fmt(protein/3,0)} g / มื้อ`;
+
+      $("goalCarbsDaily").textContent =
+        `${fmt(carbs,0)} g`;
+
+      $("goalCarbsMeal").textContent =
+        `${fmt(carbs/3,0)} g / มื้อ`;
+
+      $("goalFatDaily").textContent =
+        `${fmt(fat,0)} g`;
+
+      $("goalFatMeal").textContent =
+        `${fmt(fat/3,0)} g / มื้อ`;
+
+      const activityBaseByGoal = {
+        fat_loss:5.0,
+        muscle_gain:3.5,
+        recomposition:4.5,
+        maintain:4.0
+      };
+
+      const factorScale =
+        Math.max(
+          0.85,
+          Math.min(
+            1.20,
+            activityFactor /
+            1.55
+          )
+        );
+
+      const targetActivityBurn =
+        Math.max(
+          150,
+          Math.min(
+            650,
+            Math.round(
+              (
+                weight *
+                Number(
+                  activityBaseByGoal[type] ||
+                  4.0
+                ) *
+                factorScale
+              ) /
+              10
+            ) *
+            10
+          )
+        );
+
+      $("goalActivityRecommendation").textContent =
+        `${config.activity} • เป้าหมายเผาผลาญจากกิจกรรมประมาณ ${fmt(targetActivityBurn,0)} kcal/วัน`;
+    }
+
+
+    function renderGoalPlan(
+      data
+    ){
+
+      progressState.latestInbody =
+        data?.inbody ||
+        null;
+
+
+      progressState.goalPlan =
+        data?.goalPlan ||
+        null;
+
+
+      const plan =
+        data?.goalPlan ||
+        {};
+
+
+      if(
+        plan
+          ?.goalType &&
+        $("goalPlanType")
+      ){
+        $("goalPlanType").value =
+          plan.goalType;
+      }
+
+
+      if(
+        Number(
+          plan
+            ?.activityFactor ||
+          0
+        ) > 0 &&
+        $("goalActivityFactor")
+      ){
+        $("goalActivityFactor").value =
+          String(
+            plan.activityFactor
+          );
+      }
+
+
+      const badge =
+        $("nutritionGoalBadge");
+
+
+      if(
+        badge
+      ){
+
+        if(
+          plan
+            ?.goalLabel
+        ){
+
+          badge.classList.add(
+            "show"
+          );
+
+          badge.textContent =
+            `🎯 เป้าหมาย: ${plan.goalLabel}` +
+            (
+              plan?.tdeeKcal
+                ? ` • TDEE ${fmt(plan.tdeeKcal,0)} kcal`
+                : ""
+            );
+
+        }else{
+
+          badge.classList.remove(
+            "show"
+          );
+
+          badge.textContent =
+            "ยังไม่ได้ตั้งเป้าหมายจาก InBody";
+        }
+      }
+
+
+      previewGoalPlan();
+    }
+
+
+    async function saveGoalPlan(){
+
+      const latest =
+        progressState
+          .latestInbody ||
+        {};
+
+
+      if(
+        !Number(
+          latest
+            ?.weight_kg ||
+          0
+        ) ||
+        !Number(
+          latest
+            ?.bmr_kcal ||
+          0
+        )
+      ){
+
+        throw new Error(
+          "กรุณาบันทึก InBody ที่มี Weight และ BMR ก่อน"
+        );
+      }
+
+
+      const idToken =
+        await getToken();
+
+
+      const response =
+        await fetch(
+          inbodyApiUrl(),
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            cache:"no-store",
+
+            body:
+              JSON.stringify({
+
+                action:
+                  "setGoalPlan",
+
+                idToken,
+
+                goalType:
+                  $("goalPlanType")
+                    .value,
+
+                activityFactor:
+                  Number(
+                    $("goalActivityFactor")
+                      .value
+                  )
+
+              })
+          }
+        );
+
+
+      const raw =
+        await response.text();
+
+
+      let result = {};
+
+
+      try{
+
+        result =
+          raw
+            ? JSON.parse(
+                raw
+              )
+            : {};
+
+      }catch{
+
+        throw new Error(
+          `INBODY Goal API ตอบกลับไม่ใช่ JSON HTTP ${response.status}`
+        );
+      }
+
+
+      if(
+        tokenExpiredMessage(
+          result,
+          response.status
+        )
+      ){
+        return await reloginLine();
+      }
+
+
+      if(
+        !response.ok ||
+        result?.success ===
+          false
+      ){
+
+        throw new Error(
+          result?.error ||
+          result?.message ||
+          `HTTP ${response.status}`
+        );
+      }
+
+
+      return result;
+    }
+
+
+
+    function renderActivityFlow(
+      data
+    ){
+
+      const done =
+        Number(
+          data?.today?.caloriesBurned ||
+          0
+        );
+
+      const target =
+        Number(
+          data?.goals?.caloriesBurned ||
+          data?.goalPlan?.targetActivityBurnKcal ||
+          0
+        );
+
+      const remaining =
+        Math.max(
+          0,
+          target -
+          done
+        );
+
+      const percent =
+        target > 0
+          ? Math.max(
+              0,
+              Math.min(
+                100,
+                done /
+                target *
+                100
+              )
+            )
+          : 0;
+
+      $("activityDoneTop").textContent = fmt(done,0);
+      $("activityTargetTop").textContent = fmt(target,0);
+      $("activityDone").textContent = `${fmt(done,0)} kcal`;
+      $("activityTarget").textContent = `${fmt(target,0)} kcal`;
+      $("activityRemaining").textContent = `${fmt(remaining,0)} kcal`;
+      $("activityFlowFill").style.width = `${percent}%`;
+
+      const plan = data?.goalPlan || {};
+
+      $("activityGoalName").textContent =
+        plan?.goalLabel
+          ? `🎯 ${plan.goalLabel}`
+          : "เป้าหมายกิจกรรมวันนี้";
+
+      $("activityFactorText").textContent =
+        plan?.activityFactor
+          ? `Activity Factor × ${plan.activityFactor} • TDEE ${fmt(plan.tdeeKcal || 0,0)} kcal`
+          : "ยังไม่ได้เลือก Goal / Activity Factor";
+
+      const examples =
+        Array.isArray(plan?.activityExamples)
+          ? plan.activityExamples
+          : [];
+
+      $("activityExamples").innerHTML =
+        examples.length
+          ? examples.map(
+              item => `
+                <div class="activity-example-card">
+                  <b>${item.label}</b>
+                  ${fmt(item.minutes,0)} นาที • MET ${fmt(item.met,1)}
+                  <br>≈ ${fmt(item.estimatedCalories,0)} kcal
+                </div>
+              `
+            ).join("")
+          : `<div class="activity-example-card">ตั้ง Goal จาก InBody เพื่อดูคำแนะนำกิจกรรม</div>`;
+    }
+
+
     function render(
       data
     ){
@@ -2427,6 +3330,14 @@
           : [];
 
       renderProgressStatus(
+        data
+      );
+
+      renderGoalPlan(
+        data
+      );
+
+      renderActivityFlow(
         data
       );
 
@@ -2704,6 +3615,20 @@
               data
             );
 
+
+            setTimeout(
+              ()=>{
+
+                $("inbodyGoalPlanner")
+                  ?.scrollIntoView({
+                    behavior:"smooth",
+                    block:"center"
+                  });
+
+              },
+              180
+            );
+
           }catch(error){
 
             console.error(
@@ -2763,6 +3688,81 @@
       element.value =
         local;
     }
+
+
+
+    $("goalPlanType")
+      ?.addEventListener(
+        "change",
+        previewGoalPlan
+      );
+
+
+    $("goalActivityFactor")
+      ?.addEventListener(
+        "change",
+        previewGoalPlan
+      );
+
+
+    $("saveGoalPlanButton")
+      ?.addEventListener(
+        "click",
+        async ()=>{
+
+          const button =
+            $("saveGoalPlanButton");
+
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "กำลังบันทึกเป้าหมาย...";
+
+
+          try{
+
+            const result =
+              await saveGoalPlan();
+
+
+            showToast(
+              `✅ ตั้งเป้าหมาย Nutrition แล้ว: ${result?.plan?.goalLabel || ""}`
+            );
+
+
+            const data =
+              await loadProgress();
+
+
+            render(
+              data
+            );
+
+          }catch(error){
+
+            console.error(
+              "SAVE GOAL PLAN ERROR:",
+              error
+            );
+
+
+            showToast(
+              error?.message ||
+              "ตั้งเป้าหมายไม่สำเร็จ"
+            );
+
+          }finally{
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "✅ ใช้เป้าหมายนี้กับ Nutrition";
+          }
+        }
+      );
 
 
     async function init(){
