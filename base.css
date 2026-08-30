@@ -1025,3 +1025,32 @@ button,input,select,textarea{font:inherit}
   font-weight: 800 !important;
   color: #fff !important;
 }
+/* =====================================================
+   ลบพื้นหลังข้อมูลทั้งหมดบน HOME
+   เหลือเฉพาะตัวเลข/ข้อความ
+===================================================== */
+
+#coin,
+#energy,
+#currentWeight,
+#targetWeight,
+#steps,
+#calories,
+#sleep,
+#healthScore,
+#weightProgressPct,
+#lostWeight,
+#remainingWeight,
+#lineName,
+#level,
+#expValue {
+    background: none !important;
+    background-color: transparent !important;
+
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
