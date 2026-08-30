@@ -12,11 +12,11 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-home-v55"
+    href="./base.css?v=20260830-home-v56"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-v55"></script>
+  <script src="./app-config.js?v=20260830-home-v56"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260830-home-v55"
+    src="./home-template.png?v=20260830-home-v56"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -404,7 +404,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V5.5
+   HOME V5.6
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
@@ -660,16 +660,36 @@ async function initLiff(){
   }
 
 
-  /*
-    getIDToken ต้องเป็น token สดจาก LIFF
-  */
+  const idToken =
+    liff.getIDToken();
+
+
   if(
-    !liff.getIDToken()
+    !idToken
   ){
 
-    throw new Error(
-      "ไม่พบ LINE ID Token กรุณาปิด LIFF แล้วเปิดใหม่"
-    );
+    try{
+
+      liff.logout();
+
+    }catch(error){
+
+      console.warn(
+        "LIFF logout:",
+        error
+      );
+    }
+
+
+    liff.login({
+
+      redirectUri:
+        window.location.href
+
+    });
+
+
+    return false;
   }
 
 
@@ -681,20 +701,153 @@ async function initLiff(){
    PLAYER API
 ========================================================= */
 
+async function getFreshIdToken(){
+
+  if(
+    typeof liff ===
+    "undefined"
+  ){
+
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
+    );
+  }
+
+
+  if(
+    !liff.isLoggedIn()
+  ){
+
+    liff.login({
+
+      redirectUri:
+        window.location.href
+
+    });
+
+
+    return null;
+  }
+
+
+  const token =
+    liff.getIDToken();
+
+
+  if(
+    !token
+  ){
+
+    try{
+
+      liff.logout();
+
+    }catch(error){
+
+      console.warn(
+        "LIFF logout:",
+        error
+      );
+    }
+
+
+    liff.login({
+
+      redirectUri:
+        window.location.href
+
+    });
+
+
+    return null;
+  }
+
+
+  return token;
+}
+
+
+function isTokenExpiredError(
+  result,
+  status
+){
+
+  const message =
+    String(
+      result?.error ||
+      result?.message ||
+      ""
+    )
+    .toLowerCase();
+
+
+  return (
+    status === 401 ||
+    message.includes(
+      "idtoken expired"
+    ) ||
+    message.includes(
+      "id token expired"
+    ) ||
+    message.includes(
+      "token expired"
+    ) ||
+    message.includes(
+      "authentication failed"
+    )
+  );
+}
+
+
+async function renewLineLogin(){
+
+  try{
+
+    if(
+      liff.isLoggedIn()
+    ){
+
+      liff.logout();
+    }
+
+  }catch(error){
+
+    console.warn(
+      "LIFF logout:",
+      error
+    );
+  }
+
+
+  sessionStorage.setItem(
+    "ryb_relogin_reason",
+    "token_expired"
+  );
+
+
+  liff.login({
+
+    redirectUri:
+      window.location.href
+
+  });
+}
+
+
 async function playerApi(
   payload
 ){
 
   const idToken =
-    liff.getIDToken();
+    await getFreshIdToken();
 
 
   if(
     !idToken
   ){
 
-    throw new Error(
-      "LINE ID Token หมดอายุหรือไม่พร้อม"
+    return new Promise(
+      ()=>{}
     );
   }
 
@@ -750,6 +903,22 @@ async function playerApi(
 
     throw new Error(
       "PLAYER API ตอบกลับไม่ใช่ JSON"
+    );
+  }
+
+
+  if(
+    isTokenExpiredError(
+      result,
+      response.status
+    )
+  ){
+
+    await renewLineLogin();
+
+
+    return new Promise(
+      ()=>{}
     );
   }
 
@@ -2187,6 +2356,28 @@ $("battleHotspot")
     ){
 
       return;
+    }
+
+
+    const reloginReason =
+      sessionStorage.getItem(
+        "ryb_relogin_reason"
+      );
+
+
+    if(
+      reloginReason ===
+      "token_expired"
+    ){
+
+      sessionStorage.removeItem(
+        "ryb_relogin_reason"
+      );
+
+
+      showToast(
+        "เชื่อมต่อ LINE ใหม่แล้ว"
+      );
     }
 
 
