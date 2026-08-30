@@ -91,8 +91,8 @@
 <main id="mapStage">
   <img
     id="mapImage"
-    src="./battle%20map.jpeg?v=20260831-v50"
-    onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260831-v50'"
+    src="./battle%20map.jpeg?v=20260831-v53"
+    onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260831-v53'"
     alt="Battle Map"
   >
 
@@ -282,7 +282,19 @@ $("backButton").onclick=()=>{
   try{
     const ok=await initLine();
     if(ok===false)return;
-    render(await post("mapV5"));
+    let data;
+
+    try{
+      data = await post("mapV5");
+    }catch(error){
+      if(String(error?.message||"").includes("UNKNOWN_ACTION")){
+        data = await post("map");
+      }else{
+        throw error;
+      }
+    }
+
+    render(data);
   }catch(error){
     console.error(error);
     showStatus(error?.message||String(error),true);
