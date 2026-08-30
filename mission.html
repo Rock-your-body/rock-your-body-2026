@@ -1847,52 +1847,6 @@
       white-space:nowrap;
     }
 
-    .mission-nutrition-meals{
-      position:absolute;
-
-      left:0;
-      top:56%;
-      width:100%;
-      height:31%;
-
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:5px 7px;
-    }
-
-    .mission-nutrition-meal{
-      padding:5px 7px;
-
-      border:1px solid rgba(126,160,196,.35);
-      border-radius:9px;
-
-      background:rgba(246,250,255,.82);
-
-      overflow:hidden;
-    }
-
-    .mission-nutrition-meal strong{
-      display:block;
-
-      color:#062b72;
-
-      font-size:clamp(6.5px,.82cqw,12px);
-      font-weight:900;
-    }
-
-    .mission-nutrition-meal div{
-      margin-top:2px;
-
-      color:#446483;
-
-      font-size:clamp(5.3px,.68cqw,10px);
-      font-weight:600;
-
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
     .mission-nutrition-source{
       position:absolute;
 
@@ -2162,36 +2116,6 @@
       </div>
 
     </div>
-
-
-    <div class="mission-nutrition-meals">
-
-      <div class="mission-nutrition-meal">
-        <strong>มื้อเช้า</strong>
-        <div id="missionMealBreakfast">0 / 0 kcal</div>
-        <div id="missionMealBreakfastMacro">P 0/0 • F 0/0 • C 0/0 g</div>
-      </div>
-
-      <div class="mission-nutrition-meal">
-        <strong>มื้อกลางวัน</strong>
-        <div id="missionMealLunch">0 / 0 kcal</div>
-        <div id="missionMealLunchMacro">P 0/0 • F 0/0 • C 0/0 g</div>
-      </div>
-
-      <div class="mission-nutrition-meal">
-        <strong>มื้อเย็น</strong>
-        <div id="missionMealDinner">0 / 0 kcal</div>
-        <div id="missionMealDinnerMacro">P 0/0 • F 0/0 • C 0/0 g</div>
-      </div>
-
-      <div class="mission-nutrition-meal">
-        <strong>ของว่าง</strong>
-        <div id="missionMealSnack">0 / 0 kcal</div>
-        <div id="missionMealSnackMacro">P 0/0 • F 0/0 • C 0/0 g</div>
-      </div>
-
-    </div>
-
 
     <div
       id="missionNutritionSource"
@@ -6203,53 +6127,6 @@ function applyMissionNutrition(raw){
     carbsEl.textContent =
       `${nutritionFormat(carbsDone,1)} / ${nutritionFormat(carbsGoal,1)} g`;
   }
-
-
-  const meals = [
-    ["breakfast","Breakfast"],
-    ["lunch","Lunch"],
-    ["dinner","Dinner"],
-    ["snack","Snack"]
-  ];
-
-
-  meals.forEach(
-    ([key,suffix])=>{
-
-      const consumed =
-        mealConsumed?.[key] ??
-        {};
-
-      const goal =
-        mealGoals?.[key] ??
-        {};
-
-
-      const calorieEl =
-        document.getElementById(
-          `missionMeal${suffix}`
-        );
-
-      if(calorieEl){
-        calorieEl.textContent =
-          `${nutritionFormat(consumed?.calories)} / ${nutritionFormat(goal?.calories)} kcal`;
-      }
-
-
-      const macroEl =
-        document.getElementById(
-          `missionMeal${suffix}Macro`
-        );
-
-      if(macroEl){
-        macroEl.textContent =
-          `P ${nutritionFormat(consumed?.proteinG,1)}/${nutritionFormat(goal?.proteinG,1)}` +
-          ` • F ${nutritionFormat(consumed?.fatG,1)}/${nutritionFormat(goal?.fatG,1)}` +
-          ` • C ${nutritionFormat(consumed?.carbsG,1)}/${nutritionFormat(goal?.carbsG,1)} g`;
-      }
-    }
-  );
-
 
   const sourceEl =
     document.getElementById(
