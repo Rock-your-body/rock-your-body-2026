@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2180-sleep-exercise-weekly"
+    href="./base.css?v=20260830-mission-v2181-dynamic-weight"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.18.0
+   MISSION V2.18.1
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.18.0 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.18.1 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.0 — NUTRITION RING PANEL
+       MISSION V2.18.1 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.0 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.18.1 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2230,7 +2230,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2180-sleep-exercise-weekly"
+    src="./mission-template.png?v=20260830-mission-v2181-dynamic-weight"
     alt=""
     draggable="false"
     style="
@@ -4455,7 +4455,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.18.0
+    MISSION V2.18.1
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -5737,6 +5737,48 @@ function getExerciseWeightV2121(){
   // Same fallback rule as mission backend V2.2.
   return 70;
 }
+
+
+function getCurrentPlayerWeightKgV2181(){
+
+  const candidates = [
+    window.MISSION_LATEST_WEIGHT,
+    missionHomeSnapshot?.currentWeight,
+    missionHomeSnapshot?.weight?.current,
+    missionHomeSnapshot?.home?.currentWeight,
+    missionHomeSnapshot?.dashboard?.currentWeight,
+    missionCatalogState?.player?.weightKg
+  ];
+
+
+  for(
+    const value
+    of candidates
+  ){
+
+    const weight =
+      Number(
+        value ||
+        0
+      );
+
+
+    if(
+      Number.isFinite(
+        weight
+      ) &&
+      weight >= 20 &&
+      weight <= 400
+    ){
+
+      return weight;
+    }
+  }
+
+
+  return 0;
+}
+
 
 function calculateExerciseCaloriesV2121(){
   const type =
@@ -7260,7 +7302,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.18.0 — NUTRITION LINK
+   MISSION V2.18.1 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7367,6 +7409,26 @@ async function loadMissionHomeSnapshot(){
     ){
       missionHomeSnapshot =
         result;
+
+
+      const currentWeight =
+        Number(
+          result?.currentWeight ||
+          result?.weight?.current ||
+          result?.home?.currentWeight ||
+          0
+        );
+
+
+      if(
+        Number.isFinite(currentWeight) &&
+        currentWeight >= 20 &&
+        currentWeight <= 400
+      ){
+        window.MISSION_LATEST_WEIGHT =
+          currentWeight;
+      }
+
 
       return result;
     }
@@ -8318,7 +8380,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.0 — FINAL OVERLAY SAFETY
+   MISSION V2.18.1 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -8514,7 +8576,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.0 — DIRECT MISSION LINK
+   MISSION V2.18.1 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
