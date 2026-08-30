@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2210-approval-retry-lock"
+    href="./base.css?v=20260830-mission-v2211-home-nav-fix"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.21.0
+   MISSION V2.21.1
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.21.0 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.21.1 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.21.0 — NUTRITION RING PANEL
+       MISSION V2.21.1 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.21.0 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.21.1 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2198,7 +2198,7 @@
 
 
     /* =========================================================
-       MISSION V2.21.0 — SUMMARY / REWARD / POINT
+       MISSION V2.21.1 — SUMMARY / REWARD / POINT
     ========================================================= */
 
     .mission-summary-overlay{
@@ -2331,6 +2331,40 @@
       transition:width .25s ease;
     }
 
+
+    /* =========================================================
+       MISSION V2.21.1 — BOTTOM NAV CLICK FIX
+    ========================================================= */
+
+    #missionStage button.hotspot{
+      z-index:1200 !important;
+      pointer-events:auto !important;
+      cursor:pointer !important;
+      touch-action:manipulation !important;
+      -webkit-tap-highlight-color:transparent !important;
+    }
+
+    #missionStage button.hotspot[aria-label="Home"]{
+      left:0.5% !important;
+      top:87.4% !important;
+      width:32.5% !important;
+      height:11.5% !important;
+    }
+
+    #missionStage button.hotspot[aria-label="Mission"]{
+      left:33.4% !important;
+      top:87.4% !important;
+      width:32.7% !important;
+      height:11.5% !important;
+    }
+
+    #missionStage button.hotspot[aria-label="Battle"]{
+      left:66.5% !important;
+      top:87.4% !important;
+      width:33.0% !important;
+      height:11.5% !important;
+    }
+
 </style>
 
 </head>
@@ -2365,7 +2399,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2210-approval-retry-lock"
+    src="./mission-template.png?v=20260830-mission-v2211-home-nav-fix"
     alt=""
     draggable="false"
     style="
@@ -2940,7 +2974,7 @@
       width:31%;
       height:11%;
     "
-    onclick="goHome()"
+    onclick="goHome(); return false;"
     aria-label="Home"
   ></button>
 
@@ -4613,7 +4647,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.21.0
+    MISSION V2.21.1
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -7924,7 +7958,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.21.0 — NUTRITION LINK
+   MISSION V2.21.1 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7991,7 +8025,7 @@ function getHomeApiUrl(){
 
 
 /* =========================================================
-   MISSION V2.21.0 — WALLET SYNC FROM HOME
+   MISSION V2.21.1 — WALLET SYNC FROM HOME
    Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
 ========================================================= */
 
@@ -8083,7 +8117,7 @@ function renderMissionWalletFromHome(
 
 
 /* =========================================================
-   MISSION V2.21.0 — FRESH LINE ID TOKEN
+   MISSION V2.21.1 — FRESH LINE ID TOKEN
    ห้ามใช้ token จาก localStorage / profile / userId
 ========================================================= */
 
@@ -8968,6 +9002,29 @@ applyMissionNutrition =
   };
 
 
+
+/* =========================================================
+   MISSION V2.21.1 — HOME NAVIGATION FIX
+========================================================= */
+
+function goHome(){
+
+  const url =
+    window.APP_CONFIG?.PAGE?.HOME ||
+    "./dashboard.html";
+
+
+  /*
+    ใช้ location.assign() โดยตรง
+    ไม่พึ่ง ROCK navigation
+    เพื่อให้ปุ่ม HOME ทำงานใน LIFF / GitHub Pages แน่นอน
+  */
+  window.location.assign(
+    url
+  );
+}
+
+
 function goBattle(){
 
   const url =
@@ -9264,7 +9321,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.21.0 — FINAL OVERLAY SAFETY
+   MISSION V2.21.1 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -9460,7 +9517,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.21.0 — DIRECT MISSION LINK
+   MISSION V2.21.1 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
