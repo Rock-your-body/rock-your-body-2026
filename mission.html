@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2183-fresh-liff-token"
+    href="./base.css?v=20260830-mission-v2184-wallet-token-fix"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.18.3
+   MISSION V2.18.4
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.18.3 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.18.4 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.3 — NUTRITION RING PANEL
+       MISSION V2.18.4 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.3 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.18.4 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2230,7 +2230,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2183-fresh-liff-token"
+    src="./mission-template.png?v=20260830-mission-v2184-wallet-token-fix"
     alt=""
     draggable="false"
     style="
@@ -2281,7 +2281,7 @@
       white-space:nowrap!important;
     "
   >
-    0
+    --
   </div>
 
 
@@ -2316,7 +2316,7 @@
       white-space:nowrap!important;
     "
   >
-    0 / 200
+    -- / --
   </div>
 
 
@@ -4457,7 +4457,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.18.3
+    MISSION V2.18.4
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -7306,7 +7306,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.18.3 — NUTRITION LINK
+   MISSION V2.18.4 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7373,13 +7373,20 @@ function getHomeApiUrl(){
 
 
 /* =========================================================
-   MISSION V2.18.3 — WALLET SYNC FROM HOME
+   MISSION V2.18.4 — WALLET SYNC FROM HOME
    Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
 ========================================================= */
 
 function renderMissionWalletFromHome(
   result
 ){
+
+  /*
+    player-dashboard / action:"home" response จริง:
+    result.rockCoin
+    result.energy.current
+    result.energy.max
+  */
 
   const coin =
     Math.max(
@@ -7398,10 +7405,13 @@ function renderMissionWalletFromHome(
       0,
       Number(
         result?.energy?.current ??
-        result?.energy ??
         result?.wallet?.energy ??
         result?.player?.energy ??
-        0
+        (
+          typeof result?.energy === "number"
+            ? result.energy
+            : 0
+        )
       )
     );
 
@@ -7431,43 +7441,31 @@ function renderMissionWalletFromHome(
     );
 
 
-  if(
-    coinElement
-  ){
+  if(coinElement){
 
     coinElement.textContent =
       coin.toLocaleString();
   }
 
 
-  if(
-    energyElement
-  ){
+  if(energyElement){
 
     energyElement.textContent =
       `${energyCurrent.toLocaleString()} / ${energyMax.toLocaleString()}`;
   }
 
 
-  /*
-    เก็บไว้ใช้ร่วมกับส่วนอื่นของ Mission
-  */
   window.MISSION_WALLET = {
-    rockCoin:
-      coin,
-
-    energy:
-      energyCurrent,
-
-    maxEnergy:
-      energyMax
+    rockCoin:coin,
+    energy:energyCurrent,
+    maxEnergy:energyMax
   };
 }
 
 
 
 /* =========================================================
-   MISSION V2.18.3 — FRESH LINE ID TOKEN
+   MISSION V2.18.4 — FRESH LINE ID TOKEN
    ห้ามใช้ token จาก localStorage / profile / userId
 ========================================================= */
 
@@ -7512,7 +7510,8 @@ async function getFreshLineIdTokenV2183(){
     getIDToken() ต้องได้ JWT จริงรูปแบบ xxx.yyy.zzz
     ห้ามส่ง LINE userId เช่น Uxxxx ไปแทน
   */
-  const idToken = await getFreshLineIdTokenV2183();
+  let idToken =
+    liff.getIDToken();
 
 
   const isJwt =
@@ -7558,21 +7557,23 @@ async function loadMissionHomeSnapshot(){
 
   try{
 
-    const idToken = await getFreshLineIdTokenV2183();
+    const idToken =
+      await getFreshLineIdTokenV2183();
 
-    if(!idToken){
-      return null;
-    }
 
     const response =
       await fetch(
         getHomeApiUrl(),
         {
           method:"POST",
+
           headers:{
-            "Content-Type":"application/json"
+            "Content-Type":
+              "application/json"
           },
+
           cache:"no-store",
+
           body:
             JSON.stringify({
               action:"home",
@@ -7581,61 +7582,111 @@ async function loadMissionHomeSnapshot(){
         }
       );
 
+
     const raw =
       await response.text();
 
-    const result =
-      raw
-        ? JSON.parse(raw)
-        : {};
+
+    let result = {};
+
+
+    try{
+
+      result =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    }catch{
+
+      throw new Error(
+        "HOME API ตอบกลับไม่ใช่ JSON"
+      );
+    }
+
 
     if(
-      response.ok &&
-      result?.success !== false
+      !response.ok ||
+      result?.success === false
     ){
-      missionHomeSnapshot =
-        result;
+
+      throw new Error(
+        result?.error ||
+        result?.message ||
+        `HOME API HTTP ${response.status}`
+      );
+    }
 
 
-      /*
-        Coin / Energy ต้องตรงกับ HOME ทุกครั้ง
-      */
-      renderMissionWalletFromHome(
-        result
+    missionHomeSnapshot =
+      result;
+
+
+    /*
+      ดึง Coin / Energy จากข้อมูลเดียวกับ HOME
+    */
+    renderMissionWalletFromHome(
+      result
+    );
+
+
+    const currentWeight =
+      Number(
+        result?.currentWeight ??
+        result?.weight?.current ??
+        result?.home?.currentWeight ??
+        0
       );
 
 
-      const currentWeight =
-        Number(
-          result?.currentWeight ||
-          result?.weight?.current ||
-          result?.home?.currentWeight ||
-          0
-        );
+    if(
+      Number.isFinite(currentWeight) &&
+      currentWeight >= 20 &&
+      currentWeight <= 400
+    ){
 
-
-      if(
-        Number.isFinite(currentWeight) &&
-        currentWeight >= 20 &&
-        currentWeight <= 400
-      ){
-        window.MISSION_LATEST_WEIGHT =
-          currentWeight;
-      }
-
-
-      return result;
+      window.MISSION_LATEST_WEIGHT =
+        currentWeight;
     }
+
+
+    return result;
+
 
   }catch(error){
 
-    console.warn(
-      "MISSION HOME SNAPSHOT ERROR:",
+    console.error(
+      "MISSION HOME WALLET ERROR:",
       error
     );
-  }
 
-  return null;
+
+    const coinElement =
+      document.getElementById(
+        "missionCoin"
+      );
+
+
+    const energyElement =
+      document.getElementById(
+        "missionEnergy"
+      );
+
+
+    if(coinElement){
+      coinElement.textContent =
+        "--";
+    }
+
+
+    if(energyElement){
+      energyElement.textContent =
+        "-- / --";
+    }
+
+
+    return null;
+  }
 }
 
 
@@ -8595,7 +8646,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.3 — FINAL OVERLAY SAFETY
+   MISSION V2.18.4 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -8791,7 +8842,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.3 — DIRECT MISSION LINK
+   MISSION V2.18.4 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
