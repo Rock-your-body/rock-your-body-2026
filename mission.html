@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2200-aerobic-currentday-equal-reward"
+    href="./base.css?v=20260830-mission-v2210-approval-retry-lock"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.20.0
+   MISSION V2.21.0
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.20.0 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.21.0 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.20.0 — NUTRITION RING PANEL
+       MISSION V2.21.0 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.20.0 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.21.0 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2198,7 +2198,7 @@
 
 
     /* =========================================================
-       MISSION V2.20.0 — SUMMARY / REWARD / POINT
+       MISSION V2.21.0 — SUMMARY / REWARD / POINT
     ========================================================= */
 
     .mission-summary-overlay{
@@ -2365,7 +2365,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2200-aerobic-currentday-equal-reward"
+    src="./mission-template.png?v=20260830-mission-v2210-approval-retry-lock"
     alt=""
     draggable="false"
     style="
@@ -4613,7 +4613,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.20.0
+    MISSION V2.21.0
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -4864,8 +4864,14 @@ function renderCategory(){
         "approved"
       ){
 
+        const approvedRewardText =
+          state.rewardGranted === true
+            ? ` • ได้รับรางวัล +${mission.reward.coin} Coin +${mission.reward.energy} Energy +${mission.reward.exp} EXP`
+            : " • อนุมัติแล้ว กำลังตรวจสอบการบันทึกรางวัล";
+
+
         statusText =
-          "✅ Admin อนุมัติแล้ว";
+          `✅ อนุมัติแล้ว${approvedRewardText}`;
 
         statusClass =
           "status-approved";
@@ -4878,8 +4884,18 @@ function renderCategory(){
         "rejected"
       ){
 
+        const reason =
+          String(
+            state.rejectReason ||
+            ""
+          ).trim();
+
+
         statusText =
-          "❌ ไม่ผ่าน กรุณาส่งใหม่";
+          reason
+            ? `❌ ปฏิเสธ • ${reason} • สามารถทำภารกิจใหม่และส่งหลักฐานใหม่ได้`
+            : "❌ ปฏิเสธ • สามารถทำภารกิจใหม่และส่งหลักฐานใหม่ได้";
+
 
         statusClass =
           "status-rejected";
@@ -4923,21 +4939,101 @@ function renderCategory(){
           "approved";
 
 
+      /*
+        DAILY:
+        - pending  = ล็อก รอ Admin
+        - rejected = ปลดล็อก ทำใหม่ได้ทันที
+        - approved = ล็อกเฉพาะวันนี้
+        - วันใหม่ backend จะเปลี่ยน period_key และสถานะกลับ not_submitted
+      */
+      if(
+        activeCategory ===
+          "daily" &&
+        state.status ===
+          "approved"
+      ){
+
+        statusText =
+          state.rewardGranted === true
+            ? `✅ อนุมัติแล้ว • ได้รับรางวัล +${mission.reward.coin} Coin +${mission.reward.energy} Energy +${mission.reward.exp} EXP • 🔒 วันนี้ทำซ้ำไม่ได้`
+            : "✅ อนุมัติแล้ว • 🔒 วันนี้ทำซ้ำไม่ได้";
+
+        statusClass =
+          "status-approved";
+      }
+
+
       if(
         mission.id ===
         "weekly_aerobic"
       ){
 
-        canSubmit =
+        const aerobicCanSubmit =
           weeklyAerobicCanSubmit();
 
-        statusText =
-          weeklyAerobicProgressText();
 
-        statusClass =
-          canSubmit
-            ? "status-not-submitted"
-            : "status-pending";
+        canSubmit =
+          aerobicCanSubmit &&
+          state.status !==
+            "pending";
+
+
+        if(
+          state.status ===
+          "rejected"
+        ){
+
+          statusText =
+            state.rejectReason
+              ? `❌ ปฏิเสธ • ${state.rejectReason} • วันนี้ทำใหม่ได้`
+              : "❌ ปฏิเสธ • วันนี้ทำใหม่ได้";
+
+          statusClass =
+            "status-rejected";
+
+          canSubmit =
+            true;
+
+        }else if(
+          state.status ===
+          "pending"
+        ){
+
+          statusText =
+            "⏳ รอ Admin ตรวจสอบ • วันนี้ยังส่งซ้ำไม่ได้";
+
+          statusClass =
+            "status-pending";
+
+          canSubmit =
+            false;
+
+        }else if(
+          state.status ===
+          "approved"
+        ){
+
+          statusText =
+            state.rewardGranted === true
+              ? `✅ อนุมัติแล้ว • ได้รับรางวัล +${mission.reward.coin} Coin +${mission.reward.energy} Energy +${mission.reward.exp} EXP • วันนี้ล็อกแล้ว`
+              : "✅ อนุมัติแล้ว • วันนี้ล็อกแล้ว";
+
+          statusClass =
+            "status-approved";
+
+          canSubmit =
+            aerobicCanSubmit;
+
+        }else{
+
+          statusText =
+            weeklyAerobicProgressText();
+
+          statusClass =
+            canSubmit
+              ? "status-not-submitted"
+              : "status-pending";
+        }
 
       }
 
@@ -5043,7 +5139,12 @@ function renderCategory(){
                         )
                       "
                     >
-                      ส่งหลักฐาน
+                      ${
+                        state.status ===
+                        "rejected"
+                          ? "ทำภารกิจใหม่ / ส่งหลักฐานใหม่"
+                          : "ส่งหลักฐาน"
+                      }
                     </button>
 
                   `
@@ -7252,10 +7353,13 @@ async function refreshMissionStatus(){
   try{
 
     const idToken =
-      ROCK?.getIdToken?.() ||
-      window.liff?.getIDToken?.();
+      await getFreshLineIdTokenV2185();
 
-    if(!idToken){
+
+    if(
+      !idToken ||
+      idToken.split(".").length !== 3
+    ){
       return null;
     }
 
@@ -7820,7 +7924,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.20.0 — NUTRITION LINK
+   MISSION V2.21.0 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7887,7 +7991,7 @@ function getHomeApiUrl(){
 
 
 /* =========================================================
-   MISSION V2.20.0 — WALLET SYNC FROM HOME
+   MISSION V2.21.0 — WALLET SYNC FROM HOME
    Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
 ========================================================= */
 
@@ -7979,7 +8083,7 @@ function renderMissionWalletFromHome(
 
 
 /* =========================================================
-   MISSION V2.20.0 — FRESH LINE ID TOKEN
+   MISSION V2.21.0 — FRESH LINE ID TOKEN
    ห้ามใช้ token จาก localStorage / profile / userId
 ========================================================= */
 
@@ -9160,7 +9264,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.20.0 — FINAL OVERLAY SAFETY
+   MISSION V2.21.0 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -9356,7 +9460,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.20.0 — DIRECT MISSION LINK
+   MISSION V2.21.0 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
