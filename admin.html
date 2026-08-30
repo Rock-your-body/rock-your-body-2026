@@ -337,6 +337,7 @@
   <nav class="tabs">
     <button class="tab active" data-tab="mission">🎯 Mission</button>
     <button class="tab" data-tab="rewards">🎁 Rewards</button>
+    <button class="tab" data-tab="battle-rewards">⚔️ Stage Rewards</button>
     <button class="tab" data-tab="players">👥 Players</button>
     <button class="tab" data-tab="advice">💬 Advice</button>
     <button class="tab" data-tab="missionset">➕ Mission Setup</button>
@@ -376,6 +377,167 @@
     </div>
     <div id="rewardList"></div>
   </section>
+
+  <!-- BATTLE STAGE REWARDS -->
+  <section id="panel-battle-rewards" class="panel">
+
+    <div class="card">
+      <div class="row space">
+        <div>
+          <b>⚔️ กำหนดของรางวัลแต่ละ Battle Stage</b>
+          <div class="muted-text">
+            Admin สามารถเพิ่ม / แก้ไข / ปิดใช้งาน / ยกเลิกรางวัลแต่ละด่านได้
+          </div>
+        </div>
+
+        <button
+          class="btn primary"
+          onclick="resetBattleRewardForm()"
+        >
+          + เพิ่มรางวัล
+        </button>
+      </div>
+
+      <div class="grid3" style="margin-top:12px">
+
+        <div>
+          <label>Stage</label>
+          <select id="brStage">
+            <option value="1">Stage 1</option>
+            <option value="2">Stage 2</option>
+            <option value="3">Stage 3</option>
+            <option value="4">Stage 4</option>
+            <option value="5">Stage 5</option>
+            <option value="6">Stage 6</option>
+            <option value="7">Stage 7</option>
+            <option value="8">Stage 8</option>
+            <option value="9">Stage 9</option>
+            <option value="10">Stage 10</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Reward Type</label>
+          <select id="brType">
+            <option value="physical">ของรางวัลจริง</option>
+            <option value="coin">Rock Coin</option>
+            <option value="energy">Energy</option>
+            <option value="exp">EXP</option>
+            <option value="coupon">Coupon / Voucher</option>
+            <option value="other">อื่น ๆ</option>
+          </select>
+        </div>
+
+        <div>
+          <label>สถานะ</label>
+          <select id="brActive">
+            <option value="true">ใช้งาน</option>
+            <option value="false">ปิดใช้งาน</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+
+        <div>
+          <label>ชื่อรางวัล</label>
+          <input
+            id="brName"
+            placeholder="เช่น กระบอกน้ำ ROCK YOUR BODY"
+          >
+        </div>
+
+        <div>
+          <label>จำนวน / มูลค่า</label>
+          <input
+            id="brAmount"
+            type="number"
+            min="0"
+            step="1"
+            value="1"
+          >
+        </div>
+
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+
+        <div>
+          <label>รายละเอียดรางวัล</label>
+          <textarea
+            id="brDescription"
+            placeholder="รายละเอียด / เงื่อนไขการรับของรางวัล"
+          ></textarea>
+        </div>
+
+        <div>
+          <label>หมายเหตุ Admin</label>
+          <textarea
+            id="brAdminNote"
+            placeholder="หมายเหตุสำหรับทีม Admin"
+          ></textarea>
+        </div>
+
+      </div>
+
+      <input id="brId" type="hidden">
+
+      <div class="row" style="margin-top:12px">
+        <button
+          class="btn success"
+          onclick="saveBattleReward()"
+        >
+          💾 บันทึกรางวัล
+        </button>
+
+        <button
+          class="btn muted"
+          onclick="resetBattleRewardForm()"
+        >
+          ล้างฟอร์ม
+        </button>
+      </div>
+
+    </div>
+
+    <div class="card row space">
+      <div>
+        <b>รายการรางวัลตาม Stage</b>
+      </div>
+
+      <div class="row">
+        <select
+          id="battleRewardStageFilter"
+          style="width:auto"
+          onchange="loadBattleRewards()"
+        >
+          <option value="all">ทุก Stage</option>
+          <option value="1">Stage 1</option>
+          <option value="2">Stage 2</option>
+          <option value="3">Stage 3</option>
+          <option value="4">Stage 4</option>
+          <option value="5">Stage 5</option>
+          <option value="6">Stage 6</option>
+          <option value="7">Stage 7</option>
+          <option value="8">Stage 8</option>
+          <option value="9">Stage 9</option>
+          <option value="10">Stage 10</option>
+        </select>
+
+        <button
+          class="btn primary"
+          onclick="loadBattleRewards()"
+        >
+          รีเฟรช
+        </button>
+      </div>
+    </div>
+
+    <div id="battleRewardList"></div>
+
+  </section>
+
 
   <!-- PLAYERS -->
   <section id="panel-players" class="panel">
@@ -619,6 +781,7 @@ document.querySelectorAll(".tab").forEach(btn=>{
     $(`panel-${btn.dataset.tab}`).classList.add("active");
 
     if(btn.dataset.tab==="rewards") loadRewards();
+    if(btn.dataset.tab==="battle-rewards") loadBattleRewards();
     if(btn.dataset.tab==="players") loadPlayers();
     if(btn.dataset.tab==="advice") loadAdvice();
     if(btn.dataset.tab==="missionset") loadCustomMissions();
@@ -739,6 +902,365 @@ async function setRewardStatus(id,status){
     await Promise.all([loadRewards(),loadSummary()]);
   }catch(e){toast(e.message,true)}
 }
+
+
+/* =========================================================
+   BATTLE STAGE REWARD MANAGEMENT V3.2
+========================================================= */
+
+let battleRewardsCache = [];
+
+
+function resetBattleRewardForm(){
+
+  $("brId").value = "";
+  $("brStage").value = "1";
+  $("brType").value = "physical";
+  $("brName").value = "";
+  $("brAmount").value = "1";
+  $("brDescription").value = "";
+  $("brAdminNote").value = "";
+  $("brActive").value = "true";
+}
+
+
+async function loadBattleRewards(){
+
+  try{
+
+    const stage =
+      $("battleRewardStageFilter")?.value ||
+      "all";
+
+
+    const d =
+      await post(
+        "battleRewardList",
+        {
+          stage:
+            stage === "all"
+              ? null
+              : Number(stage)
+        }
+      );
+
+
+    battleRewardsCache =
+      d?.items ||
+      [];
+
+
+    $("battleRewardList").innerHTML =
+      battleRewardsCache.length
+        ? battleRewardsCache
+            .map(
+              r => `
+                <article class="card">
+
+                  <div class="row space">
+
+                    <div>
+
+                      <b>
+                        ⚔️ Stage ${Number(r.stage_no || 0)}
+                        • ${esc(r.reward_name || "รางวัล")}
+                      </b>
+
+                      ${
+                        r.active
+                          ? '<span class="badge approved">ใช้งาน</span>'
+                          : '<span class="badge cancelled">ปิดใช้งาน</span>'
+                      }
+
+                      <div class="muted-text">
+                        ${esc(r.reward_type || "")}
+                        • จำนวน/มูลค่า ${Number(r.reward_amount || 0)}
+                      </div>
+
+                    </div>
+
+                    <div class="row">
+
+                      <button
+                        class="btn primary"
+                        onclick="editBattleReward('${esc(r.id)}')"
+                      >
+                        แก้ไข
+                      </button>
+
+                      ${
+                        r.active
+                          ? `
+                            <button
+                              class="btn warning"
+                              onclick="setBattleRewardActive('${esc(r.id)}',false)"
+                            >
+                              ปิดใช้งาน
+                            </button>
+                          `
+                          : `
+                            <button
+                              class="btn success"
+                              onclick="setBattleRewardActive('${esc(r.id)}',true)"
+                            >
+                              เปิดใช้งาน
+                            </button>
+                          `
+                      }
+
+                      <button
+                        class="btn danger"
+                        onclick="deleteBattleReward('${esc(r.id)}')"
+                      >
+                        ยกเลิก/ลบ
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                  ${
+                    r.description
+                      ? `<div style="margin-top:8px">${esc(r.description)}</div>`
+                      : ""
+                  }
+
+                  ${
+                    r.admin_note
+                      ? `<div class="muted-text" style="margin-top:6px">Admin: ${esc(r.admin_note)}</div>`
+                      : ""
+                  }
+
+                </article>
+              `
+            )
+            .join("")
+        : `<div class="card empty">ยังไม่มีการกำหนดรางวัล Stage</div>`;
+
+  }catch(e){
+
+    $("battleRewardList").innerHTML =
+      `<div class="card empty">${esc(e.message)}</div>`;
+  }
+}
+
+
+function editBattleReward(
+  id
+){
+
+  const r =
+    battleRewardsCache.find(
+      x => x.id === id
+    );
+
+
+  if(!r){
+    return;
+  }
+
+
+  $("brId").value =
+    r.id ||
+    "";
+
+  $("brStage").value =
+    String(
+      r.stage_no ||
+      1
+    );
+
+  $("brType").value =
+    r.reward_type ||
+    "physical";
+
+  $("brName").value =
+    r.reward_name ||
+    "";
+
+  $("brAmount").value =
+    String(
+      r.reward_amount ??
+      1
+    );
+
+  $("brDescription").value =
+    r.description ||
+    "";
+
+  $("brAdminNote").value =
+    r.admin_note ||
+    "";
+
+  $("brActive").value =
+    String(
+      Boolean(
+        r.active
+      )
+    );
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+
+async function saveBattleReward(){
+
+  try{
+
+    const rewardName =
+      $("brName")
+        .value
+        .trim();
+
+
+    if(!rewardName){
+
+      throw new Error(
+        "กรุณากรอกชื่อรางวัล"
+      );
+    }
+
+
+    await post(
+      "saveBattleReward",
+      {
+        reward:{
+          id:
+            $("brId").value ||
+            null,
+
+          stageNo:
+            Number(
+              $("brStage").value ||
+              1
+            ),
+
+          rewardType:
+            $("brType").value,
+
+          rewardName,
+
+          rewardAmount:
+            Number(
+              $("brAmount").value ||
+              0
+            ),
+
+          description:
+            $("brDescription")
+              .value
+              .trim(),
+
+          adminNote:
+            $("brAdminNote")
+              .value
+              .trim(),
+
+          active:
+            $("brActive").value ===
+            "true"
+        }
+      }
+    );
+
+
+    toast(
+      "บันทึกรางวัล Stage แล้ว"
+    );
+
+
+    resetBattleRewardForm();
+
+    await loadBattleRewards();
+
+  }catch(e){
+
+    toast(
+      e.message,
+      true
+    );
+  }
+}
+
+
+async function setBattleRewardActive(
+  id,
+  active
+){
+
+  try{
+
+    await post(
+      "setBattleRewardActive",
+      {
+        rewardId:id,
+        active
+      }
+    );
+
+
+    toast(
+      active
+        ? "เปิดใช้งานรางวัลแล้ว"
+        : "ปิดใช้งานรางวัลแล้ว"
+    );
+
+
+    await loadBattleRewards();
+
+  }catch(e){
+
+    toast(
+      e.message,
+      true
+    );
+  }
+}
+
+
+async function deleteBattleReward(
+  id
+){
+
+  if(
+    !confirm(
+      "ยืนยันยกเลิกรางวัลนี้?"
+    )
+  ){
+    return;
+  }
+
+
+  try{
+
+    await post(
+      "deleteBattleReward",
+      {
+        rewardId:id
+      }
+    );
+
+
+    toast(
+      "ยกเลิกรางวัลแล้ว"
+    );
+
+
+    await loadBattleRewards();
+
+  }catch(e){
+
+    toast(
+      e.message,
+      true
+    );
+  }
+}
+
 
 async function loadPlayers(){
   try{
