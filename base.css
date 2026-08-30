@@ -947,110 +947,146 @@ button,input,select,textarea{font:inherit}
   font-weight: 900 !important;
   color: #062b72 !important;
   line-height: 1 !important;
-}
+/* =========================================================
+   HOME FINAL OVERLAY FIX
+   ใช้ home-template เป็นภาพหลัก
+   ข้อมูลเป็นข้อความโปร่งใส ไม่มีพื้นหลัง
+========================================================= */
 
-/* น้ำหนักเป้าหมาย = สีแดง */
-#targetWeight{
-  font-size: 25px !important;
-  font-weight: 900 !important;
-  color: #e00000 !important;
-  line-height: 1 !important;
-}
-
-/* % ความคืบหน้า = สีเขียว */
-#weightProgressPercent{
-  font-size: 24px !important;
-  font-weight: 900 !important;
-  color: #11852f !important;
-  line-height: 1 !important;
-}
-/* ===== CURRENT WEIGHT ===== */
+/* น้ำหนักปัจจุบัน */
 #currentWeight{
-  font-size: 52px !important;
-  font-weight: 800 !important;
-  color: #061d68 !important;
-  line-height: 1;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#062b72 !important;
+  font-size:clamp(20px,3.1cqw,48px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
 }
 
-/* kg เล็กกว่า */
-#currentWeight .unit{
-  font-size: 26px !important;
-  font-weight: 800 !important;
-}
-
-/* ===== TARGET WEIGHT ===== */
+/* เป้าหมายน้ำหนัก */
 #targetWeight{
-  font-size: 52px !important;
-  font-weight: 800 !important;
-  color: #d71919 !important;
-  line-height: 1;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#d71919 !important;
+  font-size:clamp(20px,3.1cqw,48px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
 }
 
-#targetWeight .unit{
-  font-size: 26px !important;
-  font-weight: 800 !important;
-}
-
-/* ===== WEIGHT PROGRESS ===== */
+/* % ความคืบหน้า */
+#weightProgressPct,
 #weightProgressPercent{
-  font-size: 35px !important;
-  font-weight: 800 !important;
-  color: #118529 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#118529 !important;
+  font-size:clamp(17px,2.4cqw,36px) !important;
+  font-weight:800 !important;
+  line-height:1 !important;
 }
 
-/* ===== STEPS ===== */
+/* ลดไปแล้ว / เหลืออีก */
+#lostWeight,
+#remainingWeight{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#06276c !important;
+  font-size:clamp(8px,1.15cqw,18px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+}
+
+/* ก้าว */
+#steps,
 #todaySteps{
-  font-size: 38px !important;
-  font-weight: 800 !important;
-  color: #fff !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#fff !important;
+  font-size:clamp(18px,2.8cqw,43px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  text-shadow:none !important;
 }
 
-/* ===== CALORIES ===== */
+/* แคลอรี่ */
+#calories,
 #todayCalories{
-  font-size: 38px !important;
-  font-weight: 800 !important;
-  color: #fff !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#fff !important;
+  font-size:clamp(17px,2.5cqw,39px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  text-shadow:none !important;
 }
 
-/* ===== SLEEP ===== */
-#todaySleep{
-  font-size: 38px !important;
-  font-weight: 800 !important;
-  color: #fff !important;
+/* การนอน */
+#sleep,
+#todaySleep,
+#sleepDuration{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+
+  color:#fff !important;
+  font-size:clamp(11px,1.75cqw,27px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  text-shadow:none !important;
 }
 
-/* ===== HEALTH SCORE ===== */
+/* Health score */
 #healthScore{
-  font-size: 38px !important;
-  font-weight: 800 !important;
-  color: #fff !important;
-}
-/* =====================================================
-   ลบพื้นหลังข้อมูลทั้งหมดบน HOME
-   เหลือเฉพาะตัวเลข/ข้อความ
-===================================================== */
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
 
+  color:#fff !important;
+  font-size:clamp(16px,2.3cqw,36px) !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  text-shadow:none !important;
+}
+
+/* Coin / Energy */
 #coin,
 #energy,
-#currentWeight,
-#targetWeight,
-#steps,
-#calories,
-#sleep,
-#healthScore,
-#weightProgressPct,
-#lostWeight,
-#remainingWeight,
+#coinValue,
+#energyValue{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+
+/* ชื่อ LINE / Level / EXP */
 #lineName,
 #level,
-#expValue {
-    background: none !important;
-    background-color: transparent !important;
-
-    border: 0 !important;
-    outline: 0 !important;
-    box-shadow: none !important;
-
-    padding: 0 !important;
-    border-radius: 0 !important;
+#levelValue,
+#expValue{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
 }
