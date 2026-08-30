@@ -12,11 +12,11 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-home-v57-exp-sync"
+    href="./base.css?v=20260830-home-v510-weight-kg"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-v57-exp-sync"></script>
+  <script src="./app-config.js?v=20260830-home-v510-weight-kg"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260830-home-v57-exp-sync"
+    src="./home-template.png?v=20260830-home-v510-weight-kg"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -404,7 +404,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V5.7 EXP-SYNC
+   HOME V5.10 EXP-SYNC
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
@@ -1410,13 +1410,91 @@ function normalizeHome(
 
           today.health_score,
 
-          raw.healthScore
+          raw.healthScore,
+
+          raw.health?.healthScore,
+
+          raw.activity?.healthScore
 
         )
 
     }
 
   };
+}
+
+
+/* =========================================================
+   HEALTH SCORE FALLBACK
+========================================================= */
+
+function calculateHealthScoreFallback(
+  data
+){
+
+  const steps =
+    Math.max(
+      0,
+      Number(
+        data?.today?.steps ||
+        0
+      )
+    );
+
+
+  const calories =
+    Math.max(
+      0,
+      Number(
+        data?.today?.calories ||
+        0
+      )
+    );
+
+
+  const sleepMinutes =
+    Math.max(
+      0,
+      Number(
+        data?.today?.sleepMinutes ||
+        0
+      )
+    );
+
+
+  const stepsScore =
+    Math.min(
+      1,
+      steps /
+      8000
+    );
+
+
+  const caloriesScore =
+    Math.min(
+      1,
+      calories /
+      300
+    );
+
+
+  const sleepScore =
+    Math.min(
+      1,
+      sleepMinutes /
+      420
+    );
+
+
+  return Math.round(
+    (
+      stepsScore +
+      caloriesScore +
+      sleepScore
+    ) /
+    3 *
+    100
+  );
 }
 
 
@@ -1568,32 +1646,32 @@ function renderHome(
 
 
   /*
-    ไม่มี kg เพื่อไม่ซ้อน Template
+    แสดงหน่วย kg หลังค่าความคืบหน้าน้ำหนัก
   */
   $("lostWeight")
     .textContent =
       data.weight.lost ===
         null
-        ? "--"
-        : Number(
+        ? "-- kg"
+        : `${Number(
             data.weight.lost
           )
           .toFixed(
             1
-          );
+          )} kg`;
 
 
   $("remainingWeight")
     .textContent =
       data.weight.remaining ===
         null
-        ? "--"
-        : Number(
+        ? "-- kg"
+        : `${Number(
             data.weight.remaining
           )
           .toFixed(
             1
-          );
+          )} kg`;
 
 
   /* ---------- HEALTH ---------- */
@@ -1655,20 +1733,33 @@ function renderHome(
     Template มี / 100 แล้ว
     จึงใส่เฉพาะคะแนน
   */
-  $("healthScore").textContent =
+
+  const resolvedHealthScore =
     data.today.healthScore ===
       null ||
     data.today.healthScore ===
       undefined
-      ? "--"
-      : String(
-          Math.round(
-            num(
-              data.today.healthScore,
-              0
-            )
+      ? calculateHealthScoreFallback(
+          data
+        )
+      : Math.round(
+          num(
+            data.today.healthScore,
+            0
           )
         );
+
+
+  $("healthScore").textContent =
+    String(
+      Math.max(
+        0,
+        Math.min(
+          100,
+          resolvedHealthScore
+        )
+      )
+    );
 }
 
 
