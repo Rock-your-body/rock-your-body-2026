@@ -6,7 +6,7 @@
   <title>ROCK YOUR BODY 2026 — BATTLE STAGE</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v50"></script>
+  <script src="./app-config.js?v=20260831-battle-v53"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -394,7 +394,17 @@ async function attack(){
   try{
     ensureAudio();
 
-    const result=await post("attackV5",{stageId:STAGE_ID});
+    let result;
+
+    try{
+      result=await post("attackV5",{stageId:STAGE_ID});
+    }catch(error){
+      if(String(error?.message||"").includes("UNKNOWN_ACTION")){
+        result=await post("attack",{stageId:STAGE_ID});
+      }else{
+        throw error;
+      }
+    }
 
     if(result?.locked){
       showResult({
@@ -441,7 +451,19 @@ $("resultButton").onclick=()=>location.href="./battle_maps.html";
   try{
     const ok=await initLine();
     if(ok===false)return;
-    render(await post("stageV5",{stageId:STAGE_ID}));
+    let data;
+
+    try{
+      data=await post("stageV5",{stageId:STAGE_ID});
+    }catch(error){
+      if(String(error?.message||"").includes("UNKNOWN_ACTION")){
+        data=await post("stage",{stageId:STAGE_ID});
+      }else{
+        throw error;
+      }
+    }
+
+    render(data);
   }catch(error){
     console.error(error);
     showStatus(error?.message||String(error),true);
