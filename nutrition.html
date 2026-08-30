@@ -2,183 +2,2991 @@
 <html lang="th">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 - NUTRITION</title>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+  <meta
+    name="theme-color"
+    content="#eef6ff"
+  >
+  <title>
+    ROCK YOUR BODY 2026 • Nutrition
+  </title>
+
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script src="./app-config.js"></script>
+  <script src="./common.js"></script>
+
   <style>
-    *{box-sizing:border-box}
-    body{margin:0;background:#eef5ff;font-family:Arial,"Noto Sans Thai",sans-serif;color:#08245f}
-    .app{max-width:760px;margin:auto;padding:14px}
-    .card{background:#fff;border:2px solid #d7e5f5;border-radius:22px;padding:18px;box-shadow:0 5px 15px #163f8120}
-    h1{margin:0 0 6px;font-size:26px}
-    .sub{color:#607493;margin-bottom:16px}
-    .ring-wrap{display:grid;grid-template-columns:210px 1fr;gap:18px;align-items:center}
-    .ring{width:190px;height:190px;border-radius:50%;background:conic-gradient(#174fe5 0 25%,#17a53a 25% 50%,#ff7b10 50% 75%,#e60018 75% 100%);position:relative;margin:auto}
-    .ring:after{content:"";position:absolute;inset:25px;background:#fff;border-radius:50%}
-    .ring-center{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:700}
-    .ring-center strong{font-size:34px}
-    .metrics{display:grid;gap:12px}
-    .metric{display:grid;grid-template-columns:10px 1fr auto;gap:10px;align-items:center;border-bottom:1px solid #d9e2ed;padding:8px 0}
-    .bar{height:48px;border-radius:8px}.blue{background:#174fe5}.green{background:#17a53a}.orange{background:#ff7b10}.red{background:#e60018}
-    .metric b{font-size:18px}.metric span{font-size:17px}
-    .meal-title{margin:22px 0 10px;font-size:20px}
-    .meals{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .meal{border:1px solid #d7e2f0;border-radius:15px;padding:12px;background:#f8fbff}
-    .meal b{display:block;margin-bottom:6px}
-    .meal small{color:#607493}
-    button{width:100%;border:0;border-radius:14px;padding:15px;font-size:18px;font-weight:700;color:white;background:#008999;margin-top:16px}
-    .back{background:#073783}
-    dialog{border:0;border-radius:20px;padding:0;width:min(92vw,520px)}
-    dialog .box{padding:20px}
-    label{display:block;font-weight:700;margin-top:10px}
-    input,select,textarea{width:100%;padding:12px;border:1px solid #ccd9e8;border-radius:10px;font-size:16px;margin-top:5px}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .notice{padding:10px;background:#fff7dd;border-radius:10px;margin-top:12px;color:#725300}
-    #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#17395f;color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:99}
-    @media(max-width:600px){.ring-wrap{grid-template-columns:1fr}.ring{width:160px;height:160px}.ring:after{inset:22px}.meals{grid-template-columns:1fr}}
-  </style>
-</head>
-<body>
-<div class="app">
-  <div class="card">
-    <h1>🥗 NUTRITION</h1>
-    <div class="sub">เป้าหมายโภชนาการจากข้อมูลสุขภาพล่าสุด • ไม่มีข้อมูลแสดง 0</div>
-
-    <div class="ring-wrap">
-      <div class="ring">
-        <div class="ring-center"><strong id="pct">0%</strong><span>พลังงานวันนี้</span></div>
-      </div>
-
-      <div class="metrics">
-        <div class="metric"><i class="bar blue"></i><b>พลังงาน</b><span><strong id="calDone">0</strong> / <strong id="calGoal">0</strong> kcal</span></div>
-        <div class="metric"><i class="bar green"></i><b>โปรตีน</b><span><strong id="proDone">0</strong> / <strong id="proGoal">0</strong> g</span></div>
-        <div class="metric"><i class="bar orange"></i><b>ไขมัน</b><span><strong id="fatDone">0</strong> / <strong id="fatGoal">0</strong> g</span></div>
-        <div class="metric"><i class="bar red"></i><b>คาร์โบไฮเดรต</b><span><strong id="carbDone">0</strong> / <strong id="carbGoal">0</strong> g</span></div>
-      </div>
-    </div>
-
-    <div class="meal-title">เป้าหมาย / ที่รับประทานจริงแต่ละมื้อ</div>
-    <div class="meals" id="meals"></div>
-
-    <button onclick="openMeal()">📝 บันทึกการรับประทานอาหาร</button>
-    <button class="back" onclick="location.href='./mission.html'">← กลับ MISSION</button>
-    <div class="notice">* เป้าหมายเป็นการประมาณเพื่อ Wellness จากข้อมูลล่าสุด ไม่ใช่คำสั่งทางการแพทย์</div>
-  </div>
-</div>
-
-<dialog id="mealDialog">
-  <div class="box">
-    <h2>บันทึกอาหาร</h2>
-    <label>มื้ออาหาร</label>
-    <select id="mealType">
-      <option value="breakfast">มื้อเช้า</option>
-      <option value="lunch">มื้อกลางวัน</option>
-      <option value="dinner">มื้อเย็น</option>
-      <option value="snack">ของว่าง</option>
-    </select>
-    <label>ชื่ออาหาร</label><input id="mealName" placeholder="เช่น ข้าว + อกไก่ + ผัก">
-    <label>รายละเอียด</label><textarea id="mealDesc" rows="2"></textarea>
-    <div class="grid2">
-      <div><label>พลังงาน kcal</label><input id="calories" type="number" min="0" value="0"></div>
-      <div><label>โปรตีน g</label><input id="protein" type="number" min="0" step="0.1" value="0"></div>
-      <div><label>ไขมัน g</label><input id="fat" type="number" min="0" step="0.1" value="0"></div>
-      <div><label>คาร์โบไฮเดรต g</label><input id="carbs" type="number" min="0" step="0.1" value="0"></div>
-    </div>
-    <label>รูปอาหาร (ถ้ามี)</label><input id="photo" type="file" accept="image/*">
-    <button onclick="saveMeal()">บันทึก</button>
-    <button class="back" onclick="mealDialog.close()">ยกเลิก</button>
-  </div>
-</dialog>
-<div id="toast"></div>
-
-<script>
-const LIFF_ID = window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF";
-const API = window.APP_CONFIG?.getApi ? window.APP_CONFIG.getApi("NUTRITION")
-  : (window.APP_CONFIG?.API?.NUTRITION || "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/nutrition");
-
-const $ = id => document.getElementById(id);
-const n = v => Number(v) || 0;
-const fmt = v => n(v).toLocaleString("th-TH",{maximumFractionDigits:1});
-const mealDialog = $("mealDialog");
-
-function toast(t){ const x=$("toast"); x.textContent=t; x.style.display="block"; setTimeout(()=>x.style.display="none",2500); }
-
-async function initLine(){
-  await liff.init({liffId:LIFF_ID});
-  if(!liff.isLoggedIn()){ liff.login({redirectUri:location.href}); return false; }
-  if(!liff.getIDToken()){ liff.logout(); liff.login({redirectUri:location.href}); return false; }
-  return true;
-}
-
-async function api(action, data={}){
-  const idToken=liff.getIDToken();
-  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},cache:"no-store",
-    body:JSON.stringify({action,idToken,...data})});
-  const j=await r.json().catch(()=>({}));
-  const msg=String(j.error||j.message||"").toLowerCase();
-  if(r.status===401 || msg.includes("expired")){
-    liff.logout(); liff.login({redirectUri:location.href}); return new Promise(()=>{});
-  }
-  if(!r.ok || j.success===false) throw new Error(j.error||j.message||`HTTP ${r.status}`);
-  return j.data ?? j;
-}
-
-function render(d={}){
-  const g=d.goals||{}, c=d.consumed||{};
-  $("calGoal").textContent=fmt(g.calories);
-  $("proGoal").textContent=fmt(g.protein);
-  $("fatGoal").textContent=fmt(g.fat);
-  $("carbGoal").textContent=fmt(g.carbs);
-  $("calDone").textContent=fmt(c.calories);
-  $("proDone").textContent=fmt(c.protein);
-  $("fatDone").textContent=fmt(c.fat);
-  $("carbDone").textContent=fmt(c.carbs);
-  $("pct").textContent=(n(g.calories)>0 ? Math.min(100,Math.round(n(c.calories)/n(g.calories)*100)) : 0)+"%";
-
-  const names={breakfast:"มื้อเช้า",lunch:"มื้อกลางวัน",dinner:"มื้อเย็น",snack:"ของว่าง"};
-  const splits={breakfast:.25,lunch:.35,dinner:.30,snack:.10};
-  const actual=d.meals||{};
-  $("meals").innerHTML=Object.keys(names).map(k=>{
-    const m=actual[k]||{};
-    return `<div class="meal"><b>${names[k]}</b>
-      <small>พลังงาน ${fmt(m.calories)} / ${fmt(n(g.calories)*splits[k])} kcal</small><br>
-      <small>P ${fmt(m.protein)} / ${fmt(n(g.protein)*splits[k])} g ·
-      F ${fmt(m.fat)} / ${fmt(n(g.fat)*splits[k])} g ·
-      C ${fmt(m.carbs)} / ${fmt(n(g.carbs)*splits[k])} g</small></div>`;
-  }).join("");
-}
-
-function openMeal(){ mealDialog.showModal(); }
-
-async function saveMeal(){
-  try{
-    const file=$("photo").files[0];
-    let photoBase64=null, photoName=null, photoType=null;
-    if(file){
-      photoName=file.name; photoType=file.type;
-      photoBase64=await new Promise((resolve,reject)=>{
-        const fr=new FileReader(); fr.onload=()=>resolve(String(fr.result).split(",")[1]); fr.onerror=reject; fr.readAsDataURL(file);
-      });
+    *{
+      box-sizing:border-box;
     }
-    await api("saveMeal",{
-      meal_type:$("mealType").value,
-      meal_name:$("mealName").value.trim(),
-      description:$("mealDesc").value.trim(),
-      calories:n($("calories").value), protein:n($("protein").value),
-      fat:n($("fat").value), carbs:n($("carbs").value),
-      photo_base64:photoBase64, photo_name:photoName, photo_type:photoType
-    });
-    mealDialog.close(); toast("บันทึกอาหารแล้ว"); await load();
-  }catch(e){ toast("บันทึกไม่สำเร็จ: "+e.message); }
-}
 
-async function load(){
-  try{ render(await api("dashboard")); }
-  catch(e){ render({}); toast("โหลดข้อมูลไม่สำเร็จ: "+e.message); }
-}
+    :root{
+      --bg:#eef6ff;
+      --card:#ffffff;
+      --ink:#173454;
+      --muted:#68809d;
+      --line:#dce8f5;
+      --blue:#2563eb;
+      --green:#0f9f78;
+      --orange:#ea8a16;
+      --shadow:
+        0 12px 32px
+        rgba(45,83,130,.12);
+    }
 
-(async()=>{ try{ if(await initLine()) await load(); }catch(e){ render({}); toast(e.message); } })();
-</script>
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:
+        Arial,
+        "Noto Sans Thai",
+        sans-serif;
+      color:var(--ink);
+      background:
+        linear-gradient(
+          180deg,
+          #eaf5ff 0%,
+          #f7fbff 45%,
+          #eef6ff 100%
+        );
+    }
+
+    button,
+    input,
+    select,
+    textarea{
+      font:inherit;
+    }
+
+    .wrap{
+      width:min(
+        720px,
+        100%
+      );
+      margin:auto;
+      padding:
+        calc(16px + env(safe-area-inset-top))
+        16px
+        calc(30px + env(safe-area-inset-bottom));
+    }
+
+    .hero{
+      padding:18px;
+      border-radius:24px;
+      background:
+        linear-gradient(
+          135deg,
+          #0d67d8,
+          #20a985
+        );
+      color:#fff;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+
+    .hero h1{
+      margin:0 0 4px;
+      font-size:24px;
+    }
+
+    .hero p{
+      margin:0;
+      opacity:.9;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:
+        repeat(2,1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .metric{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:
+        0 5px 18px
+        rgba(50,85,120,.07);
+    }
+
+    .metric .label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .metric .value{
+      margin-top:5px;
+      font-size:22px;
+      font-weight:1000;
+    }
+
+    .metric .goal{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .progress{
+      height:8px;
+      margin-top:9px;
+      overflow:hidden;
+      border-radius:100px;
+      background:#e8f0f8;
+    }
+
+    .progress > div{
+      height:100%;
+      width:0%;
+      border-radius:inherit;
+      background:
+        linear-gradient(
+          90deg,
+          #2e7df5,
+          #1caf83
+        );
+      transition:
+        width .25s ease;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:
+        0 5px 20px
+        rgba(50,85,120,.08);
+      margin-bottom:14px;
+    }
+
+    .card h2{
+      margin:0 0 4px;
+      font-size:18px;
+    }
+
+    .sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .water-row{
+      display:grid;
+      grid-template-columns:
+        1fr auto;
+      gap:10px;
+      align-items:end;
+    }
+
+    .field{
+      margin-bottom:11px;
+    }
+
+    .field label{
+      display:block;
+      margin-bottom:6px;
+      font-size:12px;
+      font-weight:900;
+      color:#315b91;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border:1px solid #d5e2ef;
+      border-radius:12px;
+      padding:11px 12px;
+      background:#fff;
+      color:var(--ink);
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:78px;
+      resize:vertical;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:10px;
+    }
+
+    .btn{
+      border:0;
+      border-radius:13px;
+      padding:12px 15px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+
+    .btn.primary{
+      color:#fff;
+      background:var(--green);
+    }
+
+    .btn.blue{
+      color:#fff;
+      background:var(--blue);
+    }
+
+    .btn.ghost{
+      color:var(--ink);
+      background:#edf4fb;
+    }
+
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .quick-water{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .quick-water button{
+      border:1px solid #d7e4f2;
+      border-radius:999px;
+      background:#f5f9fd;
+      color:#315b91;
+      padding:8px 11px;
+      font-size:12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .meal-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .meal{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px;
+      background:#fbfdff;
+    }
+
+    .meal-top{
+      display:flex;
+      justify-content:
+        space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+
+    .meal-name{
+      font-weight:1000;
+      font-size:15px;
+    }
+
+    .meal-type{
+      color:var(--muted);
+      font-size:11px;
+      margin-top:3px;
+    }
+
+    .badge{
+      white-space:nowrap;
+      padding:5px 8px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      background:#edf4fb;
+      color:#496682;
+    }
+
+    .badge.pending{
+      background:#fff4d8;
+      color:#996800;
+    }
+
+    .badge.approved{
+      background:#e7f8ef;
+      color:#08744f;
+    }
+
+    .badge.rejected{
+      background:#ffe9e9;
+      color:#a83c3c;
+    }
+
+    .meal-desc{
+      margin-top:8px;
+      color:#536e8c;
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .macro-row{
+      display:grid;
+      grid-template-columns:
+        repeat(4,1fr);
+      gap:6px;
+      margin-top:10px;
+    }
+
+    .macro{
+      border-radius:10px;
+      background:#eff6fc;
+      padding:8px 5px;
+      text-align:center;
+    }
+
+    .macro b{
+      display:block;
+      font-size:12px;
+    }
+
+    .macro span{
+      font-size:9px;
+      color:var(--muted);
+    }
+
+    .empty{
+      padding:20px 12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .notice{
+      padding:10px 12px;
+      border-radius:12px;
+      background:#fff8e9;
+      color:#7e5d19;
+      font-size:11px;
+      line-height:1.5;
+      margin-bottom:12px;
+    }
+
+    #status{
+      position:fixed;
+      left:50%;
+      bottom:
+        calc(
+          20px +
+          env(safe-area-inset-bottom)
+        );
+      transform:
+        translateX(-50%);
+      width:
+        min(
+          92vw,
+          560px
+        );
+      padding:11px 14px;
+      border-radius:14px;
+      background:
+        rgba(
+          18,
+          45,
+          74,
+          .95
+        );
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      text-align:center;
+      display:none;
+      z-index:50;
+    }
+
+    .nav{
+      display:grid;
+      grid-template-columns:
+        1fr 1fr;
+      gap:10px;
+      margin-top:6px;
+    }
+
+    @media(
+      max-width:460px
+    ){
+      .macro-row{
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+    }
+  
+    /* =========================================================
+       NUTRITION V3 — INBODY GOALS / ZERO DEFAULT / MEAL TARGET
+    ========================================================= */
+
+    .goal-source{
+      margin-top:8px;
+      padding:9px 12px;
+      border-radius:12px;
+      background:#eef6ff;
+      color:#315679;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .daily-table{
+      width:100%;
+      margin-top:12px;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:14px;
+      background:#f8fbff;
+    }
+
+    .daily-table th,
+    .daily-table td{
+      padding:9px 8px;
+      border-bottom:1px solid #e1eaf4;
+      font-size:12px;
+      text-align:right;
+    }
+
+    .daily-table th:first-child,
+    .daily-table td:first-child{
+      text-align:left;
+      font-weight:900;
+    }
+
+    .daily-table th{
+      color:#58718e;
+      font-size:11px;
+    }
+
+    .daily-table tr:last-child td{
+      border-bottom:0;
+    }
+
+    .meal-goal-panel{
+      display:none;
+      margin:12px 0 2px;
+      padding:13px;
+      border:1px solid #cfe1f4;
+      border-radius:15px;
+      background:#f7fbff;
+    }
+
+    .meal-goal-panel.show{
+      display:block;
+    }
+
+    .meal-goal-title{
+      color:#073b86;
+      font-size:14px;
+      font-weight:1000;
+    }
+
+    .meal-goal-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      margin-top:9px;
+    }
+
+    .meal-goal-item{
+      padding:9px 5px;
+      border-radius:10px;
+      background:#fff;
+      text-align:center;
+      box-shadow:0 2px 7px rgba(27,64,110,.08);
+    }
+
+    .meal-goal-item b{
+      display:block;
+      color:#082f74;
+      font-size:15px;
+    }
+
+    .meal-goal-item span{
+      display:block;
+      margin-top:3px;
+      color:#68809d;
+      font-size:9px;
+    }
+
+    .meal-balance{
+      margin-top:8px;
+      color:#5d7189;
+      font-size:10px;
+      line-height:1.5;
+    }
+
+    @media(max-width:480px){
+      .meal-goal-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+
+    /* =========================================================
+       NUTRITION V3.1 — EAT SMART CLAIM
+    ========================================================= */
+
+    .eat-smart-claim{
+      display:none;
+      margin-top:14px;
+      padding:15px;
+      border:1px solid #b9dbca;
+      border-radius:16px;
+      background:#f0fbf5;
+    }
+
+    .eat-smart-claim.show{
+      display:block;
+    }
+
+    .eat-smart-claim h3{
+      margin:0 0 6px;
+      color:#08743c;
+      font-size:17px;
+    }
+
+    .eat-smart-claim p{
+      margin:5px 0;
+      color:#365c4a;
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .eat-smart-claim .reward-wait{
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:11px;
+      background:#fff7e8;
+      color:#825c00;
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .eat-smart-claim .evidence-field{
+      margin-top:12px;
+    }
+
+    .eat-smart-claim .evidence-field label{
+      display:block;
+      margin-bottom:6px;
+      color:#244d3a;
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .eat-smart-claim .evidence-field input{
+      width:100%;
+      padding:9px;
+      border:1px solid #bcd6c8;
+      border-radius:11px;
+      background:#fff;
+    }
+
+    .eat-smart-claim .claim-result{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:11px;
+      font-size:12px;
+      font-weight:900;
+      line-height:1.55;
+    }
+
+    .eat-smart-claim .claim-result.pending{
+      display:block;
+      background:#eef4ff;
+      color:#173f89;
+    }
+
+
+    /* =========================================================
+       NUTRITION V3.3 — SELECTED GOAL / TDEE
+    ========================================================= */
+
+    .nutrition-plan-box{
+      display:none;
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      background:#f1f8ff;
+      border:1px solid #d5e7f8;
+    }
+
+    .nutrition-plan-box.show{
+      display:block;
+    }
+
+    .nutrition-plan-title{
+      color:#0a4685;
+      font-size:14px;
+      font-weight:1000;
+    }
+
+    .nutrition-plan-meta{
+      margin-top:5px;
+      color:#57718c;
+      font-size:10px;
+      line-height:1.6;
+    }
+
+    .nutrition-plan-permeal{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:6px;
+      margin-top:9px;
+    }
+
+    .nutrition-plan-permeal > div{
+      padding:8px 4px;
+      border-radius:9px;
+      background:#fff;
+      text-align:center;
+      color:#566d84;
+      font-size:9px;
+    }
+
+    .nutrition-plan-permeal b{
+      display:block;
+      color:#072f70;
+      font-size:13px;
+    }
+
+    .nutrition-plan-activity{
+      margin-top:8px;
+      color:#35664c;
+      font-size:10px;
+      line-height:1.55;
+    }
+
+    @media(max-width:480px){
+      .nutrition-plan-permeal{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+</style>
+</head>
+
+<body>
+
+  <main class="wrap">
+
+    <section class="hero">
+      <h1>
+        🥗 NUTRITION
+      </h1>
+      <p>
+        อาหาร น้ำ และสารอาหารของวันนี้
+        เชื่อมกับ EAT SMART และ HYDRATE
+      </p>
+    </section>
+
+
+    <section class="summary-grid">
+
+      <article class="metric">
+        <div class="label">
+          🔥 Calories
+        </div>
+        <div
+          class="value"
+          id="caloriesValue"
+        >
+          0 kcal
+        </div>
+        <div
+          class="goal"
+          id="caloriesGoal"
+        >
+          เป้าหมาย 0 kcal
+        </div>
+        <div class="progress">
+          <div
+            id="caloriesBar"
+          ></div>
+        </div>
+      </article>
+
+
+      <article class="metric">
+        <div class="label">
+          🥩 Protein
+        </div>
+        <div
+          class="value"
+          id="proteinValue"
+        >
+          0 g
+        </div>
+        <div
+          class="goal"
+          id="proteinGoal"
+        >
+          เป้าหมาย 0 g
+        </div>
+        <div class="progress">
+          <div
+            id="proteinBar"
+          ></div>
+        </div>
+      </article>
+
+
+      <article class="metric">
+        <div class="label">
+          🍚 Carbs
+        </div>
+        <div
+          class="value"
+          id="carbsValue"
+        >
+          0 g
+        </div>
+        <div
+          class="goal"
+          id="carbsGoal"
+        >
+          เป้าหมาย 0 g
+        </div>
+        <div class="progress">
+          <div
+            id="carbsBar"
+          ></div>
+        </div>
+      </article>
+
+
+      <article class="metric">
+        <div class="label">
+          🥑 Fat
+        </div>
+        <div
+          class="value"
+          id="fatValue"
+        >
+          0 g
+        </div>
+        <div
+          class="goal"
+          id="fatGoal"
+        >
+          เป้าหมาย 0 g
+        </div>
+        <div class="progress">
+          <div
+            id="fatBar"
+          ></div>
+        </div>
+      </article>
+
+    </section>
+
+
+    <section class="card">
+      <h2>
+        🎯 เป้าหมายจาก InBody เทียบกับที่กินจริง
+      </h2>
+
+      <p class="sub">
+        เป้าหมาย Wellness ใช้ค่าจาก InBody / Health Goal ล่าสุด
+        หากยังไม่มีข้อมูลจะแสดง 0
+      </p>
+
+      <div
+        id="goalSource"
+        class="goal-source"
+      >
+        ยังไม่มีเป้าหมายจาก InBody
+      </div>
+
+      <div
+        id="nutritionPlanBox"
+        class="nutrition-plan-box"
+      >
+        <div
+          id="nutritionPlanTitle"
+          class="nutrition-plan-title"
+        >
+          🎯 เป้าหมาย
+        </div>
+
+        <div
+          id="nutritionPlanMeta"
+          class="nutrition-plan-meta"
+        >
+          BMR 0 kcal • TDEE 0 kcal
+        </div>
+
+        <div class="nutrition-plan-permeal">
+          <div>
+            Calories / มื้อ
+            <b id="planMealCalories">0 kcal</b>
+          </div>
+          <div>
+            Protein / มื้อ
+            <b id="planMealProtein">0 g</b>
+          </div>
+          <div>
+            Carbs / มื้อ
+            <b id="planMealCarbs">0 g</b>
+          </div>
+          <div>
+            Fat / มื้อ
+            <b id="planMealFat">0 g</b>
+          </div>
+        </div>
+
+        <div
+          id="nutritionPlanActivity"
+          class="nutrition-plan-activity"
+        ></div>
+      </div>
+
+      <table class="daily-table">
+        <thead>
+          <tr>
+            <th>รายการ</th>
+            <th>กินจริง</th>
+            <th>เป้าหมาย</th>
+            <th>ยังขาด</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>🔥 พลังงาน</td>
+            <td id="dailyCaloriesDone">0 kcal</td>
+            <td id="dailyCaloriesTarget">0 kcal</td>
+            <td id="dailyCaloriesRemain">0 kcal</td>
+          </tr>
+
+          <tr>
+            <td>🥩 โปรตีน</td>
+            <td id="dailyProteinDone">0 g</td>
+            <td id="dailyProteinTarget">0 g</td>
+            <td id="dailyProteinRemain">0 g</td>
+          </tr>
+
+          <tr>
+            <td>🥑 ไขมัน</td>
+            <td id="dailyFatDone">0 g</td>
+            <td id="dailyFatTarget">0 g</td>
+            <td id="dailyFatRemain">0 g</td>
+          </tr>
+
+          <tr>
+            <td>🍚 คาร์โบไฮเดรต</td>
+            <td id="dailyCarbsDone">0 g</td>
+            <td id="dailyCarbsTarget">0 g</td>
+            <td id="dailyCarbsRemain">0 g</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        💧 น้ำวันนี้
+      </h2>
+      <p class="sub">
+        HYDRATE จาก Mission จะเข้าหน้านี้อัตโนมัติ
+        และสามารถเติมน้ำที่ดื่มเพิ่มได้
+      </p>
+
+      <div class="water-row">
+        <div>
+          <div
+            class="value"
+            id="waterValue"
+            style="
+              font-size:26px;
+              font-weight:1000;
+            "
+          >
+            0 ml
+          </div>
+          <div
+            class="goal"
+            id="waterGoal"
+            style="
+              margin-top:4px;
+              color:#68809d;
+              font-size:11px;
+            "
+          >
+            เป้าหมาย 0 ml
+          </div>
+        </div>
+
+        <button
+          class="btn primary"
+          id="addWaterButton"
+          type="button"
+          onclick="addWaterFromInput()"
+        >
+          + น้ำ
+        </button>
+      </div>
+
+      <div class="progress">
+        <div id="waterBar"></div>
+      </div>
+
+      <div class="quick-water">
+        <button
+          onclick="quickWater(250)"
+        >
+          +250 ml
+        </button>
+        <button
+          onclick="quickWater(500)"
+        >
+          +500 ml
+        </button>
+        <button
+          onclick="quickWater(750)"
+        >
+          +750 ml
+        </button>
+      </div>
+
+      <div
+        class="field"
+        style="margin-top:12px"
+      >
+        <label>
+          ปริมาณที่ดื่มเพิ่ม (ml)
+        </label>
+        <input
+          id="waterInput"
+          type="number"
+          min="1"
+          max="5000"
+          step="1"
+          inputmode="numeric"
+          placeholder="เช่น 250"
+        >
+      </div>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        🍽️ บันทึกอาหารเอง
+      </h2>
+      <p class="sub">
+        ใช้สำหรับข้อมูลจากฉลากอาหาร
+        หรือค่าที่ผู้ใช้ทราบอยู่แล้ว
+      </p>
+
+      <div class="notice">
+        ระบบยังไม่สร้างค่าพลังงาน/โปรตีน/ไขมัน/คาร์บจากชื่ออาหารแบบเดาเอง
+        ถ้า EAT SMART ยังไม่มีค่าธาตุอาหาร จะแสดง “รอประเมิน”
+        เพื่อไม่ให้ข้อมูลสุขภาพคลาดเคลื่อน
+      </div>
+
+      <div class="field">
+        <label>
+          มื้ออาหาร
+        </label>
+        <select id="mealType">
+          <option value="">
+            เลือกมื้อ
+          </option>
+          <option value="breakfast">
+            อาหารเช้า
+          </option>
+          <option value="lunch">
+            อาหารกลางวัน
+          </option>
+          <option value="dinner">
+            อาหารเย็น
+          </option>
+          <option value="snack">
+            ของว่าง
+          </option>
+        </select>
+      </div>
+
+      <div
+        id="mealGoalPanel"
+        class="meal-goal-panel"
+      >
+        <div
+          id="mealGoalTitle"
+          class="meal-goal-title"
+        >
+          เป้าหมายมื้อนี้
+        </div>
+
+        <div class="meal-goal-grid">
+          <div class="meal-goal-item">
+            <b id="mealGoalCalories">0</b>
+            <span>kcal</span>
+          </div>
+
+          <div class="meal-goal-item">
+            <b id="mealGoalProtein">0</b>
+            <span>Protein g</span>
+          </div>
+
+          <div class="meal-goal-item">
+            <b id="mealGoalFat">0</b>
+            <span>Fat g</span>
+          </div>
+
+          <div class="meal-goal-item">
+            <b id="mealGoalCarbs">0</b>
+            <span>Carbs g</span>
+          </div>
+        </div>
+
+        <div
+          id="mealBalance"
+          class="meal-balance"
+        >
+          กินจริงมื้อนี้ 0 kcal • Protein 0 g • Fat 0 g • Carbs 0 g
+        </div>
+      </div>
+
+      <div class="field">
+        <label>
+          ชื่อเมนู
+        </label>
+        <input
+          id="mealName"
+          type="text"
+          placeholder="เช่น ข้าวกล้อง + อกไก่"
+        >
+      </div>
+
+      <div class="field">
+        <label>
+          รายละเอียด
+        </label>
+        <textarea
+          id="mealDescription"
+          placeholder="ปริมาณ / วัตถุดิบ / หมายเหตุ"
+        ></textarea>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>
+            Calories (kcal)
+          </label>
+          <input
+            id="mealCalories"
+            type="number"
+            min="0"
+            step="1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Protein (g)
+          </label>
+          <input
+            id="mealProtein"
+            type="number"
+            min="0"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Fat (g)
+          </label>
+          <input
+            id="mealFat"
+            type="number"
+            min="0"
+            step="0.1"
+          >
+        </div>
+
+        <div class="field">
+          <label>
+            Carbs (g)
+          </label>
+          <input
+            id="mealCarbs"
+            type="number"
+            min="0"
+            step="0.1"
+          >
+        </div>
+      </div>
+
+      <button
+        class="btn blue"
+        id="saveMealButton"
+        type="button"
+        onclick="saveManualMeal()"
+        style="width:100%"
+      >
+        บันทึกอาหาร
+      </button>
+    </section>
+
+
+    <section
+      id="eatSmartClaim"
+      class="card eat-smart-claim"
+    >
+      <h3>
+        ✅ EAT SMART ทำกิจกรรมสำเร็จแล้ว
+      </h3>
+
+      <p id="eatSmartMealLabel">
+        บันทึกรายการอาหารเรียบร้อย
+      </p>
+
+      <div class="reward-wait">
+        ยังไม่ได้รับรางวัล 10 Coin + 10 Energy + 10 EXP
+        <br>
+        ต้องแนบรูปอาหารจริงและส่งให้ Admin อนุมัติก่อน
+      </div>
+
+      <div class="evidence-field">
+        <label for="eatSmartEvidence">
+          📷 รูปอาหารจริงสำหรับหลักฐาน
+        </label>
+
+        <input
+          id="eatSmartEvidence"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/*"
+        >
+      </div>
+
+      <button
+        id="submitEatSmartButton"
+        class="btn primary"
+        type="button"
+        onclick="submitEatSmartEvidence()"
+        style="width:100%;margin-top:12px"
+      >
+        ส่งหลักฐาน EAT SMART ให้ Admin
+      </button>
+
+      <div
+        id="eatSmartClaimResult"
+        class="claim-result"
+      ></div>
+    </section>
+
+
+    <section class="card">
+      <h2>
+        📋 รายการอาหารวันนี้
+      </h2>
+      <p
+        class="sub"
+        id="todayLabel"
+      >
+        กำลังโหลด...
+      </p>
+
+      <div
+        class="meal-list"
+        id="mealList"
+      >
+        <div class="empty">
+          กำลังโหลดข้อมูล
+        </div>
+      </div>
+    </section>
+
+
+    <div class="nav">
+      <button
+        class="btn ghost"
+        type="button"
+        onclick="goHome()"
+      >
+        ← HOME
+      </button>
+
+      <button
+        class="btn ghost"
+        type="button"
+        onclick="goMission()"
+      >
+        MISSION →
+      </button>
+    </div>
+
+  </main>
+
+
+  <div id="status"></div>
+
+
+  <script>
+    "use strict";
+
+    const $ =
+      id =>
+        document
+          .getElementById(
+            id
+          );
+
+
+    function nutritionApi(){
+
+      if(
+        window
+          .APP_CONFIG
+          ?.getApi
+      ){
+        return window
+          .APP_CONFIG
+          .getApi(
+            "NUTRITION"
+          );
+      }
+
+      const direct =
+        window
+          .APP_CONFIG
+          ?.API
+          ?.NUTRITION;
+
+      if(direct){
+        return direct;
+      }
+
+      throw new Error(
+        "ไม่พบ NUTRITION API"
+      );
+    }
+
+
+
+    function missionApi(){
+
+      if(
+        window
+          .APP_CONFIG
+          ?.getApi
+      ){
+        return window
+          .APP_CONFIG
+          .getApi(
+            "MISSION"
+          );
+      }
+
+
+      const direct =
+        window
+          .APP_CONFIG
+          ?.API
+          ?.MISSION;
+
+
+      if(direct){
+        return direct;
+      }
+
+
+      throw new Error(
+        "ไม่พบ MISSION API"
+      );
+    }
+
+
+    let eatSmartPendingMeal =
+      null;
+
+
+    function saveEatSmartCandidate(
+      meal
+    ){
+
+      eatSmartPendingMeal =
+        meal ||
+        null;
+
+
+      if(
+        meal
+          ?.id
+      ){
+
+        sessionStorage.setItem(
+          "ryb_eat_smart_candidate",
+          JSON.stringify(
+            meal
+          )
+        );
+
+      }else{
+
+        sessionStorage.removeItem(
+          "ryb_eat_smart_candidate"
+        );
+      }
+
+
+      renderEatSmartClaim();
+    }
+
+
+    function renderEatSmartClaim(){
+
+      const panel =
+        $("eatSmartClaim");
+
+
+      if(
+        !panel
+      ){
+        return;
+      }
+
+
+      if(
+        !eatSmartPendingMeal
+          ?.id
+      ){
+
+        panel.classList.remove(
+          "show"
+        );
+
+        return;
+      }
+
+
+      panel.classList.add(
+        "show"
+      );
+
+
+      const label =
+        $("eatSmartMealLabel");
+
+
+      if(label){
+
+        const mealName =
+          eatSmartPendingMeal
+            ?.meal_name ||
+          eatSmartPendingMeal
+            ?.mealName ||
+          "รายการอาหาร";
+
+
+        label.textContent =
+          `บันทึก “${mealName}” แล้ว • กิจกรรม EAT SMART สำเร็จ`;
+      }
+    }
+
+
+    function restoreEatSmartCandidate(){
+
+      try{
+
+        const raw =
+          sessionStorage.getItem(
+            "ryb_eat_smart_candidate"
+          );
+
+
+        if(!raw){
+          return;
+        }
+
+
+        const meal =
+          JSON.parse(raw);
+
+
+        if(
+          meal
+            ?.id
+        ){
+
+          eatSmartPendingMeal =
+            meal;
+
+          renderEatSmartClaim();
+        }
+
+      }catch(error){
+
+        console.warn(
+          "RESTORE EAT SMART:",
+          error
+        );
+      }
+    }
+
+
+    function showStatus(
+      text,
+      ms=2800
+    ){
+
+      const el =
+        $("status");
+
+      el.textContent =
+        text;
+
+      el.style.display =
+        "block";
+
+      clearTimeout(
+        window
+          .__nutritionStatusTimer
+      );
+
+      window
+        .__nutritionStatusTimer =
+          setTimeout(
+            () => {
+              el.style.display =
+                "none";
+            },
+            ms
+          );
+    }
+
+
+    async function getFreshIdToken(){
+
+      if(
+        !window.liff
+      ){
+        throw new Error(
+          "ไม่พบ LIFF SDK"
+        );
+      }
+
+      if(
+        !liff.id
+      ){
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+      }
+
+      if(
+        !liff.isLoggedIn()
+      ){
+        liff.login();
+        throw new Error(
+          "กำลังเข้าสู่ระบบ LINE"
+        );
+      }
+
+      const token =
+        liff.getIDToken();
+
+      if(!token){
+        throw new Error(
+          "ไม่พบ LINE ID Token"
+        );
+      }
+
+      return token;
+    }
+
+
+    async function api(
+      action,
+      extra={}
+    ){
+
+      const idToken =
+        await getFreshIdToken();
+
+      const response =
+        await fetch(
+          nutritionApi(),
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify({
+                action,
+                idToken,
+                ...extra
+              })
+          }
+        );
+
+      const raw =
+        await response
+          .text();
+
+      let result = {};
+
+      try{
+        result =
+          raw
+            ? JSON.parse(raw)
+            : {};
+      }catch{
+        throw new Error(
+          `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
+        );
+      }
+
+      if(
+        !response.ok ||
+        result
+          ?.success ===
+          false
+      ){
+        throw new Error(
+          result?.error ||
+          result?.message ||
+          `HTTP ${response.status}`
+        );
+      }
+
+      return result;
+    }
+
+
+    function num(
+      value
+    ){
+
+      const n =
+        Number(value);
+
+      return Number
+        .isFinite(n)
+          ? n
+          : null;
+    }
+
+
+    function fmt(
+      value,
+      digits=0
+    ){
+
+      const n =
+        num(value);
+
+      if(n === null){
+        return "—";
+      }
+
+      return n
+        .toLocaleString(
+          "th-TH",
+          {
+            maximumFractionDigits:
+              digits
+          }
+        );
+    }
+
+
+    function percent(
+      value,
+      goal
+    ){
+
+      const v =
+        num(value);
+
+      const g =
+        num(goal);
+
+      if(
+        v === null ||
+        g === null ||
+        g <= 0
+      ){
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        Math.min(
+          100,
+          (v / g) * 100
+        )
+      );
+    }
+
+
+    function setMetric(
+      key,
+      value,
+      goal,
+      unit
+    ){
+
+      const safeValue =
+        Number(
+          value ||
+          0
+        );
+
+      const safeGoal =
+        Number(
+          goal ||
+          0
+        );
+
+      $(
+        `${key}Value`
+      ).textContent =
+        `${fmt(safeValue,1)} ${unit}`;
+
+      $(
+        `${key}Goal`
+      ).textContent =
+        `เป้าหมาย ${fmt(safeGoal,1)} ${unit}`;
+
+      $(
+        `${key}Bar`
+      ).style.width =
+        `${percent(value,goal)}%`;
+    }
+
+
+    function mealTypeLabel(
+      value
+    ){
+
+      const map = {
+        breakfast:
+          "อาหารเช้า",
+        lunch:
+          "อาหารกลางวัน",
+        dinner:
+          "อาหารเย็น",
+        snack:
+          "ของว่าง"
+      };
+
+      return map[
+        String(
+          value ||
+          ""
+        )
+          .toLowerCase()
+      ] ||
+      String(
+        value ||
+        "มื้ออาหาร"
+      );
+    }
+
+
+    function escapeHtml(
+      value
+    ){
+
+      return String(
+        value ??
+        ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+    }
+
+
+    function macroBox(
+      label,
+      value,
+      unit
+    ){
+
+      return `
+        <div class="macro">
+          <b>
+            ${
+              escapeHtml(
+                fmt(
+                  Number(
+                    value ||
+                    0
+                  ),
+                  1
+                )
+              )
+            }
+          </b>
+          <span>
+            ${escapeHtml(label)}
+            ${
+              ` • ${escapeHtml(unit)}`
+            }
+          </span>
+        </div>
+      `;
+    }
+
+
+    function renderMeals(
+      meals
+    ){
+
+      const host =
+        $("mealList");
+
+      if(
+        !Array.isArray(
+          meals
+        ) ||
+        meals.length === 0
+      ){
+        host.innerHTML = `
+          <div class="empty">
+            วันนี้ยังไม่มีรายการอาหาร
+            <br>
+            ส่ง EAT SMART หรือบันทึกอาหารด้านบนได้เลย
+          </div>
+        `;
+        return;
+      }
+
+      host.innerHTML =
+        meals
+          .map(
+            meal => {
+
+              const status =
+                meal
+                  ?.missionStatus ||
+                "";
+
+              const badge =
+                meal
+                  ?.mission_submission_id
+                  ? `
+                    <span
+                      class="badge ${escapeHtml(status)}"
+                    >
+                      MISSION ${
+                        status
+                          ? escapeHtml(
+                              status
+                                .toUpperCase()
+                            )
+                          : ""
+                      }
+                    </span>
+                  `
+                  : `
+                    <span class="badge">
+                      MANUAL
+                    </span>
+                  `;
+
+              return `
+                <article class="meal">
+
+                  <div class="meal-top">
+
+                    <div>
+                      <div class="meal-name">
+                        ${escapeHtml(
+                          meal
+                            ?.meal_name ||
+                          "รายการอาหาร"
+                        )}
+                      </div>
+
+                      <div class="meal-type">
+                        ${escapeHtml(
+                          mealTypeLabel(
+                            meal
+                              ?.meal_type
+                          )
+                        )}
+                      </div>
+                    </div>
+
+                    ${badge}
+
+                  </div>
+
+                  ${
+                    meal
+                      ?.meal_description
+                      ? `
+                        <div class="meal-desc">
+                          ${escapeHtml(
+                            meal
+                              .meal_description
+                          )}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                  <div class="macro-row">
+                    ${macroBox(
+                      "Calories",
+                      meal?.calories,
+                      "kcal"
+                    )}
+                    ${macroBox(
+                      "Protein",
+                      meal?.protein_g,
+                      "g"
+                    )}
+                    ${macroBox(
+                      "Fat",
+                      meal?.fat_g,
+                      "g"
+                    )}
+                    ${macroBox(
+                      "Carbs",
+                      meal?.carbs_g,
+                      "g"
+                    )}
+                  </div>
+
+                </article>
+              `;
+            }
+          )
+          .join("");
+    }
+
+
+
+    let nutritionState = {
+      goals:{
+        calories:0,
+        proteinG:0,
+        fatG:0,
+        carbsG:0,
+        waterMl:0
+      },
+      totals:{
+        calories:0,
+        proteinG:0,
+        fatG:0,
+        carbsG:0,
+        waterMl:0
+      },
+      remaining:{
+        calories:0,
+        proteinG:0,
+        fatG:0,
+        carbsG:0,
+        waterMl:0
+      },
+      mealGoals:{},
+      mealConsumed:{},
+      goalSource:"none",
+      goalPlan:{}
+    };
+
+
+    function safeMetric(
+      value
+    ){
+      return Number(
+        value ||
+        0
+      );
+    }
+
+
+    function renderDailyComparison(){
+
+      const totals =
+        nutritionState
+          ?.totals ||
+        {};
+
+      const goals =
+        nutritionState
+          ?.goals ||
+        {};
+
+      const remaining =
+        nutritionState
+          ?.remaining ||
+        {};
+
+
+      $("dailyCaloriesDone").textContent =
+        `${fmt(safeMetric(totals.calories),1)} kcal`;
+
+      $("dailyCaloriesTarget").textContent =
+        `${fmt(safeMetric(goals.calories),1)} kcal`;
+
+      $("dailyCaloriesRemain").textContent =
+        `${fmt(safeMetric(remaining.calories),1)} kcal`;
+
+
+      $("dailyProteinDone").textContent =
+        `${fmt(safeMetric(totals.proteinG),1)} g`;
+
+      $("dailyProteinTarget").textContent =
+        `${fmt(safeMetric(goals.proteinG),1)} g`;
+
+      $("dailyProteinRemain").textContent =
+        `${fmt(safeMetric(remaining.proteinG),1)} g`;
+
+
+      $("dailyFatDone").textContent =
+        `${fmt(safeMetric(totals.fatG),1)} g`;
+
+      $("dailyFatTarget").textContent =
+        `${fmt(safeMetric(goals.fatG),1)} g`;
+
+      $("dailyFatRemain").textContent =
+        `${fmt(safeMetric(remaining.fatG),1)} g`;
+
+
+      $("dailyCarbsDone").textContent =
+        `${fmt(safeMetric(totals.carbsG),1)} g`;
+
+      $("dailyCarbsTarget").textContent =
+        `${fmt(safeMetric(goals.carbsG),1)} g`;
+
+      $("dailyCarbsRemain").textContent =
+        `${fmt(safeMetric(remaining.carbsG),1)} g`;
+
+
+      const goalPlan =
+        nutritionState
+          ?.goalPlan ||
+        {};
+
+
+      $("goalSource").textContent =
+        nutritionState.goalSource ===
+          "inbody_goal_plan"
+          ? `✅ เป้าหมาย: ${goalPlan?.goalLabel || "จาก InBody"}`
+          : (
+              nutritionState.goalSource ===
+                "inbody_goal"
+                ? "✅ ใช้เป้าหมาย Wellness จาก InBody / Health Goal ล่าสุด"
+                : "ℹ️ ยังไม่มีข้อมูล InBody/Goal — เป้าหมายจะแสดง 0"
+            );
+
+
+      const planBox =
+        $("nutritionPlanBox");
+
+
+      if(
+        goalPlan
+          ?.goalLabel
+      ){
+
+        planBox
+          ?.classList
+          .add(
+            "show"
+          );
+
+
+        $("nutritionPlanTitle").textContent =
+          `🎯 ${goalPlan.goalLabel}`;
+
+
+        $("nutritionPlanMeta").textContent =
+          `BMR ${fmt(Number(goalPlan.bmrKcal || 0),0)} kcal` +
+          ` • TDEE ${fmt(Number(goalPlan.tdeeKcal || 0),0)} kcal` +
+          (
+            Number(
+              goalPlan.activityFactor ||
+              0
+            ) > 0
+              ? ` • Activity × ${goalPlan.activityFactor}`
+              : ""
+          );
+
+
+        const perMeal =
+          goalPlan
+            ?.perMeal ||
+          {};
+
+
+        $("planMealCalories").textContent =
+          `${fmt(Number(perMeal.calories || 0),0)} kcal`;
+
+        $("planMealProtein").textContent =
+          `${fmt(Number(perMeal.proteinG || 0),0)} g`;
+
+        $("planMealCarbs").textContent =
+          `${fmt(Number(perMeal.carbsG || 0),0)} g`;
+
+        $("planMealFat").textContent =
+          `${fmt(Number(perMeal.fatG || 0),0)} g`;
+
+
+        $("nutritionPlanActivity").textContent =
+          goalPlan
+            ?.activityRecommendation ||
+          "";
+
+      }else{
+
+        planBox
+          ?.classList
+          .remove(
+            "show"
+          );
+      }
+    }
+
+
+    function renderMealGoal(){
+
+      const mealType =
+        $("mealType")
+          ?.value ||
+        "";
+
+
+      const panel =
+        $("mealGoalPanel");
+
+
+      if(
+        !mealType
+      ){
+
+        panel
+          ?.classList
+          .remove(
+            "show"
+          );
+
+        return;
+      }
+
+
+      const goal =
+        nutritionState
+          ?.mealGoals
+          ?.[mealType] ||
+        {
+          calories:0,
+          proteinG:0,
+          fatG:0,
+          carbsG:0,
+          ratio:0
+        };
+
+
+      const consumed =
+        nutritionState
+          ?.mealConsumed
+          ?.[mealType] ||
+        {
+          calories:0,
+          proteinG:0,
+          fatG:0,
+          carbsG:0
+        };
+
+
+      const mealLabel =
+        mealTypeLabel(
+          mealType
+        );
+
+
+      $("mealGoalTitle").textContent =
+        `เป้าหมาย ${mealLabel} (${Math.round(Number(goal.ratio || 0)*100)}% ของเป้าหมายวัน)`;
+
+
+      $("mealGoalCalories").textContent =
+        fmt(
+          safeMetric(
+            goal.calories
+          ),
+          0
+        );
+
+
+      $("mealGoalProtein").textContent =
+        fmt(
+          safeMetric(
+            goal.proteinG
+          ),
+          1
+        );
+
+
+      $("mealGoalFat").textContent =
+        fmt(
+          safeMetric(
+            goal.fatG
+          ),
+          1
+        );
+
+
+      $("mealGoalCarbs").textContent =
+        fmt(
+          safeMetric(
+            goal.carbsG
+          ),
+          1
+        );
+
+
+      $("mealBalance").textContent =
+        `กินจริงมื้อนี้ ${fmt(safeMetric(consumed.calories),0)} kcal` +
+        ` • Protein ${fmt(safeMetric(consumed.proteinG),1)} g` +
+        ` • Fat ${fmt(safeMetric(consumed.fatG),1)} g` +
+        ` • Carbs ${fmt(safeMetric(consumed.carbsG),1)} g`;
+
+
+      panel
+        ?.classList
+        .add(
+          "show"
+        );
+    }
+
+
+    $("mealType")
+      ?.addEventListener(
+        "change",
+        renderMealGoal
+      );
+
+
+    async function loadToday(){
+
+      try{
+
+        const result =
+          await api(
+            "today"
+          );
+
+        const totals =
+          result
+            ?.totals ||
+          {};
+
+        const goals =
+          result
+            ?.goals ||
+          {};
+
+        nutritionState = {
+          goals:{
+            calories:Number(goals?.calories || 0),
+            proteinG:Number(goals?.proteinG || 0),
+            fatG:Number(goals?.fatG || 0),
+            carbsG:Number(goals?.carbsG || 0),
+            waterMl:Number(goals?.waterMl || 0)
+          },
+
+          totals:{
+            calories:Number(totals?.calories || 0),
+            proteinG:Number(totals?.proteinG || 0),
+            fatG:Number(totals?.fatG || 0),
+            carbsG:Number(totals?.carbsG || 0),
+            waterMl:Number(result?.water?.totalMl || 0)
+          },
+
+          remaining:{
+            calories:Number(result?.remaining?.calories || 0),
+            proteinG:Number(result?.remaining?.proteinG || 0),
+            fatG:Number(result?.remaining?.fatG || 0),
+            carbsG:Number(result?.remaining?.carbsG || 0),
+            waterMl:Number(result?.remaining?.waterMl || 0)
+          },
+
+          mealGoals:
+            result?.mealGoals ||
+            {},
+
+          mealConsumed:
+            result?.mealConsumed ||
+            {},
+
+          goalSource:
+            result?.goalSource ||
+            "none",
+
+          goalPlan:
+            result?.goalPlan ||
+            {}
+        };
+
+        setMetric(
+          "calories",
+          totals?.calories,
+          goals?.calories,
+          "kcal"
+        );
+
+        setMetric(
+          "protein",
+          totals?.proteinG,
+          goals?.proteinG,
+          "g"
+        );
+
+        setMetric(
+          "carbs",
+          totals?.carbsG,
+          goals?.carbsG,
+          "g"
+        );
+
+        setMetric(
+          "fat",
+          totals?.fatG,
+          goals?.fatG,
+          "g"
+        );
+
+        const water =
+          Number(
+            result
+              ?.water
+              ?.totalMl ||
+            0
+          );
+
+        const waterGoal =
+          Number(
+            goals?.waterMl ||
+            0
+          );
+
+        $("waterValue")
+          .textContent =
+            `${fmt(water)} ml`;
+
+        $("waterGoal")
+          .textContent =
+            `เป้าหมาย ${fmt(waterGoal)} ml`;
+
+        $("waterBar")
+          .style
+          .width =
+            `${percent(
+              water,
+              waterGoal
+            )}%`;
+
+        $("todayLabel")
+          .textContent =
+            `วันที่ ${result?.date || "-"}`;
+
+        renderDailyComparison();
+
+        renderMealGoal();
+
+        renderMeals(
+          result?.meals
+        );
+
+        /*
+          ถ้าผู้ใช้บันทึกอาหารแล้วแต่ยังไม่ได้ส่ง Mission
+          ให้แสดงปุ่มส่งหลักฐานต่อได้ แม้ reload หน้า
+        */
+        const unlinkedMeal =
+          Array.isArray(
+            result?.meals
+          )
+            ? result.meals.find(
+                meal =>
+                  !meal
+                    ?.mission_submission_id &&
+                  String(
+                    meal
+                      ?.meal_type ||
+                    ""
+                  )
+                  .toLowerCase() !==
+                    "water"
+              )
+            : null;
+
+
+        if(
+          unlinkedMeal
+            ?.id
+        ){
+
+          saveEatSmartCandidate(
+            unlinkedMeal
+          );
+        }
+
+      }catch(error){
+
+        console.error(
+          "LOAD NUTRITION ERROR:",
+          error
+        );
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+      }
+    }
+
+
+    async function addWater(
+      waterMl
+    ){
+
+      const button =
+        $("addWaterButton");
+
+      button.disabled =
+        true;
+
+      try{
+
+        const result =
+          await api(
+            "addWater",
+            {
+              waterMl
+            }
+          );
+
+        $("waterInput")
+          .value =
+            "";
+
+        showStatus(
+          `✅ น้ำวันนี้ ${fmt(result?.waterMl || 0)} ml`
+        );
+
+        restoreEatSmartCandidate();
+
+        await loadToday();
+
+      }catch(error){
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+      }
+    }
+
+
+    function quickWater(
+      amount
+    ){
+
+      addWater(
+        amount
+      );
+    }
+
+
+    function addWaterFromInput(){
+
+      const value =
+        Number(
+          $("waterInput")
+            .value ||
+          0
+        );
+
+      if(
+        !Number.isFinite(value) ||
+        value <= 0
+      ){
+        showStatus(
+          "กรุณากรอกปริมาณน้ำ"
+        );
+        return;
+      }
+
+      addWater(
+        Math.round(value)
+      );
+    }
+
+
+    async function saveManualMeal(){
+
+      const button =
+        $("saveMealButton");
+
+      const payload = {
+        mealType:
+          $("mealType")
+            .value,
+        mealName:
+          $("mealName")
+            .value
+            .trim(),
+        description:
+          $("mealDescription")
+            .value
+            .trim(),
+        calories:
+          $("mealCalories")
+            .value,
+        proteinG:
+          $("mealProtein")
+            .value,
+        fatG:
+          $("mealFat")
+            .value,
+        carbsG:
+          $("mealCarbs")
+            .value
+      };
+
+      if(
+        !payload
+          .mealType
+      ){
+        showStatus(
+          "กรุณาเลือกมื้ออาหาร"
+        );
+        return;
+      }
+
+      if(
+        !payload
+          .mealName
+      ){
+        showStatus(
+          "กรุณากรอกชื่อเมนู"
+        );
+        return;
+      }
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+
+      try{
+
+        const result =
+          await api(
+            "addManualMeal",
+            payload
+          );
+
+
+        const savedMeal =
+          {
+            ...(result?.item || {}),
+            meal_type:
+              result
+                ?.item
+                ?.meal_type ||
+              payload.mealType,
+            meal_name:
+              result
+                ?.item
+                ?.meal_name ||
+              payload.mealName,
+            meal_description:
+              result
+                ?.item
+                ?.meal_description ||
+              payload.description
+          };
+
+
+        /*
+          บันทึกอาหาร = ทำกิจกรรม EAT SMART สำเร็จ
+          แต่ยังไม่สร้าง reward และยังไม่ถือว่า Admin อนุมัติ
+        */
+        saveEatSmartCandidate(
+          savedMeal
+        );
+
+
+        [
+          "mealName",
+          "mealDescription",
+          "mealCalories",
+          "mealProtein",
+          "mealFat",
+          "mealCarbs"
+        ]
+          .forEach(
+            id => {
+              $(id).value =
+                "";
+            }
+          );
+
+        $("mealType")
+          .value =
+            "";
+
+        showStatus(
+          "✅ บันทึกอาหารแล้ว • EAT SMART สำเร็จ • แนบรูปเพื่อส่งให้ Admin"
+        );
+
+        await loadToday();
+
+        setTimeout(
+          ()=>{
+
+            $("eatSmartClaim")
+              ?.scrollIntoView({
+                behavior:"smooth",
+                block:"center"
+              });
+
+          },
+          150
+        );
+
+      }catch(error){
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          5000
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "บันทึกอาหาร";
+      }
+    }
+
+
+    async function submitEatSmartEvidence(){
+
+      const meal =
+        eatSmartPendingMeal;
+
+
+      if(
+        !meal
+          ?.id
+      ){
+
+        showStatus(
+          "ไม่พบรายการอาหารสำหรับ EAT SMART",
+          5000
+        );
+
+        return;
+      }
+
+
+      const input =
+        $("eatSmartEvidence");
+
+
+      const file =
+        input
+          ?.files
+          ?.[0] ||
+        null;
+
+
+      if(
+        !(file instanceof File) ||
+        file.size <= 0
+      ){
+
+        showStatus(
+          "กรุณาแนบรูปอาหารจริง",
+          5000
+        );
+
+        return;
+      }
+
+
+      if(
+        !String(
+          file.type ||
+          ""
+        )
+        .toLowerCase()
+        .startsWith(
+          "image/"
+        )
+      ){
+
+        showStatus(
+          "หลักฐาน EAT SMART ต้องเป็นรูปภาพ",
+          5000
+        );
+
+        return;
+      }
+
+
+      if(
+        file.size >
+        15 *
+        1024 *
+        1024
+      ){
+
+        showStatus(
+          "รูปหลักฐานมีขนาดเกิน 15 MB",
+          5000
+        );
+
+        return;
+      }
+
+
+      const button =
+        $("submitEatSmartButton");
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังส่งให้ Admin...";
+
+
+      try{
+
+        const idToken =
+          await getFreshIdToken();
+
+
+        const form =
+          new FormData();
+
+
+        form.append(
+          "action",
+          "submitEvidence"
+        );
+
+        form.append(
+          "idToken",
+          idToken
+        );
+
+        form.append(
+          "missionId",
+          "daily_eat_smart"
+        );
+
+        form.append(
+          "category",
+          "daily"
+        );
+
+        form.append(
+          "nutritionLogId",
+          String(
+            meal.id
+          )
+        );
+
+        form.append(
+          "mealType",
+          String(
+            meal.meal_type ||
+            ""
+          )
+        );
+
+        form.append(
+          "mealName",
+          String(
+            meal.meal_name ||
+            "รายการอาหาร"
+          )
+        );
+
+        form.append(
+          "mealDescription",
+          String(
+            meal.meal_description ||
+            ""
+          )
+        );
+
+        form.append(
+          "note",
+          `EAT SMART จาก Nutrition Log ${meal.id}`
+        );
+
+        form.append(
+          "file",
+          file,
+          file.name
+        );
+
+
+        const response =
+          await fetch(
+            missionApi(),
+            {
+              method:"POST",
+              cache:"no-store",
+              body:form
+            }
+          );
+
+
+        const raw =
+          await response.text();
+
+
+        let result = {};
+
+
+        try{
+
+          result =
+            raw
+              ? JSON.parse(
+                  raw
+                )
+              : {};
+
+        }catch{
+
+          throw new Error(
+            `MISSION API ตอบกลับไม่ใช่ JSON HTTP ${response.status}`
+          );
+        }
+
+
+        const message =
+          String(
+            result?.error ||
+            result?.message ||
+            ""
+          );
+
+
+        if(
+          response.status ===
+            401 ||
+          message
+            .toLowerCase()
+            .includes(
+              "expired"
+            )
+        ){
+
+          liff.logout();
+
+          liff.login({
+            redirectUri:
+              window.location.href
+          });
+
+          return;
+        }
+
+
+        if(
+          !response.ok ||
+          result
+            ?.success ===
+            false
+        ){
+
+          throw new Error(
+            message ||
+            `HTTP ${response.status}`
+          );
+        }
+
+
+        const resultBox =
+          $("eatSmartClaimResult");
+
+
+        resultBox.className =
+          "claim-result pending";
+
+        resultBox.innerHTML =
+          `
+            📤 ส่งหลักฐานแล้ว<br>
+            สถานะ: PENDING<br>
+            รอ Admin ตรวจสอบก่อนรับรางวัล
+            10 Coin + 10 Energy + 10 EXP
+          `;
+
+
+        button.textContent =
+          "ส่งหลักฐานแล้ว • รอ Admin";
+
+        input.disabled =
+          true;
+
+
+        sessionStorage.removeItem(
+          "ryb_eat_smart_candidate"
+        );
+
+
+        showStatus(
+          "✅ ส่ง EAT SMART ให้ Admin แล้ว • ยังไม่ได้รับรางวัลจนกว่าจะอนุมัติ",
+          4500
+        );
+
+
+        await loadToday();
+
+      }catch(error){
+
+        console.error(
+          "EAT SMART SUBMIT ERROR:",
+          error
+        );
+
+
+        showStatus(
+          "❌ ส่งหลักฐาน EAT SMART ไม่สำเร็จ: " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          6000
+        );
+
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "ส่งหลักฐาน EAT SMART ให้ Admin";
+      }
+    }
+
+
+    function goHome(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.HOME ||
+        "./dashboard.html";
+    }
+
+
+    function goMission(){
+
+      location.href =
+        APP_CONFIG
+          ?.PAGE
+          ?.MISSION ||
+        "./mission.html";
+    }
+
+
+    async function init(){
+
+      try{
+
+        await liff.init({
+          liffId:
+            APP_CONFIG.LIFF_ID
+        });
+
+        if(
+          !liff.isLoggedIn()
+        ){
+          liff.login();
+          return;
+        }
+
+        await loadToday();
+
+      }catch(error){
+
+        console.error(
+          "NUTRITION INIT ERROR:",
+          error
+        );
+
+        showStatus(
+          "❌ " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          6000
+        );
+      }
+    }
+
+
+    init();
+  </script>
+
 </body>
 </html>
