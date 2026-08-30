@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ROCK YOUR BODY 2026 - BATTLE MAP</title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js?v=20260830-battle-flow-v36"></script>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      background:#020817;
+      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
+    }
+
+    body{
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      overflow-x:hidden;
+    }
+
+    #mapStage{
+      position:relative;
+      width:min(100vw,1280px);
+      aspect-ratio:1280/657;
+      margin:0 auto;
+      overflow:hidden;
+      background:#020817;
+    }
+
+    #mapImage{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:fill;
+      user-select:none;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .stage-hotspot,
+    .nav-hotspot{
+      position:absolute;
+      z-index:20;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
+      cursor:pointer;
+      touch-action:manipulation;
+    }
+
+    .stage-hotspot.locked{
+      cursor:not-allowed;
+    }
+
+    .stage-hotspot.locked::after{
+      content:"🔒";
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:clamp(18px,3vw,44px);
+      background:rgba(0,15,55,.48);
+      border-radius:18px;
+      color:#fff;
+      text-shadow:0 2px 5px rgba(0,0,0,.45);
+    }
+
+    /* Stage 1-5 */
+    #stage1{left:2.8%;top:20.5%;width:17.5%;height:34.5%}
+    #stage2{left:21.0%;top:19.5%;width:18.2%;height:36.0%}
+    #stage3{left:39.4%;top:19.0%;width:18.0%;height:36.5%}
+    #stage4{left:57.7%;top:18.2%;width:18.2%;height:37.0%}
+    #stage5{left:76.1%;top:18.0%;width:21.0%;height:38.0%}
+
+    /* Stage 6-10 */
+    #stage6{left:1.2%;top:58.0%;width:18.0%;height:38.0%}
+    #stage7{left:19.8%;top:58.0%;width:18.0%;height:38.0%}
+    #stage8{left:38.4%;top:57.0%;width:18.0%;height:39.0%}
+    #stage9{left:57.0%;top:57.0%;width:18.5%;height:39.0%}
+    #stage10{left:76.0%;top:55.5%;width:23.0%;height:41.0%}
+
+    /* Top controls */
+    #backButton{left:1.0%;top:1.5%;width:5.3%;height:10.0%}
+    #rewardButton{left:75.0%;top:1.5%;width:7.0%;height:14.0%}
+    #missionButton{left:83.2%;top:1.5%;width:7.0%;height:14.0%}
+    #statsButton{left:91.2%;top:1.5%;width:7.0%;height:14.0%}
+
+    /* Live energy overlay, aligned to top-left energy panel */
+    #energyLive{
+      position:absolute;
+      z-index:25;
+      left:15.7%;
+      top:8.3%;
+      width:10.5%;
+      height:7.0%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#ffd845;
+      font-size:clamp(12px,2.1vw,28px);
+      font-weight:900;
+      text-shadow:0 2px 4px rgba(0,0,0,.8);
+      pointer-events:none;
+    }
+
+
+    .stage-state{
+      position:absolute;
+      z-index:22;
+      pointer-events:none;
+      min-width:34px;
+      height:25px;
+      padding:0 7px;
+      border-radius:999px;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      background:#0a9b45;
+      border:2px solid #fff;
+      font-size:11px;
+      font-weight:900;
+      box-shadow:0 2px 8px rgba(0,0,0,.35);
+    }
+    .stage-state.current{
+      display:flex;
+      background:#ff9800;
+    }
+    .stage-state.done{
+      display:flex;
+      background:#0a9b45;
+    }
+    .state1{left:13.4%;top:42.5%}
+    .state2{left:31.7%;top:42.5%}
+    .state3{left:50.0%;top:42.5%}
+    .state4{left:68.3%;top:42.5%}
+    .state5{left:87.0%;top:42.5%}
+    .state6{left:12.5%;top:83.5%}
+    .state7{left:31.2%;top:83.5%}
+    .state8{left:49.5%;top:83.5%}
+    .state9{left:68.0%;top:83.5%}
+    .state10{left:87.5%;top:83.5%}
+
+    #status{
+      position:fixed;
+      left:50%;
+      bottom:max(18px,env(safe-area-inset-bottom));
+      transform:translateX(-50%);
+      z-index:9999;
+      display:none;
+      width:max-content;
+      max-width:calc(100vw - 28px);
+      padding:11px 16px;
+      border-radius:14px;
+      background:#173c70;
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      text-align:center;
+      box-shadow:0 8px 25px rgba(0,0,0,.3);
+    }
+
+    #status.show{display:block}
+    #status.error{background:#c62828}
+  </style>
+</head>
+
+<body>
+  <main id="mapStage">
+    <img id="mapImage" src="./battle-map.jpg?v=20260830-v36" alt="Battle Map">
+
+    <div id="energyLive">--</div>
+
+    <button id="backButton" class="nav-hotspot" type="button" aria-label="ย้อนกลับ"></button>
+    <button id="rewardButton" class="nav-hotspot" type="button" aria-label="รางวัล"></button>
+    <button id="missionButton" class="nav-hotspot" type="button" aria-label="ภารกิจ"></button>
+    <button id="statsButton" class="nav-hotspot" type="button" aria-label="สถิติ"></button>
+
+    <button id="stage1" class="stage-hotspot" data-stage="1" type="button" aria-label="Stage 1"></button>
+    <button id="stage2" class="stage-hotspot" data-stage="2" type="button" aria-label="Stage 2"></button>
+    <button id="stage3" class="stage-hotspot" data-stage="3" type="button" aria-label="Stage 3"></button>
+    <button id="stage4" class="stage-hotspot" data-stage="4" type="button" aria-label="Stage 4"></button>
+    <button id="stage5" class="stage-hotspot" data-stage="5" type="button" aria-label="Stage 5"></button>
+    <button id="stage6" class="stage-hotspot" data-stage="6" type="button" aria-label="Stage 6"></button>
+    <button id="stage7" class="stage-hotspot" data-stage="7" type="button" aria-label="Stage 7"></button>
+    <button id="stage8" class="stage-hotspot" data-stage="8" type="button" aria-label="Stage 8"></button>
+    <button id="stage9" class="stage-hotspot" data-stage="9" type="button" aria-label="Stage 9"></button>
+    <button id="stage10" class="stage-hotspot" data-stage="10" type="button" aria-label="Stage 10 Boss"></button>
+
+    <div id="state1" class="stage-state state1"></div>
+    <div id="state2" class="stage-state state2"></div>
+    <div id="state3" class="stage-state state3"></div>
+    <div id="state4" class="stage-state state4"></div>
+    <div id="state5" class="stage-state state5"></div>
+    <div id="state6" class="stage-state state6"></div>
+    <div id="state7" class="stage-state state7"></div>
+    <div id="state8" class="stage-state state8"></div>
+    <div id="state9" class="stage-state state9"></div>
+    <div id="state10" class="stage-state state10"></div>
+  </main>
+
+  <div id="status"></div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+let unlockedStage = 1;
+let currentEnergy = 0;
+let maxEnergy = Number(window.APP_CONFIG?.MAX_ENERGY || 200);
+
+function showStatus(message,isError=false){
+  const el = $("status");
+  el.textContent = message;
+  el.classList.toggle("error",!!isError);
+  el.classList.add("show");
+
+  clearTimeout(window.__mapStatusTimer);
+  window.__mapStatusTimer = setTimeout(()=>{
+    el.classList.remove("show");
+  },isError ? 4500 : 2300);
+}
+
+function getApi(name){
+  if(window.APP_CONFIG?.getApi){
+    return window.APP_CONFIG.getApi(name);
+  }
+  const url = window.APP_CONFIG?.API?.[name];
+  if(!url) throw new Error("ไม่พบ API." + name);
+  return url;
+}
+
+async function initLiff(){
+  if(typeof liff === "undefined"){
+    throw new Error("LINE LIFF SDK ไม่พร้อม");
+  }
+
+  await liff.init({
+    liffId: window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
+  });
+
+  if(!liff.isLoggedIn()){
+    liff.login({redirectUri:window.location.href});
+    return false;
+  }
+
+  if(!liff.getIDToken()){
+    throw new Error("ไม่พบ LINE ID Token");
+  }
+
+  return true;
+}
+
+async function postApi(url,payload={}){
+  const idToken = liff.getIDToken();
+
+  const response = await fetch(url,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    cache:"no-store",
+    body:JSON.stringify({
+      ...payload,
+      idToken
+    })
+  });
+
+  const raw = await response.text();
+  let data = {};
+
+  try{
+    data = raw ? JSON.parse(raw) : {};
+  }catch{
+    throw new Error("API ตอบกลับไม่ใช่ JSON");
+  }
+
+  if(!response.ok || data?.success === false){
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      `HTTP ${response.status}`
+    );
+  }
+
+  return data;
+}
+
+async function loadWallet(){
+  const result = await postApi(
+    getApi("PLAYER"),
+    {action:"dashboard"}
+  );
+
+  const data = result?.data ?? result?.dashboard ?? result ?? {};
+  const user = data?.user ?? data?.player ?? {};
+  const energy = data?.energy && typeof data.energy === "object"
+    ? data.energy
+    : {};
+
+  currentEnergy = Number(
+    energy.current ??
+    data.energyCurrent ??
+    data.current_energy ??
+    (typeof data.energy === "number" ? data.energy : null) ??
+    user.energy ??
+    0
+  ) || 0;
+
+  maxEnergy = Number(
+    energy.max ??
+    data.maxEnergy ??
+    data.max_energy ??
+    user.maxEnergy ??
+    user.max_energy ??
+    window.APP_CONFIG?.MAX_ENERGY ??
+    200
+  ) || 200;
+
+  $("energyLive").textContent =
+    currentEnergy.toLocaleString("en-US");
+}
+
+async function loadBattleState(){
+  let result;
+
+  try{
+    result = await postApi(
+      getApi("BATTLE"),
+      {action:"battleStatus"}
+    );
+  }catch(error){
+    const msg = String(error?.message || "").toLowerCase();
+
+    if(
+      msg.includes("unknown action") ||
+      msg.includes("unsupported action")
+    ){
+      result = await postApi(
+        getApi("BATTLE"),
+        {action:"status"}
+      );
+    }else{
+      throw error;
+    }
+  }
+
+  const data = result?.data ?? result ?? {};
+  const player = data?.player ?? data?.user ?? {};
+
+  unlockedStage = Math.max(
+    1,
+    Math.min(
+      10,
+      Number(
+        player.unlockedStage ??
+        player.unlocked_stage ??
+        data.currentStage ??
+        data.current_stage ??
+        1
+      ) || 1
+    )
+  );
+
+  renderLocks();
+}
+
+function renderLocks(){
+  document.querySelectorAll(".stage-hotspot").forEach(button=>{
+    const stage = Number(button.dataset.stage || 1);
+    const locked = stage > unlockedStage;
+
+    button.classList.toggle("locked",locked);
+    button.setAttribute("aria-disabled",locked ? "true" : "false");
+
+    const badge = $("state" + stage);
+    if(!badge) return;
+
+    badge.classList.remove("done","current");
+    badge.textContent = "";
+
+    if(stage < unlockedStage){
+      badge.classList.add("done");
+      badge.textContent = "✓ ผ่าน";
+    }else if(stage === unlockedStage){
+      badge.classList.add("current");
+      badge.textContent = "ด่านปัจจุบัน";
+    }
+  });
+}
+
+function openStage(stage){
+  if(stage > unlockedStage){
+    showStatus(`Stage ${stage} ยังไม่ปลดล็อก`,true);
+    return;
+  }
+
+  window.location.href =
+    (window.APP_CONFIG?.PAGE?.BATTLE_STAGE || "./battle_stage.html") +
+    "?stage=" +
+    encodeURIComponent(stage);
+}
+
+document.querySelectorAll(".stage-hotspot").forEach(button=>{
+  button.addEventListener("click",()=>{
+    openStage(Number(button.dataset.stage || 1));
+  });
+});
+
+$("backButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.BATTLE ||
+    "./battle.html";
+});
+
+$("rewardButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.REWARDS ||
+    "./rewards.html";
+});
+
+$("missionButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.MISSION ||
+    "./mission.html";
+});
+
+$("statsButton").addEventListener("click",()=>{
+  window.location.href =
+    window.APP_CONFIG?.PAGE?.PROGRESS ||
+    "./progress.html";
+});
+
+(async()=>{
+  try{
+    const ready = await initLiff();
+    if(ready === false) return;
+
+    const results = await Promise.allSettled([
+      loadWallet(),
+      loadBattleState()
+    ]);
+
+    if(results[0].status === "rejected"){
+      console.warn("WALLET ERROR",results[0].reason);
+    }
+
+    if(results[1].status === "rejected"){
+      console.warn("BATTLE STATE ERROR",results[1].reason);
+      showStatus(
+        results[1].reason?.message ||
+        "โหลดสถานะ Battle ไม่สำเร็จ",
+        true
+      );
+      renderLocks();
+    }
+
+  }catch(error){
+    console.error("BATTLE MAP ERROR",error);
+    showStatus(
+      error?.message ||
+      "เปิด Battle Map ไม่สำเร็จ",
+      true
+    );
+  }
+})();
+</script>
+</body>
+</html>
