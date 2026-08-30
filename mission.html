@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2173-template-data-overlay"
+    href="./base.css?v=20260830-mission-v2180-sleep-exercise-weekly"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.17.3
+   MISSION V2.18.0
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.17.3 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.18.0 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.17.3 — NUTRITION RING PANEL
+       MISSION V2.18.0 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.17.3 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.18.0 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2230,7 +2230,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2173-template-data-overlay"
+    src="./mission-template.png?v=20260830-mission-v2180-sleep-exercise-weekly"
     alt=""
     draggable="false"
     style="
@@ -4455,7 +4455,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.17.3
+    MISSION V2.18.0
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -5197,6 +5197,488 @@ function getHomePrefillV212(){
 
 
 
+
+/* =========================================================
+   SLEEP WELL V2.18.0
+========================================================= */
+
+function calculateSleepMinutesFromTimesV2180(
+  bedTime,
+  wakeTime
+){
+
+  if(
+    !bedTime ||
+    !wakeTime
+  ){
+    return 0;
+  }
+
+
+  const [
+    bedHour,
+    bedMinute
+  ] =
+    bedTime
+      .split(":")
+      .map(Number);
+
+
+  const [
+    wakeHour,
+    wakeMinute
+  ] =
+    wakeTime
+      .split(":")
+      .map(Number);
+
+
+  if(
+    !Number.isFinite(bedHour) ||
+    !Number.isFinite(bedMinute) ||
+    !Number.isFinite(wakeHour) ||
+    !Number.isFinite(wakeMinute)
+  ){
+    return 0;
+  }
+
+
+  const bedTotal =
+    (
+      bedHour *
+      60
+    ) +
+    bedMinute;
+
+
+  let wakeTotal =
+    (
+      wakeHour *
+      60
+    ) +
+    wakeMinute;
+
+
+  /*
+    ถ้าเวลาตื่นน้อยกว่าเวลานอน
+    ถือว่านอนข้ามเที่ยงคืน
+  */
+  if(
+    wakeTotal <=
+    bedTotal
+  ){
+    wakeTotal +=
+      24 * 60;
+  }
+
+
+  const total =
+    wakeTotal -
+    bedTotal;
+
+
+  return (
+    total > 0 &&
+    total <= 1440
+  )
+    ? total
+    : 0;
+}
+
+
+function bindSleepAutoCalculateV2137(){
+
+  const bed =
+    document.getElementById(
+      "v2BedTime"
+    );
+
+
+  const wake =
+    document.getElementById(
+      "v2WakeTime"
+    );
+
+
+  const hours =
+    document.getElementById(
+      "v2SleepHours"
+    );
+
+
+  const minutesPart =
+    document.getElementById(
+      "v2SleepMinutesPart"
+    );
+
+
+  const result =
+    document.getElementById(
+      "v2SleepAutoResult"
+    );
+
+
+  if(
+    !bed ||
+    !wake
+  ){
+    return;
+  }
+
+
+  const recalc =
+    ()=>{
+
+      const total =
+        calculateSleepMinutesFromTimesV2180(
+          bed.value,
+          wake.value
+        );
+
+
+      const h =
+        Math.floor(
+          total /
+          60
+        );
+
+
+      const m =
+        total %
+        60;
+
+
+      if(hours){
+        hours.value =
+          total > 0
+            ? String(h)
+            : "";
+      }
+
+
+      if(minutesPart){
+        minutesPart.value =
+          total > 0
+            ? String(m)
+            : "";
+      }
+
+
+      if(result){
+
+        if(
+          total <= 0
+        ){
+
+          result.innerHTML =
+            "กรอกเวลานอนและเวลาตื่น ระบบจะคำนวณระยะเวลานอนให้อัตโนมัติ";
+
+        }else if(
+          total >=
+          420
+        ){
+
+          result.innerHTML =
+            `✅ นอน ${h} ชม. ${m} นาที • SLEEP WELL สำเร็จด้านกิจกรรมแล้ว<br><small>ต้องแนบ Screenshot และรอ Admin อนุมัติก่อนรับรางวัล</small>`;
+
+        }else{
+
+          const remaining =
+            420 -
+            total;
+
+
+          result.innerHTML =
+            `⏳ นอน ${h} ชม. ${m} นาที • ยังขาดอีก ${Math.floor(remaining / 60)} ชม. ${remaining % 60} นาที`;
+        }
+      }
+    };
+
+
+  if(
+    !bed.dataset.sleepBound
+  ){
+    bed.dataset.sleepBound =
+      "1";
+
+    bed.addEventListener(
+      "change",
+      recalc
+    );
+
+    bed.addEventListener(
+      "input",
+      recalc
+    );
+  }
+
+
+  if(
+    !wake.dataset.sleepBound
+  ){
+    wake.dataset.sleepBound =
+      "1";
+
+    wake.addEventListener(
+      "change",
+      recalc
+    );
+
+    wake.addEventListener(
+      "input",
+      recalc
+    );
+  }
+
+
+  recalc();
+}
+
+
+/* =========================================================
+   WEEKLY EXERCISE V2.18.0
+========================================================= */
+
+const WEEKLY_EXERCISE_IDS_V2180 =
+  new Set([
+    "weekly_aerobic",
+    "weekly_weight_training",
+    "weekly_badminton",
+    "weekly_run_together",
+    "weekly_running_club",
+    "weekly_yoga"
+  ]);
+
+
+function isExerciseMissionV2180(
+  missionId
+){
+
+  return (
+    missionId ===
+      "daily_exercise_30" ||
+    WEEKLY_EXERCISE_IDS_V2180.has(
+      missionId
+    )
+  );
+}
+
+
+function defaultExerciseTypeV2180(
+  missionId
+){
+
+  const map = {
+    weekly_aerobic:
+      "aerobic",
+
+    weekly_weight_training:
+      "weight_training",
+
+    weekly_badminton:
+      "badminton",
+
+    weekly_run_together:
+      "running",
+
+    weekly_running_club:
+      "running",
+
+    weekly_yoga:
+      "yoga"
+  };
+
+
+  return (
+    map[
+      missionId
+    ] ||
+    ""
+  );
+}
+
+
+function bangkokDateKeyV2180(){
+
+  return new Intl
+    .DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:
+          "Asia/Bangkok",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }
+    )
+    .format(
+      new Date()
+    );
+}
+
+
+function currentWeekAerobicDatesV2180(){
+
+  const todayKey =
+    missionCatalogState
+      ?.current
+      ?.date ||
+    bangkokDateKeyV2180();
+
+
+  const [
+    year,
+    month,
+    day
+  ] =
+    todayKey
+      .split("-")
+      .map(Number);
+
+
+  const current =
+    new Date(
+      Date.UTC(
+        year,
+        month - 1,
+        day
+      )
+    );
+
+
+  const weekday =
+    current.getUTCDay() ||
+    7;
+
+
+  const monday =
+    new Date(
+      current
+    );
+
+
+  monday.setUTCDate(
+    current.getUTCDate() -
+    (
+      weekday -
+      1
+    )
+  );
+
+
+  const offsets =
+    [
+      0,
+      2,
+      4
+    ];
+
+
+  return offsets.map(
+    offset => {
+
+      const d =
+        new Date(
+          monday
+        );
+
+
+      d.setUTCDate(
+        monday.getUTCDate() +
+        offset
+      );
+
+
+      const key =
+        [
+          d.getUTCFullYear(),
+          String(
+            d.getUTCMonth() +
+            1
+          ).padStart(2,"0"),
+          String(
+            d.getUTCDate()
+          ).padStart(2,"0")
+        ].join("-");
+
+
+      const label =
+        offset === 0
+          ? "จันทร์"
+          : (
+              offset === 2
+                ? "พุธ"
+                : "ศุกร์"
+            );
+
+
+      return {
+        key,
+        label,
+        future:
+          key >
+          todayKey
+      };
+    }
+  );
+}
+
+
+function aerobicDateOptionsV2180(){
+
+  const used =
+    new Set(
+      (
+        missionCatalogState
+          ?.weekly
+          ?.submissions ||
+        []
+      )
+      .map(
+        row =>
+          String(
+            row?.activity_date ||
+            ""
+          )
+      )
+    );
+
+
+  return currentWeekAerobicDatesV2180()
+    .map(
+      row => {
+
+        const disabled =
+          row.future ||
+          used.has(
+            row.key
+          );
+
+
+        const suffix =
+          used.has(row.key)
+            ? " • ส่งแล้ว"
+            : (
+                row.future
+                  ? " • ยังไม่ถึงวัน"
+                  : ""
+              );
+
+
+        return `
+          <option
+            value="${row.key}"
+            ${disabled ? "disabled" : ""}
+          >
+            ${row.label} ${row.key}${suffix}
+          </option>
+        `;
+      }
+    )
+    .join("");
+}
+
+
 /* =========================================================
    EXERCISE AUTO CALORIE V2.12.1
    Wellness estimate:
@@ -5205,6 +5687,7 @@ function getHomePrefillV212(){
 
 const EXERCISE_MET_V2121 = {
   walking: 4.0,
+  brisk_walking: 4.5,
   aerobic: 6.5,
   running: 8.5,
   cycling: 7.0,
@@ -5269,9 +5752,24 @@ function calculateExerciseCaloriesV2121(){
       )
     );
 
+  const normalizedType =
+    String(
+      type ||
+      "other"
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+      /\s+/g,
+      "_"
+    );
+
+
   const met =
     Number(
-      EXERCISE_MET_V2121[type] ||
+      EXERCISE_MET_V2121[
+        normalizedType
+      ] ||
       EXERCISE_MET_V2121.other
     );
 
@@ -5557,11 +6055,16 @@ function buildMissionV2Fields(
 
 
   if(
-    mission.id ===
-      "daily_exercise_30" ||
-    mission.id ===
-      "weekly_aerobic"
+    isExerciseMissionV2180(
+      mission.id
+    )
   ){
+
+    const fixedType =
+      defaultExerciseTypeV2180(
+        mission.id
+      );
+
 
     host.innerHTML = `
       ${
@@ -5571,41 +6074,108 @@ function buildMissionV2Fields(
             <div class="v2-week-progress">
               ${weeklyAerobicProgressText()}
             </div>
+
+            <div class="v2-field">
+              <label>วันที่เข้าร่วม AEROBIC CLUB</label>
+
+              <select id="v2ActivityDate">
+                <option value="">เลือกวันที่เข้าร่วม</option>
+                ${aerobicDateOptionsV2180()}
+              </select>
+            </div>
+
+            <div class="v2-hint">
+              เลือกได้เฉพาะ จันทร์ / พุธ / ศุกร์ ของสัปดาห์นี้ • ไม่เกิน 3 ครั้ง/สัปดาห์ • ห้ามซ้ำวัน
+            </div>
           `
           : ""
       }
 
       <div class="v2-field">
         <label>ประเภทกิจกรรม</label>
+
         <select id="v2ExerciseType">
-          ${
-            mission.id ===
-            "weekly_aerobic"
-              ? `
-                <option value="aerobic">แอโรบิก</option>
-                <option value="dance">เต้นแอโรบิก</option>
-                <option value="brisk walking">เดินเร็ว</option>
-                <option value="running">วิ่ง</option>
-                <option value="cycling">ปั่นจักรยาน</option>
-              `
-              : `
-                <option value="">เลือกกิจกรรม</option>
-                <option value="walking">เดิน</option>
-                <option value="brisk walking">เดินเร็ว</option>
-                <option value="running">วิ่ง</option>
-                <option value="aerobic">แอโรบิก</option>
-                <option value="cycling">ปั่นจักรยาน</option>
-                <option value="weight training">เวทเทรนนิ่ง</option>
-                <option value="yoga">โยคะ</option>
-                <option value="badminton">แบดมินตัน</option>
-                <option value="swimming">ว่ายน้ำ</option>
-              `
-          }
+
+          <option value="">เลือกกิจกรรม</option>
+
+          <option
+            value="walking"
+            ${fixedType === "walking" ? "selected" : ""}
+          >
+            เดินออกกำลังกาย
+          </option>
+
+          <option
+            value="brisk_walking"
+            ${fixedType === "brisk_walking" ? "selected" : ""}
+          >
+            เดินเร็ว
+          </option>
+
+          <option
+            value="running"
+            ${fixedType === "running" ? "selected" : ""}
+          >
+            วิ่ง
+          </option>
+
+          <option
+            value="aerobic"
+            ${fixedType === "aerobic" ? "selected" : ""}
+          >
+            แอโรบิก
+          </option>
+
+          <option
+            value="cycling"
+            ${fixedType === "cycling" ? "selected" : ""}
+          >
+            ปั่นจักรยาน
+          </option>
+
+          <option
+            value="weight_training"
+            ${fixedType === "weight_training" ? "selected" : ""}
+          >
+            เวทเทรนนิ่ง
+          </option>
+
+          <option
+            value="yoga"
+            ${fixedType === "yoga" ? "selected" : ""}
+          >
+            โยคะ
+          </option>
+
+          <option
+            value="badminton"
+            ${fixedType === "badminton" ? "selected" : ""}
+          >
+            แบดมินตัน
+          </option>
+
+          <option
+            value="swimming"
+            ${fixedType === "swimming" ? "selected" : ""}
+          >
+            ว่ายน้ำ
+          </option>
+
+          <option
+            value="dance"
+            ${fixedType === "dance" ? "selected" : ""}
+          >
+            เต้น / Dance
+          </option>
+
         </select>
       </div>
 
+
       <div class="v2-field">
+
         <label>ระยะเวลา (นาที)</label>
+
         <input
           id="v2ExerciseMinutes"
           type="number"
@@ -5614,12 +6184,47 @@ function buildMissionV2Fields(
           step="1"
           placeholder="30"
         >
+
       </div>
 
+
+      <div
+        id="v2ExerciseCalories"
+        class="v2-hint"
+        style="
+          margin-top:10px;
+          padding:12px 14px;
+          border-radius:12px;
+          background:#fff5e8;
+          color:#8a4b00;
+          font-size:14px;
+          line-height:1.5;
+          font-weight:900;
+        "
+      >
+        🔥 กรอกประเภทกิจกรรมและระยะเวลา เพื่อคำนวณแคลอรี่อัตโนมัติ
+      </div>
+
+
+      <input
+        id="v2EstimatedCalories"
+        type="hidden"
+        value="0"
+      >
+
+
       <div class="v2-hint">
-        ระบบจะใช้น้ำหนักล่าสุด + ประเภทกิจกรรม + เวลา เพื่อประมาณแคลอรี่ และส่งไป HOME
+        ระบบคำนวณโดยประมาณจาก MET × น้ำหนักปัจจุบัน × ชั่วโมง
+        และบันทึกเป็นแคลอรี่เผาผลาญของวันนั้นบน HOME
       </div>
     `;
+
+
+    requestAnimationFrame(
+      ()=>{
+        bindExerciseCalculatorV2121();
+      }
+    );
 
     return;
   }
@@ -5933,7 +6538,17 @@ async function submitEvidence(){
       sleepTotal > 1440
     ){
       showMissionStatus(
-        "กรุณากรอกเวลานอนให้ถูกต้อง"
+        "กรุณากรอกเวลานอนและเวลาตื่นให้ถูกต้อง"
+      );
+      return;
+    }
+
+
+    if(
+      sleepTotal < 420
+    ){
+      showMissionStatus(
+        "SLEEP WELL ต้องนอนอย่างน้อย 7 ชั่วโมงก่อนส่งหลักฐาน"
       );
       return;
     }
@@ -6091,11 +6706,41 @@ async function submitEvidence(){
     DAILY / WEEKLY EXERCISE
   */
   if(
-    mission.id ===
-      "daily_exercise_30" ||
-    mission.id ===
-      "weekly_aerobic"
+    isExerciseMissionV2180(
+      mission.id
+    )
   ){
+
+    if(
+      mission.id ===
+      "weekly_aerobic"
+    ){
+
+      const activityDate =
+        document
+          .getElementById(
+            "v2ActivityDate"
+          )
+          ?.value ||
+        "";
+
+
+      if(!activityDate){
+
+        showMissionStatus(
+          "กรุณาเลือกวันที่เข้าร่วม AEROBIC CLUB"
+        );
+
+        return;
+      }
+
+
+      form.append(
+        "activityDate",
+        activityDate
+      );
+    }
+
 
     const exerciseType =
       document
@@ -6155,6 +6800,24 @@ async function submitEvidence(){
       String(
         Math.round(
           exerciseMinutes
+        )
+      )
+    );
+
+
+    const caloriePreview =
+      calculateExerciseCaloriesV2121();
+
+
+    form.append(
+      "clientEstimatedCalories",
+      String(
+        Math.round(
+          Number(
+            caloriePreview
+              ?.calories ||
+            0
+          )
         )
       )
     );
@@ -6597,7 +7260,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.17.3 — NUTRITION LINK
+   MISSION V2.18.0 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7655,7 +8318,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.17.3 — FINAL OVERLAY SAFETY
+   MISSION V2.18.0 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -7851,7 +8514,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.17.3 — DIRECT MISSION LINK
+   MISSION V2.18.0 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
