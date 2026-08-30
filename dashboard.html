@@ -5,528 +5,343 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>ROCK YOUR BODY 2026 - HOME</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-v50"></script>
+  <script src="./app-config.js?v=20260830-home-template-v52"></script>
 
   <style>
-    :root{
-      --navy:#062a73;
-      --navy2:#001b5e;
-      --blue:#0a53d4;
-      --blue2:#00359f;
-      --green:#0ba33d;
-      --purple:#5b11d4;
-      --pink:#e8144b;
-      --red:#d91515;
-      --line:#c9d8ec;
-      --bg:#eef4ff;
-      --text:#0a2f72;
-    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
-    *{box-sizing:border-box}
     html,body{
       margin:0;
       min-height:100%;
-      background:var(--bg);
-      font-family:"Prompt",Arial,sans-serif;
-      color:var(--text);
+      background:#eef4ff;
+      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
     }
 
     body{
       display:flex;
       justify-content:center;
-      padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+      align-items:flex-start;
+      overflow-x:hidden;
     }
 
     button,input{
       font:inherit;
     }
 
-    #app{
-      width:min(100vw,1536px);
-      min-height:100vh;
-      background:linear-gradient(180deg,#fff 0,#f8fbff 68%,#eef4ff 100%);
-      overflow:hidden;
-    }
-
-    /* HEADER */
-    .header{
-      min-height:132px;
-      padding:14px 26px 10px;
-      display:grid;
-      grid-template-columns:260px 1fr 360px;
-      gap:18px;
-      align-items:center;
-      background:#fff;
-    }
-
-    .hospital{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      color:#0b2a72;
-      font-weight:900;
-      line-height:.92;
-    }
-
-    .hospital-mark{
-      width:72px;
-      height:72px;
-      border-radius:17px;
-      background:linear-gradient(180deg,#e40012 0 50%,#06389a 50% 100%);
+    #homeStage{
       position:relative;
-      box-shadow:0 4px 10px rgba(0,0,0,.12);
-      flex:none;
-    }
-
-    .hospital-mark:before,
-    .hospital-mark:after{
-      content:"";
-      position:absolute;
-      background:#fff;
-      border-radius:4px;
-    }
-    .hospital-mark:before{width:18px;height:52px;left:27px;top:10px}
-    .hospital-mark:after{width:52px;height:18px;left:10px;top:27px}
-
-    .hospital-name{
-      font-size:31px;
-      letter-spacing:-1px;
-    }
-    .hospital-name small{
-      display:block;
-      color:#6d6d6d;
-      font-size:21px;
-      margin-top:7px;
-      text-align:center;
-    }
-
-    .brand{
-      text-align:center;
-      min-width:0;
-    }
-    .brand-title{
-      margin:0;
-      color:#0b2a72;
-      font-size:clamp(42px,5.4vw,82px);
-      font-weight:900;
-      font-style:italic;
-      letter-spacing:-4px;
-      line-height:.95;
-      white-space:nowrap;
-    }
-    .brand-title .red{color:#b81217}
-    .brand-title .year{
-      font-size:.46em;
-      font-style:normal;
-      letter-spacing:-1px;
-    }
-    .brand-sub{
-      margin-top:7px;
-      font-size:clamp(15px,1.7vw,28px);
-      font-weight:900;
-      letter-spacing:2px;
-      white-space:nowrap;
-    }
-    .move{color:#1344c4}
-    .eat{color:#f06a16}
-    .sleep{color:#5b1bc1}
-    .health{color:#10833a}
-
-    .wallet{
-      min-height:94px;
-      background:#fff;
-      border:1px solid #d5dfec;
-      border-radius:22px;
-      box-shadow:0 5px 15px rgba(25,55,100,.16);
-      display:grid;
-      grid-template-columns:1fr 1fr;
+      width:min(100vw,1536px);
+      aspect-ratio:1536/1024;
+      margin:0 auto;
       overflow:hidden;
+      background:#eef4ff;
     }
-    .wallet-item{
+
+    #homeTemplate{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:fill;
+      z-index:1;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .overlay{
+      position:absolute;
+      z-index:20;
       display:flex;
       align-items:center;
       justify-content:center;
-      gap:10px;
-      padding:10px;
-    }
-    .wallet-item + .wallet-item{border-left:1px solid #c7d1de}
-    .wallet-icon{font-size:48px;line-height:1}
-    .wallet-value{font-size:23px;font-weight:700;line-height:1}
-    .wallet-label{font-size:12px;font-weight:800;margin-top:5px}
-
-    /* MAIN */
-    .main{
-      padding:10px 20px 12px;
-      display:grid;
-      grid-template-columns:30% 29% 1fr;
-      gap:16px;
-    }
-
-    .profile-card{
-      min-height:640px;
-      border-radius:28px;
+      white-space:nowrap;
       overflow:hidden;
-      padding:18px 18px 16px;
-      background:
-        linear-gradient(180deg,rgba(0,91,237,.07),rgba(0,91,237,.02)),
-        linear-gradient(180deg,#0a73ee,#0b4fc6 58%,#75b8ff);
-      border:2px solid #89c2ff;
-      box-shadow:0 7px 18px rgba(19,64,126,.2);
-      position:relative;
+      text-overflow:ellipsis;
+      text-align:center;
+      line-height:1;
     }
 
-    .photo-ring{
-      width:92%;
-      aspect-ratio:1/1;
-      margin:0 auto;
-      border-radius:50%;
-      padding:10px;
-      background:radial-gradient(circle,#9fd8ff 0,#e6f7ff 48%,#4cb1ff 68%,#0d67d7 69%);
-      box-shadow:0 0 0 4px #b6e7ff,0 0 22px rgba(255,255,255,.65);
-      position:relative;
-      overflow:hidden;
-    }
+    /* =====================================================
+       PROFILE
+    ====================================================== */
 
     #profileImage{
-      width:100%;
-      height:100%;
+      position:absolute;
+      z-index:18;
+      left:7.6%;
+      top:18.0%;
+      width:17.6%;
+      aspect-ratio:1/1;
       border-radius:50%;
       object-fit:cover;
       object-position:center center;
       display:none;
-      background:#0a4aa8;
     }
 
-    .profile-placeholder{
-      position:absolute;
-      inset:10px;
-      border-radius:50%;
-      background:
-        radial-gradient(circle at 50% 30%,#163b85 0 17%,transparent 18%),
-        radial-gradient(ellipse at 50% 78%,#173b83 0 34%,transparent 35%),
-        linear-gradient(180deg,#dff3ff,#4fa8f8);
-    }
-
-    .camera{
-      position:absolute;
-      left:50%;
-      top:58%;
-      transform:translate(-50%,-50%);
-      width:92px;
-      height:92px;
-      border-radius:50%;
-      border:4px solid #fff;
-      background:#0b2c70;
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:42px;
-      box-shadow:0 5px 15px rgba(0,0,0,.25);
-      z-index:3;
-    }
-
-    .profile-caption{
-      position:absolute;
-      left:0;right:0;
-      bottom:15%;
-      text-align:center;
-      color:#fff;
-      font-size:18px;
-      font-weight:700;
-      z-index:3;
-    }
-
-    .hero-row{
-      margin-top:14px;
-      min-height:78px;
-      border-radius:18px;
-      background:linear-gradient(180deg,#0a3c99,#031d63);
-      border:2px solid #74aaff;
-      box-shadow:0 5px 10px rgba(0,24,85,.25);
-      display:grid;
-      grid-template-columns:62px 1fr 86px;
-      gap:8px;
-      align-items:center;
-      padding:10px 12px;
-      color:#fff;
-    }
-
-    .shield{
-      font-size:42px;
-      text-align:center;
-    }
-
+    /* LINE name inside HERO row */
     #lineName{
-      font-size:clamp(14px,1.45vw,24px);
+      left:7.2%;
+      top:61.4%;
+      width:14.7%;
+      height:6.4%;
+      justify-content:flex-start;
+      padding-left:1.2%;
+      color:#fff;
+      background:#082968;
+      font-size:clamp(10px,1.35vw,21px);
       font-weight:700;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      z-index:30;
     }
 
     #level{
-      border-radius:11px;
-      background:linear-gradient(180deg,#ff3b2a,#c90000);
+      left:23.0%;
+      top:60.8%;
+      width:6.1%;
+      height:6.8%;
       color:#fff;
-      text-align:center;
-      font-size:clamp(16px,1.8vw,29px);
+      background:linear-gradient(#f7271a,#ce0000);
+      border-radius:10px;
+      font-size:clamp(13px,1.8vw,28px);
       font-weight:900;
-      padding:8px 5px;
-      box-shadow:0 4px 8px rgba(130,0,0,.3);
+      z-index:31;
     }
 
-    .exp-row{
-      margin-top:10px;
-      min-height:58px;
-      border:2px solid #8ab8f0;
-      border-radius:14px;
+    #expValue{
+      left:22.0%;
+      top:70.1%;
+      width:7.5%;
+      height:4.2%;
+      color:#071f5f;
       background:#fff;
-      display:grid;
-      grid-template-columns:62px 1fr 105px;
-      align-items:center;
-      gap:8px;
-      padding:8px 12px;
+      font-size:clamp(9px,1.1vw,17px);
+      font-weight:800;
+      z-index:31;
     }
-    .exp-label{font-size:20px;font-weight:900}
-    .exp-track{
-      height:18px;
+
+    #expMask{
+      position:absolute;
+      z-index:29;
+      left:7.4%;
+      top:70.6%;
+      width:13.0%;
+      height:2.2%;
+      background:#d7e7f6;
       border-radius:999px;
-      background:#d9e8f8;
-      overflow:hidden;
     }
+
     #expFill{
-      height:100%;
-      width:0;
+      position:absolute;
+      z-index:30;
+      left:7.4%;
+      top:70.6%;
+      width:0%;
+      max-width:13.0%;
+      height:2.2%;
+      background:linear-gradient(90deg,#0871ee,#1046c4);
       border-radius:999px;
-      background:linear-gradient(90deg,#0868ed,#1048c4);
       transition:width .35s ease;
     }
-    #expText{
-      text-align:right;
-      font-size:17px;
-      font-weight:800;
-      white-space:nowrap;
-    }
 
-    /* WEIGHT */
-    .weight-card{
-      min-height:640px;
+    /* =====================================================
+       TOP WALLET
+    ====================================================== */
+
+    #coin{
+      left:77.2%;
+      top:4.2%;
+      width:7.2%;
+      height:4.4%;
+      color:#091f62;
       background:#fff;
-      border:2px solid #d2dfef;
-      border-radius:28px;
-      box-shadow:0 7px 18px rgba(23,54,99,.13);
-      padding:24px 24px 18px;
-      display:grid;
-      grid-template-rows:1fr 1fr 1.18fr;
-      gap:10px;
-    }
-
-    .weight-section{
-      display:grid;
-      grid-template-columns:130px 1fr;
-      align-items:center;
-      gap:14px;
-      border-bottom:1px solid #cbd9eb;
-    }
-    .weight-section:last-child{border-bottom:0}
-    .weight-icon{font-size:92px;text-align:center}
-    .weight-label{font-size:22px;font-weight:800}
-    .weight-value{
-      margin-top:4px;
-      font-size:clamp(38px,4vw,65px);
+      font-size:clamp(11px,1.45vw,22px);
       font-weight:700;
-      line-height:1;
-      white-space:nowrap;
-      color:#0b2c78;
     }
-    .weight-value.target{color:#d41d14}
 
-    .progress-box{
-      border:1px solid #cbd8e9;
-      border-radius:18px;
-      padding:16px;
-      align-self:center;
+    #energy{
+      left:89.1%;
+      top:4.2%;
+      width:7.0%;
+      height:4.4%;
+      color:#091f62;
+      background:#fff;
+      font-size:clamp(10px,1.35vw,21px);
+      font-weight:700;
     }
-    .progress-title{font-size:18px;font-weight:800}
-    .progress-main{
-      display:grid;
-      grid-template-columns:1fr 95px;
-      align-items:center;
-      gap:10px;
-      margin-top:14px;
+
+    /* =====================================================
+       WEIGHT
+    ====================================================== */
+
+    #currentWeight{
+      left:43.2%;
+      top:23.1%;
+      width:15.0%;
+      height:7.5%;
+      color:#08246f;
+      background:#fff;
+      font-size:clamp(23px,3.7vw,57px);
+      font-weight:700;
     }
-    .progress-track{
-      height:18px;
+
+    #targetWeight{
+      left:43.2%;
+      top:44.8%;
+      width:15.0%;
+      height:7.5%;
+      color:#d51c13;
+      background:#fff;
+      font-size:clamp(23px,3.7vw,57px);
+      font-weight:700;
+    }
+
+    #weightProgressPct{
+      left:52.0%;
+      top:67.5%;
+      width:6.5%;
+      height:5.0%;
+      color:#148326;
+      background:#fff;
+      font-size:clamp(18px,2.8vw,42px);
+      font-weight:900;
+    }
+
+    #lostWeight{
+      left:35.6%;
+      top:75.5%;
+      width:9.2%;
+      height:4.3%;
+      color:#081d59;
+      background:#fff;
+      font-size:clamp(9px,1.35vw,20px);
+      font-weight:800;
+    }
+
+    #remainingWeight{
+      left:49.7%;
+      top:75.5%;
+      width:9.2%;
+      height:4.3%;
+      color:#081d59;
+      background:#fff;
+      font-size:clamp(9px,1.35vw,20px);
+      font-weight:800;
+    }
+
+    #weightProgressTrack{
+      position:absolute;
+      z-index:24;
+      left:35.0%;
+      top:68.7%;
+      width:15.6%;
+      height:2.3%;
       border-radius:999px;
       background:#d7e4f3;
       overflow:hidden;
     }
+
     #weightProgressFill{
       height:100%;
-      width:0;
-      background:linear-gradient(90deg,#0a61eb,#1e89ff);
+      width:0%;
       border-radius:inherit;
+      background:linear-gradient(90deg,#0868ed,#167cef);
       transition:width .35s ease;
     }
-    #weightProgressPct{
-      color:#14842e;
-      font-size:34px;
-      font-weight:900;
-      text-align:right;
-    }
-    .progress-foot{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:17px;
-      font-size:15px;
+
+    /* =====================================================
+       HEALTH CARDS
+    ====================================================== */
+
+    #steps{
+      left:69.4%;
+      top:23.7%;
+      width:8.3%;
+      height:7.0%;
+      color:#fff;
+      background:#0750c4;
+      font-size:clamp(22px,3.7vw,58px);
       font-weight:700;
     }
 
-    /* RIGHT */
-    .right-column{
-      display:grid;
-      grid-template-rows:auto auto;
-      gap:16px;
-    }
-
-    .health-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
-
-    .health-card{
-      min-height:195px;
-      border-radius:23px;
+    #calories{
+      left:88.0%;
+      top:23.7%;
+      width:9.3%;
+      height:7.0%;
       color:#fff;
-      position:relative;
-      overflow:hidden;
-      border:2px solid rgba(255,255,255,.28);
-      box-shadow:0 6px 13px rgba(0,30,90,.22);
-      padding:22px 20px 18px;
-      display:grid;
-      grid-template-columns:95px 1fr;
-      align-items:center;
-      cursor:default;
-    }
-    .health-card.clickable{cursor:pointer}
-    .health-card.clickable:active{transform:scale(.99)}
-
-    .steps-card{background:linear-gradient(150deg,#0d70ff,#0036a8)}
-    .calories-card{background:linear-gradient(150deg,#15ba42,#006a1c)}
-    .sleep-card{background:linear-gradient(150deg,#8a1df0,#3900a0)}
-    .score-card{background:linear-gradient(150deg,#ff2a68,#c9023f)}
-
-    .health-icon{font-size:68px;text-align:center}
-    .health-title{font-size:18px;font-weight:600}
-    .health-value{
-      margin-top:6px;
-      font-size:clamp(28px,3.1vw,52px);
+      background:#087b26;
+      font-size:clamp(20px,3.4vw,53px);
       font-weight:700;
-      line-height:1;
-      white-space:nowrap;
-    }
-    .health-unit{
-      font-size:.48em;
-      font-weight:500;
     }
 
-    .action-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
-    .action-card{
-      min-height:270px;
-      border-radius:23px;
-      border:2px solid rgba(255,255,255,.3);
+    #sleep{
+      left:69.0%;
+      top:45.0%;
+      width:9.5%;
+      height:6.8%;
       color:#fff;
-      box-shadow:0 6px 13px rgba(0,30,90,.22);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
-      cursor:pointer;
-      position:relative;
+      background:#4f0fbd;
+      font-size:clamp(14px,2.0vw,31px);
+      font-weight:700;
     }
-    .weight-check{background:linear-gradient(150deg,#0e66df,#04256d)}
-    .progress-card{background:linear-gradient(150deg,#13b72d,#056f18)}
-    .action-icon{font-size:86px}
-    .action-title{margin-top:10px;font-size:28px;font-weight:900}
-    .action-sub{font-size:17px;margin-top:3px}
-    .action-arrow{
+
+    #healthScore{
+      left:87.3%;
+      top:45.0%;
+      width:10.7%;
+      height:6.8%;
+      color:#fff;
+      background:#d40b49;
+      font-size:clamp(18px,2.7vw,41px);
+      font-weight:700;
+    }
+
+    /* =====================================================
+       CLICK AREAS
+    ====================================================== */
+
+    .hotspot{
       position:absolute;
-      right:18px;
-      bottom:16px;
-      width:36px;height:36px;
-      border-radius:50%;
-      border:2px solid #fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:25px;
-    }
-
-    /* NAV */
-    .nav{
-      padding:0 20px 18px;
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr;
-      gap:14px;
-    }
-    .nav-btn{
-      min-height:112px;
-      border-radius:22px;
-      border:2px solid #094ab5;
-      color:#fff;
-      background:linear-gradient(150deg,#0946b7,#001f68);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:18px;
-      box-shadow:0 6px 14px rgba(0,30,90,.23);
+      z-index:50;
+      border:0;
+      padding:0;
+      background:transparent;
       cursor:pointer;
-    }
-    .nav-btn.mission{
-      background:linear-gradient(150deg,#ec1b14,#9e0000);
-      border-color:#f2574c;
-    }
-    .nav-icon{font-size:60px}
-    .nav-main{
-      font-size:clamp(25px,3vw,48px);
-      font-weight:900;
-      font-style:italic;
-      line-height:1;
-    }
-    .nav-sub{
-      margin-top:6px;
-      text-align:center;
-      font-size:15px;
-      font-style:normal;
-      font-weight:500;
+      touch-action:manipulation;
     }
 
-    /* MODALS */
+    .hotspot:active{
+      background:rgba(255,255,255,.08);
+      border-radius:18px;
+    }
+
+    #stepsHotspot{left:61.7%;top:15.5%;width:18.0%;height:19.5%}
+    #sleepHotspot{left:61.7%;top:36.6%;width:18.0%;height:19.2%}
+    #weightHotspot{left:61.6%;top:58.1%;width:18.2%;height:24.4%}
+    #progressHotspot{left:80.8%;top:58.1%;width:18.0%;height:24.4%}
+
+    #homeHotspot{left:1.2%;top:84.8%;width:31.7%;height:12.5%}
+    #missionHotspot{left:34.0%;top:84.8%;width:31.6%;height:12.5%}
+    #battleHotspot{left:66.7%;top:84.8%;width:31.9%;height:12.5%}
+
+    /* =====================================================
+       MODAL
+    ====================================================== */
+
     .modal-bg{
       position:fixed;
       inset:0;
       z-index:9999;
-      background:rgba(0,12,40,.62);
       display:none;
       align-items:center;
       justify-content:center;
       padding:20px;
+      background:rgba(0,12,40,.64);
       backdrop-filter:blur(4px);
     }
+
     .modal-bg.show{display:flex}
+
     .modal{
       width:min(92vw,520px);
       background:#fff;
@@ -535,9 +350,20 @@
       padding:22px;
       box-shadow:0 20px 50px rgba(0,0,0,.35);
     }
-    .modal h3{margin:0 0 16px;font-size:24px}
+
+    .modal h3{
+      margin:0 0 16px;
+      font-size:24px;
+    }
+
     .field{margin-top:12px}
-    .field label{display:block;font-weight:800;margin-bottom:6px}
+
+    .field label{
+      display:block;
+      margin-bottom:6px;
+      font-weight:800;
+    }
+
     .field input{
       width:100%;
       min-height:52px;
@@ -546,7 +372,13 @@
       padding:10px 13px;
       font-size:19px;
     }
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
     .modal-status{
       margin-top:12px;
       padding:12px;
@@ -556,16 +388,19 @@
       line-height:1.55;
       font-weight:700;
     }
+
     .modal-status.success{
       color:#087438;
       background:#eaf9ef;
       border:1px solid #b9e5c6;
     }
+
     .modal-status.warning{
       color:#815800;
       background:#fff7e9;
       border:1px solid #f0d39a;
     }
+
     .evidence-btn{
       display:none;
       width:100%;
@@ -577,20 +412,31 @@
       color:#fff;
       font-weight:900;
     }
+
     .modal-actions{
       margin-top:14px;
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:9px;
     }
+
     .modal-actions button{
       min-height:48px;
       border:0;
       border-radius:12px;
       font-weight:900;
     }
+
     .cancel{background:#e9eef5;color:#315072}
     .save{background:#0a9b48;color:#fff}
+
+    #sleepDuration{
+      margin-top:12px;
+      text-align:center;
+      font-size:24px;
+      font-weight:900;
+      color:#4c20ab;
+    }
 
     #toast{
       position:fixed;
@@ -609,276 +455,62 @@
       font-weight:800;
       box-shadow:0 8px 24px rgba(0,0,0,.28);
     }
+
     #toast.show{display:block}
     #toast.error{background:#c62828}
-
-    @media(max-width:900px){
-      .header{
-        min-height:92px;
-        grid-template-columns:150px 1fr 230px;
-        gap:8px;
-        padding:8px 10px;
-      }
-      .hospital-mark{width:46px;height:46px}
-      .hospital-mark:before{width:11px;height:34px;left:17px;top:6px}
-      .hospital-mark:after{width:34px;height:11px;left:6px;top:17px}
-      .hospital-name{font-size:17px}
-      .hospital-name small{font-size:12px}
-      .wallet{min-height:60px;border-radius:14px}
-      .wallet-icon{font-size:28px}
-      .wallet-value{font-size:15px}
-      .wallet-label{font-size:8px}
-
-      .main{
-        padding:5px 7px 8px;
-        grid-template-columns:31% 31% 1fr;
-        gap:6px;
-      }
-      .profile-card,.weight-card{min-height:470px;border-radius:15px}
-      .profile-card{padding:8px}
-      .photo-ring{padding:5px}
-      .camera{width:52px;height:52px;font-size:24px}
-      .profile-caption{font-size:9px}
-      .hero-row{min-height:49px;grid-template-columns:34px 1fr 50px;padding:5px;gap:2px}
-      .shield{font-size:25px}
-      #lineName{font-size:9px}
-      #level{font-size:11px;padding:5px 2px}
-      .exp-row{min-height:38px;grid-template-columns:30px 1fr 55px;padding:5px}
-      .exp-label{font-size:10px}
-      .exp-track{height:9px}
-      #expText{font-size:8px}
-
-      .weight-card{padding:10px}
-      .weight-section{grid-template-columns:62px 1fr;gap:4px}
-      .weight-icon{font-size:45px}
-      .weight-label{font-size:11px}
-      .weight-value{font-size:24px}
-      .progress-box{padding:8px;border-radius:10px}
-      .progress-title{font-size:9px}
-      .progress-main{grid-template-columns:1fr 40px;margin-top:6px}
-      .progress-track{height:8px}
-      #weightProgressPct{font-size:17px}
-      .progress-foot{font-size:7px;margin-top:8px}
-
-      .health-grid{gap:6px}
-      .health-card{min-height:130px;border-radius:12px;padding:8px;grid-template-columns:40px 1fr}
-      .health-icon{font-size:34px}
-      .health-title{font-size:9px}
-      .health-value{font-size:20px}
-      .action-grid{gap:6px}
-      .action-card{min-height:205px;border-radius:12px;padding:8px}
-      .action-icon{font-size:48px}
-      .action-title{font-size:14px}
-      .action-sub{font-size:8px}
-      .action-arrow{width:22px;height:22px;font-size:14px;right:8px;bottom:8px}
-
-      .nav{padding:0 7px 8px;gap:6px}
-      .nav-btn{min-height:68px;border-radius:12px;gap:7px}
-      .nav-icon{font-size:31px}
-      .nav-main{font-size:19px}
-      .nav-sub{font-size:8px;margin-top:2px}
-    }
   </style>
 </head>
 
 <body>
-<div id="app">
 
-  <header class="header">
-    <div class="hospital">
-      <div class="hospital-mark"></div>
-      <div class="hospital-name">
-        BANGKOK<br>HOSPITAL
-        <small>UDON</small>
-      </div>
-    </div>
+<div id="homeStage">
 
-    <div class="brand">
-      <h1 class="brand-title">
-        ROCK <span class="red">YOUR</span> BODY <span class="year">2026</span>
-      </h1>
-      <div class="brand-sub">
-        <span class="move">MOVE</span> •
-        <span class="eat">EAT</span> •
-        <span class="sleep">SLEEP</span> •
-        <span class="health">HEALTH</span>
-      </div>
-    </div>
+  <img
+    id="homeTemplate"
+    src="./home-template.png?v=20260830-v52"
+    alt="ROCK YOUR BODY 2026 HOME"
+  >
 
-    <div class="wallet">
-      <div class="wallet-item">
-        <div class="wallet-icon">🪙</div>
-        <div>
-          <div id="coin" class="wallet-value">--</div>
-          <div class="wallet-label">ROCK COIN</div>
-        </div>
-      </div>
+  <!-- PROFILE -->
+  <img id="profileImage" alt="LINE Profile">
+  <div id="lineName" class="overlay">กำลังโหลด...</div>
+  <div id="level" class="overlay">Lv.1</div>
+  <div id="expMask"></div>
+  <div id="expFill"></div>
+  <div id="expValue" class="overlay">0 / 500</div>
 
-      <div class="wallet-item">
-        <div class="wallet-icon">⚡</div>
-        <div>
-          <div id="energy" class="wallet-value">-- / --</div>
-          <div class="wallet-label">ENERGY</div>
-        </div>
-      </div>
-    </div>
-  </header>
+  <!-- WALLET -->
+  <div id="coin" class="overlay">--</div>
+  <div id="energy" class="overlay">-- / --</div>
 
+  <!-- WEIGHT -->
+  <div id="currentWeight" class="overlay">-- kg</div>
+  <div id="targetWeight" class="overlay">-- kg</div>
 
-  <main class="main">
+  <div id="weightProgressTrack">
+    <div id="weightProgressFill"></div>
+  </div>
 
-    <section class="profile-card">
-      <div class="photo-ring">
-        <div id="profilePlaceholder" class="profile-placeholder"></div>
-        <img id="profileImage" alt="LINE Profile">
-        <div class="camera">📷</div>
-        <div class="profile-caption">อัปโหลดรูปของคุณ</div>
-      </div>
+  <div id="weightProgressPct" class="overlay">0%</div>
+  <div id="lostWeight" class="overlay">-- kg</div>
+  <div id="remainingWeight" class="overlay">-- kg</div>
 
-      <div class="hero-row">
-        <div class="shield">🛡️</div>
-        <div id="lineName">กำลังโหลด...</div>
-        <div id="level">Lv.1</div>
-      </div>
+  <!-- HEALTH -->
+  <div id="steps" class="overlay">0</div>
+  <div id="calories" class="overlay">0 kcal</div>
+  <div id="sleep" class="overlay">0 ชม. 0 นาที</div>
+  <div id="healthScore" class="overlay">-- / 100</div>
 
-      <div class="exp-row">
-        <div class="exp-label">EXP</div>
-        <div class="exp-track"><div id="expFill"></div></div>
-        <div id="expText">0 / 500</div>
-      </div>
-    </section>
+  <!-- CLICK AREAS -->
+  <button id="stepsHotspot" class="hotspot" type="button" aria-label="กรอกก้าว"></button>
+  <button id="sleepHotspot" class="hotspot" type="button" aria-label="กรอกการนอน"></button>
 
+  <button id="weightHotspot" class="hotspot" type="button" aria-label="Weight Check"></button>
+  <button id="progressHotspot" class="hotspot" type="button" aria-label="My Progress"></button>
 
-    <section class="weight-card">
-
-      <div class="weight-section">
-        <div class="weight-icon">⚖️</div>
-        <div>
-          <div class="weight-label">น้ำหนักปัจจุบัน</div>
-          <div id="currentWeight" class="weight-value">-- kg</div>
-        </div>
-      </div>
-
-      <div class="weight-section">
-        <div class="weight-icon">🎯</div>
-        <div>
-          <div class="weight-label">เป้าหมาย</div>
-          <div id="targetWeight" class="weight-value target">-- kg</div>
-        </div>
-      </div>
-
-      <div class="progress-box">
-        <div class="progress-title">ความคืบหน้าเป้าหมายน้ำหนัก</div>
-
-        <div class="progress-main">
-          <div class="progress-track"><div id="weightProgressFill"></div></div>
-          <div id="weightProgressPct">0%</div>
-        </div>
-
-        <div class="progress-foot">
-          <span>ลดไปแล้ว <strong id="lostWeight">-- kg</strong></span>
-          <span>เหลืออีก <strong id="remainingWeight">-- kg</strong></span>
-        </div>
-      </div>
-
-    </section>
-
-
-    <section class="right-column">
-
-      <div class="health-grid">
-
-        <button id="stepsCard" class="health-card steps-card clickable" type="button">
-          <div class="health-icon">👣</div>
-          <div>
-            <div class="health-title">วันนี้ก้าวไปแล้ว</div>
-            <div class="health-value">
-              <span id="steps">0</span>
-              <span class="health-unit">ก้าว</span>
-            </div>
-          </div>
-        </button>
-
-        <div class="health-card calories-card">
-          <div class="health-icon">🔥</div>
-          <div>
-            <div class="health-title">แคลอรี่เผาผลาญ</div>
-            <div class="health-value">
-              <span id="calories">0</span>
-              <span class="health-unit">kcal</span>
-            </div>
-          </div>
-        </div>
-
-        <button id="sleepCard" class="health-card sleep-card clickable" type="button">
-          <div class="health-icon">🌙</div>
-          <div>
-            <div class="health-title">นอนหลับ</div>
-            <div id="sleep" class="health-value">0 ชม. 0 นาที</div>
-          </div>
-        </button>
-
-        <div class="health-card score-card">
-          <div class="health-icon">❤️</div>
-          <div>
-            <div class="health-title">คะแนนสุขภาพรวม</div>
-            <div id="healthScore" class="health-value">-- / 100</div>
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="action-grid">
-
-        <button id="weightCheckButton" class="action-card weight-check" type="button">
-          <div class="action-icon">⚖️</div>
-          <div class="action-title">WEIGHT CHECK</div>
-          <div class="action-sub">ชั่งน้ำหนัก</div>
-          <div class="action-arrow">›</div>
-        </button>
-
-        <button id="progressButton" class="action-card progress-card" type="button">
-          <div class="action-icon">📈</div>
-          <div class="action-title">MY PROGRESS</div>
-          <div class="action-sub">ความก้าวหน้าของฉัน</div>
-          <div class="action-arrow">›</div>
-        </button>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <nav class="nav">
-
-    <button class="nav-btn" type="button">
-      <div class="nav-icon">🏠</div>
-      <div>
-        <div class="nav-main">HOME</div>
-        <div class="nav-sub">หน้าหลัก</div>
-      </div>
-    </button>
-
-    <button id="missionButton" class="nav-btn mission" type="button">
-      <div class="nav-icon">🎯</div>
-      <div>
-        <div class="nav-main">MISSION</div>
-        <div class="nav-sub">ภารกิจ</div>
-      </div>
-    </button>
-
-    <button id="battleButton" class="nav-btn" type="button">
-      <div class="nav-icon">⚔️</div>
-      <div>
-        <div class="nav-main">BATTLE</div>
-        <div class="nav-sub">ต่อสู้กับมอนสเตอร์</div>
-      </div>
-    </button>
-
-  </nav>
+  <button id="homeHotspot" class="hotspot" type="button" aria-label="Home"></button>
+  <button id="missionHotspot" class="hotspot" type="button" aria-label="Mission"></button>
+  <button id="battleHotspot" class="hotspot" type="button" aria-label="Battle"></button>
 
 </div>
 
@@ -886,6 +518,7 @@
 <!-- STEPS MODAL -->
 <div id="stepsModal" class="modal-bg">
   <div class="modal">
+
     <h3>👣 วันนี้ก้าวไปแล้ว</h3>
 
     <div class="field">
@@ -905,6 +538,7 @@
       <button class="cancel" type="button" onclick="closeModal('stepsModal')">ปิด</button>
       <button id="saveStepsButton" class="save" type="button">บันทึกก้าว</button>
     </div>
+
   </div>
 </div>
 
@@ -912,9 +546,11 @@
 <!-- SLEEP MODAL -->
 <div id="sleepModal" class="modal-bg">
   <div class="modal">
+
     <h3>😴 บันทึกการนอนหลับ</h3>
 
     <div class="grid2">
+
       <div class="field">
         <label for="sleepStart">เวลานอน</label>
         <input id="sleepStart" type="time" value="22:00">
@@ -924,14 +560,13 @@
         <label for="sleepWake">เวลาตื่น</label>
         <input id="sleepWake" type="time" value="06:00">
       </div>
+
     </div>
 
-    <div id="sleepDuration" style="margin-top:12px;text-align:center;font-size:24px;font-weight:900;color:#4c20ab">
-      8 ชม. 0 นาที
-    </div>
+    <div id="sleepDuration">8 ชม. 0 นาที</div>
 
     <div id="sleepStatus" class="modal-status">
-      ระบบจะคำนวณระยะเวลานอนอัตโนมัติ
+      ระบบคำนวณระยะเวลานอนอัตโนมัติ
     </div>
 
     <button id="sleepEvidence" class="evidence-btn" type="button">
@@ -942,6 +577,7 @@
       <button class="cancel" type="button" onclick="closeModal('sleepModal')">ปิด</button>
       <button id="saveSleepButton" class="save" type="button">บันทึกการนอน</button>
     </div>
+
   </div>
 </div>
 
@@ -952,617 +588,1408 @@
 "use strict";
 
 /* =========================================================
-   HOME V5.0 — SINGLE API
-   LIFF ID Token -> player-dashboard action=dashboard
-   หน้า HOME ยิง PLAYER API หลักเพียงครั้งเดียวต่อ refresh
+   HOME TEMPLATE OVERLAY V5.2
+   READ: PLAYER API action=dashboard เพียงก้อนเดียว
 ========================================================= */
 
-const $ = id => document.getElementById(id);
+const $ =
+  id =>
+    document.getElementById(id);
 
 const state = {
-  dashboard:null
+  raw:null,
+  data:null
 };
 
-function n(value,fallback=0){
-  const x = Number(value);
-  return Number.isFinite(x) ? x : fallback;
+
+function num(
+  value,
+  fallback=0
+){
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : fallback;
 }
 
-function pick(...values){
+
+function pick(
+  ...values
+){
   for(const value of values){
-    if(value !== undefined && value !== null && value !== ""){
+    if(
+      value !== undefined &&
+      value !== null &&
+      value !== ""
+    ){
       return value;
     }
   }
+
   return null;
 }
 
-function fmt(value){
-  return Math.round(n(value,0)).toLocaleString("en-US");
+
+function clamp(
+  value,
+  min,
+  max
+){
+  return Math.max(
+    min,
+    Math.min(
+      max,
+      num(value,0)
+    )
+  );
 }
 
-function fmtWeight(value){
-  const x = Number(value);
-  return Number.isFinite(x) ? `${x.toFixed(1)} kg` : "-- kg";
+
+function formatNumber(
+  value
+){
+  return Math.round(
+    num(value,0)
+  ).toLocaleString(
+    "en-US"
+  );
 }
 
-function clamp(value,min,max){
-  return Math.max(min,Math.min(max,n(value,0)));
+
+function formatWeight(
+  value
+){
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? `${n.toFixed(1)} kg`
+    : "-- kg";
 }
 
-function getApi(name){
-  if(window.APP_CONFIG?.getApi){
-    return window.APP_CONFIG.getApi(name);
+
+function showToast(
+  message,
+  isError=false
+){
+  const el =
+    $("toast");
+
+  el.textContent =
+    message;
+
+  el.classList.toggle(
+    "error",
+    Boolean(isError)
+  );
+
+  el.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    window.__homeToast
+  );
+
+  window.__homeToast =
+    setTimeout(
+      ()=>{
+        el.classList.remove(
+          "show"
+        );
+      },
+      isError
+        ? 5000
+        : 2800
+    );
+}
+
+
+function getApi(
+  name
+){
+  if(
+    window.APP_CONFIG?.getApi
+  ){
+    return window.APP_CONFIG.getApi(
+      name
+    );
   }
 
-  const url = window.APP_CONFIG?.API?.[name];
-  if(!url) throw new Error("ไม่พบ API." + name);
+  const url =
+    window.APP_CONFIG?.API?.[name];
+
+  if(!url){
+    throw new Error(
+      `ไม่พบ API.${name}`
+    );
+  }
+
   return url;
 }
 
-function toast(message,isError=false){
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.toggle("error",!!isError);
-  el.classList.add("show");
 
-  clearTimeout(window.__homeToast);
-  window.__homeToast = setTimeout(()=>{
-    el.classList.remove("show");
-  },isError ? 5000 : 2800);
-}
+/* =========================================================
+   LIFF
+========================================================= */
 
 async function initLiff(){
-  if(typeof liff === "undefined"){
-    throw new Error("LINE LIFF SDK ไม่พร้อม");
+
+  if(
+    typeof liff ===
+    "undefined"
+  ){
+    throw new Error(
+      "LINE LIFF SDK ไม่พร้อม"
+    );
   }
 
+
   await liff.init({
-    liffId:window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
+    liffId:
+      window.APP_CONFIG?.LIFF_ID ||
+      "2011201679-uNWz5yqF"
   });
 
-  if(!liff.isLoggedIn()){
-    liff.login({redirectUri:window.location.href});
+
+  if(
+    !liff.isLoggedIn()
+  ){
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
     return false;
   }
 
-  if(!liff.getIDToken()){
-    throw new Error("ไม่พบ LINE ID Token");
+
+  if(
+    !liff.getIDToken()
+  ){
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
   }
+
 
   return true;
 }
 
-async function playerApi(payload){
-  const response = await fetch(
-    getApi("PLAYER"),
-    {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      cache:"no-store",
-      body:JSON.stringify({
-        ...payload,
-        idToken:liff.getIDToken()
-      })
-    }
-  );
 
-  const raw = await response.text();
-  let data = {};
+/* =========================================================
+   PLAYER API
+========================================================= */
+
+async function playerApi(
+  payload
+){
+
+  const response =
+    await fetch(
+      getApi("PLAYER"),
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        cache:"no-store",
+
+        body:
+          JSON.stringify({
+            ...payload,
+
+            idToken:
+              liff.getIDToken()
+          })
+      }
+    );
+
+
+  const raw =
+    await response.text();
+
+
+  let result = {};
+
 
   try{
-    data = raw ? JSON.parse(raw) : {};
+
+    result =
+      raw
+        ? JSON.parse(raw)
+        : {};
+
   }catch{
-    throw new Error("PLAYER API ตอบกลับไม่ใช่ JSON");
+
+    throw new Error(
+      "PLAYER API ตอบกลับไม่ใช่ JSON"
+    );
   }
 
-  if(!response.ok || data?.success === false){
+
+  if(
+    !response.ok ||
+    result?.success === false
+  ){
+
     throw new Error(
-      data?.error ||
-      data?.message ||
+      result?.error ||
+      result?.message ||
       `HTTP ${response.status}`
     );
   }
 
-  return data?.data ?? data?.dashboard ?? data;
+
+  return (
+    result?.data ??
+    result?.dashboard ??
+    result
+  );
 }
 
-/* =========================================================
-   SINGLE DASHBOARD REQUEST
-========================================================= */
 
-async function fetchDashboard(){
+/*
+  จุดสำคัญ:
+  หน้า HOME ดึงข้อมูลด้วย action=dashboard เพียงครั้งเดียว
+*/
+async function fetchHome(){
+
   return await Promise.race([
-    playerApi({action:"dashboard"}),
 
-    new Promise((_,reject)=>{
-      setTimeout(()=>{
-        reject(new Error("PLAYER API ใช้เวลานานเกิน 12 วินาที"));
-      },12000);
-    })
+    playerApi({
+      action:"dashboard"
+    }),
+
+    new Promise(
+      (_,reject) =>
+        setTimeout(
+          ()=>{
+            reject(
+              new Error(
+                "PLAYER API ใช้เวลานานเกิน 12 วินาที"
+              )
+            );
+          },
+          12000
+        )
+    )
+
   ]);
 }
 
-function normalizeDashboard(data){
-  const player = data?.player ?? data?.user ?? {};
-  const wallet = data?.wallet ?? {};
-  const weight = data?.weight ?? {};
-  const today = data?.today ?? data?.health ?? data?.activity ?? {};
-  const energyObj =
-    data?.energy && typeof data.energy === "object"
-      ? data.energy
+
+/* =========================================================
+   NORMALIZE RESPONSE
+========================================================= */
+
+function normalizeHome(
+  raw
+){
+
+  const player =
+    raw?.player ??
+    raw?.user ??
+    {};
+
+  const wallet =
+    raw?.wallet ??
+    {};
+
+  const weight =
+    raw?.weight ??
+    {};
+
+  const today =
+    raw?.today ??
+    raw?.health ??
+    raw?.activity ??
+    {};
+
+  const energyObject =
+    raw?.energy &&
+    typeof raw.energy ===
+      "object"
+      ? raw.energy
       : {};
 
-  const currentWeight =
-    pick(
-      weight.current,
-      weight.currentWeight,
-      data.currentWeight,
-      data?.weight?.current_weight
-    );
 
   const startWeight =
     pick(
       weight.start,
       weight.startWeight,
-      data.startWeight,
-      data?.weight?.start_weight
+      weight.start_weight,
+      raw.startWeight
     );
+
+
+  const currentWeight =
+    pick(
+      weight.current,
+      weight.currentWeight,
+      weight.current_weight,
+      raw.currentWeight
+    );
+
 
   const targetWeight =
     pick(
       weight.target,
       weight.targetWeight,
-      data.targetWeight,
-      data?.weight?.target_weight
+      weight.target_weight,
+      raw.targetWeight
     );
 
-  const c = Number(currentWeight);
-  const s = Number(startWeight);
-  const t = Number(targetWeight);
 
-  let weightProgress = n(
-    pick(
-      weight.progressPercent,
-      data.weightProgressPct
-    ),
-    0
-  );
+  const sw =
+    Number(startWeight);
 
-  let lostWeight = null;
-  let remainingWeight = null;
+  const cw =
+    Number(currentWeight);
 
-  if(Number.isFinite(c) && Number.isFinite(s)){
-    lostWeight = Math.max(0,s-c);
-  }
+  const tw =
+    Number(targetWeight);
 
-  if(Number.isFinite(c) && Number.isFinite(t)){
-    remainingWeight = Math.max(0,c-t);
-  }
+
+  let progress =
+    num(
+      pick(
+        weight.progressPercent,
+        weight.progress,
+        raw.weightProgressPct
+      ),
+      0
+    );
+
+
+  let lost =
+    null;
+
+  let remaining =
+    null;
+
 
   if(
-    Number.isFinite(s) &&
-    Number.isFinite(c) &&
-    Number.isFinite(t) &&
-    s !== t
+    Number.isFinite(sw) &&
+    Number.isFinite(cw)
   ){
-    weightProgress = clamp(
-      ((s-c)/(s-t))*100,
-      0,
-      100
-    );
+    lost =
+      Math.max(
+        0,
+        sw - cw
+      );
   }
 
+
+  if(
+    Number.isFinite(cw) &&
+    Number.isFinite(tw)
+  ){
+    remaining =
+      Math.max(
+        0,
+        cw - tw
+      );
+  }
+
+
+  if(
+    Number.isFinite(sw) &&
+    Number.isFinite(cw) &&
+    Number.isFinite(tw) &&
+    sw !== tw
+  ){
+
+    progress =
+      clamp(
+        (
+          (sw - cw) /
+          (sw - tw)
+        ) * 100,
+        0,
+        100
+      );
+  }
+
+
   return {
+
     player:{
+
       displayName:
         pick(
           player.displayName,
           player.lineDisplayName,
           player.line_display_name,
-          data.lineDisplayName
-        ) || "ROCK HERO",
+          raw.lineDisplayName
+        ) ||
+        "ROCK HERO",
 
       pictureUrl:
         pick(
           player.pictureUrl,
           player.picture_url,
-          data.pictureUrl
-        ) || "",
+          raw.pictureUrl
+        ) ||
+        "",
 
-      level:n(
-        pick(
-          player.level,
-          data.level
-        ),
-        1
-      )
+      level:
+        num(
+          pick(
+            player.level,
+            raw.level
+          ),
+          1
+        )
     },
+
 
     wallet:{
-      rockCoin:n(
-        pick(
-          wallet.rockCoin,
-          wallet.rock_coin,
-          data.rockCoin,
-          data.rock_coin
-        ),
-        0
-      ),
 
-      energy:n(
-        pick(
-          wallet.energy,
-          energyObj.current,
-          typeof data.energy === "number" ? data.energy : null
+      rockCoin:
+        num(
+          pick(
+            wallet.rockCoin,
+            wallet.rock_coin,
+            raw.rockCoin,
+            raw.rock_coin
+          ),
+          0
         ),
-        0
-      ),
 
-      maxEnergy:n(
-        pick(
-          wallet.maxEnergy,
-          energyObj.max,
-          data.maxEnergy,
-          window.APP_CONFIG?.MAX_ENERGY
+      energy:
+        num(
+          pick(
+            wallet.energy,
+            energyObject.current,
+            typeof raw.energy ===
+              "number"
+              ? raw.energy
+              : null
+          ),
+          0
         ),
-        200
-      )
+
+      maxEnergy:
+        num(
+          pick(
+            wallet.maxEnergy,
+            energyObject.max,
+            raw.maxEnergy,
+            window.APP_CONFIG?.MAX_ENERGY
+          ),
+          200
+        )
     },
+
 
     exp:{
-      current:n(
-        pick(
-          data.exp,
-          player.exp,
-          data?.experience?.current
-        ),
-        0
-      ),
 
-      max:n(
-        pick(
-          data.nextLevelExp,
-          data.expNext,
-          data?.experience?.max,
-          window.APP_CONFIG?.EXP_PER_LEVEL
+      current:
+        num(
+          pick(
+            raw.exp,
+            player.exp,
+            raw?.experience?.current
+          ),
+          0
         ),
-        500
-      )
+
+      max:
+        num(
+          pick(
+            raw.nextLevelExp,
+            raw.expNext,
+            raw?.experience?.max,
+            window.APP_CONFIG?.EXP_PER_LEVEL
+          ),
+          500
+        )
     },
+
 
     weight:{
-      start:startWeight,
-      current:currentWeight,
-      target:targetWeight,
-      progress:weightProgress,
-      lost:lostWeight,
-      remaining:remainingWeight
+
+      start:
+        startWeight,
+
+      current:
+        currentWeight,
+
+      target:
+        targetWeight,
+
+      progress,
+
+      lost,
+
+      remaining
     },
 
+
     today:{
-      steps:n(
-        pick(
-          today.steps,
-          data.steps
-        ),
-        0
-      ),
 
-      calories:n(
-        pick(
-          today.calories,
-          today.caloriesBurned,
-          today.calories_burned,
-          data.calories
+      steps:
+        num(
+          pick(
+            today.steps,
+            raw.steps
+          ),
+          0
         ),
-        0
-      ),
 
-      sleepMinutes:n(
-        pick(
-          today.sleepMinutes,
-          today.sleep_minutes,
-          data.sleepMinutes
+      calories:
+        num(
+          pick(
+            today.calories,
+            today.caloriesBurned,
+            today.calories_burned,
+            raw.calories
+          ),
+          0
         ),
-        0
-      ),
 
-      healthScore:pick(
-        today.healthScore,
-        today.health_score,
-        data.healthScore
-      )
+      sleepMinutes:
+        num(
+          pick(
+            today.sleepMinutes,
+            today.sleep_minutes,
+            raw.sleepMinutes
+          ),
+          0
+        ),
+
+      healthScore:
+        pick(
+          today.healthScore,
+          today.health_score,
+          raw.healthScore
+        )
     }
   };
 }
 
-function renderDashboard(raw){
-  const data = normalizeDashboard(raw);
-  state.dashboard = data;
-
-  $("coin").textContent = fmt(data.wallet.rockCoin);
-  $("energy").textContent =
-    `${fmt(data.wallet.energy)} / ${fmt(data.wallet.maxEnergy)}`;
-
-  $("lineName").textContent = data.player.displayName;
-  $("level").textContent = `Lv.${Math.max(1,Math.round(data.player.level))}`;
-
-  if(data.player.pictureUrl){
-    $("profileImage").src = data.player.pictureUrl;
-    $("profileImage").style.display = "block";
-    $("profilePlaceholder").style.display = "none";
-  }
-
-  const expMax = Math.max(1,data.exp.max);
-  const expPct = clamp(data.exp.current/expMax*100,0,100);
-  $("expFill").style.width = expPct + "%";
-  $("expText").textContent = `${fmt(data.exp.current)} / ${fmt(expMax)}`;
-
-  $("currentWeight").textContent = fmtWeight(data.weight.current);
-  $("targetWeight").textContent = fmtWeight(data.weight.target);
-
-  const wp = clamp(data.weight.progress,0,100);
-  $("weightProgressFill").style.width = wp + "%";
-  $("weightProgressPct").textContent = `${Math.round(wp)}%`;
-
-  $("lostWeight").textContent =
-    data.weight.lost == null ? "-- kg" : `${Number(data.weight.lost).toFixed(1)} kg`;
-
-  $("remainingWeight").textContent =
-    data.weight.remaining == null ? "-- kg" : `${Number(data.weight.remaining).toFixed(1)} kg`;
-
-  $("steps").textContent = fmt(data.today.steps);
-  $("calories").textContent = fmt(data.today.calories);
-
-  const sleepMinutes = Math.max(0,Math.round(data.today.sleepMinutes));
-  const h = Math.floor(sleepMinutes/60);
-  const m = sleepMinutes%60;
-  $("sleep").textContent = `${h} ชม. ${m} นาที`;
-
-  $("healthScore").textContent =
-    data.today.healthScore == null
-      ? "-- / 100"
-      : `${Math.round(n(data.today.healthScore,0))} / 100`;
-}
 
 /* =========================================================
-   STEPS / SLEEP SAVE
-   ใช้ PLAYER function ตัวเดิม
+   RENDER
 ========================================================= */
 
-async function saveDailyHealth(payload){
-  /*
-    เป็น PLAYER API เดียวกัน แต่เป็น write action
-    หลัง save จะเรียก dashboard เพียง 1 ครั้งเพื่อ refresh
-  */
+function renderHome(
+  raw
+){
+
+  const data =
+    normalizeHome(
+      raw
+    );
+
+
+  state.raw =
+    raw;
+
+  state.data =
+    data;
+
+
+  $("coin")
+    .textContent =
+      formatNumber(
+        data.wallet.rockCoin
+      );
+
+
+  $("energy")
+    .textContent =
+      `${formatNumber(
+        data.wallet.energy
+      )} / ${formatNumber(
+        data.wallet.maxEnergy
+      )}`;
+
+
+  $("lineName")
+    .textContent =
+      data.player.displayName;
+
+
+  $("level")
+    .textContent =
+      `Lv.${Math.max(
+        1,
+        Math.round(
+          data.player.level
+        )
+      )}`;
+
+
+  if(
+    data.player.pictureUrl
+  ){
+
+    const img =
+      $("profileImage");
+
+    img.src =
+      data.player.pictureUrl;
+
+    img.style.display =
+      "block";
+  }
+
+
+  const expMax =
+    Math.max(
+      1,
+      data.exp.max
+    );
+
+
+  const expPct =
+    clamp(
+      (
+        data.exp.current /
+        expMax
+      ) * 100,
+      0,
+      100
+    );
+
+
+  $("expFill")
+    .style.width =
+      `${13 * expPct / 100}%`;
+
+
+  $("expValue")
+    .textContent =
+      `${formatNumber(
+        data.exp.current
+      )} / ${formatNumber(
+        expMax
+      )}`;
+
+
+  $("currentWeight")
+    .textContent =
+      formatWeight(
+        data.weight.current
+      );
+
+
+  $("targetWeight")
+    .textContent =
+      formatWeight(
+        data.weight.target
+      );
+
+
+  const progress =
+    clamp(
+      data.weight.progress,
+      0,
+      100
+    );
+
+
+  $("weightProgressFill")
+    .style.width =
+      `${progress}%`;
+
+
+  $("weightProgressPct")
+    .textContent =
+      `${Math.round(
+        progress
+      )}%`;
+
+
+  $("lostWeight")
+    .textContent =
+      data.weight.lost ===
+        null
+        ? "-- kg"
+        : `${Number(
+            data.weight.lost
+          ).toFixed(1)} kg`;
+
+
+  $("remainingWeight")
+    .textContent =
+      data.weight.remaining ===
+        null
+        ? "-- kg"
+        : `${Number(
+            data.weight.remaining
+          ).toFixed(1)} kg`;
+
+
+  $("steps")
+    .textContent =
+      formatNumber(
+        data.today.steps
+      );
+
+
+  $("calories")
+    .textContent =
+      `${formatNumber(
+        data.today.calories
+      )} kcal`;
+
+
+  const sleepMinutes =
+    Math.max(
+      0,
+      Math.round(
+        data.today.sleepMinutes
+      )
+    );
+
+
+  const sleepHours =
+    Math.floor(
+      sleepMinutes / 60
+    );
+
+
+  const sleepRemain =
+    sleepMinutes % 60;
+
+
+  $("sleep")
+    .textContent =
+      `${sleepHours} ชม. ${sleepRemain} นาที`;
+
+
+  $("healthScore")
+    .textContent =
+      data.today.healthScore ===
+        null ||
+      data.today.healthScore ===
+        undefined
+        ? "-- / 100"
+        : `${Math.round(
+            num(
+              data.today.healthScore,
+              0
+            )
+          )} / 100`;
+}
+
+
+/* =========================================================
+   WRITE DAILY HEALTH
+========================================================= */
+
+async function saveDailyHealth(
+  payload
+){
+
   return await playerApi({
-    action:"saveDailyHealth",
+    action:
+      "saveDailyHealth",
+
     ...payload
   });
 }
 
-function openModal(id){
-  $(id).classList.add("show");
+
+async function refreshHome(){
+
+  const raw =
+    await fetchHome();
+
+  renderHome(
+    raw
+  );
 }
 
-function closeModal(id){
-  $(id).classList.remove("show");
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(
+  id
+){
+  $(id)
+    .classList
+    .add(
+      "show"
+    );
 }
+
+
+function closeModal(
+  id
+){
+  $(id)
+    .classList
+    .remove(
+      "show"
+    );
+}
+
 
 function updateStepsStatus(){
-  const steps = Math.max(0,Math.round(n($("stepsInput").value,0)));
-  const status = $("stepsStatus");
-  const evidence = $("stepsEvidence");
 
-  if(steps >= 8000){
-    status.className = "modal-status success";
+  const steps =
+    Math.max(
+      0,
+      Math.round(
+        num(
+          $("stepsInput").value,
+          0
+        )
+      )
+    );
+
+
+  const status =
+    $("stepsStatus");
+
+  const evidence =
+    $("stepsEvidence");
+
+
+  if(
+    steps >=
+    8000
+  ){
+
+    status.className =
+      "modal-status success";
+
     status.innerHTML =
       `✅ MOVE MORE สำเร็จแล้ว<br>
        ${steps.toLocaleString()} / 8,000 ก้าว<br>
-       <small>หากต้องการรางวัล ต้องแนบหลักฐานและส่งให้ Admin ตรวจ</small>`;
+       <small>
+         หากต้องการ ROCK COIN / ENERGY / EXP
+         ต้องแนบหลักฐานและส่งให้ Admin ตรวจ
+       </small>`;
 
-    evidence.style.display = "block";
+    evidence.style.display =
+      "block";
+
   }else{
-    status.className = "modal-status warning";
+
+    status.className =
+      "modal-status warning";
+
     status.innerHTML =
       `วันนี้เดินแล้ว ${steps.toLocaleString()} ก้าว<br>
-       เหลืออีก ${(8000-steps).toLocaleString()} ก้าว`;
+       เหลืออีก ${(8000 - steps).toLocaleString()} ก้าว`;
 
-    evidence.style.display = "none";
+    evidence.style.display =
+      "none";
   }
 }
 
-function clockToMinutes(value){
-  const m = String(value || "").match(/^(\d{1,2}):(\d{2})$/);
-  if(!m) return null;
-  const h = Number(m[1]);
-  const min = Number(m[2]);
-  if(h<0 || h>23 || min<0 || min>59) return null;
-  return h*60+min;
+
+function clockToMinutes(
+  value
+){
+
+  const match =
+    String(value || "")
+      .match(
+        /^(\d{1,2}):(\d{2})$/
+      );
+
+
+  if(!match){
+    return null;
+  }
+
+
+  const hour =
+    Number(
+      match[1]
+    );
+
+  const minute =
+    Number(
+      match[2]
+    );
+
+
+  if(
+    hour < 0 ||
+    hour > 23 ||
+    minute < 0 ||
+    minute > 59
+  ){
+    return null;
+  }
+
+
+  return (
+    hour * 60 +
+    minute
+  );
 }
+
 
 function getSleepMinutes(){
-  const start = clockToMinutes($("sleepStart").value);
-  const wake = clockToMinutes($("sleepWake").value);
 
-  if(start == null || wake == null) return 0;
+  const start =
+    clockToMinutes(
+      $("sleepStart").value
+    );
 
-  let total = wake-start;
-  if(total <= 0) total += 24*60;
 
-  return Math.max(0,Math.min(1440,total));
+  const wake =
+    clockToMinutes(
+      $("sleepWake").value
+    );
+
+
+  if(
+    start === null ||
+    wake === null
+  ){
+    return 0;
+  }
+
+
+  let total =
+    wake - start;
+
+
+  if(
+    total <= 0
+  ){
+    total +=
+      24 * 60;
+  }
+
+
+  return Math.max(
+    0,
+    Math.min(
+      24 * 60,
+      total
+    )
+  );
 }
 
+
 function updateSleepStatus(){
-  const total = getSleepMinutes();
-  const h = Math.floor(total/60);
-  const m = total%60;
 
-  $("sleepDuration").textContent = `${h} ชม. ${m} นาที`;
+  const total =
+    getSleepMinutes();
 
-  const status = $("sleepStatus");
-  const evidence = $("sleepEvidence");
 
-  if(total >= 420){
-    status.className = "modal-status success";
+  const h =
+    Math.floor(
+      total / 60
+    );
+
+
+  const m =
+    total % 60;
+
+
+  $("sleepDuration")
+    .textContent =
+      `${h} ชม. ${m} นาที`;
+
+
+  const status =
+    $("sleepStatus");
+
+  const evidence =
+    $("sleepEvidence");
+
+
+  if(
+    total >=
+    420
+  ){
+
+    status.className =
+      "modal-status success";
+
     status.innerHTML =
       `✅ SLEEP WELL สำเร็จแล้ว<br>
        นอนทั้งหมด ${h} ชม. ${m} นาที<br>
-       <small>หากต้องการรางวัล ต้องแนบหลักฐานและส่งให้ Admin ตรวจ</small>`;
+       <small>
+         หากต้องการ ROCK COIN / ENERGY / EXP
+         ต้องแนบหลักฐานและส่งให้ Admin ตรวจ
+       </small>`;
 
-    evidence.style.display = "block";
+    evidence.style.display =
+      "block";
+
   }else{
-    status.className = "modal-status warning";
+
+    status.className =
+      "modal-status warning";
+
     status.innerHTML =
       `ยังไม่ถึงเป้าหมาย 7 ชั่วโมง<br>
-       เหลืออีก ${Math.max(0,420-total)} นาที`;
+       เหลืออีก ${Math.max(
+         0,
+         420 - total
+       )} นาที`;
 
-    evidence.style.display = "none";
+    evidence.style.display =
+      "none";
   }
 }
 
-async function refreshHome(){
-  const raw = await fetchDashboard();
-  renderDashboard(raw);
-}
 
 /* =========================================================
    EVENTS
 ========================================================= */
 
-$("stepsCard").addEventListener("click",()=>{
-  $("stepsInput").value = state.dashboard?.today?.steps ?? 0;
-  updateStepsStatus();
-  openModal("stepsModal");
-});
+$("stepsHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
 
-$("sleepCard").addEventListener("click",()=>{
-  updateSleepStatus();
-  openModal("sleepModal");
-});
+      $("stepsInput").value =
+        state.data?.today?.steps ??
+        0;
 
-$("stepsInput").addEventListener("input",updateStepsStatus);
-$("sleepStart").addEventListener("input",updateSleepStatus);
-$("sleepWake").addEventListener("input",updateSleepStatus);
+      updateStepsStatus();
 
-$("saveStepsButton").addEventListener("click",async()=>{
-  const btn = $("saveStepsButton");
-  const steps = Math.max(0,Math.round(n($("stepsInput").value,0)));
+      openModal(
+        "stepsModal"
+      );
+    }
+  );
 
-  btn.disabled = true;
-  btn.textContent = "กำลังบันทึก...";
 
-  try{
-    await saveDailyHealth({steps});
-    await refreshHome();
-    updateStepsStatus();
+$("sleepHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
 
-    toast(
-      steps >= 8000
-        ? "✅ MOVE MORE สำเร็จ • แนบหลักฐานเพื่อรับรางวัล"
-        : `บันทึก ${steps.toLocaleString()} ก้าวแล้ว`
-    );
-  }catch(error){
-    toast(error?.message || "บันทึกก้าวไม่สำเร็จ",true);
-  }finally{
-    btn.disabled = false;
-    btn.textContent = "บันทึกก้าว";
-  }
-});
+      updateSleepStatus();
 
-$("saveSleepButton").addEventListener("click",async()=>{
-  const btn = $("saveSleepButton");
-  const sleepMinutes = getSleepMinutes();
-  const sleepStart = $("sleepStart").value;
-  const sleepWake = $("sleepWake").value;
+      openModal(
+        "sleepModal"
+      );
+    }
+  );
 
-  btn.disabled = true;
-  btn.textContent = "กำลังบันทึก...";
 
-  try{
-    await saveDailyHealth({
-      sleepMinutes,
-      sleepStart,
-      sleepWake
-    });
+$("stepsInput")
+  .addEventListener(
+    "input",
+    updateStepsStatus
+  );
 
-    await refreshHome();
-    updateSleepStatus();
 
-    const h = Math.floor(sleepMinutes/60);
-    const m = sleepMinutes%60;
+$("sleepStart")
+  .addEventListener(
+    "input",
+    updateSleepStatus
+  );
 
-    toast(
-      sleepMinutes >= 420
-        ? `✅ SLEEP WELL สำเร็จ • ${h} ชม. ${m} นาที • แนบหลักฐานเพื่อรับรางวัล`
-        : `บันทึกการนอน ${h} ชม. ${m} นาทีแล้ว`
-    );
-  }catch(error){
-    toast(error?.message || "บันทึกการนอนไม่สำเร็จ",true);
-  }finally{
-    btn.disabled = false;
-    btn.textContent = "บันทึกการนอน";
-  }
-});
 
-$("stepsEvidence").addEventListener("click",()=>{
-  window.location.href =
-    (window.APP_CONFIG?.PAGE?.MISSION || "./mission.html") +
-    "?category=daily&mission=daily_move_more&evidence=1&source=home";
-});
+$("sleepWake")
+  .addEventListener(
+    "input",
+    updateSleepStatus
+  );
 
-$("sleepEvidence").addEventListener("click",()=>{
-  window.location.href =
-    (window.APP_CONFIG?.PAGE?.MISSION || "./mission.html") +
-    "?category=daily&mission=daily_sleep&evidence=1&source=home";
-});
 
-$("weightCheckButton").addEventListener("click",()=>{
-  window.location.href =
-    window.APP_CONFIG?.PAGE?.WEIGHT ||
-    "./weight-check.html";
-});
+$("saveStepsButton")
+  .addEventListener(
+    "click",
+    async ()=>{
 
-$("progressButton").addEventListener("click",()=>{
-  window.location.href =
-    window.APP_CONFIG?.PAGE?.PROGRESS ||
-    "./progress.html";
-});
+      const steps =
+        Math.max(
+          0,
+          Math.round(
+            num(
+              $("stepsInput").value,
+              0
+            )
+          )
+        );
 
-$("missionButton").addEventListener("click",()=>{
-  window.location.href =
-    window.APP_CONFIG?.PAGE?.MISSION ||
-    "./mission.html";
-});
 
-$("battleButton").addEventListener("click",()=>{
-  window.location.href =
-    window.APP_CONFIG?.PAGE?.BATTLE ||
-    "./battle.html";
-});
+      const button =
+        $("saveStepsButton");
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+
+
+      try{
+
+        await saveDailyHealth({
+          steps
+        });
+
+
+        await refreshHome();
+
+
+        updateStepsStatus();
+
+
+        showToast(
+          steps >= 8000
+            ? "✅ MOVE MORE สำเร็จ • แนบหลักฐานเพื่อรับรางวัล"
+            : `บันทึก ${steps.toLocaleString()} ก้าวแล้ว`
+        );
+
+      }catch(error){
+
+        showToast(
+          error?.message ||
+          "บันทึกก้าวไม่สำเร็จ",
+          true
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "บันทึกก้าว";
+      }
+    }
+  );
+
+
+$("saveSleepButton")
+  .addEventListener(
+    "click",
+    async ()=>{
+
+      const sleepMinutes =
+        getSleepMinutes();
+
+
+      const sleepStart =
+        $("sleepStart").value;
+
+
+      const sleepWake =
+        $("sleepWake").value;
+
+
+      const button =
+        $("saveSleepButton");
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+
+
+      try{
+
+        await saveDailyHealth({
+          sleepMinutes,
+          sleepStart,
+          sleepWake
+        });
+
+
+        await refreshHome();
+
+
+        updateSleepStatus();
+
+
+        const h =
+          Math.floor(
+            sleepMinutes / 60
+          );
+
+
+        const m =
+          sleepMinutes % 60;
+
+
+        showToast(
+          sleepMinutes >= 420
+            ? `✅ SLEEP WELL สำเร็จ • ${h} ชม. ${m} นาที • แนบหลักฐานเพื่อรับรางวัล`
+            : `บันทึกการนอน ${h} ชม. ${m} นาทีแล้ว`
+        );
+
+      }catch(error){
+
+        showToast(
+          error?.message ||
+          "บันทึกการนอนไม่สำเร็จ",
+          true
+        );
+
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "บันทึกการนอน";
+      }
+    }
+  );
+
+
+$("stepsEvidence")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        (
+          window.APP_CONFIG?.PAGE?.MISSION ||
+          "./mission.html"
+        ) +
+        "?category=daily&mission=daily_move_more&evidence=1&source=home";
+    }
+  );
+
+
+$("sleepEvidence")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        (
+          window.APP_CONFIG?.PAGE?.MISSION ||
+          "./mission.html"
+        ) +
+        "?category=daily&mission=daily_sleep&evidence=1&source=home";
+    }
+  );
+
+
+$("weightHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window.APP_CONFIG?.PAGE?.WEIGHT ||
+        "./weight-check.html";
+    }
+  );
+
+
+$("progressHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window.APP_CONFIG?.PAGE?.PROGRESS ||
+        "./progress.html";
+    }
+  );
+
+
+$("homeHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
+      refreshHome();
+    }
+  );
+
+
+$("missionHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window.APP_CONFIG?.PAGE?.MISSION ||
+        "./mission.html";
+    }
+  );
+
+
+$("battleHotspot")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window.APP_CONFIG?.PAGE?.BATTLE ||
+        "./battle.html";
+    }
+  );
+
 
 /* =========================================================
    START
 ========================================================= */
 
 (async()=>{
+
   try{
-    const ready = await initLiff();
-    if(ready === false) return;
+
+    const ready =
+      await initLiff();
+
+
+    if(
+      ready === false
+    ){
+      return;
+    }
+
 
     await refreshHome();
 
-    setInterval(()=>{
-      refreshHome().catch(error=>{
-        console.warn("HOME REFRESH:",error);
-      });
-    },Number(window.APP_CONFIG?.REFRESH_MS || 30000));
+
+    setInterval(
+      ()=>{
+
+        refreshHome()
+          .catch(
+            error =>
+              console.warn(
+                "HOME REFRESH:",
+                error
+              )
+          );
+
+      },
+      Number(
+        window.APP_CONFIG?.REFRESH_MS ||
+        30000
+      )
+    );
 
   }catch(error){
-    console.error("HOME INIT:",error);
-    toast(error?.message || "โหลดข้อมูล HOME ไม่สำเร็จ",true);
+
+    console.error(
+      "HOME INIT:",
+      error
+    );
+
+
+    showToast(
+      error?.message ||
+      "โหลดข้อมูล HOME ไม่สำเร็จ",
+      true
+    );
   }
+
 })();
 </script>
 
