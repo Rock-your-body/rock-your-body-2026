@@ -249,7 +249,201 @@
           repeat(2,1fr);
       }
     }
-  </style>
+  
+    /* =========================================================
+       PROGRESS V3.1 — EXP / WEIGHT STATUS / INBODY FILTER
+    ========================================================= */
+
+    .status-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .status-card{
+      border:1px solid #d8e6f5;
+      border-radius:18px;
+      background:#fff;
+      padding:15px;
+      box-shadow:0 5px 15px rgba(28,61,100,.08);
+    }
+
+    .status-title{
+      font-size:13px;
+      font-weight:900;
+      color:#315b8c;
+    }
+
+    .status-value{
+      margin-top:5px;
+      font-size:25px;
+      font-weight:1000;
+      color:#082f78;
+    }
+
+    .status-track{
+      margin-top:10px;
+      width:100%;
+      height:13px;
+      border-radius:999px;
+      background:#dbe8f5;
+      overflow:hidden;
+    }
+
+    .status-fill{
+      width:0;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,#086ae7,#1c87ff);
+      transition:width .3s ease;
+    }
+
+    .status-fill.weight{
+      background:linear-gradient(90deg,#0aa95b,#27c96d);
+    }
+
+    .status-foot{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      margin-top:8px;
+      color:#5c7188;
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .filter-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr auto;
+      gap:8px;
+      align-items:end;
+      margin-top:12px;
+    }
+
+    .filter-grid label{
+      display:block;
+      color:#49647f;
+      font-size:11px;
+      font-weight:900;
+      margin-bottom:5px;
+    }
+
+    .filter-grid input,
+    .filter-grid select{
+      width:100%;
+      min-height:42px;
+      border:1px solid #cfddec;
+      border-radius:10px;
+      padding:8px 10px;
+      background:#fff;
+      color:#173b67;
+    }
+
+    .mini-btn{
+      min-height:42px;
+      border:0;
+      border-radius:10px;
+      padding:0 13px;
+      background:#0b62d6;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .inbody-table-wrap{
+      margin-top:12px;
+      overflow:auto;
+      border:1px solid #dce7f2;
+      border-radius:14px;
+    }
+
+    .inbody-table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:760px;
+      background:#fff;
+    }
+
+    .inbody-table th,
+    .inbody-table td{
+      padding:9px 8px;
+      border-bottom:1px solid #e7eef6;
+      font-size:11px;
+      text-align:right;
+      white-space:nowrap;
+    }
+
+    .inbody-table th{
+      background:#f3f8fd;
+      color:#46617d;
+      font-weight:900;
+    }
+
+    .inbody-table th:first-child,
+    .inbody-table td:first-child{
+      text-align:left;
+    }
+
+    .upload-box{
+      margin-top:14px;
+      padding:14px;
+      border:1px dashed #aac6e5;
+      border-radius:15px;
+      background:#f8fbff;
+    }
+
+    .upload-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .upload-grid label{
+      display:block;
+      margin-bottom:5px;
+      color:#31577f;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .upload-grid input{
+      width:100%;
+      padding:8px;
+      border:1px solid #cfdeec;
+      border-radius:10px;
+      background:#fff;
+    }
+
+    .upload-actions{
+      margin-top:10px;
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .upload-note{
+      margin-top:7px;
+      color:#6a7f94;
+      font-size:10px;
+      line-height:1.55;
+    }
+
+    @media(max-width:640px){
+      .status-grid{
+        grid-template-columns:1fr;
+      }
+
+      .filter-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .upload-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+</style>
 </head>
 
 <body>
@@ -274,6 +468,72 @@
       id="content"
       style="display:none"
     >
+
+      <section class="section">
+        <h2>📊 สถานะความก้าวหน้า</h2>
+        <p class="sub">
+          ดึง EXP และน้ำหนักจากข้อมูลผู้ใช้ล่าสุด
+        </p>
+
+        <div class="status-grid">
+
+          <div class="status-card">
+            <div class="status-title">EXP</div>
+            <div
+              id="expStatusValue"
+              class="status-value"
+            >
+              0 / 500
+            </div>
+
+            <div class="status-track">
+              <div
+                id="expStatusFill"
+                class="status-fill"
+              ></div>
+            </div>
+
+            <div class="status-foot">
+              <span id="expLevel">Lv.1</span>
+              <span id="expTotal">EXP รวม 0</span>
+            </div>
+          </div>
+
+
+          <div class="status-card">
+            <div class="status-title">
+              ความคืบหน้าเป้าหมายน้ำหนัก
+            </div>
+
+            <div
+              id="weightProgressValue"
+              class="status-value"
+            >
+              0%
+            </div>
+
+            <div class="status-track">
+              <div
+                id="weightProgressFill"
+                class="status-fill weight"
+              ></div>
+            </div>
+
+            <div class="status-foot">
+              <span>
+                ลดไปแล้ว
+                <b id="weightLostKg">0.0 kg</b>
+              </span>
+
+              <span>
+                เหลืออีก
+                <b id="weightRemainingKg">0.0 kg</b>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       <section class="section">
         <h2>
@@ -531,6 +791,131 @@
       </section>
 
 
+      <section class="section">
+        <h2>🔎 กรองประวัติ InBody</h2>
+
+        <p class="sub">
+          เลือกช่วงวันที่และค่าที่ต้องการดู
+        </p>
+
+        <div class="filter-grid">
+
+          <div>
+            <label for="inbodyFrom">จากวันที่</label>
+            <input
+              id="inbodyFrom"
+              type="date"
+            >
+          </div>
+
+          <div>
+            <label for="inbodyTo">ถึงวันที่</label>
+            <input
+              id="inbodyTo"
+              type="date"
+            >
+          </div>
+
+          <div>
+            <label for="inbodyMetric">ค่าที่ต้องการดู</label>
+            <select id="inbodyMetric">
+              <option value="all">ทั้งหมด</option>
+              <option value="weight_kg">Weight</option>
+              <option value="skeletal_muscle_mass_kg">Muscle</option>
+              <option value="body_fat_percent">Body Fat %</option>
+              <option value="bmi">BMI</option>
+              <option value="bmr_kcal">BMR</option>
+              <option value="visceral_fat_area_cm2">Visceral Fat Area</option>
+              <option value="inbody_score">InBody Score</option>
+            </select>
+          </div>
+
+          <button
+            id="applyInbodyFilter"
+            class="mini-btn"
+            type="button"
+          >
+            กรอง
+          </button>
+
+        </div>
+
+        <div class="inbody-table-wrap">
+          <table class="inbody-table">
+            <thead>
+              <tr>
+                <th>วันที่</th>
+                <th>Weight</th>
+                <th>Muscle</th>
+                <th>Body Fat %</th>
+                <th>BMI</th>
+                <th>BMR</th>
+                <th>Visceral Area</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+
+            <tbody id="inbodyHistoryBody">
+              <tr>
+                <td colspan="8">
+                  ยังไม่มีข้อมูล
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <div class="upload-box">
+          <b>📷 แนบรูป InBody ได้ 2 หน้า</b>
+
+          <div class="upload-grid">
+
+            <div>
+              <label for="progressInbodyImage1">
+                รูป InBody หน้า 1
+              </label>
+
+              <input
+                id="progressInbodyImage1"
+                type="file"
+                accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/*"
+              >
+            </div>
+
+            <div>
+              <label for="progressInbodyImage2">
+                รูป InBody หน้า 2
+              </label>
+
+              <input
+                id="progressInbodyImage2"
+                type="file"
+                accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/*"
+              >
+            </div>
+
+          </div>
+
+          <div class="upload-note">
+            รองรับ JPG / PNG / WEBP / HEIC / HEIF ไม่เกิน 15 MB ต่อรูป
+            • รูปใช้สำหรับบันทึกผลและการอ่านผลด้าน Wellness
+          </div>
+
+          <div class="upload-actions">
+            <button
+              id="uploadProgressInbody"
+              class="mini-btn"
+              type="button"
+            >
+              อัปโหลดรูป InBody
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+
       <section class="notice">
         Progress และ Health Goals เป็นข้อมูล Wellness สำหรับติดตามโครงการ
         ไม่ใช่การวินิจฉัยหรือแผนรักษาทางการแพทย์
@@ -572,6 +957,10 @@
       id =>
         document
           .getElementById(id);
+
+    let progressState = {
+      inbodyHistory:[]
+    };
 
 
     function showToast(
@@ -618,6 +1007,24 @@
       return APP_CONFIG
         ?.API
         ?.PLAYER;
+    }
+
+
+    function inbodyApiUrl(){
+
+      if(
+        APP_CONFIG
+          ?.getApi
+      ){
+        return APP_CONFIG
+          .getApi(
+            "INBODY"
+          );
+      }
+
+      return APP_CONFIG
+        ?.API
+        ?.INBODY;
     }
 
 
@@ -956,9 +1363,447 @@
     }
 
 
+
+    function safeZero(
+      value
+    ){
+      const n =
+        Number(value);
+
+      return Number.isFinite(n)
+        ? n
+        : 0;
+    }
+
+
+    function renderProgressStatus(
+      data
+    ){
+
+      const exp =
+        data?.exp ||
+        {};
+
+      const weight =
+        data?.weight ||
+        {};
+
+
+      const expCurrent =
+        safeZero(
+          exp.current
+        );
+
+      const expPerLevel =
+        Math.max(
+          1,
+          safeZero(
+            exp.perLevel
+          ) ||
+          500
+        );
+
+      const expPct =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            safeZero(
+              exp.progressPct
+            )
+          )
+        );
+
+
+      $("expStatusValue").textContent =
+        `${fmt(expCurrent,0)} / ${fmt(expPerLevel,0)}`;
+
+      $("expStatusFill").style.width =
+        `${expPct}%`;
+
+      $("expLevel").textContent =
+        `Lv.${Math.max(1,Math.round(safeZero(exp.level) || 1))}`;
+
+      $("expTotal").textContent =
+        `EXP รวม ${fmt(safeZero(exp.total),0)}`;
+
+
+      const weightPct =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            safeZero(
+              weight.progressPct
+            )
+          )
+        );
+
+
+      $("weightProgressValue").textContent =
+        `${Math.round(weightPct)}%`;
+
+      $("weightProgressFill").style.width =
+        `${weightPct}%`;
+
+      $("weightLostKg").textContent =
+        `${fmt(safeZero(weight.lostKg),1)} kg`;
+
+      $("weightRemainingKg").textContent =
+        `${fmt(safeZero(weight.remainingKg),1)} kg`;
+    }
+
+
+    function filterInbodyRows(){
+
+      const from =
+        $("inbodyFrom")
+          ?.value ||
+        "";
+
+      const to =
+        $("inbodyTo")
+          ?.value ||
+        "";
+
+      const metric =
+        $("inbodyMetric")
+          ?.value ||
+        "all";
+
+
+      const rows =
+        Array.isArray(
+          progressState.inbodyHistory
+        )
+          ? progressState.inbodyHistory
+          : [];
+
+
+      const filtered =
+        rows.filter(
+          row =>{
+
+            const date =
+              row?.measured_at
+                ? String(
+                    row.measured_at
+                  ).slice(
+                    0,
+                    10
+                  )
+                : "";
+
+
+            if(
+              from &&
+              date &&
+              date < from
+            ){
+              return false;
+            }
+
+
+            if(
+              to &&
+              date &&
+              date > to
+            ){
+              return false;
+            }
+
+
+            if(
+              metric !==
+              "all"
+            ){
+
+              const value =
+                row?.[metric];
+
+
+              if(
+                value === null ||
+                value === undefined ||
+                value === ""
+              ){
+                return false;
+              }
+            }
+
+
+            return true;
+          }
+        );
+
+
+      renderInbodyHistory(
+        filtered,
+        metric
+      );
+    }
+
+
+    function metricCell(
+      row,
+      key,
+      digits=1
+    ){
+
+      const value =
+        row?.[key];
+
+      return value === null ||
+        value === undefined
+          ? "0"
+          : fmt(
+              value,
+              digits
+            );
+    }
+
+
+    function renderInbodyHistory(
+      rows,
+      metric="all"
+    ){
+
+      const body =
+        $("inbodyHistoryBody");
+
+
+      if(
+        !Array.isArray(rows) ||
+        rows.length === 0
+      ){
+
+        body.innerHTML =
+          `
+            <tr>
+              <td colspan="8">
+                ไม่พบข้อมูลตามตัวกรอง
+              </td>
+            </tr>
+          `;
+
+        return;
+      }
+
+
+      body.innerHTML =
+        rows
+          .map(
+            row =>{
+
+              const measured =
+                row?.measured_at
+                  ? new Date(
+                      row.measured_at
+                    )
+                    .toLocaleDateString(
+                      "th-TH"
+                    )
+                  : "-";
+
+
+              return `
+                <tr>
+                  <td>${measured}</td>
+                  <td>${metricCell(row,"weight_kg")}</td>
+                  <td>${metricCell(row,"skeletal_muscle_mass_kg")}</td>
+                  <td>${metricCell(row,"body_fat_percent")}</td>
+                  <td>${metricCell(row,"bmi")}</td>
+                  <td>${metricCell(row,"bmr_kcal",0)}</td>
+                  <td>${metricCell(row,"visceral_fat_area_cm2")}</td>
+                  <td>${metricCell(row,"inbody_score",0)}</td>
+                </tr>
+              `;
+            }
+          )
+          .join("");
+    }
+
+
+    function validateInbodyFile(
+      file
+    ){
+
+      if(
+        !file
+      ){
+        return;
+      }
+
+
+      const maxBytes =
+        15 *
+        1024 *
+        1024;
+
+
+      if(
+        file.size >
+        maxBytes
+      ){
+        throw new Error(
+          `${file.name} มีขนาดเกิน 15 MB`
+        );
+      }
+    }
+
+
+    async function uploadInbodyFromProgress(){
+
+      const image1 =
+        $("progressInbodyImage1")
+          ?.files
+          ?.[0] ||
+        null;
+
+      const image2 =
+        $("progressInbodyImage2")
+          ?.files
+          ?.[0] ||
+        null;
+
+
+      if(
+        !image1 &&
+        !image2
+      ){
+
+        throw new Error(
+          "กรุณาเลือกรูป InBody อย่างน้อย 1 รูป"
+        );
+      }
+
+
+      validateInbodyFile(
+        image1
+      );
+
+      validateInbodyFile(
+        image2
+      );
+
+
+      const idToken =
+        await getToken();
+
+
+      const form =
+        new FormData();
+
+
+      form.append(
+        "action",
+        "saveResult"
+      );
+
+      form.append(
+        "idToken",
+        idToken
+      );
+
+      form.append(
+        "measuredAt",
+        new Date()
+          .toISOString()
+      );
+
+      form.append(
+        "note",
+        "Uploaded from Progress"
+      );
+
+
+      if(
+        image1
+      ){
+        form.append(
+          "image1",
+          image1
+        );
+      }
+
+
+      if(
+        image2
+      ){
+        form.append(
+          "image2",
+          image2
+        );
+      }
+
+
+      const response =
+        await fetch(
+          inbodyApiUrl(),
+          {
+            method:"POST",
+            body:form
+          }
+        );
+
+
+      const raw =
+        await response.text();
+
+
+      let result = {};
+
+
+      try{
+
+        result =
+          raw
+            ? JSON.parse(raw)
+            : {};
+
+      }catch{
+
+        throw new Error(
+          `INBODY API JSON ไม่ถูกต้อง HTTP ${response.status}`
+        );
+      }
+
+
+      if(
+        !response.ok ||
+        result?.success === false
+      ){
+
+        throw new Error(
+          result?.error ||
+          result?.message ||
+          `HTTP ${response.status}`
+        );
+      }
+
+
+      return result;
+    }
+
+
     function render(
       data
     ){
+
+      progressState.inbodyHistory =
+        Array.isArray(
+          data?.inbodyHistory
+        )
+          ? data.inbodyHistory
+          : [];
+
+      renderProgressStatus(
+        data
+      );
+
+      renderInbodyHistory(
+        progressState.inbodyHistory
+      );
 
       const today =
         data.today || {};
@@ -1123,10 +1968,9 @@
 
         $("weightChange")
           .textContent =
-            `${change >= 0 ? "+" : ""}${fmt(
-              change,
-              1
-            )} kg`;
+            change <= 0
+              ? `ลด ${fmt(Math.abs(change),1)} kg`
+              : `เพิ่ม ${fmt(change,1)} kg`;
 
       }else{
 
@@ -1164,6 +2008,92 @@
       location.href =
         "./inbody.html";
     }
+
+
+
+    $("applyInbodyFilter")
+      ?.addEventListener(
+        "click",
+        filterInbodyRows
+      );
+
+
+    $("inbodyFrom")
+      ?.addEventListener(
+        "change",
+        filterInbodyRows
+      );
+
+
+    $("inbodyTo")
+      ?.addEventListener(
+        "change",
+        filterInbodyRows
+      );
+
+
+    $("inbodyMetric")
+      ?.addEventListener(
+        "change",
+        filterInbodyRows
+      );
+
+
+    $("uploadProgressInbody")
+      ?.addEventListener(
+        "click",
+        async ()=>{
+
+          const button =
+            $("uploadProgressInbody");
+
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "กำลังอัปโหลด...";
+
+
+          try{
+
+            await uploadInbodyFromProgress();
+
+            showToast(
+              "✅ อัปโหลดรูป InBody สำเร็จ"
+            );
+
+            $("progressInbodyImage1").value =
+              "";
+
+            $("progressInbodyImage2").value =
+              "";
+
+
+            const data =
+              await loadProgress();
+
+            render(
+              data
+            );
+
+          }catch(error){
+
+            showToast(
+              error?.message ||
+              "อัปโหลดรูป InBody ไม่สำเร็จ"
+            );
+
+          }finally{
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "อัปโหลดรูป InBody";
+          }
+        }
+      );
 
 
     async function init(){
