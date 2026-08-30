@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260823-30"
+    href="./base.css?v=20260830-mission-v2160-nutrition-summary-links"
   >
 
 
@@ -1284,12 +1284,648 @@
 
 
 
+
+/* =========================================================
+   DAILY MISSION HISTORY V2.13.5
+========================================================= */
+.history-open-btn{
+  width:100%;
+  margin:12px 0 2px;
+  min-height:46px;
+  border:0;
+  border-radius:14px;
+  background:#0b4eae;
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+.history-modal{
+  position:fixed;
+  inset:0;
+  z-index:100001;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,25,65,.62);
+  backdrop-filter:blur(3px);
+}
+.history-modal.show{display:flex}
+.history-panel{
+  width:min(100%,760px);
+  max-height:92vh;
+  overflow-y:auto;
+  border-radius:28px 28px 0 0;
+  background:#f5f8fd;
+  padding:16px 14px max(24px,env(safe-area-inset-bottom));
+  color:#123d77;
+}
+.history-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f5f8fd;
+  padding-bottom:10px;
+}
+.history-title{
+  font-size:22px;
+  font-weight:1000;
+}
+.history-close{
+  border:0;
+  border-radius:999px;
+  width:40px;
+  height:40px;
+  background:#e5edf8;
+  color:#123d77;
+  font-size:24px;
+  font-weight:900;
+  cursor:pointer;
+}
+.history-day{
+  margin-top:12px;
+  border:1px solid #dbe5f2;
+  border-radius:16px;
+  background:#fff;
+  overflow:hidden;
+}
+.history-day-head{
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  background:#eef5ff;
+  font-weight:900;
+}
+.history-item{
+  padding:11px 14px;
+  border-top:1px solid #edf1f6;
+}
+.history-item-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.history-status{
+  font-weight:900;
+}
+.history-approved{color:#138545}
+.history-pending{color:#b06b00}
+.history-rejected{color:#c93434}
+.history-note{
+  margin-top:4px;
+  font-size:12px;
+  color:#6b7d93;
+}
+.history-empty{
+  padding:28px 14px;
+  text-align:center;
+  color:#6b7d93;
+  font-weight:800;
+}
+
+
+    /* NUTRITION CTA HOTSPOT V2.13.8 */
+    .nutrition-hotspot{
+      position:absolute;
+      z-index:560;
+      left:34.2%;
+      top:81.0%;
+      width:37.5%;
+      height:5.7%;
+      border:0;
+      margin:0;
+      padding:0;
+      background:transparent;
+      cursor:pointer;
+      pointer-events:auto;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+
+/* =========================================================
+   MISSION TEMPLATE HOTSPOTS V2.13.9
+   Template ใหม่:
+   Nutrition ซ้าย / Daily Weekly Monthly Bonus ขวา
+========================================================= */
+.template-stage{
+  position:relative;
+}
+
+/* Nutrition CTA */
+.nutrition-hotspot{
+  position:absolute !important;
+  z-index:700 !important;
+  left:3.2% !important;
+  top:80.8% !important;
+  width:35.8% !important;
+  height:6.1% !important;
+  background:transparent !important;
+  border:0 !important;
+  cursor:pointer !important;
+}
+
+/* =========================================================
+   MISSION V2.16.0
+   HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
+   แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
+========================================================= */
+
+.hotspot-daily{
+  left:42.0% !important;
+  top:14.2% !important;
+  width:25.8% !important;
+  height:38.3% !important;
+}
+
+.hotspot-weekly{
+  left:68.7% !important;
+  top:14.2% !important;
+  width:27.4% !important;
+  height:38.3% !important;
+}
+
+.hotspot-monthly{
+  left:42.0% !important;
+  top:52.7% !important;
+  width:25.8% !important;
+  height:32.8% !important;
+}
+
+.hotspot-bonus{
+  left:68.7% !important;
+  top:52.7% !important;
+  width:27.4% !important;
+  height:32.8% !important;
+}
+
+/* ให้ hotspot อยู่เหนือ live overlay แต่โปร่งใส */
+.hotspot-daily,
+.hotspot-weekly,
+.hotspot-monthly,
+.hotspot-bonus{
+  z-index:760 !important;
+  border:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:transparent !important;
+  cursor:pointer !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+/* Bottom navigation */
+.hotspot-home{
+  left:1.5% !important;
+  top:89.0% !important;
+  width:31.8% !important;
+  height:8.5% !important;
+}
+.hotspot-mission{
+  left:34.3% !important;
+  top:89.0% !important;
+  width:31.8% !important;
+  height:8.5% !important;
+}
+.hotspot-battle{
+  left:67.1% !important;
+  top:89.0% !important;
+  width:31.5% !important;
+  height:8.5% !important;
+}
+
+
+.category-hotspot{
+  position:absolute;
+  z-index:700;
+  border:0;
+  padding:0;
+  margin:0;
+  background:transparent;
+  cursor:pointer;
+  pointer-events:auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+
+    /* =========================================================
+       MISSION V2.16.0 — FINAL STAGE / OVERLAY SAFETY
+       ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
+    ========================================================= */
+
+    body.mission-page{
+      display:block !important;
+      margin:0 !important;
+      padding:0 !important;
+      width:100% !important;
+      min-height:100% !important;
+      overflow-x:hidden !important;
+      background:#eef4ff !important;
+    }
+
+    body.mission-page #missionStage.stage{
+      position:relative !important;
+      display:block !important;
+      width:min(100vw,1536px) !important;
+      aspect-ratio:1536 / 1024 !important;
+      height:auto !important;
+      margin:0 auto !important;
+      overflow:hidden !important;
+      background:#eef4ff !important;
+      container-type:inline-size !important;
+    }
+
+    body.mission-page #missionStage > img.template{
+      position:absolute !important;
+      inset:0 !important;
+      z-index:1 !important;
+      display:block !important;
+      width:100% !important;
+      height:100% !important;
+      object-fit:fill !important;
+      margin:0 !important;
+      padding:0 !important;
+      border:0 !important;
+      pointer-events:none !important;
+      user-select:none !important;
+    }
+
+    body.mission-page #missionStage .overlay,
+    body.mission-page #missionStage .daily-count,
+    body.mission-page #missionStage .weekly-count,
+    body.mission-page #missionStage .monthly-count,
+    body.mission-page #missionStage .bonus-count,
+    body.mission-page #missionStage .live-track{
+      position:absolute !important;
+      z-index:30 !important;
+      margin:0 !important;
+      padding:0 !important;
+      border:0 !important;
+      outline:0 !important;
+      box-shadow:none !important;
+      background:transparent !important;
+      pointer-events:none !important;
+      white-space:nowrap !important;
+    }
+
+    body.mission-page #missionStage .mission-coin-box{
+      left:77.1% !important;
+      top:4.0% !important;
+      width:5.2% !important;
+      height:3.6% !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      color:#071f60 !important;
+      font-size:clamp(9px,1.15cqw,18px) !important;
+      font-weight:700 !important;
+      line-height:1 !important;
+    }
+
+    body.mission-page #missionStage .mission-energy-box{
+      left:89.0% !important;
+      top:4.0% !important;
+      width:7.0% !important;
+      height:3.6% !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      color:#071f60 !important;
+      font-size:clamp(8px,1.05cqw,17px) !important;
+      font-weight:700 !important;
+      line-height:1 !important;
+    }
+
+    /* Template V2.13.9:
+       Nutrition ซ้าย / Daily-Weekly ด้านขวาบน / Monthly-Bonus ด้านขวาล่าง */
+    body.mission-page #missionStage .daily-count{
+      left:60.9% !important;
+      top:16.1% !important;
+      width:6.6% !important;
+      height:4.2% !important;
+    }
+
+    body.mission-page #missionStage .weekly-count{
+      left:89.9% !important;
+      top:16.1% !important;
+      width:6.6% !important;
+      height:4.2% !important;
+    }
+
+    body.mission-page #missionStage .monthly-count{
+      left:60.9% !important;
+      top:53.6% !important;
+      width:6.6% !important;
+      height:4.2% !important;
+    }
+
+    body.mission-page #missionStage .bonus-count{
+      left:89.9% !important;
+      top:53.6% !important;
+      width:6.6% !important;
+      height:4.2% !important;
+    }
+
+    body.mission-page #missionStage .daily-count,
+    body.mission-page #missionStage .weekly-count,
+    body.mission-page #missionStage .monthly-count,
+    body.mission-page #missionStage .bonus-count{
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      color:#fff !important;
+      font-size:clamp(9px,1.15cqw,18px) !important;
+      font-weight:900 !important;
+      line-height:1 !important;
+      text-shadow:0 1px 2px rgba(0,0,0,.18) !important;
+    }
+
+    body.mission-page #missionStage .live-track{
+      height:1.35% !important;
+      overflow:hidden !important;
+      border-radius:999px !important;
+      background:transparent !important;
+    }
+
+    body.mission-page #missionStage .daily-track{
+      left:43.9% !important;
+      top:30.6% !important;
+      width:22.0% !important;
+    }
+
+    body.mission-page #missionStage .weekly-track{
+      left:70.0% !important;
+      top:30.6% !important;
+      width:25.1% !important;
+    }
+
+    body.mission-page #missionStage .monthly-track{
+      left:43.9% !important;
+      top:68.0% !important;
+      width:22.0% !important;
+    }
+
+    body.mission-page #missionStage .bonus-track{
+      left:70.0% !important;
+      top:68.0% !important;
+      width:25.1% !important;
+    }
+
+    body.mission-page #missionStage .live-fill{
+      display:block !important;
+      width:0%;
+      height:100% !important;
+      border-radius:inherit !important;
+      transition:width .3s ease !important;
+    }
+
+    body.mission-page #missionStage .mission-fill-daily{
+      background:linear-gradient(90deg,#ffb34e,#ff5c00) !important;
+    }
+
+    body.mission-page #missionStage .mission-fill-weekly{
+      background:linear-gradient(90deg,#2d70ff,#0050d9) !important;
+    }
+
+    body.mission-page #missionStage .mission-fill-monthly{
+      background:linear-gradient(90deg,#8d42e5,#5e16ba) !important;
+    }
+
+    body.mission-page #missionStage .mission-fill-bonus{
+      background:linear-gradient(90deg,#46bd55,#078f28) !important;
+    }
+
+    body.mission-page #missionStage button.mission-card-button,
+    body.mission-page #missionStage button.category-hotspot,
+    body.mission-page #missionStage button.nutrition-hotspot,
+    body.mission-page #missionStage button.hotspot{
+      position:absolute !important;
+      z-index:700 !important;
+      display:block !important;
+      margin:0 !important;
+      padding:0 !important;
+      border:0 !important;
+      outline:0 !important;
+      box-shadow:none !important;
+      background:transparent !important;
+      background-color:transparent !important;
+      background-image:none !important;
+      appearance:none !important;
+      -webkit-appearance:none !important;
+      cursor:pointer !important;
+    }
+
+
+    /* =========================================================
+       MISSION V2.16.0 — NUTRITION COMPACT SUMMARY
+       แสดง 4 ค่า + progress + ขาด/เกิน
+       รายละเอียดแต่ละมื้ออยู่ใน nutrition.html เท่านั้น
+    ========================================================= */
+
+    .mission-nutrition-live{
+      position:absolute;
+      z-index:80;
+
+      left:4.2%;
+      top:23.0%;
+      width:35.8%;
+      height:56.5%;
+
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:1fr 1fr;
+      gap:7px;
+
+      padding:4px;
+
+      pointer-events:none;
+
+      color:#062b72;
+      font-family:"Prompt",Arial,sans-serif;
+    }
+
+
+    .mission-nutrition-card{
+      min-width:0;
+      overflow:hidden;
+
+      padding:8px 9px;
+
+      border:1px solid rgba(128,164,204,.34);
+      border-radius:13px;
+
+      background:rgba(247,251,255,.88);
+
+      box-shadow:
+        0 3px 9px rgba(37,75,120,.05);
+    }
+
+
+    .mission-nutrition-card-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:5px;
+    }
+
+
+    .mission-nutrition-card-label{
+      display:flex;
+      align-items:center;
+      gap:5px;
+
+      min-width:0;
+
+      font-size:clamp(6px,.77cqw,11px);
+      font-weight:900;
+      color:#516f92;
+    }
+
+
+    .mission-nutrition-card-label b{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+
+    .mission-nutrition-card-percent{
+      flex:0 0 auto;
+
+      color:#0d4a8d;
+      font-size:clamp(6px,.72cqw,10px);
+      font-weight:1000;
+      white-space:nowrap;
+    }
+
+
+    .mission-nutrition-card-value{
+      margin-top:5px;
+
+      color:#062c70;
+
+      font-size:clamp(8px,1.15cqw,17px);
+      font-weight:1000;
+      line-height:1.05;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+
+    .mission-nutrition-card-goal{
+      margin-top:3px;
+
+      color:#71849a;
+
+      font-size:clamp(5.4px,.61cqw,9px);
+      font-weight:700;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+
+    .mission-nutrition-progress{
+      width:100%;
+      height:7px;
+
+      margin-top:5px;
+
+      overflow:hidden;
+
+      border-radius:999px;
+      background:#dce7f2;
+    }
+
+
+    .mission-nutrition-progress > div{
+      width:0;
+      height:100%;
+
+      border-radius:999px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #2d68ff,
+          #1aa978
+        );
+
+      transition:width .25s ease;
+    }
+
+
+    .mission-nutrition-gap{
+      margin-top:4px;
+
+      min-height:12px;
+
+      font-size:clamp(5.4px,.62cqw,9px);
+      font-weight:900;
+
+      color:#956400;
+
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+
+    .mission-nutrition-gap.ok{
+      color:#177141;
+    }
+
+
+    .mission-nutrition-gap.over{
+      color:#bc2d2d;
+    }
+
+
+    .mission-nutrition-source{
+      position:absolute;
+
+      left:4.2%;
+      top:78.7%;
+      width:35.8%;
+      height:3.4%;
+
+      z-index:82;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:0 6px;
+
+      color:#4f6c89;
+
+      font-size:clamp(5px,.58cqw,9px);
+      font-weight:700;
+
+      text-align:center;
+
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+
+      pointer-events:none;
+    }
+
 </style>
 
 </head>
 
 
-<body>
+<body class="mission-page">
 
 
 
@@ -1301,6 +1937,16 @@
 <div
   id="missionStage"
   class="stage"
+  style="
+    position:relative!important;
+    display:block!important;
+    width:min(100vw,1536px)!important;
+    aspect-ratio:1536/1024!important;
+    height:auto!important;
+    margin:0 auto!important;
+    overflow:hidden!important;
+    background:#eef4ff!important;
+  "
 >
 
 
@@ -1308,9 +1954,23 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260829-v2134"
+    src="./mission-template.png?v=20260830-mission-v2160-nutrition-summary-links"
     alt=""
     draggable="false"
+    style="
+      position:absolute!important;
+      inset:0!important;
+      z-index:1!important;
+      display:block!important;
+      width:100%!important;
+      height:100%!important;
+      object-fit:fill!important;
+      margin:0!important;
+      padding:0!important;
+      border:0!important;
+      pointer-events:none!important;
+      user-select:none!important;
+    "
   >
 
 
@@ -1322,6 +1982,26 @@
       overlay
       mission-coin-box
       live-blue
+    "
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:77.1%!important;
+      top:4.0%!important;
+      width:5.2%!important;
+      height:3.6%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      border:0!important;
+      background:transparent!important;
+      color:#071f60!important;
+      font-weight:700!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
     "
   >
     0
@@ -1337,6 +2017,26 @@
       mission-energy-box
       live-blue
     "
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:89.0%!important;
+      top:4.0%!important;
+      width:7.0%!important;
+      height:3.6%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      border:0!important;
+      background:transparent!important;
+      color:#071f60!important;
+      font-weight:700!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
+    "
   >
     0 / 200
   </div>
@@ -1350,6 +2050,20 @@
     class="
       live-track
       daily-track
+    "
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:43.9%!important;
+      top:30.6%!important;
+      width:22.0%!important;
+      height:1.35%!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden!important;
+      border-radius:999px!important;
+      background:transparent!important;
+      pointer-events:none!important;
     "
   >
 
@@ -1367,6 +2081,25 @@
   <div
     id="dailyCount"
     class="daily-count"
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:60.9%!important;
+      top:16.1%!important;
+      width:6.6%!important;
+      height:4.2%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      background:transparent!important;
+      color:#fff!important;
+      font-weight:900!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
+    "
   >
     0 / 5
   </div>
@@ -1380,6 +2113,20 @@
     class="
       live-track
       weekly-track
+    "
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:70.0%!important;
+      top:30.6%!important;
+      width:25.1%!important;
+      height:1.35%!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden!important;
+      border-radius:999px!important;
+      background:transparent!important;
+      pointer-events:none!important;
     "
   >
 
@@ -1397,6 +2144,25 @@
   <div
     id="weeklyCount"
     class="weekly-count"
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:89.9%!important;
+      top:16.1%!important;
+      width:6.6%!important;
+      height:4.2%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      background:transparent!important;
+      color:#fff!important;
+      font-weight:900!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
+    "
   >
     0 / 9
   </div>
@@ -1410,6 +2176,20 @@
     class="
       live-track
       monthly-track
+    "
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:43.9%!important;
+      top:68.0%!important;
+      width:22.0%!important;
+      height:1.35%!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden!important;
+      border-radius:999px!important;
+      background:transparent!important;
+      pointer-events:none!important;
     "
   >
 
@@ -1427,6 +2207,25 @@
   <div
     id="monthlyCount"
     class="monthly-count"
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:60.9%!important;
+      top:53.6%!important;
+      width:6.6%!important;
+      height:4.2%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      background:transparent!important;
+      color:#fff!important;
+      font-weight:900!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
+    "
   >
     0 / 3
   </div>
@@ -1440,6 +2239,20 @@
     class="
       live-track
       bonus-track
+    "
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:70.0%!important;
+      top:68.0%!important;
+      width:25.1%!important;
+      height:1.35%!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden!important;
+      border-radius:999px!important;
+      background:transparent!important;
+      pointer-events:none!important;
     "
   >
 
@@ -1457,8 +2270,236 @@
   <div
     id="bonusCount"
     class="bonus-count"
+    style="
+      position:absolute!important;
+      z-index:30!important;
+      left:89.9%!important;
+      top:53.6%!important;
+      width:6.6%!important;
+      height:4.2%!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      background:transparent!important;
+      color:#fff!important;
+      font-weight:900!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
+    "
   >
     0 / 6
+  </div>
+
+
+
+  <!-- =====================================================
+       NUTRITION LIVE SUMMARY
+       ดึงจาก Nutrition API
+  ====================================================== -->
+
+  <div
+    id="missionNutritionLive"
+    class="mission-nutrition-live"
+  >
+
+    <!-- CALORIES -->
+    <div class="mission-nutrition-card">
+
+      <div class="mission-nutrition-card-head">
+
+        <div class="mission-nutrition-card-label">
+          <span>🔥</span>
+          <b>Calories</b>
+        </div>
+
+        <span
+          id="missionNutritionCaloriesPercent"
+          class="mission-nutrition-card-percent"
+        >
+          0%
+        </span>
+
+      </div>
+
+      <div
+        id="missionNutritionCalories"
+        class="mission-nutrition-card-value"
+      >
+        0 / 0 kcal
+      </div>
+
+      <div
+        id="missionNutritionCaloriesGoal"
+        class="mission-nutrition-card-goal"
+      >
+        เป้าหมาย 0 kcal
+      </div>
+
+      <div class="mission-nutrition-progress">
+        <div id="missionNutritionCaloriesBar"></div>
+      </div>
+
+      <div
+        id="missionNutritionCaloriesGap"
+        class="mission-nutrition-gap"
+      >
+        ยังไม่มีเป้าหมาย
+      </div>
+
+    </div>
+
+
+    <!-- PROTEIN -->
+    <div class="mission-nutrition-card">
+
+      <div class="mission-nutrition-card-head">
+
+        <div class="mission-nutrition-card-label">
+          <span>🥩</span>
+          <b>Protein</b>
+        </div>
+
+        <span
+          id="missionNutritionProteinPercent"
+          class="mission-nutrition-card-percent"
+        >
+          0%
+        </span>
+
+      </div>
+
+      <div
+        id="missionNutritionProtein"
+        class="mission-nutrition-card-value"
+      >
+        0 / 0 g
+      </div>
+
+      <div
+        id="missionNutritionProteinGoal"
+        class="mission-nutrition-card-goal"
+      >
+        เป้าหมาย 0 g
+      </div>
+
+      <div class="mission-nutrition-progress">
+        <div id="missionNutritionProteinBar"></div>
+      </div>
+
+      <div
+        id="missionNutritionProteinGap"
+        class="mission-nutrition-gap"
+      >
+        ยังไม่มีเป้าหมาย
+      </div>
+
+    </div>
+
+
+    <!-- CARBS -->
+    <div class="mission-nutrition-card">
+
+      <div class="mission-nutrition-card-head">
+
+        <div class="mission-nutrition-card-label">
+          <span>🍚</span>
+          <b>Carbs</b>
+        </div>
+
+        <span
+          id="missionNutritionCarbsPercent"
+          class="mission-nutrition-card-percent"
+        >
+          0%
+        </span>
+
+      </div>
+
+      <div
+        id="missionNutritionCarbs"
+        class="mission-nutrition-card-value"
+      >
+        0 / 0 g
+      </div>
+
+      <div
+        id="missionNutritionCarbsGoal"
+        class="mission-nutrition-card-goal"
+      >
+        เป้าหมาย 0 g
+      </div>
+
+      <div class="mission-nutrition-progress">
+        <div id="missionNutritionCarbsBar"></div>
+      </div>
+
+      <div
+        id="missionNutritionCarbsGap"
+        class="mission-nutrition-gap"
+      >
+        ยังไม่มีเป้าหมาย
+      </div>
+
+    </div>
+
+
+    <!-- FAT -->
+    <div class="mission-nutrition-card">
+
+      <div class="mission-nutrition-card-head">
+
+        <div class="mission-nutrition-card-label">
+          <span>🥑</span>
+          <b>Fat</b>
+        </div>
+
+        <span
+          id="missionNutritionFatPercent"
+          class="mission-nutrition-card-percent"
+        >
+          0%
+        </span>
+
+      </div>
+
+      <div
+        id="missionNutritionFat"
+        class="mission-nutrition-card-value"
+      >
+        0 / 0 g
+      </div>
+
+      <div
+        id="missionNutritionFatGoal"
+        class="mission-nutrition-card-goal"
+      >
+        เป้าหมาย 0 g
+      </div>
+
+      <div class="mission-nutrition-progress">
+        <div id="missionNutritionFatBar"></div>
+      </div>
+
+      <div
+        id="missionNutritionFatGap"
+        class="mission-nutrition-gap"
+      >
+        ยังไม่มีเป้าหมาย
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="missionNutritionSource"
+    class="mission-nutrition-source"
+  >
+    ยังไม่มีข้อมูล InBody / Nutrition Goal
   </div>
 
 
@@ -1471,7 +2512,7 @@
     class="
       mission-card-button
       daily
-    "
+     hotspot-daily"
     onclick="openCategory('daily')"
     aria-label="Daily Mission"
   ></button>
@@ -1482,7 +2523,7 @@
     class="
       mission-card-button
       weekly
-    "
+     hotspot-weekly"
     onclick="openCategory('weekly')"
     aria-label="Weekly Mission"
   ></button>
@@ -1493,7 +2534,7 @@
     class="
       mission-card-button
       monthly
-    "
+     hotspot-monthly"
     onclick="openCategory('monthly')"
     aria-label="Monthly Mission"
   ></button>
@@ -1504,9 +2545,19 @@
     class="
       mission-card-button
       bonus
-    "
+     hotspot-bonus"
     onclick="openCategory('bonus')"
     aria-label="Bonus Mission"
+  ></button>
+
+
+
+  <!-- NUTRITION CTA: กดตรงปุ่ม "บันทึกการรับประทานอาหารของฉัน" -->
+  <button
+    type="button"
+    class="nutrition-hotspot"
+    onclick="goNutritionV2138()"
+    aria-label="บันทึกการรับประทานอาหารของฉัน"
   ></button>
 
 
@@ -1686,6 +2737,13 @@
 
     </section>
 
+    <button
+      type="button"
+      class="history-open-btn"
+      onclick="openMissionHistoryV2135()"
+    >
+      📅 ดูประวัติการทำภารกิจรายวัน
+    </button>
 
     <section
       id="missionList"
@@ -1694,6 +2752,32 @@
 
   </section>
 
+</div>
+
+
+
+<!-- =========================================================
+     MISSION HISTORY MODAL V2.13.5
+========================================================= -->
+<div
+  id="missionHistoryModal"
+  class="history-modal"
+  onclick="closeMissionHistoryBackdropV2135(event)"
+>
+  <section class="history-panel">
+    <div class="history-head">
+      <div class="history-title">📅 ประวัติการทำภารกิจ</div>
+      <button
+        type="button"
+        class="history-close"
+        onclick="closeMissionHistoryV2135()"
+      >×</button>
+    </div>
+
+    <div id="missionHistoryBody">
+      <div class="history-empty">กำลังโหลดประวัติ...</div>
+    </div>
+  </section>
 </div>
 
 
@@ -2828,9 +3912,368 @@ function hydrateDailySecretMissionV2133(){
   };
 }
 
+
+/* =========================================================
+   MISSION HISTORY V2.13.5
+========================================================= */
+
+function historyStatusTextV2135(status){
+  const s = String(status || "").toLowerCase();
+
+  if(s === "approved"){
+    return {
+      label:"✅ อนุมัติแล้ว",
+      className:"history-approved"
+    };
+  }
+
+  if(s === "pending"){
+    return {
+      label:"⏳ รอตรวจสอบ",
+      className:"history-pending"
+    };
+  }
+
+  if(s === "rejected"){
+    return {
+      label:"❌ ไม่ผ่าน",
+      className:"history-rejected"
+    };
+  }
+
+  return {
+    label:s || "ยังไม่ทราบสถานะ",
+    className:""
+  };
+}
+
+
+function formatBangkokDateV2135(value){
+  if(!value) return "-";
+
+  try{
+    return new Intl.DateTimeFormat(
+      "th-TH",
+      {
+        timeZone:"Asia/Bangkok",
+        year:"numeric",
+        month:"short",
+        day:"numeric"
+      }
+    ).format(new Date(value));
+  }catch{
+    return String(value);
+  }
+}
+
+
+async function loadMissionHistoryV2135(){
+
+  const host =
+    document.getElementById(
+      "missionHistoryBody"
+    );
+
+  host.innerHTML =
+    `<div class="history-empty">
+      กำลังโหลดประวัติ...
+    </div>`;
+
+  try{
+
+    const api =
+      window.APP_CONFIG?.getApi
+        ? window.APP_CONFIG.getApi("MISSION")
+        : window.APP_CONFIG?.API?.MISSION;
+
+    if(!api){
+      throw new Error(
+        "ไม่พบ API.MISSION"
+      );
+    }
+
+    const response =
+      await fetch(
+        api,
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          cache:"no-store",
+          body:JSON.stringify({
+            action:"history",
+            idToken:liff.getIDToken(),
+            limit:90
+          })
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    const data =
+      raw
+        ? JSON.parse(raw)
+        : {};
+
+    if(
+      !response.ok ||
+      data?.success === false
+    ){
+      throw new Error(
+        data?.error ||
+        data?.message ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    const rows =
+      Array.isArray(data?.history)
+        ? data.history
+        : (
+            Array.isArray(data?.items)
+              ? data.items
+              : []
+          );
+
+    if(!rows.length){
+      host.innerHTML =
+        `<div class="history-empty">
+          ยังไม่มีประวัติการทำภารกิจ
+        </div>`;
+      return;
+    }
+
+    const byDate = {};
+
+    rows.forEach(item=>{
+      const key =
+        item.mission_date ||
+        item.activity_date ||
+        (
+          item.approved_at
+            ? String(item.approved_at).slice(0,10)
+            : null
+        ) ||
+        (
+          item.submitted_at
+            ? String(item.submitted_at).slice(0,10)
+            : null
+        ) ||
+        (
+          item.created_at
+            ? String(item.created_at).slice(0,10)
+            : null
+        ) ||
+        item.period_key ||
+        "unknown";
+
+      if(!byDate[key]){
+        byDate[key] = [];
+      }
+
+      byDate[key].push(item);
+    });
+
+    const dates =
+      Object.keys(byDate)
+        .sort((a,b)=>String(b).localeCompare(String(a)));
+
+    host.innerHTML =
+      dates.map(dateKey=>{
+
+        const items =
+          byDate[dateKey];
+
+        const approved =
+          items.filter(
+            x =>
+              String(x.status).toLowerCase() ===
+              "approved"
+          ).length;
+
+        return `
+          <section class="history-day">
+            <div class="history-day-head">
+              <span>${formatBangkokDateV2135(dateKey)}</span>
+              <span>${approved}/${items.length} ผ่าน</span>
+            </div>
+
+            ${
+              items.map(item=>{
+
+                const status =
+                  historyStatusTextV2135(
+                    item.status
+                  );
+
+                const rewardCoin =
+                  Number(
+                    item.reward_coin ??
+                    item.rewardCoin ??
+                    0
+                  );
+
+                const rewardEnergy =
+                  Number(
+                    item.reward_energy ??
+                    item.rewardEnergy ??
+                    0
+                  );
+
+                const rewardExp =
+                  Number(
+                    item.reward_exp ??
+                    item.rewardExp ??
+                    0
+                  );
+
+                const missionName =
+                  item.mission_name ||
+                  item.name ||
+                  item.mission_id ||
+                  "MISSION";
+
+                const category =
+                  String(
+                    item.category ||
+                    item.period_type ||
+                    ""
+                  ).toUpperCase();
+
+                const approvedTime =
+                  item.approved_at
+                    ? new Intl.DateTimeFormat(
+                        "th-TH",
+                        {
+                          timeZone:"Asia/Bangkok",
+                          hour:"2-digit",
+                          minute:"2-digit"
+                        }
+                      ).format(new Date(item.approved_at))
+                    : "";
+
+                return `
+                  <div class="history-item">
+                    <div class="history-item-row">
+                      <strong>${item.icon || "🎯"} ${missionName}</strong>
+                      <span class="history-status ${status.className}">
+                        ${status.label}
+                      </span>
+                    </div>
+
+                    <div class="history-note">
+                      ${category ? `${category} • ` : ""}
+                      🎁 ${rewardCoin} Coin
+                      • ${rewardEnergy} Energy
+                      • ${rewardExp} EXP
+                      ${approvedTime ? ` • อนุมัติ ${approvedTime} น.` : ""}
+                      ${
+                        item.review_reason
+                          ? ` • เหตุผล: ${item.review_reason}`
+                          : ""
+                      }
+                    </div>
+                  </div>
+                `;
+              }).join("")
+            }
+          </section>
+        `;
+      }).join("");
+
+  }catch(error){
+
+    host.innerHTML =
+      `<div class="history-empty">
+        โหลดประวัติไม่สำเร็จ<br>
+        ${error?.message || error}
+      </div>`;
+  }
+}
+
+
+function openMissionHistoryV2135(){
+  document
+    .getElementById(
+      "missionHistoryModal"
+    )
+    ?.classList
+    .add("show");
+
+  document.body.style.overflow =
+    "hidden";
+
+  loadMissionHistoryV2135();
+}
+
+
+function closeMissionHistoryV2135(){
+  document
+    .getElementById(
+      "missionHistoryModal"
+    )
+    ?.classList
+    .remove("show");
+
+  document.body.style.overflow =
+    "";
+}
+
+
+function closeMissionHistoryBackdropV2135(event){
+  if(
+    event.target.id ===
+    "missionHistoryModal"
+  ){
+    closeMissionHistoryV2135();
+  }
+}
+
+
+
+function goNutritionV2138(){
+
+  const url =
+    window.APP_CONFIG?.PAGE?.NUTRITION ||
+    "./nutrition.html";
+
+  window.location.href =
+    url;
+}
+
+
 function openCategory(
   category
 ){
+
+  /*
+    MISSION V2.16.0
+    วางลิงก์ให้ตรงกับแต่ละ Mission
+    URL จะเป็น:
+    mission.html#daily
+    mission.html#weekly
+    mission.html#monthly
+    mission.html#bonus
+  */
+  try{
+
+    history.replaceState(
+      null,
+      "",
+      `#${String(category || "daily")}`
+    );
+
+  }catch(error){
+
+    console.warn(
+      "MISSION HASH ERROR:",
+      error
+    );
+  }
+
+
 
   if(category === "daily"){
     hydrateDailySecretMissionV2133();
@@ -3371,28 +4814,6 @@ async function loadMissionCatalog(){
     missionCatalogState =
       result;
 
-
-    const apiWeight =
-      Number(
-        result
-          ?.player
-          ?.weightKg ||
-        0
-      );
-
-
-    if(
-      Number.isFinite(
-        apiWeight
-      ) &&
-      apiWeight >= 20 &&
-      apiWeight <= 400
-    ){
-      window.MISSION_LATEST_WEIGHT =
-        apiWeight;
-    }
-
-
     /*
       MONTHLY:
       แสดงเฉพาะหัวข้อของเดือนปัจจุบันจาก backend
@@ -3571,14 +4992,13 @@ function getHomePrefillV212(){
 
 
 /* =========================================================
-   EXERCISE AUTO CALORIE V2.12.2
+   EXERCISE AUTO CALORIE V2.12.1
    Wellness estimate:
    kcal ≈ MET × weight(kg) × hours
 ========================================================= */
 
 const EXERCISE_MET_V2121 = {
   walking: 4.0,
-  brisk_walking: 4.5,
   aerobic: 6.5,
   running: 8.5,
   cycling: 7.0,
@@ -3643,24 +5063,9 @@ function calculateExerciseCaloriesV2121(){
       )
     );
 
-  const normalizedType =
-    String(
-      type ||
-      "other"
-    )
-    .trim()
-    .toLowerCase()
-    .replace(
-      /\s+/g,
-      "_"
-    );
-
-
   const met =
     Number(
-      EXERCISE_MET_V2121[
-        normalizedType
-      ] ||
+      EXERCISE_MET_V2121[type] ||
       EXERCISE_MET_V2121.other
     );
 
@@ -3682,7 +5087,7 @@ function calculateExerciseCaloriesV2121(){
 
   if(output){
     output.innerHTML = minutes > 0
-      ? `🔥 แคลอรี่ที่เผาผลาญโดยประมาณ <strong style="font-size:20px">${calories.toLocaleString()} kcal</strong>
+      ? `🔥 เผาผลาญโดยประมาณ <strong>${calories.toLocaleString()} kcal</strong>
          <div style="margin-top:4px;font-size:12px;color:#6b7890">
            ${exerciseLabelV2121(type)} • ${minutes} นาที • MET ${met} • ใช้น้ำหนัก ${weight.toFixed(1)} kg
          </div>`
@@ -3797,6 +5202,7 @@ function buildMissionV2Fields(
           <input
             id="v2SleepHours"
             type="number"
+            readonly
             min="0"
             max="24"
             step="1"
@@ -3809,6 +5215,7 @@ function buildMissionV2Fields(
           <input
             id="v2SleepMinutesPart"
             type="number"
+            readonly
             min="0"
             max="59"
             step="1"
@@ -3834,10 +5241,29 @@ function buildMissionV2Fields(
 
       </div>
 
+      <div
+        id="v2SleepAutoResult"
+        class="v2-hint"
+        style="
+          margin-top:10px;
+          padding:12px;
+          border-radius:12px;
+          background:#f3f7fc;
+          font-weight:800;
+        "
+      >
+        กรอกเวลานอนและเวลาตื่น ระบบจะคำนวณระยะเวลานอนให้อัตโนมัติ
+      </div>
+
       <div class="v2-hint">
-        เป้าหมาย ≥ 7 ชั่วโมง • เวลานอนจะเชื่อมไป HOME
+        เป้าหมาย ≥ 7 ชั่วโมง • ชั่วโมงและนาทีคำนวณจากเวลานอน/เวลาตื่นอัตโนมัติ
       </div>
     `;
+
+    setTimeout(
+      bindSleepAutoCalculateV2137,
+      0
+    );
 
     return;
   }
@@ -3984,44 +5410,10 @@ function buildMissionV2Fields(
         >
       </div>
 
-      <div
-        id="v2ExerciseCalories"
-        class="v2-hint"
-        style="
-          margin-top:10px;
-          padding:12px 14px;
-          border-radius:12px;
-          background:#fff5e8;
-          color:#8a4b00;
-          font-size:14px;
-          line-height:1.5;
-        "
-      >
-        🔥 กรอกประเภทกิจกรรมและระยะเวลา เพื่อคำนวณแคลอรี่อัตโนมัติ
-      </div>
-
-      <input
-        id="v2EstimatedCalories"
-        type="hidden"
-        value="0"
-      >
-
       <div class="v2-hint">
-        * แคลอรี่เป็นค่าประมาณจาก MET × น้ำหนักล่าสุด × เวลา
-        และจะส่งไปอัปเดต HOME / PROGRESS หลังบันทึกกิจกรรม
+        ระบบจะใช้น้ำหนักล่าสุด + ประเภทกิจกรรม + เวลา เพื่อประมาณแคลอรี่ และส่งไป HOME
       </div>
     `;
-
-
-    /*
-      DOM เพิ่งถูกสร้างจาก innerHTML
-      จึงต้อง bind calculator หลังจาก render เสร็จ
-    */
-    requestAnimationFrame(
-      ()=>{
-        bindExerciseCalculatorV2121();
-      }
-    );
 
     return;
   }
@@ -4560,24 +5952,6 @@ async function submitEvidence(){
         )
       )
     );
-
-
-    const caloriePreview =
-      calculateExerciseCaloriesV2121();
-
-
-    form.append(
-      "clientEstimatedCalories",
-      String(
-        Math.round(
-          Number(
-            caloriePreview
-              ?.calories ||
-            0
-          )
-        )
-      )
-    );
   }
 
 
@@ -4990,51 +6364,333 @@ function showMissionStatus(message){
   missionStatusTimer = setTimeout(()=>el.classList.remove('show'),3500);
 }
 
+
 /* =========================================================
-   DASHBOARD / COIN / ENERGY
+   NUTRITION LIVE SUMMARY V2.15.0
 ========================================================= */
-function applyMissionDashboard(raw){
-  const d = raw?.data || raw?.dashboard || raw;
-  if(!d) return;
-  const coin = Number(d?.rockCoin ?? d?.rock_coin ?? d?.coin ?? 0) || 0;
-  const current = Number(d?.energy?.current ?? d?.currentEnergy ?? d?.current_energy ?? d?.energy ?? 0) || 0;
-  const max = Number(d?.energy?.max ?? d?.maxEnergy ?? d?.max_energy ?? window.APP_CONFIG?.MAX_ENERGY ?? 200) || 200;
-  const coinEl = document.getElementById('missionCoin');
-  const energyEl = document.getElementById('missionEnergy');
-  if(coinEl) coinEl.textContent = coin.toLocaleString('en-US');
-  if(energyEl) energyEl.textContent = `${current.toLocaleString('en-US')} / ${max.toLocaleString('en-US')}`;
+
+function nutritionZero(value){
+  const n = Number(value);
+  return Number.isFinite(n)
+    ? n
+    : 0;
 }
 
-async function loadMissionDashboard(){
-  try{
-    let data = null;
-    if(typeof ROCK?.dashboard === 'function') data = await ROCK.dashboard();
-    else if(typeof ROCK?.fetchDashboard === 'function') data = await ROCK.fetchDashboard();
-    else if(typeof ROCK?.getDashboard === 'function') data = await ROCK.getDashboard();
-    if(data) applyMissionDashboard(data);
-    return data;
-  }catch(error){
-    console.error('MISSION DASHBOARD ERROR:',error);
-    return null;
+
+function nutritionFormat(value,digits=0){
+  return nutritionZero(value)
+    .toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits:digits,
+        maximumFractionDigits:digits
+      }
+    );
+}
+
+
+function applyMissionNutrition(raw){
+
+  const data =
+    raw?.data ??
+    raw ??
+    {};
+
+  const goals =
+    data?.goals ??
+    {};
+
+  const totals =
+    data?.totals ??
+    data?.consumed ??
+    {};
+
+  const mealGoals =
+    data?.mealGoals ??
+    {};
+
+  const mealConsumed =
+    data?.mealConsumed ??
+    {};
+
+
+  const caloriesDone =
+    nutritionZero(
+      totals?.calories
+    );
+
+  const caloriesGoal =
+    nutritionZero(
+      goals?.calories
+    );
+
+  const proteinDone =
+    nutritionZero(
+      totals?.proteinG ??
+      totals?.protein
+    );
+
+  const proteinGoal =
+    nutritionZero(
+      goals?.proteinG ??
+      goals?.protein
+    );
+
+  const fatDone =
+    nutritionZero(
+      totals?.fatG ??
+      totals?.fat
+    );
+
+  const fatGoal =
+    nutritionZero(
+      goals?.fatG ??
+      goals?.fat
+    );
+
+  const carbsDone =
+    nutritionZero(
+      totals?.carbsG ??
+      totals?.carbs
+    );
+
+  const carbsGoal =
+    nutritionZero(
+      goals?.carbsG ??
+      goals?.carbs
+    );
+
+
+  function renderMissionNutritionMetric(
+    prefix,
+    consumed,
+    target,
+    unit,
+    digits=1
+  ){
+
+    const done =
+      Math.max(
+        0,
+        Number(
+          consumed ||
+          0
+        )
+      );
+
+
+    const goal =
+      Math.max(
+        0,
+        Number(
+          target ||
+          0
+        )
+      );
+
+
+    const percent =
+      goal > 0
+        ? done /
+          goal *
+          100
+        : 0;
+
+
+    const barPercent =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          percent
+        )
+      );
+
+
+    const valueEl =
+      document.getElementById(
+        `missionNutrition${prefix}`
+      );
+
+
+    const goalEl =
+      document.getElementById(
+        `missionNutrition${prefix}Goal`
+      );
+
+
+    const percentEl =
+      document.getElementById(
+        `missionNutrition${prefix}Percent`
+      );
+
+
+    const barEl =
+      document.getElementById(
+        `missionNutrition${prefix}Bar`
+      );
+
+
+    const gapEl =
+      document.getElementById(
+        `missionNutrition${prefix}Gap`
+      );
+
+
+    if(valueEl){
+
+      valueEl.textContent =
+        `${nutritionFormat(done,digits)} / ${nutritionFormat(goal,digits)} ${unit}`;
+    }
+
+
+    if(goalEl){
+
+      goalEl.textContent =
+        `เป้าหมายต่อวัน ${nutritionFormat(goal,digits)} ${unit}`;
+    }
+
+
+    if(percentEl){
+
+      percentEl.textContent =
+        goal > 0
+          ? `${nutritionFormat(percent,1)}%`
+          : "0%";
+    }
+
+
+    if(barEl){
+
+      barEl.style.width =
+        `${barPercent}%`;
+    }
+
+
+    if(gapEl){
+
+      gapEl.classList.remove(
+        "ok",
+        "over"
+      );
+
+
+      if(
+        goal <= 0
+      ){
+
+        gapEl.textContent =
+          "ยังไม่มีเป้าหมาย";
+
+        return;
+      }
+
+
+      const difference =
+        done -
+        goal;
+
+
+      if(
+        Math.abs(
+          difference
+        ) < 0.0001
+      ){
+
+        gapEl.classList.add(
+          "ok"
+        );
+
+        gapEl.textContent =
+          "✅ ครบเป้าหมายแล้ว";
+
+        return;
+      }
+
+
+      if(
+        difference > 0
+      ){
+
+        gapEl.classList.add(
+          "over"
+        );
+
+        gapEl.textContent =
+          `⚠️ เกิน ${nutritionFormat(Math.abs(difference),digits)} ${unit}`;
+
+        return;
+      }
+
+
+      gapEl.textContent =
+        `ขาดอีก ${nutritionFormat(Math.abs(difference),digits)} ${unit}`;
+    }
   }
-}
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
-function goHome(){
 
-  const url =
-    window.APP_CONFIG?.PAGE?.HOME ||
-    "./dashboard.html";
+  renderMissionNutritionMetric(
+    "Calories",
+    caloriesDone,
+    caloriesGoal,
+    "kcal",
+    0
+  );
 
-  /*
-    ใช้ location.href ตรง ๆ
-    ไม่ส่งคำว่า "HOME" เข้า ROCK.go()
-    เพราะ ROCK.go() ควรได้รับ URL จริง ไม่ใช่ key
-  */
-  window.location.href =
-    url;
+
+  renderMissionNutritionMetric(
+    "Protein",
+    proteinDone,
+    proteinGoal,
+    "g",
+    1
+  );
+
+
+  renderMissionNutritionMetric(
+    "Carbs",
+    carbsDone,
+    carbsGoal,
+    "g",
+    1
+  );
+
+
+  renderMissionNutritionMetric(
+    "Fat",
+    fatDone,
+    fatGoal,
+    "g",
+    1
+  );
+
+
+  const sourceEl =
+    document.getElementById(
+      "missionNutritionSource"
+    );
+
+
+  if(sourceEl){
+
+    const source =
+      String(
+        data?.goalSource ||
+        ""
+      );
+
+
+    sourceEl.textContent =
+      source ===
+      "inbody_goal_plan"
+        ? `🎯 ${data?.goalPlan?.goalLabel || "เป้าหมายจาก InBody"}`
+        : (
+            source ===
+            "inbody_goal"
+              ? "เป้าหมาย Wellness จาก InBody / Health Goal ล่าสุด"
+              : "ยังไม่มีข้อมูล InBody / Nutrition Goal • แสดง 0"
+          );
+  }
 }
 
 
@@ -5078,7 +6734,11 @@ async function initMissionPage(){
   try{
     const ready = await prepareMissionApp();
     if(ready === false) return;
-    await Promise.allSettled([loadMissionDashboard(),refreshMissionStatus()]);
+    await Promise.allSettled([
+      loadMissionDashboard(),
+      refreshMissionStatus(),
+      loadMissionNutrition()
+    ]);
     updateTemplate();
     checkApprovedMessage();
   }catch(error){
@@ -5092,13 +6752,21 @@ function startMissionRefresh(){
   const ms = Number(window.APP_CONFIG?.REFRESH_MS || ROCK?.CFG?.REFRESH_MS) || 30000;
   missionRefreshTimer = setInterval(async()=>{
     if(document.visibilityState !== 'visible') return;
-    await Promise.allSettled([loadMissionDashboard(),refreshMissionStatus()]);
+    await Promise.allSettled([
+      loadMissionDashboard(),
+      refreshMissionStatus(),
+      loadMissionNutrition()
+    ]);
   },ms);
 }
 
 document.addEventListener('visibilitychange',async()=>{
   if(document.visibilityState === 'visible'){
-    await Promise.allSettled([loadMissionDashboard(),refreshMissionStatus()]);
+    await Promise.allSettled([
+      loadMissionDashboard(),
+      refreshMissionStatus(),
+      loadMissionNutrition()
+    ]);
   }
 });
 
@@ -5249,6 +6917,291 @@ if(document.readyState === 'loading'){
 </style>
 
 
+
+
+<script>
+/* =========================================================
+   MISSION V2.16.0 — FINAL OVERLAY SAFETY
+   ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
+========================================================= */
+(function(){
+
+  function forceAbsolute(
+    id,
+    left,
+    top,
+    width,
+    height
+  ){
+
+    const el =
+      document.getElementById(
+        id
+      );
+
+    if(!el){
+      return;
+    }
+
+    el.style.setProperty(
+      "position",
+      "absolute",
+      "important"
+    );
+
+    el.style.setProperty(
+      "z-index",
+      "30",
+      "important"
+    );
+
+    el.style.setProperty(
+      "left",
+      left,
+      "important"
+    );
+
+    el.style.setProperty(
+      "top",
+      top,
+      "important"
+    );
+
+    el.style.setProperty(
+      "width",
+      width,
+      "important"
+    );
+
+    el.style.setProperty(
+      "height",
+      height,
+      "important"
+    );
+
+    el.style.setProperty(
+      "margin",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "padding",
+      "0",
+      "important"
+    );
+
+    el.style.setProperty(
+      "pointer-events",
+      "none",
+      "important"
+    );
+  }
+
+
+  function applyMissionOverlaySafety(){
+
+    const stage =
+      document.getElementById(
+        "missionStage"
+      );
+
+    if(stage){
+
+      stage.style.setProperty(
+        "position",
+        "relative",
+        "important"
+      );
+
+      stage.style.setProperty(
+        "display",
+        "block",
+        "important"
+      );
+
+      stage.style.setProperty(
+        "width",
+        "min(100vw,1536px)",
+        "important"
+      );
+
+      stage.style.setProperty(
+        "aspect-ratio",
+        "1536 / 1024",
+        "important"
+      );
+
+      stage.style.setProperty(
+        "overflow",
+        "hidden",
+        "important"
+      );
+    }
+
+
+    forceAbsolute(
+      "missionCoin",
+      "77.1%",
+      "4.0%",
+      "5.2%",
+      "3.6%"
+    );
+
+    forceAbsolute(
+      "missionEnergy",
+      "89.0%",
+      "4.0%",
+      "7.0%",
+      "3.6%"
+    );
+
+    forceAbsolute(
+      "dailyCount",
+      "60.9%",
+      "16.1%",
+      "6.6%",
+      "4.2%"
+    );
+
+    forceAbsolute(
+      "weeklyCount",
+      "89.9%",
+      "16.1%",
+      "6.6%",
+      "4.2%"
+    );
+
+    forceAbsolute(
+      "monthlyCount",
+      "60.9%",
+      "53.6%",
+      "6.6%",
+      "4.2%"
+    );
+
+    forceAbsolute(
+      "bonusCount",
+      "89.9%",
+      "53.6%",
+      "6.6%",
+      "4.2%"
+    );
+  }
+
+
+  if(
+    document.readyState ===
+    "loading"
+  ){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      applyMissionOverlaySafety
+    );
+
+  }else{
+
+    applyMissionOverlaySafety();
+  }
+
+
+  window.addEventListener(
+    "resize",
+    applyMissionOverlaySafety
+  );
+
+})();
+</script>
+
+
+<script>
+/* =========================================================
+   MISSION V2.16.0 — DIRECT MISSION LINK
+   เปิดหมวดตาม URL hash
+   #daily #weekly #monthly #bonus
+========================================================= */
+(function(){
+
+  const valid =
+    new Set([
+      "daily",
+      "weekly",
+      "monthly",
+      "bonus"
+    ]);
+
+
+  function openMissionFromHash(){
+
+    const category =
+      String(
+        location.hash ||
+        ""
+      )
+      .replace(
+        "#",
+        ""
+      )
+      .trim()
+      .toLowerCase();
+
+
+    if(
+      !valid.has(
+        category
+      )
+    ){
+
+      return;
+    }
+
+
+    /*
+      รอ Catalog/LIFF โหลดก่อนเล็กน้อย
+    */
+    setTimeout(
+      ()=>{
+
+        if(
+          typeof window.openCategory ===
+          "function"
+        ){
+
+          window.openCategory(
+            category
+          );
+        }
+
+      },
+      450
+    );
+  }
+
+
+  window.addEventListener(
+    "hashchange",
+    openMissionFromHash
+  );
+
+
+  if(
+    document.readyState ===
+    "loading"
+  ){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      openMissionFromHash
+    );
+
+  }else{
+
+    openMissionFromHash();
+  }
+
+})();
+</script>
 
 </body>
 </html>
