@@ -6,7 +6,7 @@
   <title>ROCK YOUR BODY 2026 — BATTLE STAGE</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v53"></script>
+  <script src="./app-config.js?v=20260831-battle-v54"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -160,7 +160,7 @@
   <div id="slash"></div>
   <div id="blast"></div>
 
-  <div id="wellnessBox">กำลังโหลด Health Energy...</div>
+  <div id="wellnessBox">กำลังโหลด Energy...</div>
 
   <button id="backButton" type="button" aria-label="ย้อนกลับ"></button>
   <button id="attackButton" type="button">⚔️ โจมตี</button>
@@ -322,10 +322,10 @@ function render(data){
   $("monster").classList.toggle("dead",!!p.completed);
 
   $("wellnessBox").innerHTML=
-    `Health Energy วันนี้ <b>${Number(e.available||0)}/${Number(e.max||200)}</b>`+
+    `Energy วันนี้ <b>${Number(e.available||0)}/${Number(e.max||200)}</b>`+
     ` • โจมตีครั้งละ ⚡${Number(s.attackCost||0)}`+
     ` • Damage ประมาณ ${Number(data?.damagePreview||0).toLocaleString()}`+
-    `<br><small>Energy คำนวณจาก Steps + Calories Burned + Sleep + Weight/InBody ของผู้เล่น ไม่ต้องกรอกเอง</small>`;
+    `<br><small>Energy ใช้ค่าเดียวกับหน้า HOME และจะลดลงเมื่อโจมตี</small>`;
 
   $("attackButton").disabled=
     !s.unlocked||
@@ -380,7 +380,7 @@ function showResult(result){
   }else{
     $("resultText").innerHTML=
       `MISSION FAILED<br>`+
-      `${result?.reason||"Health Energy ไม่เพียงพอสำหรับการโจมตี"}`;
+      `${result?.reason||"Energy ไม่เพียงพอสำหรับการโจมตี"}`;
   }
 
   $("resultModal").classList.add("show");
@@ -417,7 +417,7 @@ async function attack(){
     if(result?.insufficientEnergy){
       showResult({
         missionSuccess:false,
-        reason:`Health Energy เหลือ ${Number(result?.healthEnergy?.available||0)} แต่ต้องใช้ ${Number(result?.stage?.attackCost||0)}`
+        reason:`Energy เหลือ ${Number(result?.healthEnergy?.available||0)} แต่ต้องใช้ ${Number(result?.stage?.attackCost||0)}`
       });
       return;
     }
