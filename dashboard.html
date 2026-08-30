@@ -1,354 +1,3521 @@
-<script>
-"use strict";
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ROCK YOUR BODY 2026</title>
 
-const HOME_API =
-  window.APP_CONFIG?.getApi?.("PLAYER") ||
-  window.APP_CONFIG?.API?.PLAYER;
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-const LOADING_TIMEOUT_MS = 12000;
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="./app-config.js?v=20260829-clean-v2"></script>
+  <style>
+    /* =====================================================
+   HOME TEMPLATE — PROFILE + FONT SIZE FIX
+   วางท้าย <style>
+===================================================== */
 
-function $(id){
-  return document.getElementById(id);
+/* 1. รูปโปรไฟล์ — ลดให้พอดีกับวงกลม */
+#profileImage{
+  position:absolute !important;
+
+  left:4.6% !important;
+  top:17.0% !important;
+
+  width:21.8% !important;
+  height:auto !important;
+  aspect-ratio:1 / 1 !important;
+
+  border-radius:50% !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+
+  overflow:hidden !important;
+  z-index:10 !important;
 }
 
-function showHomeError(message){
-  console.error("HOME ERROR:", message);
+/* 2. ชื่อผู้เล่นใต้รูป */
+#teamName{
+  left:7.0% !important;
+  top:47.3% !important;
+  width:22% !important;
 
-  const loader = $("loadingText");
-  if(loader){
-    loader.textContent = "โหลดข้อมูลไม่สำเร็จ";
-  }
+  font-size:clamp(8px,1vw,15px) !important;
+  font-weight:500 !important;
 
-  const status = $("status");
-  if(status){
-    status.textContent = message;
-    status.classList.add("show","error");
-  }
+  color:#fff !important;
+  text-align:center !important;
+
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+
+  z-index:30 !important;
 }
 
-function hideHomeLoading(){
-  const loader = $("loadingText");
-  if(loader){
-    loader.style.display = "none";
-  }
+/* 3. ROCK COIN มุมขวาบน */
+#coin{
+  font-size:clamp(9px,1.25vw,18px) !important;
+  font-weight:500 !important;
+  line-height:1 !important;
 }
 
-async function withTimeout(promise, ms){
-  const controller = new Promise((_, reject)=>{
-    setTimeout(()=>{
-      reject(new Error("โหลดข้อมูลเกินเวลาที่กำหนด"));
-    }, ms);
-  });
-
-  return Promise.race([
-    promise,
-    controller
-  ]);
+/* 4. ENERGY มุมขวาบน */
+#energy{
+  font-size:clamp(9px,1.25vw,18px) !important;
+  font-weight:500 !important;
+  line-height:1 !important;
 }
 
-async function initHomeLiff(){
+/* 5. น้ำหนักปัจจุบัน */
+#currentWeight{
+  font-size:clamp(18px,3vw,44px) !important;
+  font-weight:700 !important;
+  color:#071b65 !important;
+  line-height:1 !important;
+}
+
+/* 6. น้ำหนักเป้าหมาย */
+#targetWeight{
+  font-size:clamp(18px,3vw,44px) !important;
+  font-weight:700 !important;
+  color:#d71919 !important;
+  line-height:1 !important;
+}
+
+/* 7. % ความคืบหน้า */
+#weightProgressPct{
+  font-size:clamp(15px,2.1vw,31px) !important;
+  font-weight:700 !important;
+  color:#118529 !important;
+}
+
+/* 8. จำนวนก้าว */
+#steps{
+  font-size:clamp(15px,2.35vw,35px) !important;
+  font-weight:600 !important;
+}
+
+/* 9. Calories */
+#calories{
+  font-size:clamp(15px,2.35vw,35px) !important;
+  font-weight:600 !important;
+}
+
+/* 10. Sleep */
+#sleep{
+  font-size:clamp(12px,2vw,24px) !important;
+  font-weight:600 !important;
+}
+
+/* 11. Health Score */
+#healthScore{
+  font-size:clamp(15px,2.35vw,35px) !important;
+  font-weight:600 !important;
+}
+
+/* 12. Reward Coin */
+#rewardCoin{
+  font-size:clamp(10px,1.5vw,20px) !important;
+  font-weight:600 !important;
+}
+
+/* 13. Reward Energy */
+#rewardEnergy{
+  font-size:clamp(10px,1.5vw,20px) !important;
+  font-weight:600 !important;
+}
+
+/* 14. InBody Score */
+#inbodyScore{
+  font-size:clamp(17px,2.3vw,34px) !important;
+  font-weight:600 !important;
+}
+
+/* 15. Project */
+#projectElapsed{
+  font-size:clamp(18px,2.3vw,34px) !important;
+  font-weight:600 !important;
+}
+
+/* 16. Ranking */
+#myRank{
+  font-size:clamp(22px,2.8vw,42px) !important;
+  font-weight:700 !important;
+}
+    /* HOME TEMPLATE ALIGN V2.19 — canonical CSS only */
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;padding:0;width:100%;min-height:100%;
+      background:#eef4ff;font-family:"Prompt",Arial,sans-serif;color:#082b68
+    }
+    body{display:flex;justify-content:center;align-items:flex-start;overflow-x:hidden}
+    #homeStage{
+      position:relative;width:min(100vw,1280px);aspect-ratio:1536/1024;
+      overflow:hidden;background:#fff;margin:0 auto
+    }
+    .template{
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:fill;z-index:1;pointer-events:none;user-select:none
+    }
+
+    .abs{
+      position:absolute;z-index:20;display:flex;align-items:center;justify-content:center;
+      text-align:center;font-weight:900;line-height:1.05;pointer-events:none
+    }
+
+    /* PROFILE */
+    #profileImage{
+      position:absolute;
+      z-index:10;
+      left:4.4%;
+      top:15.7%;
+      width:26.1%;
+      aspect-ratio:1/1;
+      height:auto;
+      object-fit:cover;
+      object-position:center center;
+      border-radius:50%;
+      overflow:hidden;
+      display:none
+    }
+    #teamName{
+      left:7.0%;
+      top:47.3%;
+      width:18%;
+      height:3.5%;
+      font-size:clamp(8px,1.15vw,16px);
+      font-weight:600;
+      color:#fff;
+      pointer-events:auto;
+      cursor:pointer;
+      z-index:70;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis
+    }
+    #teamEditModal{
+      position:fixed;inset:0;z-index:40000;display:none;align-items:center;justify-content:center;
+      padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
+    }
+    #teamEditModal.show{display:flex}
+    #teamEditModal .modal-card{width:min(92vw,430px)}
+    #lineDisplayNameBox{
+      padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;background:#f3f6fb;
+      color:#173b76;font-weight:800
+    }
+    #teamNameInput{width:100%;padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;font:inherit}
+    #teamCancel{background:#e9eef8;color:#173b76}
+    #teamSave{background:#0d5bd7;color:#fff}
+
+    /* TOP */
+    #coin{
+      left:78.0%;
+      top:4.55%;
+      width:7.2%;
+      height:4.6%;
+      font-size:clamp(10px,1.45vw,19px);
+      font-weight:500
+    }
+    #energy{
+      left:89.3%;
+      top:4.55%;
+      width:8.8%;
+      height:4.6%;
+      font-size:clamp(10px,1.45vw,19px);
+      font-weight:500;
+      white-space:nowrap
+    }
+    #level{left:25.1%;top:52.8%;width:6.3%;height:4.8%;font-size:clamp(14px,1.8vw,28px);color:#fff}
+    #expText{left:23.1%;top:61.3%;width:7.5%;height:3%;font-size:clamp(10px,1.2vw,17px)}
+    .bar{
+      position:absolute;z-index:18;height:1.45%;border-radius:999px;overflow:hidden;pointer-events:none
+    }
+    .bar>i{display:block;height:100%;width:0;border-radius:inherit;background:#1267f5}
+    #expTrack{left:7.4%;top:61.0%;width:15.2%}
+
+    /* WEIGHT */
+    #currentWeight{
+      left:42.6%;
+      top:20.0%;
+      width:17.3%;
+      height:6.2%;
+      font-size:clamp(22px,3.45vw,50px);
+      font-weight:700;
+      color:#071b65;
+      line-height:1
+    }
+    #targetWeight{
+      left:42.6%;
+      top:34.0%;
+      width:17.3%;
+      height:6.2%;
+      font-size:clamp(22px,3.45vw,50px);
+      font-weight:700;
+      color:#d71919;
+      line-height:1
+    }
+    #weightProgressPct{
+      left:53.0%;
+      top:47.2%;
+      width:6.0%;
+      height:4.5%;
+      font-size:clamp(16px,2.25vw,33px);
+      font-weight:800;
+      color:#118529
+    }
+    #weightProgressTrack{left:42.6%;top:49.4%;width:11.8%;height:1.7%}
+    #lost{left:36.1%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
+    #remaining{left:51.2%;top:58.2%;width:8%;height:4%;font-size:clamp(12px,1.55vw,22px)}
+
+    /* HEALTH CARDS */
+    #steps{
+      left:67.8%;
+      top:19.8%;
+      width:10.0%;
+      height:5.0%;
+      font-size:clamp(18px,2.55vw,38px);
+      font-weight:700;
+      color:#fff
+    }
+    #stepsTrack{left:62.2%;top:25.8%;width:12.2%;height:1.5%}
+    #calories{
+      left:86.2%;
+      top:19.8%;
+      width:11.5%;
+      height:5.0%;
+      font-size:clamp(18px,2.55vw,38px);
+      font-weight:700;
+      color:#fff
+    }
+    #caloriesTrack{left:81.0%;top:25.8%;width:14.0%;height:1.5%}
+    #sleep{
+      left:67.4%;
+      top:35.4%;
+      width:11.0%;
+      height:5.2%;
+      font-size:clamp(15px,2.15vw,31px);
+      font-weight:700;
+      color:#fff;
+      white-space:nowrap
+    }
+    #sleepTrack{left:62.2%;top:42.5%;width:12.2%;height:1.5%}
+    #healthScore{
+      left:86.5%;
+      top:35.4%;
+      width:11.2%;
+      height:5.2%;
+      font-size:clamp(18px,2.55vw,38px);
+      font-weight:700;
+      color:#fff;
+      white-space:nowrap
+    }
+    #healthTrack{left:81.0%;top:42.5%;width:14.0%;height:1.5%}
+
+    /* REWARDS */
+    #rewardCoin{
+      left:66.0%;
+      top:59.7%;
+      width:8.2%;
+      height:4.2%;
+      font-size:clamp(12px,1.65vw,24px);
+      font-weight:600
+    }
+    #rewardEnergy{
+      left:79.0%;
+      top:59.7%;
+      width:9.0%;
+      height:4.2%;
+      font-size:clamp(12px,1.65vw,24px);
+      font-weight:600
+    }
+    #rewardBadge{left:91.8%;top:60.2%;width:10%;height:4%;font-size:clamp(8px,1.05vw,15px)}
+
+    /* INBODY */
+    #inbodyDate{
+      left:36.1%;
+      top:67.9%;
+      width:11.2%;
+      height:2.5%;
+      font-size:clamp(7px,.78vw,11px);
+      font-weight:600
+    }
+    #inbodyScore{
+      left:35.5%;
+      top:72.3%;
+      width:8.2%;
+      height:4.6%;
+      font-size:clamp(18px,2.55vw,37px);
+      font-weight:700
+    }
+    #inbodyChart{
+      position:absolute;z-index:22;left:33.4%;top:76.4%;width:12.2%;height:7.0%;
+      pointer-events:none;overflow:visible
+    }
+    #inbodyUpload{
+      position:absolute;z-index:30;left:44.7%;top:72.8%;width:2.6%;aspect-ratio:1;
+      border:none;border-radius:50%;background:#16a63d;color:#fff;font-weight:900;
+      font-size:clamp(16px,2vw,29px);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)
+    }
+
+    /* PROJECT */
+    #projectRange{
+      left:53.7%;
+      top:72.4%;
+      width:13.5%;
+      height:3.4%;
+      font-size:clamp(9px,1.1vw,16px);
+      font-weight:600
+    }
+    #projectElapsed{
+      left:51.8%;
+      top:77.6%;
+      width:9.2%;
+      height:4.6%;
+      font-size:clamp(19px,2.45vw,36px);
+      font-weight:700
+    }
+    #projectTrack{left:50.6%;top:81.1%;width:11.8%;height:1.5%}
+    #projectRemaining{
+      left:51.8%;
+      top:85.2%;
+      width:9.2%;
+      height:3.8%;
+      font-size:clamp(11px,1.35vw,20px);
+      font-weight:600
+    }
+
+    /* RANKING */
+    #myRank{
+      left:69.2%;
+      top:75.6%;
+      width:9.0%;
+      height:6.0%;
+      font-size:clamp(24px,3.0vw,45px);
+      font-weight:800
+    }
+    #participantCount{
+      left:68.3%;
+      top:83.7%;
+      width:11.2%;
+      height:3.5%;
+      font-size:clamp(9px,1.2vw,17px);
+      font-weight:600
+    }
+    #top1Score{left:87.7%;top:85.7%;width:8%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
+    #top2Score{left:81.2%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
+    #top3Score{left:94.0%;top:87.2%;width:7%;height:3%;font-size:clamp(8px,1vw,15px);color:#fff}
+
+    /* HEALTH CARD LINKS */
+    #steps,
+    #calories,
+    #sleep{
+      pointer-events:auto;
+      cursor:pointer;
+      z-index:60;
+    }
+
+    /* HOTSPOTS */
+    .hotspot{position:absolute;z-index:40;background:transparent;border:0;cursor:pointer}
+    #weightButton{left:1.2%;top:66.7%;width:14.4%;height:21.0%}
+    #progressButton{left:16.7%;top:66.7%;width:14.5%;height:21.0%}
+    #inbodyViewButton{left:33.2%;top:83.3%;width:13.8%;height:4.5%}
+    #projectSettingsButton{left:48.0%;top:66.7%;width:14.2%;height:21.0%}
+    #rankingButton{left:64.7%;top:66.7%;width:33.8%;height:21.0%}
+    #rewardsButton{left:61.0%;top:47.7%;width:37.5%;height:17.8%}
+    #homeButton{left:1.0%;top:89.1%;width:31.8%;height:8.9%}
+    #missionButton{left:34.0%;top:89.1%;width:30.1%;height:8.9%}
+    #battleButton{left:65.0%;top:89.1%;width:33.0%;height:8.9%}
+
+   /* =========================================================
+   STATUS / ERROR
+   ต้องอยู่เหนือ InBody Modal
+========================================================= */
+
+#status{
+  position:fixed;
+
+  left:50%;
+  bottom:max(
+    22px,
+    env(safe-area-inset-bottom)
+  );
+
+  transform:translateX(-50%);
+
+  z-index:120000 !important;
+
+  display:none;
+
+  width:max-content;
+  max-width:calc(100vw - 28px);
+
+  padding:12px 18px;
+
+  border-radius:16px;
+
+  background:rgba(7,59,147,.97);
+
+  color:#fff;
+
+  font-size:14px;
+  font-weight:800;
+  line-height:1.45;
+
+  text-align:center;
+
+  box-shadow:0 8px 28px rgba(0,0,0,.30);
+}
+
+#status.show{
+  display:block !important;
+}
+
+#status.error{
+  display:block !important;
+  background:#c62828 !important;
+}
+
+    /* MODAL */
+    #inbodyModal{
+      position:fixed;inset:0;z-index:30000;display:none;align-items:center;justify-content:center;
+      padding:18px;background:rgba(3,20,55,.68);backdrop-filter:blur(4px)
+    }
+    #inbodyModal.show{display:flex}
+    .modal-card{
+      width:min(92vw,430px);padding:20px;background:#fff;border-radius:22px;
+      box-shadow:0 18px 55px rgba(0,0,0,.3)
+    }
+    .modal-card h2{margin:0 0 14px;font-size:20px}
+    .field{margin-bottom:12px}
+    .field label{display:block;margin-bottom:5px;font-size:13px;font-weight:800}
+    .field input{width:100%;padding:11px 12px;border:1px solid #cbd8ee;border-radius:12px;font:inherit}
+    .modal-actions{display:grid;grid-template-columns:1fr 1.3fr;gap:10px;margin-top:16px}
+    .modal-actions button{min-height:44px;border:0;border-radius:12px;font:inherit;font-weight:900;cursor:pointer}
+    #inbodyCancel{background:#e9eef8;color:#173b76}
+    #inbodySave{background:#0d5bd7;color:#fff}
+    #inbodySave:disabled{opacity:.55}
+
+    @media(max-width:700px){
+      #homeStage{width:100vw}
+    }
+
+    /* =====================================================
+       NOTIFICATION V2.9
+    ====================================================== */
+
+    #notificationBell{
+      position:absolute;
+      z-index:30;
+      top:2.1%;
+      right:2.2%;
+      width:42px;
+      height:42px;
+      border:0;
+      border-radius:50%;
+      background:
+        rgba(255,255,255,.94);
+      box-shadow:
+        0 4px 12px
+        rgba(0,0,0,.2);
+      font-size:21px;
+      cursor:pointer;
+    }
+
+    #notificationBadge{
+      position:absolute;
+      z-index:31;
+      top:-5px;
+      right:-5px;
+      min-width:20px;
+      height:20px;
+      padding:0 5px;
+      border-radius:999px;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:#e4202a;
+      color:#fff;
+      border:2px solid #fff;
+      font-size:10px;
+      font-weight:1000;
+      line-height:16px;
+    }
+
+    #notificationPanel{
+      position:fixed;
+      z-index:1200;
+      inset:0;
+      display:none;
+      align-items:flex-start;
+      justify-content:center;
+      padding:
+        calc(70px + env(safe-area-inset-top))
+        14px
+        20px;
+      background:
+        rgba(8,27,53,.45);
+      backdrop-filter:blur(3px);
+    }
+
+    #notificationPanel.show{
+      display:flex;
+    }
+
+    .notification-card{
+      width:min(560px,100%);
+      max-height:75vh;
+      overflow:auto;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:
+        0 18px 50px
+        rgba(0,0,0,.25);
+      padding:14px;
+    }
+
+    .notification-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .notification-head h2{
+      margin:0;
+      color:#12376d;
+      font-size:18px;
+    }
+
+    .notification-head-actions{
+      display:flex;
+      gap:6px;
+    }
+
+    .notification-head button{
+      border:0;
+      border-radius:10px;
+      padding:8px 10px;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    #notificationList{
+      display:grid;
+      gap:8px;
+    }
+
+    .notification-item{
+      width:100%;
+      border:1px solid #dce8f4;
+      border-radius:14px;
+      padding:11px 12px;
+      background:#f8fbff;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .notification-item.unread{
+      border-color:#63a7ee;
+      background:#eef7ff;
+      box-shadow:
+        inset 4px 0 0
+        #1671d8;
+    }
+
+    .notification-title{
+      color:#163a6a;
+      font-size:13px;
+      font-weight:1000;
+    }
+
+    .notification-message{
+      margin-top:4px;
+      color:#516d89;
+      font-size:11px;
+      line-height:1.45;
+    }
+
+    .notification-time{
+      margin-top:5px;
+      color:#8294a7;
+      font-size:9px;
+    }
+
+    #notificationToast{
+      position:fixed;
+      z-index:1190;
+      left:50%;
+      top:
+        calc(
+          12px +
+          env(safe-area-inset-top)
+        );
+      transform:
+        translateX(-50%);
+      width:min(92vw,560px);
+      display:none;
+      gap:10px;
+      align-items:center;
+      padding:11px 13px;
+      border-radius:15px;
+      background:
+        linear-gradient(
+          135deg,
+          #0d62c7,
+          #14916f
+        );
+      color:#fff;
+      box-shadow:
+        0 10px 28px
+        rgba(0,0,0,.24);
+      cursor:pointer;
+    }
+
+    #notificationToast.show{
+      display:flex;
+    }
+
+    #notificationToastIcon{
+      font-size:24px;
+    }
+
+    #notificationToastTitle{
+      font-size:12px;
+      font-weight:1000;
+    }
+
+    #notificationToastMessage{
+      margin-top:2px;
+      font-size:10px;
+      line-height:1.35;
+      opacity:.95;
+    }
+
+  
+    /* HOME HEALTH INPUT + ACTIVITY MODAL V2.12 */
+    .health-v212{
+      position:absolute;
+      z-index:30;
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    #stepsEntry{left:62.0%;top:27.8%;width:15%}
+    #sleepEntry{left:62.0%;top:43.9%;width:15%}
+    .health-v212 button{
+      border:0;
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:clamp(8px,1vw,13px);
+      font-weight:900;
+      cursor:pointer;
+      background:rgba(255,255,255,.94);
+      color:#0754ad;
+      box-shadow:0 2px 8px rgba(0,0,0,.14);
+    }
+    .health-v212 .qualified{
+      background:#dff8e8;
+      color:#087438;
+    }
+    #calories{
+      cursor:pointer;
+    }
+    .v212-modal-bg{
+      position:fixed;
+      z-index:10000;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(3,24,55,.62);
+    }
+    .v212-modal-bg.show{display:flex}
+    .v212-modal{
+      width:min(520px,100%);
+      max-height:88vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:24px;
+      padding:22px;
+      color:#0a376f;
+      box-shadow:0 24px 70px rgba(0,0,0,.3);
+    }
+    .v212-modal h3{margin:0 0 8px;font-size:24px}
+    .v212-field{margin-top:14px}
+    .v212-field label{display:block;margin-bottom:6px;font-weight:900}
+    .v212-field input{
+      width:100%;min-height:52px;border:2px solid #c9daf0;
+      border-radius:14px;padding:10px 14px;font-size:20px;font-weight:800;
+    }
+    .v212-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .v212-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    .v212-actions button{
+      min-height:48px;border:0;border-radius:14px;font-weight:900;font-size:16px;
+    }
+    .v212-cancel{background:#edf3fb;color:#16467f}
+    .v212-save{background:#0966d8;color:#fff}
+    .v212-mission{
+      width:100%;margin-top:12px;min-height:48px;border:0;border-radius:14px;
+      background:#0bbf64;color:#fff;font-weight:900;font-size:15px;
+    }
+    .v212-activity{
+      padding:12px 0;border-bottom:1px solid #e4edf8;
+    }
+    .v212-activity strong{display:block}
+    .v212-total{margin-top:14px;font-size:20px;font-weight:950}
+
+
+    /* HOME V2.20 — hide notification bell on HOME */
+    #notificationBell,
+    #notificationBadge{
+      display:none !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+    }
+
+
+    /* =====================================================
+       TEAM NAME — FINAL POSITION
+    ===================================================== */
+    #teamName{
+      position:absolute !important;
+      left:7.0% !important;
+      top:47.3% !important;
+      width:22% !important;
+      height:3.5% !important;
+
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+
+      color:#ffffff !important;
+      font-size:clamp(8px,1vw,15px) !important;
+      font-weight:500 !important;
+      line-height:1 !important;
+
+      text-align:center !important;
+      white-space:nowrap !important;
+      overflow:hidden !important;
+      text-overflow:ellipsis !important;
+
+      z-index:70 !important;
+      visibility:visible !important;
+      opacity:1 !important;
+      pointer-events:auto !important;
+      cursor:pointer !important;
+    }
+
+    /* HOME — no notification bell */
+    #notificationBell,
+    #notificationBadge{
+      display:none !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+    }
+
+</style>
+</head>
+
+<body>
+  <div id="homeStage">
+    <img class="template" src="./home-template.png?v=20260830-home-single-api-v40" alt="ROCK YOUR BODY 2026 HOME" draggable="false">
+    <img id="profileImage" alt="LINE Profile">
+
+    <div id="teamName" class="abs" title="แตะเพื่อเปลี่ยนชื่อทีม">กำลังโหลด...</div>
+
+    <div id="coin" class="abs">0</div>
+    <div id="energy" class="abs">0 / 200</div>
+    <div id="level" class="abs">Lv.1</div>
+    <div id="expTrack" class="bar"><i id="expBar"></i></div>
+    <div id="expText" class="abs">0 / 500</div>
+
+    <div id="currentWeight" class="abs">--.- kg</div>
+    <div id="targetWeight" class="abs">--.- kg</div>
+    <div id="weightProgressPct" class="abs">0%</div>
+    <div id="weightProgressTrack" class="bar"><i id="weightProgressBar"></i></div>
+    <div id="lost" class="abs">--.- kg</div>
+    <div id="remaining" class="abs">--.- kg</div>
+
+    <div id="steps" class="abs">0</div>
+    <div id="stepsTrack" class="bar"><i id="stepsBar"></i></div>
+
+    <div id="calories" class="abs">0 kcal</div>
+    <div id="caloriesTrack" class="bar"><i id="caloriesBar"></i></div>
+
+    <div id="sleep" class="abs">0 ชม. 0 นาที</div>
+    <div id="sleepTrack" class="bar"><i id="sleepBar"></i></div>
+
+    <div id="stepsEntry" class="health-v212">
+      <button id="editStepsButton" type="button">กรอกก้าววันนี้</button>
+      <button id="moveMoreMissionButton" class="qualified" type="button" style="display:none">
+        ✓ ถึงเป้าหมาย
+      </button>
+    </div>
+
+    <div id="sleepEntry" class="health-v212">
+      <button id="editSleepButton" type="button">กรอกการนอน</button>
+      <button id="sleepMissionButton" class="qualified" type="button" style="display:none">
+        ✓ ถึงเป้าหมาย
+      </button>
+    </div>
+
+    <div id="healthScore" class="abs">-- / 100</div>
+    <div id="healthTrack" class="bar"><i id="healthBar"></i></div>
+
+    <div id="rewardCoin" class="abs">0</div>
+    <div id="rewardEnergy" class="abs">0 / 200</div>
+    <div id="rewardBadge" class="abs">--</div>
+
+    <div id="inbodyDate" class="abs">ยังไม่มีข้อมูล</div>
+    <div id="inbodyScore" class="abs">--</div>
+    <svg id="inbodyChart" viewBox="0 0 220 80" preserveAspectRatio="none"></svg>
+    <button id="inbodyUpload" type="button" aria-label="อัปโหลด InBody">+</button>
+
+    <div id="projectRange" class="abs">--</div>
+    <div id="projectElapsed" class="abs">-- วัน</div>
+    <div id="projectTrack" class="bar"><i id="projectBar"></i></div>
+    <div id="projectRemaining" class="abs">-- วัน</div>
+
+    <div id="myRank" class="abs"># --</div>
+    <div id="participantCount" class="abs">-- คน</div>
+    <div id="top1Score" class="abs"></div>
+    <div id="top2Score" class="abs"></div>
+    <div id="top3Score" class="abs"></div>
+
+    <button id="weightButton" class="hotspot" aria-label="Weight Check"></button>
+    <button id="progressButton" class="hotspot" aria-label="My Progress"></button>
+    <button id="inbodyViewButton" class="hotspot" aria-label="ดูผล InBody ทั้งหมด"></button>
+    <button id="projectSettingsButton" class="hotspot" aria-label="Project Settings"></button>
+    <button id="rankingButton" class="hotspot" aria-label="Ranking"></button>
+    <button id="rewardsButton" class="hotspot" aria-label="Rewards"></button>
+    <button id="homeButton" class="hotspot" aria-label="Home"></button>
+    <button id="missionButton" class="hotspot" aria-label="Mission"></button>
+    <button id="battleButton" class="hotspot" aria-label="Battle"></button>
+  </div>
+
+  <div
+    id="notificationToast"
+    role="button"
+    tabindex="0"
+  >
+    <div id="notificationToastIcon">💬</div>
+    <div>
+      <div id="notificationToastTitle">
+        มีการแจ้งเตือนใหม่
+      </div>
+      <div id="notificationToastMessage"></div>
+    </div>
+  </div>
+
+
+  <div id="notificationPanel">
+    <div class="notification-card">
+
+      <div class="notification-head">
+        <h2>
+          🔔 การแจ้งเตือน
+        </h2>
+
+        <div class="notification-head-actions">
+          <button
+            id="markAllNotificationsButton"
+            type="button"
+          >
+            อ่านทั้งหมด
+          </button>
+
+          <button
+            id="closeNotificationsButton"
+            type="button"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div id="notificationList">
+        <div class="notification-item">
+          กำลังโหลด...
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div id="teamEditModal">
+    <div class="modal-card">
+      <h2>ข้อมูล HERO / ทีม</h2>
+
+      <div class="field">
+        <label>ชื่อ HERO จาก LINE</label>
+        <div id="lineDisplayNameBox">--</div>
+      </div>
+
+      <div class="field">
+        <label for="teamNameInput">ชื่อทีม</label>
+        <input id="teamNameInput" type="text" maxlength="30" placeholder="เช่น HERO ROCK">
+      </div>
+
+      <div class="modal-actions">
+        <button id="teamCancel" type="button">ยกเลิก</button>
+        <button id="teamSave" type="button">บันทึกชื่อทีม</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="status"></div>
+
+  <div id="inbodyModal">
+    <div class="modal-card">
+      <h2>อัปโหลดผล InBody</h2>
+
+      <div class="field">
+        <label for="inbodyMeasuredDate">วันที่ตรวจ</label>
+        <input id="inbodyMeasuredDate" type="date">
+      </div>
+
+      <div class="field">
+        <label for="inbodyScoreInput">InBody Score</label>
+        <input id="inbodyScoreInput" type="number" min="0" max="150" step="1" inputmode="numeric" placeholder="เช่น 72">
+      </div>
+
+      <div class="field">
+        <label for="inbodyFileInput">รูป/PDF ผล InBody</label>
+        <input id="inbodyFileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">
+      </div>
+
+      <div class="modal-actions">
+        <button id="inbodyCancel" type="button">ยกเลิก</button>
+        <button id="inbodySave" type="button">บันทึกผล</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const $ = id => document.getElementById(id);
+
+    let loading = false;
+    let refreshTimer = null;
+    let currentLineProfile = null;
+    let currentTeamName = "HERO ROCK";
+    let notificationItems = [];
+    let notificationToastItem = null;
+    let dashboardUnreadNotifications = 0;
+
+    function showStatus(message,isError=false){
+      const el=$("status");
+      el.textContent=message;
+      el.classList.toggle("error",!!isError);
+      el.style.display="block";
+    }
+
+    function hideStatus(){
+      $("status").style.display="none";
+    }
+
+    function num(value,fallback=0){
+      const n=Number(value);
+      return Number.isFinite(n)?n:fallback;
+    }
+
+    function pick(...values){
+      for(const v of values){
+        if(v!==undefined && v!==null && v!=="") return v;
+      }
+      return null;
+    }
+
+    function clamp(value,min,max){
+      return Math.max(min,Math.min(max,num(value,0)));
+    }
+
+    function fmtInt(v){
+      return Math.round(num(v,0)).toLocaleString("en-US");
+    }
+
+    function fmtWeight(v){
+      const n=Number(v);
+      return Number.isFinite(n)?n.toFixed(1):"--.-";
+    }
+
+    function fmtDate(value){
+      if(!value) return "--";
+      const d=new Date(value);
+      if(Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleDateString("th-TH",{day:"2-digit",month:"short",year:"numeric"});
+    }
+
+    function fmtDateShort(value){
+      if(!value) return "--";
+      const d=new Date(value);
+      if(Number.isNaN(d.getTime())) return String(value);
+      return d.toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
+    }
+
+    function fmtSleep(value){
+
+      if(
+        value === null ||
+        value === undefined ||
+        value === ""
+      ){
+        return "0 ชม. 0 นาที";
+      }
+
+      if(
+        typeof value ===
+        "object"
+      ){
+        const totalMinutes =
+          Number(
+            value?.totalMinutes ??
+            value?.total_minutes ??
+            value?.sleepMinutes ??
+            value?.sleep_minutes
+          );
+
+        if(
+          Number.isFinite(
+            totalMinutes
+          )
+        ){
+          const h =
+            Math.floor(
+              totalMinutes /
+              60
+            );
+
+          const m =
+            Math.round(
+              totalMinutes %
+              60
+            );
+
+          return (
+            `${h} ชม. ${m} นาที`
+          );
+        }
+
+        const h =
+          Number(
+            value?.hours ??
+            0
+          );
+
+        const m =
+          Number(
+            value?.minutes ??
+            0
+          );
+
+        if(
+          Number.isFinite(h) &&
+          Number.isFinite(m)
+        ){
+          return (
+            `${Math.floor(h)} ชม. ${Math.round(m)} นาที`
+          );
+        }
+
+        return "--";
+      }
+
+      const n =
+        Number(value);
+
+      if(
+        Number.isFinite(n)
+      ){
+        if(n > 24){
+          const h =
+            Math.floor(
+              n /
+              60
+            );
+
+          const m =
+            Math.round(
+              n %
+              60
+            );
+
+          return (
+            `${h} ชม. ${m} นาที`
+          );
+        }
+
+        const h =
+          Math.floor(n);
+
+        const m =
+          Math.round(
+            (n - h) * 60
+          );
+
+        return (
+          `${h} ชม. ${m} นาที`
+        );
+      }
+
+      return String(value);
+    }
+
+    function setBar(id,pct){
+      const el=$(id);
+      if(el) el.style.width=clamp(pct,0,100)+"%";
+    }
+
+   /* =====================================================
+   LINE LIFF AUTH
+===================================================== */
+
+const LIFF_ID =
+  window.APP_CONFIG?.LIFF_ID ||
+  "2011201679-uNWz5yqF";
+
+async function initLINE(){
 
   if(typeof liff === "undefined"){
     throw new Error("LINE LIFF SDK ไม่พร้อม");
   }
 
   await liff.init({
-    liffId:
-      window.APP_CONFIG?.LIFF_ID ||
-      "2011201679-uNWz5yqF"
+    liffId: LIFF_ID
+  });
+
+  console.log("[LIFF]", {
+    isInClient: liff.isInClient(),
+    isLoggedIn: liff.isLoggedIn()
   });
 
   if(!liff.isLoggedIn()){
-    liff.login({
-      redirectUri: window.location.href
-    });
+    liff.login();
     return false;
   }
 
   const idToken = liff.getIDToken();
 
+  console.log(
+    "[LIFF] token available:",
+    Boolean(idToken)
+  );
+
   if(!idToken){
-    throw new Error("ไม่พบ LINE ID Token");
+    throw new Error(
+      "ไม่พบ LINE ID Token กรุณาปิดหน้านี้แล้วเปิดจากเมนู LINE ใหม่"
+    );
   }
 
   return true;
 }
 
-async function fetchHomeDashboard(){
 
-  if(!HOME_API){
-    throw new Error("ไม่พบ PLAYER API");
+/* =====================================================
+   GET CURRENT ID TOKEN
+===================================================== */
+
+async function getIdToken(){
+
+  if(typeof liff === "undefined"){
+    throw new Error("LINE LIFF SDK ไม่พร้อม");
   }
 
-  const idToken = liff.getIDToken();
+  if(!liff.isLoggedIn()){
+    liff.login();
+    return null;
+  }
 
-  const response = await fetch(HOME_API,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    cache:"no-store",
-    body:JSON.stringify({
-      action:"dashboard",
-      idToken
-    })
-  });
+  const token = liff.getIDToken();
 
-  const raw = await response.text();
+  if(!token){
+    throw new Error("ไม่พบ LINE ID Token");
+  }
 
-  let result = {};
+  return token;
+}
+
+
+/* =====================================================
+   LINE PROFILE
+===================================================== */
+
+async function getLineProfileSafe(){
+  if(currentLineProfile) return currentLineProfile;
 
   try{
-    result = raw ? JSON.parse(raw) : {};
+    currentLineProfile = await liff.getProfile();
+  }catch(error){
+    console.warn("LINE PROFILE ERROR:",error);
+    currentLineProfile = {};
+  }
+
+  return currentLineProfile;
+}
+
+
+/* =====================================================
+   POST JSON
+   เติม idToken ปัจจุบันจาก LIFF ให้อัตโนมัติทุกครั้ง
+===================================================== */
+
+async function postJson(url,payload={}){
+
+  const idToken = await getIdToken();
+
+  if(!idToken){
+    return null;
+  }
+
+  const requestBody = {
+    ...payload,
+    idToken
+  };
+
+  console.log(
+    "[API REQUEST]",
+    url,
+    {
+      action: requestBody.action,
+      hasIdToken: Boolean(idToken),
+      tokenLength: idToken?.length || 0
+    }
+  );
+
+  let response;
+
+  try{
+    response = await fetch(url,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(requestBody)
+    });
+  }catch(error){
+    console.error("[FETCH NETWORK ERROR]",error);
+    throw new Error("เชื่อมต่อ API ไม่สำเร็จ");
+  }
+
+  const text = await response.text();
+  let data = {};
+
+  try{
+    data = text ? JSON.parse(text) : {};
   }catch{
+    console.error("[API RAW RESPONSE]",text);
     throw new Error(
-      "player-dashboard ตอบกลับไม่ใช่ JSON"
+      `API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
+    );
+  }
+
+  console.log(
+    "[API RESPONSE]",
+    response.status,
+    data
+  );
+
+  if(
+    response.status === 401 &&
+    (
+      data?.code === "LINE_TOKEN_MISSING" ||
+      data?.code === "LINE_AUTH_FAILED"
+    )
+  ){
+    throw new Error(
+      data?.error ||
+      "LINE authentication ไม่สำเร็จ"
     );
   }
 
   if(
     !response.ok ||
-    result?.success === false
+    data?.success === false
   ){
     throw new Error(
-      result?.error ||
-      result?.message ||
+      data?.error ||
+      data?.message ||
       `HTTP ${response.status}`
     );
   }
 
-  return result?.data ??
-         result?.dashboard ??
-         result;
+  return data;
 }
 
-function renderHome(data){
 
-  const player =
-    data?.player ??
-    data?.user ??
-    {};
+/* =====================================================
+   NOTIFICATIONS V2.9
+===================================================== */
 
-  const wallet =
-    data?.wallet ??
-    {};
+async function fetchNotifications(
+  onlyUnread=false
+){
 
-  const weight =
-    data?.weight ??
-    {};
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
 
-  const today =
-    data?.today ??
-    data?.dailyHealth ??
-    {};
-
-  const inbody =
-    data?.inbody ??
-    {};
-
-  const project =
-    data?.project ??
-    {};
-
-  const ranking =
-    data?.ranking ??
-    {};
-
-  if($("coin")){
-    $("coin").textContent =
-      Number(
-        wallet.rockCoin ??
-        data.rockCoin ??
-        data.rock_coin ??
-        0
-      ).toLocaleString();
-  }
-
-  const energy =
-    Number(
-      wallet.energy ??
-      data.energy?.current ??
-      data.energy ??
-      0
-    ) || 0;
-
-  const maxEnergy =
-    Number(
-      wallet.maxEnergy ??
-      data.energy?.max ??
-      data.maxEnergy ??
-      200
-    ) || 200;
-
-  if($("energy")){
-    $("energy").textContent =
-      `${energy} / ${maxEnergy}`;
-  }
-
-  if($("currentWeight")){
-    const v =
-      weight.current ??
-      data.currentWeight;
-
-    $("currentWeight").textContent =
-      v != null
-        ? `${Number(v).toFixed(1)} kg`
-        : "-- kg";
-  }
-
-  if($("targetWeight")){
-    const v =
-      weight.target ??
-      data.targetWeight;
-
-    $("targetWeight").textContent =
-      v != null
-        ? `${Number(v).toFixed(1)} kg`
-        : "-- kg";
-  }
-
-  if($("weightProgressPct")){
-    $("weightProgressPct").textContent =
-      `${Math.round(
-        Number(
-          weight.progressPercent ??
-          data.weightProgressPct ??
-          0
-        )
-      )}%`;
-  }
-
-  if($("steps")){
-    $("steps").textContent =
-      Number(
-        today.steps ??
-        data.steps ??
-        0
-      ).toLocaleString();
-  }
-
-  if($("calories")){
-    $("calories").textContent =
-      `${Math.round(
-        Number(
-          today.calories ??
-          data.calories ??
-          0
-        )
-      )} kcal`;
-  }
-
-  if($("sleep")){
-    const minutes =
-      Number(
-        today.sleepMinutes ??
-        data.sleepMinutes ??
-        0
-      ) || 0;
-
-    const h =
-      Math.floor(minutes / 60);
-
-    const m =
-      minutes % 60;
-
-    $("sleep").textContent =
-      `${h} ชม. ${m} นาที`;
-  }
-
-  if($("healthScore")){
-    const score =
-      today.healthScore ??
-      data.healthScore;
-
-    $("healthScore").textContent =
-      score != null
-        ? `${score} / 100`
-        : "-- / 100";
-  }
-
-  if($("inbodyScore")){
-    $("inbodyScore").textContent =
-      inbody.score ??
-      "--";
-  }
-
-  if($("myRank")){
-    $("myRank").textContent =
-      ranking.rank
-        ? `#${ranking.rank}`
-        : "# --";
-  }
-
-  const image =
-    $("profileImage");
-
-  if(image){
-    const picture =
-      player.pictureUrl ??
-      player.picture_url ??
-      "";
-
-    if(picture){
-      image.src = picture;
-      image.style.display = "block";
+  return await postJson(
+    api,
+    {
+      action:
+        "notifications",
+      onlyUnread
     }
-  }
-
-  const team =
-    $("teamName");
-
-  if(team){
-    team.textContent =
-      player.teamName ??
-      player.team_name ??
-      "";
-  }
+  );
 }
 
-async function startHome(){
+
+async function markNotificationRead(
+  notificationId
+){
+
+  if(!notificationId){
+    return;
+  }
+
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
+
+  await postJson(
+    api,
+    {
+      action:
+        "markNotificationRead",
+      notificationId
+    }
+  );
+}
+
+
+async function markAllNotificationsRead(){
+
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
+
+  await postJson(
+    api,
+    {
+      action:
+        "markAllNotificationsRead"
+    }
+  );
+}
+
+
+function notificationDate(
+  value
+){
+
+  if(!value){
+    return "";
+  }
+
+  const d =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+    return "";
+  }
+
+  return d.toLocaleString(
+    "th-TH",
+    {
+      day:"numeric",
+      month:"short",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+}
+
+
+function escapeNotificationHtml(
+  value
+){
+
+  return String(
+    value ??
+    ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+}
+
+
+function renderNotificationBadge(){
+
+  const badge =
+    $("notificationBadge");
+
+  const unreadFromItems =
+    notificationItems
+      .filter(
+        item =>
+          item?.is_read ===
+          false
+      )
+      .length;
+
+  const unread =
+    notificationItems.length > 0
+      ? unreadFromItems
+      : dashboardUnreadNotifications;
+
+  badge.textContent =
+    unread > 99
+      ? "99+"
+      : String(unread);
+
+  badge.style.display =
+    unread > 0
+      ? "flex"
+      : "none";
+}
+
+
+function renderNotificationList(){
+
+  const host =
+    $("notificationList");
+
+  if(
+    !Array.isArray(
+      notificationItems
+    ) ||
+    notificationItems.length === 0
+  ){
+
+    host.innerHTML =
+      `
+        <div
+          class="notification-item"
+          style="cursor:default;text-align:center;color:#71869b"
+        >
+          ยังไม่มีการแจ้งเตือน
+        </div>
+      `;
+
+    return;
+  }
+
+  host.innerHTML =
+    notificationItems
+      .map(
+        item => `
+          <button
+            class="notification-item ${
+              item?.is_read
+                ? ""
+                : "unread"
+            }"
+            type="button"
+            data-notification-id="${
+              escapeNotificationHtml(
+                item.id
+              )
+            }"
+          >
+            <div class="notification-title">
+              ${
+                escapeNotificationHtml(
+                  item.title ||
+                  "การแจ้งเตือน"
+                )
+              }
+            </div>
+
+            <div class="notification-message">
+              ${
+                escapeNotificationHtml(
+                  item.message ||
+                  ""
+                )
+              }
+            </div>
+
+            <div class="notification-time">
+              ${
+                escapeNotificationHtml(
+                  notificationDate(
+                    item.created_at
+                  )
+                )
+              }
+            </div>
+          </button>
+        `
+      )
+      .join("");
+
+  host
+    .querySelectorAll(
+      "[data-notification-id]"
+    )
+    .forEach(
+      button => {
+
+        button
+          .addEventListener(
+            "click",
+            async () => {
+
+              const id =
+                button.dataset
+                  .notificationId;
+
+              const item =
+                notificationItems
+                  .find(
+                    x =>
+                      x.id === id
+                  );
+
+              if(!item){
+                return;
+              }
+
+              try{
+
+                if(
+                  item.is_read ===
+                  false
+                ){
+
+                  await markNotificationRead(
+                    item.id
+                  );
+
+                  item.is_read =
+                    true;
+
+                  renderNotificationBadge();
+                }
+
+              }catch(error){
+
+                console.warn(
+                  "MARK NOTIFICATION READ ERROR:",
+                  error
+                );
+              }
+
+              const target =
+                item.target_page ||
+                "./inbody.html";
+
+              window.location.href =
+                target;
+            }
+          );
+      }
+    );
+}
+
+
+function showNotificationToast(
+  item
+){
+
+  if(!item){
+    return;
+  }
+
+  notificationToastItem =
+    item;
+
+  $("notificationToastTitle")
+    .textContent =
+      item.title ||
+      "มีการแจ้งเตือนใหม่";
+
+  $("notificationToastMessage")
+    .textContent =
+      item.message ||
+      "";
+
+  $("notificationToast")
+    .classList.add(
+      "show"
+    );
+}
+
+
+function hideNotificationToast(){
+
+  $("notificationToast")
+    .classList.remove(
+      "show"
+    );
+
+  notificationToastItem =
+    null;
+}
+
+
+async function openNotifications(){
+
+  $("notificationPanel")
+    .classList.add(
+      "show"
+    );
+
+  await loadNotifications(
+    false,
+    false
+  );
+}
+
+
+function closeNotifications(){
+
+  $("notificationPanel")
+    .classList.remove(
+      "show"
+    );
+}
+
+
+async function loadNotifications(
+  showToast=true,
+  unreadOnly=false
+){
 
   try{
 
-    const ready =
-      await withTimeout(
-        initHomeLiff(),
-        LOADING_TIMEOUT_MS
+    const result =
+      await fetchNotifications(
+        unreadOnly
       );
 
-    if(ready === false){
-      return;
+    notificationItems =
+      Array.isArray(
+        result?.notifications
+      )
+        ? result.notifications
+        : [];
+
+    renderNotificationBadge();
+    renderNotificationList();
+
+    const latestUnread =
+      notificationItems
+        .find(
+          item =>
+            item?.is_read ===
+            false
+        );
+
+    if(
+      showToast &&
+      latestUnread
+    ){
+      showNotificationToast(
+        latestUnread
+      );
     }
-
-    const data =
-      await withTimeout(
-        fetchHomeDashboard(),
-        LOADING_TIMEOUT_MS
-      );
-
-    console.log(
-      "HOME DASHBOARD DATA:",
-      data
-    );
-
-    renderHome(data);
 
   }catch(error){
 
-    showHomeError(
-      error?.message ||
-      "โหลดข้อมูล HOME ไม่สำเร็จ"
+    console.warn(
+      "LOAD NOTIFICATIONS ERROR:",
+      error
     );
-
-  }finally{
-
-    hideHomeLoading();
-
   }
 }
 
-document.addEventListener(
-  "DOMContentLoaded",
-  startHome
-);
-</script>
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+async function fetchDashboard(){
+
+  const api =
+    window.APP_CONFIG
+      .getApi("PLAYER");
+
+  const timeoutMs =
+    12000;
+
+  return await Promise.race([
+    postJson(
+      api,
+      {
+        action:"dashboard"
+      }
+    ),
+
+    new Promise(
+      (_,reject) =>
+        setTimeout(
+          () =>
+            reject(
+              new Error(
+                "PLAYER API ใช้เวลานานเกิน 12 วินาที"
+              )
+            ),
+          timeoutMs
+        )
+    )
+  ]);
+}
+
+    function normalizeDashboard(raw){
+      const data=raw?.data ?? raw?.dashboard ?? raw ?? {};
+      const user=data?.user ?? data?.player ?? {};
+      const weight=(data?.weight && typeof data.weight==="object")?data.weight:{};
+      const energy=(data?.energy && typeof data.energy==="object")?data.energy:{};
+      const activity=data?.activity ?? data?.today ?? data?.health ?? {};
+      const rewards=data?.rewards ?? data?.myRewards ?? data?.my_rewards ?? {};
+      const project=data?.project ?? data?.campaign ?? {};
+      const ranking=data?.ranking ?? data?.leaderboard ?? {};
+      const expObj=(data?.exp && typeof data.exp==="object")?data.exp:{};
+
+      const coin=num(pick(
+        data.rockCoin,data.rock_coin,data.coin,
+        user.rockCoin,user.rock_coin,user.coin
+      ),0);
+
+      const currentEnergy=num(pick(
+        energy.current,data.energyCurrent,data.currentEnergy,data.current_energy,
+        user.energy,typeof data.energy==="number"?data.energy:null
+      ),0);
+
+      const maxEnergy=num(pick(
+        energy.max,data.maxEnergy,data.max_energy,user.maxEnergy,user.max_energy,
+        window.APP_CONFIG?.MAX_ENERGY,200
+      ),200);
+
+      const currentWeight=pick(
+        weight.current,weight.currentWeight,weight.current_weight,
+        data.currentWeight,data.current_weight,user.currentWeight,user.current_weight
+      );
+
+      const targetWeight=pick(
+        weight.target,weight.targetWeight,weight.target_weight,
+        data.targetWeight,data.target_weight,user.targetWeight,user.target_weight
+      );
+
+      const startWeight=pick(
+        weight.start,weight.startWeight,weight.start_weight,
+        data.startWeight,data.start_weight,user.startWeight,user.start_weight
+      );
+
+      const totalExp=num(pick(
+        expObj.total,expObj.current,
+        typeof data.exp==="number"?data.exp:null,
+        user.exp,user.experience
+      ),0);
+
+      const expPerLevel=num(window.APP_CONFIG?.EXP_PER_LEVEL,500) || 500;
+      const level=num(pick(data.level,user.level),Math.floor(totalExp/expPerLevel)+1) || 1;
+
+      const steps=num(pick(
+        activity.steps,data.steps,data.todaySteps,data.today_steps,
+        user.steps
+      ),0);
+
+      const stepsGoal=num(pick(
+        activity.stepsGoal,activity.steps_goal,data.stepsGoal,data.steps_goal,10000
+      ),10000);
+
+      const calories=num(pick(
+        activity.calories,activity.kcal,data.calories,data.kcal,
+        data.caloriesBurned,data.calories_burned
+      ),0);
+
+      const caloriesGoal=num(pick(
+        activity.caloriesGoal,activity.calories_goal,
+        data.caloriesGoal,data.calories_goal,2000
+      ),2000);
+
+      const sleepValue=pick(
+        activity.sleep,data.sleep,data.sleepMinutes,data.sleep_minutes,
+        data.sleepHours,data.sleep_hours
+      );
+
+      /*
+         IMPORTANT:
+         typeof null === "object"
+         จึงต้องเช็ก sleepValue !== null ก่อนอ่าน .minutes / .hours
+      */
+      const sleepIsObject =
+        sleepValue !== null &&
+        typeof sleepValue === "object";
+
+      const sleepMinutes =
+        sleepIsObject
+          ? num(
+              pick(
+                sleepValue?.minutes,
+                sleepValue?.totalMinutes,
+                sleepValue?.total_minutes,
+                sleepValue?.sleepMinutes,
+                sleepValue?.sleep_minutes
+              ),
+              0
+            )
+          : num(
+              pick(
+                data.sleepMinutes,
+                data.sleep_minutes
+              ),
+              NaN
+            );
+
+      const sleepHours =
+        sleepIsObject
+          ? num(
+              pick(
+                sleepValue?.hours,
+                sleepValue?.totalHours,
+                sleepValue?.total_hours
+              ),
+              0
+            )
+          : num(
+              pick(
+                data.sleepHours,
+                data.sleep_hours
+              ),
+              NaN
+            );
+
+      const sleepPercent = num(pick(
+        activity.sleepPercent,activity.sleep_percent,
+        data.sleepPercent,data.sleep_percent,
+        Number.isFinite(sleepMinutes)?(sleepMinutes/420)*100:null,
+        Number.isFinite(sleepHours)?(sleepHours/7)*100:null
+      ),0);
+
+      const healthScore=num(pick(
+        activity.healthScore,activity.health_score,
+        data.healthScore,data.health_score,
+        data.overallHealthScore,data.overall_health_score
+      ),0);
+
+      const rewardCoin=num(pick(
+        rewards.coin,rewards.rockCoin,rewards.rock_coin,
+        data.rewardCoin,data.reward_coin,coin
+      ),coin);
+
+      const rewardEnergy=num(pick(
+        rewards.energy,data.rewardEnergy,data.reward_energy,currentEnergy
+      ),currentEnergy);
+
+      const rewardBadge=pick(
+        rewards.badge,rewards.badgeName,rewards.badge_name,
+        data.badge,data.badgeName,data.badge_name,
+        user.badge,user.badge_name
+      ) ?? "--";
+
+      const projectStart=pick(
+        project.startDate,project.start_date,data.projectStartDate,data.project_start_date
+      );
+
+      const projectEnd=pick(
+        project.endDate,project.end_date,data.projectEndDate,data.project_end_date
+      );
+
+      const elapsedDays=num(pick(
+        project.elapsedDays,project.elapsed_days,data.elapsedDays,data.elapsed_days
+      ),NaN);
+
+      const remainingDays=num(pick(
+        project.remainingDays,project.remaining_days,data.projectRemainingDays,data.project_remaining_days
+      ),NaN);
+
+      const totalDays=num(pick(
+        project.totalDays,project.total_days,data.projectTotalDays,data.project_total_days
+      ),NaN);
+
+      const myRank=num(pick(
+        ranking.myRank,ranking.my_rank,ranking.rank,
+        data.myRank,data.my_rank,data.rank
+      ),0);
+
+      const participantCount=num(pick(
+        ranking.totalParticipants,ranking.total_participants,ranking.participantCount,
+        data.totalParticipants,data.total_participants,data.participantCount,data.participant_count
+      ),0);
+
+      const top = Array.isArray(ranking.top3)
+        ? ranking.top3
+        : Array.isArray(ranking.top)
+          ? ranking.top
+          : Array.isArray(data.top3)
+            ? data.top3
+            : [];
+
+      return {
+        raw:data,
+        coin,
+        energy:currentEnergy,
+        maxEnergy,
+        currentWeight,
+        targetWeight,
+        startWeight,
+        level,
+        totalExp,
+        expPerLevel,
+
+        picture:pick(
+          user.pictureUrl,user.picture_url,data.pictureUrl,data.picture_url
+        ) ?? "",
+
+        lineDisplayName:pick(
+          user.lineDisplayName,user.line_display_name,
+          user.displayName,user.display_name,
+          data.lineDisplayName,data.line_display_name,
+          data.displayName,data.display_name
+        ) ?? "",
+
+        teamName:pick(
+          user.teamName,user.team_name,data.teamName,data.team_name,"HERO ROCK"
+        ) ?? "HERO ROCK",
+
+        steps,
+        stepsGoal,
+        calories,
+        caloriesGoal,
+
+        sleepValue,
+        sleepPercent,
+        healthScore,
+
+        rewardCoin,
+        rewardEnergy,
+        rewardBadge,
+
+        projectStart,
+        projectEnd,
+        elapsedDays,
+        remainingDays,
+        totalDays,
+
+        myRank,
+        participantCount,
+        top
+      };
+    }
+
+    async function renderProfile(url){
+      const image=$("profileImage");
+
+      let finalUrl=url;
+
+      if(!finalUrl){
+        try{
+          const profile=await liff.getProfile();
+          finalUrl=profile?.pictureUrl || "";
+        }catch{}
+      }
+
+      if(!finalUrl){
+        image.style.display="none";
+        return;
+      }
+
+      image.onload=()=>image.style.display="block";
+      image.onerror=()=>image.style.display="none";
+      image.src=finalUrl;
+    }
+
+    function calculateProject(p){
+      const now=new Date();
+      const start=p.projectStart?new Date(p.projectStart):null;
+      const end=p.projectEnd?new Date(p.projectEnd):null;
+
+      let total=p.totalDays;
+      let elapsed=p.elapsedDays;
+      let remaining=p.remainingDays;
+
+      if(start && end && !Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())){
+        if(!Number.isFinite(total)){
+          total=Math.max(1,Math.ceil((end-start)/86400000)+1);
+        }
+        if(!Number.isFinite(elapsed)){
+          elapsed=clamp(Math.floor((now-start)/86400000)+1,0,total);
+        }
+        if(!Number.isFinite(remaining)){
+          remaining=Math.max(0,total-elapsed);
+        }
+      }
+
+      return {total,elapsed,remaining};
+    }
+
+    async function renderHome(raw){
+      const p=normalizeDashboard(raw);
+
+      await renderProfile(p.picture);
+
+      const lineProfile = await getLineProfileSafe();
+      const heroDisplayName =
+        p.lineDisplayName ||
+        lineProfile?.displayName ||
+        "HERO";
+
+      currentTeamName = p.teamName || "HERO ROCK";
+
+      // ตำแหน่ง HERO ROCK บน template แสดงชื่อจาก LINE
+      $("teamName").textContent = heroDisplayName;
+      $("teamName").title = `Team: ${currentTeamName} • แตะเพื่อเปลี่ยนชื่อทีม`;
+
+      $("coin").textContent=fmtInt(p.coin);
+      $("energy").textContent=`${fmtInt(p.energy)} / ${fmtInt(p.maxEnergy)}`;
+
+      $("level").textContent=`Lv.${fmtInt(p.level)}`;
+
+      const expInLevel=((p.totalExp%p.expPerLevel)+p.expPerLevel)%p.expPerLevel;
+      $("expText").textContent=`${fmtInt(expInLevel)} / ${fmtInt(p.expPerLevel)}`;
+      setBar("expBar",(expInLevel/p.expPerLevel)*100);
+
+      $("currentWeight").textContent=`${fmtWeight(p.currentWeight)} kg`;
+      $("targetWeight").textContent=`${fmtWeight(p.targetWeight)} kg`;
+
+      const current=Number(p.currentWeight);
+      const target=Number(p.targetWeight);
+      const start=Number(p.startWeight);
+
+      let lost=NaN;
+      let remaining=NaN;
+      let weightPct=0;
+
+      if(Number.isFinite(start) && Number.isFinite(current)){
+        lost=Math.max(0,start-current);
+      }
+      if(Number.isFinite(current) && Number.isFinite(target)){
+        remaining=Math.max(0,current-target);
+      }
+      if(Number.isFinite(start) && Number.isFinite(target) && Number.isFinite(current) && start!==target){
+        weightPct=clamp(((start-current)/(start-target))*100,0,100);
+      }
+
+      $("lost").textContent=Number.isFinite(lost)?`${lost.toFixed(1)} kg`:"--.- kg";
+      $("remaining").textContent=Number.isFinite(remaining)?`${remaining.toFixed(1)} kg`:"--.- kg";
+      $("weightProgressPct").textContent=`${Math.round(weightPct)}%`;
+      setBar("weightProgressBar",weightPct);
+
+      $("steps").textContent=fmtInt(p.steps);
+      setBar("stepsBar",p.stepsGoal>0?(p.steps/p.stepsGoal)*100:0);
+
+      $("calories").textContent=`${fmtInt(p.calories)} kcal`;
+      setBar("caloriesBar",p.caloriesGoal>0?(p.calories/p.caloriesGoal)*100:0);
+
+      $("sleep").textContent=fmtSleep(p.sleepValue);
+      setBar("sleepBar",p.sleepPercent);
+
+      $("healthScore").textContent=`${fmtInt(p.healthScore)} / 100`;
+      setBar("healthBar",p.healthScore);
+
+      $("rewardCoin").textContent=fmtInt(p.rewardCoin);
+      $("rewardEnergy").textContent=`${fmtInt(p.rewardEnergy)} / ${fmtInt(p.maxEnergy)}`;
+      $("rewardBadge").textContent=String(p.rewardBadge);
+
+      if(p.projectStart || p.projectEnd){
+        $("projectRange").textContent=`${fmtDateShort(p.projectStart)} - ${fmtDateShort(p.projectEnd)}`;
+      }else{
+        $("projectRange").textContent="--";
+      }
+
+      const proj=calculateProject(p);
+      $("projectElapsed").textContent=Number.isFinite(proj.elapsed)?`${fmtInt(proj.elapsed)} วัน`:"-- วัน";
+      $("projectRemaining").textContent=Number.isFinite(proj.remaining)?`${fmtInt(proj.remaining)} วัน`:"-- วัน";
+      setBar("projectBar",Number.isFinite(proj.total)&&proj.total>0&&Number.isFinite(proj.elapsed)?(proj.elapsed/proj.total)*100:0);
+
+      $("myRank").textContent=p.myRank>0?`# ${fmtInt(p.myRank)}`:"# --";
+      $("participantCount").textContent=p.participantCount>0?`${fmtInt(p.participantCount)} คน`:"-- คน";
+
+      const top=p.top || [];
+      $("top1Score").textContent=top[0]?.score!=null?fmtInt(top[0].score):"";
+      $("top2Score").textContent=top[1]?.score!=null?fmtInt(top[1].score):"";
+      $("top3Score").textContent=top[2]?.score!=null?fmtInt(top[2].score):"";
+    }
+
+    /* =====================================================
+       INBODY
+    ====================================================== */
+
+    function normalizeInbodyHistory(raw){
+      const data=raw?.data ?? raw ?? {};
+      const list=data?.inbodyHistory ?? data?.inbody_history ?? data?.history ?? [];
+
+      if(!Array.isArray(list)) return [];
+
+      return list.map(item=>({
+        score:num(pick(item.score,item.inbody_score,item.inbodyScore),NaN),
+        measuredAt:pick(item.measuredAt,item.measured_at,item.date)
+      }))
+      .filter(item=>Number.isFinite(item.score) && item.measuredAt)
+      .sort((a,b)=>new Date(a.measuredAt)-new Date(b.measuredAt));
+    }
+
+    function drawInbodyChart(history){
+      const svg=$("inbodyChart");
+      svg.innerHTML="";
+
+      if(!history.length) return;
+
+      const list=history.slice(-7);
+      const scores=list.map(x=>x.score);
+      let min=Math.min(...scores);
+      let max=Math.max(...scores);
+
+      if(max===min){min-=5;max+=5}
+      else{
+        const pad=Math.max(2,(max-min)*.15);
+        min-=pad;max+=pad;
+      }
+
+      const W=220,H=80,L=8,R=8,T=8,B=8;
+
+      const points=list.map((item,index)=>{
+        const x=list.length===1?W/2:L+(index/(list.length-1))*(W-L-R);
+        const y=H-B-((item.score-min)/(max-min))*(H-T-B);
+        return {x,y,score:item.score};
+      });
+
+      const poly=document.createElementNS("http://www.w3.org/2000/svg","polyline");
+      poly.setAttribute("points",points.map(p=>`${p.x},${p.y}`).join(" "));
+      poly.setAttribute("fill","none");
+      poly.setAttribute("stroke","#6736e8");
+      poly.setAttribute("stroke-width","3");
+      poly.setAttribute("stroke-linecap","round");
+      poly.setAttribute("stroke-linejoin","round");
+      svg.appendChild(poly);
+
+      points.forEach(p=>{
+        const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+        c.setAttribute("cx",p.x);
+        c.setAttribute("cy",p.y);
+        c.setAttribute("r","4");
+        c.setAttribute("fill","#fff");
+        c.setAttribute("stroke","#6736e8");
+        c.setAttribute("stroke-width","2.5");
+        svg.appendChild(c);
+      });
+    }
+
+    function renderInbody(raw){
+      const history=normalizeInbodyHistory(raw);
+      const latest=history.length?history[history.length-1]:null;
+
+      $("inbodyScore").textContent=latest?fmtInt(latest.score):"--";
+      $("inbodyDate").textContent=latest?`(${fmtDateShort(latest.measuredAt)})`:"ยังไม่มีข้อมูล";
+      drawInbodyChart(history);
+    }
+
+    async function fetchInbodyHistory(){
+      // Render API contract รุ่นนี้ยังไม่มี InBody action
+      return {success:true,inbodyHistory:[]};
+    }
+
+    async function loadInbodyHistory(){
+      try{
+        const result=await fetchInbodyHistory();
+        renderInbody(result);
+      }catch(error){
+        console.warn("INBODY HISTORY ERROR:",error);
+        renderInbody({inbodyHistory:[]});
+      }
+    }
+
+    function openInbodyModal(){
+      const d=new Date();
+      $("inbodyMeasuredDate").value=[
+        d.getFullYear(),
+        String(d.getMonth()+1).padStart(2,"0"),
+        String(d.getDate()).padStart(2,"0")
+      ].join("-");
+      $("inbodyScoreInput").value="";
+      $("inbodyFileInput").value="";
+      $("inbodyModal").classList.add("show");
+    }
+
+    function closeInbodyModal(){
+      $("inbodyModal").classList.remove("show");
+    }
+
+   async function saveInbody(){
+      showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม InBody action",true);
+    }
+
+
+    /* =====================================================
+       HOME -> MISSION AUTO QUALIFY V2.12
+    ====================================================== */
+
+    function closeV212(id){
+      document
+        .getElementById(id)
+        ?.classList
+        .remove("show");
+    }
+
+    window.closeV212 =
+      closeV212;
+
+
+    async function saveDailyHealthV212(
+      payload
+    ){
+      return await postJson(
+        window.APP_CONFIG.getApi("PLAYER"),
+        {
+          action:"saveDailyHealth",
+          ...payload
+        }
+      );
+    }
+
+
+    function missionUrlV212(
+      missionId,
+      params = {}
+    ){
+      const url =
+        new URL(
+          window.APP_CONFIG?.PAGE?.MISSION ||
+          "./mission.html",
+          window.location.href
+        );
+
+      url.searchParams.set(
+        "mission",
+        missionId
+      );
+
+      Object.entries(params)
+        .forEach(
+          ([key,value]) => {
+            if(
+              value !== undefined &&
+              value !== null
+            ){
+              url.searchParams.set(
+                key,
+                String(value)
+              );
+            }
+          }
+        );
+
+      return url.toString();
+    }
+
+
+    function renderHomeMissionQualificationV212(){
+
+      const h =
+        window.HOME_V212_HEALTH ||
+        {
+          steps:0,
+          sleepMinutes:0,
+          exerciseActivities:[]
+        };
+
+      const moveButton =
+        document.getElementById(
+          "moveMoreMissionButton"
+        );
+
+      const sleepButton =
+        document.getElementById(
+          "sleepMissionButton"
+        );
+
+      if(moveButton){
+        moveButton.style.display =
+          h.steps >= 8000
+            ? ""
+            : "none";
+      }
+
+      if(sleepButton){
+        sleepButton.style.display =
+          h.sleepMinutes >= 420
+            ? ""
+            : "none";
+      }
+    }
+
+
+    function openStepsV212(){
+
+      const h =
+        window.HOME_V212_HEALTH ||
+        {};
+
+      const input =
+        document.getElementById(
+          "stepsInputV212"
+        );
+
+      input.value =
+        Math.round(
+          Number(
+            h.steps ||
+            0
+          )
+        );
+
+      updateStepsQualifyV212();
+
+      document
+        .getElementById(
+          "stepsModalV212"
+        )
+        .classList
+        .add("show");
+    }
+
+
+    function updateStepsQualifyV212(){
+
+      const steps =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              document
+                .getElementById(
+                  "stepsInputV212"
+                )
+                ?.value ||
+              0
+            )
+          )
+        );
+
+      const box =
+        document.getElementById(
+          "stepsQualifyV212"
+        );
+
+      const evidence =
+        document.getElementById(
+          "stepsEvidenceV212"
+        );
+
+      if(steps >= 8000){
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#087438;font-weight:900">
+            ✅ ภารกิจ MOVE MORE สำเร็จตามเป้าหมายแล้ว ${steps.toLocaleString()} / 8,000 ก้าว
+          </div>
+          <div style="margin-top:5px;font-size:13px;color:#61748c">
+            สถานะสุขภาพถือว่าถึงเป้าหมายแล้ว แต่ยังไม่ได้รับรางวัล
+            • หากต้องการ Coin / Energy / EXP ให้กดส่งหลักฐานด้านล่าง
+          </div>`;
+
+        evidence.style.display =
+          "";
+      }else{
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#6b7890;font-weight:800">
+            เหลืออีก ${(8000-steps).toLocaleString()} ก้าว
+          </div>`;
+
+        evidence.style.display =
+          "none";
+      }
+    }
+
+
+    async function saveStepsV212(){
+
+      const steps =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              document
+                .getElementById(
+                  "stepsInputV212"
+                )
+                ?.value ||
+              0
+            )
+          )
+        );
+
+      const btn =
+        document.getElementById(
+          "saveStepsV212"
+        );
+
+      btn.disabled = true;
+      btn.textContent =
+        "กำลังบันทึก...";
+
+      try{
+        await saveDailyHealthV212({
+          steps
+        });
+
+        closeV212(
+          "stepsModalV212"
+        );
+
+        await loadDailyHealth();
+
+      }catch(error){
+        alert(
+          error?.message ||
+          String(error)
+        );
+      }finally{
+        btn.disabled = false;
+        btn.textContent =
+          "บันทึกก้าว";
+      }
+    }
+
+
+    function openSleepV212(){
+
+      const total =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              window.HOME_V212_HEALTH
+                ?.sleepMinutes ||
+              0
+            )
+          )
+        );
+
+      document
+        .getElementById(
+          "sleepHoursV212"
+        )
+        .value =
+          Math.floor(
+            total /
+            60
+          );
+
+      document
+        .getElementById(
+          "sleepMinutesV212"
+        )
+        .value =
+          total %
+          60;
+
+      updateSleepQualifyV212();
+
+      document
+        .getElementById(
+          "sleepModalV212"
+        )
+        .classList
+        .add("show");
+    }
+
+
+    function getSleepMinutesV212(){
+
+      const h =
+        Math.max(
+          0,
+          Math.round(
+            Number(
+              document
+                .getElementById(
+                  "sleepHoursV212"
+                )
+                ?.value ||
+              0
+            )
+          )
+        );
+
+      const m =
+        Math.max(
+          0,
+          Math.min(
+            59,
+            Math.round(
+              Number(
+                document
+                  .getElementById(
+                    "sleepMinutesV212"
+                  )
+                  ?.value ||
+                0
+              )
+            )
+          )
+        );
+
+      return Math.min(
+        1440,
+        h * 60 + m
+      );
+    }
+
+
+    function updateSleepQualifyV212(){
+
+      const total =
+        getSleepMinutesV212();
+
+      const box =
+        document.getElementById(
+          "sleepQualifyV212"
+        );
+
+      const evidence =
+        document.getElementById(
+          "sleepEvidenceV212"
+        );
+
+      if(total >= 420){
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#087438;font-weight:900">
+            ✅ ภารกิจ SLEEP WELL สำเร็จตามเป้าหมายแล้ว ${Math.floor(total/60)} ชม. ${total%60} นาที
+          </div>
+          <div style="margin-top:5px;font-size:13px;color:#61748c">
+            สถานะสุขภาพถือว่าถึงเป้าหมายแล้ว แต่ยังไม่ได้รับรางวัล
+            • หากต้องการ Coin / Energy / EXP ให้กดส่งหลักฐานด้านล่าง
+          </div>`;
+
+        evidence.style.display =
+          "";
+      }else{
+        box.innerHTML =
+          `<div style="margin-top:12px;color:#6b7890;font-weight:800">
+            เหลืออีก ${420-total} นาที จึงถึงเป้าหมาย 7 ชั่วโมง
+          </div>`;
+
+        evidence.style.display =
+          "none";
+      }
+    }
+
+
+    async function saveSleepV212(){
+
+      const sleepMinutes =
+        getSleepMinutesV212();
+
+      const btn =
+        document.getElementById(
+          "saveSleepV212"
+        );
+
+      btn.disabled = true;
+      btn.textContent =
+        "กำลังบันทึก...";
+
+      try{
+        await saveDailyHealthV212({
+          sleepMinutes
+        });
+
+        closeV212(
+          "sleepModalV212"
+        );
+
+        await loadDailyHealth();
+
+      }catch(error){
+        alert(
+          error?.message ||
+          String(error)
+        );
+      }finally{
+        btn.disabled = false;
+        btn.textContent =
+          "บันทึกการนอน";
+      }
+    }
+
+
+    function openActivitiesV212(){
+
+      const rows =
+        window.HOME_V212_HEALTH
+          ?.exerciseActivities ||
+        [];
+
+      const list =
+        document.getElementById(
+          "activityListV212"
+        );
+
+      if(!rows.length){
+        list.innerHTML =
+          `<div style="padding:18px 0;color:#697b91">
+            วันนี้ยังไม่มีกิจกรรมออกกำลังกายจาก Daily / Weekly
+          </div>`;
+      }else{
+        list.innerHTML =
+          rows
+            .map(
+              (row,index) => `
+                <div class="v212-activity">
+                  <strong>
+                    ${index+1}. ${String(row.label || row.sourceType || "Exercise").toUpperCase()}
+                  </strong>
+                  <div>
+                    ${Math.round(Number(row.durationMinutes || 0))} นาที
+                    • ≈ ${Math.round(Number(row.estimatedCalories || 0))} kcal
+                  </div>
+                </div>
+              `
+            )
+            .join("");
+      }
+
+      const total =
+        rows.reduce(
+          (sum,row) =>
+            sum +
+            Math.max(
+              0,
+              Number(
+                row.estimatedCalories ||
+                0
+              )
+            ),
+          0
+        );
+
+      document
+        .getElementById(
+          "activityTotalV212"
+        )
+        .textContent =
+          `รวม ≈ ${Math.round(total).toLocaleString()} kcal`;
+
+      document
+        .getElementById(
+          "activityModalV212"
+        )
+        .classList
+        .add("show");
+    }
+
+
+    document
+      .getElementById(
+        "editStepsButton"
+      )
+      ?.addEventListener(
+        "click",
+        openStepsV212
+      );
+
+    document
+      .getElementById(
+        "stepsInputV212"
+      )
+      ?.addEventListener(
+        "input",
+        updateStepsQualifyV212
+      );
+
+    document
+      .getElementById(
+        "saveStepsV212"
+      )
+      ?.addEventListener(
+        "click",
+        saveStepsV212
+      );
+
+    document
+      .getElementById(
+        "moveMoreMissionButton"
+      )
+      ?.addEventListener(
+        "click",
+        openStepsV212
+      );
+
+    document
+      .getElementById(
+        "stepsEvidenceV212"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            missionUrlV212(
+              "daily_move_more",
+              {
+                steps:
+                  document
+                    .getElementById(
+                      "stepsInputV212"
+                    )
+                    ?.value ||
+                  0,
+                evidence:
+                  1
+              }
+            );
+        }
+      );
+
+    document
+      .getElementById(
+        "editSleepButton"
+      )
+      ?.addEventListener(
+        "click",
+        openSleepV212
+      );
+
+    document
+      .getElementById(
+        "sleepHoursV212"
+      )
+      ?.addEventListener(
+        "input",
+        updateSleepQualifyV212
+      );
+
+    document
+      .getElementById(
+        "sleepMinutesV212"
+      )
+      ?.addEventListener(
+        "input",
+        updateSleepQualifyV212
+      );
+
+    document
+      .getElementById(
+        "saveSleepV212"
+      )
+      ?.addEventListener(
+        "click",
+        saveSleepV212
+      );
+
+    document
+      .getElementById(
+        "sleepMissionButton"
+      )
+      ?.addEventListener(
+        "click",
+        openSleepV212
+      );
+
+    document
+      .getElementById(
+        "sleepEvidenceV212"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          window.location.href =
+            missionUrlV212(
+              "daily_sleep",
+              {
+                sleepMinutes:
+                  getSleepMinutesV212(),
+                evidence:
+                  1
+              }
+            );
+        }
+      );
+
+    document
+      .getElementById(
+        "calories"
+      )
+      ?.addEventListener(
+        "click",
+        openActivitiesV212
+      );
+
+    /* =====================================================
+       LOAD ALL HOME DATA
+    ====================================================== */
+
+
+
+    /* =====================================================
+       DAILY HEALTH
+       ข้อมูลมาจาก DAILY MISSION
+    ====================================================== */
+
+    async function fetchDailyHealth(){
+
+      const raw = await postJson(
+        window.APP_CONFIG.getApi("PLAYER"),
+        {
+          action:"dailyHealth"
+        }
+      );
+
+      const data =
+        raw?.data ??
+        raw?.dashboard ??
+        raw ??
+        {};
+
+      const health =
+        data?.activity ??
+        data?.today ??
+        data?.health ??
+        {};
+
+      return { health };
+    }
+
+
+    function renderDailyHealth(
+      raw
+    ){
+
+      const health =
+        raw?.health ??
+        raw?.data?.health ??
+        {};
+
+
+      const steps =
+        num(
+          health?.steps,
+          0
+        );
+
+
+      const calories =
+        num(
+          health?.calories,
+          0
+        );
+
+
+      const sleepMinutes =
+        num(
+          health?.sleepMinutes ??
+          health?.sleep_minutes ??
+          health?.sleep?.totalMinutes ??
+          health?.sleep?.total_minutes,
+          0
+        );
+
+
+      const stepsGoal =
+        num(
+          health?.goals?.steps ??
+          window.APP_CONFIG
+            ?.DAILY_GOALS
+            ?.STEPS,
+          8000
+        );
+
+
+      const caloriesGoal =
+        num(
+          health?.goals?.calories ??
+          window.APP_CONFIG
+            ?.DAILY_GOALS
+            ?.CALORIES,
+          300
+        );
+
+
+      const sleepGoal =
+        num(
+          health?.goals?.sleepMinutes ??
+          window.APP_CONFIG
+            ?.DAILY_GOALS
+            ?.SLEEP_MINUTES,
+          420
+        );
+
+
+      $("steps")
+        .textContent =
+          fmtInt(
+            steps
+          );
+
+
+      $("calories")
+        .textContent =
+          `${fmtInt(calories)} kcal`;
+
+
+      const calorieBreakdown =
+        health?.caloriesBreakdown ??
+        health?.calories_breakdown ??
+        {};
+
+      const stepsKcal =
+        num(
+          calorieBreakdown?.steps,
+          0
+        );
+
+      const exerciseKcal =
+        num(
+          calorieBreakdown?.exercise,
+          0
+        );
+
+      $("calories").title =
+        `Steps ${fmtInt(stepsKcal)} kcal + Exercise ${fmtInt(exerciseKcal)} kcal`;
+
+
+      $("sleep")
+        .textContent =
+          sleepMinutes > 0
+            ? fmtSleep({
+                totalMinutes:
+                  sleepMinutes
+              })
+            : "0 ชม. 0 นาที";
+
+
+      const waterMl =
+        num(
+          health?.waterMl ??
+          health?.water_ml,
+          0
+        );
+
+      const exerciseMinutes =
+        num(
+          health?.exerciseMinutes ??
+          health?.exercise_minutes,
+          0
+        );
+
+      document.body.dataset.todaySteps =
+        String(
+          Math.round(steps)
+        );
+
+      document.body.dataset.todayCalories =
+        String(
+          Math.round(calories)
+        );
+
+      document.body.dataset.todaySleepMinutes =
+        String(
+          Math.round(sleepMinutes)
+        );
+
+      document.body.dataset.todayWaterMl =
+        String(
+          Math.round(waterMl)
+        );
+
+      document.body.dataset.todayExerciseMinutes =
+        String(
+          Math.round(exerciseMinutes)
+        );
+
+      window.HOME_V212_HEALTH = {
+        steps,
+        sleepMinutes,
+        calories,
+        exerciseActivities:
+          health?.exerciseActivities ??
+          health?.exercise_activities ??
+          [],
+        moveMoreQualified:
+          Boolean(
+            health?.moveMoreQualified ??
+            steps >= 8000
+          ),
+        sleepWellQualified:
+          Boolean(
+            health?.sleepWellQualified ??
+            sleepMinutes >= 420
+          )
+      };
+
+      renderHomeMissionQualificationV212();
+
+
+      setBar(
+        "stepsBar",
+        stepsGoal > 0
+          ? (
+              steps /
+              stepsGoal
+            ) * 100
+          : 0
+      );
+
+
+      setBar(
+        "caloriesBar",
+        caloriesGoal > 0
+          ? (
+              calories /
+              caloriesGoal
+            ) * 100
+          : 0
+      );
+
+
+      setBar(
+        "sleepBar",
+        sleepGoal > 0
+          ? (
+              sleepMinutes /
+              sleepGoal
+            ) * 100
+          : 0
+      );
+
+    }
+
+
+    async function loadDailyHealth(){
+
+      try{
+
+        const result =
+          await fetchDailyHealth();
+
+
+        renderDailyHealth(
+          result
+        );
+
+
+      }catch(error){
+
+        console.warn(
+          "DAILY HEALTH ERROR:",
+          error
+        );
+
+
+        /*
+         * Daily Mission มีปัญหา
+         * HOME ส่วนอื่นยังต้องทำงานต่อ
+         */
+        renderDailyHealth({
+          health: {
+            steps: 0,
+            calories: 0,
+            sleepMinutes: 0
+          }
+        });
+
+      }
+
+    }
+
+
+    async function loadProjectSettings(){
+      // Project data แสดงจาก payload ของ action:dashboard ใน renderHome() แล้ว
+      return;
+    }
+
+
+    async function loadHome(){
+      if(loading) return;
+      loading=true;
+
+      try{
+        const raw=await fetchDashboard();
+
+        await renderHome(raw);
+
+        /*
+          Steps / Calories / Sleep
+          ใช้ข้อมูลจริงจาก DAILY MISSION / DAILY_HEALTH
+          ถ้าไม่มีข้อมูล renderDailyHealth() จะแสดง 0
+        */
+        /*
+          Daily Health รวมอยู่ใน action: dashboard แล้ว
+          ไม่ยิง player-dashboard ซ้ำรอบที่ 2
+        */
+        {
+          const data =
+            raw?.data ??
+            raw?.dashboard ??
+            raw ??
+            {};
+
+          renderDailyHealth({
+            health:
+              data?.activity ??
+              data?.health ??
+              data?.today ??
+              {}
+          });
+        }
+
+        /*
+          สำคัญ:
+          InBody โหลดแยกจาก Dashboard
+          ต่อให้ InBody error ก็ไม่ทำให้ HOME ทั้งหน้าล้ม
+        */
+        /*
+          HOME SINGLE API V4.0:
+          InBody / Project / Ranking อยู่ใน action:dashboard แล้ว
+          ไม่ยิง API เพิ่ม
+        */
+        {
+          const data =
+            raw?.data ??
+            raw?.dashboard ??
+            raw ??
+            {};
+
+          renderInbody({
+            inbodyHistory:
+              data?.inbodyHistory ??
+              data?.inbody_history ??
+              []
+          });
+        }
+
+        hideStatus();
+
+      }catch(error){
+        console.error("HOME LOAD ERROR:",error);
+        showStatus(error?.message || "โหลดข้อมูล HOME ไม่สำเร็จ",true);
+      }finally{
+        loading=false;
+      }
+    }
+
+
+    function openTeamEditModal(){
+      const modal=$("teamEditModal");
+      const profile=currentLineProfile || {};
+      $("lineDisplayNameBox").textContent=profile?.displayName || $("teamName")?.textContent || "--";
+      $("teamNameInput").value=currentTeamName || "";
+      modal.classList.add("show");
+    }
+
+    function closeTeamEditModal(){
+      $("teamEditModal").classList.remove("show");
+    }
+
+    async function saveTeamName(){
+      showStatus("❌ ระบบ HOME ยังไม่ได้เชื่อม action สำหรับเปลี่ยนชื่อทีม",true);
+    }
+
+    function goPage(name){
+      const page=window.APP_CONFIG?.PAGE?.[name] ?? window.APP_CONFIG?.PAGES?.[name];
+      if(!page){
+        showStatus("ไม่พบหน้า "+name,true);
+        return;
+      }
+      window.location.href=page;
+    }
+
+
+    function goConfiguredPage(
+      name,
+      fallback
+    ){
+
+      const url =
+        window.APP_CONFIG
+          ?.PAGE
+          ?.[name] ||
+        window.APP_CONFIG
+          ?.PAGES
+          ?.[name] ||
+        fallback;
+
+      if(url){
+        window.location.href =
+          url;
+      }
+
+    }
+
+
+    $("steps")
+      ?.addEventListener(
+        "click",
+        () => {
+          goConfiguredPage(
+            "DAILY_MOVE",
+            "./mission.html?category=daily&mission=daily_move_more"
+          );
+        }
+      );
+
+
+    $("calories")
+      ?.addEventListener(
+        "click",
+        () => {
+          goConfiguredPage(
+            "DAILY_EXERCISE",
+            "./mission.html?category=daily&mission=daily_exercise_30"
+          );
+        }
+      );
+
+
+    $("sleep")
+      ?.addEventListener(
+        "click",
+        () => {
+          goConfiguredPage(
+            "DAILY_SLEEP",
+            "./mission.html?category=daily&mission=daily_sleep"
+          );
+        }
+      );
+
+
+    $("teamName").addEventListener("click",openTeamEditModal);
+    $("teamCancel").addEventListener("click",closeTeamEditModal);
+    $("teamSave").addEventListener("click",saveTeamName);
+    $("teamEditModal").addEventListener("click",event=>{
+      if(event.target===$("teamEditModal")) closeTeamEditModal();
+    });
+
+    $("weightButton").addEventListener("click",()=>goPage("WEIGHT"));
+    $("progressButton").addEventListener("click",()=>goPage("PROGRESS"));
+    $("projectSettingsButton").addEventListener("click",()=>goPage("PROJECT_SETTINGS"));
+    $("rankingButton").addEventListener("click",()=>goPage("RANKING"));
+    $("rewardsButton").addEventListener("click",()=>goPage("REWARDS"));
+    $("homeButton").addEventListener("click",()=>goPage("HOME"));
+    $("missionButton").addEventListener("click",()=>goPage("MISSION"));
+    $("battleButton").addEventListener("click",()=>goPage("BATTLE"));
+
+    $("inbodyViewButton").addEventListener("click",()=>goConfiguredPage("INBODY","./inbody.html"));
+    $("inbodyUpload").addEventListener("click",()=>goConfiguredPage("INBODY","./inbody.html"));
+    $("inbodyCancel").addEventListener("click",closeInbodyModal);
+    $("inbodySave").addEventListener("click",saveInbody);
+
+    $("inbodyModal").addEventListener("click",event=>{
+      if(event.target===$("inbodyModal")) closeInbodyModal();
+    });
+
+    $("notificationBell")
+      ?.addEventListener(
+        "click",
+        openNotifications
+      );
+
+    $("closeNotificationsButton")
+      ?.addEventListener(
+        "click",
+        closeNotifications
+      );
+
+    $("notificationPanel")
+      ?.addEventListener(
+        "click",
+        event => {
+          if(
+            event.target ===
+            $("notificationPanel")
+          ){
+            closeNotifications();
+          }
+        }
+      );
+
+    $("markAllNotificationsButton")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          try{
+
+            await markAllNotificationsRead();
+
+            notificationItems =
+              notificationItems
+                .map(
+                  item => ({
+                    ...item,
+                    is_read:true
+                  })
+                );
+
+            renderNotificationBadge();
+            renderNotificationList();
+
+          }catch(error){
+
+            showStatus(
+              error?.message ||
+              "อัปเดต Notification ไม่สำเร็จ",
+              true
+            );
+          }
+        }
+      );
+
+    $("notificationToast")
+      ?.addEventListener(
+        "click",
+        async () => {
+
+          const item =
+            notificationToastItem;
+
+          if(!item){
+            return;
+          }
+
+          try{
+
+            if(
+              item.is_read ===
+              false
+            ){
+              await markNotificationRead(
+                item.id
+              );
+            }
+
+          }catch(error){
+            console.warn(
+              "TOAST MARK READ ERROR:",
+              error
+            );
+          }
+
+          hideNotificationToast();
+
+          window.location.href =
+            item.target_page ||
+            "./inbody.html";
+        }
+      );
+
+
+    async function startApp(){
+      try{
+        showStatus("กำลังเชื่อมต่อ LINE...");
+
+        const ready=await initLINE();
+        if(ready===false) return;
+
+        await loadHome();
+        renderNotificationBadge();
+
+        /*
+          HOME V4.0 เรียกข้อมูลหลักจาก PLAYER API เพียงครั้งเดียว
+          ไม่ยิง notifications แยกในหน้า HOME
+        */
+        const ms=num(window.APP_CONFIG?.REFRESH_MS,30000);
+        refreshTimer =
+          setInterval(
+            async () => {
+              await loadHome();
+            },
+            Math.max(
+              10000,
+              ms
+            )
+          );
+
+      }catch(error){
+        console.error("START APP ERROR:",error);
+        showStatus(error?.message || "เปิดแอปไม่สำเร็จ",true);
+      }
+    }
+
+    startApp();
+  </script>
+
+<div id="stepsModalV212" class="v212-modal-bg">
+  <div class="v212-modal">
+    <h3>👣 จำนวนก้าววันนี้</h3>
+    <div class="v212-field">
+      <label for="stepsInputV212">จำนวนก้าว</label>
+      <input id="stepsInputV212" type="number" min="0" max="200000" step="1" inputmode="numeric">
+    </div>
+    <div id="stepsQualifyV212"></div>
+    <button id="stepsEvidenceV212" class="v212-mission" type="button" style="display:none">
+      📷 ส่งหลักฐาน MOVE MORE เพื่อรับรางวัล
+    </button>
+    <div class="v212-actions">
+      <button class="v212-cancel" type="button" onclick="closeV212('stepsModalV212')">ยกเลิก</button>
+      <button id="saveStepsV212" class="v212-save" type="button">บันทึกก้าว</button>
+    </div>
+  </div>
+</div>
+
+<div id="sleepModalV212" class="v212-modal-bg">
+  <div class="v212-modal">
+    <h3>😴 การนอนหลับเมื่อคืน</h3>
+    <div class="v212-grid">
+      <div class="v212-field">
+        <label for="sleepHoursV212">ชั่วโมง</label>
+        <input id="sleepHoursV212" type="number" min="0" max="24" step="1">
+      </div>
+      <div class="v212-field">
+        <label for="sleepMinutesV212">นาที</label>
+        <input id="sleepMinutesV212" type="number" min="0" max="59" step="1">
+      </div>
+    </div>
+    <div id="sleepQualifyV212"></div>
+    <button id="sleepEvidenceV212" class="v212-mission" type="button" style="display:none">
+      📷 ส่งหลักฐาน SLEEP WELL เพื่อรับรางวัล
+    </button>
+    <div class="v212-actions">
+      <button class="v212-cancel" type="button" onclick="closeV212('sleepModalV212')">ยกเลิก</button>
+      <button id="saveSleepV212" class="v212-save" type="button">บันทึกการนอน</button>
+    </div>
+  </div>
+</div>
+
+<div id="activityModalV212" class="v212-modal-bg">
+  <div class="v212-modal">
+    <h3>🔥 กิจกรรมออกกำลังกายวันนี้</h3>
+    <div style="font-size:13px;color:#63758d">
+      แคลอรี่เป็นค่าประมาณจากกิจกรรม Daily / Weekly ที่บันทึกในระบบ
+    </div>
+    <div id="activityListV212"></div>
+    <div id="activityTotalV212" class="v212-total">รวม 0 kcal</div>
+    <div class="v212-actions" style="grid-template-columns:1fr">
+      <button class="v212-cancel" type="button" onclick="closeV212('activityModalV212')">ปิด</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
