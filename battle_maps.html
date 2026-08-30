@@ -3,58 +3,78 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 - BATTLE MAP</title>
+  <title>ROCK YOUR BODY 2026 — BATTLE MAP</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-battle-v40"></script>
+  <script src="./app-config.js?v=20260831-battle-v50"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;width:100%;min-height:100%;background:#020817;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
+    html,body{margin:0;min-height:100%;background:#020817;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
     body{display:flex;justify-content:center;overflow-x:hidden}
 
     #mapStage{
-      position:relative;width:min(100vw,1280px);aspect-ratio:1280/657;
-      overflow:hidden;background:#020817
+      position:relative;
+      width:min(100vw,1280px);
+      aspect-ratio:1280/657;
+      overflow:hidden;
+      background:#020817;
     }
 
-    #mapImage{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
-
-    .stage-hotspot,.nav-hotspot{
-      position:absolute;z-index:20;border:0;background:transparent;padding:0;cursor:pointer
+    #mapImage{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none
     }
 
-    #backButton{left:1%;top:1.5%;width:5.5%;height:10%}
-
-    #stage1{left:2.8%;top:20.5%;width:17.5%;height:34.5%}
-    #stage2{left:21%;top:19.5%;width:18.2%;height:36%}
-    #stage3{left:39.4%;top:19%;width:18%;height:36.5%}
-    #stage4{left:57.7%;top:18.2%;width:18.2%;height:37%}
-    #stage5{left:76.1%;top:18%;width:21%;height:38%}
-    #stage6{left:1.2%;top:58%;width:18%;height:38%}
-    #stage7{left:19.8%;top:58%;width:18%;height:38%}
-    #stage8{left:38.4%;top:57%;width:18%;height:39%}
-    #stage9{left:57%;top:57%;width:18.5%;height:39%}
-    #stage10{left:76%;top:55.5%;width:23%;height:41%}
-
-    .stage-hotspot.locked::after{
-      content:"🔒";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-      border-radius:16px;background:rgba(0,12,45,.56);color:#fff;font-size:clamp(20px,3vw,48px)
+    .hot{
+      position:absolute;z-index:70;border:0;background:transparent;padding:0;cursor:pointer
     }
 
-    .stage-meta{
-      position:absolute;z-index:25;display:flex;flex-direction:column;align-items:center;gap:2px;
-      pointer-events:none;color:#fff;font-weight:900;text-shadow:0 2px 4px #000;
-      font-size:clamp(7px,1vw,14px)
+    #backButton{left:1%;top:1%;width:7%;height:12%}
+
+    .monster{
+      position:absolute;
+      z-index:45;
+      width:11.5%;
+      aspect-ratio:1;
+      object-fit:contain;
+      filter:drop-shadow(0 10px 10px rgba(0,0,0,.5));
+      cursor:pointer;
+      transition:.18s ease;
+      animation:float 2.2s ease-in-out infinite;
     }
-    .stage-meta b{padding:3px 7px;border-radius:999px;background:rgba(0,25,80,.82)}
-    .stage-meta .exp{background:rgba(98,30,180,.88)}
-    .m1{left:5%;top:47%;width:12%}.m2{left:24%;top:47%;width:12%}.m3{left:43%;top:47%;width:12%}.m4{left:61%;top:47%;width:12%}.m5{left:80%;top:47%;width:15%}
-    .m6{left:4%;top:87%;width:13%}.m7{left:23%;top:87%;width:13%}.m8{left:42%;top:87%;width:13%}.m9{left:61%;top:87%;width:13%}.m10{left:81%;top:87%;width:15%}
+    .monster:hover{transform:scale(1.07)}
+    .monster.locked{filter:grayscale(1) brightness(.45) drop-shadow(0 8px 8px rgba(0,0,0,.5))}
+    .monster.done{filter:drop-shadow(0 0 10px #5cff84)}
+    @keyframes float{0%,100%{translate:0 0}50%{translate:0 -6px}}
+
+    .lock{
+      position:absolute;z-index:60;pointer-events:none;
+      display:none;align-items:center;justify-content:center;
+      color:#fff;font-size:clamp(20px,3vw,50px);text-shadow:0 3px 8px #000;
+    }
+    .lock.show{display:flex}
+
+    .meta{
+      position:absolute;z-index:61;pointer-events:none;
+      width:13%;text-align:center;color:#fff;font-weight:1000;
+      font-size:clamp(7px,1vw,14px);text-shadow:0 2px 5px #000;
+    }
+    .meta b{
+      display:inline-block;background:rgba(0,20,66,.84);padding:3px 7px;border-radius:999px
+    }
+    .meta .done{background:#087d44}
+    .meta .pending{background:#a96f00}
 
     #playerInfo{
-      position:absolute;z-index:30;left:14%;top:2.5%;padding:7px 12px;border-radius:13px;
-      background:rgba(3,25,73,.88);color:#fff;font-weight:900;font-size:clamp(9px,1.3vw,17px)
+      position:absolute;z-index:80;left:11%;top:2.3%;
+      padding:8px 12px;border-radius:13px;background:rgba(2,24,66,.88);
+      color:#fff;font-size:clamp(8px,1.15vw,16px);font-weight:1000
+    }
+
+    #healthEnergy{
+      position:absolute;z-index:80;right:2%;top:2.3%;
+      padding:8px 12px;border-radius:13px;background:rgba(5,90,47,.90);
+      color:#fff;font-size:clamp(8px,1.15vw,16px);font-weight:1000
     }
 
     #status{
@@ -69,41 +89,41 @@
 <body>
 
 <main id="mapStage">
-  <img id="mapImage" src="./battle%20map.jpeg?v=20260830-v40"
-       onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260830-v40'"
-       alt="Battle Map">
+  <img
+    id="mapImage"
+    src="./battle%20map.jpeg?v=20260831-v50"
+    onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260831-v50'"
+    alt="Battle Map"
+  >
 
-  <div id="playerInfo">EXP -- • ⚡ --</div>
-  <button id="backButton" class="nav-hotspot" type="button" aria-label="ย้อนกลับ"></button>
+  <div id="playerInfo">EXP -- • Stage --</div>
+  <div id="healthEnergy">⚡ Health Energy -- / 200</div>
 
-  <button id="stage1" class="stage-hotspot" data-stage="1"></button>
-  <button id="stage2" class="stage-hotspot" data-stage="2"></button>
-  <button id="stage3" class="stage-hotspot" data-stage="3"></button>
-  <button id="stage4" class="stage-hotspot" data-stage="4"></button>
-  <button id="stage5" class="stage-hotspot" data-stage="5"></button>
-  <button id="stage6" class="stage-hotspot" data-stage="6"></button>
-  <button id="stage7" class="stage-hotspot" data-stage="7"></button>
-  <button id="stage8" class="stage-hotspot" data-stage="8"></button>
-  <button id="stage9" class="stage-hotspot" data-stage="9"></button>
-  <button id="stage10" class="stage-hotspot" data-stage="10"></button>
+  <button id="backButton" class="hot" type="button" aria-label="ย้อนกลับ"></button>
 
-  <div id="meta1" class="stage-meta m1"></div>
-  <div id="meta2" class="stage-meta m2"></div>
-  <div id="meta3" class="stage-meta m3"></div>
-  <div id="meta4" class="stage-meta m4"></div>
-  <div id="meta5" class="stage-meta m5"></div>
-  <div id="meta6" class="stage-meta m6"></div>
-  <div id="meta7" class="stage-meta m7"></div>
-  <div id="meta8" class="stage-meta m8"></div>
-  <div id="meta9" class="stage-meta m9"></div>
-  <div id="meta10" class="stage-meta m10"></div>
+  <div id="monsterLayer"></div>
 </main>
 
 <div id="status"></div>
 
 <script>
 "use strict";
+
 const $=id=>document.getElementById(id);
+
+const STAGE_POSITIONS = {
+  1:{left:4.0,top:25.0,metaLeft:3.2,metaTop:49.0},
+  2:{left:22.5,top:24.0,metaLeft:21.8,metaTop:49.0},
+  3:{left:41.0,top:24.0,metaLeft:40.3,metaTop:49.0},
+  4:{left:59.2,top:23.5,metaLeft:58.6,metaTop:49.0},
+  5:{left:79.0,top:22.8,metaLeft:78.0,metaTop:49.0},
+  6:{left:3.2,top:64.0,metaLeft:2.5,metaTop:88.0},
+  7:{left:21.8,top:63.5,metaLeft:21.0,metaTop:88.0},
+  8:{left:40.5,top:63.0,metaLeft:39.8,metaTop:88.0},
+  9:{left:59.2,top:62.5,metaLeft:58.5,metaTop:88.0},
+  10:{left:79.5,top:61.5,metaLeft:78.3,metaTop:88.0}
+};
+
 let state=null;
 
 function apiUrl(){
@@ -113,13 +133,21 @@ function apiUrl(){
   return url;
 }
 
+function assetUrl(path){
+  if(!path) return "";
+  if(/^https?:\/\//i.test(path)) return path;
+  const root=String(window.APP_CONFIG?.SUPABASE_URL||"").replace(/\/$/,"");
+  return `${root}/storage/v1/object/public/rock-assets/${String(path).replace(/^\/+/,"")}`;
+}
+
 async function initLine(){
   await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});
   if(!liff.isLoggedIn()){
     liff.login({redirectUri:location.href});
     return false;
   }
-  if(!liff.getIDToken()){
+  const token=liff.getIDToken();
+  if(!token||token.split(".").length!==3){
     liff.logout();
     liff.login({redirectUri:location.href});
     return false;
@@ -128,68 +156,136 @@ async function initLine(){
 }
 
 async function post(action,payload={}){
+  const idToken=liff.getIDToken();
   const res=await fetch(apiUrl(),{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     cache:"no-store",
-    body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})
+    body:JSON.stringify({action,idToken,...payload})
   });
+
   const text=await res.text();
   let data={};
   try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
-  if(!res.ok||data?.success===false) throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
+
+  if(res.status===401||String(data?.error||"").toLowerCase().includes("expired")){
+    liff.logout();
+    liff.login({redirectUri:location.href});
+    return new Promise(()=>{});
+  }
+
+  if(!res.ok||data?.success===false){
+    throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
+  }
+
   return data;
 }
 
 function showStatus(text,error=false){
-  const el=$("status");el.textContent=text;el.classList.toggle("error",error);el.classList.add("show");
-  clearTimeout(window.__s);window.__s=setTimeout(()=>el.classList.remove("show"),error?4500:2300);
+  const el=$("status");
+  el.textContent=text;
+  el.classList.toggle("error",error);
+  el.classList.add("show");
+  clearTimeout(window.__st);
+  window.__st=setTimeout(()=>el.classList.remove("show"),error?4800:2400);
+}
+
+function cacheProgress(data){
+  try{
+    localStorage.setItem(
+      "ryb_battle_map_cache_v5",
+      JSON.stringify({
+        updatedAt:Date.now(),
+        completedStages:(data?.stages||[]).filter(x=>x.completed).map(x=>x.id),
+        currentStage:data?.currentStage||1
+      })
+    );
+  }catch{}
 }
 
 function render(data){
   state=data;
-  const p=data?.player||{};
-  $("playerInfo").textContent=`EXP ${Number(p.exp||0).toLocaleString()} • ⚡ ${Number(p.energy||0).toLocaleString()}/${Number(p.maxEnergy||200).toLocaleString()}`;
+
+  $("playerInfo").textContent=
+    `EXP ${Number(data?.player?.exp||0).toLocaleString()} • Stage ${Number(data?.currentStage||1)}`;
+
+  $("healthEnergy").textContent=
+    `⚡ Health Energy ${Number(data?.healthEnergy?.available||0).toLocaleString()} / ${Number(data?.healthEnergy?.max||200).toLocaleString()}`;
+
+  const layer=$("monsterLayer");
+  layer.innerHTML="";
 
   for(const stage of (data?.stages||[])){
-    const button=$("stage"+stage.id);
-    const meta=$("meta"+stage.id);
-    const locked=!stage.unlocked;
+    const p=STAGE_POSITIONS[stage.id]||STAGE_POSITIONS[1];
 
-    button.classList.toggle("locked",locked);
-    button.setAttribute("aria-disabled",locked?"true":"false");
+    const img=document.createElement("img");
+    img.className=`monster ${stage.unlocked?"":"locked"} ${stage.completed?"done":""}`;
+    img.style.left=p.left+"%";
+    img.style.top=p.top+"%";
+    img.alt=`Stage ${stage.id} ${stage.name||""}`;
+    img.src=assetUrl(stage.monsterImagePath);
+    img.onerror=()=>{
+      img.onerror=null;
+      img.src=`${assetUrl("battle/monster-"+String(stage.id).padStart(2,"0")+".png")}`;
+    };
+    img.onclick=()=>openStage(stage.id);
+    layer.appendChild(img);
 
-    meta.innerHTML=`
-      <b>⚡ ${Number(stage.energyRequired||0).toLocaleString()}</b>
-      <b class="exp">EXP ${Number(stage.expRequired||0).toLocaleString()}</b>
-    `;
+    const meta=document.createElement("div");
+    meta.className="meta";
+    meta.style.left=p.metaLeft+"%";
+    meta.style.top=p.metaTop+"%";
+
+    const status=stage.completed
+      ? `<b class="done">✅ CLEAR</b>`
+      : stage.rewardStatus==="pending"
+        ? `<b class="pending">🎁 รอ Admin</b>`
+        : `<b>HP ${Number(stage.maxHp||0).toLocaleString()}</b>`;
+
+    meta.innerHTML=`${status}<br><b>EXP ${Number(stage.expRequired||0).toLocaleString()}</b>`;
+    layer.appendChild(meta);
+
+    if(!stage.unlocked){
+      const lock=document.createElement("div");
+      lock.className="lock show";
+      lock.style.left=p.left+"%";
+      lock.style.top=p.top+"%";
+      lock.style.width="11.5%";
+      lock.style.aspectRatio="1";
+      lock.textContent="🔒";
+      layer.appendChild(lock);
+    }
   }
+
+  cacheProgress(data);
 }
 
-async function openStage(id){
-  const stage=state?.stages?.find(x=>Number(x.id)===Number(id));
-  if(!stage) return;
+async function openStage(stageId){
+  const s=state?.stages?.find(x=>Number(x.id)===Number(stageId));
+  if(!s) return;
 
-  if(!stage.unlocked){
-    showStatus(`🔒 Stage ${id} ต้องมี EXP ${Number(stage.expRequired).toLocaleString()} • ตอนนี้มี ${Number(state?.player?.exp||0).toLocaleString()}`,true);
+  if(!s.unlocked){
+    const reason=s.lockReason||"ต้องผ่าน Stage ก่อนหน้า";
+    showStatus(`🔒 Stage ${stageId} ยังไม่เปิด • ${reason}`,true);
     return;
   }
 
-  location.href=(window.APP_CONFIG?.PAGE?.BATTLE_STAGE||"./battle_stage.html")+"?stage="+encodeURIComponent(id);
+  location.href=(window.APP_CONFIG?.PAGE?.BATTLE_STAGE||"./battle_stage.html")
+    +"?stage="+encodeURIComponent(stageId);
 }
 
-document.querySelectorAll(".stage-hotspot").forEach(btn=>{
-  btn.onclick=()=>openStage(Number(btn.dataset.stage||1));
-});
-
-$("backButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE||"./battle.html";
+$("backButton").onclick=()=>{
+  location.href=window.APP_CONFIG?.PAGE?.BATTLE||"./battle.html";
+};
 
 (async()=>{
   try{
-    const ok=await initLine();if(ok===false)return;
-    render(await post("map"));
+    const ok=await initLine();
+    if(ok===false)return;
+    render(await post("mapV5"));
   }catch(error){
-    console.error(error);showStatus(error?.message||String(error),true);
+    console.error(error);
+    showStatus(error?.message||String(error),true);
   }
 })();
 </script>
