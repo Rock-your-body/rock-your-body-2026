@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2182-home-wallet-sync"
+    href="./base.css?v=20260830-mission-v2183-fresh-liff-token"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.18.2
+   MISSION V2.18.3
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.18.2 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.18.3 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.2 — NUTRITION RING PANEL
+       MISSION V2.18.3 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.2 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.18.3 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2230,7 +2230,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2182-home-wallet-sync"
+    src="./mission-template.png?v=20260830-mission-v2183-fresh-liff-token"
     alt=""
     draggable="false"
     style="
@@ -4457,7 +4457,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.18.2
+    MISSION V2.18.3
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -7306,7 +7306,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.18.2 — NUTRITION LINK
+   MISSION V2.18.3 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7373,7 +7373,7 @@ function getHomeApiUrl(){
 
 
 /* =========================================================
-   MISSION V2.18.2 — WALLET SYNC FROM HOME
+   MISSION V2.18.3 — WALLET SYNC FROM HOME
    Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
 ========================================================= */
 
@@ -7465,12 +7465,100 @@ function renderMissionWalletFromHome(
 }
 
 
+
+/* =========================================================
+   MISSION V2.18.3 — FRESH LINE ID TOKEN
+   ห้ามใช้ token จาก localStorage / profile / userId
+========================================================= */
+
+async function getFreshLineIdTokenV2183(){
+
+  if(
+    !window.liff
+  ){
+    throw new Error(
+      "ไม่พบ LINE LIFF SDK"
+    );
+  }
+
+
+  if(
+    !liff.id
+  ){
+    await liff.init({
+      liffId:
+        window.APP_CONFIG?.LIFF_ID ||
+        "2011201679-uNWz5yqF"
+    });
+  }
+
+
+  if(
+    !liff.isLoggedIn()
+  ){
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
+    throw new Error(
+      "กำลังเข้าสู่ระบบ LINE..."
+    );
+  }
+
+
+  /*
+    getIDToken() ต้องได้ JWT จริงรูปแบบ xxx.yyy.zzz
+    ห้ามส่ง LINE userId เช่น Uxxxx ไปแทน
+  */
+  const idToken = await getFreshLineIdTokenV2183();
+
+
+  const isJwt =
+    typeof idToken === "string" &&
+    idToken.split(".").length === 3;
+
+
+  if(
+    !isJwt
+  ){
+
+    /*
+      LIFF session อาจเก่า:
+      init ใหม่ 1 รอบแล้วอ่าน token อีกครั้ง
+    */
+    await liff.init({
+      liffId:
+        window.APP_CONFIG?.LIFF_ID ||
+        "2011201679-uNWz5yqF"
+    });
+
+
+    idToken =
+      liff.getIDToken();
+  }
+
+
+  if(
+    typeof idToken !== "string" ||
+    idToken.split(".").length !== 3
+  ){
+    throw new Error(
+      "ไม่สามารถอ่าน LINE ID Token ได้ กรุณาปิดหน้าแล้วเปิดผ่าน LINE LIFF ใหม่"
+    );
+  }
+
+
+  return idToken;
+}
+
+
 async function loadMissionHomeSnapshot(){
 
   try{
 
-    const idToken =
-      liff.getIDToken();
+    const idToken = await getFreshLineIdTokenV2183();
 
     if(!idToken){
       return null;
@@ -7555,8 +7643,7 @@ async function loadMissionNutrition(){
 
   try{
 
-    const idToken =
-      liff.getIDToken();
+    const idToken = await getFreshLineIdTokenV2183();
 
 
     if(!idToken){
@@ -8508,7 +8595,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.2 — FINAL OVERLAY SAFETY
+   MISSION V2.18.3 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -8704,7 +8791,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.2 — DIRECT MISSION LINK
+   MISSION V2.18.3 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
