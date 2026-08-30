@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2162-nutrition-linked"
+    href="./base.css?v=20260830-mission-v2170-nutrition-ring-home"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.16.2
+   MISSION V2.17.0
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.16.2 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.17.0 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,178 +1723,223 @@
 
 
     /* =========================================================
-       MISSION V2.16.2 — NUTRITION PANEL
-       ตามตัวอย่าง: 4 ค่า + progress + % + ขาด/เกิน + CTA
+       MISSION V2.17.0 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
       position:absolute;
       z-index:90;
-
-      left:3.2%;
-      top:20.5%;
-      width:35.9%;
-      height:60.5%;
-
-      padding:12px 13px 10px;
-
-      border:1.5px solid rgba(16,74,137,.75);
-      border-radius:0;
-
-      background:rgba(255,255,255,.90);
-
-      color:#102f55;
+      left:3.1%;
+      top:18.3%;
+      width:36.8%;
+      height:64.5%;
+      padding:8px 10px;
+      border:1.5px solid rgba(0,112,132,.72);
+      border-radius:16px;
+      background:rgba(255,255,255,.94);
+      color:#0a315d;
       font-family:"Prompt","Noto Sans Thai",Arial,sans-serif;
-
       pointer-events:auto;
       overflow:hidden;
     }
 
-    .nutrition-panel-title{
+    .nutrition-head{
       display:flex;
       align-items:center;
       gap:7px;
-
-      margin:0;
-
-      color:#0f335e;
-
-      font-size:clamp(7px,.92cqw,14px);
+      padding:0 2px 5px;
+      color:#073b70;
+      font-size:clamp(7px,.95cqw,14px);
       font-weight:1000;
-      line-height:1.2;
     }
 
-    .nutrition-panel-subtitle{
-      margin-top:4px;
-      margin-bottom:10px;
-
-      color:#425f80;
-
-      font-size:clamp(5.5px,.68cqw,10px);
+    .nutrition-head small{
+      color:#3d7083;
+      font-size:.82em;
       font-weight:700;
-      line-height:1.2;
     }
 
-    .nutrition-panel-metrics{
+    .nutrition-main{
       display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
+      grid-template-columns:45% 55%;
+      gap:7px;
+      align-items:center;
     }
 
-    .nutrition-row{
-      min-width:0;
-    }
-
-    .nutrition-row-head{
+    .nutrition-ring-wrap{
+      position:relative;
       display:flex;
       align-items:center;
-      gap:5px;
-
-      color:#1c426d;
-
-      font-size:clamp(6px,.74cqw,11px);
-      font-weight:900;
+      justify-content:center;
+      min-height:155px;
     }
 
-    .nutrition-row-value{
+    .nutrition-ring{
+      --pct:0%;
+      position:relative;
+      width:min(18cqw,145px);
+      aspect-ratio:1;
+      border-radius:50%;
+      background:
+        conic-gradient(
+          #2357e7 0 calc(var(--pct) * .25),
+          #2ba83f calc(var(--pct) * .25) calc(var(--pct) * .50),
+          #ff7900 calc(var(--pct) * .50) calc(var(--pct) * .75),
+          #e21c1c calc(var(--pct) * .75) var(--pct),
+          #e7eef5 var(--pct) 100%
+        );
+      box-shadow:0 5px 14px rgba(26,73,125,.12);
+    }
+
+    .nutrition-ring::after{
+      content:"";
+      position:absolute;
+      inset:17%;
+      border-radius:50%;
+      background:#fff;
+    }
+
+    .nutrition-ring-center{
+      position:absolute;
+      inset:0;
+      z-index:2;
       display:flex;
+      flex-direction:column;
       align-items:center;
-      justify-content:space-between;
-      gap:8px;
-
-      margin-top:2px;
-
-      color:#0e315d;
-
-      font-size:clamp(6px,.78cqw,12px);
-      font-weight:900;
-      line-height:1.25;
+      justify-content:center;
+      text-align:center;
+      pointer-events:none;
     }
 
-    .nutrition-row-percent{
-      flex:0 0 auto;
-      color:#173b67;
+    .nutrition-ring-center span{
+      color:#456780;
+      font-size:clamp(5.5px,.65cqw,9px);
+      font-weight:800;
+    }
+
+    .nutrition-ring-center b{
+      color:#062d63;
+      font-size:clamp(12px,2.1cqw,28px);
+      line-height:1;
       font-weight:1000;
     }
 
-    .nutrition-row-progress{
-      width:70%;
-      height:8px;
-
-      margin-top:4px;
-
-      overflow:hidden;
-      border-radius:0;
-
-      background:#d9e4ef;
-      border:1px solid rgba(20,55,95,.25);
+    .nutrition-ring-center small{
+      color:#5c7187;
+      font-size:clamp(5.2px,.61cqw,9px);
+      font-weight:800;
     }
 
-    .nutrition-row-progress > div{
-      width:0;
-      height:100%;
-
-      background:
-        linear-gradient(
-          90deg,
-          #0b1a25 0 14%,
-          #1ea26b 14% 100%
-        );
-
-      transition:width .25s ease;
+    .nutrition-macros{
+      display:grid;
+      gap:7px;
     }
 
-    .nutrition-row-gap{
-      margin-top:3px;
+    .nutrition-macro{
+      padding:4px 3px 6px 9px;
+      border-bottom:1px solid #dbe5ee;
+      border-left:5px solid #2b63ff;
+    }
 
-      min-height:12px;
+    .nutrition-macro.carbs{border-left-color:#ff8b00}
+    .nutrition-macro.fat{border-left-color:#e51b1b}
 
-      color:#6d4a00;
-
-      font-size:clamp(5.3px,.65cqw,9.5px);
+    .nutrition-macro-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+      color:#244b70;
+      font-size:clamp(5.5px,.67cqw,10px);
       font-weight:900;
+    }
 
+    .nutrition-macro-title strong{
+      color:#0b3568;
+      font-size:1.12em;
+    }
+
+    .nutrition-macro-percent{
+      color:#0c4d83;
+      font-weight:1000;
       white-space:nowrap;
+    }
+
+    .nutrition-macro-gap{
+      margin-top:2px;
+      color:#8a5d00;
+      font-size:clamp(5px,.57cqw,8.5px);
+      font-weight:800;
+    }
+
+    .nutrition-macro-gap.over{color:#b62222}
+    .nutrition-macro-gap.ok{color:#167142}
+
+    .nutrition-water{
+      margin-top:8px;
+      padding:7px 8px 4px;
+      border-top:1px solid #d6e3ed;
+    }
+
+    .nutrition-water-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:#285271;
+      font-size:clamp(6px,.72cqw,10.5px);
+      font-weight:900;
+    }
+
+    .water-cups{
+      display:flex;
+      gap:4px;
+      margin-top:5px;
       overflow:hidden;
-      text-overflow:ellipsis;
+      white-space:nowrap;
     }
 
-    .nutrition-row-gap.ok{
-      color:#177141;
+    .water-cup{
+      position:relative;
+      flex:0 0 auto;
+      width:15px;
+      height:18px;
+      border:2px solid #4aa9ef;
+      border-top-width:3px;
+      border-radius:2px 2px 4px 4px;
+      background:transparent;
     }
 
-    .nutrition-row-gap.over{
-      color:#b82525;
+    .water-cup.filled::after{
+      content:"";
+      position:absolute;
+      left:1px;
+      right:1px;
+      bottom:1px;
+      height:70%;
+      border-radius:1px 1px 3px 3px;
+      background:#4aa9ef;
     }
 
     .mission-nutrition-cta{
       display:flex;
       align-items:center;
       justify-content:center;
-
       width:100%;
-
-      margin-top:10px;
-      padding:7px 8px;
-
+      margin-top:7px;
+      padding:8px 9px;
       border:0;
-      border-top:1px solid rgba(13,67,125,.3);
-
-      background:transparent;
-
-      color:#173d68;
-
+      border-radius:9px;
+      background:linear-gradient(180deg,#1692a0,#087b8a);
+      color:#fff;
       font-size:clamp(6px,.76cqw,11px);
       font-weight:1000;
-
       cursor:pointer;
       pointer-events:auto;
       touch-action:manipulation;
+      box-shadow:0 4px 9px rgba(0,93,108,.18);
     }
 
-    .mission-nutrition-cta:active{
-      transform:scale(.985);
-    }
+    .mission-nutrition-cta:active{transform:scale(.985)}
 
     .mission-nutrition-source{
       display:none!important;
@@ -1934,7 +1979,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2162-nutrition-linked"
+    src="./mission-template.png?v=20260830-mission-v2170-nutrition-ring-home"
     alt=""
     draggable="false"
     style="
@@ -2285,193 +2330,132 @@
     class="mission-nutrition-live"
   >
 
-    <div class="nutrition-panel-title">
-      🥗 NUTRITION โภชนาการวันนี้
+    <div class="nutrition-head">
+      🥗 NUTRITION
+      <small>โภชนาการวันนี้</small>
     </div>
 
-    <div
-      id="missionNutritionGoalSource"
-      class="nutrition-panel-subtitle"
-    >
-      เป้าหมายจาก InBody / Health Goal
-    </div>
+    <div class="nutrition-main">
 
-
-    <div class="nutrition-panel-metrics">
-
-      <!-- Calories -->
-      <div class="nutrition-row">
-
-        <div class="nutrition-row-head">
-          🔥 Calories
-        </div>
-
-        <div class="nutrition-row-value">
-          <span id="missionNutritionCalories">
-            0 / 0 kcal
-          </span>
-
-          <span
-            id="missionNutritionCaloriesPercent"
-            class="nutrition-row-percent"
-          >
-            0%
-          </span>
-        </div>
-
-        <div class="nutrition-row-progress">
-          <div id="missionNutritionCaloriesBar"></div>
-        </div>
+      <div class="nutrition-ring-wrap">
 
         <div
-          id="missionNutritionCaloriesGap"
-          class="nutrition-row-gap"
-        >
-          ยังไม่มีเป้าหมาย
-        </div>
-
-        <div
-          id="missionNutritionCaloriesGoal"
-          style="display:none"
+          id="missionNutritionRing"
+          class="nutrition-ring"
         ></div>
+
+        <div class="nutrition-ring-center">
+          <span>แคลอรี่</span>
+          <b id="missionNutritionCaloriesMain">0</b>
+          <small>kcal</small>
+          <small id="missionNutritionCaloriesTargetText">
+            เป้าหมาย 0 kcal
+          </small>
+        </div>
 
       </div>
 
+      <div class="nutrition-macros">
 
-      <!-- Protein -->
-      <div class="nutrition-row">
-
-        <div class="nutrition-row-head">
-          🥩 Protein
+        <div class="nutrition-macro protein">
+          <div class="nutrition-macro-title">
+            <div>
+              โปรตีน
+              <strong id="missionNutritionProtein">0 / 0 g</strong>
+            </div>
+            <span
+              id="missionNutritionProteinPercent"
+              class="nutrition-macro-percent"
+            >0%</span>
+          </div>
+          <div
+            id="missionNutritionProteinGap"
+            class="nutrition-macro-gap"
+          >ยังไม่มีเป้าหมาย</div>
         </div>
 
-        <div class="nutrition-row-value">
-          <span id="missionNutritionProtein">
-            0 / 0 g
-          </span>
-
-          <span
-            id="missionNutritionProteinPercent"
-            class="nutrition-row-percent"
-          >
-            0%
-          </span>
+        <div class="nutrition-macro carbs">
+          <div class="nutrition-macro-title">
+            <div>
+              คาร์โบไฮเดรต
+              <strong id="missionNutritionCarbs">0 / 0 g</strong>
+            </div>
+            <span
+              id="missionNutritionCarbsPercent"
+              class="nutrition-macro-percent"
+            >0%</span>
+          </div>
+          <div
+            id="missionNutritionCarbsGap"
+            class="nutrition-macro-gap"
+          >ยังไม่มีเป้าหมาย</div>
         </div>
 
-        <div class="nutrition-row-progress">
-          <div id="missionNutritionProteinBar"></div>
+        <div class="nutrition-macro fat">
+          <div class="nutrition-macro-title">
+            <div>
+              ไขมัน
+              <strong id="missionNutritionFat">0 / 0 g</strong>
+            </div>
+            <span
+              id="missionNutritionFatPercent"
+              class="nutrition-macro-percent"
+            >0%</span>
+          </div>
+          <div
+            id="missionNutritionFatGap"
+            class="nutrition-macro-gap"
+          >ยังไม่มีเป้าหมาย</div>
         </div>
-
-        <div
-          id="missionNutritionProteinGap"
-          class="nutrition-row-gap"
-        >
-          ยังไม่มีเป้าหมาย
-        </div>
-
-        <div
-          id="missionNutritionProteinGoal"
-          style="display:none"
-        ></div>
-
-      </div>
-
-
-      <!-- Carbs -->
-      <div class="nutrition-row">
-
-        <div class="nutrition-row-head">
-          🍚 Carbs
-        </div>
-
-        <div class="nutrition-row-value">
-          <span id="missionNutritionCarbs">
-            0 / 0 g
-          </span>
-
-          <span
-            id="missionNutritionCarbsPercent"
-            class="nutrition-row-percent"
-          >
-            0%
-          </span>
-        </div>
-
-        <div class="nutrition-row-progress">
-          <div id="missionNutritionCarbsBar"></div>
-        </div>
-
-        <div
-          id="missionNutritionCarbsGap"
-          class="nutrition-row-gap"
-        >
-          ยังไม่มีเป้าหมาย
-        </div>
-
-        <div
-          id="missionNutritionCarbsGoal"
-          style="display:none"
-        ></div>
-
-      </div>
-
-
-      <!-- Fat -->
-      <div class="nutrition-row">
-
-        <div class="nutrition-row-head">
-          🥑 Fat
-        </div>
-
-        <div class="nutrition-row-value">
-          <span id="missionNutritionFat">
-            0 / 0 g
-          </span>
-
-          <span
-            id="missionNutritionFatPercent"
-            class="nutrition-row-percent"
-          >
-            0%
-          </span>
-        </div>
-
-        <div class="nutrition-row-progress">
-          <div id="missionNutritionFatBar"></div>
-        </div>
-
-        <div
-          id="missionNutritionFatGap"
-          class="nutrition-row-gap"
-        >
-          ยังไม่มีเป้าหมาย
-        </div>
-
-        <div
-          id="missionNutritionFatGoal"
-          style="display:none"
-        ></div>
 
       </div>
 
     </div>
 
+    <div class="nutrition-water">
+
+      <div class="nutrition-water-head">
+        <span>💧 น้ำดื่ม</span>
+        <strong id="missionNutritionWaterText">0 / 0 L</strong>
+      </div>
+
+      <div
+        id="missionNutritionWaterCups"
+        class="water-cups"
+      ></div>
+
+    </div>
 
     <button
       id="missionNutritionButton"
       class="mission-nutrition-cta"
       type="button"
     >
-      📝 บันทึกการรับประทานอาหาร
+      📝 บันทึกการรับประทานอาหารของฉัน →
     </button>
 
   </div>
 
 
-  <div
-    id="missionNutritionSource"
-    class="mission-nutrition-source"
-  ></div>
+  <!-- compatibility elements -->
+  <div style="display:none">
+    <span id="missionNutritionCalories"></span>
+    <span id="missionNutritionCaloriesPercent"></span>
+    <span id="missionNutritionCaloriesGoal"></span>
+    <span id="missionNutritionCaloriesGap"></span>
+    <span id="missionNutritionCaloriesBar"></span>
+
+    <span id="missionNutritionProteinGoal"></span>
+    <span id="missionNutritionProteinBar"></span>
+
+    <span id="missionNutritionCarbsGoal"></span>
+    <span id="missionNutritionCarbsBar"></span>
+
+    <span id="missionNutritionFatGoal"></span>
+    <span id="missionNutritionFatBar"></span>
+
+    <span id="missionNutritionSource"></span>
+  </div>
 
 
   <!-- =====================================================
@@ -4220,7 +4204,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.16.2
+    MISSION V2.17.0
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -6362,7 +6346,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.16.2 — NUTRITION LINK
+   MISSION V2.17.0 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -6391,6 +6375,97 @@ function getNutritionApiUrl(){
 
 
   return url;
+}
+
+
+
+/* =========================================================
+   HOME SNAPSHOT
+   ดึงข้อมูลกลางจาก API เดียวกับหน้า HOME
+========================================================= */
+
+let missionHomeSnapshot =
+  null;
+
+
+function getHomeApiUrl(){
+
+  if(
+    window.APP_CONFIG?.getApi
+  ){
+    return window.APP_CONFIG.getApi(
+      "PLAYER"
+    );
+  }
+
+  const url =
+    window.APP_CONFIG?.API?.PLAYER;
+
+  if(!url){
+    throw new Error(
+      "ไม่พบ API.PLAYER"
+    );
+  }
+
+  return url;
+}
+
+
+async function loadMissionHomeSnapshot(){
+
+  try{
+
+    const idToken =
+      liff.getIDToken();
+
+    if(!idToken){
+      return null;
+    }
+
+    const response =
+      await fetch(
+        getHomeApiUrl(),
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          cache:"no-store",
+          body:
+            JSON.stringify({
+              action:"home",
+              idToken
+            })
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    const result =
+      raw
+        ? JSON.parse(raw)
+        : {};
+
+    if(
+      response.ok &&
+      result?.success !== false
+    ){
+      missionHomeSnapshot =
+        result;
+
+      return result;
+    }
+
+  }catch(error){
+
+    console.warn(
+      "MISSION HOME SNAPSHOT ERROR:",
+      error
+    );
+  }
+
+  return null;
 }
 
 
@@ -6494,6 +6569,18 @@ async function loadMissionNutrition(){
         `HTTP ${response.status}`
       );
     }
+
+
+    const homeGoals =
+      missionHomeSnapshot
+        ?.goals ||
+      {};
+
+
+    result.goals = {
+      ...homeGoals,
+      ...(result?.goals || {})
+    };
 
 
     applyMissionNutrition(
@@ -6865,6 +6952,184 @@ function applyMissionNutrition(raw){
 }
 
 
+
+/* =========================================================
+   NUTRITION VISUAL
+========================================================= */
+
+function renderMissionNutritionVisual(
+  data
+){
+
+  const totals =
+    data?.totals ||
+    {};
+
+  const goals =
+    data?.goals ||
+    {};
+
+
+  const caloriesDone =
+    Number(
+      totals?.calories ||
+      0
+    );
+
+  const caloriesGoal =
+    Number(
+      goals?.calories ||
+      0
+    );
+
+  const caloriesPercent =
+    caloriesGoal > 0
+      ? caloriesDone /
+        caloriesGoal *
+        100
+      : 0;
+
+
+  const mainCalories =
+    document.getElementById(
+      "missionNutritionCaloriesMain"
+    );
+
+  if(mainCalories){
+    mainCalories.textContent =
+      nutritionFormat(
+        caloriesDone,
+        0
+      );
+  }
+
+
+  const targetText =
+    document.getElementById(
+      "missionNutritionCaloriesTargetText"
+    );
+
+  if(targetText){
+    targetText.textContent =
+      `เป้าหมาย ${nutritionFormat(caloriesGoal,0)} kcal`;
+  }
+
+
+  const ring =
+    document.getElementById(
+      "missionNutritionRing"
+    );
+
+  if(ring){
+
+    ring.style.setProperty(
+      "--pct",
+      `${Math.max(
+        0,
+        Math.min(
+          100,
+          caloriesPercent
+        )
+      )}%`
+    );
+  }
+
+
+  const waterTotalMl =
+    Number(
+      data?.water?.totalMl ??
+      totals?.waterMl ??
+      0
+    );
+
+  const waterGoalMl =
+    Number(
+      goals?.waterMl ||
+      missionHomeSnapshot?.goals?.waterMl ||
+      0
+    );
+
+
+  const waterText =
+    document.getElementById(
+      "missionNutritionWaterText"
+    );
+
+  if(waterText){
+    waterText.textContent =
+      `${nutritionFormat(waterTotalMl / 1000,1)} / ${nutritionFormat(waterGoalMl / 1000,1)} L`;
+  }
+
+
+  const cups =
+    document.getElementById(
+      "missionNutritionWaterCups"
+    );
+
+  if(cups){
+
+    const goalCups =
+      Math.max(
+        1,
+        Math.min(
+          10,
+          Math.ceil(
+            (
+              waterGoalMl ||
+              2500
+            ) /
+            250
+          )
+        )
+      );
+
+    const filledCups =
+      Math.max(
+        0,
+        Math.min(
+          goalCups,
+          Math.floor(
+            waterTotalMl /
+            250
+          )
+        )
+      );
+
+    cups.innerHTML =
+      Array
+        .from(
+          {length:goalCups},
+          (_,index)=>
+            `<span class="water-cup ${index < filledCups ? "filled" : ""}"></span>`
+        )
+        .join("");
+  }
+}
+
+
+/*
+  ครอบ renderer เดิม เพื่อให้ data จาก nutrition.html
+  ไปเติมวงแหวน + น้ำดื่มด้วย
+*/
+const originalApplyMissionNutrition =
+  applyMissionNutrition;
+
+
+applyMissionNutrition =
+  function(
+    data
+  ){
+
+    originalApplyMissionNutrition(
+      data
+    );
+
+    renderMissionNutritionVisual(
+      data
+    );
+  };
+
+
 function goBattle(){
 
   const url =
@@ -7123,7 +7388,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.16.2 — FINAL OVERLAY SAFETY
+   MISSION V2.17.0 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -7319,7 +7584,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.16.2 — DIRECT MISSION LINK
+   MISSION V2.17.0 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
