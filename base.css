@@ -681,3 +681,259 @@ button,input{
     font-size:clamp(11px,2.2cqw,21px);
   }
 }
+
+/* =========================================================
+   ROCK YOUR BODY 2026
+   MISSION V2.14.0 — TEMPLATE OVERLAY FIX
+   ใช้ร่วมกับ HOME V5.5 ได้
+========================================================= */
+
+body.mission-page{
+  display:block;
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+  background:#eef4ff;
+}
+
+body.mission-page #missionStage.stage{
+  position:relative;
+  display:block;
+  width:min(100vw,1536px);
+  aspect-ratio:1536 / 1024;
+  height:auto;
+  margin:0 auto;
+  overflow:hidden;
+  background:#eef4ff;
+  container-type:inline-size;
+}
+
+body.mission-page #missionStage > .template{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  margin:0;
+  padding:0;
+  border:0;
+  user-select:none;
+  pointer-events:none;
+}
+
+body.mission-page #missionStage .overlay,
+body.mission-page #missionStage .daily-count,
+body.mission-page #missionStage .weekly-count,
+body.mission-page #missionStage .monthly-count,
+body.mission-page #missionStage .bonus-count,
+body.mission-page #missionStage .live-track{
+  position:absolute;
+  z-index:30;
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  box-shadow:none;
+  background:transparent;
+  pointer-events:none;
+  white-space:nowrap;
+}
+
+body.mission-page #missionStage .mission-coin-box{
+  left:77.1%;
+  top:4.0%;
+  width:5.2%;
+  height:3.6%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#071f60;
+  font-size:clamp(9px,1.15cqw,18px);
+  font-weight:700;
+  line-height:1;
+}
+
+body.mission-page #missionStage .mission-energy-box{
+  left:89.0%;
+  top:4.0%;
+  width:7.0%;
+  height:3.6%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#071f60;
+  font-size:clamp(8px,1.05cqw,17px);
+  font-weight:700;
+  line-height:1;
+}
+
+body.mission-page #missionStage .daily-count{
+  left:60.9%;
+  top:16.1%;
+  width:6.6%;
+  height:4.2%;
+}
+
+body.mission-page #missionStage .weekly-count{
+  left:89.9%;
+  top:16.1%;
+  width:6.6%;
+  height:4.2%;
+}
+
+body.mission-page #missionStage .monthly-count{
+  left:60.9%;
+  top:53.6%;
+  width:6.6%;
+  height:4.2%;
+}
+
+body.mission-page #missionStage .bonus-count{
+  left:89.9%;
+  top:53.6%;
+  width:6.6%;
+  height:4.2%;
+}
+
+body.mission-page #missionStage .daily-count,
+body.mission-page #missionStage .weekly-count,
+body.mission-page #missionStage .monthly-count,
+body.mission-page #missionStage .bonus-count{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:clamp(9px,1.15cqw,18px);
+  font-weight:900;
+  line-height:1;
+  text-shadow:0 1px 2px rgba(0,0,0,.18);
+}
+
+body.mission-page #missionStage .live-track{
+  height:1.35%;
+  overflow:hidden;
+  border-radius:999px;
+  background:transparent;
+}
+
+body.mission-page #missionStage .daily-track{
+  left:43.9%;
+  top:30.6%;
+  width:22.0%;
+}
+
+body.mission-page #missionStage .weekly-track{
+  left:70.0%;
+  top:30.6%;
+  width:25.1%;
+}
+
+body.mission-page #missionStage .monthly-track{
+  left:43.9%;
+  top:68.0%;
+  width:22.0%;
+}
+
+body.mission-page #missionStage .bonus-track{
+  left:70.0%;
+  top:68.0%;
+  width:25.1%;
+}
+
+body.mission-page #missionStage .live-fill{
+  display:block;
+  width:0%;
+  height:100%;
+  border-radius:inherit;
+  transition:width .3s ease;
+}
+
+body.mission-page #missionStage .mission-fill-daily{
+  background:linear-gradient(90deg,#ffb34e,#ff5c00);
+}
+
+body.mission-page #missionStage .mission-fill-weekly{
+  background:linear-gradient(90deg,#2d70ff,#0050d9);
+}
+
+body.mission-page #missionStage .mission-fill-monthly{
+  background:linear-gradient(90deg,#8d42e5,#5e16ba);
+}
+
+body.mission-page #missionStage .mission-fill-bonus{
+  background:linear-gradient(90deg,#46bd55,#078f28);
+}
+
+body.mission-page #missionStage button.mission-card-button,
+body.mission-page #missionStage button.category-hotspot,
+body.mission-page #missionStage button.nutrition-hotspot,
+body.mission-page #missionStage button.hotspot{
+  position:absolute;
+  z-index:700;
+  display:block;
+  margin:0;
+  padding:0;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  border-radius:0;
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body.mission-page #missionStage button:focus,
+body.mission-page #missionStage button:hover,
+body.mission-page #missionStage button:active{
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+
+/* Nutrition CTA — Template V2.13.9 */
+body.mission-page #missionStage .nutrition-hotspot{
+  left:3.2% !important;
+  top:80.8% !important;
+  width:35.8% !important;
+  height:6.1% !important;
+}
+
+/* Daily / Weekly / Monthly / Bonus CTA */
+body.mission-page #missionStage .hotspot-daily{
+  left:42.4% !important;
+  top:59.0% !important;
+  width:24.0% !important;
+  height:5.7% !important;
+}
+
+body.mission-page #missionStage .hotspot-weekly{
+  left:69.8% !important;
+  top:59.0% !important;
+  width:26.1% !important;
+  height:5.7% !important;
+}
+
+body.mission-page #missionStage .hotspot-monthly{
+  left:42.4% !important;
+  top:81.7% !important;
+  width:24.0% !important;
+  height:5.4% !important;
+}
+
+body.mission-page #missionStage .hotspot-bonus{
+  left:69.8% !important;
+  top:81.7% !important;
+  width:26.1% !important;
+  height:5.4% !important;
+}
+
