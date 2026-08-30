@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2185-evidence-jwt-fix"
+    href="./base.css?v=20260830-mission-v2190-summary-reward-point"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.18.5
+   MISSION V2.19.0
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.18.5 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.19.0 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.5 — NUTRITION RING PANEL
+       MISSION V2.19.0 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.5 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.19.0 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2196,6 +2196,141 @@
       cursor:pointer!important;
     }
 
+
+    /* =========================================================
+       MISSION V2.19.0 — SUMMARY / REWARD / POINT
+    ========================================================= */
+
+    .mission-summary-overlay{
+      position:absolute!important;
+      z-index:85!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      margin:0!important;
+      padding:0!important;
+      border:0!important;
+      background:transparent!important;
+      color:#073477!important;
+      font-weight:1000!important;
+      line-height:1!important;
+      pointer-events:none!important;
+      white-space:nowrap!important;
+      text-shadow:0 1px 1px rgba(255,255,255,.8);
+    }
+
+    .mission-point-value{
+      left:92.0%!important;
+      top:14.2%!important;
+      width:5.4%!important;
+      height:3.4%!important;
+      color:#fff!important;
+      font-size:clamp(7px,.9cqw,13px)!important;
+      text-shadow:0 2px 4px rgba(0,0,0,.55)!important;
+    }
+
+    .daily-reward-coin{
+      left:50.0%!important;
+      top:41.2%!important;
+      width:4.4%!important;
+      height:3.3%!important;
+      color:#bd2600!important;
+    }
+
+    .daily-reward-energy{
+      left:61.0%!important;
+      top:41.2%!important;
+      width:4.4%!important;
+      height:3.3%!important;
+      color:#bd2600!important;
+    }
+
+    .weekly-reward-coin{
+      left:77.0%!important;
+      top:41.2%!important;
+      width:5.0%!important;
+      height:3.3%!important;
+      color:#0439c7!important;
+    }
+
+    .weekly-reward-energy{
+      left:89.1%!important;
+      top:41.2%!important;
+      width:5.0%!important;
+      height:3.3%!important;
+      color:#0439c7!important;
+    }
+
+    .monthly-reward-coin{
+      left:50.0%!important;
+      top:76.6%!important;
+      width:4.7%!important;
+      height:3.3%!important;
+      color:#5c14c5!important;
+    }
+
+    .monthly-reward-energy{
+      left:61.0%!important;
+      top:76.6%!important;
+      width:4.7%!important;
+      height:3.3%!important;
+      color:#5c14c5!important;
+    }
+
+    .bonus-reward-coin{
+      left:77.0%!important;
+      top:76.6%!important;
+      width:5.0%!important;
+      height:3.3%!important;
+      color:#087126!important;
+    }
+
+    .bonus-reward-energy{
+      left:89.1%!important;
+      top:76.6%!important;
+      width:5.0%!important;
+      height:3.3%!important;
+      color:#087126!important;
+    }
+
+    /* reposition counts to colored badges on each category */
+    #dailyCount{
+      left:61.2%!important;
+      top:24.3%!important;
+      width:5.4%!important;
+      height:3.5%!important;
+    }
+
+    #weeklyCount{
+      left:91.1%!important;
+      top:24.3%!important;
+      width:5.4%!important;
+      height:3.5%!important;
+    }
+
+    #monthlyCount{
+      left:61.2%!important;
+      top:59.5%!important;
+      width:5.4%!important;
+      height:3.5%!important;
+    }
+
+    #bonusCount{
+      left:91.1%!important;
+      top:59.5%!important;
+      width:5.4%!important;
+      height:3.5%!important;
+    }
+
+    .daily-track,
+    .weekly-track{
+      top:36.6%!important;
+    }
+
+    .live-fill{
+      transition:width .25s ease;
+    }
+
 </style>
 
 </head>
@@ -2230,7 +2365,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2185-evidence-jwt-fix"
+    src="./mission-template.png?v=20260830-mission-v2190-summary-reward-point"
     alt=""
     draggable="false"
     style="
@@ -2570,6 +2705,27 @@
   >
     0 / 6
   </div>
+
+
+  <!-- =====================================================
+       MISSION SUMMARY V2.19.0
+       Reward totals + Mission Point
+  ====================================================== -->
+
+  <div id="missionPointValue" class="mission-summary-overlay mission-point-value">0 / 33</div>
+
+  <div id="dailyRewardCoin" class="mission-summary-overlay daily-reward-coin">75</div>
+  <div id="dailyRewardEnergy" class="mission-summary-overlay daily-reward-energy">75</div>
+
+  <div id="weeklyRewardCoin" class="mission-summary-overlay weekly-reward-coin">360</div>
+  <div id="weeklyRewardEnergy" class="mission-summary-overlay weekly-reward-energy">360</div>
+
+  <div id="monthlyRewardCoin" class="mission-summary-overlay monthly-reward-coin">250</div>
+  <div id="monthlyRewardEnergy" class="mission-summary-overlay monthly-reward-energy">50</div>
+
+  <div id="bonusRewardCoin" class="mission-summary-overlay bonus-reward-coin">0</div>
+  <div id="bonusRewardEnergy" class="mission-summary-overlay bonus-reward-energy">0</div>
+
 
 
 
@@ -4457,7 +4613,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.18.5
+    MISSION V2.19.0
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -4970,8 +5126,7 @@ async function loadMissionCatalog(){
   try{
 
     const idToken =
-      ROCK?.getIdToken?.() ||
-      window.liff?.getIDToken?.();
+      await getFreshLineIdTokenV2185();
 
     if(!idToken){
       return null;
@@ -5681,6 +5836,54 @@ function aerobicDateOptionsV2180(){
 }
 
 
+function bindAerobicDateSelectionV2190(){
+
+  const select =
+    document
+      .getElementById(
+        "v2ActivityDate"
+      );
+
+
+  if(!select){
+    return;
+  }
+
+
+  const remember =
+    ()=>{
+
+      window.MISSION_AEROBIC_DATE =
+        String(
+          select.value ||
+          ""
+        );
+    };
+
+
+  if(
+    !select.dataset.dateBound
+  ){
+    select.dataset.dateBound =
+      "1";
+
+    select.addEventListener(
+      "change",
+      remember
+    );
+
+    select.addEventListener(
+      "input",
+      remember
+    );
+  }
+
+
+  remember();
+}
+
+
+
 /* =========================================================
    EXERCISE AUTO CALORIE V2.12.1
    Wellness estimate:
@@ -6267,6 +6470,13 @@ function buildMissionV2Fields(
     requestAnimationFrame(
       ()=>{
         bindExerciseCalculatorV2121();
+
+        if(
+          mission.id ===
+          "weekly_aerobic"
+        ){
+          bindAerobicDateSelectionV2190();
+        }
       }
     );
 
@@ -6760,13 +6970,22 @@ async function submitEvidence(){
       "weekly_aerobic"
     ){
 
-      const activityDate =
+      const activityDateElement =
         document
           .getElementById(
-            "v2ActivityDate"
+            "missionV2Fields"
           )
-          ?.value ||
-        "";
+          ?.querySelector(
+            "#v2ActivityDate"
+          );
+
+
+      const activityDate =
+        String(
+          activityDateElement?.value ||
+          window.MISSION_AEROBIC_DATE ||
+          ""
+        ).trim();
 
 
       if(!activityDate){
@@ -7150,9 +7369,20 @@ async function refreshMissionStatus(){
        APPLY CURRENT PERIOD DATA FROM BACKEND
     ====================================================== */
 
-    const submissions = Array.isArray(result?.submissions)
-      ? result.submissions
-      : [];
+    const submissions =
+      Array.isArray(
+        result?.submissions
+      )
+        ? result.submissions
+        : [];
+
+
+    missionCurrentSubmissionsV2190 =
+      Array.isArray(
+        result?.currentSubmissions
+      )
+        ? result.currentSubmissions
+        : submissions;
 
     submissions.forEach(item=>{
 
@@ -7238,19 +7468,349 @@ async function refreshMissionStatus(){
 /* =========================================================
    MAIN PROGRESS
 ========================================================= */
-function countApprovedMission(category){
-  return getCategoryMissions(category).filter(m=>getMissionStatus(m.id)?.status === 'approved').length;
+let missionCurrentSubmissionsV2190 = [];
+
+
+function missionSlotsV2190(
+  category
+){
+
+  if(
+    category ===
+    "weekly"
+  ){
+    /*
+      AEROBIC CLUB ทำได้ 3 ครั้ง/สัปดาห์
+      + weekly mission อื่น 8 รายการ
+    */
+    return (
+      getCategoryMissions("weekly")
+        .filter(
+          mission =>
+            mission.id !==
+            "weekly_aerobic"
+        )
+        .length +
+      3
+    );
+  }
+
+
+  return getCategoryMissions(
+    category
+  ).length;
 }
 
+
+function rewardTotalsV2190(
+  category
+){
+
+  let coin =
+    0;
+
+
+  let energy =
+    0;
+
+
+  for(
+    const mission
+    of getCategoryMissions(
+      category
+    )
+  ){
+
+    const multiplier =
+      mission.id ===
+      "weekly_aerobic"
+        ? 3
+        : 1;
+
+
+    coin +=
+      Number(
+        mission?.reward?.coin ||
+        0
+      ) *
+      multiplier;
+
+
+    energy +=
+      Number(
+        mission?.reward?.energy ||
+        0
+      ) *
+      multiplier;
+  }
+
+
+  return {
+    coin,
+    energy
+  };
+}
+
+
+function categorySubmissionSummaryV2190(
+  category
+){
+
+  const rows =
+    missionCurrentSubmissionsV2190
+      .filter(
+        row =>
+          String(
+            row?.category ||
+            row?.period_type ||
+            ""
+          )
+            .toLowerCase() ===
+          category
+      );
+
+
+  const approved =
+    rows.filter(
+      row =>
+        row?.status ===
+        "approved"
+    ).length;
+
+
+  const pending =
+    rows.filter(
+      row =>
+        row?.status ===
+        "pending"
+    ).length;
+
+
+  return {
+    approved,
+    pending,
+    submitted:
+      approved +
+      pending
+  };
+}
+
+
+function renderCategoryProgressV2190(
+  category
+){
+
+  const total =
+    missionSlotsV2190(
+      category
+    );
+
+
+  const summary =
+    categorySubmissionSummaryV2190(
+      category
+    );
+
+
+  const count =
+    document.getElementById(
+      `${category}Count`
+    );
+
+
+  const progress =
+    document.getElementById(
+      `${category}Progress`
+    );
+
+
+  if(count){
+
+    count.textContent =
+      `${summary.approved} / ${total}`;
+
+    count.title =
+      `Approved ${summary.approved} • Pending ${summary.pending} • Total ${total}`;
+  }
+
+
+  if(progress){
+
+    const approvedPct =
+      total > 0
+        ? Math.min(
+            100,
+            summary.approved /
+            total *
+            100
+          )
+        : 0;
+
+
+    const submittedPct =
+      total > 0
+        ? Math.min(
+            100,
+            summary.submitted /
+            total *
+            100
+          )
+        : 0;
+
+
+    progress.style.width =
+      `${submittedPct}%`;
+
+
+    if(
+      summary.pending > 0
+    ){
+
+      const approvedInside =
+        submittedPct > 0
+          ? approvedPct /
+            submittedPct *
+            100
+          : 0;
+
+
+      progress.style.background =
+        `linear-gradient(90deg,#20a758 0 ${approvedInside}%,#f2b51d ${approvedInside}% 100%)`;
+
+    }else{
+
+      progress.style.background =
+        "";
+    }
+  }
+}
+
+
+function renderRewardTotalsV2190(){
+
+  for(
+    const category
+    of [
+      "daily",
+      "weekly",
+      "monthly",
+      "bonus"
+    ]
+  ){
+
+    const totals =
+      rewardTotalsV2190(
+        category
+      );
+
+
+    const coin =
+      document.getElementById(
+        `${category}RewardCoin`
+      );
+
+
+    const energy =
+      document.getElementById(
+        `${category}RewardEnergy`
+      );
+
+
+    if(coin){
+      coin.textContent =
+        totals.coin.toLocaleString();
+    }
+
+
+    if(energy){
+      energy.textContent =
+        totals.energy.toLocaleString();
+    }
+  }
+}
+
+
+function renderMissionPointV2190(){
+
+  const categories =
+    [
+      "daily",
+      "weekly",
+      "monthly",
+      "bonus"
+    ];
+
+
+  const total =
+    categories
+      .reduce(
+        (
+          sum,
+          category
+        ) =>
+          sum +
+          missionSlotsV2190(
+            category
+          ),
+        0
+      );
+
+
+  const approved =
+    categories
+      .reduce(
+        (
+          sum,
+          category
+        ) =>
+          sum +
+          categorySubmissionSummaryV2190(
+            category
+          ).approved,
+        0
+      );
+
+
+  const element =
+    document.getElementById(
+      "missionPointValue"
+    );
+
+
+  if(element){
+
+    element.textContent =
+      `${approved} / ${total}`;
+  }
+}
+
+
+function countApprovedMission(
+  category
+){
+
+  return categorySubmissionSummaryV2190(
+    category
+  ).approved;
+}
+
+
 function updateTemplate(){
-  ['daily','weekly','monthly','bonus'].forEach(category=>{
-    const total = getCategoryMissions(category).length;
-    const approved = countApprovedMission(category);
-    const count = document.getElementById(`${category}Count`);
-    const progress = document.getElementById(`${category}Progress`);
-    if(count) count.textContent = `${approved} / ${total}`;
-    if(progress) progress.style.width = `${total ? Math.min(100,(approved/total)*100) : 0}%`;
-  });
+
+  [
+    "daily",
+    "weekly",
+    "monthly",
+    "bonus"
+  ]
+    .forEach(
+      renderCategoryProgressV2190
+    );
+
+
+  renderRewardTotalsV2190();
+
+  renderMissionPointV2190();
 }
 
 /* =========================================================
@@ -7315,7 +7875,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.18.5 — NUTRITION LINK
+   MISSION V2.19.0 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7382,7 +7942,7 @@ function getHomeApiUrl(){
 
 
 /* =========================================================
-   MISSION V2.18.5 — WALLET SYNC FROM HOME
+   MISSION V2.19.0 — WALLET SYNC FROM HOME
    Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
 ========================================================= */
 
@@ -7474,7 +8034,7 @@ function renderMissionWalletFromHome(
 
 
 /* =========================================================
-   MISSION V2.18.5 — FRESH LINE ID TOKEN
+   MISSION V2.19.0 — FRESH LINE ID TOKEN
    ห้ามใช้ token จาก localStorage / profile / userId
 ========================================================= */
 
@@ -8655,7 +9215,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.5 — FINAL OVERLAY SAFETY
+   MISSION V2.19.0 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -8851,7 +9411,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.5 — DIRECT MISSION LINK
+   MISSION V2.19.0 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
