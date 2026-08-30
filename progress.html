@@ -251,7 +251,7 @@
     }
   
     /* =========================================================
-       PROGRESS V3.1 — EXP / WEIGHT STATUS / INBODY FILTER
+       PROGRESS V3.2 — EXP / WEIGHT STATUS / INBODY FILTER
     ========================================================= */
 
     .status-grid{
@@ -440,6 +440,106 @@
 
       .upload-grid{
         grid-template-columns:1fr;
+      }
+    }
+
+
+    /* =========================================================
+       PROGRESS V3.2 — INBODY MANUAL ENTRY
+    ========================================================= */
+
+    .inbody-entry-box{
+      margin-top:14px;
+      padding:16px;
+      border:1px solid #cfe0f2;
+      border-radius:16px;
+      background:#ffffff;
+    }
+
+    .inbody-entry-box h3{
+      margin:0 0 4px;
+      color:#173b67;
+      font-size:17px;
+    }
+
+    .inbody-entry-sub{
+      margin:0 0 12px;
+      color:#6d8094;
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    .inbody-entry-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    .inbody-entry-grid .field{
+      margin:0;
+    }
+
+    .inbody-entry-grid label{
+      display:block;
+      margin-bottom:5px;
+      color:#31577f;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .inbody-entry-grid input,
+    .inbody-entry-grid textarea{
+      width:100%;
+      min-height:42px;
+      border:1px solid #cfdeec;
+      border-radius:10px;
+      padding:8px 10px;
+      background:#fff;
+      color:#173b67;
+      font-size:13px;
+    }
+
+    .inbody-entry-grid textarea{
+      min-height:78px;
+      resize:vertical;
+    }
+
+    .inbody-entry-span-2{
+      grid-column:span 2;
+    }
+
+    .inbody-entry-span-3{
+      grid-column:span 3;
+    }
+
+    .inbody-save-note{
+      margin-top:10px;
+      padding:9px 11px;
+      border-radius:10px;
+      background:#f4f8fc;
+      color:#60768d;
+      font-size:10px;
+      line-height:1.55;
+    }
+
+    @media(max-width:700px){
+      .inbody-entry-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .inbody-entry-span-3{
+        grid-column:span 2;
+      }
+    }
+
+    @media(max-width:470px){
+      .inbody-entry-grid{
+        grid-template-columns:1fr;
+      }
+
+      .inbody-entry-span-2,
+      .inbody-entry-span-3{
+        grid-column:span 1;
       }
     }
 
@@ -866,41 +966,225 @@
         </div>
 
 
-        <div class="upload-box">
-          <b>📷 แนบรูป InBody ได้ 2 หน้า</b>
 
-          <div class="upload-grid">
+        <div class="inbody-entry-box">
 
-            <div>
-              <label for="progressInbodyImage1">
-                รูป InBody หน้า 1
+          <h3>📝 กรอกข้อมูล InBody</h3>
+
+          <p class="inbody-entry-sub">
+            กรอกค่าที่มีจากใบ InBody ได้ตามจริง
+            ช่องที่ไม่มีข้อมูลสามารถเว้นว่างได้
+          </p>
+
+          <div class="inbody-entry-grid">
+
+            <div class="field">
+              <label for="progressMeasuredAt">
+                วันที่ / เวลา ตรวจ
               </label>
 
               <input
-                id="progressInbodyImage1"
-                type="file"
-                accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/*"
+                id="progressMeasuredAt"
+                type="datetime-local"
               >
             </div>
 
-            <div>
-              <label for="progressInbodyImage2">
-                รูป InBody หน้า 2
+
+            <div class="field">
+              <label for="progressWeightKg">
+                Weight (kg)
               </label>
 
               <input
-                id="progressInbodyImage2"
-                type="file"
-                accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/*"
+                id="progressWeightKg"
+                type="number"
+                min="20"
+                max="400"
+                step="0.1"
+                inputmode="decimal"
+                placeholder="เช่น 58.0"
               >
+            </div>
+
+
+            <div class="field">
+              <label for="progressMuscleKg">
+                Skeletal Muscle Mass (kg)
+              </label>
+
+              <input
+                id="progressMuscleKg"
+                type="number"
+                min="1"
+                max="150"
+                step="0.1"
+                inputmode="decimal"
+                placeholder="เช่น 22.5"
+              >
+            </div>
+
+
+            <div class="field">
+              <label for="progressBodyFatMassKg">
+                Body Fat Mass (kg)
+              </label>
+
+              <input
+                id="progressBodyFatMassKg"
+                type="number"
+                min="0"
+                max="250"
+                step="0.1"
+                inputmode="decimal"
+                placeholder="เช่น 18.2"
+              >
+            </div>
+
+
+            <div class="field">
+              <label for="progressBodyFatPercent">
+                Body Fat (%)
+              </label>
+
+              <input
+                id="progressBodyFatPercent"
+                type="number"
+                min="1"
+                max="75"
+                step="0.1"
+                inputmode="decimal"
+                placeholder="เช่น 28.4"
+              >
+            </div>
+
+
+            <div class="field">
+              <label for="progressBMI">
+                BMI
+              </label>
+
+              <input
+                id="progressBMI"
+                type="number"
+                min="8"
+                max="80"
+                step="0.1"
+                inputmode="decimal"
+                placeholder="เช่น 23.3"
+              >
+            </div>
+
+
+            <div class="field">
+              <label for="progressBMR">
+                BMR (kcal)
+              </label>
+
+              <input
+                id="progressBMR"
+                type="number"
+                min="500"
+                max="5000"
+                step="1"
+                inputmode="numeric"
+                placeholder="เช่น 1280"
+              >
+            </div>
+
+
+            <div class="field">
+              <label for="progressVisceralFatArea">
+                Visceral Fat Area (cm²)
+              </label>
+
+              <input
+                id="progressVisceralFatArea"
+                type="number"
+                min="0"
+                max="1000"
+                step="0.1"
+                inputmode="decimal"
+                placeholder="เช่น 92.4"
+              >
+            </div>
+
+
+            <div class="field">
+              <label for="progressInbodyScore">
+                InBody Score
+              </label>
+
+              <input
+                id="progressInbodyScore"
+                type="number"
+                min="0"
+                max="200"
+                step="1"
+                inputmode="numeric"
+                placeholder="เช่น 66"
+              >
+            </div>
+
+
+            <div class="field inbody-entry-span-3">
+              <label for="progressInbodyNote">
+                หมายเหตุ
+              </label>
+
+              <textarea
+                id="progressInbodyNote"
+                placeholder="รายละเอียดเพิ่มเติม"
+              ></textarea>
             </div>
 
           </div>
 
-          <div class="upload-note">
-            รองรับ JPG / PNG / WEBP / HEIC / HEIF ไม่เกิน 15 MB ต่อรูป
-            • รูปใช้สำหรับบันทึกผลและการอ่านผลด้าน Wellness
+
+          <div class="upload-box">
+
+            <b>📷 แนบรูป InBody ได้ 2 หน้า</b>
+
+            <div class="upload-grid">
+
+              <div>
+                <label for="progressInbodyImage1">
+                  รูป InBody หน้า 1
+                </label>
+
+                <input
+                  id="progressInbodyImage1"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/*"
+                >
+              </div>
+
+              <div>
+                <label for="progressInbodyImage2">
+                  รูป InBody หน้า 2
+                </label>
+
+                <input
+                  id="progressInbodyImage2"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp,.heic,.heif,image/*"
+                >
+              </div>
+
+            </div>
+
+            <div class="upload-note">
+              รองรับ JPG / PNG / WEBP / HEIC / HEIF ไม่เกิน 15 MB ต่อรูป
+              • สามารถบันทึกเฉพาะตัวเลข หรือเฉพาะรูป หรือบันทึกทั้งสองอย่างพร้อมกันได้
+            </div>
+
           </div>
+
+
+          <div class="inbody-save-note">
+            ค่าที่บันทึกใช้สำหรับติดตาม Wellness และสร้าง/อัปเดต Health Goals
+            ไม่ใช่การวินิจฉัยหรือคำแนะนำทางการแพทย์
+          </div>
+
 
           <div class="upload-actions">
             <button
@@ -908,9 +1192,10 @@
               class="mini-btn"
               type="button"
             >
-              อัปโหลดรูป InBody
+              💾 บันทึก InBody
             </button>
           </div>
+
         </div>
 
       </section>
@@ -1652,6 +1937,83 @@
     }
 
 
+    function readOptionalNumber(
+      id
+    ){
+
+      const raw =
+        String(
+          $(id)
+            ?.value ??
+          ""
+        )
+        .trim();
+
+
+      if(
+        raw ===
+        ""
+      ){
+        return null;
+      }
+
+
+      const value =
+        Number(raw);
+
+
+      return Number.isFinite(
+        value
+      )
+        ? value
+        : null;
+    }
+
+
+    function clearProgressInbodyForm(){
+
+      [
+        "progressWeightKg",
+        "progressMuscleKg",
+        "progressBodyFatMassKg",
+        "progressBodyFatPercent",
+        "progressBMI",
+        "progressBMR",
+        "progressVisceralFatArea",
+        "progressInbodyScore",
+        "progressInbodyNote"
+      ]
+      .forEach(
+        id =>{
+
+          const element =
+            $(id);
+
+          if(element){
+            element.value =
+              "";
+          }
+        }
+      );
+
+
+      if(
+        $("progressInbodyImage1")
+      ){
+        $("progressInbodyImage1").value =
+          "";
+      }
+
+
+      if(
+        $("progressInbodyImage2")
+      ){
+        $("progressInbodyImage2").value =
+          "";
+      }
+    }
+
+
     async function uploadInbodyFromProgress(){
 
       const image1 =
@@ -1667,17 +2029,6 @@
         null;
 
 
-      if(
-        !image1 &&
-        !image2
-      ){
-
-        throw new Error(
-          "กรุณาเลือกรูป InBody อย่างน้อย 1 รูป"
-        );
-      }
-
-
       validateInbodyFile(
         image1
       );
@@ -1685,6 +2036,80 @@
       validateInbodyFile(
         image2
       );
+
+
+      const values = {
+
+        weightKg:
+          readOptionalNumber(
+            "progressWeightKg"
+          ),
+
+        skeletalMuscleMassKg:
+          readOptionalNumber(
+            "progressMuscleKg"
+          ),
+
+        bodyFatMassKg:
+          readOptionalNumber(
+            "progressBodyFatMassKg"
+          ),
+
+        bodyFatPercent:
+          readOptionalNumber(
+            "progressBodyFatPercent"
+          ),
+
+        bmi:
+          readOptionalNumber(
+            "progressBMI"
+          ),
+
+        bmrKcal:
+          readOptionalNumber(
+            "progressBMR"
+          ),
+
+        visceralFatAreaCm2:
+          readOptionalNumber(
+            "progressVisceralFatArea"
+          ),
+
+        inbodyScore:
+          readOptionalNumber(
+            "progressInbodyScore"
+          )
+
+      };
+
+
+      const hasMeasurement =
+        Object.values(
+          values
+        )
+        .some(
+          value =>
+            value !==
+            null
+        );
+
+
+      const hasImage =
+        Boolean(
+          image1 ||
+          image2
+        );
+
+
+      if(
+        !hasMeasurement &&
+        !hasImage
+      ){
+
+        throw new Error(
+          "กรุณากรอกข้อมูล InBody หรือแนบรูปอย่างน้อย 1 รูป"
+        );
+      }
 
 
       const idToken =
@@ -1705,21 +2130,66 @@
         idToken
       );
 
+
+      const measuredInput =
+        $("progressMeasuredAt")
+          ?.value ||
+        "";
+
+
+      const measuredAt =
+        measuredInput
+          ? new Date(
+              measuredInput
+            )
+            .toISOString()
+          : new Date()
+              .toISOString();
+
+
       form.append(
         "measuredAt",
-        new Date()
-          .toISOString()
+        measuredAt
       );
+
+
+      for(
+        const [
+          key,
+          value
+        ]
+        of Object.entries(
+          values
+        )
+      ){
+
+        if(
+          value !==
+          null
+        ){
+
+          form.append(
+            key,
+            String(value)
+          );
+        }
+      }
+
 
       form.append(
         "note",
-        "Uploaded from Progress"
+        String(
+          $("progressInbodyNote")
+            ?.value ||
+          "Saved from Progress"
+        )
       );
 
 
       if(
         image1
       ){
+
         form.append(
           "image1",
           image1
@@ -1730,6 +2200,7 @@
       if(
         image2
       ){
+
         form.append(
           "image2",
           image2
@@ -2060,14 +2531,12 @@
             await uploadInbodyFromProgress();
 
             showToast(
-              "✅ อัปโหลดรูป InBody สำเร็จ"
+              "✅ บันทึก InBody สำเร็จ"
             );
 
-            $("progressInbodyImage1").value =
-              "";
+            clearProgressInbodyForm();
 
-            $("progressInbodyImage2").value =
-              "";
+            setDefaultMeasuredAt();
 
 
             const data =
@@ -2090,10 +2559,47 @@
               false;
 
             button.textContent =
-              "อัปโหลดรูป InBody";
+              "💾 บันทึก InBody";
           }
         }
       );
+
+
+
+    function setDefaultMeasuredAt(){
+
+      const element =
+        $("progressMeasuredAt");
+
+
+      if(
+        !element ||
+        element.value
+      ){
+        return;
+      }
+
+
+      const now =
+        new Date();
+
+
+      const local =
+        new Date(
+          now.getTime() -
+          now.getTimezoneOffset() *
+          60000
+        )
+        .toISOString()
+        .slice(
+          0,
+          16
+        );
+
+
+      element.value =
+        local;
+    }
 
 
     async function init(){
@@ -2111,6 +2617,8 @@
           liff.login();
           return;
         }
+
+        setDefaultMeasuredAt();
 
         const data =
           await loadProgress();
