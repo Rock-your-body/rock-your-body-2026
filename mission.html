@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2181-dynamic-weight"
+    href="./base.css?v=20260830-mission-v2182-home-wallet-sync"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.18.1
+   MISSION V2.18.2
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.18.1 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.18.2 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.1 — NUTRITION RING PANEL
+       MISSION V2.18.2 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.18.1 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.18.2 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2230,7 +2230,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2181-dynamic-weight"
+    src="./mission-template.png?v=20260830-mission-v2182-home-wallet-sync"
     alt=""
     draggable="false"
     style="
@@ -2259,6 +2259,7 @@
       mission-coin-box
       live-blue
     "
+    aria-label="Rock Coin จาก HOME"
     style="
       position:absolute!important;
       z-index:30!important;
@@ -2293,6 +2294,7 @@
       mission-energy-box
       live-blue
     "
+    aria-label="Energy จาก HOME"
     style="
       position:absolute!important;
       z-index:30!important;
@@ -4455,7 +4457,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.18.1
+    MISSION V2.18.2
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -7005,6 +7007,8 @@ async function submitEvidence(){
 
     await refreshMissionStatus();
 
+    await refreshMissionWallet();
+
     if(
       document
         .getElementById(
@@ -7302,7 +7306,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.18.1 — NUTRITION LINK
+   MISSION V2.18.2 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7367,6 +7371,100 @@ function getHomeApiUrl(){
 }
 
 
+
+/* =========================================================
+   MISSION V2.18.2 — WALLET SYNC FROM HOME
+   Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
+========================================================= */
+
+function renderMissionWalletFromHome(
+  result
+){
+
+  const coin =
+    Math.max(
+      0,
+      Number(
+        result?.rockCoin ??
+        result?.wallet?.rockCoin ??
+        result?.player?.rockCoin ??
+        0
+      )
+    );
+
+
+  const energyCurrent =
+    Math.max(
+      0,
+      Number(
+        result?.energy?.current ??
+        result?.energy ??
+        result?.wallet?.energy ??
+        result?.player?.energy ??
+        0
+      )
+    );
+
+
+  const energyMax =
+    Math.max(
+      1,
+      Number(
+        result?.energy?.max ??
+        result?.maxEnergy ??
+        result?.wallet?.maxEnergy ??
+        result?.player?.maxEnergy ??
+        200
+      )
+    );
+
+
+  const coinElement =
+    document.getElementById(
+      "missionCoin"
+    );
+
+
+  const energyElement =
+    document.getElementById(
+      "missionEnergy"
+    );
+
+
+  if(
+    coinElement
+  ){
+
+    coinElement.textContent =
+      coin.toLocaleString();
+  }
+
+
+  if(
+    energyElement
+  ){
+
+    energyElement.textContent =
+      `${energyCurrent.toLocaleString()} / ${energyMax.toLocaleString()}`;
+  }
+
+
+  /*
+    เก็บไว้ใช้ร่วมกับส่วนอื่นของ Mission
+  */
+  window.MISSION_WALLET = {
+    rockCoin:
+      coin,
+
+    energy:
+      energyCurrent,
+
+    maxEnergy:
+      energyMax
+  };
+}
+
+
 async function loadMissionHomeSnapshot(){
 
   try{
@@ -7409,6 +7507,14 @@ async function loadMissionHomeSnapshot(){
     ){
       missionHomeSnapshot =
         result;
+
+
+      /*
+        Coin / Energy ต้องตรงกับ HOME ทุกครั้ง
+      */
+      renderMissionWalletFromHome(
+        result
+      );
 
 
       const currentWeight =
@@ -8174,6 +8280,28 @@ async function loadMissionDashboard(){
 }
 
 
+
+/* =========================================================
+   REFRESH WALLET AFTER MISSION CHANGE
+========================================================= */
+
+async function refreshMissionWallet(){
+
+  const result =
+    await loadMissionHomeSnapshot();
+
+
+  if(
+    result
+  ){
+
+    renderMissionWalletFromHome(
+      result
+    );
+  }
+}
+
+
 /* =========================================================
    START PAGE
 ========================================================= */
@@ -8380,7 +8508,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.1 — FINAL OVERLAY SAFETY
+   MISSION V2.18.2 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -8576,7 +8704,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.18.1 — DIRECT MISSION LINK
+   MISSION V2.18.2 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
