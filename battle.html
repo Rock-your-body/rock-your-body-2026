@@ -13,7 +13,7 @@
   </title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v52"></script>
+  <script src="./app-config.js?v=20260831-battle-v53"></script>
 
   <style>
 
@@ -2247,10 +2247,40 @@ async function loadBattle(){
   );
 
 
-  const data =
-    await postBattle(
-      "mapV5"
-    );
+  let data;
+
+
+  try{
+
+    data =
+      await postBattle(
+        "mapV5"
+      );
+
+  }catch(error){
+
+    /*
+      Compatibility กับ Battle Function รุ่นก่อน
+    */
+    if(
+      String(
+        error?.message ||
+        ""
+      ).includes(
+        "UNKNOWN_ACTION"
+      )
+    ){
+
+      data =
+        await postBattle(
+          "map"
+        );
+
+    }else{
+
+      throw error;
+    }
+  }
 
 
   battleState =
