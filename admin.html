@@ -6,1254 +6,1022 @@
     name="viewport"
     content="width=device-width,initial-scale=1,viewport-fit=cover"
   >
-  <title>
-    ROCK YOUR BODY 2026 • Admin
-  </title>
+  <title>ROCK YOUR BODY 2026 — ADMIN</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js"></script>
+  <script src="./app-config.js?v=20260831-admin-v31"></script>
 
   <style>
     *{box-sizing:border-box}
-    body{
+    html,body{
       margin:0;
-      font-family:
-        Arial,
-        "Noto Sans Thai",
-        sans-serif;
-      color:#183653;
+      min-height:100%;
       background:#eef5fb;
+      color:#102c54;
+      font-family:"Prompt","Noto Sans Thai",Arial,sans-serif;
     }
-    header{
-      position:sticky;
-      top:0;
-      z-index:20;
-      padding:
-        calc(13px + env(safe-area-inset-top))
-        16px
-        13px;
+
+    button,input,select,textarea{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    .app{
+      width:min(1180px,100%);
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border-radius:20px;
       color:#fff;
-      background:
-        linear-gradient(
-          135deg,
-          #0d3c7c,
-          #147c68
-        );
-      box-shadow:
-        0 4px 15px
-        rgba(0,0,0,.14);
+      background:linear-gradient(135deg,#0b3e84,#0f8a7d);
+      box-shadow:0 12px 28px rgba(21,66,116,.15);
     }
-    header b{font-size:17px}
-    main{
-      max-width:1000px;
-      margin:auto;
-      padding:15px;
+
+    .topbar h1{
+      margin:0;
+      font-size:24px;
     }
-    .status{
-      padding:11px 13px;
-      border-radius:13px;
-      margin-bottom:12px;
-      background:#fff;
-      box-shadow:
-        0 3px 12px
-        rgba(50,80,110,.07);
-      font-size:12px;
+
+    .topbar small{
+      opacity:.9;
+      font-weight:700;
+    }
+
+    .wallet{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.15);
       font-weight:900;
     }
-    .tabs{
+
+    .summary{
       display:grid;
-      grid-template-columns:
-        1fr 1fr;
-      gap:8px;
-      margin-bottom:13px;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:14px;
     }
-    button{
+
+    .summary-card{
+      padding:14px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid #d9e5f1;
+      box-shadow:0 6px 18px rgba(29,61,94,.06);
+    }
+
+    .summary-card small{
+      color:#6b809a;
+      font-weight:800;
+    }
+
+    .summary-card b{
+      display:block;
+      margin-top:6px;
+      font-size:26px;
+      color:#0d3e7c;
+    }
+
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:16px 0;
+    }
+
+    .tab{
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      background:#dfeaf6;
+      color:#174a84;
+      font-weight:900;
+    }
+
+    .tab.active{
+      background:#174a84;
+      color:#fff;
+    }
+
+    .panel{
+      display:none;
+    }
+
+    .panel.active{
+      display:block;
+    }
+
+    .card{
+      margin-bottom:12px;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid #d7e3ef;
+      background:#fff;
+      box-shadow:0 7px 18px rgba(29,61,94,.05);
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .space{
+      justify-content:space-between;
+    }
+
+    .btn{
       border:0;
       border-radius:11px;
       padding:10px 13px;
-      font:inherit;
-      font-weight:900;
-      cursor:pointer;
-    }
-    .primary{
-      color:#fff;
-      background:#145fc2;
-    }
-    .green{
-      color:#fff;
-      background:#0b986f;
-    }
-    .danger{
-      color:#fff;
-      background:#c83232;
-    }
-    .muted{
-      color:#274968;
-      background:#dfeaf4;
-    }
-    .tab.active{
-      color:#fff;
-      background:#123f80;
-    }
-    .card{
-      padding:14px;
-      margin-bottom:12px;
-      border:1px solid #dce7f1;
-      border-radius:18px;
-      background:#fff;
-      box-shadow:
-        0 4px 16px
-        rgba(50,80,110,.07);
-    }
-    .row{
-      display:flex;
-      justify-content:
-        space-between;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:flex-start;
-    }
-    .meta{
-      color:#698098;
-      font-size:11px;
-      line-height:1.45;
-    }
-    .avatar{
-      width:46px;
-      height:46px;
-      border-radius:50%;
-      object-fit:cover;
-      vertical-align:middle;
-      margin-right:8px;
-    }
-    .reward{
-      margin:7px 0;
       font-weight:900;
     }
-    .tools{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:11px;
+
+    .primary{background:#1768d8;color:#fff}
+    .success{background:#1b9d62;color:#fff}
+    .danger{background:#d53b3b;color:#fff}
+    .warning{background:#e8a316;color:#fff}
+    .muted{background:#edf2f7;color:#35506f}
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background:#edf2f7;
     }
-    input,
-    textarea{
+
+    .badge.pending{background:#fff4d6;color:#9b6a00}
+    .badge.approved{background:#e9f8ef;color:#167042}
+    .badge.rejected{background:#ffeded;color:#b62d2d}
+    .badge.sent{background:#e6f2ff;color:#125cae}
+    .badge.cancelled{background:#f0f0f0;color:#666}
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:5px;
+      font-size:13px;
+      font-weight:900;
+      color:#365777;
+    }
+
+    input,select,textarea{
       width:100%;
-      border:1px solid #cfdeea;
-      border-radius:10px;
-      padding:9px 10px;
-      font:inherit;
-      color:#183653;
+      border:1px solid #cbd9e7;
+      border-radius:11px;
+      padding:10px 11px;
       background:#fff;
+      color:#183a61;
     }
+
     textarea{
-      min-height:90px;
+      min-height:88px;
       resize:vertical;
     }
-    .review-grid{
+
+    .player{
       display:grid;
-      grid-template-columns:
-        repeat(4,1fr);
-      gap:7px;
-      margin-top:10px;
+      grid-template-columns:56px 1fr auto;
+      gap:12px;
+      align-items:center;
     }
-    .field label{
-      display:block;
-      margin-bottom:4px;
-      color:#55718d;
-      font-size:9px;
-      font-weight:900;
+
+    .avatar{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      object-fit:cover;
+      background:#e8eef5;
     }
-    .images{
-      display:grid;
-      grid-template-columns:
-        1fr 1fr;
-      gap:8px;
-      margin-top:10px;
+
+    .muted-text{
+      color:#71849a;
+      font-size:13px;
     }
-    .images a{
-      display:block;
-      border:1px solid #d9e5ef;
-      border-radius:13px;
-      overflow:hidden;
-      background:#f4f8fb;
-    }
-    .images img{
-      display:block;
-      width:100%;
-      max-height:360px;
-      object-fit:contain;
-      background:#f4f8fb;
-    }
-    .advice{
-      margin-top:10px;
-    }
-    .badge{
-      display:inline-block;
-      padding:5px 8px;
-      border-radius:999px;
-      font-size:9px;
-      font-weight:900;
-      background:#eef3f8;
-      color:#526a82;
-    }
-    .badge.pending{
-      background:#fff1d1;
-      color:#896000;
-    }
-    .badge.reviewed{
-      background:#e4f8ef;
-      color:#08704f;
-    }
-    .old-advice{
-      margin-top:9px;
-      padding:9px 10px;
+
+    .evidence{
+      max-width:170px;
       border-radius:10px;
-      background:#edf8f3;
-      color:#2b604c;
-      font-size:11px;
-      line-height:1.5;
-      white-space:pre-wrap;
+      border:1px solid #d9e2eb;
     }
-    a{
-      color:#0c57bb;
-      word-break:break-all;
+
+    .table-wrap{
+      overflow:auto;
     }
-    @media(max-width:700px){
-      .review-grid{
-        grid-template-columns:
-          repeat(2,1fr);
-      }
-      .images{
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:760px;
+    }
+
+    th,td{
+      padding:10px;
+      border-bottom:1px solid #e6edf4;
+      text-align:left;
+      vertical-align:top;
+      font-size:13px;
+    }
+
+    th{
+      color:#506a85;
+      background:#f6f9fc;
+    }
+
+    .empty{
+      padding:28px;
+      text-align:center;
+      color:#71849a;
+      font-weight:800;
+    }
+
+    #toast{
+      position:fixed;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      z-index:9999;
+      display:none;
+      max-width:calc(100vw - 30px);
+      padding:11px 16px;
+      border-radius:13px;
+      background:#173a63;
+      color:#fff;
+      font-weight:900;
+      text-align:center;
+      box-shadow:0 8px 24px rgba(0,0,0,.22);
+    }
+
+    #toast.error{
+      background:#c83232;
+    }
+
+    @media(max-width:800px){
+      .summary,.grid2,.grid3{
         grid-template-columns:1fr;
+      }
+      .player{
+        grid-template-columns:48px 1fr;
+      }
+      .player .actions{
+        grid-column:1/-1;
       }
     }
   </style>
 </head>
-
 <body>
 
-<header>
-  <b>
-    ROCK YOUR BODY 2026 — ADMIN
-  </b>
-</header>
+<div class="app">
 
-<main>
-
-  <div
-    id="status"
-    class="status"
-  >
-    กำลังเชื่อมต่อ LINE...
-  </div>
-
-  <div class="tabs">
-    <button
-      id="missionTab"
-      class="tab active"
-      onclick="showTab('mission')"
-    >
-      🎯 Mission Queue
-    </button>
-
-    <button
-      id="inbodyTab"
-      class="tab"
-      onclick="showTab('inbody')"
-    >
-      🧬 InBody Review
-    </button>
-  </div>
-
-
-  <section id="missionSection">
-
-    <div class="tools">
-      <button
-        class="primary"
-        onclick="loadMissionQueue()"
-      >
-        รีเฟรช Mission
-      </button>
+  <header class="topbar">
+    <div>
+      <h1>🛠️ ROCK YOUR BODY 2026 — ADMIN</h1>
+      <small>Mission • Reward • Player • Advice • Settings</small>
     </div>
 
-    <div id="missionQueue"></div>
+    <div class="wallet">
+      <span class="pill" id="adminName">ADMIN</span>
+      <button class="btn muted" onclick="reloadAll()">รีเฟรช</button>
+    </div>
+  </header>
 
+  <section class="summary">
+    <div class="summary-card">
+      <small>Mission รอตรวจ</small>
+      <b id="sumPending">0</b>
+    </div>
+    <div class="summary-card">
+      <small>อนุมัติแล้ววันนี้</small>
+      <b id="sumApproved">0</b>
+    </div>
+    <div class="summary-card">
+      <small>ของรางวัลรอส่ง</small>
+      <b id="sumRewards">0</b>
+    </div>
+    <div class="summary-card">
+      <small>ผู้เล่น Active</small>
+      <b id="sumPlayers">0</b>
+    </div>
   </section>
 
+  <nav class="tabs">
+    <button class="tab active" data-tab="mission">🎯 Mission</button>
+    <button class="tab" data-tab="rewards">🎁 Rewards</button>
+    <button class="tab" data-tab="players">👥 Players</button>
+    <button class="tab" data-tab="advice">💬 Advice</button>
+    <button class="tab" data-tab="missionset">➕ Mission Setup</button>
+    <button class="tab" data-tab="inbody">🧬 InBody Review</button>
+    <button class="tab" data-tab="settings">⚙️ Settings</button>
+  </nav>
 
-  <section
-    id="inbodySection"
-    style="display:none"
-  >
+  <!-- MISSION -->
+  <section id="panel-mission" class="panel active">
+    <div class="card row space">
+      <div class="row">
+        <select id="missionStatusFilter" style="width:auto" onchange="loadMissionQueue()">
+          <option value="pending">รอตรวจ</option>
+          <option value="approved">อนุมัติแล้ว</option>
+          <option value="rejected">ปฏิเสธ</option>
+          <option value="all">ทั้งหมด</option>
+        </select>
+      </div>
+      <button class="btn primary" onclick="loadMissionQueue()">รีเฟรช Mission</button>
+    </div>
+    <div id="missionList"></div>
+  </section>
 
-    <div class="tools">
-      <button
-        class="green"
-        onclick="loadInBodyQueue()"
-      >
-        รีเฟรช InBody
-      </button>
+  <!-- REWARDS -->
+  <section id="panel-rewards" class="panel">
+    <div class="card row space">
+      <div>
+        <b>🎁 การส่งของรางวัลให้ Player</b>
+        <div class="muted-text">แยกจาก Coin/Energy/EXP ในระบบ ใช้สำหรับของรางวัลจริง</div>
+      </div>
+      <select id="rewardStatusFilter" style="width:auto" onchange="loadRewards()">
+        <option value="pending">รอส่ง</option>
+        <option value="sent">ส่งแล้ว</option>
+        <option value="cancelled">ยกเลิก</option>
+        <option value="all">ทั้งหมด</option>
+      </select>
+    </div>
+    <div id="rewardList"></div>
+  </section>
+
+  <!-- PLAYERS -->
+  <section id="panel-players" class="panel">
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <label>ค้นหาผู้เล่น</label>
+          <input id="playerSearch" placeholder="ชื่อ / Team / LINE ID" oninput="renderPlayers()">
+        </div>
+        <div>
+          <label>สถานะ</label>
+          <select id="playerStatusFilter" onchange="renderPlayers()">
+            <option value="all">ทั้งหมด</option>
+            <option value="active">active</option>
+            <option value="inactive">inactive</option>
+            <option value="cancelled">cancelled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="playerList"></div>
+  </section>
+
+  <!-- ADVICE -->
+  <section id="panel-advice" class="panel">
+    <div class="card">
+      <b>💬 คำแนะนำของผู้เล่นแต่ละคน</b>
+      <div class="muted-text">บันทึกคำแนะนำ Wellness / การติดตาม / หมายเหตุของทีมโครงการ</div>
+    </div>
+    <div id="adviceList"></div>
+  </section>
+
+  <!-- MISSION SETUP -->
+  <section id="panel-missionset" class="panel">
+    <div class="card">
+      <div class="row space">
+        <div>
+          <b>➕ เพิ่ม / แก้ไข Mission</b>
+          <div class="muted-text">Mission ที่สร้างใหม่จะเก็บใน custom_missions และใช้เป็นรายการเสริมของระบบ</div>
+        </div>
+        <button class="btn primary" onclick="resetMissionForm()">สร้างใหม่</button>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label>Mission ID</label>
+          <input id="cmId" placeholder="เช่น bonus_walk_challenge">
+        </div>
+        <div>
+          <label>หมวด</label>
+          <select id="cmCategory">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="bonus">Bonus</option>
+          </select>
+        </div>
+        <div>
+          <label>ชื่อภารกิจ</label>
+          <input id="cmName">
+        </div>
+        <div>
+          <label>Icon / Emoji</label>
+          <input id="cmIcon" placeholder="🎯">
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <label>รายละเอียด</label>
+        <textarea id="cmDescription"></textarea>
+      </div>
+
+      <div class="grid3" style="margin-top:10px">
+        <div><label>Coin</label><input id="cmCoin" type="number" min="0" value="10"></div>
+        <div><label>Energy</label><input id="cmEnergy" type="number" min="0" value="10"></div>
+        <div><label>EXP</label><input id="cmExp" type="number" min="0" value="10"></div>
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label>Target JSON</label>
+          <textarea id="cmTarget" placeholder='{"steps":8000}'></textarea>
+        </div>
+        <div>
+          <label>สถานะ</label>
+          <select id="cmActive">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn success" onclick="saveCustomMission()">บันทึก Mission</button>
+      </div>
     </div>
 
-    <div id="inbodyQueue"></div>
-
+    <div id="customMissionList"></div>
   </section>
 
-</main>
+  <!-- INBODY -->
+  <section id="panel-inbody" class="panel">
+    <div class="card row space">
+      <div><b>🧬 InBody Review</b></div>
+      <button class="btn primary" onclick="loadInBody()">รีเฟรช</button>
+    </div>
+    <div id="inbodyList"></div>
+  </section>
 
+  <!-- SETTINGS -->
+  <section id="panel-settings" class="panel">
+    <div class="card">
+      <b>⚙️ ตั้งค่าระบบ</b>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label>ชื่อโครงการ</label>
+          <input id="setProjectName" value="ROCK YOUR BODY 2026">
+        </div>
+        <div>
+          <label>Max Energy</label>
+          <input id="setMaxEnergy" type="number" value="200">
+        </div>
+        <div>
+          <label>Daily Steps Goal</label>
+          <input id="setStepsGoal" type="number" value="8000">
+        </div>
+        <div>
+          <label>Daily Calories Burn Goal</label>
+          <input id="setCaloriesGoal" type="number" value="300">
+        </div>
+        <div>
+          <label>Sleep Goal (minutes)</label>
+          <input id="setSleepGoal" type="number" value="420">
+        </div>
+        <div>
+          <label>Maintenance Message</label>
+          <input id="setMaintenanceMessage" placeholder="ข้อความประกาศ (ถ้ามี)">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn success" onclick="saveSettings()">บันทึก Settings</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="toast"></div>
 
 <script>
-  "use strict";
+"use strict";
 
-  let idToken = "";
+const $ = id => document.getElementById(id);
 
+let playersCache = [];
+let currentIdToken = "";
 
-  function $(
-    id
-  ){
-    return document
-      .getElementById(id);
+function apiUrl(){
+  return window.APP_CONFIG?.getApi
+    ? window.APP_CONFIG.getApi("ADMIN")
+    : window.APP_CONFIG?.API?.ADMIN;
+}
+
+async function initLine(){
+  await liff.init({
+    liffId: window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
+  });
+
+  if(!liff.isLoggedIn()){
+    liff.login({redirectUri:location.href});
+    return false;
   }
 
+  currentIdToken = liff.getIDToken();
 
-  function esc(
-    value
-  ){
-
-    return String(
-      value ??
-      ""
-    )
-      .replace(
-        /[&<>"']/g,
-        char => ({
-          "&":"&amp;",
-          "<":"&lt;",
-          ">":"&gt;",
-          '"':"&quot;",
-          "'":"&#39;"
-        }[char])
-      );
+  if(!currentIdToken || currentIdToken.split(".").length !== 3){
+    liff.logout();
+    liff.login({redirectUri:location.href});
+    return false;
   }
 
+  return true;
+}
 
-  function setStatus(
-    text
-  ){
-    $("status")
-      .textContent =
-        text;
+async function post(action,payload={}){
+  const token = liff.getIDToken();
+
+  const res = await fetch(apiUrl(),{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    cache:"no-store",
+    body:JSON.stringify({
+      action,
+      idToken:token,
+      ...payload
+    })
+  });
+
+  const raw = await res.text();
+  let data={};
+
+  try{data=raw?JSON.parse(raw):{}}
+  catch{throw new Error("Admin API ตอบกลับไม่ใช่ JSON")}
+
+  if(!res.ok || data?.success===false){
+    throw new Error(data?.error || data?.message || `HTTP ${res.status}`);
   }
 
+  return data;
+}
 
-  async function api(
-    action,
-    extra={}
-  ){
+function toast(msg,error=false){
+  const el=$("toast");
+  el.textContent=msg;
+  el.className=error?"error":"";
+  el.style.display="block";
+  clearTimeout(window.__toast);
+  window.__toast=setTimeout(()=>el.style.display="none",3500);
+}
 
-    const response =
-      await fetch(
-        APP_CONFIG
-          .getApi(
-            "ADMIN"
-          ),
-        {
-          method:"POST",
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              action,
-              idToken,
-              ...extra
-            })
-        }
-      );
+function esc(value){
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
 
-    const raw =
-      await response.text();
+function statusBadge(status){
+  const s=String(status||"").toLowerCase();
+  return `<span class="badge ${esc(s)}">${esc(s||"-")}</span>`;
+}
 
-    let data={};
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    $(`panel-${btn.dataset.tab}`).classList.add("active");
 
-    try{
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    }catch{
-      throw new Error(
-        `Server JSON ไม่ถูกต้อง HTTP ${response.status}`
-      );
-    }
+    if(btn.dataset.tab==="rewards") loadRewards();
+    if(btn.dataset.tab==="players") loadPlayers();
+    if(btn.dataset.tab==="advice") loadAdvice();
+    if(btn.dataset.tab==="missionset") loadCustomMissions();
+    if(btn.dataset.tab==="inbody") loadInBody();
+    if(btn.dataset.tab==="settings") loadSettings();
+  });
+});
 
-    if(
-      !response.ok ||
-      data?.success === false
-    ){
-      throw new Error(
-        data?.error ||
-        `HTTP ${response.status}`
-      );
-    }
+async function loadSummary(){
+  try{
+    const d=await post("dashboardSummary");
+    $("sumPending").textContent=d?.summary?.missionPending??0;
+    $("sumApproved").textContent=d?.summary?.approvedToday??0;
+    $("sumRewards").textContent=d?.summary?.rewardPending??0;
+    $("sumPlayers").textContent=d?.summary?.activePlayers??0;
+  }catch(e){console.warn(e)}
+}
 
-    return data;
-  }
+async function loadMissionQueue(){
+  try{
+    const filter=$("missionStatusFilter").value;
+    const d=await post("missionQueue",{status:filter});
+    const rows=d?.items || d?.queue || d?.submissions || [];
 
-
-  function showTab(
-    tab
-  ){
-
-    const mission =
-      tab ===
-      "mission";
-
-    $("missionSection")
-      .style.display =
-        mission
-          ? "block"
-          : "none";
-
-    $("inbodySection")
-      .style.display =
-        mission
-          ? "none"
-          : "block";
-
-    $("missionTab")
-      .classList
-      .toggle(
-        "active",
-        mission
-      );
-
-    $("inbodyTab")
-      .classList
-      .toggle(
-        "active",
-        !mission
-      );
-
-    if(!mission){
-      loadInBodyQueue();
-    }
-  }
-
-
-  /* =====================================================
-     MISSION
-  ===================================================== */
-
-  async function loadMissionQueue(){
-
-    try{
-
-      setStatus(
-        "กำลังโหลด Mission Queue..."
-      );
-
-      const data =
-        await api(
-          "missionQueue"
-        );
-
-      renderMissionQueue(
-        data.submissions ||
-        []
-      );
-
-      setStatus(
-        `Mission รอตรวจ ${
-          data.submissions
-            ?.length ||
-          0
-        } รายการ`
-      );
-
-    }catch(error){
-
-      setStatus(
-        "ERROR: " +
-        (
-          error?.message ||
-          error
-        )
-      );
-    }
-  }
-
-
-  function renderMissionQueue(
-    items
-  ){
-
-    const root =
-      $("missionQueue");
-
-    if(!items.length){
-
-      root.innerHTML =
-        `<div class="card">ไม่มี Mission รอตรวจ</div>`;
-
-      return;
-    }
-
-    root.innerHTML =
-      items
-        .map(
-          item => {
-
-            const player =
-              item.players ||
-              {};
-
-            const evidence =
-              item.evidence_link
-                ? `
-                    <div>
-                      <a
-                        target="_blank"
-                        href="${esc(item.evidence_link)}"
-                      >
-                        เปิด Link หลักฐาน
-                      </a>
-                    </div>
-                  `
-                : item.evidence_url
-                  ? `
-                      <div class="meta">
-                        Storage: ${esc(item.evidence_url)}
-                      </div>
-                    `
-                  : "";
-
-            return `
-              <div
-                class="card"
-                id="mission-${item.id}"
-              >
-
-                <div class="row">
-                  <div>
-                    ${
-                      player.picture_url
-                        ? `
-                            <img
-                              class="avatar"
-                              src="${esc(player.picture_url)}"
-                            >
-                          `
-                        : ""
-                    }
-
-                    <strong>
-                      ${esc(
-                        player.line_display_name ||
-                        item.line_user_id ||
-                        "Player"
-                      )}
-                    </strong>
-
-                    <div class="meta">
-                      ${esc(item.mission_id)}
-                      • ${esc(item.category)}
-                      • ${esc(item.period_key)}
-                    </div>
-                  </div>
-
-                  <div class="meta">
-                    ${esc(item.submitted_at)}
-                  </div>
-                </div>
-
-                <div class="reward">
-                  🪙 ${Number(item.reward_coin || 0)}
-                  | ⚡ ${Number(item.reward_energy || 0)}
-                  | EXP ${Number(item.reward_exp || 0)}
-                </div>
-
-                ${
-                  item.metric_steps
-                    ? `<div>Steps: ${Number(item.metric_steps)}</div>`
-                    : ""
-                }
-
-                ${
-                  item.metric_calories
-                    ? `<div>Calories: ${Number(item.metric_calories)}</div>`
-                    : ""
-                }
-
-                ${
-                  item.metric_sleep_minutes
-                    ? `<div>Sleep: ${Number(item.metric_sleep_minutes)} นาที</div>`
-                    : ""
-                }
-
-                ${
-                  item.exercise_minutes
-                    ? `<div>Exercise: ${esc(item.exercise_type || "")} ${Number(item.exercise_minutes)} นาที</div>`
-                    : ""
-                }
-
-                ${
-                  item.note
-                    ? `<div>Note: ${esc(item.note)}</div>`
-                    : ""
-                }
-
-                ${evidence}
-
-                <div class="tools">
-
-                  <button
-                    class="primary"
-                    onclick="approveMission('${item.id}')"
-                  >
-                    Approve
-                  </button>
-
-                  <input
-                    id="reason-${item.id}"
-                    placeholder="เหตุผล Reject"
-                    style="max-width:320px"
-                  >
-
-                  <button
-                    class="danger"
-                    onclick="rejectMission('${item.id}')"
-                  >
-                    Reject
-                  </button>
-
-                </div>
-
+    $("missionList").innerHTML = rows.length
+      ? rows.map(m=>`
+        <article class="card">
+          <div class="row space">
+            <div>
+              <b>${esc(m?.player?.line_display_name || m?.player_name || m?.line_display_name || "Player")}</b>
+              ${statusBadge(m.status)}
+              <div class="muted-text">
+                ${esc(m.mission_id)} • ${esc(m.period_type||m.category||"")} • ${esc(m.period_key||"")}
               </div>
-            `;
-          }
-        )
-        .join("");
+            </div>
+            <div>
+              <b>⭐ ${Number(m.reward_coin||0)} | ⚡ ${Number(m.reward_energy||0)} | EXP ${Number(m.reward_exp||0)}</b>
+            </div>
+          </div>
+
+          <div style="margin-top:8px">
+            ${m.exercise_type?`Exercise: ${esc(m.exercise_type)} ${Number(m.exercise_minutes||0)} นาที<br>`:""}
+            ${m.estimated_calories?`🔥 ${Number(m.estimated_calories||0)} kcal<br>`:""}
+            ${m.reject_reason?`เหตุผล Reject: ${esc(m.reject_reason)}<br>`:""}
+            ${m.evidence_url?`<a href="${esc(m.evidence_url)}" target="_blank">เปิดหลักฐาน</a>`:""}
+          </div>
+
+          ${m.status==="pending"?`
+            <div class="row" style="margin-top:12px">
+              <button class="btn success" onclick="approveMission('${esc(m.id)}')">Approve</button>
+              <input id="reject-${esc(m.id)}" placeholder="เหตุผล Reject" style="max-width:320px">
+              <button class="btn danger" onclick="rejectMission('${esc(m.id)}')">Reject</button>
+            </div>
+          `:""}
+        </article>
+      `).join("")
+      : `<div class="card empty">ไม่มี Mission ตามสถานะที่เลือก</div>`;
+  }catch(e){
+    $("missionList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
   }
+}
 
+async function approveMission(id){
+  try{
+    await post("approveMission",{submissionId:id});
+    toast("อนุมัติ Mission แล้ว");
+    await Promise.all([loadMissionQueue(),loadSummary(),loadRewards()]);
+  }catch(e){toast(e.message,true)}
+}
 
-  async function approveMission(
-    id
-  ){
+async function rejectMission(id){
+  try{
+    const reason=$(`reject-${id}`)?.value || "ไม่ผ่านเงื่อนไข";
+    await post("rejectMission",{submissionId:id,reason});
+    toast("ปฏิเสธ Mission แล้ว");
+    await Promise.all([loadMissionQueue(),loadSummary()]);
+  }catch(e){toast(e.message,true)}
+}
 
-    if(
-      !confirm(
-        "Approve Mission นี้และแจก Reward?"
-      )
-    ){
-      return;
-    }
+async function loadRewards(){
+  try{
+    const status=$("rewardStatusFilter").value;
+    const d=await post("rewardQueue",{status});
+    const rows=d?.items||[];
 
-    try{
-
-      const data =
-        await api(
-          "approveMission",
-          {
-            submissionId:id
-          }
-        );
-
-      alert(
-        data?.alreadyApproved
-          ? "รายการนี้อนุมัติไว้แล้ว — ไม่มีการแจกซ้ำ"
-          : (
-              data?.rewardGranted
-                ? "Approve + แจก Reward สำเร็จ"
-                : "Approve สำเร็จ"
-            )
-      );
-
-      await loadMissionQueue();
-
-    }catch(error){
-
-      alert(
-        error?.message ||
-        error
-      );
-    }
+    $("rewardList").innerHTML=rows.length
+      ? rows.map(r=>`
+        <article class="card">
+          <div class="row space">
+            <div>
+              <b>🎁 ${esc(r.player_name || r.line_display_name || "Player")}</b>
+              ${statusBadge(r.status)}
+              <div class="muted-text">${esc(r.mission_id||"")} • ${esc(r.submission_id||"")}</div>
+            </div>
+            <div class="row">
+              ${r.status==="pending"?`
+                <button class="btn success" onclick="setRewardStatus('${esc(r.id)}','sent')">ส่งแล้ว</button>
+                <button class="btn danger" onclick="setRewardStatus('${esc(r.id)}','cancelled')">ยกเลิก</button>
+              `:""}
+            </div>
+          </div>
+          <div style="margin-top:8px">
+            <b>ของรางวัล:</b> ${esc(r.reward_name||"รางวัลกิจกรรม")}
+            ${r.note?`<br>หมายเหตุ: ${esc(r.note)}`:""}
+          </div>
+        </article>
+      `).join("")
+      : `<div class="card empty">ไม่มีรายการของรางวัล</div>`;
+  }catch(e){
+    $("rewardList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
   }
+}
 
+async function setRewardStatus(id,status){
+  try{
+    await post("updateRewardStatus",{rewardId:id,status});
+    toast("อัปเดตสถานะของรางวัลแล้ว");
+    await Promise.all([loadRewards(),loadSummary()]);
+  }catch(e){toast(e.message,true)}
+}
 
-  async function rejectMission(
-    id
-  ){
-
-    const reason =
-      $(
-        "reason-" +
-        id
-      )
-        ?.value ||
-      "";
-
-    if(
-      !confirm(
-        "Reject Mission นี้?"
-      )
-    ){
-      return;
-    }
-
-    try{
-
-      await api(
-        "rejectMission",
-        {
-          submissionId:id,
-          reason
-        }
-      );
-
-      await loadMissionQueue();
-
-    }catch(error){
-
-      alert(
-        error?.message ||
-        error
-      );
-    }
+async function loadPlayers(){
+  try{
+    const d=await post("players");
+    playersCache=d?.players||[];
+    renderPlayers();
+  }catch(e){
+    $("playerList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
   }
+}
 
+function renderPlayers(){
+  const q=($("playerSearch")?.value||"").toLowerCase();
+  const sf=$("playerStatusFilter")?.value||"all";
 
-  /* =====================================================
-     INBODY REVIEW
-  ===================================================== */
+  const rows=playersCache.filter(p=>{
+    const text=[
+      p.line_display_name,
+      p.team_name,
+      p.line_user_id
+    ].join(" ").toLowerCase();
 
-  function reviewField(
-    id,
-    label,
-    value,
-    step="0.1"
-  ){
+    const status=String(p.status||"active").toLowerCase();
 
-    return `
-      <div class="field">
-        <label>${label}</label>
-        <input
-          id="${id}"
-          type="number"
-          step="${step}"
-          value="${
-            value === null ||
-            value === undefined
-              ? ""
-              : esc(value)
-          }"
-        >
-      </div>
-    `;
+    return (!q || text.includes(q)) && (sf==="all" || status===sf);
+  });
+
+  $("playerList").innerHTML=rows.length
+    ? rows.map(p=>{
+      const w=Array.isArray(p.player_wallets)?p.player_wallets[0]:p.player_wallets;
+      return `
+        <article class="card player">
+          <img class="avatar" src="${esc(p.picture_url||"")}" onerror="this.style.visibility='hidden'">
+          <div>
+            <b>${esc(p.line_display_name||"-")}</b>
+            ${statusBadge(p.status||"active")}
+            <div class="muted-text">
+              Team: ${esc(p.team_name||"-")}<br>
+              ⭐ ${Number(w?.rock_coin||0)} • ⚡ ${Number(w?.energy||0)}/${Number(w?.max_energy||200)} • EXP ${Number(w?.exp||0)}
+            </div>
+          </div>
+          <div class="actions row">
+            <button class="btn primary" onclick="editPlayer('${esc(p.id)}')">แก้ไข</button>
+            <button class="btn danger" onclick="cancelPlayer('${esc(p.id)}')">ยกเลิกผู้เล่น</button>
+          </div>
+        </article>
+      `;
+    }).join("")
+    : `<div class="card empty">ไม่พบผู้เล่น</div>`;
+}
+
+async function editPlayer(id){
+  const p=playersCache.find(x=>x.id===id);
+  if(!p)return;
+
+  const name=prompt("ชื่อผู้เล่น",p.line_display_name||"");
+  if(name===null)return;
+
+  const team=prompt("Team",p.team_name||"");
+  if(team===null)return;
+
+  try{
+    await post("updatePlayer",{
+      playerId:id,
+      lineDisplayName:name.trim(),
+      teamName:team.trim(),
+      status:p.status||"active"
+    });
+    toast("บันทึกข้อมูลผู้เล่นแล้ว");
+    loadPlayers();
+  }catch(e){toast(e.message,true)}
+}
+
+async function cancelPlayer(id){
+  if(!confirm("ยืนยันยกเลิกผู้เล่นคนนี้?"))return;
+
+  try{
+    await post("updatePlayer",{playerId:id,status:"cancelled"});
+    toast("ยกเลิกผู้เล่นแล้ว");
+    await Promise.all([loadPlayers(),loadSummary()]);
+  }catch(e){toast(e.message,true)}
+}
+
+async function loadAdvice(){
+  try{
+    const d=await post("playerAdviceList");
+    const rows=d?.items||[];
+
+    $("adviceList").innerHTML=rows.length
+      ? rows.map(x=>`
+        <article class="card">
+          <b>${esc(x.line_display_name||"Player")}</b>
+          <div class="muted-text">${esc(x.team_name||"")}</div>
+          <textarea id="advice-${esc(x.player_id)}">${esc(x.advice_note||"")}</textarea>
+          <div class="row" style="margin-top:8px">
+            <button class="btn success" onclick="saveAdvice('${esc(x.player_id)}')">บันทึกคำแนะนำ</button>
+          </div>
+        </article>
+      `).join("")
+      : `<div class="card empty">ไม่มีข้อมูลผู้เล่น</div>`;
+  }catch(e){
+    $("adviceList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
   }
+}
 
+async function saveAdvice(playerId){
+  try{
+    const adviceNote=$(`advice-${playerId}`)?.value||"";
+    await post("savePlayerAdvice",{playerId,adviceNote});
+    toast("บันทึกคำแนะนำแล้ว");
+  }catch(e){toast(e.message,true)}
+}
 
-  async function loadInBodyQueue(){
+function resetMissionForm(){
+  ["cmId","cmName","cmIcon","cmDescription","cmTarget"].forEach(id=>$(id).value="");
+  $("cmCoin").value=10;
+  $("cmEnergy").value=10;
+  $("cmExp").value=10;
+  $("cmActive").value="true";
+}
 
-    try{
+async function loadCustomMissions(){
+  try{
+    const d=await post("customMissionList");
+    const rows=d?.items||[];
 
-      setStatus(
-        "กำลังโหลด InBody Review Queue..."
-      );
-
-      const data =
-        await api(
-          "inbodyQueue"
-        );
-
-      renderInBodyQueue(
-        data.items ||
-        []
-      );
-
-      const pending =
-        (
-          data.items ||
-          []
-        )
-          .filter(
-            item =>
-              item.advice_status ===
-              "pending_review"
-          )
-          .length;
-
-      setStatus(
-        `InBody รออ่านผล ${pending} รายการ • แสดงทั้งหมด ${
-          data.items
-            ?.length ||
-          0
-        }`
-      );
-
-    }catch(error){
-
-      setStatus(
-        "ERROR: " +
-        (
-          error?.message ||
-          error
-        )
-      );
-    }
+    $("customMissionList").innerHTML=rows.length
+      ? rows.map(m=>`
+        <article class="card">
+          <div class="row space">
+            <div>
+              <b>${esc(m.icon||"🎯")} ${esc(m.name)}</b>
+              ${statusBadge(m.active?"active":"inactive")}
+              <div class="muted-text">${esc(m.id)} • ${esc(m.category)}</div>
+            </div>
+            <div class="row">
+              <button class="btn primary" onclick='fillMissionForm(${JSON.stringify(m).replaceAll("'","&#39;")})'>แก้ไข</button>
+              <button class="btn danger" onclick="deleteCustomMission('${esc(m.id)}')">ลบ</button>
+            </div>
+          </div>
+          <div style="margin-top:8px">${esc(m.description||"")}</div>
+          <div style="margin-top:8px">
+            ⭐ ${Number(m.reward_coin||0)} • ⚡ ${Number(m.reward_energy||0)} • EXP ${Number(m.reward_exp||0)}
+          </div>
+        </article>
+      `).join("")
+      : `<div class="card empty">ยังไม่มี Custom Mission</div>`;
+  }catch(e){
+    $("customMissionList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
   }
-
-
-  function renderInBodyQueue(
-    items
-  ){
-
-    const root =
-      $("inbodyQueue");
-
-    if(!items.length){
-
-      root.innerHTML =
-        `<div class="card">ยังไม่มี InBody ที่ส่งรูปมาให้ตรวจ</div>`;
-
-      return;
-    }
-
-    root.innerHTML =
-      items
-        .map(
-          item => {
-
-            const player =
-              item.players ||
-              {};
-
-            const status =
-              item.advice_status ||
-              "pending_review";
-
-            return `
-              <article
-                class="card"
-                id="inbody-${item.id}"
-              >
-
-                <div class="row">
-
-                  <div>
-
-                    ${
-                      player.picture_url
-                        ? `
-                            <img
-                              class="avatar"
-                              src="${esc(player.picture_url)}"
-                            >
-                          `
-                        : ""
-                    }
-
-                    <strong>
-                      ${esc(
-                        player.line_display_name ||
-                        "Player"
-                      )}
-                    </strong>
-
-                    <div class="meta">
-                      ${
-                        item.measured_at
-                          ? new Date(
-                              item.measured_at
-                            )
-                              .toLocaleString(
-                                "th-TH"
-                              )
-                          : ""
-                      }
-                      ${
-                        player.team_name
-                          ? ` • ทีม ${esc(player.team_name)}`
-                          : ""
-                      }
-                    </div>
-
-                  </div>
-
-                  <span
-                    class="badge ${esc(status)}"
-                  >
-                    ${esc(status)}
-                  </span>
-
-                </div>
-
-
-                <div class="images">
-
-                  ${
-                    item.image1Url
-                      ? `
-                          <a
-                            href="${esc(item.image1Url)}"
-                            target="_blank"
-                          >
-                            <img
-                              src="${esc(item.image1Url)}"
-                              alt="InBody sheet 1"
-                            >
-                          </a>
-                        `
-                      : `
-                          <div class="meta">
-                            ไม่มีรูปแผ่นที่ 1
-                          </div>
-                        `
-                  }
-
-                  ${
-                    item.image2Url
-                      ? `
-                          <a
-                            href="${esc(item.image2Url)}"
-                            target="_blank"
-                          >
-                            <img
-                              src="${esc(item.image2Url)}"
-                              alt="InBody sheet 2"
-                            >
-                          </a>
-                        `
-                      : `
-                          <div class="meta">
-                            ไม่มีรูปแผ่นที่ 2
-                          </div>
-                        `
-                  }
-
-                </div>
-
-
-                <div class="review-grid">
-
-                  ${reviewField(
-                    `weight-${item.id}`,
-                    "Weight kg",
-                    item.weight_kg
-                  )}
-
-                  ${reviewField(
-                    `muscle-${item.id}`,
-                    "Skeletal Muscle kg",
-                    item.skeletal_muscle_mass_kg
-                  )}
-
-                  ${reviewField(
-                    `fatmass-${item.id}`,
-                    "Body Fat Mass kg",
-                    item.body_fat_mass_kg
-                  )}
-
-                  ${reviewField(
-                    `fatpct-${item.id}`,
-                    "Body Fat %",
-                    item.body_fat_percent
-                  )}
-
-                  ${reviewField(
-                    `bmi-${item.id}`,
-                    "BMI",
-                    item.bmi
-                  )}
-
-                  ${reviewField(
-                    `bmr-${item.id}`,
-                    "BMR kcal",
-                    item.bmr_kcal,
-                    "1"
-                  )}
-
-                  ${reviewField(
-                    `vfa-${item.id}`,
-                    "Visceral Fat Area cm²",
-                    item.visceral_fat_area_cm2
-                  )}
-
-                  ${reviewField(
-                    `score-${item.id}`,
-                    "InBody Score",
-                    item.inbody_score
-                  )}
-
-                </div>
-
-
-                <div class="advice">
-
-                  <div
-                    class="field"
-                  >
-                    <label>
-                      คำแนะนำสำหรับผู้เข้าร่วม
-                    </label>
-
-                    <textarea
-                      id="advice-${item.id}"
-                      placeholder="สรุปค่าที่สำคัญ สิ่งที่ทำได้ดี และสิ่งที่ควรปรับในด้าน Move • Eat • Sleep • Health"
-                    >${esc(item.advice_note || "")}</textarea>
-                  </div>
-
-                </div>
-
-
-                ${
-                  item.advice_note
-                    ? `
-                        <div class="old-advice">
-                          <b>คำแนะนำล่าสุด</b>
-                          <br>
-                          ${esc(item.advice_note)}
-                        </div>
-                      `
-                    : ""
-                }
-
-
-                <div class="tools">
-
-                  <button
-                    class="green"
-                    onclick="saveInBodyReview('${item.id}')"
-                  >
-                    ✅ บันทึกผล + คำแนะนำ
-                  </button>
-
-                  ${
-                    status ===
-                      "reviewed"
-                      ? `
-                          <button
-                            class="muted"
-                            onclick="reopenInBody('${item.id}')"
-                          >
-                            เปิดตรวจใหม่
-                          </button>
-                        `
-                      : ""
-                  }
-
-                </div>
-
-              </article>
-            `;
-          }
-        )
-        .join("");
-  }
-
-
-  function fieldNumber(
-    id
-  ){
-
-    const value =
-      $(id)
-        ?.value;
-
-    if(
-      value === undefined ||
-      value === null ||
-      value === ""
-    ){
-      return null;
-    }
-
-    const n =
-      Number(value);
-
-    return Number.isFinite(n)
-      ? n
-      : null;
-  }
-
-
-  async function saveInBodyReview(
-    id
-  ){
-
-    const advice =
-      $(
-        `advice-${id}`
-      )
-        ?.value
-        .trim() ||
-      "";
-
-    if(!advice){
-
-      alert(
-        "กรุณากรอกคำแนะนำก่อนบันทึก"
-      );
-
-      return;
-    }
-
-    if(
-      !confirm(
-        "ยืนยันบันทึกค่าที่อ่านจาก InBody และส่งคำแนะนำให้ผู้เข้าร่วม?"
-      )
-    ){
-      return;
-    }
-
-    try{
-
-      await api(
-        "reviewInBody",
-        {
-          inbodyId:id,
-
-          weightKg:
-            fieldNumber(
-              `weight-${id}`
-            ),
-
-          skeletalMuscleMassKg:
-            fieldNumber(
-              `muscle-${id}`
-            ),
-
-          bodyFatMassKg:
-            fieldNumber(
-              `fatmass-${id}`
-            ),
-
-          bodyFatPercent:
-            fieldNumber(
-              `fatpct-${id}`
-            ),
-
-          bmi:
-            fieldNumber(
-              `bmi-${id}`
-            ),
-
-          bmrKcal:
-            fieldNumber(
-              `bmr-${id}`
-            ),
-
-          visceralFatAreaCm2:
-            fieldNumber(
-              `vfa-${id}`
-            ),
-
-          inbodyScore:
-            fieldNumber(
-              `score-${id}`
-            ),
-
-          advice
-        }
-      );
-
-      alert(
-        "บันทึก InBody Review และคำแนะนำสำเร็จ"
-      );
-
-      await loadInBodyQueue();
-
-    }catch(error){
-
-      alert(
-        error?.message ||
-        error
-      );
-    }
-  }
-
-
-  async function reopenInBody(
-    id
-  ){
-
-    if(
-      !confirm(
-        "เปิดรายการนี้ให้ตรวจใหม่?"
-      )
-    ){
-      return;
-    }
-
-    try{
-
-      await api(
-        "reopenInBody",
-        {
-          inbodyId:id
-        }
-      );
-
-      await loadInBodyQueue();
-
-    }catch(error){
-
-      alert(
-        error?.message ||
-        error
-      );
-    }
-  }
-
-
-  /* =====================================================
-     INIT
-  ===================================================== */
-
-  (
-    async () => {
-
-      try{
-
-        await liff.init({
-          liffId:
-            APP_CONFIG.LIFF_ID
-        });
-
-        if(
-          !liff.isLoggedIn()
-        ){
-          liff.login();
-          return;
-        }
-
-        idToken =
-          liff.getIDToken() ||
-          "";
-
-        if(!idToken){
-          throw new Error(
-            "ไม่พบ LINE ID Token"
-          );
-        }
-
-        await loadMissionQueue();
-
-      }catch(error){
-
-        setStatus(
-          "ERROR: " +
-          (
-            error?.message ||
-            error
-          )
-        );
+}
+
+function fillMissionForm(m){
+  $("cmId").value=m.id||"";
+  $("cmCategory").value=m.category||"daily";
+  $("cmName").value=m.name||"";
+  $("cmIcon").value=m.icon||"";
+  $("cmDescription").value=m.description||"";
+  $("cmCoin").value=m.reward_coin||0;
+  $("cmEnergy").value=m.reward_energy||0;
+  $("cmExp").value=m.reward_exp||0;
+  $("cmTarget").value=JSON.stringify(m.target_json||{},null,2);
+  $("cmActive").value=String(Boolean(m.active));
+  scrollTo({top:0,behavior:"smooth"});
+}
+
+async function saveCustomMission(){
+  try{
+    let targetJson={};
+    const raw=$("cmTarget").value.trim();
+    if(raw)targetJson=JSON.parse(raw);
+
+    await post("saveCustomMission",{
+      mission:{
+        id:$("cmId").value.trim(),
+        category:$("cmCategory").value,
+        name:$("cmName").value.trim(),
+        icon:$("cmIcon").value.trim(),
+        description:$("cmDescription").value.trim(),
+        rewardCoin:Number($("cmCoin").value||0),
+        rewardEnergy:Number($("cmEnergy").value||0),
+        rewardExp:Number($("cmExp").value||0),
+        targetJson,
+        active:$("cmActive").value==="true"
       }
-    }
-  )();
+    });
+
+    toast("บันทึก Mission แล้ว");
+    resetMissionForm();
+    loadCustomMissions();
+  }catch(e){toast(e.message,true)}
+}
+
+async function deleteCustomMission(id){
+  if(!confirm(`ลบ Mission ${id}?`))return;
+  try{
+    await post("deleteCustomMission",{missionId:id});
+    toast("ลบ Mission แล้ว");
+    loadCustomMissions();
+  }catch(e){toast(e.message,true)}
+}
+
+async function loadInBody(){
+  try{
+    const d=await post("inbodyQueue");
+    const rows=d?.items||d?.queue||[];
+
+    $("inbodyList").innerHTML=rows.length
+      ? rows.map(x=>`
+        <article class="card">
+          <div class="row space">
+            <div>
+              <b>${esc(x.line_display_name||x.player_name||"Player")}</b>
+              ${statusBadge(x.advice_status||"pending_review")}
+            </div>
+          </div>
+          <textarea id="inbody-note-${esc(x.id)}">${esc(x.advice_note||"")}</textarea>
+          <div class="row" style="margin-top:8px">
+            <button class="btn success" onclick="reviewInBody('${esc(x.id)}')">บันทึกคำแนะนำ</button>
+          </div>
+        </article>
+      `).join("")
+      : `<div class="card empty">ไม่มี InBody รอตรวจ</div>`;
+  }catch(e){
+    $("inbodyList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
+  }
+}
+
+async function reviewInBody(id){
+  try{
+    const adviceNote=$(`inbody-note-${id}`)?.value||"";
+    await post("reviewInBody",{inbodyId:id,adviceNote,status:"reviewed"});
+    toast("บันทึก InBody Review แล้ว");
+    loadInBody();
+  }catch(e){toast(e.message,true)}
+}
+
+async function loadSettings(){
+  try{
+    const d=await post("systemSettings");
+    const s=d?.settings||{};
+    $("setProjectName").value=s.projectName||"ROCK YOUR BODY 2026";
+    $("setMaxEnergy").value=s.maxEnergy??200;
+    $("setStepsGoal").value=s.stepsGoal??8000;
+    $("setCaloriesGoal").value=s.caloriesGoal??300;
+    $("setSleepGoal").value=s.sleepGoal??420;
+    $("setMaintenanceMessage").value=s.maintenanceMessage||"";
+  }catch(e){toast(e.message,true)}
+}
+
+async function saveSettings(){
+  try{
+    await post("saveSystemSettings",{
+      settings:{
+        projectName:$("setProjectName").value.trim(),
+        maxEnergy:Number($("setMaxEnergy").value||200),
+        stepsGoal:Number($("setStepsGoal").value||8000),
+        caloriesGoal:Number($("setCaloriesGoal").value||300),
+        sleepGoal:Number($("setSleepGoal").value||420),
+        maintenanceMessage:$("setMaintenanceMessage").value.trim()
+      }
+    });
+    toast("บันทึก Settings แล้ว");
+  }catch(e){toast(e.message,true)}
+}
+
+async function reloadAll(){
+  await Promise.allSettled([
+    loadSummary(),
+    loadMissionQueue()
+  ]);
+  toast("รีเฟรชแล้ว");
+}
+
+(async()=>{
+  try{
+    const ready=await initLine();
+    if(ready===false)return;
+    await reloadAll();
+  }catch(e){
+    toast(e.message,true);
+  }
+})();
 </script>
 
 </body>
