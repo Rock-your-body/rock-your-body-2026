@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2170-nutrition-ring-home"
+    href="./base.css?v=20260830-mission-v2172-template-overlay"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.17.0
+   MISSION V2.17.2
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.17.0 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.17.2 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.17.0 — NUTRITION RING PANEL
+       MISSION V2.17.2 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -1734,9 +1734,9 @@
       width:36.8%;
       height:64.5%;
       padding:8px 10px;
-      border:1.5px solid rgba(0,112,132,.72);
-      border-radius:16px;
-      background:rgba(255,255,255,.94);
+      border:0;
+      border-radius:0;
+      background:transparent;
       color:#0a315d;
       font-family:"Prompt","Noto Sans Thai",Arial,sans-serif;
       pointer-events:auto;
@@ -1945,6 +1945,87 @@
       display:none!important;
     }
 
+
+    /* V2.17.2 — ใช้ template เดิมเป็นภาพหลัก ไม่สร้างรูป/กรอบซ้ำ */
+    .nutrition-ring,
+    .nutrition-water,
+    .nutrition-head,
+    .nutrition-macro-gap{
+      display:none !important;
+    }
+
+    .nutrition-main{
+      display:block !important;
+    }
+
+    .nutrition-ring-wrap{
+      display:none !important;
+    }
+
+    .nutrition-macros{
+      position:absolute;
+      left:54%;
+      top:13%;
+      width:42%;
+      display:grid;
+      gap:8%;
+    }
+
+    .nutrition-macro{
+      border:0 !important;
+      border-bottom:0 !important;
+      border-left:0 !important;
+      background:transparent !important;
+      padding:0 !important;
+      min-height:38px;
+    }
+
+    .nutrition-macro-title{
+      background:transparent !important;
+      color:#073b70;
+    }
+
+    .nutrition-macro-title strong{
+      display:block;
+      margin-top:2px;
+      color:#073b70;
+    }
+
+    .mission-nutrition-cta{
+      position:absolute;
+      left:5%;
+      bottom:4%;
+      width:90%;
+      background:transparent !important;
+      box-shadow:none !important;
+      border:0 !important;
+      color:transparent !important;
+    }
+
+    .mission-nutrition-live{
+      background:transparent !important;
+      border:0 !important;
+      box-shadow:none !important;
+    }
+
+    /* Calories ซ้อนตรงกลางวงแหวนที่อยู่ใน template */
+    .nutrition-ring-center{
+      display:flex !important;
+      position:absolute !important;
+      left:13%;
+      top:25%;
+      width:31%;
+      height:31%;
+      inset:auto !important;
+      z-index:95;
+    }
+
+    .nutrition-ring-center span,
+    .nutrition-ring-center b,
+    .nutrition-ring-center small{
+      color:#073b70 !important;
+    }
+
 </style>
 
 </head>
@@ -1979,7 +2060,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2170-nutrition-ring-home"
+    src="./mission-template.png?v=20260830-mission-v2172-template-overlay"
     alt=""
     draggable="false"
     style="
@@ -4204,7 +4285,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.17.0
+    MISSION V2.17.2
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -6346,7 +6427,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.17.0 — NUTRITION LINK
+   MISSION V2.17.2 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7189,6 +7270,16 @@ async function prepareMissionApp(){
 }
 
 /* =========================================================
+   LEGACY STARTUP COMPATIBILITY
+   ป้องกันไฟล์/cache รุ่นเก่าที่ยังเรียก loadMissionDashboard()
+========================================================= */
+
+async function loadMissionDashboard(){
+  return loadMissionCatalog();
+}
+
+
+/* =========================================================
    START PAGE
 ========================================================= */
 let missionPageStarted = false;
@@ -7202,10 +7293,12 @@ async function initMissionPage(){
     const ready = await prepareMissionApp();
     if(ready === false) return;
     await Promise.allSettled([
-      loadMissionDashboard(),
-      refreshMissionStatus(),
-      loadMissionNutrition()
+      loadMissionCatalog(),
+      loadMissionHomeSnapshot(),
+      refreshMissionStatus()
     ]);
+
+    await loadMissionNutrition();
     updateTemplate();
     checkApprovedMessage();
   }catch(error){
@@ -7220,20 +7313,24 @@ function startMissionRefresh(){
   missionRefreshTimer = setInterval(async()=>{
     if(document.visibilityState !== 'visible') return;
     await Promise.allSettled([
-      loadMissionDashboard(),
-      refreshMissionStatus(),
-      loadMissionNutrition()
+      loadMissionCatalog(),
+      loadMissionHomeSnapshot(),
+      refreshMissionStatus()
     ]);
+
+    await loadMissionNutrition();
   },ms);
 }
 
 document.addEventListener('visibilitychange',async()=>{
   if(document.visibilityState === 'visible'){
     await Promise.allSettled([
-      loadMissionDashboard(),
-      refreshMissionStatus(),
-      loadMissionNutrition()
+      loadMissionCatalog(),
+      loadMissionHomeSnapshot(),
+      refreshMissionStatus()
     ]);
+
+    await loadMissionNutrition();
   }
 });
 
@@ -7388,7 +7485,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.17.0 — FINAL OVERLAY SAFETY
+   MISSION V2.17.2 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -7584,7 +7681,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.17.0 — DIRECT MISSION LINK
+   MISSION V2.17.2 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
