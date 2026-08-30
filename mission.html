@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2190-summary-reward-point"
+    href="./base.css?v=20260830-mission-v2200-aerobic-currentday-equal-reward"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.19.0
+   MISSION V2.20.0
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.19.0 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.20.0 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.19.0 — NUTRITION RING PANEL
+       MISSION V2.20.0 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2028,7 +2028,7 @@
 
 
     /* =========================================================
-       MISSION V2.19.0 — NUTRITION DATA OVER TEMPLATE
+       MISSION V2.20.0 — NUTRITION DATA OVER TEMPLATE
        ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
     ========================================================= */
 
@@ -2198,7 +2198,7 @@
 
 
     /* =========================================================
-       MISSION V2.19.0 — SUMMARY / REWARD / POINT
+       MISSION V2.20.0 — SUMMARY / REWARD / POINT
     ========================================================= */
 
     .mission-summary-overlay{
@@ -2365,7 +2365,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2190-summary-reward-point"
+    src="./mission-template.png?v=20260830-mission-v2200-aerobic-currentday-equal-reward"
     alt=""
     draggable="false"
     style="
@@ -3857,7 +3857,7 @@ const missionData = {
         passCondition:"พิจารณาโดยคณะกรรมการ / ระบบโครงการ",
         evidence:"none",
         auto:true,
-        reward:{coin:200,energy:0,exp:0}
+        reward:{coin:200,energy:200,exp:200}
       }
 
     ]
@@ -3901,7 +3901,7 @@ const missionData = {
         name:"5 DAY STREAK",
         description:"ผ่าน Daily Mission อย่างน้อย 3 Mission/วัน ติดต่อกัน 5 วัน",
         auto:true,
-        reward:{coin:50,energy:0,exp:50}
+        reward:{coin:50,energy:50,exp:50}
       },
 
       {
@@ -3911,7 +3911,7 @@ const missionData = {
         name:"PERFECT WEEK",
         description:"ผ่าน Daily ≥ 3 Mission อย่างน้อย 6 จาก 7 วัน",
         auto:true,
-        reward:{coin:100,energy:0,exp:100}
+        reward:{coin:100,energy:100,exp:100}
       },
 
       {
@@ -3921,7 +3921,7 @@ const missionData = {
         name:"ALL CLEAR",
         description:"ผ่าน Daily Mission ทั้ง 5 รายการภายในวันเดียว",
         auto:true,
-        reward:{coin:30,energy:0,exp:0}
+        reward:{coin:30,energy:30,exp:30}
       },
 
       {
@@ -4613,7 +4613,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.19.0
+    MISSION V2.20.0
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -6322,17 +6322,8 @@ function buildMissionV2Fields(
               ${weeklyAerobicProgressText()}
             </div>
 
-            <div class="v2-field">
-              <label>วันที่เข้าร่วม AEROBIC CLUB</label>
-
-              <select id="v2ActivityDate">
-                <option value="">เลือกวันที่เข้าร่วม</option>
-                ${aerobicDateOptionsV2180()}
-              </select>
-            </div>
-
             <div class="v2-hint">
-              เลือกได้เฉพาะ จันทร์ / พุธ / ศุกร์ ของสัปดาห์นี้ • ไม่เกิน 3 ครั้ง/สัปดาห์ • ห้ามซ้ำวัน
+              AEROBIC CLUB บันทึกตามวันที่ปัจจุบันอัตโนมัติ • ทำได้เฉพาะวันจันทร์ / พุธ / ศุกร์ • ไม่เกิน 3 ครั้ง/สัปดาห์ • ห้ามซ้ำวัน
             </div>
           `
           : ""
@@ -6471,12 +6462,6 @@ function buildMissionV2Fields(
       ()=>{
         bindExerciseCalculatorV2121();
 
-        if(
-          mission.id ===
-          "weekly_aerobic"
-        ){
-          bindAerobicDateSelectionV2190();
-        }
       }
     );
 
@@ -6964,46 +6949,6 @@ async function submitEvidence(){
       mission.id
     )
   ){
-
-    if(
-      mission.id ===
-      "weekly_aerobic"
-    ){
-
-      const activityDateElement =
-        document
-          .getElementById(
-            "missionV2Fields"
-          )
-          ?.querySelector(
-            "#v2ActivityDate"
-          );
-
-
-      const activityDate =
-        String(
-          activityDateElement?.value ||
-          window.MISSION_AEROBIC_DATE ||
-          ""
-        ).trim();
-
-
-      if(!activityDate){
-
-        showMissionStatus(
-          "กรุณาเลือกวันที่เข้าร่วม AEROBIC CLUB"
-        );
-
-        return;
-      }
-
-
-      form.append(
-        "activityDate",
-        activityDate
-      );
-    }
-
 
     const exerciseType =
       document
@@ -7875,7 +7820,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.19.0 — NUTRITION LINK
+   MISSION V2.20.0 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7942,7 +7887,7 @@ function getHomeApiUrl(){
 
 
 /* =========================================================
-   MISSION V2.19.0 — WALLET SYNC FROM HOME
+   MISSION V2.20.0 — WALLET SYNC FROM HOME
    Coin / Energy หน้า Mission ใช้ข้อมูลชุดเดียวกับ HOME
 ========================================================= */
 
@@ -8034,7 +7979,7 @@ function renderMissionWalletFromHome(
 
 
 /* =========================================================
-   MISSION V2.19.0 — FRESH LINE ID TOKEN
+   MISSION V2.20.0 — FRESH LINE ID TOKEN
    ห้ามใช้ token จาก localStorage / profile / userId
 ========================================================= */
 
@@ -9215,7 +9160,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.19.0 — FINAL OVERLAY SAFETY
+   MISSION V2.20.0 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -9411,7 +9356,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.19.0 — DIRECT MISSION LINK
+   MISSION V2.20.0 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
