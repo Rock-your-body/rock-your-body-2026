@@ -91,13 +91,13 @@
 <main id="mapStage">
   <img
     id="mapImage"
-    src="./battle%20map.jpeg?v=20260831-v53"
-    onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260831-v53'"
+    src="./battle%20map.jpeg?v=20260831-v54"
+    onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260831-v54'"
     alt="Battle Map"
   >
 
   <div id="playerInfo">EXP -- • Stage --</div>
-  <div id="healthEnergy">⚡ Health Energy -- / 200</div>
+  <div id="healthEnergy">⚡ MY ENERGY -- / 200</div>
 
   <button id="backButton" class="hot" type="button" aria-label="ย้อนกลับ"></button>
 
@@ -210,7 +210,7 @@ function render(data){
     `EXP ${Number(data?.player?.exp||0).toLocaleString()} • Stage ${Number(data?.currentStage||1)}`;
 
   $("healthEnergy").textContent=
-    `⚡ Health Energy ${Number(data?.healthEnergy?.available||0).toLocaleString()} / ${Number(data?.healthEnergy?.max||200).toLocaleString()}`;
+    `⚡ MY ENERGY ${Number(data?.healthEnergy?.available||0).toLocaleString()} / ${Number(data?.healthEnergy?.max||200).toLocaleString()}`;
 
   const layer=$("monsterLayer");
   layer.innerHTML="";
