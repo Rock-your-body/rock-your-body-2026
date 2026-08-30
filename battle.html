@@ -2,213 +2,1591 @@
 <html lang="th">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-battle-v40"></script>
+  <script src="./app-config.js?v=20260830-battle-v41"></script>
 
   <style>
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;min-height:100%;background:#edf4ff;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
-    body{overflow-x:hidden}
-    button{font:inherit}
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
 
-    .stage{
+    html,
+    body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      background:#eef4ff;
+      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
+    }
+
+    body{
+      overflow-x:hidden;
+    }
+
+    button{
+      font:inherit;
+    }
+
+    /* =========================================================
+       TEMPLATE STAGE
+    ========================================================= */
+
+    .battle-stage{
       position:relative;
       width:100%;
       max-width:1536px;
       margin:0 auto;
-      aspect-ratio:1536/768;
+      aspect-ratio:1536 / 768;
       overflow:hidden;
       background:#071a3b;
     }
 
-    .template{
-      position:absolute;inset:0;width:100%;height:100%;
-      object-fit:fill;pointer-events:none;user-select:none
+    .battle-template{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:fill;
+      pointer-events:none;
+      user-select:none;
+      z-index:1;
     }
+
+    /* =========================================================
+       LIVE VALUES OVER TEMPLATE
+    ========================================================= */
 
     .live{
-      position:absolute;z-index:20;display:flex;align-items:center;justify-content:center;
-      font-weight:900;text-align:center;pointer-events:none
+      position:absolute;
+      z-index:30;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-weight:1000;
+      pointer-events:none;
     }
 
-    #coinValue{left:79.1%;top:4.2%;width:7.0%;height:7.2%;color:#082c6d;font-size:clamp(8px,1.15vw,18px)}
-    #energyValue{left:88.5%;top:4.2%;width:8.5%;height:7.2%;color:#082c6d;font-size:clamp(8px,1.15vw,18px)}
+    #coinValue{
+      left:79.0%;
+      top:4.1%;
+      width:7.5%;
+      height:7.5%;
+      color:#082c6d;
+      font-size:clamp(8px,1.15vw,18px);
+    }
+
+    #energyValue{
+      left:88.4%;
+      top:4.1%;
+      width:8.8%;
+      height:7.5%;
+      color:#082c6d;
+      font-size:clamp(8px,1.15vw,18px);
+    }
+
     #stageValue{
-      left:3.4%;top:31.5%;width:17%;height:17%;justify-content:flex-start;
-      color:#fff;font-size:clamp(16px,3.5vw,54px);line-height:.9;
-      text-shadow:0 3px 8px rgba(0,0,0,.7)
-    }
-    #bossEnergyValue{left:42.6%;top:32.0%;width:14%;height:8%;color:#092d6d;font-size:clamp(10px,1.7vw,28px)}
-    #giftStatus{
-      left:65.2%;top:65.2%;width:27%;height:8%;color:#fff;font-size:clamp(8px,1.1vw,17px);
-      text-shadow:0 2px 5px rgba(0,0,0,.8)
+      left:4.0%;
+      top:29.0%;
+      width:18%;
+      height:10%;
+      justify-content:flex-start;
+      color:#fff;
+      font-size:clamp(18px,3.7vw,58px);
+      line-height:.9;
+      text-shadow:0 3px 8px rgba(0,0,0,.75);
     }
 
-    .hot{
-      position:absolute;z-index:40;border:0;background:transparent;cursor:pointer;padding:0
+    #bossEnergyValue{
+      left:42.5%;
+      top:30.5%;
+      width:14%;
+      height:8%;
+      color:#092d6d;
+      font-size:clamp(10px,1.7vw,28px);
     }
-    .fight{left:60.0%;top:28.8%;width:38%;height:16%}
-    .energy{left:60.0%;top:45.0%;width:38%;height:16%}
-    .home{left:1.0%;top:83.1%;width:31.5%;height:14%}
-    .mission{left:33.5%;top:83.1%;width:31.5%;height:14%}
-    .battle{left:66.0%;top:83.1%;width:33%;height:14%}
+
+    #giftStatus{
+      left:65.1%;
+      top:65.1%;
+      width:27%;
+      height:8%;
+      color:#fff;
+      font-size:clamp(8px,1.1vw,17px);
+      text-shadow:0 2px 5px rgba(0,0,0,.8);
+    }
+
+    /* =========================================================
+       MONSTER OVERLAY
+       วางทับพื้นที่ว่างกลาง Template
+    ========================================================= */
+
+    .monster-zone{
+      position:absolute;
+      z-index:20;
+
+      /*
+        พื้นที่ว่างหน้า Battle Template
+        ปรับ 4 ค่านี้ได้หากต้องการเลื่อนมอนสเตอร์
+      */
+      left:18%;
+      top:18%;
+      width:35%;
+      height:43%;
+
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+
+      pointer-events:none;
+    }
+
+    #monsterButton{
+      position:relative;
+      width:62%;
+      height:84%;
+      border:0;
+      padding:0;
+      background:transparent;
+      cursor:pointer;
+      pointer-events:auto;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:26;
+    }
+
+    #monsterImage{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center bottom;
+      filter:
+        drop-shadow(0 12px 8px rgba(0,0,0,.35))
+        drop-shadow(0 0 8px rgba(255,255,255,.22));
+      transition:
+        transform .18s ease,
+        filter .18s ease,
+        opacity .18s ease;
+      user-select:none;
+      pointer-events:none;
+    }
+
+    #monsterButton:not(.locked):active #monsterImage{
+      transform:scale(.93);
+    }
+
+    #monsterButton:not(.locked):hover #monsterImage{
+      transform:scale(1.035);
+      filter:
+        drop-shadow(0 15px 10px rgba(0,0,0,.4))
+        drop-shadow(0 0 14px rgba(255,220,0,.65));
+    }
+
+    #monsterButton.locked #monsterImage{
+      opacity:.42;
+      filter:
+        grayscale(.75)
+        drop-shadow(0 10px 7px rgba(0,0,0,.35));
+    }
+
+    .monster-lock{
+      position:absolute;
+      left:50%;
+      top:49%;
+      transform:translate(-50%,-50%);
+      z-index:28;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:72px;
+      height:72px;
+      border-radius:50%;
+      background:rgba(4,20,60,.8);
+      border:2px solid rgba(255,255,255,.8);
+      color:#fff;
+      font-size:36px;
+      box-shadow:0 7px 20px rgba(0,0,0,.35);
+      pointer-events:none;
+    }
+
+    #monsterButton.locked .monster-lock{
+      display:flex;
+    }
+
+    .monster-hint{
+      position:absolute;
+      z-index:29;
+      left:50%;
+      bottom:-3%;
+      transform:translateX(-50%);
+      min-width:170px;
+      max-width:92%;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(4,32,94,.88);
+      border:1px solid rgba(255,255,255,.55);
+      color:#fff;
+      text-align:center;
+      font-weight:900;
+      font-size:clamp(8px,1vw,14px);
+      box-shadow:0 5px 18px rgba(0,0,0,.28);
+      pointer-events:none;
+      white-space:nowrap;
+    }
+
+    .monster-hint.locked{
+      background:rgba(100,25,25,.88);
+    }
+
+    /* =========================================================
+       STAGE SELECTOR
+    ========================================================= */
+
+    .stage-selector{
+      position:absolute;
+      z-index:35;
+      left:20.0%;
+      top:61.0%;
+      width:31%;
+      height:7.5%;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+
+      pointer-events:none;
+    }
+
+    .stage-arrow{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.75);
+      background:rgba(5,44,125,.82);
+      color:#fff;
+      font-size:22px;
+      font-weight:1000;
+      cursor:pointer;
+      pointer-events:auto;
+      box-shadow:0 4px 12px rgba(0,0,0,.3);
+    }
+
+    .stage-arrow:active{
+      transform:scale(.92);
+    }
+
+    #stageSelectLabel{
+      min-width:145px;
+      padding:7px 11px;
+      border-radius:12px;
+      background:rgba(4,35,96,.82);
+      border:1px solid rgba(255,255,255,.45);
+      color:#fff;
+      text-align:center;
+      font-weight:1000;
+      font-size:clamp(8px,1vw,14px);
+      pointer-events:none;
+    }
+
+    /* =========================================================
+       HOTSPOTS FROM TEMPLATE
+    ========================================================= */
+
+    .hotspot{
+      position:absolute;
+      z-index:40;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      padding:0;
+    }
+
+    .fight-monster{
+      left:60.0%;
+      top:28.8%;
+      width:38%;
+      height:16%;
+    }
+
+    .my-energy{
+      left:60.0%;
+      top:45.0%;
+      width:38%;
+      height:16%;
+    }
+
+    .home-bottom{
+      left:1.0%;
+      top:83.1%;
+      width:31.5%;
+      height:14%;
+    }
+
+    .mission-bottom{
+      left:33.5%;
+      top:83.1%;
+      width:31.5%;
+      height:14%;
+    }
+
+    .battle-bottom{
+      left:66.0%;
+      top:83.1%;
+      width:33%;
+      height:14%;
+    }
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
 
     #status{
-      position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);
-      z-index:9999;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;
-      max-width:calc(100vw - 28px);font-weight:900;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.28)
+      position:fixed;
+      left:50%;
+      bottom:max(18px,env(safe-area-inset-bottom));
+      transform:translateX(-50%);
+      z-index:9999;
+
+      display:none;
+
+      padding:12px 16px;
+      border-radius:14px;
+
+      background:#173c70;
+      color:#fff;
+
+      max-width:calc(100vw - 28px);
+
+      font-weight:900;
+      text-align:center;
+
+      box-shadow:0 8px 28px rgba(0,0,0,.28);
     }
-    #status.show{display:block}
-    #status.error{background:#c62828}
+
+    #status.show{
+      display:block;
+    }
+
+    #status.error{
+      background:#c62828;
+    }
+
+    /* =========================================================
+       ENERGY MODAL
+    ========================================================= */
 
     .modal{
-      position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;
-      padding:20px;background:rgba(5,20,55,.68)
+      position:fixed;
+      inset:0;
+      z-index:10000;
+
+      display:none;
+      align-items:center;
+      justify-content:center;
+
+      padding:20px;
+      background:rgba(5,20,55,.68);
     }
-    .modal.show{display:flex}
-    .card{
-      width:min(420px,100%);background:#fff;border-radius:22px;padding:22px;text-align:center;
-      box-shadow:0 20px 60px rgba(0,0,0,.32)
+
+    .modal.show{
+      display:flex;
     }
-    .card h2{margin:0 0 10px;color:#123e7a}
-    .card .big{font-size:38px;font-weight:1000;color:#0c3774}
-    .card p{color:#5b7089;line-height:1.6}
-    .card button{width:100%;border:0;border-radius:13px;padding:13px;background:#164fa8;color:#fff;font-weight:900}
+
+    .modal-card{
+      width:min(420px,100%);
+      background:#fff;
+      border-radius:22px;
+      padding:22px;
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.32);
+    }
+
+    .modal-card h2{
+      margin:0 0 10px;
+      color:#123e7a;
+    }
+
+    .modal-big{
+      font-size:38px;
+      font-weight:1000;
+      color:#0c3774;
+    }
+
+    .modal-card p{
+      color:#5b7089;
+      line-height:1.6;
+    }
+
+    .modal-card button{
+      width:100%;
+      border:0;
+      border-radius:13px;
+      padding:13px;
+      background:#164fa8;
+      color:#fff;
+      font-weight:900;
+    }
+
+    @media(max-width:650px){
+
+      .monster-zone{
+        left:16%;
+        top:18%;
+        width:39%;
+        height:43%;
+      }
+
+      #monsterButton{
+        width:70%;
+      }
+
+      .stage-selector{
+        left:17%;
+        width:39%;
+      }
+
+      .stage-arrow{
+        width:28px;
+        height:28px;
+        font-size:18px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-<main id="battleStage" class="stage">
-  <img class="template" src="./battle-template.png?v=20260830-v40" alt="Battle Template">
+<main
+  id="battleTemplateStage"
+  class="battle-stage"
+  aria-label="Battle"
+>
 
-  <div id="coinValue" class="live">0</div>
-  <div id="energyValue" class="live">0 / 200</div>
-  <div id="stageValue" class="live">STAGE 1</div>
-  <div id="bossEnergyValue" class="live">0 / 200</div>
-  <div id="giftStatus" class="live">ยังไม่มีของขวัญรอรับ</div>
+  <img
+    class="battle-template"
+    src="./battle-template.png?v=20260830-v41"
+    alt="Battle Template"
+    draggable="false"
+  >
 
-  <button class="hot fight" type="button" id="fightButton" aria-label="ต่อสู้กับมอนสเตอร์"></button>
-  <button class="hot energy" type="button" id="energyButton" aria-label="พลังงานของฉัน"></button>
-  <button class="hot home" type="button" id="homeButton" aria-label="Home"></button>
-  <button class="hot mission" type="button" id="missionButton" aria-label="Mission"></button>
-  <button class="hot battle" type="button" id="battleButton" aria-label="Battle"></button>
+
+  <!-- =====================================================
+       LIVE DATA
+  ====================================================== -->
+
+  <div
+    id="coinValue"
+    class="live"
+  >
+    0
+  </div>
+
+  <div
+    id="energyValue"
+    class="live"
+  >
+    0 / 200
+  </div>
+
+  <div
+    id="stageValue"
+    class="live"
+  >
+    STAGE 1
+  </div>
+
+  <div
+    id="bossEnergyValue"
+    class="live"
+  >
+    0 / 200
+  </div>
+
+  <div
+    id="giftStatus"
+    class="live"
+  >
+    ยังไม่มีของขวัญรอรับ
+  </div>
+
+
+  <!-- =====================================================
+       MONSTER LIVE OVERLAY
+  ====================================================== -->
+
+  <section
+    class="monster-zone"
+    aria-label="Monster Stage"
+  >
+
+    <button
+      id="monsterButton"
+      type="button"
+      aria-label="เข้า Battle Stage"
+    >
+
+      <img
+        id="monsterImage"
+        src=""
+        alt="Monster"
+        draggable="false"
+      >
+
+      <div
+        class="monster-lock"
+        aria-hidden="true"
+      >
+        🔒
+      </div>
+
+    </button>
+
+
+    <div
+      id="monsterHint"
+      class="monster-hint"
+    >
+      แตะมอนสเตอร์เพื่อเข้าสู่ Stage
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       STAGE PREV / NEXT
+  ====================================================== -->
+
+  <div class="stage-selector">
+
+    <button
+      id="prevStage"
+      class="stage-arrow"
+      type="button"
+      aria-label="Stage ก่อนหน้า"
+    >
+      ‹
+    </button>
+
+    <div id="stageSelectLabel">
+      STAGE 1
+    </div>
+
+    <button
+      id="nextStage"
+      class="stage-arrow"
+      type="button"
+      aria-label="Stage ถัดไป"
+    >
+      ›
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       TEMPLATE HOTSPOTS
+  ====================================================== -->
+
+  <button
+    id="fightButton"
+    class="hotspot fight-monster"
+    type="button"
+    aria-label="ต่อสู้กับมอนสเตอร์"
+  ></button>
+
+  <button
+    id="energyButton"
+    class="hotspot my-energy"
+    type="button"
+    aria-label="พลังงานของฉัน"
+  ></button>
+
+  <button
+    id="homeButton"
+    class="hotspot home-bottom"
+    type="button"
+    aria-label="Home"
+  ></button>
+
+  <button
+    id="missionButton"
+    class="hotspot mission-bottom"
+    type="button"
+    aria-label="Mission"
+  ></button>
+
+  <button
+    id="battleButton"
+    class="hotspot battle-bottom"
+    type="button"
+    aria-label="Battle"
+  ></button>
+
 </main>
+
 
 <div id="status"></div>
 
-<div id="energyModal" class="modal">
-  <section class="card">
-    <div style="font-size:56px">⚡</div>
-    <h2>MY ENERGY</h2>
-    <div id="energyModalValue" class="big">0 / 200</div>
-    <p>ใช้ Energy ในการผ่าน Stage เมื่อ Energy เพียงพอ ระบบจะหักตามค่าของด่าน</p>
-    <button type="button" onclick="document.getElementById('energyModal').classList.remove('show')">ตกลง</button>
+
+<div
+  id="energyModal"
+  class="modal"
+>
+
+  <section class="modal-card">
+
+    <div style="font-size:56px">
+      ⚡
+    </div>
+
+    <h2>
+      MY ENERGY
+    </h2>
+
+    <div
+      id="energyModalValue"
+      class="modal-big"
+    >
+      0 / 200
+    </div>
+
+    <p>
+      ใช้ Energy ในการผ่าน Stage
+      เมื่อ Energy เพียงพอระบบจะหักตามค่าของด่าน
+    </p>
+
+    <button
+      type="button"
+      id="closeEnergyModal"
+    >
+      ตกลง
+    </button>
+
   </section>
+
 </div>
+
 
 <script>
 "use strict";
 
-const $ = id => document.getElementById(id);
 
-function apiUrl(){
-  if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi("BATTLE");
-  const url = window.APP_CONFIG?.API?.BATTLE;
-  if(!url) throw new Error("ไม่พบ API.BATTLE");
+/* =========================================================
+   BASIC
+========================================================= */
+
+const $ =
+  id =>
+    document.getElementById(
+      id
+    );
+
+
+/* =========================================================
+   STAGE CONFIG
+   EXP unlock ต้องตรงกับ battle Edge Function
+========================================================= */
+
+const STAGES = [
+
+  {
+    id:1,
+    name:"เจ้าจอมเอื่อย",
+    expRequired:0,
+    energyRequired:20,
+    file:"stage-001-germ.png"
+  },
+
+  {
+    id:2,
+    name:"จอมหวาน",
+    expRequired:500,
+    energyRequired:40,
+    file:"stage-002-donut.png"
+  },
+
+  {
+    id:3,
+    name:"ปีศาจของทอด",
+    expRequired:1000,
+    energyRequired:60,
+    file:"stage-003-fries.png"
+  },
+
+  {
+    id:4,
+    name:"จอมเค็ม",
+    expRequired:1500,
+    energyRequired:80,
+    file:"stage-004-salt.png"
+  },
+
+  {
+    id:5,
+    name:"ราชาอาหารไร้ประโยชน์",
+    expRequired:2000,
+    energyRequired:100,
+    file:"stage-005-burger-king.png"
+  },
+
+  {
+    id:6,
+    name:"ปีศาจพักผ่อนน้อย",
+    expRequired:2500,
+    energyRequired:120,
+    file:"stage-006-rest.png"
+  },
+
+  {
+    id:7,
+    name:"จอมเนือยนิ่ง",
+    expRequired:3000,
+    energyRequired:140,
+    file:"stage-007-sedentary.png"
+  },
+
+  {
+    id:8,
+    name:"ปีศาจพฤติกรรมเสี่ยง",
+    expRequired:3500,
+    energyRequired:160,
+    file:"stage-008-risk.png"
+  },
+
+  {
+    id:9,
+    name:"ราชาความเสี่ยงสุขภาพ",
+    expRequired:4000,
+    energyRequired:180,
+    file:"stage-009-risk-king.png"
+  },
+
+  {
+    id:10,
+    name:"จอมมารโรคร้าย",
+    expRequired:4500,
+    energyRequired:200,
+    file:"stage-010-boss.png"
+  }
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let battleData =
+  null;
+
+
+let selectedStageId =
+  1;
+
+
+/* =========================================================
+   API
+========================================================= */
+
+function battleApi(){
+
+  if(
+    window
+      .APP_CONFIG
+      ?.getApi
+  ){
+
+    return window
+      .APP_CONFIG
+      .getApi(
+        "BATTLE"
+      );
+  }
+
+
+  const url =
+    window
+      .APP_CONFIG
+      ?.API
+      ?.BATTLE;
+
+
+  if(!url){
+
+    throw new Error(
+      "ไม่พบ API.BATTLE"
+    );
+  }
+
+
   return url;
 }
 
+
+/* =========================================================
+   STORAGE URL
+   rock-assets / monster / stage-xxx.png
+========================================================= */
+
+function monsterUrl(
+  filename
+){
+
+  const base =
+    window
+      .APP_CONFIG
+      ?.SUPABASE_URL ||
+    "https://nztvqdzatdpauufpvdaa.supabase.co";
+
+
+  return (
+    base +
+    "/storage/v1/object/public/rock-assets/monster/" +
+    encodeURIComponent(
+      filename
+    )
+  );
+}
+
+
+/* =========================================================
+   LIFF
+========================================================= */
+
 async function initLine(){
+
   await liff.init({
-    liffId:window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
+
+    liffId:
+      window
+        .APP_CONFIG
+        ?.LIFF_ID ||
+      "2011201679-uNWz5yqF"
+
   });
 
-  if(!liff.isLoggedIn()){
-    liff.login({redirectUri:location.href});
+
+  if(
+    !liff.isLoggedIn()
+  ){
+
+    liff.login({
+
+      redirectUri:
+        window.location.href
+
+    });
+
     return false;
   }
 
-  if(!liff.getIDToken()){
+
+  const token =
+    liff.getIDToken();
+
+
+  if(!token){
+
     liff.logout();
-    liff.login({redirectUri:location.href});
+
+    liff.login({
+
+      redirectUri:
+        window.location.href
+
+    });
+
     return false;
   }
+
 
   return true;
 }
 
-async function post(action,payload={}){
-  const idToken = liff.getIDToken();
-  if(!idToken) throw new Error("ไม่พบ LINE ID Token");
 
-  const res = await fetch(apiUrl(),{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    cache:"no-store",
-    body:JSON.stringify({action,idToken,...payload})
-  });
+/* =========================================================
+   POST API
+========================================================= */
 
-  const text = await res.text();
-  let data={};
-  try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
+async function post(
+  action,
+  payload={}
+){
 
-  if(res.status===401 || String(data?.error||"").toLowerCase().includes("expired")){
+  const idToken =
+    liff.getIDToken();
+
+
+  if(!idToken){
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
+
+
+  const response =
+    await fetch(
+      battleApi(),
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        cache:"no-store",
+
+        body:
+          JSON.stringify({
+            action,
+            idToken,
+            ...payload
+          })
+      }
+    );
+
+
+  const raw =
+    await response.text();
+
+
+  let result = {};
+
+
+  try{
+
+    result =
+      raw
+        ? JSON.parse(
+            raw
+          )
+        : {};
+
+  }catch{
+
+    throw new Error(
+      "Battle API ตอบกลับไม่ใช่ JSON"
+    );
+  }
+
+
+  const message =
+    String(
+      result?.error ||
+      result?.message ||
+      ""
+    );
+
+
+  if(
+    response.status === 401 ||
+    message
+      .toLowerCase()
+      .includes(
+        "expired"
+      )
+  ){
+
     liff.logout();
-    liff.login({redirectUri:location.href});
-    return new Promise(()=>{});
+
+    liff.login({
+
+      redirectUri:
+        window.location.href
+
+    });
+
+    return new Promise(
+      ()=>{}
+    );
   }
 
-  if(!res.ok || data?.success===false){
-    throw new Error(data?.error || data?.message || `HTTP ${res.status}`);
+
+  if(
+    !response.ok ||
+    result?.success ===
+      false
+  ){
+
+    throw new Error(
+      message ||
+      `HTTP ${response.status}`
+    );
   }
 
-  return data;
+
+  return result;
 }
 
-function showStatus(text,error=false){
-  const el=$("status");
-  el.textContent=text;
-  el.classList.toggle("error",error);
-  el.classList.add("show");
-  clearTimeout(window.__battleStatus);
-  window.__battleStatus=setTimeout(()=>el.classList.remove("show"),error?5000:2600);
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+  text,
+  error=false
+){
+
+  const element =
+    $("status");
+
+
+  element.textContent =
+    text;
+
+
+  element.classList.toggle(
+    "error",
+    error
+  );
+
+
+  element.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    window.__battleStatus
+  );
+
+
+  window.__battleStatus =
+    setTimeout(
+      ()=>{
+
+        element.classList.remove(
+          "show"
+        );
+
+      },
+      error
+        ? 4800
+        : 2500
+    );
 }
 
-function render(data){
-  const p=data?.player||{};
-  $("coinValue").textContent=Number(p.rockCoin||0).toLocaleString();
-  $("energyValue").textContent=`${Number(p.energy||0).toLocaleString()} / ${Number(p.maxEnergy||200).toLocaleString()}`;
-  $("bossEnergyValue").textContent=`${Number(p.energy||0).toLocaleString()} / ${Number(p.maxEnergy||200).toLocaleString()}`;
-  $("energyModalValue").textContent=`${Number(p.energy||0).toLocaleString()} / ${Number(p.maxEnergy||200).toLocaleString()}`;
 
-  const current=data?.currentStage||{};
-  $("stageValue").textContent=`STAGE ${current.id||1}`;
+/* =========================================================
+   PLAYER EXP
+========================================================= */
 
-  const pending=Number(data?.pendingRewards||0);
-  $("giftStatus").textContent = pending>0
-    ? `🎁 รอ Admin อนุมัติ ${pending} รางวัล`
-    : "ยังไม่มีของขวัญรอรับ";
+function playerExp(){
+
+  return Number(
+    battleData
+      ?.player
+      ?.exp ||
+    0
+  );
 }
 
-$("fightButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE_MAP || "./battle_maps.html";
-$("battleButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE_MAP || "./battle_maps.html";
-$("homeButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.HOME || "./dashboard.html";
-$("missionButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.MISSION || "./mission.html";
-$("energyButton").onclick=()=>$("energyModal").classList.add("show");
+
+/* =========================================================
+   STAGE UNLOCK
+========================================================= */
+
+function isStageUnlocked(
+  stage
+){
+
+  return (
+    playerExp() >=
+    Number(
+      stage
+        ?.expRequired ||
+      0
+    )
+  );
+}
+
+
+/* =========================================================
+   HIGHEST UNLOCKED
+========================================================= */
+
+function highestUnlockedStage(){
+
+  let result =
+    1;
+
+
+  for(
+    const stage
+    of STAGES
+  ){
+
+    if(
+      isStageUnlocked(
+        stage
+      )
+    ){
+
+      result =
+        stage.id;
+    }
+  }
+
+
+  return result;
+}
+
+
+/* =========================================================
+   GET SELECTED STAGE
+========================================================= */
+
+function selectedStage(){
+
+  return (
+    STAGES.find(
+      stage =>
+        stage.id ===
+        selectedStageId
+    ) ||
+    STAGES[0]
+  );
+}
+
+
+/* =========================================================
+   RENDER PLAYER VALUES
+========================================================= */
+
+function renderWallet(){
+
+  const player =
+    battleData
+      ?.player ||
+    {};
+
+
+  const coin =
+    Number(
+      player
+        ?.rockCoin ||
+      0
+    );
+
+
+  const energy =
+    Number(
+      player
+        ?.energy ||
+      0
+    );
+
+
+  const maxEnergy =
+    Number(
+      player
+        ?.maxEnergy ||
+      200
+    );
+
+
+  $("coinValue").textContent =
+    coin.toLocaleString();
+
+
+  $("energyValue").textContent =
+    `${energy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
+
+
+  $("bossEnergyValue").textContent =
+    `${energy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
+
+
+  $("energyModalValue").textContent =
+    `${energy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
+}
+
+
+/* =========================================================
+   RENDER GIFT STATUS
+========================================================= */
+
+function renderGiftStatus(){
+
+  const pending =
+    Number(
+      battleData
+        ?.pendingRewards ||
+      0
+    );
+
+
+  $("giftStatus").textContent =
+    pending > 0
+      ? `🎁 รอ Admin อนุมัติ ${pending} รางวัล`
+      : "ยังไม่มีของขวัญรอรับ";
+}
+
+
+/* =========================================================
+   RENDER MONSTER
+========================================================= */
+
+function renderMonster(){
+
+  const stage =
+    selectedStage();
+
+
+  const unlocked =
+    isStageUnlocked(
+      stage
+    );
+
+
+  $("stageValue").textContent =
+    `STAGE ${stage.id}`;
+
+
+  $("stageSelectLabel").textContent =
+    `STAGE ${stage.id} • EXP ${Number(stage.expRequired).toLocaleString()}`;
+
+
+  const image =
+    $("monsterImage");
+
+
+  image.src =
+    monsterUrl(
+      stage.file
+    );
+
+
+  image.alt =
+    `Stage ${stage.id} ${stage.name}`;
+
+
+  const button =
+    $("monsterButton");
+
+
+  button.classList.toggle(
+    "locked",
+    !unlocked
+  );
+
+
+  button.setAttribute(
+    "aria-label",
+    unlocked
+      ? `เข้า Stage ${stage.id} ${stage.name}`
+      : `Stage ${stage.id} ยังไม่ปลดล็อก`
+  );
+
+
+  const hint =
+    $("monsterHint");
+
+
+  if(unlocked){
+
+    hint.classList.remove(
+      "locked"
+    );
+
+
+    hint.textContent =
+      `แตะมอนสเตอร์ • ${stage.name} • ใช้ ⚡ ${stage.energyRequired}`;
+
+  }else{
+
+    hint.classList.add(
+      "locked"
+    );
+
+
+    hint.textContent =
+      `🔒 ต้องมี EXP ${Number(stage.expRequired).toLocaleString()}`;
+  }
+}
+
+
+/* =========================================================
+   SELECT STAGE
+========================================================= */
+
+function selectStage(
+  stageId
+){
+
+  selectedStageId =
+    Math.max(
+      1,
+      Math.min(
+        10,
+        Number(
+          stageId
+        ) ||
+        1
+      )
+    );
+
+
+  renderMonster();
+}
+
+
+/* =========================================================
+   PREV / NEXT
+========================================================= */
+
+function previousStage(){
+
+  selectStage(
+    selectedStageId <= 1
+      ? 10
+      : selectedStageId - 1
+  );
+}
+
+
+function nextStage(){
+
+  selectStage(
+    selectedStageId >= 10
+      ? 1
+      : selectedStageId + 1
+  );
+}
+
+
+/* =========================================================
+   OPEN SELECTED BATTLE STAGE
+========================================================= */
+
+function openSelectedStage(){
+
+  const stage =
+    selectedStage();
+
+
+  if(
+    !isStageUnlocked(
+      stage
+    )
+  ){
+
+    showStatus(
+      `🔒 Stage ${stage.id} ต้องมี EXP ${Number(stage.expRequired).toLocaleString()} • ตอนนี้มี ${playerExp().toLocaleString()}`,
+      true
+    );
+
+    return;
+  }
+
+
+  const page =
+    window
+      .APP_CONFIG
+      ?.PAGE
+      ?.BATTLE_STAGE ||
+    "./battle_stage.html";
+
+
+  window.location.href =
+    page +
+    "?stage=" +
+    encodeURIComponent(
+      stage.id
+    );
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("monsterButton")
+  .addEventListener(
+    "click",
+    openSelectedStage
+  );
+
+
+$("prevStage")
+  .addEventListener(
+    "click",
+    previousStage
+  );
+
+
+$("nextStage")
+  .addEventListener(
+    "click",
+    nextStage
+  );
+
+
+$("fightButton")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      /*
+        ปุ่ม FIGHT MONSTER:
+        เปิด Battle Map ตาม Flow เดิม
+      */
+
+      window.location.href =
+        window
+          .APP_CONFIG
+          ?.PAGE
+          ?.BATTLE_MAP ||
+        "./battle_maps.html";
+    }
+  );
+
+
+$("battleButton")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window
+          .APP_CONFIG
+          ?.PAGE
+          ?.BATTLE_MAP ||
+        "./battle_maps.html";
+    }
+  );
+
+
+$("homeButton")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window
+          .APP_CONFIG
+          ?.PAGE
+          ?.HOME ||
+        "./dashboard.html";
+    }
+  );
+
+
+$("missionButton")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      window.location.href =
+        window
+          .APP_CONFIG
+          ?.PAGE
+          ?.MISSION ||
+        "./mission.html";
+    }
+  );
+
+
+$("energyButton")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      $("energyModal")
+        .classList
+        .add(
+          "show"
+        );
+    }
+  );
+
+
+$("closeEnergyModal")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      $("energyModal")
+        .classList
+        .remove(
+          "show"
+        );
+    }
+  );
+
+
+/* =========================================================
+   INIT
+========================================================= */
 
 (async()=>{
+
   try{
-    const ok=await initLine();
-    if(ok===false) return;
-    render(await post("home"));
+
+    const ready =
+      await initLine();
+
+
+    if(
+      ready === false
+    ){
+
+      return;
+    }
+
+
+    battleData =
+      await post(
+        "home"
+      );
+
+
+    renderWallet();
+
+    renderGiftStatus();
+
+
+    /*
+      เปิดมอนสเตอร์ Stage สูงสุดที่ EXP ปลดล็อกได้อัตโนมัติ
+    */
+
+    selectedStageId =
+      highestUnlockedStage();
+
+
+    renderMonster();
+
+
   }catch(error){
-    console.error(error);
-    showStatus(error?.message||String(error),true);
+
+    console.error(
+      "BATTLE INIT ERROR:",
+      error
+    );
+
+
+    showStatus(
+      error?.message ||
+      String(error),
+      true
+    );
   }
+
 })();
 </script>
+
 </body>
 </html>
