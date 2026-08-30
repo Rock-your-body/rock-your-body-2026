@@ -6,711 +6,263 @@
   <title>ROCK YOUR BODY 2026 - BATTLE STAGE</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-battle-flow-v36"></script>
+  <script src="./app-config.js?v=20260830-battle-v40"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{
-      margin:0;
-      width:100%;
-      min-height:100%;
-      background:#031022;
-      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
-      color:#fff;
-    }
-    body{display:flex;justify-content:center}
+    html,body{margin:0;min-height:100%;background:#020b22;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
+    button{font:inherit}
 
-    #stage{
-      position:relative;
-      width:min(100vw,1000px);
-      min-height:100vh;
-      overflow:hidden;
-      background:#10263a;
+    .stage{
+      position:relative;width:100%;max-width:1080px;margin:0 auto;aspect-ratio:1080/1344;
+      overflow:hidden;background:#06163a
     }
 
-    .stage-bg{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      z-index:0;
+    #stageBg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
+
+    .live{
+      position:absolute;z-index:30;display:flex;align-items:center;justify-content:center;
+      text-align:center;font-weight:1000;pointer-events:none;text-shadow:0 2px 5px rgba(0,0,0,.8)
     }
 
-    .shade{
-      position:absolute;
-      inset:0;
-      z-index:1;
-      background:
-        linear-gradient(180deg,rgba(0,15,50,.38),transparent 28%,transparent 72%,rgba(0,8,30,.58));
-      pointer-events:none;
+    #energyLive{left:5.5%;top:80%;width:23%;height:5%;color:#ffd92f;font-size:clamp(13px,3.5vw,34px)}
+    #costLive{left:78%;top:80.8%;width:18%;height:5%;color:#fff;font-size:clamp(11px,3vw,28px)}
+    #expLive{left:70%;top:3%;width:23%;height:4.5%;color:#fff;font-size:clamp(9px,2.2vw,22px)}
+    #stageName{left:25%;top:4%;width:50%;height:6%;color:#fff;font-size:clamp(16px,4vw,42px)}
+
+    .hot{position:absolute;z-index:50;border:0;background:transparent;padding:0;cursor:pointer}
+    #backButton{left:1.5%;top:1.2%;width:12%;height:8%}
+    #attackButton{left:22%;top:88.5%;width:56%;height:10%;border-radius:20%}
+
+    #attackButton:disabled{cursor:not-allowed}
+
+    .flash{position:absolute;inset:0;z-index:55;pointer-events:none}
+    .flash.hit{animation:flash .35s ease}
+    @keyframes flash{
+      0%{background:rgba(255,255,255,0)}
+      35%{background:rgba(255,255,255,.75)}
+      100%{background:rgba(255,255,255,0)}
     }
 
-    .topbar{
-      position:relative;
-      z-index:10;
-      display:grid;
-      grid-template-columns:56px 1fr 150px;
-      gap:10px;
-      padding:12px;
-      align-items:center;
+    .slash{
+      position:absolute;z-index:57;left:50%;top:50%;width:45%;height:8px;
+      background:linear-gradient(90deg,transparent,#fff,#ffe100,transparent);
+      transform:translate(-50%,-50%) rotate(-32deg) scaleX(0);pointer-events:none;
+      filter:drop-shadow(0 0 9px #fff)
+    }
+    .slash.show{animation:slash .45s ease}
+    @keyframes slash{
+      0%{opacity:0;transform:translate(-50%,-50%) rotate(-32deg) scaleX(.1)}
+      30%{opacity:1;transform:translate(-50%,-50%) rotate(-32deg) scaleX(1.25)}
+      100%{opacity:0;transform:translate(-50%,-50%) rotate(-32deg) scaleX(.3)}
     }
 
-    .back{
-      width:48px;height:48px;
-      border:2px solid #7db9ff;
-      border-radius:14px;
-      background:#062f78;
-      color:#fff;
-      font-size:28px;
-      font-weight:900;
+    .shake{animation:shake .35s linear}
+    @keyframes shake{
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)}
+      60%{transform:translateX(-5px)}
+      80%{transform:translateX(5px)}
     }
 
-    .boss-card{
-      min-width:0;
-      padding:10px 18px;
-      border:2px solid #397ee8;
-      border-radius:18px;
-      background:linear-gradient(180deg,rgba(5,30,83,.95),rgba(1,12,50,.95));
-      text-align:center;
-      box-shadow:0 5px 18px rgba(0,0,0,.3);
-    }
-
-    #bossName{
-      font-size:clamp(17px,3.4vw,30px);
-      font-weight:900;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .hp-track{
-      height:18px;
-      margin-top:7px;
-      border-radius:999px;
-      background:#173d78;
-      border:1px solid rgba(255,255,255,.45);
-      overflow:hidden;
-    }
-
-    #hpFill{
-      width:100%;
-      height:100%;
-      border-radius:inherit;
-      background:linear-gradient(180deg,#ff3b25,#db0000);
-      transition:width .45s ease;
-    }
-
-    #hpText{
-      margin-top:4px;
-      font-size:15px;
-      font-weight:800;
-    }
-
-    .energy-box{
-      padding:10px;
-      border:2px solid #397ee8;
-      border-radius:16px;
-      background:rgba(3,28,77,.94);
-      text-align:center;
-    }
-
-    .energy-label{font-size:11px;font-weight:800}
-    #energyValue{
-      margin-top:3px;
-      color:#ffd43b;
-      font-size:21px;
-      font-weight:900;
-    }
-
-    .battle-field{
-      position:relative;
-      z-index:5;
-      min-height:62vh;
-    }
-
-    #playerCharacter{
-      position:absolute;
-      left:4%;
-      bottom:7%;
-      width:31%;
-      max-height:58vh;
-      object-fit:contain;
-      object-position:left bottom;
-      filter:drop-shadow(0 12px 14px rgba(0,0,0,.4));
-      transition:transform .18s ease;
-    }
-
-    #monsterImage{
-      position:absolute;
-      right:4%;
-      bottom:8%;
-      width:44%;
-      max-height:59vh;
-      object-fit:contain;
-      object-position:right bottom;
-      filter:drop-shadow(0 15px 17px rgba(0,0,0,.48));
-      transition:transform .25s ease,filter .25s ease;
-    }
-
-    #vs{
-      position:absolute;
-      left:50%;
-      top:43%;
-      transform:translate(-50%,-50%);
-      color:#ffd24a;
-      font-size:clamp(42px,10vw,90px);
-      font-weight:900;
-      font-style:italic;
-      text-shadow:0 3px 0 #8d4200,0 0 18px #ffce45;
-    }
-
-    .damage{
-      position:absolute;
-      right:32%;
-      top:33%;
-      z-index:20;
-      color:#ffef3a;
-      font-size:clamp(34px,7vw,70px);
-      font-weight:900;
-      text-shadow:0 4px 0 #9c0000,0 0 12px #fff;
-      opacity:0;
-      transform:translateY(15px) scale(.7);
-      pointer-events:none;
-    }
-
-    .damage.show{
-      animation:damagePop .7s ease;
-    }
-
-    @keyframes damagePop{
-      0%{opacity:0;transform:translateY(20px) scale(.5)}
-      25%{opacity:1;transform:translateY(0) scale(1.2)}
-      80%{opacity:1}
-      100%{opacity:0;transform:translateY(-35px) scale(.9)}
-    }
-
-    .bottom{
-      position:relative;
-      z-index:12;
-      display:grid;
-      grid-template-columns:1fr 1.35fr;
-      gap:12px;
-      padding:0 14px 18px;
-      margin-top:-10px;
-    }
-
-    .cost-card{
-      min-height:82px;
-      border:2px solid #3a78d9;
-      border-radius:18px;
-      background:linear-gradient(180deg,#082b6a,#031845);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      box-shadow:0 6px 16px rgba(0,0,0,.3);
-    }
-
-    .cost-label{font-size:14px;font-weight:700}
-    #energyCost{margin-top:5px;color:#ffd440;font-size:27px;font-weight:900}
-
-    #attackButton{
-      min-height:82px;
-      border:3px solid #fff1a7;
-      border-radius:21px;
-      background:linear-gradient(180deg,#ffd85b,#ed9a00);
-      color:#251400;
-      font-size:clamp(25px,5vw,48px);
-      font-weight:900;
-      box-shadow:0 7px 0 #a85600,0 10px 22px rgba(0,0,0,.35);
-    }
-
-    #attackButton:disabled{
-      opacity:.55;
-      filter:grayscale(.45);
-    }
-
-    #battleStatus{
-      position:relative;
-      z-index:15;
-      margin:0 14px 14px;
-      padding:10px 14px;
-      border-radius:13px;
-      background:rgba(0,22,62,.88);
-      text-align:center;
-      font-size:13px;
-      font-weight:800;
-    }
-
-    /* RESULT */
     #resultModal{
-      position:fixed;
-      inset:0;
-      z-index:9999;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:rgba(0,5,22,.78);
-      backdrop-filter:blur(4px);
+      position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;
+      padding:20px;background:rgba(0,10,35,.76)
     }
     #resultModal.show{display:flex}
 
-    .result-box{
-      width:min(92vw,510px);
-      padding:24px;
-      border:3px solid #7eb6ff;
-      border-radius:24px;
-      background:linear-gradient(180deg,#0b3b8b,#031c56);
-      color:#fff;
-      text-align:center;
-      box-shadow:0 20px 55px rgba(0,0,0,.48);
+    .result-card{
+      width:min(430px,100%);padding:24px;border-radius:24px;background:#fff;text-align:center;
+      box-shadow:0 24px 70px rgba(0,0,0,.4)
+    }
+    #resultIcon{font-size:70px}
+    #resultTitle{font-size:30px;font-weight:1000;margin:6px 0}
+    #resultTitle.success{color:#078b45}
+    #resultTitle.failed{color:#c92828}
+    #resultText{color:#536a83;line-height:1.65}
+    #giftBox{display:none;margin:12px auto;font-size:78px;animation:bounce 1s infinite}
+    #giftBox.show{display:block}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    .result-card button{
+      width:100%;margin-top:12px;border:0;border-radius:13px;padding:13px;background:#164fa8;color:#fff;font-weight:900
     }
 
-    #resultIcon{font-size:62px}
-    #resultTitle{margin-top:6px;font-size:35px;font-weight:900}
-    #resultText{margin-top:10px;line-height:1.5;font-size:15px}
-    #resultReward{
-      margin-top:14px;
-      padding:12px;
-      border-radius:14px;
-      background:rgba(255,255,255,.1);
-      font-size:17px;
-      font-weight:800;
-      line-height:1.6;
+    #status{
+      position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);
+      z-index:11000;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;
+      max-width:calc(100vw - 28px);font-weight:900;text-align:center
     }
-
-    .result-actions{
-      margin-top:17px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:9px;
-    }
-
-    .result-actions button{
-      min-height:50px;
-      border:0;
-      border-radius:13px;
-      color:#fff;
-      font-weight:900;
-    }
-
-    #mapButton{background:#0b62cf}
-    #nextButton{background:#10a54c}
-
-    @media(max-width:650px){
-      .topbar{grid-template-columns:42px 1fr 95px;padding:7px;gap:5px}
-      .back{width:38px;height:38px;border-radius:10px;font-size:22px}
-      .boss-card{padding:7px 9px;border-radius:11px}
-      #bossName{font-size:15px}
-      .hp-track{height:11px;margin-top:4px}
-      #hpText{font-size:10px}
-      .energy-box{padding:6px;border-radius:10px}
-      .energy-label{font-size:8px}
-      #energyValue{font-size:14px}
-      .battle-field{min-height:56vh}
-      #playerCharacter{width:34%;bottom:10%}
-      #monsterImage{width:48%;bottom:10%}
-      .bottom{padding:0 8px 11px;gap:7px}
-      .cost-card,#attackButton{min-height:62px;border-radius:13px}
-      .cost-label{font-size:10px}
-      #energyCost{font-size:19px}
-      #battleStatus{margin:0 8px 9px;font-size:10px}
-    }
+    #status.show{display:block}
+    #status.error{background:#c62828}
   </style>
 </head>
-
 <body>
-<main id="stage">
-  <img id="stageBackground" class="stage-bg" src="" alt="Battle Stage Background">
-  <div class="shade"></div>
 
-  <header class="topbar">
-    <button class="back" type="button" onclick="goMap()">‹</button>
+<main id="battleScene" class="stage">
+  <img id="stageBg" src="" alt="Battle Stage">
 
-    <div class="boss-card">
-      <div id="bossName">กำลังโหลด...</div>
-      <div class="hp-track"><div id="hpFill"></div></div>
-      <div id="hpText">-- / --</div>
-    </div>
+  <div id="stageName" class="live">STAGE</div>
+  <div id="energyLive" class="live">⚡ --</div>
+  <div id="costLive" class="live">⚡ --</div>
+  <div id="expLive" class="live">EXP --</div>
 
-    <div class="energy-box">
-      <div class="energy-label">⚡ MY ENERGY</div>
-      <div id="energyValue">--</div>
-    </div>
-  </header>
+  <div id="flash" class="flash"></div>
+  <div id="slash" class="slash"></div>
 
-  <section class="battle-field">
-    <img id="playerCharacter" src="" alt="Player">
-    <div id="vs">VS</div>
-    <img id="monsterImage" src="" alt="Monster">
-    <div id="damageText" class="damage">-0</div>
-  </section>
-
-  <div id="battleStatus">กำลังตรวจสอบข้อมูลผู้เล่น...</div>
-
-  <section class="bottom">
-    <div class="cost-card">
-      <div class="cost-label">ใช้พลังงาน</div>
-      <div id="energyCost">⚡ --</div>
-    </div>
-
-    <button id="attackButton" type="button" disabled>
-      ⚔️ โจมตีเลย!
-    </button>
-  </section>
+  <button id="backButton" class="hot" type="button" aria-label="ย้อนกลับ"></button>
+  <button id="attackButton" class="hot" type="button" aria-label="โจมตี"></button>
 </main>
 
-
 <div id="resultModal">
-  <div class="result-box">
+  <section class="result-card">
     <div id="resultIcon">🏆</div>
-    <div id="resultTitle">VICTORY!</div>
+    <div id="resultTitle">MISSION SUCCESS</div>
+    <div id="giftBox">🎁</div>
     <div id="resultText"></div>
-    <div id="resultReward"></div>
-
-    <div class="result-actions">
-      <button id="mapButton" type="button">กลับ Battle Map</button>
-      <button id="nextButton" type="button">ไปด่านถัดไป</button>
-    </div>
-  </div>
+    <button type="button" id="resultButton">กลับ Battle Map</button>
+  </section>
 </div>
 
+<div id="status"></div>
 
 <script>
 "use strict";
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
+const STAGE_ID=Math.max(1,Math.min(10,Number(new URLSearchParams(location.search).get("stage"))||1));
+let state=null;
 
-const PARAMS = new URLSearchParams(window.location.search);
-const STAGE_ID = Math.max(1,Math.min(10,Number(PARAMS.get("stage")) || 1));
-
-const ASSET_ROOT =
-  "https://nztvqdzatdpauufpvdaa.supabase.co/storage/v1/object/public/rock-assets/%20battle";
-
-const MONSTER_BASE = ASSET_ROOT + "/monster";
-const STAGE_BASE = ASSET_ROOT + "/stages";
-const CHARACTER_BASE = ASSET_ROOT + "/characters";
-
-const STATIC_STAGE = {
-  1:{name:"เจ้าจอมเอื่อย",energy:300,hp:1200,monster:"stage-001-germ.png"},
-  2:{name:"จอมหวาน",energy:900,hp:1800,monster:"stage-002-donut.png"},
-  3:{name:"ปีศาจของทอด",energy:1500,hp:2400,monster:"stage-003-fries.png"},
-  4:{name:"จอมเค็ม",energy:2100,hp:3000,monster:"stage-004-salt.png"},
-  5:{name:"ราชาอาหารไร้ประโยชน์",energy:2700,hp:3600,monster:"stage-005-burger-king.png"},
-  6:{name:"ปีศาจพักผ่อนน้อย",energy:3300,hp:4200,monster:"stage-006-rest.png"},
-  7:{name:"จอมเนือยนิ่ง",energy:3900,hp:4800,monster:"stage-007-sedentary.png"},
-  8:{name:"ปีศาจพฤติกรรมเสี่ยง",energy:4500,hp:5400,monster:"stage-008-risk.png"},
-  9:{name:"ราชาความเสี่ยงสุขภาพ",energy:5100,hp:6000,monster:"stage-009-risk-king.png"},
-  10:{name:"จอมมารโรคร้าย",energy:5700,hp:7000,monster:"stage-010-boss.png"}
-};
-
-let stageData = {...STATIC_STAGE[STAGE_ID]};
-let playerEnergy = 0;
-let maxEnergy = 200;
-let unlockedStage = 1;
-let attacking = false;
-
-function n(v,f=0){
-  const x = Number(v);
-  return Number.isFinite(x) ? x : f;
-}
-
-function pick(...xs){
-  for(const x of xs){
-    if(x !== undefined && x !== null && x !== "") return x;
-  }
-  return null;
-}
-
-function fmt(v){
-  return Math.round(n(v,0)).toLocaleString("en-US");
-}
-
-function getApi(name){
-  if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi(name);
-  const url = window.APP_CONFIG?.API?.[name];
-  if(!url) throw new Error("ไม่พบ API." + name);
+function apiUrl(){
+  if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi("BATTLE");
+  const url=window.APP_CONFIG?.API?.BATTLE;
+  if(!url) throw new Error("ไม่พบ API.BATTLE");
   return url;
 }
 
-async function initLiff(){
-  if(typeof liff === "undefined") throw new Error("LINE LIFF SDK ไม่พร้อม");
-
-  await liff.init({
-    liffId:window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
-  });
-
+async function initLine(){
+  await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});
   if(!liff.isLoggedIn()){
-    liff.login({redirectUri:window.location.href});
+    liff.login({redirectUri:location.href});
     return false;
   }
-
-  if(!liff.getIDToken()) throw new Error("ไม่พบ LINE ID Token");
+  if(!liff.getIDToken()){
+    liff.logout();liff.login({redirectUri:location.href});return false;
+  }
   return true;
 }
 
-async function battleApi(payload){
-  const response = await fetch(getApi("BATTLE"),{
+async function post(action,payload={}){
+  const res=await fetch(apiUrl(),{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     cache:"no-store",
-    body:JSON.stringify({
-      ...payload,
-      idToken:liff.getIDToken()
-    })
+    body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})
   });
-
-  const raw = await response.text();
-  let data = {};
-
-  try{
-    data = raw ? JSON.parse(raw) : {};
-  }catch{
-    throw new Error("Battle API ตอบกลับไม่ใช่ JSON");
+  const text=await res.text();let data={};
+  try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
+  if(res.status===401||String(data?.error||"").toLowerCase().includes("expired")){
+    liff.logout();liff.login({redirectUri:location.href});return new Promise(()=>{});
   }
-
-  if(!response.ok || data?.success === false){
-    throw new Error(data?.error || data?.message || `HTTP ${response.status}`);
-  }
-
+  if(!res.ok||data?.success===false) throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
   return data;
 }
 
-async function playerApi(payload){
-  const response = await fetch(getApi("PLAYER"),{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    cache:"no-store",
-    body:JSON.stringify({
-      ...payload,
-      idToken:liff.getIDToken()
-    })
-  });
+function showStatus(text,error=false){
+  const el=$("status");el.textContent=text;el.classList.toggle("error",error);el.classList.add("show");
+  clearTimeout(window.__st);window.__st=setTimeout(()=>el.classList.remove("show"),error?5000:2500);
+}
 
-  const raw = await response.text();
-  let data = {};
-  try{ data = raw ? JSON.parse(raw) : {}; }catch{}
+function stageImage(id){
+  return `./battle-stage-${String(id).padStart(2,"0")}-bg.jpeg?v=20260830-v40`;
+}
 
-  if(!response.ok || data?.success === false){
-    throw new Error(data?.error || data?.message || `HTTP ${response.status}`);
+function render(data){
+  state=data;
+  const p=data?.player||{};
+  const s=data?.stage||{};
+
+  $("stageBg").src=stageImage(STAGE_ID);
+  $("stageName").textContent=`STAGE ${s.id||STAGE_ID} • ${s.name||""}`;
+  $("energyLive").textContent=`⚡ ${Number(p.energy||0).toLocaleString()}`;
+  $("costLive").textContent=`⚡ ${Number(s.energyRequired||0).toLocaleString()}`;
+  $("expLive").textContent=`EXP ${Number(s.expRequired||0).toLocaleString()}`;
+
+  if(!s.unlocked){
+    $("attackButton").disabled=true;
+    showStatus(`🔒 ด่านนี้ต้องมี EXP ${Number(s.expRequired||0).toLocaleString()}`,true);
   }
-  return data;
 }
 
-function renderAssets(){
-  $("stageBackground").src =
-    `${STAGE_BASE}/battle-stage-${String(STAGE_ID).padStart(2,"0")}-bg.jpeg`;
-
-  $("monsterImage").src =
-    `${MONSTER_BASE}/${stageData.monster}`;
-
-  // ใช้ตัวละครผู้เล่นชุดเดียวกับ Battle Stage เดิม
-  $("playerCharacter").src =
-    `${CHARACTER_BASE}/male/player-male-battle.png`;
-
-  $("bossName").textContent = stageData.name;
-  $("energyCost").textContent = "⚡ " + fmt(stageData.energy);
-  renderHp(stageData.hp,stageData.hp);
-}
-
-function renderHp(current,max){
-  const c = Math.max(0,n(current,0));
-  const m = Math.max(1,n(max,1));
-  const pct = Math.max(0,Math.min(100,c/m*100));
-  $("hpText").textContent = `${fmt(c)} / ${fmt(m)}`;
-  $("hpFill").style.width = pct + "%";
-}
-
-function renderEnergy(){
-  $("energyValue").textContent = `${fmt(playerEnergy)} / ${fmt(maxEnergy)}`;
-}
-
-function setStatus(text){
-  $("battleStatus").textContent = text;
-}
-
-function showDamage(value){
-  const el = $("damageText");
-  el.textContent = "-" + fmt(value);
-  el.classList.remove("show");
-  void el.offsetWidth;
-  el.classList.add("show");
-}
-
-function goMap(){
-  window.location.href = "./battle_maps.html";
+function attackEffect(){
+  $("flash").classList.remove("hit");
+  $("slash").classList.remove("show");
+  $("battleScene").classList.remove("shake");
+  void $("flash").offsetWidth;
+  $("flash").classList.add("hit");
+  $("slash").classList.add("show");
+  $("battleScene").classList.add("shake");
 }
 
 function showResult(result){
-  const won = result?.mission_status === "success";
-  const modal = $("resultModal");
+  const success=!!result?.missionSuccess;
 
-  if(won){
-    $("resultIcon").textContent = STAGE_ID === 10 ? "👑" : "🏆";
-    $("resultTitle").textContent = result?.already_success ? "ผ่านด่านนี้แล้ว" : "VICTORY!";
-    $("resultText").textContent =
-      result?.already_success
-        ? `${stageData.name} ถูกพิชิตแล้ว`
-        : STAGE_ID < 10
-          ? `พิชิต ${stageData.name} สำเร็จ • Stage ${STAGE_ID + 1} ถูกปลดล็อก`
-          : "สุดยอด! คุณพิชิต FINAL BOSS สำเร็จ";
+  $("resultIcon").textContent=success?"🏆":"❌";
+  $("resultTitle").textContent=success?"MISSION SUCCESS":"MISSION FAILED";
+  $("resultTitle").className=success?"success":"failed";
+  $("giftBox").classList.toggle("show",success);
 
-    const rewardStatus = result?.reward_status || "pending";
-    $("resultReward").innerHTML =
-      `🪙 +${fmt(result?.reward_coin || 0)} ROCK COIN<br>` +
-      `⚡ +${fmt(result?.reward_energy || 0)} ENERGY<br>` +
-      `🏆 +${fmt(result?.reward_exp || 0)} EXP<br>` +
-      `<small>สถานะรางวัล: ${rewardStatus === "pending" ? "รอ Admin อนุมัติ" : rewardStatus}</small>`;
-
-    $("nextButton").style.display = STAGE_ID < 10 ? "" : "none";
+  if(success){
+    $("resultText").innerHTML=
+      `ผ่าน Stage ${result?.stage?.id}<br>`+
+      `ใช้ Energy ${Number(result?.stage?.energyRequired||0).toLocaleString()}<br>`+
+      `Energy คงเหลือ ${Number(result?.player?.energy||0).toLocaleString()}<br><br>`+
+      `<strong>🎁 ของขวัญกำลังรอ Admin อนุมัติ</strong><br>`+
+      `เมื่อ Admin ตรวจสอบแล้ว จะดำเนินการส่งของขวัญการผ่านด่านให้ภายหลัง`;
   }else{
-    $("resultIcon").textContent = "⚡";
-    $("resultTitle").textContent = "ENERGY NOT ENOUGH";
-    $("resultText").textContent =
-      `Energy ปัจจุบัน ${fmt(result?.energy_before ?? playerEnergy)} • ต้องใช้มากกว่า ${fmt(stageData.energy)} เพื่อผ่านด่าน`;
-    $("resultReward").textContent =
-      result?.energy_refunded
-        ? "ระบบคืน Energy ให้แล้ว • ไม่มีรางวัลจากการโจมตีครั้งนี้"
-        : "ไม่มีรางวัล";
-    $("nextButton").style.display = "none";
+    $("resultText").innerHTML=
+      `Energy ไม่เพียงพอสำหรับ Stage ${result?.stage?.id}<br>`+
+      `ต้องใช้ ${Number(result?.stage?.energyRequired||0).toLocaleString()} Energy<br>`+
+      `คุณมี ${Number(result?.player?.energy||0).toLocaleString()} Energy<br><br>`+
+      `ไปทำ Mission เพื่อสะสม Energy แล้วกลับมาลองใหม่`;
   }
 
-  modal.classList.add("show");
+  $("resultModal").classList.add("show");
 }
 
-async function loadState(){
-  const [battleResult,homeResult] = await Promise.all([
-    battleApi({action:"battleStatus"}),
-    playerApi({action:"dashboard"})
-  ]);
-
-  const bp = battleResult?.player || {};
-  const bs = battleResult?.stage || {};
-
-  unlockedStage = Math.max(1,n(bp.unlockedStage ?? bp.unlocked_stage,1));
-
-  if(STAGE_ID > unlockedStage){
-    throw new Error(`Stage ${STAGE_ID} ยังไม่ปลดล็อก`);
-  }
-
-  const hd = homeResult?.data ?? homeResult?.dashboard ?? homeResult ?? {};
-  const hu = hd?.user ?? hd?.player ?? {};
-  const he = hd?.energy && typeof hd.energy === "object" ? hd.energy : {};
-
-  playerEnergy = n(
-    he.current ??
-    hd.energyCurrent ??
-    hd.current_energy ??
-    (typeof hd.energy === "number" ? hd.energy : null) ??
-    hu.energy ??
-    bp.energy,
-    0
-  );
-
-  maxEnergy = Math.max(1,n(
-    he.max ??
-    hd.maxEnergy ??
-    hd.max_energy ??
-    hu.maxEnergy ??
-    hu.max_energy ??
-    bp.maxEnergy ??
-    200,
-    200
-  ));
-
-  // Battle API stage detail ใช้เฉพาะเมื่อเป็น current unlocked stage
-  if(STAGE_ID === unlockedStage){
-    stageData = {
-      ...stageData,
-      name:pick(bs.name,bs.monster_name,stageData.name),
-      energy:n(pick(bs.energy_cost,bs.energyCost,stageData.energy),stageData.energy),
-      hp:n(pick(bs.max_hp,bs.maxHp,bs.hp,stageData.hp),stageData.hp)
-    };
-  }
-
-  renderAssets();
-  renderEnergy();
-
-  if(STAGE_ID < unlockedStage){
-    setStatus("ด่านนี้ผ่านแล้ว • เปิดดูได้ แต่ระบบจะไม่แจก Reward ซ้ำ");
-  }else if(playerEnergy <= stageData.energy){
-    setStatus(`Energy ยังไม่พอ • ต้องมีมากกว่า ⚡ ${fmt(stageData.energy)}`);
-  }else{
-    setStatus("พร้อมต่อสู้ • กดโจมตีเลย!");
-  }
-
-  $("attackButton").disabled = false;
-}
-
-async function attack(){
-  if(attacking) return;
-
-  attacking = true;
-  $("attackButton").disabled = true;
-  setStatus("กำลังโจมตี...");
-
-  try{
-    const result = await battleApi({
-      action:"attackStage",
-      stageId:STAGE_ID
-    });
-
-    if(result?.mission_status === "success"){
-      renderHp(0,stageData.hp);
-      showDamage(stageData.hp);
-
-      if(result?.energy_after !== undefined){
-        playerEnergy = n(result.energy_after,playerEnergy);
-        renderEnergy();
-      }
-
-      setTimeout(()=>showResult(result),500);
-    }else{
-      const hp = n(result?.monster_hp,stageData.hp);
-      renderHp(hp,stageData.hp);
-      showDamage(Math.max(0,stageData.hp - hp));
-
-      if(result?.energy_after_refund !== undefined){
-        playerEnergy = n(result.energy_after_refund,playerEnergy);
-        renderEnergy();
-      }
-
-      setTimeout(()=>showResult(result),500);
-    }
-
-  }catch(error){
-    console.error("ATTACK ERROR",error);
-    setStatus(error?.message || "โจมตีไม่สำเร็จ");
-  }finally{
-    attacking = false;
-    $("attackButton").disabled = false;
-  }
-}
-
-$("attackButton").addEventListener("click",attack);
-$("mapButton").addEventListener("click",goMap);
-$("nextButton").addEventListener("click",()=>{
-  if(STAGE_ID >= 10){
-    goMap();
+async function attackMonster(){
+  if(!state?.stage?.unlocked){
+    showStatus("Stage ยังไม่ปลดล็อก",true);
     return;
   }
-  window.location.href = `./battle_stage.html?stage=${STAGE_ID + 1}`;
-});
+
+  $("attackButton").disabled=true;
+  attackEffect();
+
+  try{
+    await new Promise(r=>setTimeout(r,430));
+    const result=await post("attackStage",{stageId:STAGE_ID});
+    state=result;
+    render(result);
+    showResult(result);
+  }catch(error){
+    console.error(error);
+    showStatus(error?.message||String(error),true);
+    $("attackButton").disabled=false;
+  }
+}
+
+$("attackButton").onclick=attackMonster;
+$("backButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE_MAP||"./battle_maps.html";
+$("resultButton").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE_MAP||"./battle_maps.html";
 
 (async()=>{
   try{
-    renderAssets();
-
-    const ready = await initLiff();
-    if(ready === false) return;
-
-    await loadState();
+    const ok=await initLine();if(ok===false)return;
+    render(await post("stage",{stageId:STAGE_ID}));
   }catch(error){
-    console.error("BATTLE STAGE INIT",error);
-    setStatus(error?.message || "เปิด Battle Stage ไม่สำเร็จ");
-    $("attackButton").disabled = true;
+    console.error(error);showStatus(error?.message||String(error),true);
   }
 })();
 </script>
