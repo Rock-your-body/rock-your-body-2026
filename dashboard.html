@@ -2,549 +2,320 @@
 <html lang="th">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,viewport-fit=cover"
+  >
+
   <title>ROCK YOUR BODY 2026 - HOME</title>
 
+  <link
+    rel="stylesheet"
+    href="./base.css?v=20260830-home-v55"
+  >
+
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-template-v52"></script>
-
-  <style>
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-
-    html,body{
-      margin:0;
-      min-height:100%;
-      background:#eef4ff;
-      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
-    }
-
-    body{
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      overflow-x:hidden;
-    }
-
-    button,input{
-      font:inherit;
-    }
-
-    #homeStage{
-      position:relative;
-      width:min(100vw,1536px);
-      aspect-ratio:1536/1024;
-      margin:0 auto;
-      overflow:hidden;
-      background:#eef4ff;
-    }
-
-    #homeTemplate{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:fill;
-      z-index:1;
-      pointer-events:none;
-      user-select:none;
-    }
-
-    .overlay{
-      position:absolute;
-      z-index:20;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      text-align:center;
-      line-height:1;
-    }
-
-    /* =====================================================
-       PROFILE
-    ====================================================== */
-
-    #profileImage{
-      position:absolute;
-      z-index:18;
-      left:7.6%;
-      top:18.0%;
-      width:17.6%;
-      aspect-ratio:1/1;
-      border-radius:50%;
-      object-fit:cover;
-      object-position:center center;
-      display:none;
-    }
-
-    /* LINE name inside HERO row */
-    #lineName{
-      left:7.2%;
-      top:61.4%;
-      width:14.7%;
-      height:6.4%;
-      justify-content:flex-start;
-      padding-left:1.2%;
-      color:#fff;
-      font-size:clamp(10px,1.35vw,21px);
-      font-weight:700;
-      z-index:30;
-    }
-
-    #level{
-      left:23.0%;
-      top:60.8%;
-      width:6.1%;
-      height:6.8%;
-      color:#fff;
-      border-radius:10px;
-      font-size:clamp(13px,1.8vw,28px);
-      font-weight:900;
-      z-index:31;
-    }
-
-    #expValue{
-      left:22.0%;
-      top:70.1%;
-      width:7.5%;
-      height:4.2%;
-      color:#071f5f;
-      font-size:clamp(9px,1.1vw,17px);
-      font-weight:800;
-      z-index:31;
-    }
-
-    #expMask{
-      position:absolute;
-      z-index:29;
-      left:7.4%;
-      top:70.6%;
-      width:13.0%;
-      height:2.2%;
-      border-radius:999px;
-    }
-
-    #expFill{
-      position:absolute;
-      z-index:30;
-      left:7.4%;
-      top:70.6%;
-      width:0%;
-      max-width:13.0%;
-      height:2.2%;
-      border-radius:999px;
-      transition:width .35s ease;
-    }
-
-    /* =====================================================
-       TOP WALLET
-    ====================================================== */
-
-    #coin{
-      left:77.2%;
-      top:4.2%;
-      width:7.2%;
-      height:4.4%;
-      color:#091f62;
-      font-size:clamp(11px,1.45vw,22px);
-      font-weight:700;
-    }
-
-    #energy{
-      left:89.1%;
-      top:4.2%;
-      width:7.0%;
-      height:4.4%;
-      color:#091f62;
-      font-size:clamp(10px,1.35vw,21px);
-      font-weight:700;
-    }
-
-    /* =====================================================
-       WEIGHT
-    ====================================================== */
-
-    #currentWeight{
-      left:43.2%;
-      top:23.1%;
-      width:15.0%;
-      height:7.5%;
-      color:#08246f;
-      font-size:clamp(23px,3.7vw,57px);
-      font-weight:700;
-    }
-
-    #targetWeight{
-      left:43.2%;
-      top:44.8%;
-      width:15.0%;
-      height:7.5%;
-      color:#d51c13;
-      font-size:clamp(23px,3.7vw,57px);
-      font-weight:700;
-    }
-
-    #weightProgressPct{
-      left:52.0%;
-      top:67.5%;
-      width:6.5%;
-      height:5.0%;
-      color:#148326;
-      font-size:clamp(18px,2.8vw,42px);
-      font-weight:900;
-    }
-
-    #lostWeight{
-      left:35.6%;
-      top:75.5%;
-      width:9.2%;
-      height:4.3%;
-      color:#081d59;
-      font-size:clamp(9px,1.35vw,20px);
-      font-weight:800;
-    }
-
-    #remainingWeight{
-      left:49.7%;
-      top:75.5%;
-      width:9.2%;
-      height:4.3%;
-      color:#081d59;
-      font-size:clamp(9px,1.35vw,20px);
-      font-weight:800;
-    }
-
-    #weightProgressTrack{
-      position:absolute;
-      z-index:24;
-      left:35.0%;
-      top:68.7%;
-      width:15.6%;
-      height:2.3%;
-      border-radius:999px;
-      overflow:hidden;
-    }
-
-    #weightProgressFill{
-      height:100%;
-      width:0%;
-      border-radius:inherit;
-      transition:width .35s ease;
-    }
-
-    /* =====================================================
-       HEALTH CARDS
-    ====================================================== */
-
-    #steps{
-      left:69.4%;
-      top:23.7%;
-      width:8.3%;
-      height:7.0%;
-      color:#fff;
-      font-size:clamp(22px,3.7vw,58px);
-      font-weight:700;
-    }
-
-    #calories{
-      left:88.0%;
-      top:23.7%;
-      width:9.3%;
-      height:7.0%;
-      color:#fff;
-      font-size:clamp(20px,3.4vw,53px);
-      font-weight:700;
-    }
-
-    #sleep{
-      left:69.0%;
-      top:45.0%;
-      width:9.5%;
-      height:6.8%;
-      color:#fff;
-      font-size:clamp(14px,2.0vw,31px);
-      font-weight:700;
-    }
-
-    #healthScore{
-      left:87.3%;
-      top:45.0%;
-      width:10.7%;
-      height:6.8%;
-      color:#fff;
-      font-size:clamp(18px,2.7vw,41px);
-      font-weight:700;
-    }
-
-    /* =====================================================
-       CLICK AREAS
-    ====================================================== */
-
-    .hotspot{
-      position:absolute;
-      z-index:50;
-      border:0;
-      padding:0;
-      cursor:pointer;
-      touch-action:manipulation;
-    }
-
-    .hotspot:active{
-      border-radius:18px;
-    }
-
-    #stepsHotspot{left:61.7%;top:15.5%;width:18.0%;height:19.5%}
-    #sleepHotspot{left:61.7%;top:36.6%;width:18.0%;height:19.2%}
-    #weightHotspot{left:61.6%;top:58.1%;width:18.2%;height:24.4%}
-    #progressHotspot{left:80.8%;top:58.1%;width:18.0%;height:24.4%}
-
-    #homeHotspot{left:1.2%;top:84.8%;width:31.7%;height:12.5%}
-    #missionHotspot{left:34.0%;top:84.8%;width:31.6%;height:12.5%}
-    #battleHotspot{left:66.7%;top:84.8%;width:31.9%;height:12.5%}
-
-    /* =====================================================
-       MODAL
-    ====================================================== */
-
-    .modal-bg{
-      position:fixed;
-      inset:0;
-      z-index:9999;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      backdrop-filter:blur(4px);
-    }
-
-    .modal-bg.show{display:flex}
-
-    .modal{
-      width:min(92vw,520px);
-      color:#183866;
-      border-radius:22px;
-      padding:22px;
-      box-shadow:0 20px 50px rgba(0,0,0,.35);
-    }
-
-    .modal h3{
-      margin:0 0 16px;
-      font-size:24px;
-    }
-
-    .field{margin-top:12px}
-
-    .field label{
-      display:block;
-      margin-bottom:6px;
-      font-weight:800;
-    }
-
-    .field input{
-      width:100%;
-      min-height:52px;
-      border:1px solid #c7d6e8;
-      border-radius:13px;
-      padding:10px 13px;
-      font-size:19px;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-
-    .modal-status{
-      margin-top:12px;
-      padding:12px;
-      border-radius:12px;
-      font-size:14px;
-      line-height:1.55;
-      font-weight:700;
-    }
-
-    .modal-status.success{
-      color:#087438;
-      border:1px solid #b9e5c6;
-    }
-
-    .modal-status.warning{
-      color:#815800;
-      border:1px solid #f0d39a;
-    }
-
-    .evidence-btn{
-      display:none;
-      width:100%;
-      min-height:48px;
-      margin-top:12px;
-      border:0;
-      border-radius:12px;
-      color:#fff;
-      font-weight:900;
-    }
-
-    .modal-actions{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:9px;
-    }
-
-    .modal-actions button{
-      min-height:48px;
-      border:0;
-      border-radius:12px;
-      font-weight:900;
-    }
-
-    .cancel{background:#e9eef5;color:#315072}
-    .save{background:#0a9b48;color:#fff}
-
-    #sleepDuration{
-      margin-top:12px;
-      text-align:center;
-      font-size:24px;
-      font-weight:900;
-      color:#4c20ab;
-    }
-
-    #toast{
-      position:fixed;
-      left:50%;
-      bottom:max(18px,env(safe-area-inset-bottom));
-      transform:translateX(-50%);
-      z-index:10000;
-      display:none;
-      max-width:calc(100vw - 28px);
-      padding:11px 16px;
-      border-radius:14px;
-      color:#fff;
-      text-align:center;
-      font-size:13px;
-      font-weight:800;
-      box-shadow:0 8px 24px rgba(0,0,0,.28);
-    }
-
-    #toast.show{display:block}
-    #toast.error{background:#c62828}
-  
-    /* =====================================================
-       HOME V5.3 — TRANSPARENT DATA OVERLAYS
-       เหลือเฉพาะตัวเลข/ข้อความ ไม่มีแถบพื้นหลัง
-    ====================================================== */
-
-    #lineName,
-    #level,
-    #expValue,
-    #coin,
-    #energy,
-    #currentWeight,
-    #targetWeight,
-    #weightProgressPct,
-    #lostWeight,
-    #remainingWeight,
-    #steps,
-    #calories,
-    #sleep,
-    #healthScore{
-      background:transparent !important;
-      background-color:transparent !important;
-      border:none !important;
-      outline:none !important;
-      box-shadow:none !important;
-    }
-
-</style>
+  <script src="./app-config.js?v=20260830-home-v55"></script>
 </head>
 
 <body>
 
 <div id="homeStage">
 
+  <!--
+    ใช้ไฟล์ home-template.png ใน GitHub root
+    Template ควรเป็นเวอร์ชันช่องข้อมูลว่าง
+  -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260830-v53"
+    src="./home-template.png?v=20260830-home-v55"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
-  <!-- PROFILE -->
-  <img id="profileImage" alt="LINE Profile">
-  <div id="lineName" class="overlay">กำลังโหลด...</div>
-  <div id="level" class="overlay">Lv.1</div>
-  <div id="expMask"></div>
-  <div id="expFill"></div>
-  <div id="expValue" class="overlay">0 / 500</div>
+  <!-- =====================================================
+       PROFILE / USER
+  ====================================================== -->
 
-  <!-- WALLET -->
-  <div id="coin" class="overlay">--</div>
-  <div id="energy" class="overlay">-- / --</div>
+  <img
+    id="profileImage"
+    alt="LINE Profile"
+  >
 
-  <!-- WEIGHT -->
-  <div id="currentWeight" class="overlay">-- kg</div>
-  <div id="targetWeight" class="overlay">-- kg</div>
+  <div
+    id="lineName"
+    class="home-live"
+  >
+    กำลังโหลด...
+  </div>
+
+  <div
+    id="level"
+    class="home-live"
+  >
+    Lv.1
+  </div>
+
+
+  <!-- =====================================================
+       EXP
+  ====================================================== -->
+
+  <div id="expTrack">
+    <div id="expFill"></div>
+  </div>
+
+  <div
+    id="expValue"
+    class="home-live"
+  >
+    0 / 500
+  </div>
+
+
+  <!-- =====================================================
+       WALLET
+       แสดงเฉพาะตัวเลข
+  ====================================================== -->
+
+  <div
+    id="coin"
+    class="home-live"
+  >
+    --
+  </div>
+
+  <div
+    id="energy"
+    class="home-live"
+  >
+    -- / --
+  </div>
+
+
+  <!-- =====================================================
+       WEIGHT
+       Template มี kg อยู่แล้ว
+       จึงแสดงเฉพาะ 58.0 / 55.0
+  ====================================================== -->
+
+  <div
+    id="currentWeight"
+    class="home-live"
+  >
+    --
+  </div>
+
+  <div
+    id="targetWeight"
+    class="home-live"
+  >
+    --
+  </div>
+
 
   <div id="weightProgressTrack">
     <div id="weightProgressFill"></div>
   </div>
 
-  <div id="weightProgressPct" class="overlay">0%</div>
-  <div id="lostWeight" class="overlay">-- kg</div>
-  <div id="remainingWeight" class="overlay">-- kg</div>
+  <div
+    id="weightProgressPct"
+    class="home-live"
+  >
+    0%
+  </div>
 
-  <!-- HEALTH -->
-  <div id="steps" class="overlay">0</div>
-  <div id="calories" class="overlay">0 kcal</div>
-  <div id="sleep" class="overlay">0 ชม. 0 นาที</div>
-  <div id="healthScore" class="overlay">-- / 100</div>
+  <div
+    id="lostWeight"
+    class="home-live"
+  >
+    --
+  </div>
 
-  <!-- CLICK AREAS -->
-  <button id="stepsHotspot" class="hotspot" type="button" aria-label="กรอกก้าว"></button>
-  <button id="sleepHotspot" class="hotspot" type="button" aria-label="กรอกการนอน"></button>
+  <div
+    id="remainingWeight"
+    class="home-live"
+  >
+    --
+  </div>
 
-  <button id="weightHotspot" class="hotspot" type="button" aria-label="Weight Check"></button>
-  <button id="progressHotspot" class="hotspot" type="button" aria-label="My Progress"></button>
 
-  <button id="homeHotspot" class="hotspot" type="button" aria-label="Home"></button>
-  <button id="missionHotspot" class="hotspot" type="button" aria-label="Mission"></button>
-  <button id="battleHotspot" class="hotspot" type="button" aria-label="Battle"></button>
+  <!-- =====================================================
+       HEALTH
+       Dynamic ใส่เฉพาะตัวเลข
+  ====================================================== -->
+
+  <div
+    id="steps"
+    class="home-live"
+  >
+    0
+  </div>
+
+  <div
+    id="calories"
+    class="home-live"
+  >
+    0
+  </div>
+
+  <div
+    id="sleepHours"
+    class="home-live"
+  >
+    0
+  </div>
+
+  <div
+    id="sleepMinutes"
+    class="home-live"
+  >
+    0
+  </div>
+
+  <div
+    id="healthScore"
+    class="home-live"
+  >
+    --
+  </div>
+
+
+  <!-- =====================================================
+       CLICK HOTSPOTS
+       โปร่งใส 100%
+  ====================================================== -->
+
+  <button
+    id="stepsHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="กรอกก้าววันนี้"
+  ></button>
+
+  <button
+    id="sleepHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="กรอกการนอน"
+  ></button>
+
+  <button
+    id="weightHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="Weight Check"
+  ></button>
+
+  <button
+    id="progressHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="My Progress"
+  ></button>
+
+  <button
+    id="homeHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="Home"
+  ></button>
+
+  <button
+    id="missionHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="Mission"
+  ></button>
+
+  <button
+    id="battleHotspot"
+    class="hotspot"
+    type="button"
+    aria-label="Battle"
+  ></button>
 
 </div>
 
 
-<!-- STEPS MODAL -->
-<div id="stepsModal" class="modal-bg">
+<!-- =========================================================
+     STEPS MODAL
+========================================================= -->
+
+<div
+  id="stepsModal"
+  class="modal-bg"
+>
+
   <div class="modal">
 
     <h3>👣 วันนี้ก้าวไปแล้ว</h3>
 
     <div class="field">
-      <label for="stepsInput">จำนวนก้าววันนี้</label>
-      <input id="stepsInput" type="number" min="0" step="1" inputmode="numeric">
+
+      <label for="stepsInput">
+        จำนวนก้าววันนี้
+      </label>
+
+      <input
+        id="stepsInput"
+        type="number"
+        min="0"
+        step="1"
+        inputmode="numeric"
+      >
+
     </div>
 
-    <div id="stepsStatus" class="modal-status warning">
+    <div
+      id="stepsStatus"
+      class="modal-status warning"
+    >
       เป้าหมาย MOVE MORE = 8,000 ก้าว
     </div>
 
-    <button id="stepsEvidence" class="evidence-btn" type="button">
+    <button
+      id="stepsEvidence"
+      class="evidence-btn"
+      type="button"
+    >
       📷 แนบหลักฐาน MOVE MORE เพื่อรับรางวัล
     </button>
 
     <div class="modal-actions">
-      <button class="cancel" type="button" onclick="closeModal('stepsModal')">ปิด</button>
-      <button id="saveStepsButton" class="save" type="button">บันทึกก้าว</button>
+
+      <button
+        class="cancel"
+        type="button"
+        data-close-modal="stepsModal"
+      >
+        ปิด
+      </button>
+
+      <button
+        id="saveStepsButton"
+        class="save"
+        type="button"
+      >
+        บันทึกก้าว
+      </button>
+
     </div>
 
   </div>
+
 </div>
 
 
-<!-- SLEEP MODAL -->
-<div id="sleepModal" class="modal-bg">
+<!-- =========================================================
+     SLEEP MODAL
+========================================================= -->
+
+<div
+  id="sleepModal"
+  class="modal-bg"
+>
+
   <div class="modal">
 
     <h3>😴 บันทึกการนอนหลับ</h3>
@@ -552,34 +323,78 @@
     <div class="grid2">
 
       <div class="field">
-        <label for="sleepStart">เวลานอน</label>
-        <input id="sleepStart" type="time" value="22:00">
+
+        <label for="sleepStart">
+          เวลานอน
+        </label>
+
+        <input
+          id="sleepStart"
+          type="time"
+          value="22:00"
+        >
+
       </div>
 
       <div class="field">
-        <label for="sleepWake">เวลาตื่น</label>
-        <input id="sleepWake" type="time" value="06:00">
+
+        <label for="sleepWake">
+          เวลาตื่น
+        </label>
+
+        <input
+          id="sleepWake"
+          type="time"
+          value="06:00"
+        >
+
       </div>
 
     </div>
 
-    <div id="sleepDuration">8 ชม. 0 นาที</div>
+    <div id="sleepDuration">
+      8 ชม. 0 นาที
+    </div>
 
-    <div id="sleepStatus" class="modal-status">
+    <div
+      id="sleepStatus"
+      class="modal-status"
+    >
       ระบบคำนวณระยะเวลานอนอัตโนมัติ
     </div>
 
-    <button id="sleepEvidence" class="evidence-btn" type="button">
+    <button
+      id="sleepEvidence"
+      class="evidence-btn"
+      type="button"
+    >
       📷 แนบหลักฐาน SLEEP WELL เพื่อรับรางวัล
     </button>
 
     <div class="modal-actions">
-      <button class="cancel" type="button" onclick="closeModal('sleepModal')">ปิด</button>
-      <button id="saveSleepButton" class="save" type="button">บันทึกการนอน</button>
+
+      <button
+        class="cancel"
+        type="button"
+        data-close-modal="sleepModal"
+      >
+        ปิด
+      </button>
+
+      <button
+        id="saveSleepButton"
+        class="save"
+        type="button"
+      >
+        บันทึกการนอน
+      </button>
+
     </div>
 
   </div>
+
 </div>
+
 
 <div id="toast"></div>
 
@@ -588,29 +403,46 @@
 "use strict";
 
 /* =========================================================
-   HOME TEMPLATE OVERLAY V5.3
-   READ: PLAYER API action=dashboard เพียงก้อนเดียว
+   ROCK YOUR BODY 2026
+   HOME V5.5
+   READ FLOW:
+   LIFF ID Token
+   -> PLAYER API
+   -> action=dashboard
+   -> JSON ก้อนเดียว
 ========================================================= */
 
 const $ =
   id =>
     document.getElementById(id);
 
+
 const state = {
+
   raw:null,
+
   data:null
+
 };
 
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function num(
   value,
   fallback=0
 ){
-  const n =
+
+  const parsed =
     Number(value);
 
-  return Number.isFinite(n)
-    ? n
+
+  return Number.isFinite(
+    parsed
+  )
+    ? parsed
     : fallback;
 }
 
@@ -618,15 +450,22 @@ function num(
 function pick(
   ...values
 ){
-  for(const value of values){
+
+  for(
+    const value
+    of values
+  ){
+
     if(
       value !== undefined &&
       value !== null &&
       value !== ""
     ){
+
       return value;
     }
   }
+
 
   return null;
 }
@@ -637,11 +476,15 @@ function clamp(
   min,
   max
 ){
+
   return Math.max(
     min,
     Math.min(
       max,
-      num(value,0)
+      num(
+        value,
+        0
+      )
     )
   );
 }
@@ -650,23 +493,37 @@ function clamp(
 function formatNumber(
   value
 ){
+
   return Math.round(
-    num(value,0)
-  ).toLocaleString(
+    num(
+      value,
+      0
+    )
+  )
+  .toLocaleString(
     "en-US"
   );
 }
 
 
-function formatWeight(
+/*
+  สำคัญ:
+  Template มีคำ kg อยู่แล้ว
+  จึงคืนค่าเฉพาะตัวเลข
+*/
+function formatWeightNumber(
   value
 ){
-  const n =
+
+  const parsed =
     Number(value);
 
-  return Number.isFinite(n)
-    ? `${n.toFixed(1)} kg`
-    : "-- kg";
+
+  return Number.isFinite(
+    parsed
+  )
+    ? parsed.toFixed(1)
+    : "--";
 }
 
 
@@ -674,31 +531,48 @@ function showToast(
   message,
   isError=false
 ){
-  const el =
+
+  const element =
     $("toast");
 
-  el.textContent =
+
+  if(
+    !element
+  ){
+    return;
+  }
+
+
+  element.textContent =
     message;
 
-  el.classList.toggle(
+
+  element.classList.toggle(
     "error",
-    Boolean(isError)
+    Boolean(
+      isError
+    )
   );
 
-  el.classList.add(
+
+  element.classList.add(
     "show"
   );
+
 
   clearTimeout(
     window.__homeToast
   );
 
+
   window.__homeToast =
     setTimeout(
       ()=>{
-        el.classList.remove(
+
+        element.classList.remove(
           "show"
         );
+
       },
       isError
         ? 5000
@@ -710,22 +584,34 @@ function showToast(
 function getApi(
   name
 ){
+
   if(
-    window.APP_CONFIG?.getApi
+    window.APP_CONFIG
+      ?.getApi
   ){
-    return window.APP_CONFIG.getApi(
-      name
-    );
+
+    return window.APP_CONFIG
+      .getApi(
+        name
+      );
   }
 
-  const url =
-    window.APP_CONFIG?.API?.[name];
 
-  if(!url){
+  const url =
+    window.APP_CONFIG
+      ?.API
+      ?.[name];
+
+
+  if(
+    !url
+  ){
+
     throw new Error(
       `ไม่พบ API.${name}`
     );
   }
+
 
   return url;
 }
@@ -741,6 +627,7 @@ async function initLiff(){
     typeof liff ===
     "undefined"
   ){
+
     throw new Error(
       "LINE LIFF SDK ไม่พร้อม"
     );
@@ -748,29 +635,40 @@ async function initLiff(){
 
 
   await liff.init({
+
     liffId:
-      window.APP_CONFIG?.LIFF_ID ||
+      window.APP_CONFIG
+        ?.LIFF_ID ||
       "2011201679-uNWz5yqF"
+
   });
 
 
   if(
     !liff.isLoggedIn()
   ){
+
     liff.login({
+
       redirectUri:
         window.location.href
+
     });
+
 
     return false;
   }
 
 
+  /*
+    getIDToken ต้องเป็น token สดจาก LIFF
+  */
   if(
     !liff.getIDToken()
   ){
+
     throw new Error(
-      "ไม่พบ LINE ID Token"
+      "ไม่พบ LINE ID Token กรุณาปิด LIFF แล้วเปิดใหม่"
     );
   }
 
@@ -787,31 +685,52 @@ async function playerApi(
   payload
 ){
 
+  const idToken =
+    liff.getIDToken();
+
+
+  if(
+    !idToken
+  ){
+
+    throw new Error(
+      "LINE ID Token หมดอายุหรือไม่พร้อม"
+    );
+  }
+
+
   const response =
     await fetch(
-      getApi("PLAYER"),
+      getApi(
+        "PLAYER"
+      ),
       {
-        method:"POST",
+
+        method:
+          "POST",
 
         headers:{
           "Content-Type":
             "application/json"
         },
 
-        cache:"no-store",
+        cache:
+          "no-store",
 
         body:
           JSON.stringify({
+
             ...payload,
 
-            idToken:
-              liff.getIDToken()
+            idToken
+
           })
+
       }
     );
 
 
-  const raw =
+  const text =
     await response.text();
 
 
@@ -821,8 +740,10 @@ async function playerApi(
   try{
 
     result =
-      raw
-        ? JSON.parse(raw)
+      text
+        ? JSON.parse(
+            text
+          )
         : {};
 
   }catch{
@@ -835,7 +756,8 @@ async function playerApi(
 
   if(
     !response.ok ||
-    result?.success === false
+    result?.success ===
+      false
   ){
 
     throw new Error(
@@ -855,26 +777,32 @@ async function playerApi(
 
 
 /*
-  จุดสำคัญ:
-  หน้า HOME ดึงข้อมูลด้วย action=dashboard เพียงครั้งเดียว
+  READ HOME:
+  API request เดียว
 */
 async function fetchHome(){
 
   return await Promise.race([
 
     playerApi({
-      action:"dashboard"
+
+      action:
+        "dashboard"
+
     }),
 
     new Promise(
       (_,reject) =>
+
         setTimeout(
           ()=>{
+
             reject(
               new Error(
                 "PLAYER API ใช้เวลานานเกิน 12 วินาที"
               )
             );
+
           },
           12000
         )
@@ -885,7 +813,7 @@ async function fetchHome(){
 
 
 /* =========================================================
-   NORMALIZE RESPONSE
+   NORMALIZE API RESPONSE
 ========================================================= */
 
 function normalizeHome(
@@ -897,19 +825,23 @@ function normalizeHome(
     raw?.user ??
     {};
 
+
   const wallet =
     raw?.wallet ??
     {};
 
+
   const weight =
     raw?.weight ??
     {};
+
 
   const today =
     raw?.today ??
     raw?.health ??
     raw?.activity ??
     {};
+
 
   const energyObject =
     raw?.energy &&
@@ -921,47 +853,74 @@ function normalizeHome(
 
   const startWeight =
     pick(
+
       weight.start,
+
       weight.startWeight,
+
       weight.start_weight,
+
       raw.startWeight
+
     );
 
 
   const currentWeight =
     pick(
+
       weight.current,
+
       weight.currentWeight,
+
       weight.current_weight,
+
       raw.currentWeight
+
     );
 
 
   const targetWeight =
     pick(
+
       weight.target,
+
       weight.targetWeight,
+
       weight.target_weight,
+
       raw.targetWeight
+
     );
 
 
-  const sw =
-    Number(startWeight);
+  const start =
+    Number(
+      startWeight
+    );
 
-  const cw =
-    Number(currentWeight);
 
-  const tw =
-    Number(targetWeight);
+  const current =
+    Number(
+      currentWeight
+    );
+
+
+  const target =
+    Number(
+      targetWeight
+    );
 
 
   let progress =
     num(
       pick(
+
         weight.progressPercent,
+
         weight.progress,
+
         raw.weightProgressPct
+
       ),
       0
     );
@@ -970,47 +929,74 @@ function normalizeHome(
   let lost =
     null;
 
+
   let remaining =
     null;
 
 
   if(
-    Number.isFinite(sw) &&
-    Number.isFinite(cw)
+    Number.isFinite(
+      start
+    ) &&
+    Number.isFinite(
+      current
+    )
   ){
+
     lost =
       Math.max(
         0,
-        sw - cw
+        start -
+        current
       );
   }
 
 
   if(
-    Number.isFinite(cw) &&
-    Number.isFinite(tw)
+    Number.isFinite(
+      current
+    ) &&
+    Number.isFinite(
+      target
+    )
   ){
+
     remaining =
       Math.max(
         0,
-        cw - tw
+        current -
+        target
       );
   }
 
 
   if(
-    Number.isFinite(sw) &&
-    Number.isFinite(cw) &&
-    Number.isFinite(tw) &&
-    sw !== tw
+    Number.isFinite(
+      start
+    ) &&
+    Number.isFinite(
+      current
+    ) &&
+    Number.isFinite(
+      target
+    ) &&
+    start !==
+      target
   ){
 
     progress =
       clamp(
         (
-          (sw - cw) /
-          (sw - tw)
-        ) * 100,
+          (
+            start -
+            current
+          ) /
+          (
+            start -
+            target
+          )
+        ) *
+        100,
         0,
         100
       );
@@ -1023,29 +1009,44 @@ function normalizeHome(
 
       displayName:
         pick(
+
           player.displayName,
+
           player.lineDisplayName,
+
           player.line_display_name,
+
           raw.lineDisplayName
+
         ) ||
         "ROCK HERO",
 
+
       pictureUrl:
         pick(
+
           player.pictureUrl,
+
           player.picture_url,
+
           raw.pictureUrl
+
         ) ||
         "",
+
 
       level:
         num(
           pick(
+
             player.level,
+
             raw.level
+
           ),
           1
         )
+
     },
 
 
@@ -1054,37 +1055,55 @@ function normalizeHome(
       rockCoin:
         num(
           pick(
+
             wallet.rockCoin,
+
             wallet.rock_coin,
+
             raw.rockCoin,
+
             raw.rock_coin
+
           ),
           0
         ),
+
 
       energy:
         num(
           pick(
+
             wallet.energy,
+
             energyObject.current,
+
             typeof raw.energy ===
               "number"
               ? raw.energy
               : null
+
           ),
           0
         ),
 
+
       maxEnergy:
         num(
           pick(
+
             wallet.maxEnergy,
+
             energyObject.max,
+
             raw.maxEnergy,
-            window.APP_CONFIG?.MAX_ENERGY
+
+            window.APP_CONFIG
+              ?.MAX_ENERGY
+
           ),
           200
         )
+
     },
 
 
@@ -1093,23 +1112,39 @@ function normalizeHome(
       current:
         num(
           pick(
+
             raw.exp,
+
             player.exp,
-            raw?.experience?.current
+
+            raw
+              ?.experience
+              ?.current
+
           ),
           0
         ),
 
+
       max:
         num(
           pick(
+
             raw.nextLevelExp,
+
             raw.expNext,
-            raw?.experience?.max,
-            window.APP_CONFIG?.EXP_PER_LEVEL
+
+            raw
+              ?.experience
+              ?.max,
+
+            window.APP_CONFIG
+              ?.EXP_PER_LEVEL
+
           ),
           500
         )
+
     },
 
 
@@ -1129,6 +1164,7 @@ function normalizeHome(
       lost,
 
       remaining
+
     },
 
 
@@ -1137,46 +1173,67 @@ function normalizeHome(
       steps:
         num(
           pick(
+
             today.steps,
+
             raw.steps
+
           ),
           0
         ),
+
 
       calories:
         num(
           pick(
+
             today.calories,
+
             today.caloriesBurned,
+
             today.calories_burned,
+
             raw.calories
+
           ),
           0
         ),
+
 
       sleepMinutes:
         num(
           pick(
+
             today.sleepMinutes,
+
             today.sleep_minutes,
+
             raw.sleepMinutes
+
           ),
           0
         ),
 
+
       healthScore:
         pick(
+
           today.healthScore,
+
           today.health_score,
+
           raw.healthScore
+
         )
+
     }
+
   };
 }
 
 
 /* =========================================================
-   RENDER
+   RENDER HOME
 ========================================================= */
 
 function renderHome(
@@ -1192,55 +1249,60 @@ function renderHome(
   state.raw =
     raw;
 
+
   state.data =
     data;
 
 
-  $("coin")
-    .textContent =
-      formatNumber(
-        data.wallet.rockCoin
-      );
+  /* ---------- WALLET ---------- */
+
+  $("coin").textContent =
+    formatNumber(
+      data.wallet.rockCoin
+    );
 
 
-  $("energy")
-    .textContent =
-      `${formatNumber(
-        data.wallet.energy
-      )} / ${formatNumber(
-        data.wallet.maxEnergy
-      )}`;
+  $("energy").textContent =
+    `${formatNumber(
+      data.wallet.energy
+    )} / ${formatNumber(
+      data.wallet.maxEnergy
+    )}`;
 
 
-  $("lineName")
-    .textContent =
-      data.player.displayName;
+  /* ---------- LINE ---------- */
+
+  $("lineName").textContent =
+    data.player.displayName;
 
 
-  $("level")
-    .textContent =
-      `Lv.${Math.max(
-        1,
-        Math.round(
-          data.player.level
-        )
-      )}`;
+  $("level").textContent =
+    `Lv.${Math.max(
+      1,
+      Math.round(
+        data.player.level
+      )
+    )}`;
 
 
   if(
     data.player.pictureUrl
   ){
 
-    const img =
+    const image =
       $("profileImage");
 
-    img.src =
+
+    image.src =
       data.player.pictureUrl;
 
-    img.style.display =
+
+    image.style.display =
       "block";
   }
 
+
+  /* ---------- EXP ---------- */
 
   const expMax =
     Math.max(
@@ -1249,20 +1311,22 @@ function renderHome(
     );
 
 
-  const expPct =
+  const expPercent =
     clamp(
       (
         data.exp.current /
         expMax
-      ) * 100,
+      ) *
+      100,
       0,
       100
     );
 
 
   $("expFill")
-    .style.width =
-      `${13 * expPct / 100}%`;
+    .style
+    .width =
+      `${expPercent}%`;
 
 
   $("expValue")
@@ -1274,16 +1338,22 @@ function renderHome(
       )}`;
 
 
+  /* ---------- WEIGHT ---------- */
+
+  /*
+    ไม่มี kg ใน dynamic
+    เพราะ kg อยู่บน template แล้ว
+  */
   $("currentWeight")
     .textContent =
-      formatWeight(
+      formatWeightNumber(
         data.weight.current
       );
 
 
   $("targetWeight")
     .textContent =
-      formatWeight(
+      formatWeightNumber(
         data.weight.target
       );
 
@@ -1297,7 +1367,8 @@ function renderHome(
 
 
   $("weightProgressFill")
-    .style.width =
+    .style
+    .width =
       `${progress}%`;
 
 
@@ -1308,38 +1379,51 @@ function renderHome(
       )}%`;
 
 
+  /*
+    ไม่มี kg เพื่อไม่ซ้อน Template
+  */
   $("lostWeight")
     .textContent =
       data.weight.lost ===
         null
-        ? "-- kg"
-        : `${Number(
+        ? "--"
+        : Number(
             data.weight.lost
-          ).toFixed(1)} kg`;
+          )
+          .toFixed(
+            1
+          );
 
 
   $("remainingWeight")
     .textContent =
       data.weight.remaining ===
         null
-        ? "-- kg"
-        : `${Number(
+        ? "--"
+        : Number(
             data.weight.remaining
-          ).toFixed(1)} kg`;
+          )
+          .toFixed(
+            1
+          );
 
 
-  $("steps")
-    .textContent =
-      formatNumber(
-        data.today.steps
-      );
+  /* ---------- HEALTH ---------- */
+
+  $("steps").textContent =
+    formatNumber(
+      data.today.steps
+    );
 
 
-  $("calories")
-    .textContent =
-      `${formatNumber(
-        data.today.calories
-      )} kcal`;
+  /*
+    ไม่มี kcal
+    เพราะ Template มี kcal แล้ว
+  */
+  $("calories").textContent =
+    formatNumber(
+      data.today.calories
+    );
 
 
   const sleepMinutes =
@@ -1353,37 +1437,56 @@ function renderHome(
 
   const sleepHours =
     Math.floor(
-      sleepMinutes / 60
+      sleepMinutes /
+      60
     );
 
 
   const sleepRemain =
-    sleepMinutes % 60;
+    sleepMinutes %
+    60;
 
 
-  $("sleep")
-    .textContent =
-      `${sleepHours} ชม. ${sleepRemain} นาที`;
+  /*
+    แยกตัวเลขชั่วโมงและนาที
+    ไม่ซ้อนคำ ชม. / นาที บน Template
+  */
+  $("sleepHours").textContent =
+    formatNumber(
+      sleepHours
+    );
 
 
-  $("healthScore")
-    .textContent =
-      data.today.healthScore ===
-        null ||
-      data.today.healthScore ===
-        undefined
-        ? "-- / 100"
-        : `${Math.round(
+  $("sleepMinutes").textContent =
+    formatNumber(
+      sleepRemain
+    );
+
+
+  /*
+    Template มี / 100 แล้ว
+    จึงใส่เฉพาะคะแนน
+  */
+  $("healthScore").textContent =
+    data.today.healthScore ===
+      null ||
+    data.today.healthScore ===
+      undefined
+      ? "--"
+      : String(
+          Math.round(
             num(
               data.today.healthScore,
               0
             )
-          )} / 100`;
+          )
+        );
 }
 
 
 /* =========================================================
-   WRITE DAILY HEALTH
+   SAVE DAILY HEALTH
+   ใช้ PLAYER API ตัวเดียวกับ HOME
 ========================================================= */
 
 async function saveDailyHealth(
@@ -1391,10 +1494,12 @@ async function saveDailyHealth(
 ){
 
   return await playerApi({
+
     action:
       "saveDailyHealth",
 
     ...payload
+
   });
 }
 
@@ -1404,6 +1509,7 @@ async function refreshHome(){
   const raw =
     await fetchHome();
 
+
   renderHome(
     raw
   );
@@ -1411,14 +1517,15 @@ async function refreshHome(){
 
 
 /* =========================================================
-   MODALS
+   MODAL HELPERS
 ========================================================= */
 
 function openModal(
   id
 ){
+
   $(id)
-    .classList
+    ?.classList
     .add(
       "show"
     );
@@ -1428,13 +1535,18 @@ function openModal(
 function closeModal(
   id
 ){
+
   $(id)
-    .classList
+    ?.classList
     .remove(
       "show"
     );
 }
 
+
+/* =========================================================
+   STEPS
+========================================================= */
 
 function updateStepsStatus(){
 
@@ -1443,7 +1555,8 @@ function updateStepsStatus(){
       0,
       Math.round(
         num(
-          $("stepsInput").value,
+          $("stepsInput")
+            ?.value,
           0
         )
       )
@@ -1452,6 +1565,7 @@ function updateStepsStatus(){
 
   const status =
     $("stepsStatus");
+
 
   const evidence =
     $("stepsEvidence");
@@ -1465,13 +1579,14 @@ function updateStepsStatus(){
     status.className =
       "modal-status success";
 
+
     status.innerHTML =
       `✅ MOVE MORE สำเร็จแล้ว<br>
        ${steps.toLocaleString()} / 8,000 ก้าว<br>
        <small>
-         หากต้องการ ROCK COIN / ENERGY / EXP
-         ต้องแนบหลักฐานและส่งให้ Admin ตรวจ
+       หากต้องการรางวัล ต้องแนบหลักฐานและส่งให้ Admin ตรวจ
        </small>`;
+
 
     evidence.style.display =
       "block";
@@ -1481,9 +1596,11 @@ function updateStepsStatus(){
     status.className =
       "modal-status warning";
 
+
     status.innerHTML =
       `วันนี้เดินแล้ว ${steps.toLocaleString()} ก้าว<br>
        เหลืออีก ${(8000 - steps).toLocaleString()} ก้าว`;
+
 
     evidence.style.display =
       "none";
@@ -1491,18 +1608,28 @@ function updateStepsStatus(){
 }
 
 
+/* =========================================================
+   SLEEP
+========================================================= */
+
 function clockToMinutes(
   value
 ){
 
   const match =
-    String(value || "")
-      .match(
-        /^(\d{1,2}):(\d{2})$/
-      );
+    String(
+      value ||
+      ""
+    )
+    .match(
+      /^(\d{1,2}):(\d{2})$/
+    );
 
 
-  if(!match){
+  if(
+    !match
+  ){
+
     return null;
   }
 
@@ -1511,6 +1638,7 @@ function clockToMinutes(
     Number(
       match[1]
     );
+
 
   const minute =
     Number(
@@ -1524,14 +1652,16 @@ function clockToMinutes(
     minute < 0 ||
     minute > 59
   ){
+
     return null;
   }
 
 
   return (
-    hour * 60 +
-    minute
-  );
+    hour *
+    60
+  ) +
+  minute;
 }
 
 
@@ -1539,13 +1669,15 @@ function getSleepMinutes(){
 
   const start =
     clockToMinutes(
-      $("sleepStart").value
+      $("sleepStart")
+        ?.value
     );
 
 
   const wake =
     clockToMinutes(
-      $("sleepWake").value
+      $("sleepWake")
+        ?.value
     );
 
 
@@ -1553,26 +1685,36 @@ function getSleepMinutes(){
     start === null ||
     wake === null
   ){
+
     return 0;
   }
 
 
   let total =
-    wake - start;
+    wake -
+    start;
 
 
+  /*
+    เช่น 22:00 -> 06:30
+    ถือว่าเวลาตื่นเป็นวันถัดไป
+  */
   if(
-    total <= 0
+    total <=
+    0
   ){
+
     total +=
-      24 * 60;
+      24 *
+      60;
   }
 
 
   return Math.max(
     0,
     Math.min(
-      24 * 60,
+      24 *
+      60,
       total
     )
   );
@@ -1585,23 +1727,26 @@ function updateSleepStatus(){
     getSleepMinutes();
 
 
-  const h =
+  const hours =
     Math.floor(
-      total / 60
+      total /
+      60
     );
 
 
-  const m =
-    total % 60;
+  const minutes =
+    total %
+    60;
 
 
   $("sleepDuration")
     .textContent =
-      `${h} ชม. ${m} นาที`;
+      `${hours} ชม. ${minutes} นาที`;
 
 
   const status =
     $("sleepStatus");
+
 
   const evidence =
     $("sleepEvidence");
@@ -1615,13 +1760,14 @@ function updateSleepStatus(){
     status.className =
       "modal-status success";
 
+
     status.innerHTML =
       `✅ SLEEP WELL สำเร็จแล้ว<br>
-       นอนทั้งหมด ${h} ชม. ${m} นาที<br>
+       นอนทั้งหมด ${hours} ชม. ${minutes} นาที<br>
        <small>
-         หากต้องการ ROCK COIN / ENERGY / EXP
-         ต้องแนบหลักฐานและส่งให้ Admin ตรวจ
+       หากต้องการรางวัล ต้องแนบหลักฐานและส่งให้ Admin ตรวจ
        </small>`;
+
 
     evidence.style.display =
       "block";
@@ -1631,12 +1777,15 @@ function updateSleepStatus(){
     status.className =
       "modal-status warning";
 
+
     status.innerHTML =
       `ยังไม่ถึงเป้าหมาย 7 ชั่วโมง<br>
        เหลืออีก ${Math.max(
          0,
-         420 - total
+         420 -
+         total
        )} นาที`;
+
 
     evidence.style.display =
       "none";
@@ -1645,19 +1794,40 @@ function updateSleepStatus(){
 
 
 /* =========================================================
+   NAVIGATION
+========================================================= */
+
+function goPage(
+  name,
+  fallback
+){
+
+  window.location.href =
+    window.APP_CONFIG
+      ?.PAGE
+      ?.[name] ||
+    fallback;
+}
+
+
+/* =========================================================
    EVENTS
 ========================================================= */
 
 $("stepsHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
       $("stepsInput").value =
-        state.data?.today?.steps ??
+        state.data
+          ?.today
+          ?.steps ??
         0;
 
+
       updateStepsStatus();
+
 
       openModal(
         "stepsModal"
@@ -1667,11 +1837,12 @@ $("stepsHotspot")
 
 
 $("sleepHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
       updateSleepStatus();
+
 
       openModal(
         "sleepModal"
@@ -1681,49 +1852,75 @@ $("sleepHotspot")
 
 
 $("stepsInput")
-  .addEventListener(
+  ?.addEventListener(
     "input",
     updateStepsStatus
   );
 
 
 $("sleepStart")
-  .addEventListener(
+  ?.addEventListener(
     "input",
     updateSleepStatus
   );
 
 
 $("sleepWake")
-  .addEventListener(
+  ?.addEventListener(
     "input",
     updateSleepStatus
   );
 
 
+document
+  .querySelectorAll(
+    "[data-close-modal]"
+  )
+  .forEach(
+    button =>{
+
+      button
+        .addEventListener(
+          "click",
+          ()=>{
+
+            closeModal(
+              button.dataset
+                .closeModal
+            );
+          }
+        );
+    }
+  );
+
+
+/* ---------- SAVE STEPS ---------- */
+
 $("saveStepsButton")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     async ()=>{
+
+      const button =
+        $("saveStepsButton");
+
 
       const steps =
         Math.max(
           0,
           Math.round(
             num(
-              $("stepsInput").value,
+              $("stepsInput")
+                ?.value,
               0
             )
           )
         );
 
 
-      const button =
-        $("saveStepsButton");
-
-
       button.disabled =
         true;
+
 
       button.textContent =
         "กำลังบันทึก...";
@@ -1743,7 +1940,8 @@ $("saveStepsButton")
 
 
         showToast(
-          steps >= 8000
+          steps >=
+          8000
             ? "✅ MOVE MORE สำเร็จ • แนบหลักฐานเพื่อรับรางวัล"
             : `บันทึก ${steps.toLocaleString()} ก้าวแล้ว`
         );
@@ -1761,6 +1959,7 @@ $("saveStepsButton")
         button.disabled =
           false;
 
+
         button.textContent =
           "บันทึกก้าว";
       }
@@ -1768,29 +1967,36 @@ $("saveStepsButton")
   );
 
 
+/* ---------- SAVE SLEEP ---------- */
+
 $("saveSleepButton")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     async ()=>{
+
+      const button =
+        $("saveSleepButton");
+
 
       const sleepMinutes =
         getSleepMinutes();
 
 
       const sleepStart =
-        $("sleepStart").value;
+        $("sleepStart")
+          ?.value ||
+        "";
 
 
       const sleepWake =
-        $("sleepWake").value;
-
-
-      const button =
-        $("saveSleepButton");
+        $("sleepWake")
+          ?.value ||
+        "";
 
 
       button.disabled =
         true;
+
 
       button.textContent =
         "กำลังบันทึก...";
@@ -1799,9 +2005,13 @@ $("saveSleepButton")
       try{
 
         await saveDailyHealth({
+
           sleepMinutes,
+
           sleepStart,
+
           sleepWake
+
         });
 
 
@@ -1811,20 +2021,23 @@ $("saveSleepButton")
         updateSleepStatus();
 
 
-        const h =
+        const hours =
           Math.floor(
-            sleepMinutes / 60
+            sleepMinutes /
+            60
           );
 
 
-        const m =
-          sleepMinutes % 60;
+        const minutes =
+          sleepMinutes %
+          60;
 
 
         showToast(
-          sleepMinutes >= 420
-            ? `✅ SLEEP WELL สำเร็จ • ${h} ชม. ${m} นาที • แนบหลักฐานเพื่อรับรางวัล`
-            : `บันทึกการนอน ${h} ชม. ${m} นาทีแล้ว`
+          sleepMinutes >=
+          420
+            ? `✅ SLEEP WELL สำเร็จ • ${hours} ชม. ${minutes} นาที • แนบหลักฐานเพื่อรับรางวัล`
+            : `บันทึกการนอน ${hours} ชม. ${minutes} นาทีแล้ว`
         );
 
       }catch(error){
@@ -1840,6 +2053,7 @@ $("saveSleepButton")
         button.disabled =
           false;
 
+
         button.textContent =
           "บันทึกการนอน";
       }
@@ -1847,14 +2061,18 @@ $("saveSleepButton")
   );
 
 
+/* ---------- EVIDENCE ---------- */
+
 $("stepsEvidence")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
       window.location.href =
         (
-          window.APP_CONFIG?.PAGE?.MISSION ||
+          window.APP_CONFIG
+            ?.PAGE
+            ?.MISSION ||
           "./mission.html"
         ) +
         "?category=daily&mission=daily_move_more&evidence=1&source=home";
@@ -1863,13 +2081,15 @@ $("stepsEvidence")
 
 
 $("sleepEvidence")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
       window.location.href =
         (
-          window.APP_CONFIG?.PAGE?.MISSION ||
+          window.APP_CONFIG
+            ?.PAGE
+            ?.MISSION ||
           "./mission.html"
         ) +
         "?category=daily&mission=daily_sleep&evidence=1&source=home";
@@ -1877,59 +2097,74 @@ $("sleepEvidence")
   );
 
 
+/* ---------- PAGE BUTTONS ---------- */
+
 $("weightHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
-      window.location.href =
-        window.APP_CONFIG?.PAGE?.WEIGHT ||
-        "./weight-check.html";
+      goPage(
+        "WEIGHT",
+        "./weight-check.html"
+      );
     }
   );
 
 
 $("progressHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
-      window.location.href =
-        window.APP_CONFIG?.PAGE?.PROGRESS ||
-        "./progress.html";
+      goPage(
+        "PROGRESS",
+        "./progress.html"
+      );
     }
   );
 
 
 $("homeHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
-      refreshHome();
+
+      refreshHome()
+        .catch(
+          error =>
+            showToast(
+              error?.message ||
+              "โหลดข้อมูลไม่สำเร็จ",
+              true
+            )
+        );
     }
   );
 
 
 $("missionHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
-      window.location.href =
-        window.APP_CONFIG?.PAGE?.MISSION ||
-        "./mission.html";
+      goPage(
+        "MISSION",
+        "./mission.html"
+      );
     }
   );
 
 
 $("battleHotspot")
-  .addEventListener(
+  ?.addEventListener(
     "click",
     ()=>{
 
-      window.location.href =
-        window.APP_CONFIG?.PAGE?.BATTLE ||
-        "./battle.html";
+      goPage(
+        "BATTLE",
+        "./battle.html"
+      );
     }
   );
 
@@ -1947,30 +2182,43 @@ $("battleHotspot")
 
 
     if(
-      ready === false
+      ready ===
+      false
     ){
+
       return;
     }
 
 
+    /*
+      ตอนเปิด HOME:
+      ยิง dashboard API เพียงครั้งเดียว
+    */
     await refreshHome();
 
 
+    /*
+      refresh ตาม APP_CONFIG
+      แต่ 1 รอบ = dashboard request เดียว
+    */
     setInterval(
       ()=>{
 
         refreshHome()
           .catch(
-            error =>
+            error =>{
+
               console.warn(
                 "HOME REFRESH:",
                 error
-              )
+              );
+            }
           );
 
       },
       Number(
-        window.APP_CONFIG?.REFRESH_MS ||
+        window.APP_CONFIG
+          ?.REFRESH_MS ||
         30000
       )
     );
