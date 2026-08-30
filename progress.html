@@ -251,7 +251,7 @@
     }
   
     /* =========================================================
-       PROGRESS V3.2 — EXP / WEIGHT STATUS / INBODY FILTER
+       PROGRESS V3.3 SAVE-FIX — EXP / WEIGHT STATUS / INBODY FILTER
     ========================================================= */
 
     .status-grid{
@@ -445,7 +445,7 @@
 
 
     /* =========================================================
-       PROGRESS V3.2 — INBODY MANUAL ENTRY
+       PROGRESS V3.3 SAVE-FIX — INBODY MANUAL ENTRY
     ========================================================= */
 
     .inbody-entry-box{
@@ -1313,9 +1313,81 @@
     }
 
 
+    function tokenExpiredMessage(
+      result,
+      status
+    ){
+
+      const message =
+        String(
+          result?.error ||
+          result?.message ||
+          ""
+        )
+        .toLowerCase();
+
+
+      return (
+        status === 401 ||
+        message.includes(
+          "expired"
+        ) ||
+        message.includes(
+          "idtoken"
+        ) ||
+        message.includes(
+          "authentication failed"
+        )
+      );
+    }
+
+
+    async function reloginLine(){
+
+      try{
+
+        if(
+          liff.isLoggedIn()
+        ){
+          liff.logout();
+        }
+
+      }catch(error){
+
+        console.warn(
+          "LIFF logout:",
+          error
+        );
+      }
+
+
+      liff.login({
+        redirectUri:
+          window.location.href
+      });
+
+
+      return new Promise(
+        ()=>{}
+      );
+    }
+
+
     async function getToken(){
 
-      if(!liff.id){
+      if(
+        typeof liff ===
+        "undefined"
+      ){
+        throw new Error(
+          "LINE LIFF SDK ไม่พร้อม"
+        );
+      }
+
+
+      if(
+        !liff.id
+      ){
 
         await liff.init({
           liffId:
@@ -1323,23 +1395,34 @@
         });
       }
 
+
       if(
         !liff.isLoggedIn()
       ){
-        liff.login();
-        throw new Error(
-          "กำลังเข้าสู่ระบบ LINE"
+
+        liff.login({
+          redirectUri:
+            window.location.href
+        });
+
+
+        return new Promise(
+          ()=>{}
         );
       }
+
 
       const idToken =
         liff.getIDToken();
 
-      if(!idToken){
-        throw new Error(
-          "ไม่พบ LINE ID Token"
-        );
+
+      if(
+        !idToken
+      ){
+
+        return await reloginLine();
       }
+
 
       return idToken;
     }
@@ -2116,21 +2199,6 @@
         await getToken();
 
 
-      const form =
-        new FormData();
-
-
-      form.append(
-        "action",
-        "saveResult"
-      );
-
-      form.append(
-        "idToken",
-        idToken
-      );
-
-
       const measuredInput =
         $("progressMeasuredAt")
           ?.value ||
@@ -2147,75 +2215,146 @@
               .toISOString();
 
 
-      form.append(
-        "measuredAt",
-        measuredAt
-      );
-
-
-      for(
-        const [
-          key,
-          value
-        ]
-        of Object.entries(
-          values
-        )
-      ){
-
-        if(
-          value !==
-          null
-        ){
-
-          form.append(
-            key,
-            String(value)
-          );
-        }
-      }
-
-
-      form.append(
-        "note",
+      const note =
         String(
           $("progressInbodyNote")
             ?.value ||
           "Saved from Progress"
         )
-      );
+        .trim();
 
 
+      let response;
+
+
+      /*
+        ไม่มีรูป -> ใช้ JSON
+        ลดปัญหา Multipart/FormData บน browser บางรุ่น
+      */
       if(
-        image1
+        !hasImage
       ){
 
+        response =
+          await fetch(
+            inbodyApiUrl(),
+            {
+              method:"POST",
+
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+
+              cache:"no-store",
+
+              body:
+                JSON.stringify({
+                  action:
+                    "saveResult",
+
+                  idToken,
+
+                  measuredAt,
+
+                  ...values,
+
+                  note
+                })
+            }
+          );
+
+      }else{
+
+        /*
+          มีรูป -> Multipart
+          ให้ browser ตั้ง boundary เอง
+        */
+        const form =
+          new FormData();
+
+
         form.append(
-          "image1",
-          image1
+          "action",
+          "saveResult"
         );
-      }
-
-
-      if(
-        image2
-      ){
 
         form.append(
-          "image2",
-          image2
+          "idToken",
+          idToken
         );
-      }
+
+        form.append(
+          "measuredAt",
+          measuredAt
+        );
 
 
-      const response =
-        await fetch(
-          inbodyApiUrl(),
-          {
-            method:"POST",
-            body:form
+        for(
+          const [
+            key,
+            value
+          ]
+          of Object.entries(
+            values
+          )
+        ){
+
+          if(
+            value !==
+            null
+          ){
+
+            form.append(
+              key,
+              String(
+                value
+              )
+            );
           }
+        }
+
+
+        form.append(
+          "note",
+          note
         );
+
+
+        if(
+          image1
+        ){
+
+          form.append(
+            "image1",
+            image1,
+            image1.name
+          );
+        }
+
+
+        if(
+          image2
+        ){
+
+          form.append(
+            "image2",
+            image2,
+            image2.name
+          );
+        }
+
+
+        response =
+          await fetch(
+            inbodyApiUrl(),
+            {
+              method:"POST",
+              cache:"no-store",
+              body:form
+            }
+          );
+      }
 
 
       const raw =
@@ -2229,26 +2368,45 @@
 
         result =
           raw
-            ? JSON.parse(raw)
+            ? JSON.parse(
+                raw
+              )
             : {};
 
       }catch{
 
         throw new Error(
-          `INBODY API JSON ไม่ถูกต้อง HTTP ${response.status}`
+          `INBODY API ตอบกลับไม่ใช่ JSON (HTTP ${response.status})`
         );
       }
 
 
       if(
-        !response.ok ||
-        result?.success === false
+        tokenExpiredMessage(
+          result,
+          response.status
+        )
       ){
 
-        throw new Error(
+        return await reloginLine();
+      }
+
+
+      if(
+        !response.ok ||
+        result?.success ===
+          false
+      ){
+
+        const detail =
           result?.error ||
           result?.message ||
-          `HTTP ${response.status}`
+          raw ||
+          `HTTP ${response.status}`;
+
+
+        throw new Error(
+          `บันทึก InBody ไม่สำเร็จ: ${detail}`
         );
       }
 
@@ -2548,9 +2706,14 @@
 
           }catch(error){
 
+            console.error(
+              "SAVE INBODY ERROR:",
+              error
+            );
+
             showToast(
               error?.message ||
-              "อัปโหลดรูป InBody ไม่สำเร็จ"
+              "บันทึก InBody ไม่สำเร็จ"
             );
 
           }finally{
