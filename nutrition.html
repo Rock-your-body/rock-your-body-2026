@@ -674,6 +674,84 @@
       }
     }
 
+
+    /* =========================================================
+       HYDRATE CLAIM V3.7
+    ========================================================= */
+
+    .hydrate-claim{
+      display:none;
+      margin-top:14px;
+      padding:15px;
+      border:1px solid #b9d8f3;
+      border-radius:16px;
+      background:#f2f9ff;
+    }
+
+    .hydrate-claim.show{
+      display:block;
+    }
+
+    .hydrate-claim h3{
+      margin:0 0 6px;
+      color:#0b5fa8;
+      font-size:17px;
+    }
+
+    .hydrate-claim p{
+      margin:5px 0;
+      color:#456c8d;
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .hydrate-claim .reward-wait{
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:11px;
+      background:#fff7e8;
+      color:#825c00;
+      font-size:12px;
+      font-weight:900;
+      line-height:1.55;
+    }
+
+    .hydrate-claim .evidence-field{
+      margin-top:12px;
+    }
+
+    .hydrate-claim .evidence-field label{
+      display:block;
+      margin-bottom:6px;
+      color:#244d72;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .hydrate-claim .evidence-field input{
+      width:100%;
+      padding:9px;
+      border:1px solid #c5d9ec;
+      border-radius:11px;
+      background:#fff;
+    }
+
+    .hydrate-claim .claim-result{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:11px;
+      background:#eef4ff;
+      color:#173f89;
+      font-size:12px;
+      font-weight:900;
+      line-height:1.55;
+    }
+
+    .hydrate-claim .claim-result.show{
+      display:block;
+    }
+
 </style>
 </head>
 
@@ -978,6 +1056,53 @@
           placeholder="เช่น 250"
         >
       </div>
+    </section>
+
+
+    <section
+      id="hydrateClaim"
+      class="card hydrate-claim"
+    >
+      <h3>
+        ✅ HYDRATE สำเร็จด้านกิจกรรมแล้ว
+      </h3>
+
+      <p id="hydrateClaimText">
+        ดื่มน้ำถึงเป้าหมายของวันนี้แล้ว
+      </p>
+
+      <div class="reward-wait">
+        ยังไม่ได้รับรางวัล
+        <br>
+        ต้องแนบรูปภาพหลักฐานและส่งให้ Admin อนุมัติก่อน
+      </div>
+
+      <div class="evidence-field">
+        <label for="hydrateEvidence">
+          📷 รูปหลักฐานการดื่มน้ำ
+        </label>
+
+        <input
+          id="hydrateEvidence"
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/*"
+        >
+      </div>
+
+      <button
+        id="submitHydrateButton"
+        class="btn primary"
+        type="button"
+        onclick="submitHydrateEvidence()"
+        style="width:100%;margin-top:12px"
+      >
+        📤 ส่งหลักฐาน HYDRATE ให้ Admin
+      </button>
+
+      <div
+        id="hydrateClaimResult"
+        class="claim-result"
+      ></div>
     </section>
 
 
@@ -1920,7 +2045,13 @@
       mealGoals:{},
       mealConsumed:{},
       goalSource:"none",
-      goalPlan:{}
+      goalPlan:{},
+
+      hydrate:{
+        totalMl:0,
+        goalMl:0,
+        goalReached:false
+      }
     };
 
 
@@ -2255,7 +2386,45 @@
 
           goalPlan:
             result?.goalPlan ||
-            {}
+            {},
+
+          hydrate:{
+            totalMl:
+              Number(
+                result
+                  ?.water
+                  ?.totalMl ||
+                0
+              ),
+
+            goalMl:
+              Number(
+                result
+                  ?.goals
+                  ?.waterMl ||
+                0
+              ),
+
+            goalReached:
+              Number(
+                result
+                  ?.goals
+                  ?.waterMl ||
+                0
+              ) > 0 &&
+              Number(
+                result
+                  ?.water
+                  ?.totalMl ||
+                0
+              ) >=
+              Number(
+                result
+                  ?.goals
+                  ?.waterMl ||
+                0
+              )
+          }
         };
 
         setMetric(
@@ -2315,6 +2484,11 @@
               water,
               waterGoal
             )}%`;
+
+        renderHydrateClaim(
+          water,
+          waterGoal
+        );
 
         $("todayLabel")
           .textContent =
@@ -2380,6 +2554,348 @@
     }
 
 
+
+    function renderHydrateClaim(
+      totalMl,
+      goalMl
+    ){
+
+      const panel =
+        $("hydrateClaim");
+
+
+      if(!panel){
+        return;
+      }
+
+
+      const total =
+        Number(
+          totalMl ||
+          0
+        );
+
+      const goal =
+        Number(
+          goalMl ||
+          0
+        );
+
+
+      const reached =
+        goal > 0 &&
+        total >= goal;
+
+
+      nutritionState.hydrate = {
+        totalMl:total,
+        goalMl:goal,
+        goalReached:reached
+      };
+
+
+      if(!reached){
+
+        panel.classList.remove(
+          "show"
+        );
+
+        return;
+      }
+
+
+      panel.classList.add(
+        "show"
+      );
+
+
+      $("hydrateClaimText").textContent =
+        `ดื่มน้ำวันนี้ ${fmt(total)} ml / เป้าหมาย ${fmt(goal)} ml • HYDRATE สำเร็จแล้ว แต่ยังไม่ได้รับรางวัล`;
+    }
+
+
+    async function submitHydrateEvidence(){
+
+      const hydrate =
+        nutritionState
+          ?.hydrate ||
+        {};
+
+
+      if(
+        !hydrate
+          ?.goalReached
+      ){
+
+        showStatus(
+          "HYDRATE ยังไม่สำเร็จ กรุณาดื่มน้ำให้ถึงเป้าหมายก่อน",
+          5000
+        );
+
+        return;
+      }
+
+
+      const input =
+        $("hydrateEvidence");
+
+
+      const file =
+        input
+          ?.files
+          ?.[0] ||
+        null;
+
+
+      if(
+        !(file instanceof File) ||
+        file.size <= 0
+      ){
+
+        showStatus(
+          "กรุณาแนบรูปภาพหลักฐาน HYDRATE",
+          5000
+        );
+
+        return;
+      }
+
+
+      if(
+        !String(
+          file.type ||
+          ""
+        )
+        .toLowerCase()
+        .startsWith(
+          "image/"
+        )
+      ){
+
+        showStatus(
+          "หลักฐาน HYDRATE ต้องเป็นรูปภาพ",
+          5000
+        );
+
+        return;
+      }
+
+
+      if(
+        file.size >
+        15 *
+        1024 *
+        1024
+      ){
+
+        showStatus(
+          "รูปหลักฐานมีขนาดเกิน 15 MB",
+          5000
+        );
+
+        return;
+      }
+
+
+      const button =
+        $("submitHydrateButton");
+
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังส่งให้ Admin...";
+
+
+      try{
+
+        const idToken =
+          await getFreshIdToken();
+
+
+        const form =
+          new FormData();
+
+
+        form.append(
+          "action",
+          "submitEvidence"
+        );
+
+        form.append(
+          "idToken",
+          idToken
+        );
+
+        form.append(
+          "missionId",
+          "daily_hydrate"
+        );
+
+        form.append(
+          "category",
+          "daily"
+        );
+
+        /*
+          ส่งยอดน้ำรวมวันนี้ ไม่ใช่เฉพาะแก้วล่าสุด
+        */
+        form.append(
+          "waterMl",
+          String(
+            Math.round(
+              Number(
+                hydrate
+                  ?.totalMl ||
+                0
+              )
+            )
+          )
+        );
+
+        form.append(
+          "note",
+          `HYDRATE สำเร็จ ${Math.round(Number(hydrate?.totalMl || 0))} ml / เป้าหมาย ${Math.round(Number(hydrate?.goalMl || 0))} ml`
+        );
+
+        form.append(
+          "file",
+          file,
+          file.name
+        );
+
+
+        const response =
+          await fetch(
+            missionApi(),
+            {
+              method:"POST",
+              cache:"no-store",
+              body:form
+            }
+          );
+
+
+        const raw =
+          await response.text();
+
+
+        let result = {};
+
+
+        try{
+
+          result =
+            raw
+              ? JSON.parse(
+                  raw
+                )
+              : {};
+
+        }catch{
+
+          throw new Error(
+            `MISSION API ตอบกลับไม่ใช่ JSON HTTP ${response.status}`
+          );
+        }
+
+
+        const message =
+          String(
+            result?.error ||
+            result?.message ||
+            ""
+          );
+
+
+        if(
+          response.status === 401 ||
+          message
+            .toLowerCase()
+            .includes(
+              "expired"
+            )
+        ){
+
+          liff.logout();
+
+          liff.login({
+            redirectUri:
+              window.location.href
+          });
+
+          return;
+        }
+
+
+        if(
+          !response.ok ||
+          result?.success === false
+        ){
+
+          throw new Error(
+            message ||
+            `HTTP ${response.status}`
+          );
+        }
+
+
+        const resultBox =
+          $("hydrateClaimResult");
+
+
+        resultBox.classList.add(
+          "show"
+        );
+
+        resultBox.innerHTML =
+          `
+            📤 ส่งหลักฐาน HYDRATE แล้ว<br>
+            สถานะ: PENDING<br>
+            รอ Admin ตรวจสอบก่อนรับรางวัล
+          `;
+
+
+        button.textContent =
+          "ส่งแล้ว • รอ Admin";
+
+        input.disabled =
+          true;
+
+
+        showStatus(
+          "✅ HYDRATE ส่งให้ Admin แล้ว • ยังไม่ได้รับรางวัลจนกว่าจะอนุมัติ",
+          4500
+        );
+
+      }catch(error){
+
+        console.error(
+          "HYDRATE SUBMIT ERROR:",
+          error
+        );
+
+
+        showStatus(
+          "❌ ส่งหลักฐาน HYDRATE ไม่สำเร็จ: " +
+          (
+            error?.message ||
+            String(error)
+          ),
+          6000
+        );
+
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "📤 ส่งหลักฐาน HYDRATE ให้ Admin";
+      }
+    }
+
+
     async function addWater(
       waterMl
     ){
@@ -2404,9 +2920,21 @@
           .value =
             "";
 
-        showStatus(
-          `✅ น้ำวันนี้ ${fmt(result?.waterMl || 0)} ml`
-        );
+        if(
+          result?.hydrateGoalReached
+        ){
+
+          showStatus(
+            `✅ HYDRATE สำเร็จแล้ว ${fmt(result?.waterMl || 0)} / ${fmt(result?.waterGoalMl || 0)} ml • แนบรูปเพื่อส่ง Admin รับรางวัล`,
+            5000
+          );
+
+        }else{
+
+          showStatus(
+            `✅ น้ำวันนี้ ${fmt(result?.waterMl || 0)} ml • เหลือ ${fmt(result?.hydrateRemainingMl || 0)} ml`
+          );
+        }
 
         restoreEatSmartCandidate();
 
