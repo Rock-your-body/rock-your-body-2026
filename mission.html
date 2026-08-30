@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2172-template-overlay"
+    href="./base.css?v=20260830-mission-v2173-template-data-overlay"
   >
 
 
@@ -1431,7 +1431,7 @@
 }
 
 /* =========================================================
-   MISSION V2.17.2
+   MISSION V2.17.3
    HOTSPOT ให้ตรงกับการ์ด Mission ทั้งใบ
    แตะตรงไหนของการ์ดก็เปิด Mission หมวดนั้นได้
 ========================================================= */
@@ -1515,7 +1515,7 @@
 }
 
     /* =========================================================
-       MISSION V2.17.2 — FINAL STAGE / OVERLAY SAFETY
+       MISSION V2.17.3 — FINAL STAGE / OVERLAY SAFETY
        ป้องกัน Coin/Energy/Count ไหลลงด้านล่าง Template
     ========================================================= */
 
@@ -1723,7 +1723,7 @@
 
 
     /* =========================================================
-       MISSION V2.17.2 — NUTRITION RING PANEL
+       MISSION V2.17.3 — NUTRITION RING PANEL
     ========================================================= */
 
     .mission-nutrition-live{
@@ -2026,6 +2026,176 @@
       color:#073b70 !important;
     }
 
+
+    /* =========================================================
+       MISSION V2.17.3 — NUTRITION DATA OVER TEMPLATE
+       ไม่มีกรอบ ไม่มีรูปสร้างซ้ำ เหลือเฉพาะข้อมูลทับบน mission-template.png
+    ========================================================= */
+
+    #missionNutritionLive{
+      position:absolute!important;
+      left:3.1%!important;
+      top:18.4%!important;
+      width:36.8%!important;
+      height:64.2%!important;
+      z-index:120!important;
+      background:transparent!important;
+      border:0!important;
+      border-radius:0!important;
+      box-shadow:none!important;
+      padding:0!important;
+      margin:0!important;
+      overflow:visible!important;
+      pointer-events:none!important;
+    }
+
+    #missionNutritionLive .nutrition-head,
+    #missionNutritionLive .nutrition-ring,
+    #missionNutritionLive .nutrition-water,
+    #missionNutritionLive .nutrition-macro-gap{
+      display:none!important;
+    }
+
+    #missionNutritionLive .nutrition-main{
+      display:block!important;
+      position:absolute!important;
+      inset:0!important;
+    }
+
+    #missionNutritionLive .nutrition-ring-wrap{
+      display:block!important;
+      position:absolute!important;
+      left:11.5%!important;
+      top:20.0%!important;
+      width:34%!important;
+      height:34%!important;
+      min-height:0!important;
+    }
+
+    #missionNutritionLive .nutrition-ring-center{
+      display:flex!important;
+      position:absolute!important;
+      inset:0!important;
+      align-items:center!important;
+      justify-content:center!important;
+      flex-direction:column!important;
+      text-align:center!important;
+      z-index:125!important;
+    }
+
+    #missionNutritionCaloriesMain{
+      color:#082e64!important;
+      font-size:clamp(10px,2.3cqw,30px)!important;
+      font-weight:1000!important;
+      line-height:1!important;
+    }
+
+    #missionNutritionCaloriesTargetText{
+      margin-top:2px!important;
+      color:#425f80!important;
+      font-size:clamp(5px,.64cqw,9px)!important;
+      font-weight:900!important;
+    }
+
+    #missionNutritionLive .nutrition-ring-center > span,
+    #missionNutritionLive .nutrition-ring-center > small:first-of-type{
+      color:#425f80!important;
+      font-size:clamp(5px,.62cqw,9px)!important;
+      font-weight:900!important;
+    }
+
+    #missionNutritionLive .nutrition-macros{
+      position:absolute!important;
+      left:56.5%!important;
+      top:15.5%!important;
+      width:39.5%!important;
+      height:47%!important;
+      display:block!important;
+    }
+
+    #missionNutritionLive .nutrition-macro{
+      position:absolute!important;
+      left:0!important;
+      width:100%!important;
+      min-height:0!important;
+      padding:0!important;
+      margin:0!important;
+      border:0!important;
+      background:transparent!important;
+    }
+
+    #missionNutritionLive .nutrition-macro.protein{
+      top:0!important;
+    }
+
+    #missionNutritionLive .nutrition-macro.carbs{
+      top:34%!important;
+    }
+
+    #missionNutritionLive .nutrition-macro.fat{
+      top:68%!important;
+    }
+
+    #missionNutritionLive .nutrition-macro-title{
+      display:flex!important;
+      justify-content:space-between!important;
+      align-items:center!important;
+      gap:4px!important;
+      color:#164a72!important;
+      font-size:clamp(5.5px,.68cqw,10px)!important;
+      font-weight:900!important;
+      line-height:1.1!important;
+    }
+
+    #missionNutritionLive .nutrition-macro-title strong{
+      display:block!important;
+      margin-top:2px!important;
+      color:#0b3568!important;
+      font-size:clamp(7px,.95cqw,14px)!important;
+      font-weight:1000!important;
+      white-space:nowrap!important;
+    }
+
+    #missionNutritionLive .nutrition-macro-percent{
+      color:#0c4d83!important;
+      font-size:clamp(6px,.75cqw,11px)!important;
+      font-weight:1000!important;
+      white-space:nowrap!important;
+    }
+
+    /* น้ำดื่ม ใช้ตัวเลขอย่างเดียวทับบน template */
+    #missionNutritionWaterText{
+      display:block!important;
+      position:absolute!important;
+      left:70%!important;
+      top:73.0%!important;
+      width:24%!important;
+      color:#0b3f68!important;
+      font-size:clamp(7px,.93cqw,13px)!important;
+      font-weight:1000!important;
+      text-align:center!important;
+      z-index:125!important;
+      white-space:nowrap!important;
+    }
+
+    /* CTA โปร่งใส ทับปุ่มเดิมใน template */
+    #missionNutritionButton{
+      position:absolute!important;
+      left:4.5%!important;
+      bottom:2.8%!important;
+      width:91%!important;
+      height:12%!important;
+      z-index:130!important;
+      background:transparent!important;
+      border:0!important;
+      box-shadow:none!important;
+      color:transparent!important;
+      padding:0!important;
+      margin:0!important;
+      pointer-events:auto!important;
+      cursor:pointer!important;
+    }
+
 </style>
 
 </head>
@@ -2060,7 +2230,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2172-template-overlay"
+    src="./mission-template.png?v=20260830-mission-v2173-template-data-overlay"
     alt=""
     draggable="false"
     style="
@@ -4285,7 +4455,7 @@ function openCategory(
 ){
 
   /*
-    MISSION V2.17.2
+    MISSION V2.17.3
     วางลิงก์ให้ตรงกับแต่ละ Mission
     URL จะเป็น:
     mission.html#daily
@@ -6427,7 +6597,7 @@ function nutritionFormat(value,digits=0){
 
 
 /* =========================================================
-   MISSION V2.17.2 — NUTRITION LINK
+   MISSION V2.17.3 — NUTRITION LINK
    ดึงข้อมูลชุดเดียวกับหน้า nutrition.html
 ========================================================= */
 
@@ -7485,7 +7655,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.17.2 — FINAL OVERLAY SAFETY
+   MISSION V2.17.3 — FINAL OVERLAY SAFETY
    ป้องกัน Coin / Energy / Mission Count หลุดลงใต้ Template
 ========================================================= */
 (function(){
@@ -7681,7 +7851,7 @@ if(document.readyState === 'loading'){
 
 <script>
 /* =========================================================
-   MISSION V2.17.2 — DIRECT MISSION LINK
+   MISSION V2.17.3 — DIRECT MISSION LINK
    เปิดหมวดตาม URL hash
    #daily #weekly #monthly #bonus
 ========================================================= */
