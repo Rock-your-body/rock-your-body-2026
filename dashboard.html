@@ -12,11 +12,11 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-home-v56"
+    href="./base.css?v=20260830-home-v57-exp-sync"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-v56"></script>
+  <script src="./app-config.js?v=20260830-home-v57-exp-sync"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260830-home-v56"
+    src="./home-template.png?v=20260830-home-v57-exp-sync"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -404,7 +404,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V5.6
+   HOME V5.7 EXP-SYNC
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
@@ -1210,7 +1210,11 @@ function normalizeHome(
 
             player.level,
 
-            raw.level
+            raw.level,
+
+            raw?.exp?.level,
+
+            raw?.progress?.exp?.level
 
           ),
           1
@@ -1276,44 +1280,59 @@ function normalizeHome(
     },
 
 
-    exp:{
 
-      current:
+    exp:{
+      total:
         num(
           pick(
-
-            raw.exp,
-
-            player.exp,
-
-            raw
-              ?.experience
-              ?.current
-
+            raw?.exp?.total,
+            raw?.progress?.exp?.total,
+            raw?.experience?.total,
+            player?.exp,
+            typeof raw?.exp === "number" ? raw.exp : null
           ),
           0
         ),
 
-
-      max:
+      current:
         num(
           pick(
-
-            raw.nextLevelExp,
-
-            raw.expNext,
-
-            raw
-              ?.experience
-              ?.max,
-
-            window.APP_CONFIG
-              ?.EXP_PER_LEVEL
-
+            raw?.exp?.current,
+            raw?.progress?.exp?.current,
+            raw?.experience?.current,
+            typeof raw?.exp === "number" ? raw.exp : null,
+            player?.exp
           ),
-          500
-        )
+          0
+        ),
 
+      max:
+        Math.max(
+          1,
+          num(
+            pick(
+              raw?.exp?.required,
+              raw?.exp?.perLevel,
+              raw?.exp?.max,
+              raw?.progress?.exp?.required,
+              raw?.progress?.exp?.perLevel,
+              raw?.experience?.max,
+              raw?.nextLevelExp,
+              raw?.expNext,
+              window.APP_CONFIG?.EXP_PER_LEVEL
+            ),
+            500
+          )
+        ),
+
+      progress:
+        num(
+          pick(
+            raw?.exp?.progress,
+            raw?.progress?.exp?.progress
+          ),
+          0
+        )
     },
 
 
