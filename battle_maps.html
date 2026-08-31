@@ -1,349 +1,750 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#020817">
-  <title>ROCK YOUR BODY 2026 - BATTLE MAP</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>BATTLE MAP | ROCK YOUR BODY 2026</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-map-v72"></script>
+  <script src="./app-config.js"></script>
 
   <style>
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html,body{
-      margin:0;
-      padding:0;
-      width:100%;
-      min-height:100%;
-      background:#020817;
-      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      background: #020817;
+      font-family: Arial, Tahoma, sans-serif;
+      overflow-x: hidden;
     }
 
-    body{
-      overflow-x:hidden;
+    body {
+      color: white;
     }
 
-    #mapScreen{
-      position:relative;
-      width:100%;
-      max-width:1280px;
-      margin:0 auto;
-      aspect-ratio:1280/657;
-      overflow:hidden;
-      background:#020817;
+    /* ======================================================
+       PAGE
+    ====================================================== */
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #123b86 0%,
+          #041533 45%,
+          #01040d 100%
+        );
     }
 
-    #mapImage{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:fill;
-      z-index:1;
-      pointer-events:none;
-      user-select:none;
+    /* ======================================================
+       TOP BAR
+    ====================================================== */
+
+    .topbar {
+      position: fixed;
+      z-index: 1000;
+
+      top: 12px;
+      left: 12px;
+      right: 12px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      pointer-events: none;
     }
 
-    /* =========================================================
-       TOP INFO
-    ========================================================= */
+    .back-btn {
+      pointer-events: auto;
 
-    #topBar{
-      position:absolute;
-      z-index:30;
-      left:1.2%;
-      right:1.2%;
-      top:1.2%;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      pointer-events:none;
-    }
+      border: 2px solid rgba(255,255,255,.7);
 
-    .pill{
-      min-width:130px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:rgba(5,35,89,.90);
-      color:#fff;
-      font-weight:1000;
-      font-size:clamp(9px,1.1vw,15px);
-      text-align:center;
-      border:1px solid rgba(255,255,255,.28);
-      box-shadow:0 7px 18px rgba(0,0,0,.28);
-    }
+      background:
+        linear-gradient(
+          180deg,
+          #1469e8,
+          #06398e
+        );
 
-    /* =========================================================
-       BACK BUTTON
-    ========================================================= */
+      color: white;
 
-    #backBtn{
-      position:absolute;
-      z-index:100;
-      left:1.5%;
-      top:7.5%;
-      min-width:112px;
-      height:44px;
-      padding:0 16px;
-      border:2px solid rgba(255,255,255,.82);
-      border-radius:15px;
-      background:linear-gradient(180deg,#176bdc,#073f98);
-      color:#fff;
-      font-size:15px;
-      font-weight:1000;
-      cursor:pointer;
+      padding: 10px 17px;
+
+      border-radius: 14px;
+
+      font-size: 15px;
+      font-weight: 900;
+
+      cursor: pointer;
+
       box-shadow:
-        0 6px 15px rgba(0,0,0,.30),
-        inset 0 1px 0 rgba(255,255,255,.28);
+        0 4px 12px rgba(0,0,0,.45);
     }
 
-    #backBtn:active{
-      transform:scale(.97);
+    .back-btn:active {
+      transform: scale(.97);
     }
 
-    /* =========================================================
-       STAGE HOTSPOTS
-    ========================================================= */
+    .exp-box {
+      pointer-events: auto;
 
-    .stage{
-      position:absolute;
-      z-index:50;
-      width:13%;
-      height:29%;
-      border:0;
-      padding:0;
-      margin:0;
-      background:transparent;
-      cursor:pointer;
-      border-radius:18px;
+      background:
+        rgba(0,20,60,.90);
+
+      border:
+        2px solid rgba(91,179,255,.8);
+
+      border-radius: 14px;
+
+      padding:
+        8px 14px;
+
+      text-align: right;
+
+      box-shadow:
+        0 4px 12px rgba(0,0,0,.45);
     }
 
-    .stage::after{
-      content:"";
-      position:absolute;
-      inset:5%;
-      border-radius:16px;
-      opacity:0;
-      transition:.18s;
-      pointer-events:none;
+    .exp-title {
+      font-size: 11px;
+      opacity: .75;
+      font-weight: 800;
     }
 
-    .stage:active::after{
-      opacity:1;
-      background:rgba(255,255,255,.10);
+    .exp-value {
+      margin-top: 2px;
+
+      color: #ffd84d;
+
+      font-size: 18px;
+      font-weight: 1000;
     }
 
-    .stage.locked{
-      cursor:not-allowed;
+    /* ======================================================
+       MAP WRAPPER
+
+       อัตราส่วนรูปต้นฉบับประมาณ 1680 x 856
+    ====================================================== */
+
+    .map-wrapper {
+      position: relative;
+
+      width: 100%;
+      max-width: 1680px;
+
+      margin: 0 auto;
+
+      overflow: hidden;
+
+      background: #06122a;
     }
 
-    .lockBadge{
-      position:absolute;
-      z-index:70;
-      left:50%;
-      top:50%;
-      transform:translate(-50%,-50%);
-      display:none;
-      width:58px;
-      height:58px;
-      border-radius:50%;
-      align-items:center;
-      justify-content:center;
-      background:rgba(7,24,56,.88);
-      border:2px solid rgba(255,255,255,.75);
-      color:#fff;
-      font-size:30px;
-      box-shadow:0 7px 18px rgba(0,0,0,.38);
-      pointer-events:none;
+    .map-image {
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
-    .stage.locked .lockBadge{
-      display:flex;
+    /* ======================================================
+       STAGE CLICK AREA
+    ====================================================== */
+
+    .stage {
+      position: absolute;
+
+      z-index: 20;
+
+      cursor: pointer;
+
+      border-radius: 18px;
+
+      transition:
+        transform .15s ease,
+        background .15s ease,
+        box-shadow .15s ease;
     }
 
-    .stageStatus{
-      position:absolute;
-      z-index:72;
-      left:-18%;
-      right:-18%;
-      bottom:2%;
-      min-height:26px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:4px 8px;
-      border-radius:999px;
-      background:rgba(5,35,84,.85);
-      color:#fff;
-      font-weight:1000;
-      font-size:clamp(7px,.8vw,11px);
-      text-align:center;
-      text-shadow:0 2px 4px rgba(0,0,0,.6);
-      pointer-events:none;
+    .stage:hover {
+      background:
+        rgba(0,140,255,.08);
+
+      box-shadow:
+        inset 0 0 25px rgba(0,170,255,.25);
     }
 
-    .stage.completed .stageStatus{
-      background:rgba(14,116,64,.94);
+    .stage:active {
+      transform: scale(.97);
     }
 
-    .stage.unlocked .stageStatus{
-      background:rgba(11,87,183,.94);
+    /* ======================================================
+       LOCK
+    ====================================================== */
+
+    .stage-lock {
+      position: absolute;
+
+      z-index: 30;
+
+      left: 50%;
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      min-width: 74px;
+
+      text-align: center;
+
+      pointer-events: none;
     }
 
-    .stage.locked .stageStatus{
-      background:rgba(72,80,96,.94);
+    .lock-icon {
+      display: inline-flex;
+
+      width: 46px;
+      height: 46px;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background:
+        rgba(0,12,40,.92);
+
+      border:
+        2px solid #ffd34d;
+
+      font-size: 24px;
+
+      box-shadow:
+        0 3px 12px rgba(0,0,0,.65);
     }
 
-    /* top row */
-    #s1{left:2.5%;top:23%}
-    #s2{left:20.8%;top:23%}
-    #s3{left:39.3%;top:23%}
-    #s4{left:57.7%;top:23%}
-    #s5{left:76.2%;top:23%}
+    .lock-exp {
+      margin-top: 5px;
 
-    /* bottom row */
-    #s6{left:2.0%;top:61%}
-    #s7{left:20.5%;top:61%}
-    #s8{left:39.0%;top:61%}
-    #s9{left:57.6%;top:61%}
-    #s10{left:76.6%;top:60.5%}
+      padding:
+        4px 7px;
 
-    /* =========================================================
-       LOADING / TOAST
-    ========================================================= */
+      border-radius: 7px;
 
-    #loading{
-      position:fixed;
-      inset:0;
-      z-index:10000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:rgba(0,10,35,.60);
-      backdrop-filter:blur(3px);
+      background:
+        rgba(0,0,0,.82);
+
+      color:
+        #fff;
+
+      font-size:
+        10px;
+
+      font-weight:
+        900;
+
+      white-space:
+        nowrap;
+
+      text-shadow:
+        0 1px 2px #000;
     }
 
-    #loadingBox{
-      padding:16px 22px;
-      border-radius:18px;
-      background:#fff;
-      color:#0c3e86;
-      font-weight:1000;
-      box-shadow:0 12px 36px rgba(0,0,0,.3);
+    /* ======================================================
+       PASSED
+    ====================================================== */
+
+    .stage-passed {
+      position: absolute;
+
+      z-index: 31;
+
+      top: 8px;
+      right: 8px;
+
+      width: 34px;
+      height: 34px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          180deg,
+          #46e46b,
+          #0a982c
+        );
+
+      border:
+        2px solid white;
+
+      font-size: 19px;
+      font-weight: 1000;
+
+      box-shadow:
+        0 3px 10px rgba(0,0,0,.5);
+
+      pointer-events: none;
     }
 
-    #toast{
-      position:fixed;
-      z-index:11000;
-      left:50%;
-      bottom:max(18px,env(safe-area-inset-bottom));
-      transform:translateX(-50%);
-      display:none;
-      max-width:calc(100vw - 28px);
-      padding:12px 16px;
-      border-radius:14px;
-      background:#173c70;
-      color:#fff;
-      font-weight:900;
-      text-align:center;
-      box-shadow:0 8px 26px rgba(0,0,0,.3);
+    /* ======================================================
+       LOADING
+    ====================================================== */
+
+    .loading {
+      position: fixed;
+
+      z-index: 5000;
+
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background:
+        rgba(0,7,24,.86);
+
+      color: white;
+
+      font-size: 16px;
+      font-weight: 900;
     }
 
-    #toast.show{
-      display:block;
+    .loading.hide {
+      display: none;
     }
 
-    #toast.error{
-      background:#c62828;
+    /* ======================================================
+       TOAST
+    ====================================================== */
+
+    .toast {
+      position: fixed;
+
+      z-index: 6000;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform:
+        translateX(-50%)
+        translateY(30px);
+
+      width:
+        calc(100% - 30px);
+
+      max-width:
+        420px;
+
+      padding:
+        13px 16px;
+
+      border-radius:
+        14px;
+
+      background:
+        rgba(0,24,70,.96);
+
+      border:
+        2px solid #3d9dff;
+
+      color:
+        white;
+
+      text-align:
+        center;
+
+      font-size:
+        14px;
+
+      font-weight:
+        900;
+
+      box-shadow:
+        0 6px 25px rgba(0,0,0,.5);
+
+      opacity:
+        0;
+
+      pointer-events:
+        none;
+
+      transition:
+        .25s;
     }
+
+    .toast.show {
+      opacity: 1;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
+    }
+
+    .toast.error {
+      background:
+        rgba(110,0,0,.96);
+
+      border-color:
+        #ff5252;
+    }
+
+    /* ======================================================
+       STAGE POSITIONS
+       ใช้ % เพื่อให้ responsive ตามรูป
+    ====================================================== */
+
+    /* ---------- ROW 1 ---------- */
+
+    #stage1 {
+      left: 1%;
+      top: 18%;
+      width: 18%;
+      height: 39%;
+    }
+
+    #stage2 {
+      left: 19%;
+      top: 18%;
+      width: 19%;
+      height: 39%;
+    }
+
+    #stage3 {
+      left: 38%;
+      top: 18%;
+      width: 18%;
+      height: 39%;
+    }
+
+    #stage4 {
+      left: 56%;
+      top: 18%;
+      width: 20%;
+      height: 39%;
+    }
+
+    #stage5 {
+      left: 76%;
+      top: 18%;
+      width: 23%;
+      height: 39%;
+    }
+
+    /* ---------- ROW 2 ---------- */
+
+    #stage6 {
+      left: 0%;
+      top: 56%;
+      width: 20%;
+      height: 43%;
+    }
+
+    #stage7 {
+      left: 20%;
+      top: 56%;
+      width: 19%;
+      height: 43%;
+    }
+
+    #stage8 {
+      left: 39%;
+      top: 56%;
+      width: 19%;
+      height: 43%;
+    }
+
+    #stage9 {
+      left: 58%;
+      top: 56%;
+      width: 20%;
+      height: 43%;
+    }
+
+    #stage10 {
+      left: 78%;
+      top: 56%;
+      width: 22%;
+      height: 43%;
+    }
+
+
+    /* ======================================================
+       MOBILE
+    ====================================================== */
+
+    @media (max-width: 600px) {
+
+      .topbar {
+        top: 7px;
+        left: 7px;
+        right: 7px;
+      }
+
+      .back-btn {
+        padding:
+          8px 11px;
+
+        font-size:
+          12px;
+
+        border-radius:
+          10px;
+      }
+
+      .exp-box {
+        padding:
+          6px 9px;
+
+        border-radius:
+          10px;
+      }
+
+      .exp-title {
+        font-size:
+          9px;
+      }
+
+      .exp-value {
+        font-size:
+          14px;
+      }
+
+      .lock-icon {
+        width:
+          30px;
+
+        height:
+          30px;
+
+        font-size:
+          16px;
+      }
+
+      .lock-exp {
+        font-size:
+          7px;
+
+        padding:
+          3px 4px;
+      }
+
+      .stage-passed {
+        width:
+          24px;
+
+        height:
+          24px;
+
+        font-size:
+          13px;
+      }
+
+    }
+
   </style>
 </head>
 
+
 <body>
 
-<main id="mapScreen">
+<div class="page">
 
-  <img
-    id="mapImage"
-    src="./battle%20map.jpeg?v=20260831-v72"
-    alt="Battle Map"
-    draggable="false"
+
+  <!-- ======================================================
+       TOP BAR
+  ======================================================= -->
+
+  <div class="topbar">
+
+    <button
+      class="back-btn"
+      type="button"
+      onclick="goBack()"
+    >
+      ← ย้อนกลับ
+    </button>
+
+
+    <div class="exp-box">
+
+      <div class="exp-title">
+        MY EXP
+      </div>
+
+      <div
+        class="exp-value"
+        id="playerExp"
+      >
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ======================================================
+       BATTLE MAP
+  ======================================================= -->
+
+  <div
+    class="map-wrapper"
+    id="mapWrapper"
   >
 
-  <div id="topBar">
-    <div id="expInfo" class="pill">EXP --</div>
-    <div id="energyInfo" class="pill">⚡ -- / 200</div>
+    <img
+      class="map-image"
+      src="./battle%20map.jpeg"
+      alt="BATTLE MAP"
+      id="mapImage"
+    >
+
+
+    <!-- ================= STAGE 1 ================= -->
+
+    <div
+      class="stage"
+      id="stage1"
+      data-stage="1"
+      onclick="selectStage(1)"
+    ></div>
+
+
+    <!-- ================= STAGE 2 ================= -->
+
+    <div
+      class="stage"
+      id="stage2"
+      data-stage="2"
+      onclick="selectStage(2)"
+    ></div>
+
+
+    <!-- ================= STAGE 3 ================= -->
+
+    <div
+      class="stage"
+      id="stage3"
+      data-stage="3"
+      onclick="selectStage(3)"
+    ></div>
+
+
+    <!-- ================= STAGE 4 ================= -->
+
+    <div
+      class="stage"
+      id="stage4"
+      data-stage="4"
+      onclick="selectStage(4)"
+    ></div>
+
+
+    <!-- ================= STAGE 5 ================= -->
+
+    <div
+      class="stage"
+      id="stage5"
+      data-stage="5"
+      onclick="selectStage(5)"
+    ></div>
+
+
+    <!-- ================= STAGE 6 ================= -->
+
+    <div
+      class="stage"
+      id="stage6"
+      data-stage="6"
+      onclick="selectStage(6)"
+    ></div>
+
+
+    <!-- ================= STAGE 7 ================= -->
+
+    <div
+      class="stage"
+      id="stage7"
+      data-stage="7"
+      onclick="selectStage(7)"
+    ></div>
+
+
+    <!-- ================= STAGE 8 ================= -->
+
+    <div
+      class="stage"
+      id="stage8"
+      data-stage="8"
+      onclick="selectStage(8)"
+    ></div>
+
+
+    <!-- ================= STAGE 9 ================= -->
+
+    <div
+      class="stage"
+      id="stage9"
+      data-stage="9"
+      onclick="selectStage(9)"
+    ></div>
+
+
+    <!-- ================= STAGE 10 ================= -->
+
+    <div
+      class="stage"
+      id="stage10"
+      data-stage="10"
+      onclick="selectStage(10)"
+    ></div>
+
   </div>
 
-  <button id="backBtn" type="button">
-    ← ย้อนกลับ
-  </button>
-
-  <button id="s1" class="stage" data-stage="1" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 1</span>
-  </button>
-
-  <button id="s2" class="stage" data-stage="2" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 2</span>
-  </button>
-
-  <button id="s3" class="stage" data-stage="3" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 3</span>
-  </button>
-
-  <button id="s4" class="stage" data-stage="4" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 4</span>
-  </button>
-
-  <button id="s5" class="stage" data-stage="5" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 5</span>
-  </button>
-
-  <button id="s6" class="stage" data-stage="6" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 6</span>
-  </button>
-
-  <button id="s7" class="stage" data-stage="7" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 7</span>
-  </button>
-
-  <button id="s8" class="stage" data-stage="8" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 8</span>
-  </button>
-
-  <button id="s9" class="stage" data-stage="9" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 9</span>
-  </button>
-
-  <button id="s10" class="stage" data-stage="10" type="button">
-    <span class="lockBadge">🔒</span>
-    <span class="stageStatus">Stage 10</span>
-  </button>
-
-</main>
-
-
-<div id="loading">
-  <div id="loadingBox">
-    🗺️ กำลังโหลด Battle Map...
-  </div>
 </div>
 
-<div id="toast"></div>
+
+<!-- ========================================================
+     LOADING
+========================================================= -->
+
+<div
+  class="loading"
+  id="loading"
+>
+  กำลังโหลด Battle Map...
+</div>
+
+
+<!-- ========================================================
+     TOAST
+========================================================= -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
 
 
 <script>
@@ -351,18 +752,16 @@
 
 
 /* ============================================================
-   ROCK YOUR BODY 2026
-   BATTLE MAP V7.2
+   CONFIG
 ============================================================ */
 
-const $ =
-  id =>
-    document.getElementById(id);
-
-
 const CFG =
-  window.APP_CONFIG ||
-  {};
+  window.APP_CONFIG || {};
+
+
+const BATTLE_API =
+  CFG.API?.BATTLE ||
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle";
 
 
 const LIFF_ID =
@@ -370,72 +769,179 @@ const LIFF_ID =
   "2011201679-uNWz5yqF";
 
 
-let state =
-  null;
+/* ============================================================
+   STAGE CONFIG
+
+   requiredExp = EXP ที่ต้องมีเพื่อเข้า Stage
+
+   สามารถแก้ตัวเลขภายหลังได้
+============================================================ */
+
+const STAGES = {
+
+  1: {
+    name: "เจ้าจอมเอื่อย",
+    requiredExp: 0
+  },
+
+  2: {
+    name: "จอมหวาน",
+    requiredExp: 300
+  },
+
+  3: {
+    name: "ปีศาจของทอด",
+    requiredExp: 700
+  },
+
+  4: {
+    name: "จอมเค็ม",
+    requiredExp: 1200
+  },
+
+  5: {
+    name: "ราชาอาหารไร้ประโยชน์",
+    requiredExp: 1800
+  },
+
+  6: {
+    name: "ปีศาจพักผ่อนน้อย",
+    requiredExp: 2400
+  },
+
+  7: {
+    name: "จอมเนือยนิ่ง",
+    requiredExp: 3300
+  },
+
+  8: {
+    name: "ปีศาจพฤติกรรมเสี่ยง",
+    requiredExp: 4300
+  },
+
+  9: {
+    name: "ราชาความเสี่ยงสุขภาพ",
+    requiredExp: 5500
+  },
+
+  10: {
+    name: "จอมมาร Final Boss",
+    requiredExp: 7000
+  }
+
+};
 
 
 /* ============================================================
-   HELPERS
+   STATE
 ============================================================ */
 
-function showLoading(
-  show
-){
+let ID_TOKEN = "";
 
-  $("loading")
-    .style
-    .display =
-      show
-        ? "flex"
-        : "none";
+let PLAYER_EXP = 0;
+
+let PASSED_STAGES = new Set();
+
+
+/* ============================================================
+   NUMBER
+============================================================ */
+
+function numberValue(value) {
+
+  const n =
+    Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
 }
 
 
-function toast(
+function fmt(value) {
+
+  return Math.round(
+    numberValue(value)
+  ).toLocaleString("th-TH");
+
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+let toastTimer = null;
+
+
+function showToast(
   message,
-  error = false
-){
+  type = ""
+) {
 
   const el =
-    $("toast");
+    document.getElementById("toast");
+
+  if (!el) return;
 
 
   el.textContent =
-    message;
+    String(message || "");
 
 
-  el.classList
-    .toggle(
-      "error",
-      error
+  el.className =
+    "toast show" +
+    (
+      type
+        ? " " + type
+        : ""
     );
 
 
-  el.classList
-    .add(
-      "show"
-    );
+  clearTimeout(toastTimer);
 
 
-  clearTimeout(
-    window.__mapToast
-  );
+  toastTimer =
+    setTimeout(() => {
+
+      el.className =
+        "toast";
+
+    }, 2800);
+
+}
 
 
-  window.__mapToast =
-    setTimeout(
-      ()=>{
+/* ============================================================
+   LOADING
+============================================================ */
 
-        el.classList
-          .remove(
-            "show"
-          );
+function hideLoading() {
 
-      },
-      error
-        ? 4500
-        : 2300
-    );
+  const el =
+    document.getElementById("loading");
+
+  if (el) {
+    el.classList.add("hide");
+  }
+
+}
+
+
+/* ============================================================
+   BACK
+============================================================ */
+
+function goBack() {
+
+  const battlePage =
+    CFG.PAGE?.BATTLE ||
+    "./battle.html";
+
+  window.location.href =
+    battlePage;
+
 }
 
 
@@ -443,398 +949,573 @@ function toast(
    API
 ============================================================ */
 
-function battleApi(){
-
-  if(
-    CFG?.getApi
-  ){
-
-    return CFG.getApi(
-      "BATTLE"
-    );
-  }
-
-
-  const url =
-    CFG
-      ?.API
-      ?.BATTLE;
-
-
-  if(!url){
-
-    throw new Error(
-      "ไม่พบ API.BATTLE"
-    );
-  }
-
-
-  return url;
-}
-
-
-async function initLine(){
-
-  await liff.init({
-
-    liffId:
-      LIFF_ID
-
-  });
-
-
-  if(
-    !liff.isLoggedIn()
-  ){
-
-    liff.login({
-
-      redirectUri:
-        location.href
-
-    });
-
-
-    return false;
-  }
-
-
-  const token =
-    liff.getIDToken();
-
-
-  if(
-    !token ||
-    token
-      .split(".")
-      .length !==
-      3
-  ){
-
-    liff.logout();
-
-
-    liff.login({
-
-      redirectUri:
-        location.href
-
-    });
-
-
-    return false;
-  }
-
-
-  return true;
-}
-
-
-async function postBattle(
+async function callBattle(
   action,
   payload = {}
-){
+) {
 
-  const idToken =
-    liff.getIDToken();
+  if (!ID_TOKEN) {
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+
+  }
 
 
   const response =
     await fetch(
-      battleApi(),
+      BATTLE_API,
       {
-        method:
-          "POST",
+        method: "POST",
 
-        headers:{
+        headers: {
           "Content-Type":
-            "application/json"
-        },
+            "application/json",
 
-        cache:
-          "no-store",
+          "Authorization":
+            "Bearer " + ID_TOKEN
+        },
 
         body:
           JSON.stringify({
             action,
-            idToken,
             ...payload
           })
       }
     );
 
 
-  const raw =
-    await response.text();
+  let data = {};
 
-
-  let data =
-    {};
-
-
-  try{
+  try {
 
     data =
-      raw
-        ? JSON.parse(raw)
-        : {};
+      await response.json();
 
-  }catch{
+  }
+  catch (_) {
 
-    throw new Error(
-      "Battle API ตอบกลับไม่ใช่ JSON"
-    );
+    data = {};
+
   }
 
 
-  if(
-    !response.ok ||
-    data
-      ?.success ===
-      false
-  ){
+  if (!response.ok) {
 
     throw new Error(
       data?.error ||
       data?.message ||
-      `HTTP ${response.status}`
+      "Battle API error"
     );
+
+  }
+
+
+  if (data?.success === false) {
+
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      "Battle API error"
+    );
+
   }
 
 
   return data;
+
 }
 
 
 /* ============================================================
-   RENDER
+   READ BATTLE DATA
 ============================================================ */
 
-function render(
-  data
-){
+async function loadBattleData() {
 
-  state =
+  /*
+     รองรับ response ได้หลายรูปแบบ
+     เพื่อไม่ให้หน้า Map พังถ้า backend ใช้ชื่อ field ต่างกันเล็กน้อย
+  */
+
+  let data = null;
+
+
+  const actions = [
+    "map",
+    "status",
+    "dashboard"
+  ];
+
+
+  for (
+    const action of actions
+  ) {
+
+    try {
+
+      data =
+        await callBattle(action);
+
+      if (data) {
+        break;
+      }
+
+    }
+    catch (err) {
+
+      console.warn(
+        "[BATTLE MAP]",
+        action,
+        err
+      );
+
+    }
+
+  }
+
+
+  if (!data) {
+
+    throw new Error(
+      "ไม่สามารถโหลดข้อมูล Battle ได้"
+    );
+
+  }
+
+
+  const root =
+    data.data ||
+    data.battle ||
+    data.player ||
     data;
 
 
-  const exp =
-    Number(
-      data
-        ?.player
-        ?.exp ||
+  /* ---------------- EXP ---------------- */
+
+  PLAYER_EXP =
+    numberValue(
+      root.exp ??
+      root.player_exp ??
+      root.total_exp ??
+      root.current_exp ??
+      data.exp ??
+      data.player_exp ??
       0
     );
 
 
-  const energy =
-    data
-      ?.healthEnergy ||
-    {};
+  /* ---------------- PASSED STAGES ---------------- */
+
+  PASSED_STAGES =
+    new Set();
 
 
-  $("expInfo")
-    .textContent =
-      `EXP ${exp.toLocaleString()}`;
+  const passed =
+    root.passed_stages ??
+    root.completed_stages ??
+    root.cleared_stages ??
+    data.passed_stages ??
+    data.completed_stages ??
+    [];
 
 
-  $("energyInfo")
-    .textContent =
-      `⚡ ${Number(energy.available || 0).toLocaleString()} / ${Number(energy.max || 200).toLocaleString()}`;
+  if (Array.isArray(passed)) {
 
+    passed.forEach(item => {
 
-  const stages =
-    Array.isArray(
-      data
-        ?.stages
-    )
-      ? data.stages
-      : [];
+      if (
+        typeof item === "number" ||
+        typeof item === "string"
+      ) {
 
+        const stage =
+          Number(item);
 
-  for(
-    let no = 1;
-    no <= 10;
-    no++
-  ){
-
-    const stage =
-      stages.find(
-        item =>
-          Number(
-            item.id
-          ) ===
-          no
-      ) ||
-      {
-        id:no,
-        unlocked:false,
-        completed:false,
-        expRequired:0
-      };
-
-
-    const button =
-      $(
-        `s${no}`
-      );
-
-
-    const status =
-      button.querySelector(
-        ".stageStatus"
-      );
-
-
-    button.classList.remove(
-      "locked",
-      "unlocked",
-      "completed"
-    );
-
-
-    if(
-      stage.completed
-    ){
-
-      button.classList.add(
-        "completed"
-      );
-
-
-      status.textContent =
-        `✅ ผ่าน Stage ${no}`;
-
-    }else if(
-      stage.unlocked
-    ){
-
-      button.classList.add(
-        "unlocked"
-      );
-
-
-      status.textContent =
-        `⚔️ Stage ${no}`;
-
-    }else{
-
-      button.classList.add(
-        "locked"
-      );
-
-
-      status.textContent =
-        `EXP ${Number(stage.expRequired || 0).toLocaleString()}`;
-    }
-
-
-    button.onclick =
-      ()=>{
-
-        if(
-          !stage.unlocked &&
-          !stage.completed
-        ){
-
-          toast(
-            `🔒 Stage ${no} ต้องมี EXP ${Number(stage.expRequired || 0).toLocaleString()} และผ่าน Stage ก่อนหน้า`,
-            true
-          );
-
-
-          return;
+        if (stage) {
+          PASSED_STAGES.add(stage);
         }
 
+        return;
+      }
 
-        window.location
-          .assign(
-            `./battle_stage.html?stage=${encodeURIComponent(no)}`
-          );
-      };
+
+      const stage =
+        Number(
+          item?.stage ??
+          item?.stage_no ??
+          item?.stage_number
+        );
+
+
+      const passedStatus =
+        item?.passed ??
+        item?.completed ??
+        item?.cleared ??
+        (
+          String(
+            item?.status || ""
+          ).toLowerCase() === "completed"
+        );
+
+
+      if (
+        stage &&
+        passedStatus !== false
+      ) {
+
+        PASSED_STAGES.add(stage);
+
+      }
+
+    });
+
   }
+
+
+  renderMap();
+
 }
 
 
 /* ============================================================
-   NAVIGATION
+   RENDER MAP
 ============================================================ */
 
-$("backBtn")
-  .addEventListener(
-    "click",
-    ()=>{
+function renderMap() {
 
-      window.location
-        .assign(
-          CFG
-            ?.PAGE
-            ?.BATTLE ||
-          "./battle.html"
-        );
+  const expEl =
+    document.getElementById(
+      "playerExp"
+    );
+
+
+  if (expEl) {
+
+    expEl.textContent =
+      fmt(PLAYER_EXP);
+
+  }
+
+
+  for (
+    let stageNo = 1;
+    stageNo <= 10;
+    stageNo++
+  ) {
+
+    const el =
+      document.getElementById(
+        "stage" + stageNo
+      );
+
+
+    if (!el) {
+      continue;
     }
-  );
+
+
+    /*
+       ล้าง icon เดิม
+    */
+
+    el
+      .querySelectorAll(
+        ".stage-lock, .stage-passed"
+      )
+      .forEach(node => node.remove());
+
+
+    const stage =
+      STAGES[stageNo];
+
+
+    const requiredExp =
+      numberValue(
+        stage.requiredExp
+      );
+
+
+    const unlocked =
+      PLAYER_EXP >= requiredExp;
+
+
+    /* ---------------- LOCK ---------------- */
+
+    if (!unlocked) {
+
+      const lock =
+        document.createElement("div");
+
+
+      lock.className =
+        "stage-lock";
+
+
+      lock.innerHTML = `
+        <div class="lock-icon">
+          🔒
+        </div>
+
+        <div class="lock-exp">
+          ต้องมี EXP ${fmt(requiredExp)}
+        </div>
+      `;
+
+
+      el.appendChild(lock);
+
+    }
+
+
+    /* ---------------- PASSED ---------------- */
+
+    if (
+      PASSED_STAGES.has(stageNo)
+    ) {
+
+      const passed =
+        document.createElement("div");
+
+
+      passed.className =
+        "stage-passed";
+
+
+      passed.textContent =
+        "✓";
+
+
+      el.appendChild(passed);
+
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   SELECT STAGE
+============================================================ */
+
+function selectStage(stageNo) {
+
+  stageNo =
+    Number(stageNo);
+
+
+  const stage =
+    STAGES[stageNo];
+
+
+  if (!stage) {
+
+    showToast(
+      "ไม่พบ Stage",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const requiredExp =
+    numberValue(
+      stage.requiredExp
+    );
+
+
+  /* ========================================================
+     EXP LOCK
+  ======================================================== */
+
+  if (
+    PLAYER_EXP <
+    requiredExp
+  ) {
+
+    const missing =
+      requiredExp -
+      PLAYER_EXP;
+
+
+    showToast(
+      "🔒 ต้องมี EXP " +
+      fmt(requiredExp) +
+      " • ขาดอีก " +
+      fmt(missing) +
+      " EXP",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  /* ========================================================
+     OPEN BATTLE STAGE
+  ======================================================== */
+
+  const stagePage =
+    CFG.PAGE?.BATTLE_STAGE ||
+    "./battle_stage.html";
+
+
+  window.location.href =
+    stagePage +
+    "?stage=" +
+    encodeURIComponent(
+      stageNo
+    );
+
+}
+
+
+/* ============================================================
+   LIFF
+============================================================ */
+
+async function initLiff() {
+
+  if (
+    typeof liff ===
+    "undefined"
+  ) {
+
+    throw new Error(
+      "ไม่พบ LINE LIFF SDK"
+    );
+
+  }
+
+
+  await liff.init({
+    liffId: LIFF_ID
+  });
+
+
+  if (
+    !liff.isLoggedIn()
+  ) {
+
+    /*
+       ถ้าเปิดจาก browser ภายนอก
+       ให้ LINE login ก่อน
+    */
+
+    liff.login({
+      redirectUri:
+        window.location.href
+    });
+
+    return false;
+
+  }
+
+
+  ID_TOKEN =
+    liff.getIDToken() || "";
+
+
+  if (!ID_TOKEN) {
+
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+
+  }
+
+
+  return true;
+
+}
 
 
 /* ============================================================
    START
 ============================================================ */
 
-(async()=>{
+async function start() {
 
-  showLoading(
-    true
-  );
-
-
-  try{
+  try {
 
     const ready =
-      await initLine();
+      await initLiff();
 
 
-    if(
-      ready ===
-      false
-    ){
-
+    if (!ready) {
       return;
     }
 
 
-    const data =
-      await postBattle(
-        "mapV5"
-      );
+    await loadBattleData();
 
-
-    render(
-      data
-    );
-
-
-  }catch(error){
+  }
+  catch (err) {
 
     console.error(
-      error
+      "[BATTLE MAP ERROR]",
+      err
     );
 
 
-    toast(
-      error
-        ?.message ||
-      String(error),
-      true
+    /*
+       หน้า Map ยังคงเปิดให้เห็นได้
+       แต่ถ้าไม่มีข้อมูลผู้เล่น จะถือ EXP = 0
+    */
+
+    PLAYER_EXP = 0;
+
+    renderMap();
+
+
+    showToast(
+      err?.message ||
+      "โหลดข้อมูล Battle ไม่สำเร็จ",
+      "error"
     );
 
-  }finally{
+  }
+  finally {
 
-    showLoading(
-      false
-    );
+    hideLoading();
+
   }
 
-})();
+}
+
+
+/* ============================================================
+   IMAGE ERROR
+============================================================ */
+
+document
+  .getElementById("mapImage")
+  ?.addEventListener(
+    "error",
+    function() {
+
+      showToast(
+        "ไม่พบไฟล์ battle map.jpeg",
+        "error"
+      );
+
+    }
+  );
+
+
+/* ============================================================
+   BOOT
+============================================================ */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  start
+);
 
 </script>
 
