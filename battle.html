@@ -13,7 +13,7 @@
   </title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v54"></script>
+  <script src="./app-config.js?v=20260831-battle-v55"></script>
 
   <style>
 
@@ -1390,15 +1390,19 @@ function assetUrl(
   }
 
 
-  return (
-    `${base}/storage/v1/object/public/rock-assets/` +
+  const cleanPath =
     String(
       path
     )
       .replace(
         /^\/+/,
         ""
-      )
+      );
+
+
+  return (
+    `${base}/storage/v1/object/public/rock-assets/${cleanPath}` +
+    `?v=20260831-battle-v55`
   );
 }
 
@@ -1811,10 +1815,48 @@ function fallbackMonsterPaths(
 
   const n =
     Number(
-      stage
-        ?.id ||
+      stage?.id ||
       1
     );
+
+
+  /*
+    ชื่อไฟล์จริงใน rock-assets/monster
+    จากคลังรูปของโปรเจกต์
+  */
+  const exactMap = {
+
+    1:
+      "monster/stage-001-germ.png",
+
+    2:
+      "monster/stage-002-donut.png",
+
+    3:
+      "monster/stage-003-fries.png",
+
+    4:
+      "monster/stage-004-salt.png",
+
+    5:
+      "monster/stage-005-burger-king.png",
+
+    6:
+      "monster/stage-006-rest.png",
+
+    7:
+      "monster/stage-007-sedentary.png",
+
+    8:
+      "monster/stage-008-risk.png",
+
+    9:
+      "monster/stage-009-risk-king.png",
+
+    10:
+      "monster/stage-010-boss.png"
+
+  };
 
 
   const pad2 =
@@ -1839,20 +1881,30 @@ function fallbackMonsterPaths(
 
   return [
 
-    stage
-      ?.monsterImagePath,
+    /*
+      1) path จาก Database ก่อน
+    */
+    stage?.monsterImagePath,
 
+
+    /*
+      2) path จริงของคลัง rock-assets
+    */
+    exactMap[n],
+
+
+    /*
+      3) fallback เผื่อมีไฟล์อยู่ใน battle/
+    */
     `battle/monster-${pad2}.png`,
 
-    `battle/stage-${pad3}.png`,
 
-    `battle/stage-${pad3}-monster.png`,
-
-    `battle/stage-${pad3}-germ.png`,
-
+    /*
+      4) fallback ชื่อเดิม
+    */
     `monster/stage-${pad3}.png`,
 
-    `monster/stage-${pad3}-germ.png`
+    `monster/stage-${pad3}-monster.png`
 
   ]
     .filter(
@@ -1886,34 +1938,60 @@ function setMonsterImage(
       paths.length
     ){
 
-      image.removeAttribute(
-        "src"
+      image.style.display =
+        "none";
+
+
+      $("monsterHint")
+        .textContent =
+          `❌ ไม่พบรูป Monster Stage ${stage?.id || ""} ใน rock-assets/monster`;
+
+
+      console.error(
+        "MONSTER IMAGE NOT FOUND",
+        paths
       );
-
-
-      image.alt =
-        "ไม่พบภาพมอนสเตอร์";
 
 
       return;
     }
 
 
-    image.src =
+    const path =
+      paths[
+        index++
+      ];
+
+
+    const url =
       assetUrl(
-        paths[
-          index++
-        ]
+        path
       );
+
+
+    console.log(
+      "TRY MONSTER IMAGE:",
+      path,
+      url
+    );
+
+
+    image.src =
+      url;
   }
 
 
   image.onload =
     ()=>{
 
-      image.style
-        .display =
-          "block";
+      image.style.display =
+        "block";
+
+
+      console.log(
+        "MONSTER LOADED:",
+        image.src
+      );
     };
 
 
