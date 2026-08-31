@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 — BATTLE STAGE</title>
+  <title>ROCK YOUR BODY 2026 — BATTLE STAGE V5.8</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v54"></script>
+  <script src="./app-config.js?v=20260831-battle-v58"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -163,7 +163,7 @@
   <div id="wellnessBox">กำลังโหลด Energy...</div>
 
   <button id="backButton" type="button" aria-label="ย้อนกลับ"></button>
-  <button id="attackButton" type="button">⚔️ โจมตี</button>
+  <button id="attackButton" type="button">⚔️ โจมตีมอนสเตอร์</button>
 </main>
 
 <div id="resultModal">
@@ -324,13 +324,17 @@ function render(data){
   $("wellnessBox").innerHTML=
     `Energy วันนี้ <b>${Number(e.available||0)}/${Number(e.max||200)}</b>`+
     ` • โจมตีครั้งละ ⚡${Number(s.attackCost||0)}`+
-    ` • Damage ประมาณ ${Number(data?.damagePreview||0).toLocaleString()}`+
+    ` • เกณฑ์ชนะ ⚡${Number(s.attackCost||0)}`+
     `<br><small>Energy ใช้ค่าเดียวกับหน้า HOME และจะลดลงเมื่อโจมตี</small>`;
 
+  /*
+    V5.8:
+    ถ้าด่านปลดล็อกแล้ว ให้กดโจมตีได้แม้ Energy ไม่ถึง
+    เพื่อแสดง "การโจมตีล้มเหลว"
+  */
   $("attackButton").disabled=
     !s.unlocked||
-    !!p.completed||
-    Number(e.available||0)<Number(s.attackCost||0);
+    !!p.completed;
 
   if(!s.unlocked){
     showStatus(`🔒 ${s.lockReason||"ต้องผ่าน Stage ก่อนหน้า"}`,true);
@@ -360,7 +364,7 @@ function showResult(result){
   const success=!!result?.missionSuccess;
 
   $("resultIcon").textContent=success?"🏆":"❌";
-  $("resultTitle").textContent=success?"MISSION SUCCESS":"MISSION FAILED";
+  $("resultTitle").textContent=success?"ชนะ!":"การโจมตีล้มเหลว";
   $("resultTitle").className=success?"success":"failed";
   $("giftBox").classList.toggle("show",success);
 
@@ -373,14 +377,17 @@ function showResult(result){
     setTimeout(sfxVictory,380);
 
     $("resultText").innerHTML=
-      `ผ่าน Stage ${STAGE_ID} แล้ว ✅<br>`+
+      `🎉 <b>ชนะ Stage ${STAGE_ID}</b><br>`+
+      `ใช้ Energy ${Number(result?.requiredEnergy||result?.stage?.attackCost||0)} หน่วย<br>`+
+      `Energy คงเหลือ ${Number(result?.healthEnergy?.available||result?.energyAfter||0)} / ${Number(result?.healthEnergy?.max||200)}<br>`+
       `ของรางวัลถูกส่งเข้าคิว <b>รอ Admin ดำเนินการ</b><br>`+
       `${result?.reward?.rewardName?`🎁 ${result.reward.rewardName}<br>`:""}`+
-      `<br><small>ด่านถัดไปจะเปิดเมื่อผ่านด่านนี้ และมี EXP ตามเงื่อนไข</small>`;
+      `<br><small>ผ่านด่านนี้แล้ว ด่านถัดไปจะปลดล็อกเมื่อ EXP ถึงเกณฑ์</small>`;
   }else{
     $("resultText").innerHTML=
-      `MISSION FAILED<br>`+
-      `${result?.reason||"Energy ไม่เพียงพอสำหรับการโจมตี"}`;
+      `<b>การโจมตีล้มเหลว</b><br>`+
+      `${result?.reason||"Energy ไม่ถึงเกณฑ์ของ Stage นี้"}<br>`+
+      `<small>Energy จะไม่ถูกหักเมื่อการโจมตีล้มเหลว</small>`;
   }
 
   $("resultModal").classList.add("show");
@@ -416,8 +423,11 @@ async function attack(){
 
     if(result?.insufficientEnergy){
       showResult({
+        ...result,
         missionSuccess:false,
-        reason:`Energy เหลือ ${Number(result?.healthEnergy?.available||0)} แต่ต้องใช้ ${Number(result?.stage?.attackCost||0)}`
+        reason:
+          result?.reason ||
+          `การโจมตีล้มเหลว: Energy ${Number(result?.healthEnergy?.available||0)} แต่ต้องใช้ ${Number(result?.stage?.attackCost||0)}`
       });
       return;
     }
