@@ -13,7 +13,7 @@
   </title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v55"></script>
+  <script src="./app-config.js?v=20260831-battle-v56"></script>
 
   <style>
 
@@ -980,7 +980,7 @@
 
   <img
     class="battle-template"
-    src="./battle-template.png?v=20260831-v52"
+    src="./battle-template.png?v=20260831-v56"
     alt="Battle Template"
     draggable="false"
   >
@@ -1291,6 +1291,8 @@
 <script>
 "use strict";
 
+const BATTLE_BUILD = "V5.6-GITHUB-MONSTERS";
+
 
 /* =========================================================
    BASIC
@@ -1348,62 +1350,62 @@ function battleApi(){
 
 
 /* =========================================================
-   ROCK-ASSETS URL
+   GITHUB BATTLE ASSETS
 ========================================================= */
 
-function assetUrl(
-  path
+const GITHUB_ASSET_BASE =
+  "./";
+
+
+function githubAssetUrl(
+  fileName
 ){
 
-  if(!path){
-
-    return "";
-  }
-
-
-  if(
-    /^https?:\/\//i
-      .test(
-        path
-      )
-  ){
-
-    return path;
-  }
-
-
-  const base =
+  return (
+    GITHUB_ASSET_BASE +
     String(
-      window.APP_CONFIG
-        ?.SUPABASE_URL ||
+      fileName ||
       ""
-    )
-      .replace(
-        /\/$/,
-        ""
-      );
-
-
-  if(!base){
-
-    return path;
-  }
-
-
-  const cleanPath =
-    String(
-      path
     )
       .replace(
         /^\/+/,
         ""
+      )
+  );
+}
+
+
+function battleMonsterCandidates(
+  stageNo
+){
+
+  const no =
+    String(
+      Number(
+        stageNo ||
+        1
+      )
+    )
+      .padStart(
+        3,
+        "0"
       );
 
 
-  return (
-    `${base}/storage/v1/object/public/rock-assets/${cleanPath}` +
-    `?v=20260831-battle-v55`
-  );
+  /*
+    GitHub root:
+      battle-monster-stage-001.*
+      ...
+      battle-monster-stage-010.*
+
+    รองรับหลาย extension เพื่อไม่ต้องเดาชื่อจากหน้ารายการ GitHub
+  */
+  return [
+    `battle-monster-stage-${no}.png`,
+    `battle-monster-stage-${no}.webp`,
+    `battle-monster-stage-${no}.jpeg`,
+    `battle-monster-stage-${no}.jpg`
+  ];
 }
 
 
@@ -1809,110 +1811,6 @@ function firstAvailableStage(){
    MONSTER IMAGE FALLBACKS
 ========================================================= */
 
-function fallbackMonsterPaths(
-  stage
-){
-
-  const n =
-    Number(
-      stage?.id ||
-      1
-    );
-
-
-  /*
-    ชื่อไฟล์จริงใน rock-assets/monster
-    จากคลังรูปของโปรเจกต์
-  */
-  const exactMap = {
-
-    1:
-      "monster/stage-001-germ.png",
-
-    2:
-      "monster/stage-002-donut.png",
-
-    3:
-      "monster/stage-003-fries.png",
-
-    4:
-      "monster/stage-004-salt.png",
-
-    5:
-      "monster/stage-005-burger-king.png",
-
-    6:
-      "monster/stage-006-rest.png",
-
-    7:
-      "monster/stage-007-sedentary.png",
-
-    8:
-      "monster/stage-008-risk.png",
-
-    9:
-      "monster/stage-009-risk-king.png",
-
-    10:
-      "monster/stage-010-boss.png"
-
-  };
-
-
-  const pad2 =
-    String(
-      n
-    )
-      .padStart(
-        2,
-        "0"
-      );
-
-
-  const pad3 =
-    String(
-      n
-    )
-      .padStart(
-        3,
-        "0"
-      );
-
-
-  return [
-
-    /*
-      1) path จาก Database ก่อน
-    */
-    stage?.monsterImagePath,
-
-
-    /*
-      2) path จริงของคลัง rock-assets
-    */
-    exactMap[n],
-
-
-    /*
-      3) fallback เผื่อมีไฟล์อยู่ใน battle/
-    */
-    `battle/monster-${pad2}.png`,
-
-
-    /*
-      4) fallback ชื่อเดิม
-    */
-    `monster/stage-${pad3}.png`,
-
-    `monster/stage-${pad3}-monster.png`
-
-  ]
-    .filter(
-      Boolean
-    );
-}
-
-
 function setMonsterImage(
   stage
 ){
@@ -1921,9 +1819,18 @@ function setMonsterImage(
     $("monsterImage");
 
 
-  const paths =
-    fallbackMonsterPaths(
-      stage
+  const stageNo =
+    Number(
+      stage?.id ||
+      stage?.stage_no ||
+      selectedStageId ||
+      1
+    );
+
+
+  const files =
+    battleMonsterCandidates(
+      stageNo
     );
 
 
@@ -1935,7 +1842,7 @@ function setMonsterImage(
 
     if(
       index >=
-      paths.length
+      files.length
     ){
 
       image.style.display =
@@ -1944,12 +1851,12 @@ function setMonsterImage(
 
       $("monsterHint")
         .textContent =
-          `❌ ไม่พบรูป Monster Stage ${stage?.id || ""} ใน rock-assets/monster`;
+          `❌ ไม่พบรูป battle-monster-stage-${String(stageNo).padStart(3,"0")} ใน GitHub`;
 
 
       console.error(
-        "MONSTER IMAGE NOT FOUND",
-        paths
+        "MONSTER IMAGE NOT FOUND:",
+        files
       );
 
 
@@ -1957,21 +1864,22 @@ function setMonsterImage(
     }
 
 
-    const path =
-      paths[
+    const fileName =
+      files[
         index++
       ];
 
 
     const url =
-      assetUrl(
-        path
-      );
+      githubAssetUrl(
+        fileName
+      ) +
+      `?v=20260831-battle-v56`;
 
 
     console.log(
-      "TRY MONSTER IMAGE:",
-      path,
+      "TRY GITHUB MONSTER:",
+      fileName,
       url
     );
 
@@ -2000,6 +1908,12 @@ function setMonsterImage(
 
       tryNext();
     };
+
+
+  image.alt =
+    stage?.name ||
+    stage?.monster_name ||
+    `Monster Stage ${stageNo}`;
 
 
   tryNext();
