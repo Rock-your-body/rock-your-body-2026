@@ -2,9 +2,8 @@
 
 /* ============================================================
    ROCK YOUR BODY 2026
-   CENTRAL APP CONFIG
-   VERSION: 2026-08-31-BATTLE-V7.3
-   Supabase Edge Functions ONLY
+   APP CONFIG
+   VERSION: 2026-08-31-BATTLE-STAGE-V7
 ============================================================ */
 
 window.APP_CONFIG = {
@@ -13,9 +12,11 @@ window.APP_CONFIG = {
      APP
   ========================================================== */
 
-  APP_NAME: "ROCK YOUR BODY 2026",
+  APP_NAME:
+    "ROCK YOUR BODY 2026",
 
-  VERSION: "2026-08-31-BATTLE-V7.3",
+  VERSION:
+    "2026-08-31-battle-stage-v7",
 
 
   /* ==========================================================
@@ -76,7 +77,7 @@ window.APP_CONFIG = {
 
 
   /* ==========================================================
-     PAGE ROUTES
+     PAGES
   ========================================================== */
 
   PAGE: {
@@ -87,18 +88,30 @@ window.APP_CONFIG = {
     MISSION:
       "./mission.html",
 
-    /* ---------------- BATTLE ---------------- */
-
     BATTLE:
       "./battle.html",
 
+    /*
+      Battle Map
+      battle.html
+          ↓
+      battle_map.html
+    */
     BATTLE_MAP:
       "./battle_map.html",
 
+    /*
+      Battle Stage
+
+      ใช้หน้าเดียว
+      แล้วรับ ?stage=1 ถึง ?stage=10
+
+      ตัวอย่าง:
+      battle_stage.html?stage=1
+      battle_stage.html?stage=10
+    */
     BATTLE_STAGE:
       "./battle_stage.html",
-
-    /* ---------------------------------------- */
 
     WEIGHT:
       "./weight-check.html",
@@ -149,42 +162,17 @@ window.APP_CONFIG = {
 
 
   /* ==========================================================
-     BATTLE CONFIG
+     PLAYER
   ========================================================== */
 
-  BATTLE: {
+  MAX_ENERGY:
+    200,
 
-    PAGE:
-      "./battle.html",
+  EXP_PER_LEVEL:
+    500,
 
-    MAP:
-      "./battle_map.html",
-
-    STAGE:
-      "./battle_stage.html",
-
-    MAP_IMAGE:
-      "./battle map.jpeg",
-
-    PLAYER_IMAGE:
-      "./battle-player.png",
-
-    MAX_STAGE: 10,
-
-    MAX_ENERGY: 200
-
-  },
-
-
-  /* ==========================================================
-     GAME
-  ========================================================== */
-
-  MAX_ENERGY: 200,
-
-  EXP_PER_LEVEL: 500,
-
-  REFRESH_MS: 30000,
+  REFRESH_MS:
+    30000,
 
 
   /* ==========================================================
@@ -193,11 +181,14 @@ window.APP_CONFIG = {
 
   DAILY_GOALS: {
 
-    STEPS: 8000,
+    STEPS:
+      8000,
 
-    CALORIES: 300,
+    CALORIES:
+      300,
 
-    SLEEP_MINUTES: 420
+    SLEEP_MINUTES:
+      420
 
   },
 
@@ -220,316 +211,202 @@ window.APP_CONFIG = {
     ROCK_ASSETS:
       "rock-assets"
 
+  },
+
+
+  /* ==========================================================
+     BATTLE ASSETS
+  ========================================================== */
+
+  BATTLE_ASSET: {
+
+    /*
+      ตัวละครผู้เล่น
+    */
+    PLAYER:
+      "./battle-player.png",
+
+
+    /*
+      Battle Map Background
+    */
+    MAP:
+      "./battle%20map.jpeg",
+
+
+    /*
+      Battle Stage Template 01 - 10
+
+      ตั้งชื่อไฟล์ใน GitHub ให้ตรงนี้
+    */
+    STAGE_TEMPLATE: {
+
+      1:
+        "./battle-stage-01.jpeg",
+
+      2:
+        "./battle-stage-02.jpeg",
+
+      3:
+        "./battle-stage-03.jpeg",
+
+      4:
+        "./battle-stage-04.jpeg",
+
+      5:
+        "./battle-stage-05.jpeg",
+
+      6:
+        "./battle-stage-06.jpeg",
+
+      7:
+        "./battle-stage-07.jpeg",
+
+      8:
+        "./battle-stage-08.jpeg",
+
+      9:
+        "./battle-stage-09.jpeg",
+
+      10:
+        "./battle-stage-10.jpeg"
+
+    },
+
+
+    /*
+      Monster PNG
+    */
+    MONSTER: {
+
+      1:
+        "./battle-monster-stage-001-germ.png",
+
+      2:
+        "./battle-monster-stage-002-donut.png",
+
+      3:
+        "./battle-monster-stage-003-fries.png",
+
+      4:
+        "./battle-monster-stage-004-salt.png",
+
+      5:
+        "./battle-monster-stage-005-burger-king.png",
+
+      6:
+        "./battle-monster-stage-006-rest.png",
+
+      7:
+        "./battle-monster-stage-007-sedentary.png",
+
+      8:
+        "./battle-monster-stage-008-risk.png",
+
+      9:
+        "./battle-monster-stage-009-risk-king.png",
+
+      10:
+        "./battle-monster-stage-010-boss.png"
+
+    }
+
+  },
+
+
+  /* ==========================================================
+     BATTLE STAGES
+  ========================================================== */
+
+  BATTLE_STAGE: {
+
+    1: {
+      stage: 1,
+      name: "เจ้าจอมเอื่อย",
+      hp: 1200,
+      attackCost: 10,
+      expRequired: 0
+    },
+
+    2: {
+      stage: 2,
+      name: "จอมหวาน",
+      hp: 2200,
+      attackCost: 20,
+      expRequired: 300
+    },
+
+    3: {
+      stage: 3,
+      name: "ปีศาจของทอด",
+      hp: 3500,
+      attackCost: 30,
+      expRequired: 700
+    },
+
+    4: {
+      stage: 4,
+      name: "จอมเค็ม",
+      hp: 5000,
+      attackCost: 40,
+      expRequired: 1200
+    },
+
+    5: {
+      stage: 5,
+      name: "ราชาอาหารไร้ประโยชน์",
+      hp: 7000,
+      attackCost: 50,
+      expRequired: 1800
+    },
+
+    6: {
+      stage: 6,
+      name: "ปีศาจพักผ่อนน้อย",
+      hp: 9500,
+      attackCost: 60,
+      expRequired: 2400
+    },
+
+    7: {
+      stage: 7,
+      name: "จอมเนือยนิ่ง",
+      hp: 12500,
+      attackCost: 70,
+      expRequired: 3300
+    },
+
+    8: {
+      stage: 8,
+      name: "ปีศาจพฤติกรรมเสี่ยง",
+      hp: 16000,
+      attackCost: 80,
+      expRequired: 4300
+    },
+
+    9: {
+      stage: 9,
+      name: "ราชาความเสี่ยงสุขภาพ",
+      hp: 20000,
+      attackCost: 90,
+      expRequired: 5500
+    },
+
+    10: {
+      stage: 10,
+      name: "จอมมาร Final Boss",
+      hp: 30000,
+      attackCost: 100,
+      expRequired: 7000
+    }
+
   }
 
 };
 
 
 /* ============================================================
-   GET API
-
-   ตัวอย่าง:
-   APP_CONFIG.getApi("BATTLE")
-============================================================ */
-
-window.APP_CONFIG.getApi = function(name) {
-
-  const key =
-    String(name || "")
-      .trim()
-      .toUpperCase();
-
-  const url =
-    window.APP_CONFIG.API?.[key];
-
-  if (!url) {
-
-    throw new Error(
-      "ไม่พบ API configuration: " + key
-    );
-
-  }
-
-  return url;
-
-};
-
-
-/* ============================================================
-   GET PAGE
-
-   ตัวอย่าง:
-   APP_CONFIG.getPage("BATTLE_MAP")
-============================================================ */
-
-window.APP_CONFIG.getPage = function(name) {
-
-  const key =
-    String(name || "")
-      .trim()
-      .toUpperCase();
-
-  const page =
-    window.APP_CONFIG.PAGE?.[key];
-
-  if (page) {
-    return page;
-  }
-
-  return window.APP_CONFIG.PAGE.HOME;
-
-};
-
-
-/* ============================================================
-   GET ABSOLUTE PAGE URL
-
-   ตัวอย่าง:
-   APP_CONFIG.getPageUrl("BATTLE_MAP")
-
-   ผลลัพธ์:
-   https://rock-your-body.github.io/
-   rock-your-body-2026/battle_map.html
-============================================================ */
-
-window.APP_CONFIG.getPageUrl = function(name) {
-
-  const page =
-    window.APP_CONFIG.getPage(name);
-
-  const base =
-    String(window.APP_CONFIG.FRONTEND_URL || "")
-      .replace(/\/+$/, "");
-
-  const path =
-    String(page || "")
-      .replace(/^\.\//, "")
-      .replace(/^\/+/, "");
-
-  return base + "/" + path;
-
-};
-
-
-/* ============================================================
-   GET MISSION ROUTE
-============================================================ */
-
-window.APP_CONFIG.getMissionRoute = function(name) {
-
-  const key =
-    String(name || "")
-      .trim()
-      .toUpperCase();
-
-  return (
-    window.APP_CONFIG.MISSION_ROUTE?.[key]
-    ||
-    window.APP_CONFIG.PAGE.MISSION
-  );
-
-};
-
-
-/* ============================================================
-   GO PAGE
-
-   ตัวอย่าง:
-   APP_CONFIG.go("BATTLE_MAP")
-============================================================ */
-
-window.APP_CONFIG.go = function(name) {
-
-  const page =
-    window.APP_CONFIG.getPage(name);
-
-  window.location.href = page;
-
-};
-
-
-/* ============================================================
-   BATTLE HELPERS
-============================================================ */
-
-
-/* ---------------- GO BATTLE ---------------- */
-
-window.APP_CONFIG.goBattle = function() {
-
-  window.location.href =
-    window.APP_CONFIG.PAGE.BATTLE;
-
-};
-
-
-/* ---------------- GO BATTLE MAP ---------------- */
-
-window.APP_CONFIG.goBattleMap = function() {
-
-  window.location.href =
-    window.APP_CONFIG.PAGE.BATTLE_MAP;
-
-};
-
-
-/* ---------------- GO BATTLE STAGE ---------------- */
-
-/*
-   ตัวอย่าง:
-
-   APP_CONFIG.goBattleStage(1)
-
-   จะเปิด:
-
-   battle_stage.html?stage=1
-*/
-
-window.APP_CONFIG.goBattleStage = function(stage) {
-
-  let stageNo =
-    Number(stage || 1);
-
-  if (!Number.isFinite(stageNo)) {
-    stageNo = 1;
-  }
-
-  stageNo =
-    Math.max(
-      1,
-      Math.min(
-        window.APP_CONFIG.BATTLE.MAX_STAGE,
-        Math.floor(stageNo)
-      )
-    );
-
-  window.location.href =
-    window.APP_CONFIG.PAGE.BATTLE_STAGE +
-    "?stage=" +
-    encodeURIComponent(stageNo);
-
-};
-
-
-/* ============================================================
-   MONSTER IMAGE
-============================================================ */
-
-/*
-   ตัวอย่าง:
-
-   APP_CONFIG.getMonsterImage(1)
-
-   =
-   ./battle-monster-stage-001-germ.png
-*/
-
-window.APP_CONFIG.getMonsterImage = function(stage) {
-
-  const stageNo =
-    Number(stage || 1);
-
-  const monsters = {
-
-    1:
-      "./battle-monster-stage-001-germ.png",
-
-    2:
-      "./battle-monster-stage-002-donut.png",
-
-    3:
-      "./battle-monster-stage-003-fries.png",
-
-    4:
-      "./battle-monster-stage-004-salt.png",
-
-    5:
-      "./battle-monster-stage-005-burger-king.png",
-
-    6:
-      "./battle-monster-stage-006-rest.png",
-
-    7:
-      "./battle-monster-stage-007-sedentary.png",
-
-    8:
-      "./battle-monster-stage-008-risk.png",
-
-    9:
-      "./battle-monster-stage-009-risk-king.png",
-
-    10:
-      "./battle-monster-stage-010-boss.png"
-
-  };
-
-  return (
-    monsters[stageNo]
-    ||
-    monsters[1]
-  );
-
-};
-
-
-/* ============================================================
-   MONSTER NAME
-============================================================ */
-
-window.APP_CONFIG.getMonsterName = function(stage) {
-
-  const stageNo =
-    Number(stage || 1);
-
-  const names = {
-
-    1:
-      "เจ้าจอมเอื่อย",
-
-    2:
-      "จอมหวาน",
-
-    3:
-      "ปีศาจของทอด",
-
-    4:
-      "จอมเค็ม",
-
-    5:
-      "ราชาอาหารไร้ประโยชน์",
-
-    6:
-      "ปีศาจพักผ่อนน้อย",
-
-    7:
-      "จอมเนือยนิ่ง",
-
-    8:
-      "ปีศาจพฤติกรรมเสี่ยง",
-
-    9:
-      "ราชาความเสี่ยงสุขภาพ",
-
-    10:
-      "จอมมาร Final Boss"
-
-  };
-
-  return (
-    names[stageNo]
-    ||
-    "MONSTER"
-  );
-
-};
-
-
-/* ============================================================
-   LEGACY COMPATIBILITY
-
-   รองรับหน้าเก่าที่ยังใช้:
-
-   APP_CONFIG.PAGES
+   COMPATIBILITY
 ============================================================ */
 
 window.APP_CONFIG.PAGES =
@@ -537,11 +414,177 @@ window.APP_CONFIG.PAGES =
 
 
 /* ============================================================
-   READY
+   GET API
+============================================================ */
+
+window.APP_CONFIG.getApi =
+  function(name){
+
+    const key =
+      String(
+        name || ""
+      )
+      .trim()
+      .toUpperCase();
+
+
+    return (
+      window.APP_CONFIG.API[key] ||
+      ""
+    );
+  };
+
+
+/* ============================================================
+   GET PAGE
+============================================================ */
+
+window.APP_CONFIG.getPage =
+  function(name){
+
+    const key =
+      String(
+        name || ""
+      )
+      .trim()
+      .toUpperCase();
+
+
+    return (
+      window.APP_CONFIG.PAGE[key] ||
+      ""
+    );
+  };
+
+
+/* ============================================================
+   GET MISSION ROUTE
+============================================================ */
+
+window.APP_CONFIG.getMissionRoute =
+  function(name){
+
+    const key =
+      String(
+        name || ""
+      )
+      .trim()
+      .toUpperCase();
+
+
+    return (
+      window.APP_CONFIG.MISSION_ROUTE[key] ||
+      ""
+    );
+  };
+
+
+/* ============================================================
+   GET BATTLE STAGE
+============================================================ */
+
+window.APP_CONFIG.getBattleStage =
+  function(stageNo){
+
+    const stage =
+      Math.max(
+        1,
+        Math.min(
+          10,
+          Number(stageNo) || 1
+        )
+      );
+
+
+    return (
+      window.APP_CONFIG.BATTLE_STAGE[stage] ||
+      window.APP_CONFIG.BATTLE_STAGE[1]
+    );
+  };
+
+
+/* ============================================================
+   GET BATTLE STAGE TEMPLATE
+============================================================ */
+
+window.APP_CONFIG.getBattleStageTemplate =
+  function(stageNo){
+
+    const stage =
+      Math.max(
+        1,
+        Math.min(
+          10,
+          Number(stageNo) || 1
+        )
+      );
+
+
+    return (
+      window.APP_CONFIG
+        .BATTLE_ASSET
+        .STAGE_TEMPLATE[stage] ||
+      ""
+    );
+  };
+
+
+/* ============================================================
+   GET BATTLE MONSTER
+============================================================ */
+
+window.APP_CONFIG.getBattleMonster =
+  function(stageNo){
+
+    const stage =
+      Math.max(
+        1,
+        Math.min(
+          10,
+          Number(stageNo) || 1
+        )
+      );
+
+
+    return (
+      window.APP_CONFIG
+        .BATTLE_ASSET
+        .MONSTER[stage] ||
+      ""
+    );
+  };
+
+
+/* ============================================================
+   CREATE BATTLE STAGE URL
+============================================================ */
+
+window.APP_CONFIG.getBattleStageUrl =
+  function(stageNo){
+
+    const stage =
+      Math.max(
+        1,
+        Math.min(
+          10,
+          Number(stageNo) || 1
+        )
+      );
+
+
+    return (
+      window.APP_CONFIG.PAGE.BATTLE_STAGE +
+      "?stage=" +
+      encodeURIComponent(stage)
+    );
+  };
+
+
+/* ============================================================
+   LOG
 ============================================================ */
 
 console.log(
-  "[APP_CONFIG]",
-  window.APP_CONFIG.VERSION,
-  "READY"
+  `[${window.APP_CONFIG.APP_NAME}]`,
+  window.APP_CONFIG.VERSION
 );
