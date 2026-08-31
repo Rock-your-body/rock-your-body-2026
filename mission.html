@@ -66,7 +66,245 @@
 
 
   <style>
+/* =========================================================
+   NUTRITION TEMPLATE OVERLAY — FINAL
+   ใช้ข้อมูลทับบนช่อง Nutrition ใน mission-template
+========================================================= */
 
+#missionStage #missionNutritionLive{
+  position:absolute!important;
+
+  /* กรอบ Nutrition ทั้งช่อง */
+  left:2.8%!important;
+  top:18.0%!important;
+  width:36.5%!important;
+  height:64.5%!important;
+
+  padding:0!important;
+  margin:0!important;
+
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+
+  overflow:hidden!important;
+  pointer-events:none!important;
+  z-index:120!important;
+}
+
+
+/* =========================================================
+   ซ่อนของเดิมที่ไม่ต้องการ
+========================================================= */
+
+#missionStage #missionNutritionLive .nutrition-head,
+#missionStage #missionNutritionLive .nutrition-ring,
+#missionStage #missionNutritionLive .nutrition-water,
+#missionStage #missionNutritionLive .nutrition-macro-gap{
+  display:none!important;
+}
+
+
+/* =========================================================
+   CALORIES
+   ข้อมูลกลางวง
+========================================================= */
+
+#missionStage #missionNutritionLive .nutrition-ring-wrap{
+  display:block!important;
+  position:absolute!important;
+
+  left:10.0%!important;
+  top:22.0%!important;
+
+  width:38%!important;
+  height:42%!important;
+
+  min-height:0!important;
+}
+
+#missionStage #missionNutritionLive .nutrition-ring-center{
+  position:absolute!important;
+  inset:0!important;
+
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  text-align:center!important;
+  transform:none!important;
+}
+
+
+/* คำว่า Calories */
+#missionStage #missionNutritionLive .nutrition-ring-center span{
+  color:#0b477d!important;
+  font-size:clamp(8px,.90cqw,14px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+
+
+/* ตัวเลข Calories */
+#missionStage #missionNutritionCaloriesMain{
+  color:#093b70!important;
+
+  font-size:clamp(18px,2.3cqw,34px)!important;
+  font-weight:1000!important;
+
+  line-height:.95!important;
+
+  margin-top:2px!important;
+}
+
+
+/* kcal */
+#missionStage #missionNutritionCaloriesMain::after{
+  content:" kcal";
+  display:block;
+
+  margin-top:4px;
+
+  font-size:clamp(7px,.85cqw,13px);
+  font-weight:900;
+}
+
+
+/* เป้าหมาย Calories */
+#missionStage #missionNutritionCaloriesTargetText{
+  color:#425f80!important;
+
+  font-size:clamp(7px,.80cqw,12px)!important;
+  font-weight:900!important;
+
+  line-height:1.15!important;
+
+  margin-top:8px!important;
+  text-align:center!important;
+}
+
+
+/* =========================================================
+   MACROS
+========================================================= */
+
+#missionStage #missionNutritionLive .nutrition-macros{
+  position:absolute!important;
+
+  left:58.5%!important;
+  top:18.0%!important;
+
+  width:38%!important;
+  height:54%!important;
+
+  display:block!important;
+}
+
+
+/* แต่ละแถว */
+#missionStage #missionNutritionLive .nutrition-macro{
+  position:absolute!important;
+
+  left:0!important;
+  width:100%!important;
+
+  padding:0!important;
+  margin:0!important;
+
+  background:transparent!important;
+  border:0!important;
+
+  min-height:0!important;
+}
+
+
+/* Protein */
+#missionStage #missionNutritionLive .nutrition-macro.protein{
+  top:0!important;
+}
+
+
+/* Carbs */
+#missionStage #missionNutritionLive .nutrition-macro.carbs{
+  top:34%!important;
+}
+
+
+/* Fat */
+#missionStage #missionNutritionLive .nutrition-macro.fat{
+  top:68%!important;
+}
+
+
+/* ชื่อสารอาหาร */
+#missionStage #missionNutritionLive .nutrition-macro-title{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+
+  gap:5px!important;
+
+  color:#0d4777!important;
+
+  font-size:clamp(8px,.90cqw,14px)!important;
+  font-weight:900!important;
+
+  line-height:1.1!important;
+}
+
+
+/* ตัวเลข เช่น 0.0 / 69.6 g */
+#missionStage #missionNutritionLive .nutrition-macro-title strong{
+  display:block!important;
+
+  color:#073b70!important;
+
+  font-size:clamp(11px,1.20cqw,18px)!important;
+  font-weight:1000!important;
+
+  line-height:1!important;
+
+  white-space:nowrap!important;
+}
+
+
+/* % */
+#missionStage #missionNutritionLive .nutrition-macro-percent{
+  color:#073b70!important;
+
+  font-size:clamp(8px,.88cqw,13px)!important;
+  font-weight:1000!important;
+
+  white-space:nowrap!important;
+}
+
+
+/* =========================================================
+   CTA BUTTON
+   ปุ่มบันทึกการรับประทานอาหาร
+========================================================= */
+
+#missionStage #missionNutritionButton{
+  position:absolute!important;
+
+  left:4.0%!important;
+  bottom:2.6%!important;
+
+  width:92%!important;
+  height:12%!important;
+
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+
+  color:transparent!important;
+
+  pointer-events:auto!important;
+  cursor:pointer!important;
+
+  z-index:150!important;
+}
     /* =====================================================
        MISSION CLICK AREA - FIX CURRENT TEMPLATE
     ====================================================== */
