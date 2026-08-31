@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260829-mission-period-reset-01"
+    src="./app-config.js?v=20260831-mission-v2300-reset-fix"
   ></script>
 
 
@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-mission-v2212-bottom-mission-no-modal"
+    href="./base.css?v=20260831-mission-v2300-reset-fix"
   >
 
 
@@ -2399,7 +2399,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260830-mission-v2212-bottom-mission-no-modal"
+    src="./mission-template.png?v=20260831-mission-v2300-reset-fix"
     alt=""
     draggable="false"
     style="
@@ -7280,11 +7280,29 @@ async function submitEvidence(){
       idToken
     );
 
+    /*
+      Secret Mission:
+      ส่ง ID ที่ backend ใช้ตรวจสอบได้
+      mission.id = secret mission id ของวันนั้น
+    */
+    const submitMissionId =
+      String(
+        mission?.secretMissionId ||
+        mission?.id ||
+        ""
+      ).trim();
+
+
+    if(!submitMissionId){
+      throw new Error(
+        "ไม่พบ Mission ID"
+      );
+    }
+
+
     form.append(
       "missionId",
-      String(
-        mission.id
-      )
+      submitMissionId
     );
 
     form.append(
@@ -7621,6 +7639,98 @@ async function refreshMissionStatus(){
     return null;
   }
 }
+
+
+/* =========================================================
+   MISSION V2.30.0
+   DIRECT EVIDENCE FROM HOME
+   ---------------------------------------------------------
+   ตัวอย่าง:
+   mission.html?category=daily&mission=daily_move_more&evidence=1&openEvidence=1
+========================================================= */
+
+function openEvidenceDeepLinkV2300(){
+
+  try{
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const category =
+      params.get("category") ||
+      "daily";
+
+
+    const missionId =
+      params.get("mission") ||
+      "";
+
+
+    const shouldOpen =
+      params.get("evidence") === "1" ||
+      params.get("openEvidence") === "1";
+
+
+    if(
+      !shouldOpen ||
+      !missionId
+    ){
+      return false;
+    }
+
+
+    if(
+      missionData?.[category]
+    ){
+      openCategory(
+        category
+      );
+    }
+
+
+    const mission =
+      findMission(
+        missionId
+      );
+
+
+    if(!mission){
+      console.warn(
+        "DEEPLINK MISSION NOT FOUND:",
+        missionId
+      );
+      return false;
+    }
+
+
+    setTimeout(
+      ()=>{
+
+        openEvidence(
+          missionId
+        );
+
+      },
+      220
+    );
+
+
+    return true;
+
+  }catch(error){
+
+    console.warn(
+      "MISSION DEEPLINK V2300:",
+      error
+    );
+
+    return false;
+  }
+}
+
 
 /* =========================================================
    MAIN PROGRESS
@@ -9675,6 +9785,23 @@ if(document.readyState === 'loading'){
   }
 
 })();
+
+window.addEventListener(
+  "load",
+  ()=>{
+
+    setTimeout(
+      ()=>{
+
+        openEvidenceDeepLinkV2300();
+
+      },
+      900
+    );
+
+  }
+);
+
 </script>
 
 </body>
