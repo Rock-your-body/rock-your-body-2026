@@ -3,301 +3,149 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 — BATTLE MAP</title>
+  <title>ROCK YOUR BODY 2026 - BATTLE MAP</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v50"></script>
+  <script src="./app-config.js?v=20260831-battle-v60"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;min-height:100%;background:#020817;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
-    body{display:flex;justify-content:center;overflow-x:hidden}
-
-    #mapStage{
-      position:relative;
-      width:min(100vw,1280px);
-      aspect-ratio:1280/657;
-      overflow:hidden;
-      background:#020817;
-    }
-
-    #mapImage{
-      position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none
-    }
-
-    .hot{
-      position:absolute;z-index:70;border:0;background:transparent;padding:0;cursor:pointer
-    }
-
-    #backButton{left:1%;top:1%;width:7%;height:12%}
-
-    .monster{
-      position:absolute;
-      z-index:45;
-      width:11.5%;
-      aspect-ratio:1;
-      object-fit:contain;
-      filter:drop-shadow(0 10px 10px rgba(0,0,0,.5));
-      cursor:pointer;
-      transition:.18s ease;
-      animation:float 2.2s ease-in-out infinite;
-    }
-    .monster:hover{transform:scale(1.07)}
-    .monster.locked{filter:grayscale(1) brightness(.45) drop-shadow(0 8px 8px rgba(0,0,0,.5))}
-    .monster.done{filter:drop-shadow(0 0 10px #5cff84)}
-    @keyframes float{0%,100%{translate:0 0}50%{translate:0 -6px}}
-
-    .lock{
-      position:absolute;z-index:60;pointer-events:none;
-      display:none;align-items:center;justify-content:center;
-      color:#fff;font-size:clamp(20px,3vw,50px);text-shadow:0 3px 8px #000;
-    }
-    .lock.show{display:flex}
-
-    .meta{
-      position:absolute;z-index:61;pointer-events:none;
-      width:13%;text-align:center;color:#fff;font-weight:1000;
-      font-size:clamp(7px,1vw,14px);text-shadow:0 2px 5px #000;
-    }
-    .meta b{
-      display:inline-block;background:rgba(0,20,66,.84);padding:3px 7px;border-radius:999px
-    }
-    .meta .done{background:#087d44}
-    .meta .pending{background:#a96f00}
-
-    #playerInfo{
-      position:absolute;z-index:80;left:11%;top:2.3%;
-      padding:8px 12px;border-radius:13px;background:rgba(2,24,66,.88);
-      color:#fff;font-size:clamp(8px,1.15vw,16px);font-weight:1000
-    }
-
-    #healthEnergy{
-      position:absolute;z-index:80;right:2%;top:2.3%;
-      padding:8px 12px;border-radius:13px;background:rgba(5,90,47,.90);
-      color:#fff;font-size:clamp(8px,1.15vw,16px);font-weight:1000
-    }
-
-    #status{
-      position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);
-      z-index:9999;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;
-      max-width:calc(100vw - 28px);font-weight:900;text-align:center
-    }
-    #status.show{display:block}
-    #status.error{background:#c62828}
+    html,body{margin:0;background:#020817;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
+    body{display:flex;justify-content:center}
+    #map{position:relative;width:min(100vw,1280px);aspect-ratio:1280/657;overflow:hidden}
+    #bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:1}
+    #topInfo{position:absolute;z-index:20;left:1%;right:1%;top:1%;display:flex;justify-content:space-between;color:#fff;font-weight:1000;font-size:clamp(9px,1.2vw,16px)}
+    .slot{position:absolute;z-index:30;width:10.6%;aspect-ratio:1;cursor:pointer}
+    .slot img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 8px rgba(0,0,0,.45))}
+    .slot.locked img{filter:grayscale(1) brightness(.42) drop-shadow(0 8px 8px rgba(0,0,0,.45))}
+    .lock{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:clamp(26px,4vw,54px);color:#fff;text-shadow:0 3px 8px #000}
+    .slot.locked .lock{display:flex}
+    .status{position:absolute;left:-10%;right:-10%;bottom:-12%;text-align:center;color:#fff;font-weight:1000;font-size:clamp(7px,.8vw,12px);text-shadow:0 2px 4px #000}
+    #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;font-weight:900;max-width:calc(100vw - 28px);text-align:center}
+    #toast.show{display:block}
+    #toast.error{background:#c62828}
   </style>
 </head>
 <body>
 
-<main id="mapStage">
-  <img
-    id="mapImage"
-    src="./battle%20map.jpeg?v=20260831-v54"
-    onerror="this.onerror=null;this.src='./battle-map.jpg?v=20260831-v54'"
-    alt="Battle Map"
-  >
-
-  <div id="playerInfo">EXP -- • Stage --</div>
-  <div id="healthEnergy">⚡ MY ENERGY -- / 200</div>
-
-  <button id="backButton" class="hot" type="button" aria-label="ย้อนกลับ"></button>
-
-  <div id="monsterLayer"></div>
+<main id="map">
+  <img id="bg" src="./battle%20map.jpeg?v=20260831-v60" alt="Battle Map">
+  <div id="topInfo">
+    <div id="expInfo">EXP --</div>
+    <div id="energyInfo">⚡ -- / 200</div>
+  </div>
+  <div id="layer"></div>
 </main>
 
-<div id="status"></div>
+<div id="toast"></div>
 
 <script>
 "use strict";
 
 const $=id=>document.getElementById(id);
 
-const STAGE_POSITIONS = {
-  1:{left:4.0,top:25.0,metaLeft:3.2,metaTop:49.0},
-  2:{left:22.5,top:24.0,metaLeft:21.8,metaTop:49.0},
-  3:{left:41.0,top:24.0,metaLeft:40.3,metaTop:49.0},
-  4:{left:59.2,top:23.5,metaLeft:58.6,metaTop:49.0},
-  5:{left:79.0,top:22.8,metaLeft:78.0,metaTop:49.0},
-  6:{left:3.2,top:64.0,metaLeft:2.5,metaTop:88.0},
-  7:{left:21.8,top:63.5,metaLeft:21.0,metaTop:88.0},
-  8:{left:40.5,top:63.0,metaLeft:39.8,metaTop:88.0},
-  9:{left:59.2,top:62.5,metaLeft:58.5,metaTop:88.0},
-  10:{left:79.5,top:61.5,metaLeft:78.3,metaTop:88.0}
+const POS={
+  1:[3.5,22.5],2:[22.0,22.0],3:[40.4,22.0],4:[58.8,21.5],5:[78.2,21.0],
+  6:[3.0,61.5],7:[21.7,61.0],8:[40.2,60.5],9:[58.7,60.0],10:[78.8,59.0]
 };
 
-let state=null;
+function monsterFile(stageNo){
+  const map={
+    1:"battle-monster-stage-001-germ.png",
+    2:"battle-monster-stage-002-donut.png",
+    3:"battle-monster-stage-003-fries.png",
+    4:"battle-monster-stage-004-salt.png",
+    5:"battle-monster-stage-005-burger-king.png",
+    6:"battle-monster-stage-006-rest.png",
+    7:"battle-monster-stage-007-sedentary.png",
+    8:"battle-monster-stage-008-risk.png",
+    9:"battle-monster-stage-009-risk-king.png",
+    10:"battle-monster-stage-010-boss.png"
+  };
+  return map[Number(stageNo)];
+}
 
 function apiUrl(){
   if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi("BATTLE");
-  const url=window.APP_CONFIG?.API?.BATTLE;
-  if(!url) throw new Error("ไม่พบ API.BATTLE");
-  return url;
-}
-
-function assetUrl(path){
-  if(!path) return "";
-  if(/^https?:\/\//i.test(path)) return path;
-  const root=String(window.APP_CONFIG?.SUPABASE_URL||"").replace(/\/$/,"");
-  return `${root}/storage/v1/object/public/rock-assets/${String(path).replace(/^\/+/,"")}`;
+  return window.APP_CONFIG?.API?.BATTLE;
 }
 
 async function initLine(){
   await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});
-  if(!liff.isLoggedIn()){
-    liff.login({redirectUri:location.href});
-    return false;
-  }
+  if(!liff.isLoggedIn()){liff.login({redirectUri:location.href});return false}
   const token=liff.getIDToken();
-  if(!token||token.split(".").length!==3){
-    liff.logout();
-    liff.login({redirectUri:location.href});
-    return false;
-  }
+  if(!token||token.split(".").length!==3){liff.logout();liff.login({redirectUri:location.href});return false}
   return true;
 }
 
 async function post(action,payload={}){
-  const idToken=liff.getIDToken();
   const res=await fetch(apiUrl(),{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     cache:"no-store",
-    body:JSON.stringify({action,idToken,...payload})
+    body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})
   });
-
   const text=await res.text();
   let data={};
   try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
-
-  if(res.status===401||String(data?.error||"").toLowerCase().includes("expired")){
-    liff.logout();
-    liff.login({redirectUri:location.href});
-    return new Promise(()=>{});
-  }
-
-  if(!res.ok||data?.success===false){
-    throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
-  }
-
+  if(!res.ok||data?.success===false) throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
   return data;
 }
 
-function showStatus(text,error=false){
-  const el=$("status");
+function toast(text,error=false){
+  const el=$("toast");
   el.textContent=text;
   el.classList.toggle("error",error);
   el.classList.add("show");
-  clearTimeout(window.__st);
-  window.__st=setTimeout(()=>el.classList.remove("show"),error?4800:2400);
-}
-
-function cacheProgress(data){
-  try{
-    localStorage.setItem(
-      "ryb_battle_map_cache_v5",
-      JSON.stringify({
-        updatedAt:Date.now(),
-        completedStages:(data?.stages||[]).filter(x=>x.completed).map(x=>x.id),
-        currentStage:data?.currentStage||1
-      })
-    );
-  }catch{}
+  clearTimeout(window.__t);
+  window.__t=setTimeout(()=>el.classList.remove("show"),error?4500:2200);
 }
 
 function render(data){
-  state=data;
+  $("expInfo").textContent=`EXP ${Number(data?.player?.exp||0).toLocaleString()}`;
+  $("energyInfo").textContent=`⚡ ${Number(data?.healthEnergy?.available||0)} / ${Number(data?.healthEnergy?.max||200)}`;
 
-  $("playerInfo").textContent=
-    `EXP ${Number(data?.player?.exp||0).toLocaleString()} • Stage ${Number(data?.currentStage||1)}`;
-
-  $("healthEnergy").textContent=
-    `⚡ MY ENERGY ${Number(data?.healthEnergy?.available||0).toLocaleString()} / ${Number(data?.healthEnergy?.max||200).toLocaleString()}`;
-
-  const layer=$("monsterLayer");
+  const layer=$("layer");
   layer.innerHTML="";
 
-  for(const stage of (data?.stages||[])){
-    const p=STAGE_POSITIONS[stage.id]||STAGE_POSITIONS[1];
+  for(const s of (data?.stages||[])){
+    const pos=POS[s.id]||POS[1];
+    const el=document.createElement("div");
+    el.className="slot"+(s.unlocked?"":" locked");
+    el.style.left=pos[0]+"%";
+    el.style.top=pos[1]+"%";
+    el.innerHTML=`
+      <img src="./${monsterFile(s.id)}?v=20260831-v60" alt="${s.name||`Stage ${s.id}`}">
+      <div class="lock">🔒</div>
+      <div class="status">${
+        s.completed
+          ? "✅ ผ่านแล้ว"
+          : s.unlocked
+            ? `Stage ${s.id}`
+            : `ต้องมี EXP ${Number(s.expRequired||0).toLocaleString()}`
+      }</div>
+    `;
 
-    const img=document.createElement("img");
-    img.className=`monster ${stage.unlocked?"":"locked"} ${stage.completed?"done":""}`;
-    img.style.left=p.left+"%";
-    img.style.top=p.top+"%";
-    img.alt=`Stage ${stage.id} ${stage.name||""}`;
-    img.src=assetUrl(stage.monsterImagePath);
-    img.onerror=()=>{
-      img.onerror=null;
-      img.src=`${assetUrl("battle/monster-"+String(stage.id).padStart(2,"0")+".png")}`;
+    el.onclick=()=>{
+      if(!s.unlocked){
+        toast(`🔒 Stage ${s.id} ต้องมี EXP ${Number(s.expRequired||0).toLocaleString()} และผ่านด่านก่อนหน้า`,true);
+        return;
+      }
+      location.href=`./battle_stage.html?stage=${encodeURIComponent(s.id)}`;
     };
-    img.onclick=()=>openStage(stage.id);
-    layer.appendChild(img);
 
-    const meta=document.createElement("div");
-    meta.className="meta";
-    meta.style.left=p.metaLeft+"%";
-    meta.style.top=p.metaTop+"%";
-
-    const status=stage.completed
-      ? `<b class="done">✅ CLEAR</b>`
-      : stage.rewardStatus==="pending"
-        ? `<b class="pending">🎁 รอ Admin</b>`
-        : `<b>HP ${Number(stage.maxHp||0).toLocaleString()}</b>`;
-
-    meta.innerHTML=`${status}<br><b>EXP ${Number(stage.expRequired||0).toLocaleString()}</b>`;
-    layer.appendChild(meta);
-
-    if(!stage.unlocked){
-      const lock=document.createElement("div");
-      lock.className="lock show";
-      lock.style.left=p.left+"%";
-      lock.style.top=p.top+"%";
-      lock.style.width="11.5%";
-      lock.style.aspectRatio="1";
-      lock.textContent="🔒";
-      layer.appendChild(lock);
-    }
+    layer.appendChild(el);
   }
-
-  cacheProgress(data);
 }
-
-async function openStage(stageId){
-  const s=state?.stages?.find(x=>Number(x.id)===Number(stageId));
-  if(!s) return;
-
-  if(!s.unlocked){
-    const reason=s.lockReason||"ต้องผ่าน Stage ก่อนหน้า";
-    showStatus(`🔒 Stage ${stageId} ยังไม่เปิด • ${reason}`,true);
-    return;
-  }
-
-  location.href=(window.APP_CONFIG?.PAGE?.BATTLE_STAGE||"./battle_stage.html")
-    +"?stage="+encodeURIComponent(stageId);
-}
-
-$("backButton").onclick=()=>{
-  location.href=window.APP_CONFIG?.PAGE?.BATTLE||"./battle.html";
-};
 
 (async()=>{
   try{
     const ok=await initLine();
     if(ok===false)return;
-    let data;
-
-    try{
-      data = await post("mapV5");
-    }catch(error){
-      if(String(error?.message||"").includes("UNKNOWN_ACTION")){
-        data = await post("map");
-      }else{
-        throw error;
-      }
-    }
-
-    render(data);
+    render(await post("mapV5"));
   }catch(error){
     console.error(error);
-    showStatus(error?.message||String(error),true);
+    toast(error?.message||String(error),true);
   }
 })();
 </script>
