@@ -9,7 +9,7 @@
   <title>ROCK YOUR BODY 2026 — ADMIN</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-admin-v31"></script>
+  <script src="./app-config.js?v=20260831-admin-v33-test-control"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -297,7 +297,92 @@
         grid-column:1/-1;
       }
     }
-  </style>
+  
+
+    /* =========================================================
+       TEST CONTROL
+    ========================================================= */
+
+    .test-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+    }
+
+    .test-stat{
+      padding:14px;
+      border-radius:15px;
+      background:#f6f9fd;
+      border:1px solid #d9e5f1;
+    }
+
+    .test-stat small{
+      display:block;
+      color:#68809b;
+      font-weight:800;
+    }
+
+    .test-stat b{
+      display:block;
+      margin-top:5px;
+      color:#0c428a;
+      font-size:23px;
+    }
+
+    .scenario-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:9px;
+      margin-top:10px;
+    }
+
+    .scenario{
+      min-height:72px;
+      border:1px solid #d1deeb;
+      border-radius:14px;
+      padding:10px;
+      background:#f7fbff;
+      color:#183f71;
+      font-weight:900;
+      text-align:left;
+    }
+
+    .scenario small{
+      display:block;
+      margin-top:4px;
+      color:#6a829b;
+      font-weight:700;
+    }
+
+    .progress-stage{
+      display:grid;
+      grid-template-columns:74px 1fr auto;
+      gap:10px;
+      align-items:center;
+      padding:9px 0;
+      border-bottom:1px solid #edf2f7;
+    }
+
+    .test-warning{
+      padding:12px 14px;
+      border-radius:13px;
+      background:#fff4d9;
+      color:#805b00;
+      border:1px solid #f2d58b;
+      font-weight:800;
+    }
+
+    @media(max-width:800px){
+      .test-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .scenario-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+</style>
 </head>
 <body>
 
@@ -339,6 +424,7 @@
     <button class="tab" data-tab="rewards">🎁 Rewards</button>
     <button class="tab" data-tab="battle-rewards">⚔️ Stage Rewards</button>
     <button class="tab" data-tab="players">👥 Players</button>
+    <button class="tab" data-tab="test-control">🧪 Test Control</button>
     <button class="tab" data-tab="advice">💬 Advice</button>
     <button class="tab" data-tab="missionset">➕ Mission Setup</button>
     <button class="tab" data-tab="inbody">🧬 InBody Review</button>
@@ -560,6 +646,323 @@
     </div>
     <div id="playerList"></div>
   </section>
+
+
+  <!-- TEST CONTROL -->
+  <section id="panel-test-control" class="panel">
+
+    <div class="card">
+      <div class="row space">
+        <div>
+          <b>🧪 ADMIN TEST CONTROL</b>
+          <div class="muted-text">
+            จำลอง EXP / Energy / Coin / Battle Stage เพื่อทดสอบระบบจริง
+          </div>
+        </div>
+
+        <button
+          class="btn primary"
+          onclick="loadTestPlayers()"
+        >
+          รีเฟรช Player
+        </button>
+      </div>
+
+      <div class="test-warning" style="margin-top:12px">
+        ใช้เฉพาะการทดสอบโดย Admin • การ Reset Battle จะยกเลิก Reward Battle ที่ยังเป็น pending แต่ไม่ลบประวัติที่ส่งแล้ว
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+
+        <div>
+          <label>เลือก Player</label>
+
+          <select
+            id="testPlayerSelect"
+            onchange="loadTestState()"
+          >
+            <option value="">
+              -- เลือก Player --
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label>เปิดหน้าทดสอบ</label>
+
+          <div class="row">
+            <button
+              class="btn muted"
+              onclick="openTestPage('HOME')"
+            >
+              HOME
+            </button>
+
+            <button
+              class="btn muted"
+              onclick="openTestPage('MISSION')"
+            >
+              MISSION
+            </button>
+
+            <button
+              class="btn primary"
+              onclick="openTestPage('BATTLE')"
+            >
+              BATTLE
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div id="testPlayerCard" class="card" style="display:none">
+
+      <div class="row space">
+        <div>
+          <b id="testPlayerName">Player</b>
+          <div id="testPlayerMeta" class="muted-text"></div>
+        </div>
+
+        <button
+          class="btn primary"
+          onclick="loadTestState()"
+        >
+          รีเฟรชสถานะ
+        </button>
+      </div>
+
+
+      <div class="test-grid" style="margin-top:12px">
+
+        <div class="test-stat">
+          <small>Rock Coin</small>
+          <b id="testCoinStat">0</b>
+        </div>
+
+        <div class="test-stat">
+          <small>Energy</small>
+          <b id="testEnergyStat">0 / 200</b>
+        </div>
+
+        <div class="test-stat">
+          <small>EXP</small>
+          <b id="testExpStat">0</b>
+        </div>
+
+        <div class="test-stat">
+          <small>Battle ผ่านแล้ว</small>
+          <b id="testStageStat">0 / 10</b>
+        </div>
+
+      </div>
+
+
+      <div class="grid3" style="margin-top:14px">
+
+        <div>
+          <label>Rock Coin</label>
+          <input
+            id="testCoin"
+            type="number"
+            min="0"
+            step="1"
+          >
+        </div>
+
+        <div>
+          <label>Energy</label>
+          <input
+            id="testEnergy"
+            type="number"
+            min="0"
+            max="200"
+            step="1"
+          >
+        </div>
+
+        <div>
+          <label>EXP</label>
+          <input
+            id="testExp"
+            type="number"
+            min="0"
+            step="1"
+          >
+        </div>
+
+      </div>
+
+
+      <div class="row" style="margin-top:10px">
+
+        <button
+          class="btn success"
+          onclick="saveTestWallet()"
+        >
+          💾 บันทึก Coin / Energy / EXP
+        </button>
+
+        <button
+          class="btn danger"
+          onclick="resetTestBattle()"
+        >
+          ♻️ Reset Battle
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <b>⚡ Test Scenario สำเร็จรูป</b>
+
+      <div class="scenario-grid">
+
+        <button
+          class="scenario"
+          onclick="applyTestScenario('attack_fail')"
+        >
+          ❌ Attack Fail
+          <small>
+            Stage 1 • EXP ถึง • Energy 9 • ต้องใช้ 10
+          </small>
+        </button>
+
+        <button
+          class="scenario"
+          onclick="applyTestScenario('attack_exact')"
+        >
+          ✅ Energy พอดี
+          <small>
+            Stage 1 • Energy 10 • ชนะแล้วเหลือ 0
+          </small>
+        </button>
+
+        <button
+          class="scenario"
+          onclick="applyTestScenario('attack_high')"
+        >
+          ⚡ Energy 80
+          <small>
+            Stage 1 • ทดสอบชนะและหักเหลือ 70
+          </small>
+        </button>
+
+        <button
+          class="scenario"
+          onclick="applyTestScenario('stage5')"
+        >
+          🗺️ เปิด Stage 5
+          <small>
+            ผ่าน Stage 1-4 • EXP ถึง Stage 5
+          </small>
+        </button>
+
+        <button
+          class="scenario"
+          onclick="applyTestScenario('final_boss')"
+        >
+          👑 Final Boss
+          <small>
+            ผ่าน Stage 1-9 • EXP ถึง Stage 10 • Energy 200
+          </small>
+        </button>
+
+        <button
+          class="scenario"
+          onclick="applyTestScenario('wallet_max')"
+        >
+          🧪 MAX TEST
+          <small>
+            Coin 9,999 • Energy 200 • EXP 5,700
+          </small>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="row space">
+        <div>
+          <b>⚔️ เตรียม Stage สำหรับทดสอบ</b>
+          <div class="muted-text">
+            ระบบจะทำ Stage ก่อนหน้าเป็น completed และ Stage เป้าหมาย HP เต็ม
+          </div>
+        </div>
+
+        <button
+          class="btn primary"
+          onclick="prepareTestStage()"
+        >
+          เตรียม Stage
+        </button>
+      </div>
+
+
+      <div class="grid2" style="margin-top:12px">
+
+        <div>
+          <label>Stage</label>
+
+          <select id="testStageNo">
+            <option value="1">Stage 1</option>
+            <option value="2">Stage 2</option>
+            <option value="3">Stage 3</option>
+            <option value="4">Stage 4</option>
+            <option value="5">Stage 5</option>
+            <option value="6">Stage 6</option>
+            <option value="7">Stage 7</option>
+            <option value="8">Stage 8</option>
+            <option value="9">Stage 9</option>
+            <option value="10">Stage 10</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Energy สำหรับทดสอบ</label>
+
+          <input
+            id="testStageEnergy"
+            type="number"
+            min="0"
+            max="200"
+            value="80"
+          >
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="grid2">
+
+      <div class="card">
+        <b>📊 Battle Progress</b>
+        <div id="testBattleProgress" style="margin-top:8px">
+          เลือก Player ก่อน
+        </div>
+      </div>
+
+      <div class="card">
+        <b>🎁 Battle Reward Queue</b>
+        <div id="testBattleRewards" style="margin-top:8px">
+          เลือก Player ก่อน
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
 
   <!-- ADVICE -->
   <section id="panel-advice" class="panel">
@@ -783,6 +1186,7 @@ document.querySelectorAll(".tab").forEach(btn=>{
     if(btn.dataset.tab==="rewards") loadRewards();
     if(btn.dataset.tab==="battle-rewards") loadBattleRewards();
     if(btn.dataset.tab==="players") loadPlayers();
+    if(btn.dataset.tab==="test-control") loadTestPlayers();
     if(btn.dataset.tab==="advice") loadAdvice();
     if(btn.dataset.tab==="missionset") loadCustomMissions();
     if(btn.dataset.tab==="inbody") loadInBody();
@@ -1526,6 +1930,720 @@ async function saveSettings(){
     toast("บันทึก Settings แล้ว");
   }catch(e){toast(e.message,true)}
 }
+
+
+/* =========================================================
+   ADMIN TEST CONTROL V3.3
+========================================================= */
+
+let testState =
+  null;
+
+
+function selectedTestPlayerId(){
+
+  return (
+    $("testPlayerSelect")
+      ?.value ||
+    ""
+  );
+}
+
+
+async function loadTestPlayers(){
+
+  try{
+
+    if(
+      !playersCache.length
+    ){
+
+      const data =
+        await post(
+          "players"
+        );
+
+
+      playersCache =
+        data?.players ||
+        [];
+    }
+
+
+    const select =
+      $("testPlayerSelect");
+
+
+    const previous =
+      select.value;
+
+
+    select.innerHTML =
+      `<option value="">-- เลือก Player --</option>` +
+      playersCache
+        .map(
+          p => {
+
+            const wallet =
+              Array.isArray(
+                p.player_wallets
+              )
+                ? p.player_wallets[0]
+                : p.player_wallets;
+
+
+            return `
+              <option value="${esc(p.id)}">
+                ${esc(p.line_display_name || "Player")}
+                • ${esc(p.team_name || "-")}
+                • EXP ${Number(wallet?.exp || 0)}
+              </option>
+            `;
+          }
+        )
+        .join("");
+
+
+    if(
+      previous &&
+      playersCache.some(
+        p =>
+          p.id ===
+          previous
+      )
+    ){
+
+      select.value =
+        previous;
+    }
+
+
+    if(
+      select.value
+    ){
+
+      await loadTestState();
+    }
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      true
+    );
+  }
+}
+
+
+function renderTestState(
+  data
+){
+
+  testState =
+    data;
+
+
+  const player =
+    data?.player ||
+    {};
+
+
+  const home =
+    data
+      ?.wallet
+      ?.home ||
+    {};
+
+
+  const canonical =
+    data
+      ?.wallet
+      ?.canonical ||
+    {};
+
+
+  const rockCoin =
+    Number(
+      home?.rock_coin ??
+      canonical?.rock_coin ??
+      0
+    );
+
+
+  const energy =
+    Number(
+      home?.energy ??
+      canonical?.energy ??
+      0
+    );
+
+
+  const maxEnergy =
+    Number(
+      home?.max_energy ??
+      canonical?.max_energy ??
+      200
+    );
+
+
+  const exp =
+    Number(
+      home?.exp ??
+      canonical?.exp ??
+      0
+    );
+
+
+  const progress =
+    Array.isArray(
+      data?.progress
+    )
+      ? data.progress
+      : [];
+
+
+  const completedCount =
+    progress.filter(
+      row =>
+        row.completed
+    ).length;
+
+
+  $("testPlayerCard")
+    .style
+    .display =
+      "block";
+
+
+  $("testPlayerName")
+    .textContent =
+      player.line_display_name ||
+      "Player";
+
+
+  $("testPlayerMeta")
+    .textContent =
+      `${player.team_name || "-"} • ${player.line_user_id || ""}`;
+
+
+  $("testCoinStat")
+    .textContent =
+      rockCoin
+        .toLocaleString();
+
+
+  $("testEnergyStat")
+    .textContent =
+      `${energy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
+
+
+  $("testExpStat")
+    .textContent =
+      exp
+        .toLocaleString();
+
+
+  $("testStageStat")
+    .textContent =
+      `${completedCount} / 10`;
+
+
+  $("testCoin")
+    .value =
+      rockCoin;
+
+
+  $("testEnergy")
+    .value =
+      energy;
+
+
+  $("testExp")
+    .value =
+      exp;
+
+
+  renderTestBattleProgress(
+    data
+  );
+
+
+  renderTestBattleRewards(
+    data
+  );
+}
+
+
+function renderTestBattleProgress(
+  data
+){
+
+  const stages =
+    Array.isArray(
+      data?.stages
+    )
+      ? data.stages
+      : [];
+
+
+  const progress =
+    Array.isArray(
+      data?.progress
+    )
+      ? data.progress
+      : [];
+
+
+  $("testBattleProgress")
+    .innerHTML =
+      stages.length
+        ? stages
+            .map(
+              stage => {
+
+                const row =
+                  progress.find(
+                    p =>
+                      Number(
+                        p.stage_no
+                      ) ===
+                      Number(
+                        stage.stage_no
+                      )
+                  );
+
+
+                const completed =
+                  Boolean(
+                    row?.completed
+                  );
+
+
+                const hp =
+                  Number(
+                    row?.current_hp ??
+                    stage.max_hp ??
+                    0
+                  );
+
+
+                const maxHp =
+                  Number(
+                    stage.max_hp ||
+                    0
+                  );
+
+
+                return `
+                  <div class="progress-stage">
+                    <b>Stage ${Number(stage.stage_no)}</b>
+
+                    <div>
+                      ${esc(stage.monster_name || "")}
+                      <div class="muted-text">
+                        HP ${hp.toLocaleString()} / ${maxHp.toLocaleString()}
+                        • EXP ${Number(stage.exp_required || 0).toLocaleString()}
+                        • Energy ${Number(stage.attack_cost || 0)}
+                      </div>
+                    </div>
+
+                    ${
+                      completed
+                        ? `<span class="badge approved">ผ่านแล้ว</span>`
+                        : row
+                          ? `<span class="badge pending">พร้อมสู้</span>`
+                          : `<span class="badge">ยังไม่เริ่ม</span>`
+                    }
+                  </div>
+                `;
+              }
+            )
+            .join("")
+        : `<div class="empty">ไม่มี Stage Config</div>`;
+}
+
+
+function renderTestBattleRewards(
+  data
+){
+
+  const rewards =
+    Array.isArray(
+      data?.rewards
+    )
+      ? data.rewards
+      : [];
+
+
+  $("testBattleRewards")
+    .innerHTML =
+      rewards.length
+        ? rewards
+            .map(
+              reward => `
+                <div style="padding:9px 0;border-bottom:1px solid #edf2f7">
+                  <div class="row space">
+                    <b>${esc(reward.reward_name || "Battle Reward")}</b>
+                    ${statusBadge(reward.status)}
+                  </div>
+                  <div class="muted-text">
+                    ${esc(reward.mission_id || "")}
+                    • ${esc(reward.created_at || "")}
+                  </div>
+                </div>
+              `
+            )
+            .join("")
+        : `<div class="empty">ไม่มี Battle Reward</div>`;
+}
+
+
+async function loadTestState(){
+
+  const playerId =
+    selectedTestPlayerId();
+
+
+  if(!playerId){
+
+    $("testPlayerCard")
+      .style
+      .display =
+        "none";
+
+
+    $("testBattleProgress")
+      .innerHTML =
+        "เลือก Player ก่อน";
+
+
+    $("testBattleRewards")
+      .innerHTML =
+        "เลือก Player ก่อน";
+
+
+    return;
+  }
+
+
+  try{
+
+    const data =
+      await post(
+        "testControlState",
+        {
+          playerId
+        }
+      );
+
+
+    renderTestState(
+      data
+    );
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      true
+    );
+  }
+}
+
+
+async function saveTestWallet(){
+
+  const playerId =
+    selectedTestPlayerId();
+
+
+  if(!playerId){
+
+    toast(
+      "เลือก Player ก่อน",
+      true
+    );
+
+
+    return;
+  }
+
+
+  try{
+
+    const data =
+      await post(
+        "testSetWallet",
+        {
+          playerId,
+
+          rockCoin:
+            Number(
+              $("testCoin")
+                .value ||
+              0
+            ),
+
+          energy:
+            Number(
+              $("testEnergy")
+                .value ||
+              0
+            ),
+
+          exp:
+            Number(
+              $("testExp")
+                .value ||
+              0
+            )
+        }
+      );
+
+
+    renderTestState(
+      data
+    );
+
+
+    toast(
+      "บันทึก Test Wallet แล้ว"
+    );
+
+
+    /*
+      refresh Players cache
+    */
+    playersCache =
+      [];
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      true
+    );
+  }
+}
+
+
+async function resetTestBattle(){
+
+  const playerId =
+    selectedTestPlayerId();
+
+
+  if(!playerId){
+
+    toast(
+      "เลือก Player ก่อน",
+      true
+    );
+
+
+    return;
+  }
+
+
+  if(
+    !confirm(
+      "Reset Battle ของ Player นี้?\n\nProgress จะถูกล้าง และ Battle Reward ที่ยัง pending จะถูกยกเลิก"
+    )
+  ){
+
+    return;
+  }
+
+
+  try{
+
+    const data =
+      await post(
+        "testResetBattle",
+        {
+          playerId
+        }
+      );
+
+
+    renderTestState(
+      data
+    );
+
+
+    toast(
+      "Reset Battle แล้ว"
+    );
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      true
+    );
+  }
+}
+
+
+async function applyTestScenario(
+  scenario
+){
+
+  const playerId =
+    selectedTestPlayerId();
+
+
+  if(!playerId){
+
+    toast(
+      "เลือก Player ก่อน",
+      true
+    );
+
+
+    return;
+  }
+
+
+  try{
+
+    const data =
+      await post(
+        "testApplyScenario",
+        {
+          playerId,
+          scenario
+        }
+      );
+
+
+    renderTestState(
+      data
+    );
+
+
+    toast(
+      "เตรียม Test Scenario แล้ว"
+    );
+
+
+    playersCache =
+      [];
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      true
+    );
+  }
+}
+
+
+async function prepareTestStage(){
+
+  const playerId =
+    selectedTestPlayerId();
+
+
+  if(!playerId){
+
+    toast(
+      "เลือก Player ก่อน",
+      true
+    );
+
+
+    return;
+  }
+
+
+  try{
+
+    const data =
+      await post(
+        "testPrepareStage",
+        {
+          playerId,
+
+          stageNo:
+            Number(
+              $("testStageNo")
+                .value ||
+              1
+            ),
+
+          energy:
+            Number(
+              $("testStageEnergy")
+                .value ||
+              0
+            )
+        }
+      );
+
+
+    renderTestState(
+      data
+    );
+
+
+    toast(
+      `เตรียม Stage ${$("testStageNo").value} แล้ว`
+    );
+
+
+    playersCache =
+      [];
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      true
+    );
+  }
+}
+
+
+function openTestPage(
+  pageName
+){
+
+  const page =
+    window.APP_CONFIG
+      ?.getPage
+      ? window.APP_CONFIG.getPage(pageName)
+      : window.APP_CONFIG
+          ?.PAGE
+          ?.[pageName];
+
+
+  if(!page){
+
+    toast(
+      "ไม่พบ Page " +
+      pageName,
+      true
+    );
+
+
+    return;
+  }
+
+
+  window.open(
+    page,
+    "_blank"
+  );
+}
+
 
 async function reloadAll(){
   await Promise.allSettled([
