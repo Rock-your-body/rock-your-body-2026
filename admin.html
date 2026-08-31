@@ -9,7 +9,7 @@
   <title>ROCK YOUR BODY 2026 — ADMIN</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-admin-v33-test-control"></script>
+  <script src="./app-config.js?v=20260831-admin-v331-settings-fix"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -1916,19 +1916,152 @@ async function loadSettings(){
 }
 
 async function saveSettings(){
+
+  const button =
+    document.querySelector(
+      '#panel-settings button[onclick="saveSettings()"]'
+    );
+
+
+  const settings = {
+
+    projectName:
+      $("setProjectName")
+        .value
+        .trim(),
+
+    maxEnergy:
+      Number(
+        $("setMaxEnergy")
+          .value ||
+        200
+      ),
+
+    stepsGoal:
+      Number(
+        $("setStepsGoal")
+          .value ||
+        8000
+      ),
+
+    caloriesGoal:
+      Number(
+        $("setCaloriesGoal")
+          .value ||
+        300
+      ),
+
+    sleepGoal:
+      Number(
+        $("setSleepGoal")
+          .value ||
+        420
+      ),
+
+    maintenanceMessage:
+      $("setMaintenanceMessage")
+        .value
+        .trim()
+
+  };
+
+
   try{
-    await post("saveSystemSettings",{
-      settings:{
-        projectName:$("setProjectName").value.trim(),
-        maxEnergy:Number($("setMaxEnergy").value||200),
-        stepsGoal:Number($("setStepsGoal").value||8000),
-        caloriesGoal:Number($("setCaloriesGoal").value||300),
-        sleepGoal:Number($("setSleepGoal").value||420),
-        maintenanceMessage:$("setMaintenanceMessage").value.trim()
-      }
-    });
-    toast("บันทึก Settings แล้ว");
-  }catch(e){toast(e.message,true)}
+
+    if(button){
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "กำลังบันทึก...";
+    }
+
+
+    const result =
+      await post(
+        "saveSystemSettings",
+        {
+          settings
+        }
+      );
+
+
+    /*
+      Backend V3.3.1 จะส่งค่าที่บันทึกกลับมา
+      ถ้าไม่มี settings ใน response
+      ให้โหลดซ้ำจาก DB เพื่อยืนยัน
+    */
+    const saved =
+      result?.settings;
+
+
+    if(saved){
+
+      $("setProjectName").value =
+        saved.projectName ??
+        settings.projectName;
+
+      $("setMaxEnergy").value =
+        saved.maxEnergy ??
+        settings.maxEnergy;
+
+      $("setStepsGoal").value =
+        saved.stepsGoal ??
+        settings.stepsGoal;
+
+      $("setCaloriesGoal").value =
+        saved.caloriesGoal ??
+        settings.caloriesGoal;
+
+      $("setSleepGoal").value =
+        saved.sleepGoal ??
+        settings.sleepGoal;
+
+      $("setMaintenanceMessage").value =
+        saved.maintenanceMessage ??
+        settings.maintenanceMessage;
+
+    }else{
+
+      await loadSettings();
+    }
+
+
+    toast(
+      "✅ บันทึก Settings สำเร็จ"
+    );
+
+
+  }catch(e){
+
+    console.error(
+      "[SAVE SETTINGS]",
+      e
+    );
+
+
+    toast(
+      "บันทึก Settings ไม่สำเร็จ: " +
+      (
+        e?.message ||
+        String(e)
+      ),
+      true
+    );
+
+
+  }finally{
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "บันทึก Settings";
+    }
+  }
 }
 
 
