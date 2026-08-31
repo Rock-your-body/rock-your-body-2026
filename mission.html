@@ -2603,6 +2603,320 @@
       height:11.5% !important;
     }
 
+
+
+/* =========================================================
+   V2.34.1 — NUTRITION RING + MACRO CARDS FINAL OVERRIDE
+   สร้างวงกลม + กรอบ Protein / Carbs / Fat บน Template
+========================================================= */
+
+body.mission-page #missionStage #missionNutritionLive{
+  position:absolute!important;
+  left:3.10%!important;
+  top:18.40%!important;
+  width:36.80%!important;
+  height:64.20%!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  z-index:120!important;
+  pointer-events:none!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-head,
+body.mission-page #missionStage #missionNutritionLive .nutrition-water,
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
+  display:none!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-main{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+}
+
+/* =========================
+   วงกลม Calories
+========================= */
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-wrap{
+  display:block!important;
+  position:absolute!important;
+  left:9.0%!important;
+  top:22.0%!important;
+  width:47.0%!important;
+  height:auto!important;
+  aspect-ratio:1/1!important;
+  min-height:0!important;
+  z-index:122!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive #missionNutritionRing{
+  --pct:0%;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:1/1!important;
+  border-radius:50%!important;
+
+  /* 4 สีให้ตรง Template: น้ำเงิน / เขียว / ส้ม / แดง */
+  background:
+    conic-gradient(
+      from -90deg,
+      #075be8 0deg 90deg,
+      #18a83d 90deg 180deg,
+      #ff8500 180deg 270deg,
+      #e51b1b 270deg 360deg
+    )!important;
+
+  box-shadow:
+    0 2px 7px rgba(10,50,95,.16)!important;
+  opacity:1!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive #missionNutritionRing::after{
+  content:""!important;
+  position:absolute!important;
+  inset:12%!important;
+  border-radius:50%!important;
+  background:#fff!important;
+  box-shadow:inset 0 0 0 1px rgba(10,70,120,.04)!important;
+}
+
+/* วงสีเทาด้านใน เพื่อให้ดูเป็นกรอบวง */
+body.mission-page #missionStage #missionNutritionLive #missionNutritionRing::before{
+  content:""!important;
+  position:absolute!important;
+  inset:8.5%!important;
+  border-radius:50%!important;
+  border:1px solid rgba(30,85,130,.08)!important;
+  z-index:2!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center{
+  display:flex!important;
+  position:absolute!important;
+  inset:16%!important;
+  width:auto!important;
+  height:auto!important;
+  left:auto!important;
+  top:auto!important;
+  z-index:130!important;
+
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+
+  background:transparent!important;
+  pointer-events:none!important;
+  transform:none!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center > span{
+  display:block!important;
+  color:#174b7d!important;
+  font-size:clamp(7px,.82cqw,13px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+
+body.mission-page #missionStage #missionNutritionCaloriesMain{
+  display:block!important;
+  margin:3px 0 0!important;
+  color:#073b70!important;
+  font-size:clamp(17px,2.15cqw,34px)!important;
+  font-weight:1000!important;
+  line-height:.95!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center > small{
+  display:block!important;
+  color:#496784!important;
+  font-size:clamp(6px,.68cqw,10px)!important;
+  font-weight:800!important;
+  line-height:1.1!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center > small:not(#missionNutritionCaloriesTargetText){
+  margin-top:4px!important;
+}
+
+body.mission-page #missionStage #missionNutritionCaloriesTargetText{
+  display:block!important;
+  margin-top:8px!important;
+  padding-top:6px!important;
+  width:78%!important;
+  border-top:1px solid #d8e1eb!important;
+  color:#496784!important;
+  font-size:clamp(6px,.70cqw,11px)!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+}
+
+/* =========================
+   Macro Cards
+========================= */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macros{
+  display:block!important;
+  position:absolute!important;
+  left:58.0%!important;
+  top:18.0%!important;
+  width:39.0%!important;
+  height:54.0%!important;
+  z-index:126!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro{
+  position:absolute!important;
+  left:0!important;
+  width:100%!important;
+  height:29%!important;
+  min-height:0!important;
+
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:7% 6% 6% 13%!important;
+
+  border-radius:clamp(6px,.75cqw,12px)!important;
+  background:rgba(255,255,255,.95)!important;
+  box-shadow:0 2px 6px rgba(18,61,105,.08)!important;
+  overflow:visible!important;
+}
+
+/* เส้นสีด้านซ้าย */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro::before{
+  content:""!important;
+  position:absolute!important;
+  left:5%!important;
+  top:12%!important;
+  width:5.5%!important;
+  height:76%!important;
+  border-radius:999px!important;
+}
+
+/* Protein = น้ำเงิน */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein{
+  top:0!important;
+  border:1px solid rgba(7,91,232,.34)!important;
+}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein::before{
+  background:#075be8!important;
+}
+
+/* Carbs = เขียว */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs{
+  top:35.5%!important;
+  border:1px solid rgba(24,168,61,.34)!important;
+}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs::before{
+  background:#18a83d!important;
+}
+
+/* Fat = ส้ม */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat{
+  top:71%!important;
+  border:1px solid rgba(255,133,0,.38)!important;
+}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat::before{
+  background:#ff8500!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:4%!important;
+
+  width:100%!important;
+  height:100%!important;
+
+  margin:0!important;
+  padding:0!important;
+
+  color:#0b477d!important;
+  font-size:clamp(7px,.84cqw,13px)!important;
+  font-weight:1000!important;
+  line-height:1.05!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title > div{
+  min-width:0!important;
+  color:#0b477d!important;
+  font-weight:1000!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title strong{
+  display:block!important;
+  margin-top:5%!important;
+  color:#073b70!important;
+  font-size:clamp(7px,.91cqw,14px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-percent{
+  display:block!important;
+  align-self:center!important;
+  color:#073b70!important;
+  font-size:clamp(6px,.75cqw,12px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* เส้นใต้แต่ละ Macro */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro::after{
+  content:""!important;
+  position:absolute!important;
+  left:13%!important;
+  right:6%!important;
+  bottom:-12%!important;
+  height:1px!important;
+  background:#d9e4ee!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat::after{
+  display:none!important;
+}
+
+/* =========================
+   CTA เดิมบน Template
+========================= */
+body.mission-page #missionStage #missionNutritionButton{
+  position:absolute!important;
+  left:4%!important;
+  bottom:2.6%!important;
+  width:92%!important;
+  height:12%!important;
+  z-index:160!important;
+
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:transparent!important;
+
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  touch-action:manipulation!important;
+}
+
+/* กันข้อมูลหลุดออกจากช่อง Nutrition */
+body.mission-page #missionStage #missionNutritionLive *{
+  box-sizing:border-box;
+}
+
 </style>
 
 </head>
@@ -3039,7 +3353,7 @@
         <div class="nutrition-macro protein">
           <div class="nutrition-macro-title">
             <div>
-              โปรตีน
+              Protein
               <strong id="missionNutritionProtein">0 / 0 g</strong>
             </div>
             <span
@@ -3056,7 +3370,7 @@
         <div class="nutrition-macro carbs">
           <div class="nutrition-macro-title">
             <div>
-              คาร์โบไฮเดรต
+              Carbs
               <strong id="missionNutritionCarbs">0 / 0 g</strong>
             </div>
             <span
@@ -3073,7 +3387,7 @@
         <div class="nutrition-macro fat">
           <div class="nutrition-macro-title">
             <div>
-              ไขมัน
+              Fat
               <strong id="missionNutritionFat">0 / 0 g</strong>
             </div>
             <span
