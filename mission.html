@@ -5,76 +5,7 @@
 <head>
 
   <meta charset="utf-8">
-/* =========================================================
-   MISSION PROGRESS TRACK — SHOW CATEGORY COLOR
-========================================================= */
 
-/* พื้นหลังของแถบ */
-#missionStage .daily-track{
-  background:rgba(255,120,0,.18)!important;
-}
-
-#missionStage .weekly-track{
-  background:rgba(20,90,255,.16)!important;
-}
-
-#missionStage .monthly-track{
-  background:rgba(120,40,210,.18)!important;
-}
-
-#missionStage .bonus-track{
-  background:rgba(20,160,60,.16)!important;
-}
-
-
-/* สี progress จริง */
-#missionStage .mission-fill-daily{
-  background:linear-gradient(
-    90deg,
-    #ffb13b,
-    #ff5b00
-  )!important;
-}
-
-#missionStage .mission-fill-weekly{
-  background:linear-gradient(
-    90deg,
-    #4382ff,
-    #0055dd
-  )!important;
-}
-
-#missionStage .mission-fill-monthly{
-  background:linear-gradient(
-    90deg,
-    #9a4ee8,
-    #5b16b7
-  )!important;
-}
-
-#missionStage .mission-fill-bonus{
-  background:linear-gradient(
-    90deg,
-    #54c760,
-    #078e2b
-  )!important;
-}
-
-
-/* ความหนา */
-#missionStage .live-track{
-  height:1.0%!important;
-  border-radius:999px!important;
-  overflow:hidden!important;
-}
-
-
-/* ถ้าต้องการให้เห็นตัวอย่างสีขั้นต่ำแม้ 0% */
-#missionStage .live-fill{
-  min-width:2%!important;
-  height:100%!important;
-  border-radius:999px!important;
-}
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1,viewport-fit=cover"
@@ -120,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260901-mission-v2350-bonus-auto-status"
+    src="./app-config.js?v=20260901-mission-v2370-editable-master"
   ></script>
 
 
@@ -130,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260901-mission-v2350-bonus-auto-status"
+    href="./base.css?v=20260901-mission-v2370-editable-master"
   >
 
 
@@ -3090,7 +3021,7 @@ body.mission-page #missionStage #missionNutritionLive *{
 
   <img
     class="template"
-    src="./mission-template.png?v=20260901-mission-v2350-bonus-auto-status"
+    src="./mission-template.png?v=20260901-mission-v2370-editable-master"
     alt=""
     draggable="false"
     style="
@@ -11681,6 +11612,349 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat .nutr
 }
 
 </style>
+
+
+
+
+<style id="mission-v237-editable-master">
+/* =========================================================
+   ROCK YOUR BODY 2026
+   MISSION V2.37 — EDITABLE MASTER
+   ---------------------------------------------------------
+   แก้ตำแหน่งจาก :root ด้านล่างจุดเดียว
+========================================================= */
+
+:root{
+
+  /* =======================================================
+     TOP WALLET
+     ตัวเลข ROCK COIN / ENERGY ด้านบน
+     ======================================================= */
+
+  --top-coin-left: 77.0%;
+  --top-coin-top: 4.0%;
+  --top-coin-width: 6.0%;
+  --top-coin-height: 3.6%;
+  --top-coin-font: clamp(8px,1.0cqw,16px);
+
+  --top-energy-left: 89.0%;
+  --top-energy-top: 4.0%;
+  --top-energy-width: 7.0%;
+  --top-energy-height: 3.6%;
+  --top-energy-font: clamp(8px,1.0cqw,16px);
+
+
+  /* =======================================================
+     DAILY PROGRESS — สีส้ม
+     ======================================================= */
+
+  --daily-track-left: 43.0%;
+  --daily-track-top: 31.0%;
+  --daily-track-width: 23.0%;
+  --daily-track-height: 0.95%;
+
+
+  /* =======================================================
+     WEEKLY PROGRESS — สีน้ำเงิน
+     ======================================================= */
+
+  --weekly-track-left: 69.5%;
+  --weekly-track-top: 31.0%;
+  --weekly-track-width: 25.5%;
+  --weekly-track-height: 0.95%;
+
+
+  /* =======================================================
+     MONTHLY PROGRESS — สีม่วง
+     ======================================================= */
+
+  --monthly-track-left: 43.0%;
+  --monthly-track-top: 67.0%;
+  --monthly-track-width: 23.0%;
+  --monthly-track-height: 0.95%;
+
+
+  /* =======================================================
+     BONUS PROGRESS — สีเขียว
+     ======================================================= */
+
+  --bonus-track-left: 69.5%;
+  --bonus-track-top: 67.0%;
+  --bonus-track-width: 25.5%;
+  --bonus-track-height: 0.95%;
+
+
+  /* =======================================================
+     ความกว้างขั้นต่ำตอน Progress = 0%
+     0% = ไม่โชว์สีเลย
+     2% = มีจุดสีเล็ก ๆ
+     ======================================================= */
+
+  --track-min-fill: 2%;
+}
+
+
+/* =========================================================
+   TOP ROCK COIN
+========================================================= */
+
+body.mission-page
+#missionStage
+.mission-coin-box{
+
+  position:absolute!important;
+
+  left:var(--top-coin-left)!important;
+  top:var(--top-coin-top)!important;
+
+  width:var(--top-coin-width)!important;
+  height:var(--top-coin-height)!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  margin:0!important;
+  padding:0!important;
+
+  color:#071f60!important;
+
+  font-size:var(--top-coin-font)!important;
+  font-weight:600!important;
+  line-height:1!important;
+
+  white-space:nowrap!important;
+}
+
+
+/* =========================================================
+   TOP ENERGY
+========================================================= */
+
+body.mission-page
+#missionStage
+.mission-energy-box{
+
+  position:absolute!important;
+
+  left:var(--top-energy-left)!important;
+  top:var(--top-energy-top)!important;
+
+  width:var(--top-energy-width)!important;
+  height:var(--top-energy-height)!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  margin:0!important;
+  padding:0!important;
+
+  color:#071f60!important;
+
+  font-size:var(--top-energy-font)!important;
+  font-weight:600!important;
+  line-height:1!important;
+
+  white-space:nowrap!important;
+}
+
+
+/* =========================================================
+   TRACK BASE
+========================================================= */
+
+body.mission-page
+#missionStage
+.live-track{
+
+  position:absolute!important;
+
+  overflow:hidden!important;
+
+  border-radius:999px!important;
+
+  margin:0!important;
+  padding:0!important;
+
+  pointer-events:none!important;
+}
+
+
+/* =========================================================
+   DAILY TRACK
+========================================================= */
+
+body.mission-page
+#missionStage
+.daily-track{
+
+  left:var(--daily-track-left)!important;
+  top:var(--daily-track-top)!important;
+
+  width:var(--daily-track-width)!important;
+  height:var(--daily-track-height)!important;
+
+  background:
+    rgba(255,112,0,.20)!important;
+}
+
+
+/* =========================================================
+   WEEKLY TRACK
+========================================================= */
+
+body.mission-page
+#missionStage
+.weekly-track{
+
+  left:var(--weekly-track-left)!important;
+  top:var(--weekly-track-top)!important;
+
+  width:var(--weekly-track-width)!important;
+  height:var(--weekly-track-height)!important;
+
+  background:
+    rgba(30,93,255,.18)!important;
+}
+
+
+/* =========================================================
+   MONTHLY TRACK
+========================================================= */
+
+body.mission-page
+#missionStage
+.monthly-track{
+
+  left:var(--monthly-track-left)!important;
+  top:var(--monthly-track-top)!important;
+
+  width:var(--monthly-track-width)!important;
+  height:var(--monthly-track-height)!important;
+
+  background:
+    rgba(122,42,205,.20)!important;
+}
+
+
+/* =========================================================
+   BONUS TRACK
+========================================================= */
+
+body.mission-page
+#missionStage
+.bonus-track{
+
+  left:var(--bonus-track-left)!important;
+  top:var(--bonus-track-top)!important;
+
+  width:var(--bonus-track-width)!important;
+  height:var(--bonus-track-height)!important;
+
+  background:
+    rgba(15,157,52,.18)!important;
+}
+
+
+/* =========================================================
+   PROGRESS FILL
+========================================================= */
+
+body.mission-page
+#missionStage
+.live-fill{
+
+  display:block!important;
+
+  min-width:var(--track-min-fill)!important;
+
+  height:100%!important;
+
+  border-radius:inherit!important;
+
+  transition:
+    width .30s ease!important;
+}
+
+
+/* DAILY — ORANGE */
+body.mission-page
+#missionStage
+.mission-fill-daily{
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffb13b,
+      #ff5b00
+    )!important;
+}
+
+
+/* WEEKLY — BLUE */
+body.mission-page
+#missionStage
+.mission-fill-weekly{
+
+  background:
+    linear-gradient(
+      90deg,
+      #4382ff,
+      #0055dd
+    )!important;
+}
+
+
+/* MONTHLY — PURPLE */
+body.mission-page
+#missionStage
+.mission-fill-monthly{
+
+  background:
+    linear-gradient(
+      90deg,
+      #a458ed,
+      #5b16b7
+    )!important;
+}
+
+
+/* BONUS — GREEN */
+body.mission-page
+#missionStage
+.mission-fill-bonus{
+
+  background:
+    linear-gradient(
+      90deg,
+      #55c964,
+      #078e2b
+    )!important;
+}
+
+
+/* =========================================================
+   วิธีแก้ตำแหน่ง
+
+   left:
+   ลด = ไปซ้าย
+   เพิ่ม = ไปขวา
+
+   top:
+   ลด = ขึ้น
+   เพิ่ม = ลง
+
+   width:
+   เพิ่ม = แถบยาวขึ้น
+   ลด = แถบสั้นลง
+
+   height:
+   เพิ่ม = แถบหนาขึ้น
+   ลด = แถบบางลง
+========================================================= */
+</style>
+
 
 </body>
 </html>
