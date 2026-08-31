@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260831-mission-v2320-position-master"
+    src="./app-config.js?v=20260831-mission-v2330-button-only-hotspots"
   ></script>
 
 
@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-mission-v2320-position-master"
+    href="./base.css?v=20260831-mission-v2330-button-only-hotspots"
   >
 
 
@@ -89,7 +89,7 @@
     .mission-card-button.daily{
       left:2.8%;
       top:55.0%;
-      width:10%;
+      width:28.8%;
       height:6.4%;
     }
 
@@ -2012,8 +2012,8 @@
     .nutrition-ring-center{
       display:flex !important;
       position:absolute !important;
-      left:20%;
-      top:50%;
+      left:13%;
+      top:25%;
       width:31%;
       height:31%;
       inset:auto !important;
@@ -2034,8 +2034,8 @@
 
     #missionNutritionLive{
       position:absolute!important;
-      left:20%!important;
-      top:30%!important;
+      left:3.1%!important;
+      top:18.4%!important;
       width:36.8%!important;
       height:64.2%!important;
       z-index:120!important;
@@ -2399,7 +2399,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260831-mission-v2320-position-master"
+    src="./mission-template.png?v=20260831-mission-v2330-button-only-hotspots"
     alt=""
     draggable="false"
     style="
@@ -10006,7 +10006,7 @@ window.addEventListener(
 
 /* ---------- TOP ---------- */
 #missionStage .mission-coin-box{
-  left:78.9%!important; top:4.3%!important;
+  left:78.0%!important; top:4.3%!important;
   width:6.0%!important; height:3.6%!important;
   font-size:clamp(8px,1.0cqw,15px)!important;
 }
@@ -10016,7 +10016,7 @@ window.addEventListener(
   font-size:clamp(8px,1.0cqw,15px)!important;
 }
 #missionStage .mission-point-value{
-  left:88.0%!important; top:16.5%!important;
+  left:89.0%!important; top:17.0%!important;
   width:8.5%!important; height:4.5%!important;
   font-size:clamp(8px,.95cqw,14px)!important;
   display:flex!important; align-items:center!important; justify-content:center!important;
@@ -10025,7 +10025,7 @@ window.addEventListener(
 /* ---------- NUTRITION MAIN BOX ---------- */
 #missionStage #missionNutritionLive{
   position:absolute!important;
-  left:20%!important; top:25%!important;
+  left:3.0%!important; top:18.0%!important;
   width:36.5%!important; height:64.5%!important;
   overflow:hidden!important;
 }
@@ -10063,7 +10063,7 @@ window.addEventListener(
 /* Protein / Carbs / Fat */
 #missionStage #missionNutritionLive .nutrition-macros{
   position:absolute!important;
-  left:60%!important; top:30%!important;
+  left:57.5%!important; top:27.5%!important;
   width:37.0%!important; height:48.0%!important;
   display:block!important;
 }
@@ -10104,19 +10104,19 @@ window.addEventListener(
 
 /* ---------- CATEGORY COUNTS ---------- */
 #missionStage #dailyCount{
-  left:59.0%!important; top:20%!important;
+  left:59.0%!important; top:47.8%!important;
   width:6.0%!important; height:3.2%!important;
 }
 #missionStage #weeklyCount{
-  left:89.0%!important; top:20%!important;
+  left:89.0%!important; top:47.8%!important;
   width:6.0%!important; height:3.2%!important;
 }
 #missionStage #monthlyCount{
-  left:59.0%!important; top:60%!important;
+  left:59.0%!important; top:80.7%!important;
   width:6.0%!important; height:3.2%!important;
 }
 #missionStage #bonusCount{
-  left:89.0%!important; top:60%!important;
+  left:89.0%!important; top:80.7%!important;
   width:6.0%!important; height:3.2%!important;
 }
 #missionStage #dailyCount,
@@ -10168,6 +10168,108 @@ window.addEventListener(
    top ลด = ขึ้น / เพิ่ม = ลง
    font-size = ขนาดตัวเลข/ตัวหนังสือ
 ========================================================= */
+</style>
+
+
+
+<style id="mission-v233-button-only-hotspots">
+/* =========================================================
+   MISSION V2.33 — BUTTON-ONLY HOTSPOTS
+   กดเปิด Mission ได้เฉพาะแถบ "ไปทำภารกิจ" ของแต่ละหมวด
+   ไม่ให้แตะพื้นที่อื่นของการ์ดแล้วเปิด Mission
+========================================================= */
+
+/* DAILY — ปุ่มสีส้ม */
+#missionStage .hotspot-daily{
+  position:absolute!important;
+  left:41.2%!important;
+  top:43.0%!important;
+  width:26.0%!important;
+  height:5.4%!important;
+  z-index:1400!important;
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+/* WEEKLY — ปุ่มสีน้ำเงิน */
+#missionStage .hotspot-weekly{
+  position:absolute!important;
+  left:68.3%!important;
+  top:43.0%!important;
+  width:27.8%!important;
+  height:5.4%!important;
+  z-index:1400!important;
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+/* MONTHLY — ปุ่มสีม่วง */
+#missionStage .hotspot-monthly{
+  position:absolute!important;
+  left:41.2%!important;
+  top:68.5%!important;
+  width:26.0%!important;
+  height:5.4%!important;
+  z-index:1400!important;
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+/* BONUS — ปุ่มสีเขียว */
+#missionStage .hotspot-bonus{
+  position:absolute!important;
+  left:68.3%!important;
+  top:68.5%!important;
+  width:27.8%!important;
+  height:5.4%!important;
+  z-index:1400!important;
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+/* ปิด click area แบบเก่าที่อาจครอบทั้งการ์ด
+   ให้ button เดียวกันใช้ขนาดจาก hotspot-* ด้านบน */
+#missionStage .mission-card-button.daily,
+#missionStage .mission-card-button.weekly,
+#missionStage .mission-card-button.monthly,
+#missionStage .mission-card-button.bonus{
+  inset:auto!important;
+}
+
+/* กัน overlay ข้อมูลกิน click */
+#missionStage .mission-summary-overlay,
+#missionStage .daily-count,
+#missionStage .weekly-count,
+#missionStage .monthly-count,
+#missionStage .bonus-count,
+#missionStage .live-track{
+  pointer-events:none!important;
+}
+
+/* DEBUG:
+   ถ้าต้องการดูกรอบพื้นที่กด ให้เปลี่ยน rgba(...,0) เป็น .20 ชั่วคราว */
+#missionStage .hotspot-daily,
+#missionStage .hotspot-weekly,
+#missionStage .hotspot-monthly,
+#missionStage .hotspot-bonus{
+  outline:0 solid rgba(255,0,0,0)!important;
+}
 </style>
 
 </body>
