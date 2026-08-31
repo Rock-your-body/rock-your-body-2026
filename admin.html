@@ -744,7 +744,7 @@
 
         <div class="test-stat">
           <small>Energy</small>
-          <b id="testEnergyStat">0 / 200</b>
+          <b id="testEnergyStat">0 / 50,000</b>
         </div>
 
         <div class="test-stat">
@@ -778,7 +778,7 @@
             id="testEnergy"
             type="number"
             min="0"
-            max="200"
+            max="50,000"
             step="1"
           >
         </div>
@@ -839,7 +839,7 @@
         >
           ✅ Energy พอดี
           <small>
-            Stage 1 • Energy 10 • ชนะแล้วเหลือ 0
+            Stage 1 • Energy 300 • ชนะแล้วเหลือ 300
           </small>
         </button>
 
@@ -847,9 +847,9 @@
           class="scenario"
           onclick="applyTestScenario('attack_high')"
         >
-          ⚡ Energy 80
+          ⚡ Energy 300
           <small>
-            Stage 1 • ทดสอบชนะและหักเหลือ 70
+            Stage 1 • ทดสอบชนะและหักเหลือ 300
           </small>
         </button>
 
@@ -869,7 +869,7 @@
         >
           👑 Final Boss
           <small>
-            ผ่าน Stage 1-9 • EXP ถึง Stage 10 • Energy 200
+            ผ่าน Stage 1-9 • EXP  ถึง Stage 10 
           </small>
         </button>
 
@@ -879,7 +879,7 @@
         >
           🧪 MAX TEST
           <small>
-            Coin 9,999 • Energy 200 • EXP 5,700
+            Coin 99,999 • Energy 99,999 • EXP 99,999
           </small>
         </button>
 
@@ -933,8 +933,8 @@
             id="testStageEnergy"
             type="number"
             min="0"
-            max="200"
-            value="80"
+            max="99,999"
+            value="300"
           >
         </div>
 
@@ -1062,7 +1062,7 @@
         </div>
         <div>
           <label>Max Energy</label>
-          <input id="setMaxEnergy" type="number" value="200">
+          <input id="setMaxEnergy" type="number" value="99,999">
         </div>
         <div>
           <label>Daily Steps Goal</label>
@@ -1703,7 +1703,7 @@ function renderPlayers(){
             ${statusBadge(p.status||"active")}
             <div class="muted-text">
               Team: ${esc(p.team_name||"-")}<br>
-              ⭐ ${Number(w?.rock_coin||0)} • ⚡ ${Number(w?.energy||0)}/${Number(w?.max_energy||200)} • EXP ${Number(w?.exp||0)}
+              ⭐ ${Number(w?.rock_coin||0)} • ⚡ ${Number(w?.energy||0)}/${Number(w?.max_energy||99,999)} • EXP ${Number(w?.exp||0)}
             </div>
           </div>
           <div class="actions row">
@@ -1907,7 +1907,7 @@ async function loadSettings(){
     const d=await post("systemSettings");
     const s=d?.settings||{};
     $("setProjectName").value=s.projectName||"ROCK YOUR BODY 2026";
-    $("setMaxEnergy").value=s.maxEnergy??200;
+    $("setMaxEnergy").value=s.maxEnergy??99,999;
     $("setStepsGoal").value=s.stepsGoal??8000;
     $("setCaloriesGoal").value=s.caloriesGoal??300;
     $("setSleepGoal").value=s.sleepGoal??420;
@@ -1934,7 +1934,7 @@ async function saveSettings(){
       Number(
         $("setMaxEnergy")
           .value ||
-        200
+        99,999
       ),
 
     stepsGoal:
@@ -2216,7 +2216,7 @@ function renderTestState(
     Number(
       home?.max_energy ??
       canonical?.max_energy ??
-      200
+      99,999
     );
 
 
