@@ -5,7 +5,76 @@
 <head>
 
   <meta charset="utf-8">
+/* =========================================================
+   MISSION PROGRESS TRACK — SHOW CATEGORY COLOR
+========================================================= */
 
+/* พื้นหลังของแถบ */
+#missionStage .daily-track{
+  background:rgba(255,120,0,.18)!important;
+}
+
+#missionStage .weekly-track{
+  background:rgba(20,90,255,.16)!important;
+}
+
+#missionStage .monthly-track{
+  background:rgba(120,40,210,.18)!important;
+}
+
+#missionStage .bonus-track{
+  background:rgba(20,160,60,.16)!important;
+}
+
+
+/* สี progress จริง */
+#missionStage .mission-fill-daily{
+  background:linear-gradient(
+    90deg,
+    #ffb13b,
+    #ff5b00
+  )!important;
+}
+
+#missionStage .mission-fill-weekly{
+  background:linear-gradient(
+    90deg,
+    #4382ff,
+    #0055dd
+  )!important;
+}
+
+#missionStage .mission-fill-monthly{
+  background:linear-gradient(
+    90deg,
+    #9a4ee8,
+    #5b16b7
+  )!important;
+}
+
+#missionStage .mission-fill-bonus{
+  background:linear-gradient(
+    90deg,
+    #54c760,
+    #078e2b
+  )!important;
+}
+
+
+/* ความหนา */
+#missionStage .live-track{
+  height:1.0%!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+}
+
+
+/* ถ้าต้องการให้เห็นตัวอย่างสีขั้นต่ำแม้ 0% */
+#missionStage .live-fill{
+  min-width:2%!important;
+  height:100%!important;
+  border-radius:999px!important;
+}
   <meta
     name="viewport"
     content="width=device-width,initial-scale=1,viewport-fit=cover"
@@ -66,6 +135,76 @@
 
 
   <style>
+    /* =========================================================
+   MISSION PROGRESS TRACK — SHOW CATEGORY COLOR
+========================================================= */
+
+/* พื้นหลังของแถบ */
+#missionStage .daily-track{
+  background:rgba(255,120,0,.18)!important;
+}
+
+#missionStage .weekly-track{
+  background:rgba(20,90,255,.16)!important;
+}
+
+#missionStage .monthly-track{
+  background:rgba(120,40,210,.18)!important;
+}
+
+#missionStage .bonus-track{
+  background:rgba(20,160,60,.16)!important;
+}
+
+
+/* สี progress จริง */
+#missionStage .mission-fill-daily{
+  background:linear-gradient(
+    90deg,
+    #ffb13b,
+    #ff5b00
+  )!important;
+}
+
+#missionStage .mission-fill-weekly{
+  background:linear-gradient(
+    90deg,
+    #4382ff,
+    #0055dd
+  )!important;
+}
+
+#missionStage .mission-fill-monthly{
+  background:linear-gradient(
+    90deg,
+    #9a4ee8,
+    #5b16b7
+  )!important;
+}
+
+#missionStage .mission-fill-bonus{
+  background:linear-gradient(
+    90deg,
+    #54c760,
+    #078e2b
+  )!important;
+}
+
+
+/* ความหนา */
+#missionStage .live-track{
+  height:1.0%!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+}
+
+
+/* ถ้าต้องการให้เห็นตัวอย่างสีขั้นต่ำแม้ 0% */
+#missionStage .live-fill{
+  min-width:2%!important;
+  height:100%!important;
+  border-radius:999px!important;
+}
 /* =========================================================
    NUTRITION TEMPLATE OVERLAY — FINAL
    ใช้ข้อมูลทับบนช่อง Nutrition ใน mission-template
@@ -9915,76 +10054,7 @@ if(document.readyState === 'loading'){
   initMissionPage().then(startMissionRefresh);
 }
 </script>
-/* =========================================================
-   MISSION PROGRESS TRACK — SHOW CATEGORY COLOR
-========================================================= */
 
-/* พื้นหลังของแถบ */
-#missionStage .daily-track{
-  background:rgba(255,120,0,.18)!important;
-}
-
-#missionStage .weekly-track{
-  background:rgba(20,90,255,.16)!important;
-}
-
-#missionStage .monthly-track{
-  background:rgba(120,40,210,.18)!important;
-}
-
-#missionStage .bonus-track{
-  background:rgba(20,160,60,.16)!important;
-}
-
-
-/* สี progress จริง */
-#missionStage .mission-fill-daily{
-  background:linear-gradient(
-    90deg,
-    #ffb13b,
-    #ff5b00
-  )!important;
-}
-
-#missionStage .mission-fill-weekly{
-  background:linear-gradient(
-    90deg,
-    #4382ff,
-    #0055dd
-  )!important;
-}
-
-#missionStage .mission-fill-monthly{
-  background:linear-gradient(
-    90deg,
-    #9a4ee8,
-    #5b16b7
-  )!important;
-}
-
-#missionStage .mission-fill-bonus{
-  background:linear-gradient(
-    90deg,
-    #54c760,
-    #078e2b
-  )!important;
-}
-
-
-/* ความหนา */
-#missionStage .live-track{
-  height:1.0%!important;
-  border-radius:999px!important;
-  overflow:hidden!important;
-}
-
-
-/* ถ้าต้องการให้เห็นตัวอย่างสีขั้นต่ำแม้ 0% */
-#missionStage .live-fill{
-  min-width:2%!important;
-  height:100%!important;
-  border-radius:999px!important;
-}
 <style>
 /* =========================================================
    MISSION MODAL - BIGGER TEXT
