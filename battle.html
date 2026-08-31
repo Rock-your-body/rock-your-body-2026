@@ -3,1618 +3,232 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#eef4ff">
-
   <title>ROCK YOUR BODY 2026 - BATTLE</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v71"></script>
+  <script src="./app-config.js?v=20260831-battle-v60"></script>
 
   <style>
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
-    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;background:#eef4ff;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
+    body{display:flex;justify-content:center;overflow-x:hidden}
+    #app{position:relative;width:min(100vw,1536px);aspect-ratio:1536/1024;background:#eef4ff;overflow:hidden}
+    #template{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:1;pointer-events:none}
 
-    html,body{
-      margin:0;
-      padding:0;
-      width:100%;
-      min-height:100%;
-      background:#eef4ff;
-      font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif;
-    }
+    .live{position:absolute;z-index:20;font-weight:1000;color:#0a2a62;text-align:center}
+    #coin{right:9.0%;top:3.0%;width:8%;font-size:clamp(9px,1.2vw,18px)}
+    #energyTop{right:1.4%;top:3.0%;width:8%;font-size:clamp(9px,1.2vw,18px)}
 
-    body{
-      overflow-x:hidden;
-    }
+    #bossName{left:2.9%;top:24.5%;width:21%;font-size:clamp(18px,3vw,52px);color:#fff;text-align:left;text-shadow:0 3px 8px #000}
+    #hpText{left:3.0%;top:43.2%;width:22%;font-size:clamp(10px,1.4vw,22px);color:#fff;text-align:left}
+    #hpPct{left:3.0%;top:48.0%;width:8%;font-size:clamp(18px,2.5vw,42px);color:#fff;text-align:left}
 
-    button{
-      font:inherit;
-    }
+    #hpTrack{position:absolute;z-index:18;left:6.1%;top:45.1%;width:16.4%;height:2.4%;border-radius:999px;background:rgba(31,59,109,.7);overflow:hidden}
+    #hpFill{height:100%;width:100%;background:linear-gradient(90deg,#ef4444,#ff7b00);transition:.35s}
 
-    /* =========================================================
-       BATTLE TEMPLATE
-    ========================================================= */
+    #monsterBox{position:absolute;z-index:17;left:21%;top:20%;width:31%;height:38%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+    #monster{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 14px 14px rgba(0,0,0,.45))}
 
-    #battleScreen{
-      position:relative;
-      width:100%;
-      max-width:1536px;
-      margin:0 auto;
-      aspect-ratio:1536/900;
-      overflow:hidden;
-      background:#eaf2ff;
-    }
+    #energyMain{left:57.6%;top:29.5%;width:10%;font-size:clamp(16px,2vw,32px)}
+    #energyTrack{position:absolute;z-index:18;left:53.0%;top:37.4%;width:16.8%;height:3.0%;border-radius:999px;background:#d8e2f0;overflow:hidden}
+    #energyFill{height:100%;width:0%;background:linear-gradient(90deg,#ff9f0a,#ffc529);transition:.35s}
+    #energyTimer{left:54.6%;top:47.0%;width:13.5%;font-size:clamp(12px,1.6vw,26px)}
 
-    #battleTemplate{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:fill;
-      z-index:1;
-      pointer-events:none;
-      user-select:none;
-    }
+    .hot{position:absolute;z-index:30;border:0;background:transparent;cursor:pointer}
+    #fightBtn{left:72.2%;top:22.2%;width:25.2%;height:17.7%}
+    #energyBtn{left:72.2%;top:41.5%;width:25.2%;height:17.2%}
+    #homeBtn{left:1.0%;top:82.4%;width:31.2%;height:14.2%}
+    #missionBtn{left:33.2%;top:82.4%;width:31.2%;height:14.2%}
+    #battleBtn{left:65.4%;top:82.4%;width:33.2%;height:14.2%}
+    #rewardStatus{position:absolute;z-index:20;left:64.0%;top:68.0%;width:27%;color:#fff;font-weight:900;font-size:clamp(8px,1vw,14px);text-align:center;text-shadow:0 2px 4px #000}
 
-    /* =========================================================
-       LIVE WALLET
-    ========================================================= */
-
-    .live{
-      position:absolute;
-      z-index:30;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:1000;
-      pointer-events:none;
-      text-align:center;
-    }
-
-    #coinValue{
-      left:80.5%;
-      top:3.6%;
-      width:7.2%;
-      height:5.5%;
-      color:#0a2d69;
-      font-size:clamp(8px,1.15vw,18px);
-    }
-
-    #energyTopValue{
-      left:90.2%;
-      top:3.6%;
-      width:7.6%;
-      height:5.5%;
-      color:#0a2d69;
-      font-size:clamp(8px,1.15vw,18px);
-    }
-
-    /* =========================================================
-       MONSTER
-    ========================================================= */
-
-    #monsterName{
-      position:absolute;
-      z-index:31;
-      left:3.4%;
-      top:24.0%;
-      width:27%;
-      min-height:6%;
-      color:#fff;
-      font-size:clamp(17px,3vw,48px);
-      font-weight:1000;
-      line-height:1.05;
-      text-align:left;
-      text-shadow:
-        0 4px 7px rgba(0,0,0,.66),
-        0 0 8px rgba(0,0,0,.28);
-      pointer-events:none;
-    }
-
-    #monsterBox{
-      position:absolute;
-      z-index:25;
-      left:20.0%;
-      top:22.0%;
-      width:35%;
-      height:42%;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      pointer-events:none;
-    }
-
-    #monsterImage{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      object-position:center bottom;
-      filter:drop-shadow(0 14px 12px rgba(0,0,0,.42));
-    }
-
-    /* =========================================================
-       HP
-    ========================================================= */
-
-    #hpTrack{
-      position:absolute;
-      z-index:28;
-      left:6.1%;
-      top:49.7%;
-      width:17.2%;
-      height:2.5%;
-      border-radius:999px;
-      overflow:hidden;
-      background:rgba(37,69,117,.72);
-      pointer-events:none;
-    }
-
-    #hpFill{
-      width:100%;
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg,#ef2222,#ff6a18);
-      transition:width .35s ease;
-    }
-
-    #hpNumbers{
-      left:3.2%;
-      top:52.3%;
-      width:21%;
-      height:4%;
-      justify-content:flex-start;
-      color:#fff;
-      font-size:clamp(9px,1.2vw,18px);
-      text-shadow:0 2px 5px rgba(0,0,0,.65);
-    }
-
-    #hpPercent{
-      left:3.2%;
-      top:56.0%;
-      width:10%;
-      height:5%;
-      justify-content:flex-start;
-      color:#fff;
-      font-size:clamp(14px,2.2vw,34px);
-      text-shadow:0 2px 5px rgba(0,0,0,.65);
-    }
-
-    /* =========================================================
-       ENERGY CARD
-    ========================================================= */
-
-    #energyMainValue{
-      left:55.8%;
-      top:31.0%;
-      width:10%;
-      height:6%;
-      color:#0a2d69;
-      font-size:clamp(12px,1.75vw,28px);
-    }
-
-    #energyTrack{
-      position:absolute;
-      z-index:29;
-      left:53.1%;
-      top:38.1%;
-      width:16.7%;
-      height:3.0%;
-      border-radius:999px;
-      overflow:hidden;
-      background:#d9e2ee;
-      border:1px solid rgba(120,140,170,.25);
-      pointer-events:none;
-    }
-
-    #energyFill{
-      width:0%;
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg,#ff9800,#ffc72c);
-      transition:width .35s ease;
-    }
-
-    #energyCountdown{
-      left:54.1%;
-      top:47.6%;
-      width:15%;
-      height:5%;
-      color:#0a2d69;
-      font-size:clamp(9px,1.35vw,21px);
-    }
-
-    /* =========================================================
-       BOSS REWARD STATUS
-    ========================================================= */
-
-    #rewardStatus{
-      position:absolute;
-      z-index:32;
-      left:68.5%;
-      top:67.4%;
-      width:23%;
-      min-height:5%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-size:clamp(7px,.95vw,14px);
-      font-weight:1000;
-      text-align:center;
-      text-shadow:0 2px 5px rgba(0,0,0,.85);
-      pointer-events:none;
-    }
-
-    /* =========================================================
-       HOTSPOTS
-       หน้า BATTLE ไม่มีปุ่มโจมตี
-    ========================================================= */
-
-    .hotspot{
-      position:absolute;
-      z-index:80;
-      border:0;
-      padding:0;
-      background:transparent;
-      cursor:pointer;
-      touch-action:manipulation;
-    }
-
-    #fightMonsterButton{
-      left:72.0%;
-      top:22.0%;
-      width:25.2%;
-      height:19%;
-    }
-
-    #myEnergyButton{
-      left:72.0%;
-      top:42.5%;
-      width:25.2%;
-      height:18%;
-    }
-
-    #rankingButton{
-      left:3.0%;
-      top:64%;
-      width:55%;
-      height:14%;
-    }
-
-    #rewardButton{
-      left:59%;
-      top:64%;
-      width:38%;
-      height:14%;
-    }
-
-    #homeButton{
-      left:1.0%;
-      top:79.3%;
-      width:32%;
-      height:12.2%;
-    }
-
-    #missionButton{
-      left:34%;
-      top:79.3%;
-      width:32%;
-      height:12.2%;
-    }
-
-    #battleButton{
-      left:67%;
-      top:79.3%;
-      width:32%;
-      height:12.2%;
-    }
-
-    /* =========================================================
-       LOADING / TOAST
-    ========================================================= */
-
-    #loading{
-      position:fixed;
-      inset:0;
-      z-index:10000;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:rgba(3,22,62,.60);
-      backdrop-filter:blur(3px);
-    }
-
-    #loadingBox{
-      padding:16px 22px;
-      border-radius:18px;
-      background:#fff;
-      color:#0a3c86;
-      font-weight:1000;
-      box-shadow:0 12px 36px rgba(0,0,0,.32);
-    }
-
-    #toast{
-      position:fixed;
-      z-index:11000;
-      left:50%;
-      bottom:max(18px,env(safe-area-inset-bottom));
-      transform:translateX(-50%);
-      display:none;
-      max-width:calc(100vw - 28px);
-      padding:12px 16px;
-      border-radius:14px;
-      background:#173c70;
-      color:#fff;
-      font-weight:900;
-      text-align:center;
-      box-shadow:0 8px 26px rgba(0,0,0,.30);
-    }
-
-    #toast.show{
-      display:block;
-    }
-
-    #toast.error{
-      background:#c62828;
-    }
-
-    @media(max-width:700px){
-      #battleScreen{
-        min-width:740px;
-        transform-origin:top left;
-      }
-
-      body{
-        overflow-x:auto;
-      }
-    }
+    #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;font-weight:900;max-width:calc(100vw - 28px);text-align:center}
+    #toast.show{display:block}
+    #toast.error{background:#c62828}
   </style>
 </head>
-
 <body>
 
-<main id="battleScreen">
+<main id="app">
+  <img id="template" src="./rock-battle(5).jpg?v=20260831-v60" alt="Battle">
 
-  <!-- TEMPLATE -->
-  <img
-    id="battleTemplate"
-    src="./battle-template.png?v=20260831-v71"
-    alt="Battle"
-    draggable="false"
-  >
+  <div id="coin" class="live">0</div>
+  <div id="energyTop" class="live">0</div>
 
-  <!-- TOP WALLET -->
-  <div id="coinValue" class="live">--</div>
-  <div id="energyTopValue" class="live">-- / 200</div>
+  <div id="bossName" class="live">BOSS OF THE MONTH</div>
+  <div id="hpText" class="live">HP -- / --</div>
+  <div id="hpPct" class="live">--%</div>
+  <div id="hpTrack"><div id="hpFill"></div></div>
 
-  <!-- MONSTER -->
-  <div id="monsterName">BOSS OF THE MONTH</div>
+  <div id="monsterBox"><img id="monster" src="./battle-monster-stage-001-germ.png" alt="Monster"></div>
 
-  <div id="monsterBox">
-    <img
-      id="monsterImage"
-      src="./battle-monster-stage-001-germ.png?v=20260831-v71"
-      alt="Monster"
-      draggable="false"
-    >
-  </div>
+  <div id="energyMain" class="live">0</div>
+  <div id="energyTrack"><div id="energyFill"></div></div>
+  <div id="energyTimer" class="live">--:--:--</div>
 
-  <!-- HP -->
-  <div id="hpTrack">
-    <div id="hpFill"></div>
-  </div>
+  <div id="rewardStatus">ยังไม่มีของรางวัลรอรับ</div>
 
-  <div id="hpNumbers" class="live">-- / --</div>
-  <div id="hpPercent" class="live">--%</div>
-
-  <!-- ENERGY -->
-  <div id="energyMainValue" class="live">-- / 200</div>
-
-  <div id="energyTrack">
-    <div id="energyFill"></div>
-  </div>
-
-  <div id="energyCountdown" class="live">--:--:--</div>
-
-  <!-- REWARD -->
-  <div id="rewardStatus">
-    ยังไม่มีของรางวัลรอรับ
-  </div>
-
-  <!-- CLICK AREAS -->
-  <button
-    id="fightMonsterButton"
-    class="hotspot"
-    type="button"
-    aria-label="Fight Monster"
-  ></button>
-
-  <button
-    id="myEnergyButton"
-    class="hotspot"
-    type="button"
-    aria-label="My Energy"
-  ></button>
-
-  <button
-    id="rankingButton"
-    class="hotspot"
-    type="button"
-    aria-label="Battle Ranking"
-  ></button>
-
-  <button
-    id="rewardButton"
-    class="hotspot"
-    type="button"
-    aria-label="Boss Reward"
-  ></button>
-
-  <button
-    id="homeButton"
-    class="hotspot"
-    type="button"
-    aria-label="Home"
-  ></button>
-
-  <button
-    id="missionButton"
-    class="hotspot"
-    type="button"
-    aria-label="Mission"
-  ></button>
-
-  <button
-    id="battleButton"
-    class="hotspot"
-    type="button"
-    aria-label="Battle"
-  ></button>
-
+  <button id="fightBtn" class="hot" type="button" aria-label="Fight Monster"></button>
+  <button id="energyBtn" class="hot" type="button" aria-label="My Energy"></button>
+  <button id="homeBtn" class="hot" type="button" aria-label="Home"></button>
+  <button id="missionBtn" class="hot" type="button" aria-label="Mission"></button>
+  <button id="battleBtn" class="hot" type="button" aria-label="Battle"></button>
 </main>
 
-
-<div id="loading">
-  <div id="loadingBox">
-    ⚔️ กำลังโหลด Battle...
-  </div>
-</div>
-
 <div id="toast"></div>
-
 
 <script>
 "use strict";
 
+const $=id=>document.getElementById(id);
 
-/* ============================================================
-   ROCK YOUR BODY 2026
-   BATTLE V7.1
-   ------------------------------------------------------------
-   หน้า Battle = Dashboard เท่านั้น
-
-   ไม่มีการโจมตีในหน้านี้
-
-   FLOW:
-   battle.html
-      ↓ FIGHT MONSTER
-   battle_map.html
-      ↓ เลือก Stage
-   battle_stage.html?stage=N
-      ↓ Attack
-============================================================ */
-
-
-/* ============================================================
-   BASIC
-============================================================ */
-
-const $ =
-  id =>
-    document.getElementById(id);
-
-
-const CFG =
-  window.APP_CONFIG ||
-  {};
-
-
-const LIFF_ID =
-  CFG.LIFF_ID ||
-  "2011201679-uNWz5yqF";
-
-
-const MAX_ENERGY =
-  Number(
-    CFG.MAX_ENERGY ||
-    200
-  );
-
-
-let state =
-  null;
-
-
-let countdownTimer =
-  null;
-
-
-/* ============================================================
-   MONSTER FILES
-============================================================ */
-
-const MONSTER_FILES = {
-
-  1:{
-    name:"เจ้าจอมเอื่อย",
-    image:"battle-monster-stage-001-germ.png"
-  },
-
-  2:{
-    name:"จอมหวาน",
-    image:"battle-monster-stage-002-donut.png"
-  },
-
-  3:{
-    name:"ปีศาจของทอด",
-    image:"battle-monster-stage-003-fries.png"
-  },
-
-  4:{
-    name:"จอมเค็ม",
-    image:"battle-monster-stage-004-salt.png"
-  },
-
-  5:{
-    name:"ราชาอาหารไร้ประโยชน์",
-    image:"battle-monster-stage-005-burger-king.png"
-  },
-
-  6:{
-    name:"ปีศาจพักผ่อนน้อย",
-    image:"battle-monster-stage-006-rest.png"
-  },
-
-  7:{
-    name:"จอมเนือยนิ่ง",
-    image:"battle-monster-stage-007-sedentary.png"
-  },
-
-  8:{
-    name:"ปีศาจพฤติกรรมเสี่ยง",
-    image:"battle-monster-stage-008-risk.png"
-  },
-
-  9:{
-    name:"ราชาความเสี่ยงสุขภาพ",
-    image:"battle-monster-stage-009-risk-king.png"
-  },
-
-  10:{
-    name:"จอมมาร Final Boss",
-    image:"battle-monster-stage-010-boss.png"
-  }
-
-};
-
-
-/* ============================================================
-   API URL
-============================================================ */
-
-function battleApi(){
-
-  if(
-    CFG
-      ?.getApi
-  ){
-
-    return CFG.getApi(
-      "BATTLE"
-    );
-  }
-
-
-  const url =
-    CFG
-      ?.API
-      ?.BATTLE;
-
-
-  if(!url){
-
-    throw new Error(
-      "ไม่พบ API.BATTLE ใน app-config.js"
-    );
-  }
-
-
+function apiUrl(){
+  if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi("BATTLE");
+  const url=window.APP_CONFIG?.API?.BATTLE;
+  if(!url) throw new Error("ไม่พบ API.BATTLE");
   return url;
 }
 
-
-/* ============================================================
-   STATUS
-============================================================ */
-
-function showLoading(
-  show
-){
-
-  $("loading")
-    .style
-    .display =
-      show
-        ? "flex"
-        : "none";
-}
-
-
-function toast(
-  message,
-  error = false
-){
-
-  const el =
-    $("toast");
-
-
-  el.textContent =
-    message;
-
-
-  el.classList
-    .toggle(
-      "error",
-      error
-    );
-
-
-  el.classList
-    .add(
-      "show"
-    );
-
-
-  clearTimeout(
-    window.__battleToastTimer
-  );
-
-
-  window.__battleToastTimer =
-    setTimeout(
-      ()=>{
-
-        el.classList
-          .remove(
-            "show"
-          );
-
-      },
-      error
-        ? 4500
-        : 2300
-    );
-}
-
-
-/* ============================================================
-   LIFF
-============================================================ */
-
 async function initLine(){
-
-  if(
-    !window.liff
-  ){
-
-    throw new Error(
-      "ไม่พบ LINE LIFF SDK"
-    );
-  }
-
-
-  await liff.init({
-
-    liffId:
-      LIFF_ID
-
-  });
-
-
-  if(
-    !liff.isLoggedIn()
-  ){
-
-    liff.login({
-
-      redirectUri:
-        window.location.href
-
-    });
-
-
+  await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});
+  if(!liff.isLoggedIn()){
+    liff.login({redirectUri:location.href});
     return false;
   }
-
-
-  const token =
-    liff.getIDToken();
-
-
-  if(
-    !token ||
-    token
-      .split(".")
-      .length !==
-      3
-  ){
-
-    /*
-      Token ไม่ถูกต้อง:
-      logout แล้วให้ LINE สร้าง Token ใหม่
-    */
-
+  const token=liff.getIDToken();
+  if(!token||token.split(".").length!==3){
     liff.logout();
-
-
-    liff.login({
-
-      redirectUri:
-        window.location.href
-
-    });
-
-
+    liff.login({redirectUri:location.href});
     return false;
   }
-
-
   return true;
 }
 
-
-/* ============================================================
-   BATTLE API
-   IMPORTANT:
-   ส่ง idToken ใน JSON body
-   ให้ตรงกับ Battle Edge Function V6.x
-============================================================ */
-
-async function postBattle(
-  action,
-  payload = {}
-){
-
-  const idToken =
-    liff.getIDToken();
-
-
-  if(
-    !idToken ||
-    idToken
-      .split(".")
-      .length !==
-      3
-  ){
-
-    throw new Error(
-      "INVALID_LINE_ID_TOKEN"
-    );
-  }
-
-
-  const response =
-    await fetch(
-      battleApi(),
-      {
-        method:
-          "POST",
-
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        cache:
-          "no-store",
-
-        body:
-          JSON.stringify({
-            action,
-            idToken,
-            ...payload
-          })
-      }
-    );
-
-
-  const raw =
-    await response.text();
-
-
-  let data =
-    {};
-
-
-  try{
-
-    data =
-      raw
-        ? JSON.parse(raw)
-        : {};
-
-  }catch{
-
-    throw new Error(
-      "Battle API ตอบกลับไม่ใช่ JSON"
-    );
-  }
-
-
-  if(
-    !response.ok ||
-    data
-      ?.success ===
-      false
-  ){
-
-    throw new Error(
-      data?.error ||
-      data?.message ||
-      `HTTP ${response.status}`
-    );
-  }
-
-
+async function post(action,payload={}){
+  const res=await fetch(apiUrl(),{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    cache:"no-store",
+    body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})
+  });
+  const text=await res.text();
+  let data={};
+  try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
+  if(!res.ok||data?.success===false) throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
   return data;
 }
 
-
-/* ============================================================
-   MONSTER IMAGE
-============================================================ */
-
-function monsterFile(
-  stageNo
-){
-
-  return (
-    MONSTER_FILES[
-      Number(stageNo)
-    ] ||
-    MONSTER_FILES[1]
-  );
+function toast(text,error=false){
+  const el=$("toast");
+  el.textContent=text;
+  el.classList.toggle("error",error);
+  el.classList.add("show");
+  clearTimeout(window.__t);
+  window.__t=setTimeout(()=>el.classList.remove("show"),error?4500:2200);
 }
 
-
-/* ============================================================
-   COUNTDOWN
-============================================================ */
-
-function millisecondsUntilBangkokMidnight(){
-
-  const now =
-    new Date();
-
-
-  const formatter =
-    new Intl.DateTimeFormat(
-      "en-CA",
-      {
-        timeZone:
-          "Asia/Bangkok",
-
-        year:
-          "numeric",
-
-        month:
-          "2-digit",
-
-        day:
-          "2-digit",
-
-        hour:
-          "2-digit",
-
-        minute:
-          "2-digit",
-
-        second:
-          "2-digit",
-
-        hour12:
-          false
-      }
-    );
-
-
-  const parts =
-    formatter
-      .formatToParts(now)
-      .reduce(
-        (obj,item)=>{
-
-          obj[
-            item.type
-          ] =
-            item.value;
-
-          return obj;
-
-        },
-        {}
-      );
-
-
-  const bangkokNow =
-    new Date(
-      `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}+07:00`
-    );
-
-
-  const tomorrow =
-    new Date(
-      bangkokNow
-        .getTime() +
-      24 *
-      60 *
-      60 *
-      1000
-    );
-
-
-  tomorrow.setUTCHours(
-    17,
-    0,
-    0,
-    0
-  );
-
-
-  return Math.max(
-    0,
-    tomorrow.getTime() -
-    bangkokNow.getTime()
-  );
+function monsterFile(stageNo){
+  const map={
+    1:"battle-monster-stage-001-germ.png",
+    2:"battle-monster-stage-002-donut.png",
+    3:"battle-monster-stage-003-fries.png",
+    4:"battle-monster-stage-004-salt.png",
+    5:"battle-monster-stage-005-burger-king.png",
+    6:"battle-monster-stage-006-rest.png",
+    7:"battle-monster-stage-007-sedentary.png",
+    8:"battle-monster-stage-008-risk.png",
+    9:"battle-monster-stage-009-risk-king.png",
+    10:"battle-monster-stage-010-boss.png"
+  };
+  return map[Number(stageNo)]||map[1];
 }
 
+function nextBangkokMidnightMs(){
+  const now=new Date();
+  const parts=new Intl.DateTimeFormat("en-CA",{
+    timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit",
+    hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false
+  }).formatToParts(now).reduce((a,p)=>(a[p.type]=p.value,a),{});
+  const bkk = new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}+07:00`);
+  const next = new Date(bkk.getTime()+24*60*60*1000);
+  next.setHours(0,0,0,0);
+  return next.getTime() - bkk.getTime();
+}
 
-function startCountdown(){
-
-  clearInterval(
-    countdownTimer
-  );
-
-
-  function render(){
-
-    const available =
-      Number(
-        state
-          ?.healthEnergy
-          ?.available ||
-        0
-      );
-
-
-    const max =
-      Number(
-        state
-          ?.healthEnergy
-          ?.max ||
-        MAX_ENERGY
-      );
-
-
-    if(
-      available >=
-      max
-    ){
-
-      $("energyCountdown")
-        .textContent =
-          "เต็มแล้ว";
-
-
-      return;
-    }
-
-
-    let ms =
-      millisecondsUntilBangkokMidnight();
-
-
-    const hours =
-      Math.floor(
-        ms /
-        3600000
-      );
-
-
-    ms %=
-      3600000;
-
-
-    const minutes =
-      Math.floor(
-        ms /
-        60000
-      );
-
-
-    ms %=
-      60000;
-
-
-    const seconds =
-      Math.floor(
-        ms /
-        1000
-      );
-
-
-    $("energyCountdown")
-      .textContent =
-        `${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
-  }
-
-
+function startTimer(){
+  const render=()=>{
+    let ms=nextBangkokMidnightMs();
+    const h=Math.floor(ms/3600000); ms%=3600000;
+    const m=Math.floor(ms/60000); ms%=60000;
+    const s=Math.floor(ms/1000);
+    $("energyTimer").textContent=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  };
   render();
-
-
-  countdownTimer =
-    setInterval(
-      render,
-      1000
-    );
+  setInterval(render,1000);
 }
 
+function render(data){
+  const player=data?.player||{};
+  const e=data?.healthEnergy||{};
+  const stages=Array.isArray(data?.stages)?data.stages:[];
+  const boss=stages.find(s=>Number(s.id)===Number(data?.currentStage||1))||stages[0]||{};
 
-/* ============================================================
-   RENDER
-============================================================ */
+  $("coin").textContent=Number(player.rockCoin||0).toLocaleString();
+  $("energyTop").textContent=Number(e.available||0).toLocaleString();
+  $("energyMain").textContent=Number(e.available||0).toLocaleString();
 
-function renderBattle(
-  data
-){
+  const ep=Math.max(0,Math.min(100,Number(e.max||50000)>0?Number(e.available||0)/Number(e.max||50000)*100:0));
+  $("energyFill").style.width=`${ep}%`;
 
-  state =
-    data;
+  const maxHp=Math.max(1,Number(boss.maxHp||1));
+  const curHp=Math.max(0,Number(boss.currentHp??maxHp));
+  const hpPct=Math.round(curHp/maxHp*100);
 
+  $("bossName").textContent=(boss.name||"BOSS OF THE MONTH").toUpperCase();
+  $("hpText").textContent=`${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
+  $("hpPct").textContent=`${hpPct}%`;
+  $("hpFill").style.width=`${hpPct}%`;
 
-  const player =
-    data
-      ?.player ||
-    {};
+  $("monster").src="./"+monsterFile(boss.id)+"?v=20260831-v60";
+  $("monster").alt=boss.name||"Monster";
 
-
-  const energy =
-    data
-      ?.healthEnergy ||
-    {};
-
-
-  const stages =
-    Array.isArray(
-      data
-        ?.stages
-    )
-      ? data.stages
-      : [];
-
-
-  const currentStageNo =
-    Number(
-      data
-        ?.currentStage ||
-      1
-    );
-
-
-  const stage =
-    stages.find(
-      s =>
-        Number(
-          s.id
-        ) ===
-        currentStageNo
-    ) ||
-    stages[0] ||
-    {
-      id:1,
-      maxHp:1200,
-      currentHp:1200,
-      name:"เจ้าจอมเอื่อย"
-    };
-
-
-  /* WALLET */
-
-  const rockCoin =
-    Number(
-      player
-        ?.rockCoin ||
-      0
-    );
-
-
-  const availableEnergy =
-    Math.max(
-      0,
-      Number(
-        energy
-          ?.available ||
-        0
-      )
-    );
-
-
-  const maxEnergy =
-    Math.max(
-      1,
-      Number(
-        energy
-          ?.max ||
-        MAX_ENERGY
-      )
-    );
-
-
-  $("coinValue")
-    .textContent =
-      rockCoin
-        .toLocaleString();
-
-
-  $("energyTopValue")
-    .textContent =
-      `${availableEnergy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
-
-
-  $("energyMainValue")
-    .textContent =
-      `${availableEnergy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
-
-
-  const energyPercent =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        (
-          availableEnergy /
-          maxEnergy
-        ) *
-        100
-      )
-    );
-
-
-  $("energyFill")
-    .style
-    .width =
-      `${energyPercent}%`;
-
-
-  /* MONSTER */
-
-  const mapped =
-    monsterFile(
-      stage.id
-    );
-
-
-  $("monsterName")
-    .textContent =
-      stage
-        ?.name ||
-      mapped.name;
-
-
-  $("monsterImage")
-    .src =
-      `./${mapped.image}?v=20260831-v71`;
-
-
-  $("monsterImage")
-    .alt =
-      stage
-        ?.name ||
-      mapped.name;
-
-
-  /* HP */
-
-  const maxHp =
-    Math.max(
-      1,
-      Number(
-        stage
-          ?.maxHp ||
-        1
-      )
-    );
-
-
-  const currentHp =
-    Math.max(
-      0,
-      Number(
-        stage
-          ?.currentHp ??
-        maxHp
-      )
-    );
-
-
-  const hpPercent =
-    Math.max(
-      0,
-      Math.min(
-        100,
-        (
-          currentHp /
-          maxHp
-        ) *
-        100
-      )
-    );
-
-
-  $("hpNumbers")
-    .textContent =
-      `${currentHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
-
-
-  $("hpPercent")
-    .textContent =
-      `${Math.round(hpPercent)}%`;
-
-
-  $("hpFill")
-    .style
-    .width =
-      `${hpPercent}%`;
-
-
-  /* REWARD */
-
-  const rewardStatus =
-    String(
-      stage
-        ?.rewardStatus ||
-      "none"
-    );
-
-
-  if(
-    rewardStatus ===
-    "pending"
-  ){
-
-    $("rewardStatus")
-      .textContent =
-        "🎁 ผ่านด่านแล้ว • รอ Admin ส่งของรางวัล";
-
-  }else if(
-    rewardStatus ===
-    "sent"
-  ){
-
-    $("rewardStatus")
-      .textContent =
-        "✅ Admin ส่งของรางวัลแล้ว";
-
-  }else if(
-    rewardStatus ===
-    "cancelled"
-  ){
-
-    $("rewardStatus")
-      .textContent =
-        "ของรางวัลถูกยกเลิก";
-
+  if(boss.rewardStatus==="pending"){
+    $("rewardStatus").textContent="🎁 ผ่านด่านแล้ว • รอ Admin ส่งของรางวัล";
+  }else if(boss.rewardStatus==="sent"){
+    $("rewardStatus").textContent="✅ Admin ส่งของรางวัลแล้ว";
   }else{
-
-    $("rewardStatus")
-      .textContent =
-        "ยังไม่มีของรางวัลรอรับ";
-  }
-
-
-  startCountdown();
-}
-
-
-/* ============================================================
-   LOAD
-============================================================ */
-
-async function loadBattle(){
-
-  showLoading(
-    true
-  );
-
-
-  try{
-
-    /*
-      Backend V6.x canonical action
-    */
-
-    const data =
-      await postBattle(
-        "mapV5"
-      );
-
-
-    renderBattle(
-      data
-    );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    /*
-      ถ้า Token หมดอายุ
-      ให้ LIFF login ใหม่ ไม่ใช้ line_user_id แทน
-    */
-
-    if(
-      String(
-        error
-          ?.message ||
-        ""
-      )
-        .includes(
-          "INVALID_LINE_ID_TOKEN"
-        )
-    ){
-
-      try{
-
-        liff.logout();
-
-
-        liff.login({
-
-          redirectUri:
-            window.location.href
-
-        });
-
-
-        return;
-
-      }catch(_){}
-    }
-
-
-    toast(
-      `โหลดข้อมูล Battle ไม่สำเร็จ: ${error?.message || error}`,
-      true
-    );
-
-  }finally{
-
-    showLoading(
-      false
-    );
+    $("rewardStatus").textContent="ยังไม่มีของรางวัลรอรับ";
   }
 }
 
+async function load(){
+  const data=await post("mapV5");
+  render(data);
+}
 
-/* ============================================================
-   NAVIGATION
-============================================================ */
+$("fightBtn").onclick=()=>{
+  location.href=window.APP_CONFIG?.PAGE?.BATTLE_MAP||"./battle_map.html";
+};
 
-/*
-  FIGHT MONSTER
+$("energyBtn").onclick=()=>{
+  toast("Energy สะสมใช้ค่าเดียวกับหน้า HOME");
+};
 
-  สำคัญ:
-  ชื่อไฟล์ HTML คือ battle_map.html
-  ส่วน "battle map.jpeg" เป็นเพียงรูปพื้นหลัง
-*/
-
-$("fightMonsterButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      window.location
-        .assign(
-          CFG
-            ?.PAGE
-            ?.BATTLE_MAP ||
-          "./battle_map.html"
-        );
-    }
-  );
-
-
-$("myEnergyButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const energy =
-        state
-          ?.healthEnergy ||
-        {};
-
-
-      toast(
-        `⚡ MY ENERGY ${Number(energy.available || 0)} / ${Number(energy.max || MAX_ENERGY)}`
-      );
-    }
-  );
-
-
-$("rankingButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      window.location
-        .assign(
-          CFG
-            ?.PAGE
-            ?.RANKING ||
-          "./ranking.html"
-        );
-    }
-  );
-
-
-$("rewardButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      window.location
-        .assign(
-          CFG
-            ?.PAGE
-            ?.REWARDS ||
-          "./rewards.html"
-        );
-    }
-  );
-
-
-$("homeButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      window.location
-        .assign(
-          CFG
-            ?.PAGE
-            ?.HOME ||
-          "./dashboard.html"
-        );
-    }
-  );
-
-
-$("missionButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      window.location
-        .assign(
-          CFG
-            ?.PAGE
-            ?.MISSION ||
-          "./mission.html"
-        );
-    }
-  );
-
-
-$("battleButton")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      window.scrollTo({
-        top:0,
-        behavior:"smooth"
-      });
-    }
-  );
-
-
-/* ============================================================
-   START
-============================================================ */
+$("homeBtn").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.HOME||"./dashboard.html";
+$("missionBtn").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.MISSION||"./mission.html";
+$("battleBtn").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE||"./battle.html";
 
 (async()=>{
-
   try{
-
-    const ready =
-      await initLine();
-
-
-    if(
-      ready ===
-      false
-    ){
-
-      return;
-    }
-
-
-    await loadBattle();
-
-
-    /*
-      Refresh wallet / Battle state
-      ทุก 30 วินาที
-    */
-
-    setInterval(
-      ()=>{
-
-        if(
-          document.visibilityState ===
-          "visible"
-        ){
-
-          loadBattle()
-            .catch(
-              error =>
-                console.error(
-                  error
-                )
-            );
-        }
-
-      },
-      Number(
-        CFG
-          ?.REFRESH_MS ||
-        30000
-      )
-    );
-
-
+    const ok=await initLine();
+    if(ok===false)return;
+    startTimer();
+    await load();
   }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    showLoading(
-      false
-    );
-
-
-    toast(
-      error
-        ?.message ||
-      String(error),
-      true
-    );
+    console.error(error);
+    toast(error?.message||String(error),true);
   }
-
 })();
-
 </script>
-
 </body>
 </html>
