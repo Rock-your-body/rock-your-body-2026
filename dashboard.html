@@ -12,11 +12,11 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-home-v510-weight-kg"
+    href="./base.css?v=20260830-home-v59-health-score"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-v510-weight-kg"></script>
+  <script src="./app-config.js?v=20260830-home-v59-health-score"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260830-home-v510-weight-kg"
+    src="./home-template.png?v=20260830-home-v59-health-score"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -404,7 +404,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V5.10 EXP-SYNC
+   HOME V5.9 EXP-SYNC
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
@@ -1529,11 +1529,9 @@ function renderHome(
 
 
   $("energy").textContent =
-    `${formatNumber(
+    formatNumber(
       data.wallet.energy
-    )} / ${formatNumber(
-      data.wallet.maxEnergy
-    )}`;
+    );
 
 
   /* ---------- LINE ---------- */
@@ -1646,32 +1644,32 @@ function renderHome(
 
 
   /*
-    แสดงหน่วย kg หลังค่าความคืบหน้าน้ำหนัก
+    ไม่มี kg เพื่อไม่ซ้อน Template
   */
   $("lostWeight")
     .textContent =
       data.weight.lost ===
         null
-        ? "-- kg"
-        : `${Number(
+        ? "--"
+        : Number(
             data.weight.lost
           )
           .toFixed(
             1
-          )} kg`;
+          );
 
 
   $("remainingWeight")
     .textContent =
       data.weight.remaining ===
         null
-        ? "-- kg"
-        : `${Number(
+        ? "--"
+        : Number(
             data.weight.remaining
           )
           .toFixed(
             1
-          )} kg`;
+          );
 
 
   /* ---------- HEALTH ---------- */
