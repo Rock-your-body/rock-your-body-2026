@@ -12,11 +12,11 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-home-v61-energy-50000"
+    href="./base.css?v=20260831-home-v70-system-fix"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-home-v61-energy-50000"></script>
+  <script src="./app-config.js?v=20260831-home-v70-system-fix"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260831-home-v61-energy-50000"
+    src="./home-template.png?v=20260831-home-v70-system-fix"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -404,7 +404,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V6.1 TOTAL-EXP + KG + ENERGY-50000
+   HOME V7.0 TOTAL-EXP + KG + ENERGY-50000 + MISSION-DEEPLINK
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
@@ -2361,6 +2361,9 @@ $("stepsEvidence")
     "click",
     ()=>{
 
+      /*
+        HOME -> MOVE MORE evidence โดยตรง
+      */
       window.location.href =
         (
           window.APP_CONFIG
@@ -2368,7 +2371,11 @@ $("stepsEvidence")
             ?.MISSION ||
           "./mission.html"
         ) +
-        "?category=daily&mission=daily_move_more&evidence=1&source=home";
+        "?category=daily" +
+        "&mission=daily_move_more" +
+        "&evidence=1" +
+        "&openEvidence=1" +
+        "&source=home";
     }
   );
 
