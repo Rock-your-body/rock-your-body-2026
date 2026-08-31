@@ -12,11 +12,11 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260830-home-v59-health-score"
+    href="./base.css?v=20260831-home-v61-energy-50000"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260830-home-v59-health-score"></script>
+  <script src="./app-config.js?v=20260831-home-v61-energy-50000"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260830-home-v59-health-score"
+    src="./home-template.png?v=20260831-home-v61-energy-50000"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -69,7 +69,7 @@
     id="expValue"
     class="home-live"
   >
-    0 / 500
+    0 EXP
   </div>
 
 
@@ -404,7 +404,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V5.9 EXP-SYNC
+   HOME V6.1 TOTAL-EXP + KG + ENERGY-50000
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
@@ -1261,21 +1261,7 @@ function normalizeHome(
 
 
       maxEnergy:
-        num(
-          pick(
-
-            wallet.maxEnergy,
-
-            energyObject.max,
-
-            raw.maxEnergy,
-
-            window.APP_CONFIG
-              ?.MAX_ENERGY
-
-          ),
-          200
-        )
+        50000
 
     },
 
@@ -1528,6 +1514,12 @@ function renderHome(
     );
 
 
+  /*
+    Energy:
+    - แสดงเฉพาะค่าปัจจุบันบน HOME
+    - ซ่อน /ค่าสูงสุด
+    - ค่าสูงสุดระบบ = 50,000
+  */
   $("energy").textContent =
     formatNumber(
       data.wallet.energy
@@ -1566,7 +1558,7 @@ function renderHome(
   }
 
 
-  /* ---------- EXP ---------- */
+  /* ---------- EXP สะสมทั้งหมด ---------- */
 
   const expMax =
     Math.max(
@@ -1575,10 +1567,35 @@ function renderHome(
     );
 
 
+  const totalExp =
+    Math.max(
+      0,
+      num(
+        data.exp.total,
+        0
+      )
+    );
+
+
+  /*
+    แถบ EXP ยังแสดงความคืบหน้าของ Level ปัจจุบัน
+    แต่ข้อความแสดง EXP สะสมทั้งหมด
+  */
+  const expInLevel =
+    (
+      (
+        totalExp %
+        expMax
+      ) +
+      expMax
+    ) %
+    expMax;
+
+
   const expPercent =
     clamp(
       (
-        data.exp.current /
+        expInLevel /
         expMax
       ) *
       100,
@@ -1596,10 +1613,8 @@ function renderHome(
   $("expValue")
     .textContent =
       `${formatNumber(
-        data.exp.current
-      )} / ${formatNumber(
-        expMax
-      )}`;
+        totalExp
+      )} EXP`;
 
 
   /* ---------- WEIGHT ---------- */
@@ -1644,32 +1659,33 @@ function renderHome(
 
 
   /*
-    ไม่มี kg เพื่อไม่ซ้อน Template
+    ช่อง "ลดไปแล้ว" และ "เหลืออีก"
+    Template ไม่มี kg จึงเติม kg จาก Dynamic
   */
   $("lostWeight")
     .textContent =
       data.weight.lost ===
         null
-        ? "--"
-        : Number(
+        ? "-- kg"
+        : `${Number(
             data.weight.lost
           )
           .toFixed(
             1
-          );
+          )} kg`;
 
 
   $("remainingWeight")
     .textContent =
       data.weight.remaining ===
         null
-        ? "--"
-        : Number(
+        ? "-- kg"
+        : `${Number(
             data.weight.remaining
           )
           .toFixed(
             1
-          );
+          )} kg`;
 
 
   /* ---------- HEALTH ---------- */
