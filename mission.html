@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260831-mission-v2330-button-only-hotspots"
+    src="./app-config.js?v=20260831-mission-v2340-refresh-safety"
   ></script>
 
 
@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-mission-v2330-button-only-hotspots"
+    href="./base.css?v=20260831-mission-v2340-refresh-safety"
   >
 
 
@@ -2399,7 +2399,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260831-mission-v2330-button-only-hotspots"
+    src="./mission-template.png?v=20260831-mission-v2340-refresh-safety"
     alt=""
     draggable="false"
     style="
@@ -10271,6 +10271,70 @@ window.addEventListener(
   outline:0 solid rgba(255,0,0,0)!important;
 }
 </style>
+
+
+
+<script id="mission-v234-refresh-safety">
+/* =========================================================
+   MISSION V2.34 — REFRESH SAFETY
+   หน้า Mission ปกติจะเริ่มจาก Dashboard เสมอ
+   ไม่เปิด DAILY/WEEKLY/MONTHLY/BONUS เองหลัง Refresh
+========================================================= */
+(function(){
+
+  function hasExplicitEvidenceDeepLink(){
+    const params = new URLSearchParams(window.location.search);
+    return (
+      !!params.get("mission") &&
+      (
+        params.get("evidence") === "1" ||
+        params.get("openEvidence") === "1"
+      )
+    );
+  }
+
+  function resetMissionOnNormalLoad(){
+
+    if(hasExplicitEvidenceDeepLink()){
+      return;
+    }
+
+    try{
+      if(
+        ["#daily","#weekly","#monthly","#bonus"]
+          .includes(String(window.location.hash || "").toLowerCase())
+      ){
+        history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search
+        );
+      }
+    }catch(error){
+      console.warn("MISSION REFRESH HASH RESET:", error);
+    }
+
+    const modal = document.getElementById("missionModal");
+    if(modal){
+      modal.classList.remove("show","open","active");
+      modal.style.display = "";
+    }
+
+    document.body.classList.remove("modal-open");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      resetMissionOnNormalLoad,
+      { once:true }
+    );
+  }else{
+    resetMissionOnNormalLoad();
+  }
+
+})();
+</script>
 
 </body>
 </html>
