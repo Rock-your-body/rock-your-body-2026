@@ -13,7 +13,16 @@
     html,body{margin:0;background:#eef4ff;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
     body{display:flex;justify-content:center;overflow-x:hidden}
     #app{position:relative;width:min(100vw,1536px);aspect-ratio:1536/1024;background:#eef4ff;overflow:hidden}
-    #template{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:1;pointer-events:none}
+    #template{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  z-index:1;
+  pointer-events:none;
+  user-select:none;
+}
 
     .live{position:absolute;z-index:20;font-weight:1000;color:#0a2a62;text-align:center}
     #coin{right:9.0%;top:3.0%;width:8%;font-size:clamp(9px,1.2vw,18px)}
@@ -50,8 +59,12 @@
 <body>
 
 <main id="app">
-  <img id="template" src="./rock-battle(5).jpg?v=20260831-v60" alt="Battle">
-
+ <img
+  id="template"
+  src="./battle-template.png?v=20260831-battle-v61"
+  alt=""
+  draggable="false"
+>
   <div id="coin" class="live">0</div>
   <div id="energyTop" class="live">0</div>
 
