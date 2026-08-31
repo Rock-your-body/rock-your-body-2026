@@ -9553,7 +9553,144 @@ body.mission-page #missionStage button.hotspot[aria-label="Battle"]{left:66.3%!i
 
 </style>
 
+/* =========================================================
+   NUTRITION — POSITION + SIZE FIX
+========================================================= */
 
+body.mission-page #missionStage #missionNutritionLive{
+  position:absolute!important;
+  left:3.1%!important;
+  top:18.4%!important;
+  width:36.8%!important;
+  height:64.2%!important;
+  overflow:hidden!important;
+}
+
+/* ---------- วง Calories ---------- */
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-wrap{
+  position:absolute!important;
+
+  left:13%!important;
+  top:27%!important;
+
+  width:47%!important;
+  height:42%!important;
+
+  min-height:0!important;
+}
+
+/* ---------- ข้อมูลตรงกลางวง ---------- */
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center{
+  position:absolute!important;
+  inset:0!important;
+
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  text-align:center!important;
+
+  transform:translate(0,0)!important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center span{
+  font-size:clamp(7px,.85cqw,13px)!important;
+  line-height:1.05!important;
+}
+
+body.mission-page #missionStage #missionNutritionCaloriesMain{
+  font-size:clamp(13px,1.55cqw,24px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+
+body.mission-page #missionStage #missionNutritionCaloriesTargetText{
+  margin-top:3px!important;
+
+  font-size:clamp(6px,.68cqw,10px)!important;
+  line-height:1.1!important;
+}
+
+
+/* =========================================================
+   PROTEIN / CARBS / FAT
+========================================================= */
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macros{
+  position:absolute!important;
+
+  left:57%!important;
+  top:28%!important;
+
+  width:37%!important;
+  height:48%!important;
+
+  display:block!important;
+}
+
+
+/* Protein */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:100%!important;
+}
+
+
+/* Carbs */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs{
+  position:absolute!important;
+  left:0!important;
+  top:34%!important;
+  width:100%!important;
+}
+
+
+/* Fat */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat{
+  position:absolute!important;
+  left:0!important;
+  top:68%!important;
+  width:100%!important;
+}
+
+
+/* ชื่อ + ตัวเลข */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title{
+  font-size:clamp(7px,.76cqw,12px)!important;
+  line-height:1.15!important;
+}
+
+
+/* 0 / 69.6 g */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title strong{
+  display:block!important;
+
+  margin-top:2px!important;
+
+  font-size:clamp(8px,.92cqw,14px)!important;
+  font-weight:900!important;
+
+  line-height:1.05!important;
+}
+
+
+/* 0% */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-percent{
+  font-size:clamp(7px,.78cqw,12px)!important;
+  font-weight:900!important;
+}
+
+
+/* ข้อความขาด/เกิน */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
+  margin-top:2px!important;
+
+  font-size:clamp(6px,.64cqw,10px)!important;
+  line-height:1.1!important;
+}
 
 
 <script>
