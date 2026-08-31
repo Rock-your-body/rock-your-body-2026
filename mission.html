@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260831-mission-v2300-reset-fix"
+    src="./app-config.js?v=20260831-mission-v2310-final-position"
   ></script>
 
 
@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-mission-v2300-reset-fix"
+    href="./base.css?v=20260831-mission-v2310-final-position"
   >
 
 
@@ -2399,7 +2399,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260831-mission-v2300-reset-fix"
+    src="./mission-template.png?v=20260831-mission-v2310-final-position"
     alt=""
     draggable="false"
     style="
@@ -9498,6 +9498,59 @@ if(document.readyState === 'loading'){
     min-height:40px !important;
   }
 }
+
+/* =========================================================
+   MISSION V2.31.0 — FINAL TEMPLATE POSITION OVERRIDE
+========================================================= */
+
+body.mission-page #missionStage .mission-coin-box{left:78.0%!important;top:4.3%!important;width:5.5%!important;height:3.4%!important;font-size:clamp(8px,1cqw,15px)!important;}
+body.mission-page #missionStage .mission-energy-box{left:89.7%!important;top:4.3%!important;width:6.5%!important;height:3.4%!important;font-size:clamp(8px,.95cqw,14px)!important;}
+body.mission-page #missionStage .mission-point-value{left:91.2%!important;top:18.1%!important;width:6%!important;height:3.2%!important;font-size:clamp(7px,.88cqw,13px)!important;}
+
+body.mission-page #missionStage #missionNutritionLive{left:3.1%!important;top:18.4%!important;width:36.8%!important;height:64.2%!important;overflow:hidden!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-wrap{display:block!important;position:absolute!important;left:21.5%!important;top:34%!important;width:40%!important;height:35%!important;min-height:0!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center{display:flex!important;position:absolute!important;inset:0!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;text-align:center!important;}
+body.mission-page #missionStage #missionNutritionCaloriesMain{font-size:clamp(10px,1.75cqw,25px)!important;}
+body.mission-page #missionStage #missionNutritionCaloriesTargetText{font-size:clamp(5px,.58cqw,8px)!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macros{position:absolute!important;left:56%!important;top:36.5%!important;width:40%!important;height:40%!important;display:block!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein{top:0!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs{top:34%!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat{top:68%!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title{font-size:clamp(5px,.60cqw,9px)!important;line-height:1.05!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title strong{font-size:clamp(6.5px,.82cqw,12px)!important;}
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-percent{font-size:clamp(5.5px,.62cqw,9px)!important;}
+body.mission-page #missionStage #missionNutritionWaterText{left:66%!important;top:78%!important;width:29%!important;font-size:clamp(6px,.72cqw,11px)!important;}
+
+body.mission-page #missionStage #dailyCount{left:61%!important;top:49.1%!important;width:5.2%!important;height:2.8%!important;}
+body.mission-page #missionStage #weeklyCount{left:90.7%!important;top:49.1%!important;width:5.2%!important;height:2.8%!important;}
+body.mission-page #missionStage #monthlyCount{left:61%!important;top:82%!important;width:5.2%!important;height:2.8%!important;}
+body.mission-page #missionStage #bonusCount{left:90.7%!important;top:82%!important;width:5.2%!important;height:2.8%!important;}
+body.mission-page #missionStage #dailyCount,body.mission-page #missionStage #weeklyCount,body.mission-page #missionStage #monthlyCount,body.mission-page #missionStage #bonusCount{font-size:clamp(7px,.82cqw,12px)!important;justify-content:flex-end!important;}
+
+body.mission-page #missionStage .daily-track{left:42.8%!important;top:32.6%!important;width:23%!important;}
+body.mission-page #missionStage .weekly-track{left:69.6%!important;top:32.6%!important;width:25.2%!important;}
+body.mission-page #missionStage .monthly-track{left:42.8%!important;top:67.2%!important;width:23%!important;}
+body.mission-page #missionStage .bonus-track{left:69.6%!important;top:67.2%!important;width:25.2%!important;}
+
+body.mission-page #missionStage .daily-reward-coin{left:49.5%!important;top:42.6%!important;}
+body.mission-page #missionStage .daily-reward-energy{left:60.3%!important;top:42.6%!important;}
+body.mission-page #missionStage .weekly-reward-coin{left:76.5%!important;top:42.6%!important;}
+body.mission-page #missionStage .weekly-reward-energy{left:88.4%!important;top:42.6%!important;}
+body.mission-page #missionStage .monthly-reward-coin{left:49.5%!important;top:76.8%!important;}
+body.mission-page #missionStage .monthly-reward-energy{left:60.3%!important;top:76.8%!important;}
+body.mission-page #missionStage .bonus-reward-coin{left:76.5%!important;top:76.8%!important;}
+body.mission-page #missionStage .bonus-reward-energy{left:88.4%!important;top:76.8%!important;}
+body.mission-page #missionStage .daily-reward-coin,body.mission-page #missionStage .daily-reward-energy,body.mission-page #missionStage .weekly-reward-coin,body.mission-page #missionStage .weekly-reward-energy,body.mission-page #missionStage .monthly-reward-coin,body.mission-page #missionStage .monthly-reward-energy,body.mission-page #missionStage .bonus-reward-coin,body.mission-page #missionStage .bonus-reward-energy{width:5%!important;height:3%!important;font-size:clamp(7px,.86cqw,13px)!important;}
+
+body.mission-page #missionStage .hotspot-daily{left:41.2%!important;top:17%!important;width:26.2%!important;height:36.8%!important;}
+body.mission-page #missionStage .hotspot-weekly{left:68%!important;top:17%!important;width:28.2%!important;height:36.8%!important;}
+body.mission-page #missionStage .hotspot-monthly{left:41.2%!important;top:53.6%!important;width:26.2%!important;height:31.6%!important;}
+body.mission-page #missionStage .hotspot-bonus{left:68%!important;top:53.6%!important;width:28.2%!important;height:31.6%!important;}
+
+body.mission-page #missionStage button.hotspot[aria-label="Home"]{left:1%!important;top:88.7%!important;width:32%!important;height:9.5%!important;}
+body.mission-page #missionStage button.hotspot[aria-label="Mission"]{left:33.7%!important;top:88.7%!important;width:32%!important;height:9.5%!important;}
+body.mission-page #missionStage button.hotspot[aria-label="Battle"]{left:66.3%!important;top:88.7%!important;width:32.5%!important;height:9.5%!important;}
+
 </style>
 
 
