@@ -51,7 +51,7 @@
   ====================================================== -->
 
   <script
-    src="./app-config.js?v=20260831-mission-v2311-nutrition-style-fix"
+    src="./app-config.js?v=20260831-mission-v2320-position-master"
   ></script>
 
 
@@ -61,7 +61,7 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-mission-v2311-nutrition-style-fix"
+    href="./base.css?v=20260831-mission-v2320-position-master"
   >
 
 
@@ -2399,7 +2399,7 @@
 
   <img
     class="template"
-    src="./mission-template.png?v=20260831-mission-v2311-nutrition-style-fix"
+    src="./mission-template.png?v=20260831-mission-v2320-position-master"
     alt=""
     draggable="false"
     style="
@@ -9503,11 +9503,11 @@ if(document.readyState === 'loading'){
    MISSION V2.31.0 — FINAL TEMPLATE POSITION OVERRIDE
 ========================================================= */
 
-body.mission-page #missionStage .mission-coin-box{left:83.0%!important;top:4.0%!important;width:8%!important;height:3.4%!important;font-size:clamp(8px,1cqw,15px)!important;}
-body.mission-page #missionStage .mission-energy-box{left:92.8%!important;top:4.0%!important;width:8%!important;height:3.4%!important;font-size:clamp(8px,.95cqw,14px)!important;}
-body.mission-page #missionStage .mission-point-value{left:86.2%!important;top:17.8%!important;width:8%!important;height:3.2%!important;font-size:clamp(6px,.80cqw,12px)!important;}
+body.mission-page #missionStage .mission-coin-box{left:78.0%!important;top:4.3%!important;width:5.5%!important;height:3.4%!important;font-size:clamp(8px,1cqw,15px)!important;}
+body.mission-page #missionStage .mission-energy-box{left:89.7%!important;top:4.3%!important;width:6.5%!important;height:3.4%!important;font-size:clamp(8px,.95cqw,14px)!important;}
+body.mission-page #missionStage .mission-point-value{left:91.2%!important;top:18.1%!important;width:6%!important;height:3.2%!important;font-size:clamp(7px,.88cqw,13px)!important;}
 
-body.mission-page #missionStage #missionNutritionLive{left:5.5%!important;top:50%!important;width:36.8%!important;height:64.2%!important;overflow:hidden!important;}
+body.mission-page #missionStage #missionNutritionLive{left:3.1%!important;top:18.4%!important;width:36.8%!important;height:64.2%!important;overflow:hidden!important;}
 body.mission-page #missionStage #missionNutritionLive .nutrition-ring-wrap{display:block!important;position:absolute!important;left:21.5%!important;top:34%!important;width:40%!important;height:35%!important;min-height:0!important;}
 body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center{display:flex!important;position:absolute!important;inset:0!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;text-align:center!important;}
 body.mission-page #missionStage #missionNutritionCaloriesMain{font-size:clamp(10px,1.75cqw,25px)!important;}
@@ -9701,7 +9701,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
 ========================================================= */
 (function(){
 
-  function forceAbsolute(
+  function legacyForceAbsolute(
     id,
     left,
     top,
@@ -9815,7 +9815,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
     }
 
 
-    forceAbsolute(
+    legacyForceAbsolute(
       "missionCoin",
       "78.0%",
       "4.3%",
@@ -9823,7 +9823,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
       "3.4%"
     );
 
-    forceAbsolute(
+    legacyForceAbsolute(
       "missionEnergy",
       "89.7%",
       "4.3%",
@@ -9831,7 +9831,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
       "3.4%"
     );
 
-    forceAbsolute(
+    legacyForceAbsolute(
       "dailyCount",
       "61.0%",
       "49.1%",
@@ -9839,7 +9839,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
       "2.8%"
     );
 
-    forceAbsolute(
+    legacyForceAbsolute(
       "weeklyCount",
       "90.7%",
       "49.1%",
@@ -9847,7 +9847,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
       "2.8%"
     );
 
-    forceAbsolute(
+    legacyForceAbsolute(
       "monthlyCount",
       "61.0%",
       "82.0%",
@@ -9855,7 +9855,7 @@ body.mission-page #missionStage #missionNutritionLive .nutrition-macro-gap{
       "2.8%"
     );
 
-    forceAbsolute(
+    legacyForceAbsolute(
       "bonusCount",
       "90.7%",
       "82.0%",
@@ -9994,6 +9994,181 @@ window.addEventListener(
 );
 
 </script>
+
+
+
+<style id="mission-v232-position-master">
+/* =========================================================
+   MISSION V2.32 — POSITION MASTER
+   แก้ตำแหน่งจากก้อนนี้ก้อนเดียว
+   สำคัญ: ก้อนนี้อยู่ท้าย BODY จึงชนะ CSS เดิม
+========================================================= */
+
+/* ---------- TOP ---------- */
+#missionStage .mission-coin-box{
+  left:78.0%!important; top:4.3%!important;
+  width:6.0%!important; height:3.6%!important;
+  font-size:clamp(8px,1.0cqw,15px)!important;
+}
+#missionStage .mission-energy-box{
+  left:89.0%!important; top:4.3%!important;
+  width:7.0%!important; height:3.6%!important;
+  font-size:clamp(8px,1.0cqw,15px)!important;
+}
+#missionStage .mission-point-value{
+  left:89.0%!important; top:17.0%!important;
+  width:8.5%!important; height:4.5%!important;
+  font-size:clamp(8px,.95cqw,14px)!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+}
+
+/* ---------- NUTRITION MAIN BOX ---------- */
+#missionStage #missionNutritionLive{
+  position:absolute!important;
+  left:3.0%!important; top:18.0%!important;
+  width:36.5%!important; height:64.5%!important;
+  overflow:hidden!important;
+}
+
+/* วงแหวน */
+#missionStage #missionNutritionLive .nutrition-ring-wrap{
+  position:absolute!important;
+  left:9.0%!important; top:27.0%!important;
+  width:48.0%!important; height:43.0%!important;
+  min-height:0!important;
+}
+
+/* ข้อความ Calories กลางวง */
+#missionStage #missionNutritionLive .nutrition-ring-center{
+  position:absolute!important;
+  left:0!important; top:0!important; right:0!important; bottom:0!important;
+  transform:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+#missionStage #missionNutritionCaloriesMain{
+  font-size:clamp(15px,2.0cqw,30px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+#missionStage #missionNutritionCaloriesTargetText{
+  font-size:clamp(7px,.78cqw,12px)!important;
+  line-height:1.15!important;
+  margin-top:4px!important;
+}
+
+/* Protein / Carbs / Fat */
+#missionStage #missionNutritionLive .nutrition-macros{
+  position:absolute!important;
+  left:57.5%!important; top:27.5%!important;
+  width:37.0%!important; height:48.0%!important;
+  display:block!important;
+}
+#missionStage #missionNutritionLive .nutrition-macro{
+  position:absolute!important;
+  left:0!important; width:100%!important;
+  transform:none!important;
+}
+#missionStage #missionNutritionLive .nutrition-macro.protein{top:0!important}
+#missionStage #missionNutritionLive .nutrition-macro.carbs{top:34%!important}
+#missionStage #missionNutritionLive .nutrition-macro.fat{top:68%!important}
+
+#missionStage #missionNutritionLive .nutrition-macro-title{
+  font-size:clamp(7px,.80cqw,12px)!important;
+  line-height:1.05!important;
+}
+#missionStage #missionNutritionLive .nutrition-macro-title strong{
+  display:block!important;
+  font-size:clamp(8px,.95cqw,14px)!important;
+  font-weight:900!important;
+  line-height:1.05!important;
+}
+#missionStage #missionNutritionLive .nutrition-macro-percent{
+  font-size:clamp(7px,.80cqw,12px)!important;
+  font-weight:900!important;
+}
+#missionStage #missionNutritionLive .nutrition-macro-gap{
+  font-size:clamp(6px,.68cqw,10px)!important;
+  line-height:1.05!important;
+}
+
+/* Water */
+#missionStage #missionNutritionWaterText{
+  left:58%!important; top:77%!important;
+  width:36%!important; height:4%!important;
+  font-size:clamp(7px,.78cqw,12px)!important;
+}
+
+/* ---------- CATEGORY COUNTS ---------- */
+#missionStage #dailyCount{
+  left:59.0%!important; top:47.8%!important;
+  width:6.0%!important; height:3.2%!important;
+}
+#missionStage #weeklyCount{
+  left:89.0%!important; top:47.8%!important;
+  width:6.0%!important; height:3.2%!important;
+}
+#missionStage #monthlyCount{
+  left:59.0%!important; top:80.7%!important;
+  width:6.0%!important; height:3.2%!important;
+}
+#missionStage #bonusCount{
+  left:89.0%!important; top:80.7%!important;
+  width:6.0%!important; height:3.2%!important;
+}
+#missionStage #dailyCount,
+#missionStage #weeklyCount,
+#missionStage #monthlyCount,
+#missionStage #bonusCount{
+  transform:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:clamp(8px,.95cqw,14px)!important;
+  line-height:1!important;
+}
+
+/* ---------- REWARD NUMBERS ---------- */
+#missionStage .daily-reward-coin{left:49.5%!important;top:41.7%!important}
+#missionStage .daily-reward-energy{left:60.0%!important;top:41.7%!important}
+#missionStage .weekly-reward-coin{left:76.3%!important;top:41.7%!important}
+#missionStage .weekly-reward-energy{left:88.2%!important;top:41.7%!important}
+#missionStage .monthly-reward-coin{left:49.5%!important;top:75.4%!important}
+#missionStage .monthly-reward-energy{left:60.0%!important;top:75.4%!important}
+#missionStage .bonus-reward-coin{left:76.3%!important;top:75.4%!important}
+#missionStage .bonus-reward-energy{left:88.2%!important;top:75.4%!important}
+
+#missionStage .daily-reward-coin,
+#missionStage .daily-reward-energy,
+#missionStage .weekly-reward-coin,
+#missionStage .weekly-reward-energy,
+#missionStage .monthly-reward-coin,
+#missionStage .monthly-reward-energy,
+#missionStage .bonus-reward-coin,
+#missionStage .bonus-reward-energy{
+  width:5.5%!important; height:3.2%!important;
+  transform:none!important;
+  font-size:clamp(8px,.95cqw,14px)!important;
+  line-height:1!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+}
+
+/* ---------- PROGRESS ---------- */
+#missionStage .daily-track{left:42.0%!important;top:32.1%!important;width:23.5%!important}
+#missionStage .weekly-track{left:69.0%!important;top:32.1%!important;width:25.5%!important}
+#missionStage .monthly-track{left:42.0%!important;top:66.0%!important;width:23.5%!important}
+#missionStage .bonus-track{left:69.0%!important;top:66.0%!important;width:25.5%!important}
+
+/* ---------- EDIT HERE ----------
+   วิธีปรับ:
+   left ลด = ซ้าย / เพิ่ม = ขวา
+   top ลด = ขึ้น / เพิ่ม = ลง
+   font-size = ขนาดตัวเลข/ตัวหนังสือ
+========================================================= */
+</style>
 
 </body>
 </html>
