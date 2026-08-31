@@ -12,32 +12,206 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-home-v71-profile-full-circle"
+    href="./base.css?v=20260831-home-v72-layout-control"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-home-v71-profile-full-circle"></script>
+  <script src="./app-config.js?v=20260831-home-v72-layout-control"></script>
 
   <style>
-    /* =====================================================
-       PROFILE PHOTO V7.1
-       ขยายรูป LINE ให้เต็มวงกลมของ Template
-    ====================================================== */
+    /* =========================================================
+       ROCK YOUR BODY 2026
+       HOME LAYOUT CONTROL V7.2
+
+       ปรับตำแหน่งข้อมูลทั้งหมดจากก้อนนี้ก้อนเดียว
+       ---------------------------------------------------------
+       left  มากขึ้น = ไปขวา
+       left  น้อยลง = ไปซ้าย
+       right มากขึ้น = ไปซ้าย
+       right น้อยลง = ไปขวา
+       top   มากขึ้น = ลง
+       top   น้อยลง = ขึ้น
+       width = ความกว้าง
+       font-size = ขนาดตัวอักษร
+    ========================================================= */
+
+    :root{
+
+      /* =====================================================
+         PROFILE PHOTO
+      ====================================================== */
+      --profile-left:4.4%;
+      --profile-top:18.2%;
+      --profile-width:24.2%;
+      --profile-scale:1.08;
+
+
+      /* =====================================================
+         LINE NAME
+      ====================================================== */
+      --name-left:6.0%;
+      --name-top:57.6%;
+      --name-width:16.5%;
+      --name-font:clamp(8px,1.25vw,18px);
+
+
+      /* =====================================================
+         LEVEL
+      ====================================================== */
+      --level-left:22.6%;
+      --level-top:57.3%;
+      --level-width:6.0%;
+      --level-font:clamp(12px,1.8vw,26px);
+
+
+      /* =====================================================
+         EXP BAR
+      ====================================================== */
+      --exp-track-left:7.2%;
+      --exp-track-top:65.0%;
+      --exp-track-width:13.8%;
+      --exp-track-height:2.0%;
+
+
+      /* =====================================================
+         EXP NUMBER
+      ====================================================== */
+      --exp-value-left:22.7%;
+      --exp-value-top:64.3%;
+      --exp-value-width:5.0%;
+      --exp-value-font:clamp(8px,1.0vw,15px);
+
+
+      /* =====================================================
+         ROCK COIN
+      ====================================================== */
+      --coin-right:19.2%;
+      --coin-top:6.1%;
+      --coin-width:7%;
+      --coin-font:clamp(8px,1.0vw,16px);
+
+
+      /* =====================================================
+         ENERGY
+      ====================================================== */
+      --energy-right:6.6%;
+      --energy-top:6.1%;
+      --energy-width:7%;
+      --energy-font:clamp(8px,1.0vw,16px);
+
+
+      /* =====================================================
+         CURRENT WEIGHT
+      ====================================================== */
+      --current-weight-left:45.0%;
+      --current-weight-top:22.0%;
+      --current-weight-width:8.0%;
+      --current-weight-font:clamp(18px,3vw,42px);
+
+
+      /* =====================================================
+         TARGET WEIGHT
+      ====================================================== */
+      --target-weight-left:45.0%;
+      --target-weight-top:43.7%;
+      --target-weight-width:8.0%;
+      --target-weight-font:clamp(18px,3vw,42px);
+
+
+      /* =====================================================
+         WEIGHT PROGRESS BAR
+      ====================================================== */
+      --weight-track-left:34.0%;
+      --weight-track-top:63.1%;
+      --weight-track-width:15.5%;
+      --weight-track-height:2.4%;
+
+
+      /* =====================================================
+         WEIGHT PROGRESS %
+      ====================================================== */
+      --weight-pct-left:51.0%;
+      --weight-pct-top:61.8%;
+      --weight-pct-width:6%;
+      --weight-pct-font:clamp(16px,2.6vw,38px);
+
+
+      /* =====================================================
+         LOST WEIGHT
+      ====================================================== */
+      --lost-left:34.0%;
+      --lost-top:71.0%;
+      --lost-width:9%;
+      --lost-font:clamp(8px,1.0vw,16px);
+
+
+      /* =====================================================
+         REMAINING WEIGHT
+      ====================================================== */
+      --remaining-left:49.3%;
+      --remaining-top:71.0%;
+      --remaining-width:9%;
+      --remaining-font:clamp(8px,1.0vw,16px);
+
+
+      /* =====================================================
+         STEPS
+      ====================================================== */
+      --steps-left:67.0%;
+      --steps-top:23.0%;
+      --steps-width:9%;
+      --steps-font:clamp(18px,3vw,42px);
+
+
+      /* =====================================================
+         CALORIES
+      ====================================================== */
+      --calories-left:86.5%;
+      --calories-top:23.0%;
+      --calories-width:9%;
+      --calories-font:clamp(18px,3vw,42px);
+
+
+      /* =====================================================
+         SLEEP HOURS
+      ====================================================== */
+      --sleep-hours-left:69.4%;
+      --sleep-hours-top:44.3%;
+      --sleep-hours-width:4.2%;
+      --sleep-hours-font:clamp(16px,2.4vw,36px);
+
+
+      /* =====================================================
+         SLEEP MINUTES
+      ====================================================== */
+      --sleep-minutes-left:74.8%;
+      --sleep-minutes-top:44.3%;
+      --sleep-minutes-width:4.0%;
+      --sleep-minutes-font:clamp(16px,2.4vw,36px);
+
+
+      /* =====================================================
+         HEALTH SCORE
+      ====================================================== */
+      --health-left:87.0%;
+      --health-top:44.0%;
+      --health-width:7%;
+      --health-font:clamp(18px,3vw,42px);
+    }
+
+
+    /* =========================================================
+       PROFILE
+    ========================================================= */
 
     #profileImage{
       position:absolute !important;
       z-index:20 !important;
 
-      /*
-        ตำแหน่งวงกลมบน home-template.png
-      */
-      left:4.4% !important;
-      top:18.2% !important;
+      left:var(--profile-left) !important;
+      top:var(--profile-top) !important;
 
-      /*
-        ต้องเป็นสี่เหลี่ยมจัตุรัสเพื่อให้วงกลมไม่เบี้ยว
-      */
-      width:24.2% !important;
+      width:var(--profile-width) !important;
       height:auto !important;
       aspect-ratio:1 / 1 !important;
 
@@ -49,10 +223,10 @@
       object-fit:cover !important;
       object-position:center center !important;
 
-      /*
-        ซูมรูปเล็กน้อยเพื่อให้เต็มวงกลม
-      */
-      transform:scale(1.08);
+      transform:scale(
+        var(--profile-scale)
+      );
+
       transform-origin:center center;
 
       padding:0 !important;
@@ -61,6 +235,263 @@
       background:transparent !important;
       pointer-events:none;
     }
+
+
+    /* =========================================================
+       COMMON LIVE DATA
+    ========================================================= */
+
+    #lineName,
+    #level,
+    #expValue,
+    #coin,
+    #energy,
+    #currentWeight,
+    #targetWeight,
+    #weightProgressPct,
+    #lostWeight,
+    #remainingWeight,
+    #steps,
+    #calories,
+    #sleepHours,
+    #sleepMinutes,
+    #healthScore{
+      position:absolute !important;
+      z-index:25 !important;
+      margin:0 !important;
+      padding:0 !important;
+      line-height:1 !important;
+      white-space:nowrap;
+      pointer-events:none;
+    }
+
+
+    /* =========================================================
+       LINE NAME
+    ========================================================= */
+
+    #lineName{
+      left:var(--name-left) !important;
+      top:var(--name-top) !important;
+      width:var(--name-width) !important;
+      font-size:var(--name-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       LEVEL
+    ========================================================= */
+
+    #level{
+      left:var(--level-left) !important;
+      top:var(--level-top) !important;
+      width:var(--level-width) !important;
+      font-size:var(--level-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       EXP TRACK
+    ========================================================= */
+
+    #expTrack{
+      position:absolute !important;
+      z-index:22 !important;
+
+      left:var(--exp-track-left) !important;
+      top:var(--exp-track-top) !important;
+
+      width:var(--exp-track-width) !important;
+      height:var(--exp-track-height) !important;
+    }
+
+
+    #expFill{
+      height:100% !important;
+      border-radius:999px !important;
+    }
+
+
+    #expValue{
+      left:var(--exp-value-left) !important;
+      top:var(--exp-value-top) !important;
+      width:var(--exp-value-width) !important;
+      font-size:var(--exp-value-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       ROCK COIN
+    ========================================================= */
+
+    #coin{
+      right:var(--coin-right) !important;
+      top:var(--coin-top) !important;
+      width:var(--coin-width) !important;
+      font-size:var(--coin-font) !important;
+      text-align:center !important;
+      color:#061d58 !important;
+      font-weight:900 !important;
+    }
+
+
+    /* =========================================================
+       ENERGY
+    ========================================================= */
+
+    #energy{
+      right:var(--energy-right) !important;
+      top:var(--energy-top) !important;
+      width:var(--energy-width) !important;
+      font-size:var(--energy-font) !important;
+      text-align:center !important;
+      color:#061d58 !important;
+      font-weight:900 !important;
+    }
+
+
+    /* =========================================================
+       CURRENT WEIGHT
+    ========================================================= */
+
+    #currentWeight{
+      left:var(--current-weight-left) !important;
+      top:var(--current-weight-top) !important;
+      width:var(--current-weight-width) !important;
+      font-size:var(--current-weight-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       TARGET WEIGHT
+    ========================================================= */
+
+    #targetWeight{
+      left:var(--target-weight-left) !important;
+      top:var(--target-weight-top) !important;
+      width:var(--target-weight-width) !important;
+      font-size:var(--target-weight-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       WEIGHT PROGRESS TRACK
+    ========================================================= */
+
+    #weightProgressTrack{
+      position:absolute !important;
+      z-index:22 !important;
+
+      left:var(--weight-track-left) !important;
+      top:var(--weight-track-top) !important;
+
+      width:var(--weight-track-width) !important;
+      height:var(--weight-track-height) !important;
+    }
+
+
+    #weightProgressFill{
+      height:100% !important;
+      border-radius:999px !important;
+    }
+
+
+    #weightProgressPct{
+      left:var(--weight-pct-left) !important;
+      top:var(--weight-pct-top) !important;
+      width:var(--weight-pct-width) !important;
+      font-size:var(--weight-pct-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       LOST / REMAINING
+    ========================================================= */
+
+    #lostWeight{
+      left:var(--lost-left) !important;
+      top:var(--lost-top) !important;
+      width:var(--lost-width) !important;
+      font-size:var(--lost-font) !important;
+      text-align:center !important;
+    }
+
+
+    #remainingWeight{
+      left:var(--remaining-left) !important;
+      top:var(--remaining-top) !important;
+      width:var(--remaining-width) !important;
+      font-size:var(--remaining-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       STEPS
+    ========================================================= */
+
+    #steps{
+      left:var(--steps-left) !important;
+      top:var(--steps-top) !important;
+      width:var(--steps-width) !important;
+      font-size:var(--steps-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       CALORIES
+    ========================================================= */
+
+    #calories{
+      left:var(--calories-left) !important;
+      top:var(--calories-top) !important;
+      width:var(--calories-width) !important;
+      font-size:var(--calories-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       SLEEP
+    ========================================================= */
+
+    #sleepHours{
+      left:var(--sleep-hours-left) !important;
+      top:var(--sleep-hours-top) !important;
+      width:var(--sleep-hours-width) !important;
+      font-size:var(--sleep-hours-font) !important;
+      text-align:center !important;
+    }
+
+
+    #sleepMinutes{
+      left:var(--sleep-minutes-left) !important;
+      top:var(--sleep-minutes-top) !important;
+      width:var(--sleep-minutes-width) !important;
+      font-size:var(--sleep-minutes-font) !important;
+      text-align:center !important;
+    }
+
+
+    /* =========================================================
+       HEALTH SCORE
+    ========================================================= */
+
+    #healthScore{
+      left:var(--health-left) !important;
+      top:var(--health-top) !important;
+      width:var(--health-width) !important;
+      font-size:var(--health-font) !important;
+      text-align:center !important;
+    }
+
   </style>
 
 </head>
@@ -75,7 +506,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260831-home-v71-profile-full-circle"
+    src="./home-template.png?v=20260831-home-v72-layout-control"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -118,16 +549,6 @@
   >
     0
   </div>
-#expTrack{
-  position:absolute;
-  z-index:20;
-
-  left:7.2%;    /* มากขึ้น = ไปขวา */
-  top:65.0%;    /* มากขึ้น = ลง */
-
-  width:13.8%;  /* ความยาวแถบ */
-  height:2.0%;  /* ความหนาแถบ */
-}
 
   <!-- =====================================================
        WALLET
@@ -147,33 +568,6 @@
   >
     -- / --
   </div>
-/* ROCK COIN */
-#coin{
-  position:absolute;
-  z-index:20;
-
-  right:19.2%;  /* มากขึ้น = เลื่อนไปซ้าย */
-  top:6.1%;     /* มากขึ้น = เลื่อนลง */
-
-  width:7%;
-  text-align:center;
-  font-weight:900;
-  color:#061d58;
-}
-
-/* ENERGY */
-#energy{
-  position:absolute;
-  z-index:20;
-
-  right:6.6%;   /* มากขึ้น = เลื่อนไปซ้าย */
-  top:6.1%;     /* มากขึ้น = เลื่อนลง */
-
-  width:7%;
-  text-align:center;
-  font-weight:900;
-  color:#061d58;
-}
 
   <!-- =====================================================
        WEIGHT
@@ -486,7 +880,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V7.1 PROFILE-FULL-CIRCLE + TOTAL-EXP + KG + ENERGY-50000
+   HOME V7.2 LAYOUT-CONTROL + PROFILE + TOTAL-EXP + KG + ENERGY
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
