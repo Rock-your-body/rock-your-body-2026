@@ -11346,6 +11346,201 @@ window.addEventListener(
   background:#e5f8ec;
   color:#08713b;
 }
+
+
+/* =========================================================
+   NUTRITION EDITABLE POSITION V2.36
+   ปรับตำแหน่ง/ขนาดได้จากค่าชุดเดียวด้านล่าง
+   ไม่มีการล็อกด้วย !important ในก้อนนี้
+========================================================= */
+:root{
+  /* Nutrition ทั้งช่อง */
+  --nut-left: 5%;
+  --nut-top: 18%;
+  --nut-width: 40%;
+  --nut-height: 64.5%;
+
+  /* วง Calories */
+  --nut-ring-left: 5%;
+  --nut-ring-top: 18%;
+  --nut-ring-size: 52%;
+
+  /* ความหนาวง */
+  --nut-ring-hole: 16%;
+
+  /* Macro ทั้งชุด */
+  --nut-macro-left: 58%;
+  --nut-macro-top: 18%;
+  --nut-macro-width: 39%;
+  --nut-macro-height: 55%;
+
+  /* ระยะ Protein / Carbs / Fat */
+  --nut-protein-top: 0%;
+  --nut-carbs-top: 35%;
+  --nut-fat-top: 70%;
+
+  /* ขนาดตัวเลข Calories */
+  --nut-calories-size: clamp(18px,2.4cqw,36px);
+
+  /* ขนาดข้อความ Macro */
+  --nut-macro-name-size: clamp(7px,.82cqw,12px);
+  --nut-macro-value-size: clamp(7px,.88cqw,13px);
+  --nut-macro-percent-size: clamp(8px,.92cqw,14px);
+}
+
+body.mission-page #missionStage #missionNutritionLive{
+  left:var(--nut-left) !important;
+  top:var(--nut-top) !important;
+  width:var(--nut-width) !important;
+  height:var(--nut-height) !important;
+  overflow:visible !important;
+}
+
+/* วง Nutrition */
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-wrap{
+  display:block !important;
+  position:absolute !important;
+  left:var(--nut-ring-left) !important;
+  top:var(--nut-ring-top) !important;
+  width:var(--nut-ring-size) !important;
+  height:auto !important;
+  aspect-ratio:1/1;
+  min-height:0 !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive #missionNutritionRing{
+  display:block !important;
+  position:absolute !important;
+  inset:0;
+  width:100% !important;
+  height:100% !important;
+  border-radius:50%;
+  background:conic-gradient(
+    from -90deg,
+    #1266e8 0deg 90deg,
+    #19a83e 90deg 180deg,
+    #ff8a00 180deg 270deg,
+    #e52222 270deg 360deg
+  ) !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive #missionNutritionRing::after{
+  content:"";
+  position:absolute;
+  inset:var(--nut-ring-hole);
+  border-radius:50%;
+  background:#fff;
+}
+
+/* ข้อมูลกลางวง */
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center{
+  position:absolute !important;
+  inset:16% !important;
+  display:flex !important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center > span{
+  font-weight:400 !important;
+}
+
+body.mission-page #missionStage #missionNutritionCaloriesMain{
+  font-size:var(--nut-calories-size) !important;
+  font-weight:600 !important;
+  line-height:1;
+}
+
+/* ป้องกัน kcal ซ้ำ */
+body.mission-page #missionStage #missionNutritionCaloriesMain::after{
+  content:none !important;
+  display:none !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-ring-center > small:first-of-type{
+  display:none !important;
+}
+
+body.mission-page #missionStage #missionNutritionCaloriesTargetText{
+  margin-top:7px !important;
+  font-weight:400 !important;
+}
+
+/* Macro container */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macros{
+  position:absolute !important;
+  left:var(--nut-macro-left) !important;
+  top:var(--nut-macro-top) !important;
+  width:var(--nut-macro-width) !important;
+  height:var(--nut-macro-height) !important;
+  display:block !important;
+}
+
+/* Macro cards */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro{
+  position:absolute !important;
+  left:0 !important;
+  width:100% !important;
+  min-height:26% !important;
+  padding:5% 5% 5% 12% !important;
+  box-sizing:border-box;
+  border-radius:9px;
+  background:rgba(255,255,255,.93) !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein{
+  top:var(--nut-protein-top) !important;
+  border:1px solid #4d91ff !important;
+  border-left:6px solid #1266e8 !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs{
+  top:var(--nut-carbs-top) !important;
+  border:1px solid #63c77a !important;
+  border-left:6px solid #19a83e !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat{
+  top:var(--nut-fat-top) !important;
+  border:1px solid #ffad55 !important;
+  border-left:6px solid #ff7a00 !important;
+}
+
+/* ตัวหนังสือไม่หนา */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title{
+  font-size:var(--nut-macro-name-size) !important;
+  font-weight:500 !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-title strong{
+  font-size:var(--nut-macro-value-size) !important;
+  font-weight:500 !important;
+  color:#173d67 !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro-percent{
+  font-size:var(--nut-macro-percent-size) !important;
+  font-weight:600 !important;
+}
+
+/* สีชื่อ + % แยกชัด */
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein .nutrition-macro-title,
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.protein .nutrition-macro-percent{
+  color:#075bd7 !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs .nutrition-macro-title,
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.carbs .nutrition-macro-percent{
+  color:#078b36 !important;
+}
+
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat .nutrition-macro-title,
+body.mission-page #missionStage #missionNutritionLive .nutrition-macro.fat .nutrition-macro-percent{
+  color:#e66b00 !important;
+}
+
 </style>
 
 </body>
