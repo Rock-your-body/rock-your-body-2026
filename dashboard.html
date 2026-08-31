@@ -1,27 +1,30 @@
 <!doctype html>
+
 <html lang="th">
 <head>
   <meta charset="utf-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover"
+
+
 
   <title>ROCK YOUR BODY 2026 - HOME</title>
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-home-v73-six-box-align"
+    href="./base.css?v=20260831-home-v72-layout-control"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-home-v73-six-box-align"></script>
+
+  <script src="./app-config.js?v=20260831-home-v72-layout-control"></script>
 
   <style>
     /* =========================================================
        ROCK YOUR BODY 2026
-       HOME LAYOUT CONTROL V7.3
+       HOME LAYOUT CONTROL V7.2
 
        ปรับตำแหน่งข้อมูลทั้งหมดจากก้อนนี้ก้อนเดียว
        ---------------------------------------------------------
@@ -103,44 +106,44 @@
       /* =====================================================
          CURRENT WEIGHT
       ====================================================== */
-      --current-weight-left:45.4%;
-      --current-weight-top:25.0%;
-      --current-weight-width:8.8%;
+      --current-weight-left:45.0%;
+      --current-weight-top:25.7%;
+      --current-weight-width:8.0%;
       --current-weight-font:clamp(18px,3vw,42px);
 
 
       /* =====================================================
          TARGET WEIGHT
       ====================================================== */
-      --target-weight-left:45.4%;
-      --target-weight-top:46.6%;
-      --target-weight-width:8.8%;
+      --target-weight-left:45.0%;
+      --target-weight-top:47.5%;
+      --target-weight-width:8.0%;
       --target-weight-font:clamp(18px,3vw,42px);
 
 
       /* =====================================================
          WEIGHT PROGRESS BAR
       ====================================================== */
-      --weight-track-left:34.8%;
-      --weight-track-top:69.0%;
-      --weight-track-width:15.4%;
+      --weight-track-left:34.6%;
+      --weight-track-top:69.4%;
+      --weight-track-width:15.6%;
       --weight-track-height:2.4%;
 
 
       /* =====================================================
          WEIGHT PROGRESS %
       ====================================================== */
-      --weight-pct-left:51.3%;
-      --weight-pct-top:67.2%;
-      --weight-pct-width:6.4%;
+      --weight-pct-left:51.6%;
+      --weight-pct-top:68.0%;
+      --weight-pct-width:6%;
       --weight-pct-font:clamp(15px,2.0vw,28px);
 
 
       /* =====================================================
          LOST WEIGHT
       ====================================================== */
-      --lost-left:38.2%;
-      --lost-top:75.8%;
+      --lost-left:38.4%;
+      --lost-top:76.4%;
       --lost-width:9%;
       --lost-font:clamp(7px,0.6vw,14px);
 
@@ -148,8 +151,8 @@
       /* =====================================================
          REMAINING WEIGHT
       ====================================================== */
-      --remaining-left:52.0%;
-      --remaining-top:75.8%;
+      --remaining-left:52.4%;
+      --remaining-top:76.4%;
       --remaining-width:9%;
       --remaining-font:clamp(7px,0.6vw,14px);
 
@@ -157,46 +160,46 @@
       /* =====================================================
          STEPS
       ====================================================== */
-      --steps-left:68.7%;
-      --steps-top:22.5%;
-      --steps-width:10%;
+      --steps-left:69.0%;
+      --steps-top:23.0%;
+      --steps-width:9%;
       --steps-font:clamp(18px,3vw,36px);
 
 
       /* =====================================================
          CALORIES
       ====================================================== */
-      --calories-left:86.0%;
-      --calories-top:22.2%;
-      --calories-width:10%;
+      --calories-left:86.5%;
+      --calories-top:20.4%;
+      --calories-width:9%;
       --calories-font:clamp(17px,3vw,34px);
 
 
       /* =====================================================
          SLEEP HOURS
       ====================================================== */
-      --sleep-hours-left:68.0%;
-      --sleep-hours-top:44.8%;
-      --sleep-hours-width:6.8%;
-      --sleep-hours-font:clamp(16px,2.7vw,32px);
+      --sleep-hours-left:67.4%;
+      --sleep-hours-top:43.4%;
+      --sleep-hours-width:9%;
+      --sleep-hours-font:clamp(17px,3vw,34px);
 
 
       /* =====================================================
          SLEEP MINUTES
       ====================================================== */
-      --sleep-minutes-left:72.6%;
-      --sleep-minutes-top:44.8%;
-      --sleep-minutes-width:5.0%;
-      --sleep-minutes-font:clamp(15px,2.3vw,30px);
+      --sleep-minutes-left:72.8%;
+      --sleep-minutes-top:42.4%;
+      --sleep-minutes-width:4.0%;
+      --sleep-minutes-font:clamp(16px,2.4vw,34px);
 
 
       /* =====================================================
          HEALTH SCORE
       ====================================================== */
-      --health-left:85.8%;
-      --health-top:47.4%;
-      --health-width:10%;
-      --health-font:clamp(18px,2.9vw,40px);
+      --health-left:87.0%;
+      --health-top:50.0%;
+      --health-width:7%;
+      --health-font:clamp(18px,3vw,42px);
     }
 
 
@@ -504,21 +507,24 @@
     ใช้ไฟล์ home-template.png ใน GitHub root
     Template ควรเป็นเวอร์ชันช่องข้อมูลว่าง
   -->
-  <img
-    id="homeTemplate"
-    src="./home-template.png?v=20260831-home-v73-six-box-align"
-    alt="ROCK YOUR BODY 2026 HOME"
-  >
+
+<img
+id="homeTemplate"
+src="./home-template.png?v=20260831-home-v72-layout-control"
+alt="ROCK YOUR BODY 2026 HOME"
+
+
 
   <!-- =====================================================
        PROFILE / USER
   ====================================================== -->
 
-  <img
-    id="profileImage"
-    alt="LINE Profile"
-    draggable="false"
-  >
+<img
+id="profileImage"
+alt="LINE Profile"
+draggable="false"
+
+
 
   <div
     id="lineName"
@@ -533,7 +539,6 @@
   >
     Lv.1
   </div>
-
 
   <!-- =====================================================
        EXP
@@ -589,7 +594,6 @@
     --
   </div>
 
-
   <div id="weightProgressTrack">
     <div id="weightProgressFill"></div>
   </div>
@@ -614,7 +618,6 @@
   >
     --
   </div>
-
 
   <!-- =====================================================
        HEALTH
@@ -656,63 +659,54 @@
     --
   </div>
 
-
   <!-- =====================================================
        CLICK HOTSPOTS
        โปร่งใส 100%
   ====================================================== -->
 
-  <button
-    id="stepsHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="กรอกก้าววันนี้"
-  ></button>
+<button
+id="stepsHotspot"
+class="hotspot"
+type="button"
+aria-label="กรอกก้าววันนี้"
 
-  <button
-    id="sleepHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="กรอกการนอน"
-  ></button>
+<button
+id="sleepHotspot"
+class="hotspot"
+type="button"
+aria-label="กรอกการนอน"
 
-  <button
-    id="weightHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="Weight Check"
-  ></button>
+<button
+id="weightHotspot"
+class="hotspot"
+type="button"
+aria-label="Weight Check"
 
-  <button
-    id="progressHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="My Progress"
-  ></button>
+<button
+id="progressHotspot"
+class="hotspot"
+type="button"
+aria-label="My Progress"
 
-  <button
-    id="homeHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="Home"
-  ></button>
+<button
+id="homeHotspot"
+class="hotspot"
+type="button"
+aria-label="Home"
 
-  <button
-    id="missionHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="Mission"
-  ></button>
+<button
+id="missionHotspot"
+class="hotspot"
+type="button"
+aria-label="Mission"
 
-  <button
-    id="battleHotspot"
-    class="hotspot"
-    type="button"
-    aria-label="Battle"
-  ></button>
+<button
+id="battleHotspot"
+class="hotspot"
+type="button"
+aria-label="Battle"
 
 </div>
-
 
 <!-- =========================================================
      STEPS MODAL
@@ -725,63 +719,62 @@
 
   <div class="modal">
 
-    <h3>👣 วันนี้ก้าวไปแล้ว</h3>
+<h3>👣 วันนี้ก้าวไปแล้ว</h3>
 
-    <div class="field">
+<div class="field">
 
-      <label for="stepsInput">
-        จำนวนก้าววันนี้
-      </label>
+  <label for="stepsInput">
+    จำนวนก้าววันนี้
+  </label>
 
-      <input
-        id="stepsInput"
-        type="number"
-        min="0"
-        step="1"
-        inputmode="numeric"
-      >
+  <input
+    id="stepsInput"
+    type="number"
+    min="0"
+    step="1"
+    inputmode="numeric"
+  >
 
-    </div>
+</div>
 
-    <div
-      id="stepsStatus"
-      class="modal-status warning"
-    >
-      เป้าหมาย MOVE MORE = 8,000 ก้าว
-    </div>
+<div
+  id="stepsStatus"
+  class="modal-status warning"
+>
+  เป้าหมาย MOVE MORE = 8,000 ก้าว
+</div>
 
-    <button
-      id="stepsEvidence"
-      class="evidence-btn"
-      type="button"
-    >
-      📷 แนบหลักฐาน MOVE MORE เพื่อรับรางวัล
-    </button>
+<button
+  id="stepsEvidence"
+  class="evidence-btn"
+  type="button"
+>
+  📷 แนบหลักฐาน MOVE MORE เพื่อรับรางวัล
+</button>
 
-    <div class="modal-actions">
+<div class="modal-actions">
 
-      <button
-        class="cancel"
-        type="button"
-        data-close-modal="stepsModal"
-      >
-        ปิด
-      </button>
+  <button
+    class="cancel"
+    type="button"
+    data-close-modal="stepsModal"
+  >
+    ปิด
+  </button>
 
-      <button
-        id="saveStepsButton"
-        class="save"
-        type="button"
-      >
-        บันทึกก้าว
-      </button>
+  <button
+    id="saveStepsButton"
+    class="save"
+    type="button"
+  >
+    บันทึกก้าว
+  </button>
 
-    </div>
+</div>
 
   </div>
 
 </div>
-
 
 <!-- =========================================================
      SLEEP MODAL
@@ -794,93 +787,91 @@
 
   <div class="modal">
 
-    <h3>😴 บันทึกการนอนหลับ</h3>
+<h3>😴 บันทึกการนอนหลับ</h3>
 
-    <div class="grid2">
+<div class="grid2">
 
-      <div class="field">
+  <div class="field">
 
-        <label for="sleepStart">
-          เวลานอน
-        </label>
+    <label for="sleepStart">
+      เวลานอน
+    </label>
 
-        <input
-          id="sleepStart"
-          type="time"
-          value="22:00"
-        >
-
-      </div>
-
-      <div class="field">
-
-        <label for="sleepWake">
-          เวลาตื่น
-        </label>
-
-        <input
-          id="sleepWake"
-          type="time"
-          value="06:00"
-        >
-
-      </div>
-
-    </div>
-
-    <div id="sleepDuration">
-      8 ชม. 0 นาที
-    </div>
-
-    <div
-      id="sleepStatus"
-      class="modal-status"
+    <input
+      id="sleepStart"
+      type="time"
+      value="22:00"
     >
-      ระบบคำนวณระยะเวลานอนอัตโนมัติ
-    </div>
 
-    <button
-      id="sleepEvidence"
-      class="evidence-btn"
-      type="button"
+  </div>
+
+  <div class="field">
+
+    <label for="sleepWake">
+      เวลาตื่น
+    </label>
+
+    <input
+      id="sleepWake"
+      type="time"
+      value="06:00"
     >
-      📷 แนบหลักฐาน SLEEP WELL เพื่อรับรางวัล
-    </button>
-
-    <div class="modal-actions">
-
-      <button
-        class="cancel"
-        type="button"
-        data-close-modal="sleepModal"
-      >
-        ปิด
-      </button>
-
-      <button
-        id="saveSleepButton"
-        class="save"
-        type="button"
-      >
-        บันทึกการนอน
-      </button>
-
-    </div>
 
   </div>
 
 </div>
 
+<div id="sleepDuration">
+  8 ชม. 0 นาที
+</div>
+
+<div
+  id="sleepStatus"
+  class="modal-status"
+>
+  ระบบคำนวณระยะเวลานอนอัตโนมัติ
+</div>
+
+<button
+  id="sleepEvidence"
+  class="evidence-btn"
+  type="button"
+>
+  📷 แนบหลักฐาน SLEEP WELL เพื่อรับรางวัล
+</button>
+
+<div class="modal-actions">
+
+  <button
+    class="cancel"
+    type="button"
+    data-close-modal="sleepModal"
+  >
+    ปิด
+  </button>
+
+  <button
+    id="saveSleepButton"
+    class="save"
+    type="button"
+  >
+    บันทึกการนอน
+  </button>
+
+</div>
+
+  </div>
+
+</div>
 
 <div id="toast"></div>
-
 
 <script>
 "use strict";
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V7.3 SIX-BOX ALIGN ONLY
+   HOME V7.2 LAYOUT-CONTROL + PROFILE + TOTAL-EXP + KG + ENERGY
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
