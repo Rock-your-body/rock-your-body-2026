@@ -13,7 +13,7 @@
   </title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v56"></script>
+  <script src="./app-config.js?v=20260831-battle-v57"></script>
 
   <style>
 
@@ -1291,7 +1291,7 @@
 <script>
 "use strict";
 
-const BATTLE_BUILD = "V5.6-GITHUB-MONSTERS";
+const BATTLE_BUILD = "V5.7-GITHUB-MONSTERS-EXACT";
 
 
 /* =========================================================
@@ -1375,37 +1375,87 @@ function githubAssetUrl(
 }
 
 
-function battleMonsterCandidates(
+const BATTLE_MONSTERS = {
+
+  1:{
+    name:"เจ้าจอมเอื่อย",
+    image:"battle-monster-stage-001-germ.png"
+  },
+
+  2:{
+    name:"จอมหวาน",
+    image:"battle-monster-stage-002-donut.png"
+  },
+
+  3:{
+    name:"ปีศาจของทอด",
+    image:"battle-monster-stage-003-fries.png"
+  },
+
+  4:{
+    name:"จอมเค็ม",
+    image:"battle-monster-stage-004-salt.png"
+  },
+
+  5:{
+    name:"ราชาอาหารไร้ประโยชน์",
+    image:"battle-monster-stage-005-burger-king.png"
+  },
+
+  6:{
+    name:"ปีศาจพักผ่อนน้อย",
+    image:"battle-monster-stage-006-rest.png"
+  },
+
+  7:{
+    name:"จอมเนือยนิ่ง",
+    image:"battle-monster-stage-007-sedentary.png"
+  },
+
+  8:{
+    name:"ปีศาจพฤติกรรมเสี่ยง",
+    image:"battle-monster-stage-008-risk.png"
+  },
+
+  9:{
+    name:"ราชาความเสี่ยงสุขภาพ",
+    image:"battle-monster-stage-009-risk-king.png"
+  },
+
+  10:{
+    name:"จอมมาร Final Boss",
+    image:"battle-monster-stage-010-boss.png"
+  }
+
+};
+
+
+function githubMonsterUrl(
   stageNo
 ){
 
-  const no =
-    String(
+  const monster =
+    BATTLE_MONSTERS[
       Number(
-        stageNo ||
-        1
+        stageNo
       )
-    )
-      .padStart(
-        3,
-        "0"
-      );
+    ];
 
 
-  /*
-    GitHub root:
-      battle-monster-stage-001.*
-      ...
-      battle-monster-stage-010.*
+  if(
+    !monster
+  ){
 
-    รองรับหลาย extension เพื่อไม่ต้องเดาชื่อจากหน้ารายการ GitHub
-  */
-  return [
-    `battle-monster-stage-${no}.png`,
-    `battle-monster-stage-${no}.webp`,
-    `battle-monster-stage-${no}.jpeg`,
-    `battle-monster-stage-${no}.jpg`
-  ];
+    return "";
+  }
+
+
+  return (
+    githubAssetUrl(
+      monster.image
+    ) +
+    "?v=20260831-battle-v57"
+  );
 }
 
 
@@ -1828,65 +1878,37 @@ function setMonsterImage(
     );
 
 
-  const files =
-    battleMonsterCandidates(
+  const monster =
+    BATTLE_MONSTERS[
+      stageNo
+    ];
+
+
+  if(
+    !monster
+  ){
+
+    image.style.display =
+      "none";
+
+
+    $("monsterHint")
+      .textContent =
+        `❌ ไม่พบข้อมูล Monster Stage ${stageNo}`;
+
+
+    return;
+  }
+
+
+  const url =
+    githubMonsterUrl(
       stageNo
     );
 
 
-  let index =
-    0;
-
-
-  function tryNext(){
-
-    if(
-      index >=
-      files.length
-    ){
-
-      image.style.display =
-        "none";
-
-
-      $("monsterHint")
-        .textContent =
-          `❌ ไม่พบรูป battle-monster-stage-${String(stageNo).padStart(3,"0")} ใน GitHub`;
-
-
-      console.error(
-        "MONSTER IMAGE NOT FOUND:",
-        files
-      );
-
-
-      return;
-    }
-
-
-    const fileName =
-      files[
-        index++
-      ];
-
-
-    const url =
-      githubAssetUrl(
-        fileName
-      ) +
-      `?v=20260831-battle-v56`;
-
-
-    console.log(
-      "TRY GITHUB MONSTER:",
-      fileName,
-      url
-    );
-
-
-    image.src =
-      url;
-  }
+  image.alt =
+    monster.name;
 
 
   image.onload =
@@ -1897,8 +1919,9 @@ function setMonsterImage(
 
 
       console.log(
-        "MONSTER LOADED:",
-        image.src
+        "✅ MONSTER LOADED:",
+        stageNo,
+        monster.image
       );
     };
 
@@ -1906,17 +1929,24 @@ function setMonsterImage(
   image.onerror =
     ()=>{
 
-      tryNext();
+      image.style.display =
+        "none";
+
+
+      $("monsterHint")
+        .textContent =
+          `❌ โหลดรูป ${monster.image} ไม่สำเร็จ`;
+
+
+      console.error(
+        "❌ MONSTER IMAGE ERROR:",
+        url
+      );
     };
 
 
-  image.alt =
-    stage?.name ||
-    stage?.monster_name ||
-    `Monster Stage ${stageNo}`;
-
-
-  tryNext();
+  image.src =
+    url;
 }
 
 
@@ -2004,10 +2034,18 @@ function renderStage(){
       `STAGE ${stage.id}`;
 
 
+  const mappedMonster =
+    BATTLE_MONSTERS[
+      Number(
+        stage.id
+      )
+    ];
+
+
   $("monsterName")
     .textContent =
-      stage
-        ?.name ||
+      mappedMonster?.name ||
+      stage?.name ||
       `MONSTER STAGE ${stage.id}`;
 
 
