@@ -12,11 +12,57 @@
 
   <link
     rel="stylesheet"
-    href="./base.css?v=20260831-home-v70-system-fix"
+    href="./base.css?v=20260831-home-v71-profile-full-circle"
   >
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-home-v70-system-fix"></script>
+  <script src="./app-config.js?v=20260831-home-v71-profile-full-circle"></script>
+
+  <style>
+    /* =====================================================
+       PROFILE PHOTO V7.1
+       ขยายรูป LINE ให้เต็มวงกลมของ Template
+    ====================================================== */
+
+    #profileImage{
+      position:absolute !important;
+      z-index:20 !important;
+
+      /*
+        ตำแหน่งวงกลมบน home-template.png
+      */
+      left:6.3% !important;
+      top:18.2% !important;
+
+      /*
+        ต้องเป็นสี่เหลี่ยมจัตุรัสเพื่อให้วงกลมไม่เบี้ยว
+      */
+      width:20.8% !important;
+      height:auto !important;
+      aspect-ratio:1 / 1 !important;
+
+      display:none;
+
+      border:0 !important;
+      border-radius:50% !important;
+
+      object-fit:cover !important;
+      object-position:center center !important;
+
+      /*
+        ซูมรูปเล็กน้อยเพื่อให้เต็มวงกลม
+      */
+      transform:scale(1.08);
+      transform-origin:center center;
+
+      padding:0 !important;
+      margin:0 !important;
+
+      background:transparent !important;
+      pointer-events:none;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -29,7 +75,7 @@
   -->
   <img
     id="homeTemplate"
-    src="./home-template.png?v=20260831-home-v70-system-fix"
+    src="./home-template.png?v=20260831-home-v71-profile-full-circle"
     alt="ROCK YOUR BODY 2026 HOME"
   >
 
@@ -38,48 +84,9 @@
   ====================================================== -->
 
   <img
-   .profile-circle{
-  position:absolute;
-
-  /* ใช้ตำแหน่งวงกลมเดิม */
-  width:260px;
-  height:260px;
-
-  border-radius:50%;
-  overflow:hidden;
-}
-
-.profile-circle img{
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-  object-position:center;
-
-  display:block;
-} id="profileImage"
+    id="profileImage"
     alt="LINE Profile"
-    #profileImage{
-  position:absolute;
-  left:6.3%;
-  top:18.2%;
-  width:20.8%;
-  height:31.2%;
-
-  border-radius:50%;
-
-  object-fit:cover;
-  object-position:center;
-
-  z-index:20;
-
-  display:block;
-
-  padding:0;
-  margin:0;
-
-  transform:scale(1.08);
-}
+    draggable="false"
   >
 
   <div
@@ -444,7 +451,7 @@
 
 /* =========================================================
    ROCK YOUR BODY 2026
-   HOME V7.0 TOTAL-EXP + KG + ENERGY-50000 + MISSION-DEEPLINK
+   HOME V7.1 PROFILE-FULL-CIRCLE + TOTAL-EXP + KG + ENERGY-50000
    READ FLOW:
    LIFF ID Token
    -> PLAYER API
