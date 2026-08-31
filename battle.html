@@ -1,234 +1,1675 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 - BATTLE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#eef4ff">
+
+  <title>ROCK YOUR BODY 2026 - Battle</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v60"></script>
+  <script src="./app-config.js"></script>
+  <script src="./common.js"></script>
 
   <style>
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;background:#eef4ff;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
-    body{display:flex;justify-content:center;overflow-x:hidden}
-    #app{position:relative;width:min(100vw,1536px);aspect-ratio:1536/1024;background:#eef4ff;overflow:hidden}
-    #template{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:1;pointer-events:none}
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
 
-    .live{position:absolute;z-index:20;font-weight:1000;color:#0a2a62;text-align:center}
-    #coin{right:9.0%;top:3.0%;width:8%;font-size:clamp(9px,1.2vw,18px)}
-    #energyTop{right:1.4%;top:3.0%;width:8%;font-size:clamp(9px,1.2vw,18px)}
+    html,body{
+      margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+      background:#edf4ff;
+      font-family:Arial,"Noto Sans Thai",sans-serif;
+      overflow-x:hidden;
+    }
 
-    #bossName{left:2.9%;top:24.5%;width:21%;font-size:clamp(18px,3vw,52px);color:#fff;text-align:left;text-shadow:0 3px 8px #000}
-    #hpText{left:3.0%;top:43.2%;width:22%;font-size:clamp(10px,1.4vw,22px);color:#fff;text-align:left}
-    #hpPct{left:3.0%;top:48.0%;width:8%;font-size:clamp(18px,2.5vw,42px);color:#fff;text-align:left}
+    body{
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
 
-    #hpTrack{position:absolute;z-index:18;left:6.1%;top:45.1%;width:16.4%;height:2.4%;border-radius:999px;background:rgba(31,59,109,.7);overflow:hidden}
-    #hpFill{height:100%;width:100%;background:linear-gradient(90deg,#ef4444,#ff7b00);transition:.35s}
+    /* =========================================================
+       BATTLE SCREEN
+    ========================================================= */
 
-    #monsterBox{position:absolute;z-index:17;left:21%;top:20%;width:31%;height:38%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-    #monster{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 14px 14px rgba(0,0,0,.45))}
+    #battleScreen{
+      position:relative;
+      width:100%;
+      max-width:1024px;
+      aspect-ratio:1024 / 900;
 
-    #energyMain{left:57.6%;top:29.5%;width:10%;font-size:clamp(16px,2vw,32px)}
-    #energyTrack{position:absolute;z-index:18;left:53.0%;top:37.4%;width:16.8%;height:3.0%;border-radius:999px;background:#d8e2f0;overflow:hidden}
-    #energyFill{height:100%;width:0%;background:linear-gradient(90deg,#ff9f0a,#ffc529);transition:.35s}
-    #energyTimer{left:54.6%;top:47.0%;width:13.5%;font-size:clamp(12px,1.6vw,26px)}
+      background-image:url("./battle-template.png?v=20260831");
+      background-repeat:no-repeat;
+      background-position:top center;
+      background-size:100% 100%;
 
-    .hot{position:absolute;z-index:30;border:0;background:transparent;cursor:pointer}
-    #fightBtn{left:72.2%;top:22.2%;width:25.2%;height:17.7%}
-    #energyBtn{left:72.2%;top:41.5%;width:25.2%;height:17.2%}
-    #homeBtn{left:1.0%;top:82.4%;width:31.2%;height:14.2%}
-    #missionBtn{left:33.2%;top:82.4%;width:31.2%;height:14.2%}
-    #battleBtn{left:65.4%;top:82.4%;width:33.2%;height:14.2%}
-    #rewardStatus{position:absolute;z-index:20;left:64.0%;top:68.0%;width:27%;color:#fff;font-weight:900;font-size:clamp(8px,1vw,14px);text-align:center;text-shadow:0 2px 4px #000}
+      overflow:hidden;
+    }
 
-    #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;font-weight:900;max-width:calc(100vw - 28px);text-align:center}
-    #toast.show{display:block}
-    #toast.error{background:#c62828}
+    /* =========================================================
+       TOP WALLET
+    ========================================================= */
+
+    .top-coin{
+      position:absolute;
+      top:5.1%;
+      left:77.2%;
+      width:8%;
+      text-align:center;
+      font-size:clamp(10px,1.55vw,18px);
+      font-weight:900;
+      color:#06285e;
+      z-index:20;
+    }
+
+    .top-energy{
+      position:absolute;
+      top:5.1%;
+      left:88.1%;
+      width:9%;
+      text-align:center;
+      font-size:clamp(10px,1.55vw,18px);
+      font-weight:900;
+      color:#06285e;
+      z-index:20;
+    }
+
+    /* =========================================================
+       MONSTER AREA
+    ========================================================= */
+
+    .monster-area{
+      position:absolute;
+      left:4.5%;
+      top:42%;
+      width:49%;
+      height:25%;
+      z-index:10;
+      pointer-events:none;
+    }
+
+    .monster-name{
+      position:absolute;
+      left:0;
+      top:-25%;
+      width:48%;
+      color:#fff;
+      font-weight:900;
+      font-size:clamp(16px,3vw,35px);
+      line-height:1.05;
+      text-shadow:
+        0 3px 2px rgba(0,0,0,.45),
+        0 0 8px rgba(0,0,0,.35);
+    }
+
+    #monsterImg{
+      position:absolute;
+      left:25%;
+      bottom:-3%;
+      width:52%;
+      max-height:140%;
+      object-fit:contain;
+      object-position:center bottom;
+
+      filter:drop-shadow(0 9px 8px rgba(0,0,0,.35));
+    }
+
+    /* =========================================================
+       HP
+    ========================================================= */
+
+    .hp-data{
+      position:absolute;
+      left:4.7%;
+      top:52.8%;
+      width:29%;
+      z-index:15;
+      color:#fff;
+      pointer-events:none;
+    }
+
+    .hp-numbers{
+      margin-top:8px;
+      font-weight:900;
+      font-size:clamp(10px,1.65vw,18px);
+      text-shadow:0 2px 3px rgba(0,0,0,.45);
+    }
+
+    .hp-percent{
+      margin-top:4px;
+      font-weight:900;
+      font-size:clamp(15px,2.6vw,30px);
+      text-shadow:0 2px 3px rgba(0,0,0,.45);
+    }
+
+    .hp-bar{
+      width:67%;
+      height:clamp(7px,1.2vw,14px);
+      border-radius:999px;
+      overflow:hidden;
+      background:#0c428c;
+      box-shadow:inset 0 1px 3px rgba(0,0,0,.4);
+    }
+
+    .hp-fill{
+      width:100%;
+      height:100%;
+      background:linear-gradient(90deg,#ff2517,#ff5b18);
+      border-radius:999px;
+      transition:width .4s ease;
+    }
+
+    /* =========================================================
+       MY ENERGY CARD
+    ========================================================= */
+
+    .energy-card-data{
+      position:absolute;
+      left:55.1%;
+      top:44.8%;
+      width:14.5%;
+      height:18%;
+      z-index:15;
+      pointer-events:none;
+    }
+
+    .energy-value{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      text-align:center;
+      color:#052b69;
+      font-size:clamp(15px,2.1vw,25px);
+      font-weight:900;
+    }
+
+    .energy-bar{
+      position:absolute;
+      top:29%;
+      left:0;
+      width:100%;
+      height:clamp(8px,1.4vw,16px);
+      border-radius:999px;
+      overflow:hidden;
+      background:#dbe4f0;
+      box-shadow:inset 0 1px 3px rgba(0,0,0,.15);
+    }
+
+    .energy-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(
+        90deg,
+        #ff8a00,
+        #ffb000,
+        #ffc62a
+      );
+      transition:width .45s ease;
+    }
+
+    .energy-countdown{
+      position:absolute;
+      top:66%;
+      left:-5%;
+      width:110%;
+      text-align:center;
+      color:#06285e;
+      font-size:clamp(10px,1.55vw,18px);
+      font-weight:900;
+    }
+
+    /* =========================================================
+       CLICK AREAS
+    ========================================================= */
+
+    .click-zone{
+      position:absolute;
+      display:block;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
+      cursor:pointer;
+      z-index:50;
+    }
+
+    /* FIGHT MONSTER */
+    #fightMonsterBtn{
+      left:71.2%;
+      top:39.7%;
+      width:25.2%;
+      height:12.3%;
+    }
+
+    /* MY ENERGY */
+    #myEnergyBtn{
+      left:71.2%;
+      top:52.4%;
+      width:25.2%;
+      height:11.8%;
+    }
+
+    /* BATTLE RANKING */
+    #rankingBtn{
+      left:3.3%;
+      top:65.5%;
+      width:54.4%;
+      height:13.2%;
+    }
+
+    /* BOSS REWARD */
+    #rewardBtn{
+      left:58.7%;
+      top:65.5%;
+      width:38%;
+      height:13.2%;
+    }
+
+    /* HOME */
+    #homeBtn{
+      left:3.2%;
+      top:79.7%;
+      width:30.7%;
+      height:9.6%;
+    }
+
+    /* MISSION */
+    #missionBtn{
+      left:35%;
+      top:79.7%;
+      width:30.5%;
+      height:9.6%;
+    }
+
+    /* BATTLE */
+    #battleBtn{
+      left:66.4%;
+      top:79.7%;
+      width:30.5%;
+      height:9.6%;
+    }
+
+    .click-zone:active{
+      background:rgba(255,255,255,.08);
+    }
+
+    /* =========================================================
+       LOADING
+    ========================================================= */
+
+    #loading{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,20,60,.55);
+      backdrop-filter:blur(3px);
+    }
+
+    .loading-box{
+      padding:18px 25px;
+      border-radius:18px;
+      background:#fff;
+      color:#07377e;
+      font-weight:900;
+      box-shadow:0 8px 30px rgba(0,0,0,.3);
+    }
+
+    #toast{
+      position:fixed;
+      left:50%;
+      bottom:25px;
+      transform:translateX(-50%) translateY(120px);
+      z-index:10000;
+
+      max-width:90%;
+      padding:12px 20px;
+
+      background:#082f73;
+      color:#fff;
+
+      border-radius:15px;
+      font-weight:800;
+      text-align:center;
+
+      opacity:0;
+      transition:.25s;
+    }
+
+    #toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    /* Debug outlines:
+    .click-zone{
+      outline:2px solid red;
+      background:rgba(255,0,0,.12);
+    }
+    */
   </style>
 </head>
+
 <body>
 
-<main id="app">
-  <img id="template" src="./rock-battle(5).jpg?v=20260831-v60" alt="Battle">
+<div id="battleScreen">
 
-  <div id="coin" class="live">0</div>
-  <div id="energyTop" class="live">0 / 200</div>
+  <!-- TOP -->
+  <div id="topCoin" class="top-coin">0</div>
+  <div id="topEnergy" class="top-energy">0 / 200</div>
 
-  <div id="bossName" class="live">BOSS OF THE MONTH</div>
-  <div id="hpText" class="live">HP -- / --</div>
-  <div id="hpPct" class="live">--%</div>
-  <div id="hpTrack"><div id="hpFill"></div></div>
 
-  <div id="monsterBox"><img id="monster" src="./battle-monster-stage-001-germ.png" alt="Monster"></div>
+  <!-- MONSTER -->
+  <div class="monster-area">
 
-  <div id="energyMain" class="live">0 / 200</div>
-  <div id="energyTrack"><div id="energyFill"></div></div>
-  <div id="energyTimer" class="live">--:--:--</div>
+    <div id="monsterName" class="monster-name">
+      เจ้าจอมเอื่อย
+    </div>
 
-  <div id="rewardStatus">ยังไม่มีของรางวัลรอรับ</div>
+    <img
+      id="monsterImg"
+      src="./battle-monster-stage-001-germ.png"
+      alt="Monster"
+    >
 
-  <button id="fightBtn" class="hot" type="button" aria-label="Fight Monster"></button>
-  <button id="energyBtn" class="hot" type="button" aria-label="My Energy"></button>
-  <button id="homeBtn" class="hot" type="button" aria-label="Home"></button>
-  <button id="missionBtn" class="hot" type="button" aria-label="Mission"></button>
-  <button id="battleBtn" class="hot" type="button" aria-label="Battle"></button>
-</main>
+  </div>
+
+
+  <!-- HP -->
+  <div class="hp-data">
+
+    <div class="hp-bar">
+      <div id="hpFill" class="hp-fill"></div>
+    </div>
+
+    <div id="hpNumbers" class="hp-numbers">
+      1,200 / 1,200
+    </div>
+
+    <div id="hpPercent" class="hp-percent">
+      100%
+    </div>
+
+  </div>
+
+
+  <!-- ENERGY -->
+  <div class="energy-card-data">
+
+    <div id="energyValue" class="energy-value">
+      0 / 200
+    </div>
+
+    <div class="energy-bar">
+      <div id="energyFill" class="energy-fill"></div>
+    </div>
+
+    <div id="energyCountdown" class="energy-countdown">
+      --:--:--
+    </div>
+
+  </div>
+
+
+  <!-- CLICK ZONES -->
+
+  <button
+    id="fightMonsterBtn"
+    class="click-zone"
+    type="button"
+    aria-label="Fight Monster">
+  </button>
+
+  <button
+    id="myEnergyBtn"
+    class="click-zone"
+    type="button"
+    aria-label="My Energy">
+  </button>
+
+  <button
+    id="rankingBtn"
+    class="click-zone"
+    type="button"
+    aria-label="Battle Ranking">
+  </button>
+
+  <button
+    id="rewardBtn"
+    class="click-zone"
+    type="button"
+    aria-label="Boss Reward">
+  </button>
+
+  <button
+    id="homeBtn"
+    class="click-zone"
+    type="button"
+    aria-label="Home">
+  </button>
+
+  <button
+    id="missionBtn"
+    class="click-zone"
+    type="button"
+    aria-label="Mission">
+  </button>
+
+  <button
+    id="battleBtn"
+    class="click-zone"
+    type="button"
+    aria-label="Battle">
+  </button>
+
+</div>
+
+
+<div id="loading">
+  <div class="loading-box">
+    ⚔️ กำลังโหลด Battle...
+  </div>
+</div>
 
 <div id="toast"></div>
+
 
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
+/* ============================================================
+   ROCK YOUR BODY 2026
+   BATTLE HOME V7.0
+   ------------------------------------------------------------
+   หน้านี้:
+   - ไม่มีการโจมตี
+   - แสดงข้อมูล Battle
+   - FIGHT MONSTER -> battle_map.html
+============================================================ */
 
-function apiUrl(){
-  if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi("BATTLE");
-  const url=window.APP_CONFIG?.API?.BATTLE;
-  if(!url) throw new Error("ไม่พบ API.BATTLE");
-  return url;
-}
 
-async function initLine(){
-  await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});
-  if(!liff.isLoggedIn()){
-    liff.login({redirectUri:location.href});
-    return false;
+/* ============================================================
+   CONFIG
+============================================================ */
+
+const CFG = window.APP_CONFIG || {};
+
+const LIFF_ID =
+  CFG.LIFF_ID ||
+  "2011201679-uNWz5yqF";
+
+const BATTLE_API =
+  CFG.API?.BATTLE ||
+  "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle";
+
+const MAX_ENERGY =
+  Number(CFG.MAX_ENERGY || 200);
+
+
+/* ============================================================
+   MONSTER CONFIG
+============================================================ */
+
+const MONSTERS = {
+
+  1:{
+    name:"เจ้าจอมเอื่อย",
+    image:"battle-monster-stage-001-germ.png",
+    maxHp:1200
+  },
+
+  2:{
+    name:"จอมหวาน",
+    image:"battle-monster-stage-002-donut.png",
+    maxHp:3600
+  },
+
+  3:{
+    name:"ปีศาจของทอด",
+    image:"battle-monster-stage-003-fries.png",
+    maxHp:6000
+  },
+
+  4:{
+    name:"จอมเค็ม",
+    image:"battle-monster-stage-004-salt.png",
+    maxHp:8400
+  },
+
+  5:{
+    name:"ราชาอาหารไร้ประโยชน์",
+    image:"battle-monster-stage-005-burger-king.png",
+    maxHp:10800
+  },
+
+  6:{
+    name:"ปีศาจพักผ่อนน้อย",
+    image:"battle-monster-stage-006-rest.png",
+    maxHp:13200
+  },
+
+  7:{
+    name:"จอมเนือยนิ่ง",
+    image:"battle-monster-stage-007-sedentary.png",
+    maxHp:15600
+  },
+
+  8:{
+    name:"ปีศาจพฤติกรรมเสี่ยง",
+    image:"battle-monster-stage-008-risk.png",
+    maxHp:18000
+  },
+
+  9:{
+    name:"ราชาความเสี่ยงสุขภาพ",
+    image:"battle-monster-stage-009-risk-king.png",
+    maxHp:20400
+  },
+
+  10:{
+    name:"จอมมาร Final Boss",
+    image:"battle-monster-stage-010-boss.png",
+    maxHp:22800
   }
-  const token=liff.getIDToken();
-  if(!token||token.split(".").length!==3){
-    liff.logout();
-    liff.login({redirectUri:location.href});
-    return false;
-  }
-  return true;
+
+};
+
+
+/* ============================================================
+   STATE
+============================================================ */
+
+let STATE = {
+
+  coin:0,
+  energy:0,
+  exp:0,
+
+  stageNo:1,
+
+  monsterName:"",
+  monsterImage:"",
+
+  currentHp:1200,
+  maxHp:1200,
+
+  nextEnergyAt:null
+
+};
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function $(id){
+  return document.getElementById(id);
 }
 
-async function post(action,payload={}){
-  const res=await fetch(apiUrl(),{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    cache:"no-store",
-    body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})
-  });
-  const text=await res.text();
-  let data={};
-  try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
-  if(!res.ok||data?.success===false) throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
-  return data;
+
+function num(value, fallback = 0){
+
+  const n = Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : fallback;
+
 }
 
-function toast(text,error=false){
-  const el=$("toast");
-  el.textContent=text;
-  el.classList.toggle("error",error);
+
+function clamp(value,min,max){
+
+  return Math.min(
+    max,
+    Math.max(min,value)
+  );
+
+}
+
+
+function fmt(value){
+
+  return Math.round(
+    num(value)
+  ).toLocaleString("en-US");
+
+}
+
+
+function showLoading(show){
+
+  $("loading").style.display =
+    show ? "flex" : "none";
+
+}
+
+
+function toast(message){
+
+  const el = $("toast");
+
+  el.textContent = message;
   el.classList.add("show");
-  clearTimeout(window.__t);
-  window.__t=setTimeout(()=>el.classList.remove("show"),error?4500:2200);
+
+  clearTimeout(toast._timer);
+
+  toast._timer = setTimeout(()=>{
+    el.classList.remove("show");
+  },2500);
+
 }
 
-function monsterFile(stageNo){
-  const map={
-    1:"battle-monster-stage-001-germ.png",
-    2:"battle-monster-stage-002-donut.png",
-    3:"battle-monster-stage-003-fries.png",
-    4:"battle-monster-stage-004-salt.png",
-    5:"battle-monster-stage-005-burger-king.png",
-    6:"battle-monster-stage-006-rest.png",
-    7:"battle-monster-stage-007-sedentary.png",
-    8:"battle-monster-stage-008-risk.png",
-    9:"battle-monster-stage-009-risk-king.png",
-    10:"battle-monster-stage-010-boss.png"
-  };
-  return map[Number(stageNo)]||map[1];
-}
 
-function nextBangkokMidnightMs(){
-  const now=new Date();
-  const parts=new Intl.DateTimeFormat("en-CA",{
-    timeZone:"Asia/Bangkok",year:"numeric",month:"2-digit",day:"2-digit",
-    hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false
-  }).formatToParts(now).reduce((a,p)=>(a[p.type]=p.value,a),{});
-  const bkk = new Date(`${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}:${parts.second}+07:00`);
-  const next = new Date(bkk.getTime()+24*60*60*1000);
-  next.setHours(0,0,0,0);
-  return next.getTime() - bkk.getTime();
-}
+/* ============================================================
+   TOKEN
+============================================================ */
 
-function startTimer(){
-  const render=()=>{
-    let ms=nextBangkokMidnightMs();
-    const h=Math.floor(ms/3600000); ms%=3600000;
-    const m=Math.floor(ms/60000); ms%=60000;
-    const s=Math.floor(ms/1000);
-    $("energyTimer").textContent=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-  };
-  render();
-  setInterval(render,1000);
-}
+async function getIdToken(){
 
-function render(data){
-  const player=data?.player||{};
-  const e=data?.healthEnergy||{};
-  const stages=Array.isArray(data?.stages)?data.stages:[];
-  const boss=stages.find(s=>Number(s.id)===Number(data?.currentStage||1))||stages[0]||{};
-
-  $("coin").textContent=Number(player.rockCoin||0).toLocaleString();
-  $("energyTop").textContent=`${Number(e.available||0)} / ${Number(e.max||200)}`;
-  $("energyMain").textContent=`${Number(e.available||0)} / ${Number(e.max||200)}`;
-
-  const ep=Math.max(0,Math.min(100,Number(e.max||200)>0?Number(e.available||0)/Number(e.max||200)*100:0));
-  $("energyFill").style.width=`${ep}%`;
-
-  const maxHp=Math.max(1,Number(boss.maxHp||1));
-  const curHp=Math.max(0,Number(boss.currentHp??maxHp));
-  const hpPct=Math.round(curHp/maxHp*100);
-
-  $("bossName").textContent=(boss.name||"BOSS OF THE MONTH").toUpperCase();
-  $("hpText").textContent=`${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
-  $("hpPct").textContent=`${hpPct}%`;
-  $("hpFill").style.width=`${hpPct}%`;
-
-  $("monster").src="./"+monsterFile(boss.id)+"?v=20260831-v60";
-  $("monster").alt=boss.name||"Monster";
-
-  if(boss.rewardStatus==="pending"){
-    $("rewardStatus").textContent="🎁 ผ่านด่านแล้ว • รอ Admin ส่งของรางวัล";
-  }else if(boss.rewardStatus==="sent"){
-    $("rewardStatus").textContent="✅ Admin ส่งของรางวัลแล้ว";
-  }else{
-    $("rewardStatus").textContent="ยังไม่มีของรางวัลรอรับ";
+  if(typeof liff === "undefined"){
+    throw new Error("ไม่พบ LINE LIFF SDK");
   }
+
+  if(!liff.id){
+
+    await liff.init({
+      liffId:LIFF_ID
+    });
+
+  }
+
+  if(!liff.isLoggedIn()){
+
+    liff.login({
+      redirectUri:location.href
+    });
+
+    throw new Error("LINE_LOGIN");
+
+  }
+
+  const token = liff.getIDToken();
+
+  if(!token){
+    throw new Error("ไม่พบ LINE ID Token");
+  }
+
+  return token;
+
 }
 
-async function load(){
-  const data=await post("mapV5");
-  render(data);
-}
 
-$("fightBtn").onclick=()=>{
-  location.href="./battle_maps.html";
-};
+/* ============================================================
+   API
+============================================================ */
 
-$("energyBtn").onclick=()=>{
-  toast("Energy ใช้ค่าเดียวกับหน้า HOME");
-};
+async function callBattle(action,payload = {}){
 
-$("homeBtn").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.HOME||"./dashboard.html";
-$("missionBtn").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.MISSION||"./mission.html";
-$("battleBtn").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE||"./battle.html";
+  const token = await getIdToken();
 
-(async()=>{
+  const response = await fetch(BATTLE_API,{
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer " + token
+    },
+
+    body:JSON.stringify({
+      action,
+      ...payload
+    })
+
+  });
+
+
+  let data = {};
+
   try{
-    const ok=await initLine();
-    if(ok===false)return;
-    startTimer();
-    await load();
-  }catch(error){
-    console.error(error);
-    toast(error?.message||String(error),true);
+    data = await response.json();
   }
-})();
+  catch(_){}
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      "Battle API Error " + response.status
+    );
+
+  }
+
+
+  if(data?.success === false){
+
+    throw new Error(
+      data?.error ||
+      data?.message ||
+      "โหลดข้อมูล Battle ไม่สำเร็จ"
+    );
+
+  }
+
+  return data;
+
+}
+
+
+/* ============================================================
+   FIND VALUE
+============================================================ */
+
+function pick(obj, keys, fallback = null){
+
+  if(!obj || typeof obj !== "object"){
+    return fallback;
+  }
+
+  for(const key of keys){
+
+    if(
+      Object.prototype.hasOwnProperty.call(obj,key) &&
+      obj[key] !== null &&
+      obj[key] !== undefined
+    ){
+      return obj[key];
+    }
+
+  }
+
+  return fallback;
+
+}
+
+
+/* ============================================================
+   NORMALIZE DATA
+============================================================ */
+
+function applyApiData(data){
+
+  /*
+    รองรับ response ได้หลายโครงสร้าง เช่น
+
+    {
+      player:{...},
+      wallet:{...},
+      stage:{...}
+    }
+
+    หรือ
+
+    {
+      data:{
+        player:{...},
+        stage:{...}
+      }
+    }
+  */
+
+  const root =
+    data?.data &&
+    typeof data.data === "object"
+      ? data.data
+      : data;
+
+
+  const player =
+    root?.player ||
+    root?.user ||
+    {};
+
+
+  const wallet =
+    root?.wallet ||
+    player?.wallet ||
+    {};
+
+
+  const battle =
+    root?.battle ||
+    {};
+
+
+  const stage =
+    root?.stage ||
+    battle?.stage ||
+    root?.current_stage ||
+    {};
+
+
+  /* -------------------------
+     WALLET
+  ------------------------- */
+
+  STATE.coin = num(
+
+    pick(
+      wallet,
+      [
+        "coin",
+        "coins",
+        "rock_coin",
+        "rock_coins"
+      ],
+      pick(
+        player,
+        [
+          "coin",
+          "coins",
+          "rock_coin",
+          "rock_coins"
+        ],
+        STATE.coin
+      )
+    )
+
+  );
+
+
+  STATE.energy = clamp(
+
+    num(
+
+      pick(
+        wallet,
+        [
+          "energy",
+          "current_energy",
+          "health_energy"
+        ],
+        pick(
+          player,
+          [
+            "energy",
+            "current_energy",
+            "health_energy"
+          ],
+          STATE.energy
+        )
+      )
+
+    ),
+
+    0,
+    MAX_ENERGY
+
+  );
+
+
+  STATE.exp = num(
+
+    pick(
+      player,
+      [
+        "exp",
+        "experience",
+        "total_exp"
+      ],
+      STATE.exp
+    )
+
+  );
+
+
+  /* -------------------------
+     STAGE
+  ------------------------- */
+
+  const stageNo = num(
+
+    pick(
+      stage,
+      [
+        "stage_no",
+        "stageNo",
+        "current_stage",
+        "stage"
+      ],
+      pick(
+        battle,
+        [
+          "stage_no",
+          "stageNo",
+          "current_stage"
+        ],
+        STATE.stageNo
+      )
+    ),
+
+    STATE.stageNo
+
+  );
+
+
+  STATE.stageNo =
+    clamp(
+      Math.round(stageNo),
+      1,
+      10
+    );
+
+
+  const config =
+    MONSTERS[STATE.stageNo] ||
+    MONSTERS[1];
+
+
+  STATE.monsterName =
+    pick(
+      stage,
+      [
+        "monster_name",
+        "monsterName"
+      ],
+      config.name
+    );
+
+
+  STATE.monsterImage =
+    pick(
+      stage,
+      [
+        "monster_image",
+        "monster_image_path",
+        "monsterImage"
+      ],
+      config.image
+    );
+
+
+  STATE.maxHp = num(
+
+    pick(
+      stage,
+      [
+        "max_hp",
+        "maxHp",
+        "monster_max_hp"
+      ],
+      config.maxHp
+    ),
+
+    config.maxHp
+
+  );
+
+
+  STATE.currentHp = num(
+
+    pick(
+      stage,
+      [
+        "current_hp",
+        "currentHp",
+        "hp",
+        "monster_hp"
+      ],
+      STATE.maxHp
+    ),
+
+    STATE.maxHp
+
+  );
+
+
+  STATE.currentHp =
+    clamp(
+      STATE.currentHp,
+      0,
+      STATE.maxHp
+    );
+
+
+  STATE.nextEnergyAt =
+
+    pick(
+      root,
+      [
+        "next_energy_at",
+        "nextEnergyAt",
+        "energy_refill_at"
+      ],
+      pick(
+        player,
+        [
+          "next_energy_at",
+          "nextEnergyAt",
+          "energy_refill_at"
+        ],
+        null
+      )
+    );
+
+}
+
+
+/* ============================================================
+   IMAGE PATH
+============================================================ */
+
+function resolveMonsterImage(path){
+
+  if(!path){
+    return "./" + MONSTERS[STATE.stageNo].image;
+  }
+
+
+  const value =
+    String(path).trim();
+
+
+  /* absolute URL */
+
+  if(
+    value.startsWith("http://") ||
+    value.startsWith("https://")
+  ){
+    return value;
+  }
+
+
+  /* remove leading slash */
+
+  let clean =
+    value.replace(/^\/+/,"");
+
+
+  /*
+    DB เก่าอาจเก็บ:
+    battle/monster-01.png
+
+    แต่ไฟล์จริง GitHub:
+    battle-monster-stage-001-germ.png
+
+    ดังนั้นถ้าเป็น path เก่า
+    ให้ใช้ config ใหม่
+  */
+
+  if(
+    clean.startsWith("battle/") ||
+    clean.startsWith("monster-")
+  ){
+
+    return "./" +
+      MONSTERS[STATE.stageNo].image;
+
+  }
+
+
+  return "./" + clean;
+
+}
+
+
+/* ============================================================
+   RENDER
+============================================================ */
+
+function render(){
+
+  /* -------------------------
+     TOP
+  ------------------------- */
+
+  $("topCoin").textContent =
+    fmt(STATE.coin);
+
+
+  $("topEnergy").textContent =
+    `${fmt(STATE.energy)} / ${MAX_ENERGY}`;
+
+
+  /* -------------------------
+     MONSTER
+  ------------------------- */
+
+  $("monsterName").textContent =
+    STATE.monsterName ||
+    MONSTERS[STATE.stageNo].name;
+
+
+  const img = $("monsterImg");
+
+  img.src =
+    resolveMonsterImage(
+      STATE.monsterImage
+    );
+
+
+  img.onerror = function(){
+
+    const fallback =
+      "./" +
+      MONSTERS[STATE.stageNo].image;
+
+    if(
+      !this.src.endsWith(
+        MONSTERS[STATE.stageNo].image
+      )
+    ){
+      this.src = fallback;
+    }
+
+  };
+
+
+  /* -------------------------
+     HP
+  ------------------------- */
+
+  const hpPercent =
+
+    STATE.maxHp > 0
+      ? clamp(
+          Math.round(
+            STATE.currentHp /
+            STATE.maxHp *
+            100
+          ),
+          0,
+          100
+        )
+      : 0;
+
+
+  $("hpNumbers").textContent =
+    `${fmt(STATE.currentHp)} / ${fmt(STATE.maxHp)}`;
+
+
+  $("hpPercent").textContent =
+    `${hpPercent}%`;
+
+
+  $("hpFill").style.width =
+    hpPercent + "%";
+
+
+  /* -------------------------
+     ENERGY
+  ------------------------- */
+
+  const energyPercent =
+    clamp(
+      STATE.energy /
+      MAX_ENERGY *
+      100,
+      0,
+      100
+    );
+
+
+  $("energyValue").textContent =
+    `${fmt(STATE.energy)} / ${MAX_ENERGY}`;
+
+
+  $("energyFill").style.width =
+    energyPercent + "%";
+
+}
+
+
+/* ============================================================
+   ENERGY COUNTDOWN
+============================================================ */
+
+function renderCountdown(){
+
+  const el =
+    $("energyCountdown");
+
+
+  /*
+    ถ้า Backend ส่ง next_energy_at
+    จะนับถอยหลังจริง
+  */
+
+  if(STATE.nextEnergyAt){
+
+    const target =
+      new Date(
+        STATE.nextEnergyAt
+      ).getTime();
+
+
+    if(Number.isFinite(target)){
+
+      const diff =
+        Math.max(
+          0,
+          target - Date.now()
+        );
+
+
+      if(diff > 0){
+
+        const totalSeconds =
+          Math.floor(
+            diff / 1000
+          );
+
+
+        const hours =
+          Math.floor(
+            totalSeconds / 3600
+          );
+
+
+        const minutes =
+          Math.floor(
+            (
+              totalSeconds % 3600
+            ) / 60
+          );
+
+
+        const seconds =
+          totalSeconds % 60;
+
+
+        el.textContent =
+          String(hours).padStart(2,"0") +
+          ":" +
+          String(minutes).padStart(2,"0") +
+          ":" +
+          String(seconds).padStart(2,"0");
+
+
+        return;
+
+      }
+
+    }
+
+  }
+
+
+  /*
+    Energy เต็มแล้ว
+  */
+
+  if(STATE.energy >= MAX_ENERGY){
+
+    el.textContent =
+      "ENERGY เต็มแล้ว";
+
+    return;
+
+  }
+
+
+  /*
+    ถ้า Backend ยังไม่มีเวลา refill
+  */
+
+  el.textContent =
+    "--:--:--";
+
+}
+
+
+/* ============================================================
+   LOAD BATTLE
+============================================================ */
+
+async function loadBattle(){
+
+  showLoading(true);
+
+  try{
+
+    /*
+      ลอง action ใหม่ก่อน
+    */
+
+    let data;
+
+    try{
+
+      data =
+        await callBattle(
+          "battleHome"
+        );
+
+    }
+    catch(error){
+
+      /*
+        รองรับ battle/index.ts
+        รุ่นที่ใช้ action = home
+      */
+
+      const msg =
+        String(
+          error?.message || ""
+        ).toUpperCase();
+
+
+      if(
+        msg.includes("UNKNOWN_ACTION") ||
+        msg.includes("UNKNOWN ACTION")
+      ){
+
+        data =
+          await callBattle(
+            "home"
+          );
+
+      }
+      else{
+        throw error;
+      }
+
+    }
+
+
+    applyApiData(data);
+
+    render();
+    renderCountdown();
+
+  }
+  catch(error){
+
+    console.error(
+      "LOAD BATTLE:",
+      error
+    );
+
+
+    /*
+      ยัง Render config ได้
+      แม้ Backend มีปัญหา
+    */
+
+    const config =
+      MONSTERS[STATE.stageNo];
+
+
+    STATE.monsterName =
+      config.name;
+
+    STATE.monsterImage =
+      config.image;
+
+    STATE.maxHp =
+      config.maxHp;
+
+    STATE.currentHp =
+      config.maxHp;
+
+
+    render();
+    renderCountdown();
+
+
+    if(
+      error?.message !==
+      "LINE_LOGIN"
+    ){
+
+      toast(
+        "โหลดข้อมูล Battle ไม่สำเร็จ: " +
+        error.message
+      );
+
+    }
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function go(page){
+
+  location.href = page;
+
+}
+
+
+/*
+  FIGHT MONSTER
+
+  สำคัญ:
+  หน้า Battle ไม่มีการโจมตี
+
+  Battle
+       ↓
+  Battle Map
+       ↓
+  เลือก Stage
+       ↓
+  Battle Stage
+       ↓
+  Attack
+*/
+
+$("fightMonsterBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      go("./battle_map.html");
+    }
+  );
+
+
+$("myEnergyBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      /*
+        ตอนนี้แสดงข้อมูล Energy
+        ยังไม่เปิดหน้าใหม่
+      */
+
+      toast(
+        `⚡ MY ENERGY ${fmt(STATE.energy)} / ${MAX_ENERGY}`
+      );
+
+    }
+  );
+
+
+$("rankingBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      go("./ranking.html");
+    }
+  );
+
+
+$("rewardBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      go("./rewards.html");
+    }
+  );
+
+
+$("homeBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      go(
+        CFG.PAGE?.HOME ||
+        "./dashboard.html"
+      );
+    }
+  );
+
+
+$("missionBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      go(
+        CFG.PAGE?.MISSION ||
+        "./mission.html"
+      );
+    }
+  );
+
+
+$("battleBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      location.reload();
+    }
+  );
+
+
+/* ============================================================
+   START
+============================================================ */
+
+async function start(){
+
+  try{
+
+    await liff.init({
+      liffId:LIFF_ID
+    });
+
+
+    if(!liff.isLoggedIn()){
+
+      liff.login({
+        redirectUri:location.href
+      });
+
+      return;
+
+    }
+
+
+    await loadBattle();
+
+
+    setInterval(
+      renderCountdown,
+      1000
+    );
+
+
+    /*
+      refresh wallet / battle data
+      ทุก 30 วินาที
+    */
+
+    setInterval(
+      async ()=>{
+
+        try{
+
+          let data;
+
+          try{
+
+            data =
+              await callBattle(
+                "battleHome"
+              );
+
+          }
+          catch(error){
+
+            const msg =
+              String(
+                error?.message || ""
+              ).toUpperCase();
+
+
+            if(
+              msg.includes(
+                "UNKNOWN_ACTION"
+              )
+            ){
+
+              data =
+                await callBattle(
+                  "home"
+                );
+
+            }
+            else{
+              throw error;
+            }
+
+          }
+
+
+          applyApiData(data);
+
+          render();
+
+        }
+        catch(error){
+
+          console.warn(
+            "AUTO REFRESH:",
+            error
+          );
+
+        }
+
+      },
+
+      Number(
+        CFG.REFRESH_MS ||
+        30000
+      )
+
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "START:",
+      error
+    );
+
+    showLoading(false);
+
+    toast(
+      error.message ||
+      "เปิด Battle ไม่สำเร็จ"
+    );
+
+  }
+
+}
+
+
+start();
+
 </script>
+
 </body>
 </html>
