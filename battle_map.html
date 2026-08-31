@@ -1,153 +1,80 @@
 <!doctype html>
-<html lang="th">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>ROCK YOUR BODY 2026 - BATTLE MAP</title>
-
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-battle-v60"></script>
-
-  <style>
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;background:#020817;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
-    body{display:flex;justify-content:center}
-    #map{position:relative;width:min(100vw,1280px);aspect-ratio:1280/657;overflow:hidden}
-    #bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:1}
-    #topInfo{position:absolute;z-index:20;left:1%;right:1%;top:1%;display:flex;justify-content:space-between;color:#fff;font-weight:1000;font-size:clamp(9px,1.2vw,16px)}
-    .slot{position:absolute;z-index:30;width:10.6%;aspect-ratio:1;cursor:pointer}
-    .slot img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 8px rgba(0,0,0,.45))}
-    .slot.locked img{filter:grayscale(1) brightness(.42) drop-shadow(0 8px 8px rgba(0,0,0,.45))}
-    .lock{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:clamp(26px,4vw,54px);color:#fff;text-shadow:0 3px 8px #000}
-    .slot.locked .lock{display:flex}
-    .status{position:absolute;left:-10%;right:-10%;bottom:-12%;text-align:center;color:#fff;font-weight:1000;font-size:clamp(7px,.8vw,12px);text-shadow:0 2px 4px #000}
-    #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;display:none;padding:12px 16px;border-radius:14px;background:#173c70;color:#fff;font-weight:900;max-width:calc(100vw - 28px);text-align:center}
-    #toast.show{display:block}
-    #toast.error{background:#c62828}
-  </style>
-</head>
-<body>
-
-<main id="map">
-  <img id="bg" src="./battle%20map.jpeg?v=20260831-v60" alt="Battle Map">
-  <div id="topInfo">
-    <div id="expInfo">EXP --</div>
-    <div id="energyInfo">⚡ --</div>
-  </div>
-  <div id="layer"></div>
-</main>
-
-<div id="toast"></div>
-
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>BATTLE MAP</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script><script src="./app-config.js?v=20260831-battle-v70"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#020817;color:#fff;font-family:Arial,"Noto Sans Thai",Tahoma,sans-serif}
+.wrap{max-width:1500px;margin:auto;padding:14px}header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+h1{margin:0;font-size:clamp(26px,5vw,58px)}.hud{font-weight:1000;color:#ffe23d}#back{border:0;border-radius:13px;padding:12px 16px;background:#0b56b7;color:#fff;font-weight:1000}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.card{position:relative;min-height:290px;border:2px solid #1d70d7;border-radius:20px;background:linear-gradient(180deg,#08224b,#041329);color:#fff;overflow:hidden;padding:14px;cursor:pointer}
+.card img{width:100%;height:175px;object-fit:contain}.badge{font-weight:1000;color:#ffe23d}.name{font-weight:1000;font-size:16px;min-height:42px}.lock{margin-top:8px;border-radius:10px;padding:9px;background:#9d1515;font-weight:1000}.card.open .lock{background:#079447}.card.done{outline:3px solid #22c55e}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.card{min-height:250px}.card img{height:145px}}
+</style></head><body><div class="wrap"><header><button id="back">← ย้อนกลับ</button><h1>BATTLE MAP</h1><div class="hud">EXP <span id="exp">0</span> • ⚡ <span id="energy">0</span></div></header>
+<div class="grid"><button class="card" data-stage="1" data-exp="300">
+      <div class="badge">STAGE 1</div>
+      <img src="./battle-monster-stage-001-germ.png" alt="เจ้าจอมเอื่อย">
+      <div class="name">เจ้าจอมเอื่อย</div>
+      <div class="lock" id="lock1">EXP 300</div>
+    </button>
+<button class="card" data-stage="2" data-exp="900">
+      <div class="badge">STAGE 2</div>
+      <img src="./battle-monster-stage-002-donut.png" alt="จอมหวาน">
+      <div class="name">จอมหวาน</div>
+      <div class="lock" id="lock2">EXP 900</div>
+    </button>
+<button class="card" data-stage="3" data-exp="1500">
+      <div class="badge">STAGE 3</div>
+      <img src="./battle-monster-stage-003-fries.png" alt="ปีศาจของทอด">
+      <div class="name">ปีศาจของทอด</div>
+      <div class="lock" id="lock3">EXP 1,500</div>
+    </button>
+<button class="card" data-stage="4" data-exp="2100">
+      <div class="badge">STAGE 4</div>
+      <img src="./battle-monster-stage-004-salt.png" alt="จอมเค็ม">
+      <div class="name">จอมเค็ม</div>
+      <div class="lock" id="lock4">EXP 2,100</div>
+    </button>
+<button class="card" data-stage="5" data-exp="2700">
+      <div class="badge">STAGE 5</div>
+      <img src="./battle-monster-stage-005-burger-king.png" alt="ราชาอาหารไร้ประโยชน์">
+      <div class="name">ราชาอาหารไร้ประโยชน์</div>
+      <div class="lock" id="lock5">EXP 2,700</div>
+    </button>
+<button class="card" data-stage="6" data-exp="3300">
+      <div class="badge">STAGE 6</div>
+      <img src="./battle-monster-stage-006-rest.png" alt="ปีศาจพักผ่อนน้อย">
+      <div class="name">ปีศาจพักผ่อนน้อย</div>
+      <div class="lock" id="lock6">EXP 3,300</div>
+    </button>
+<button class="card" data-stage="7" data-exp="3900">
+      <div class="badge">STAGE 7</div>
+      <img src="./battle-monster-stage-007-sedentary.png" alt="จอมเนือยนิ่ง">
+      <div class="name">จอมเนือยนิ่ง</div>
+      <div class="lock" id="lock7">EXP 3,900</div>
+    </button>
+<button class="card" data-stage="8" data-exp="4500">
+      <div class="badge">STAGE 8</div>
+      <img src="./battle-monster-stage-008-risk.png" alt="ปีศาจพฤติกรรมเสี่ยง">
+      <div class="name">ปีศาจพฤติกรรมเสี่ยง</div>
+      <div class="lock" id="lock8">EXP 4,500</div>
+    </button>
+<button class="card" data-stage="9" data-exp="5100">
+      <div class="badge">STAGE 9</div>
+      <img src="./battle-monster-stage-009-risk-king.png" alt="ราชาความเสี่ยงสุขภาพ">
+      <div class="name">ราชาความเสี่ยงสุขภาพ</div>
+      <div class="lock" id="lock9">EXP 5,100</div>
+    </button>
+<button class="card" data-stage="10" data-exp="5700">
+      <div class="badge">STAGE 10</div>
+      <img src="./battle-monster-stage-010-boss.png" alt="จอมมาร Final Boss">
+      <div class="name">จอมมาร Final Boss</div>
+      <div class="lock" id="lock10">EXP 5,700</div>
+    </button></div></div>
 <script>
-"use strict";
-
-const $=id=>document.getElementById(id);
-
-const POS={
-  1:[3.5,22.5],2:[22.0,22.0],3:[40.4,22.0],4:[58.8,21.5],5:[78.2,21.0],
-  6:[3.0,61.5],7:[21.7,61.0],8:[40.2,60.5],9:[58.7,60.0],10:[78.8,59.0]
-};
-
-function monsterFile(stageNo){
-  const map={
-    1:"battle-monster-stage-001-germ.png",
-    2:"battle-monster-stage-002-donut.png",
-    3:"battle-monster-stage-003-fries.png",
-    4:"battle-monster-stage-004-salt.png",
-    5:"battle-monster-stage-005-burger-king.png",
-    6:"battle-monster-stage-006-rest.png",
-    7:"battle-monster-stage-007-sedentary.png",
-    8:"battle-monster-stage-008-risk.png",
-    9:"battle-monster-stage-009-risk-king.png",
-    10:"battle-monster-stage-010-boss.png"
-  };
-  return map[Number(stageNo)];
-}
-
-function apiUrl(){
-  if(window.APP_CONFIG?.getApi) return window.APP_CONFIG.getApi("BATTLE");
-  return window.APP_CONFIG?.API?.BATTLE;
-}
-
-async function initLine(){
-  await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});
-  if(!liff.isLoggedIn()){liff.login({redirectUri:location.href});return false}
-  const token=liff.getIDToken();
-  if(!token||token.split(".").length!==3){liff.logout();liff.login({redirectUri:location.href});return false}
-  return true;
-}
-
-async function post(action,payload={}){
-  const res=await fetch(apiUrl(),{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    cache:"no-store",
-    body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})
-  });
-  const text=await res.text();
-  let data={};
-  try{data=text?JSON.parse(text):{}}catch{throw new Error("Battle API ตอบกลับไม่ใช่ JSON")}
-  if(!res.ok||data?.success===false) throw new Error(data?.error||data?.message||`HTTP ${res.status}`);
-  return data;
-}
-
-function toast(text,error=false){
-  const el=$("toast");
-  el.textContent=text;
-  el.classList.toggle("error",error);
-  el.classList.add("show");
-  clearTimeout(window.__t);
-  window.__t=setTimeout(()=>el.classList.remove("show"),error?4500:2200);
-}
-
-function render(data){
-  $("expInfo").textContent=`EXP ${Number(data?.player?.exp||0).toLocaleString()}`;
-  $("energyInfo").textContent=`⚡ ${Number(data?.healthEnergy?.available||0).toLocaleString()}`;
-
-  const layer=$("layer");
-  layer.innerHTML="";
-
-  for(const s of (data?.stages||[])){
-    const pos=POS[s.id]||POS[1];
-    const el=document.createElement("div");
-    el.className="slot"+(s.unlocked?"":" locked");
-    el.style.left=pos[0]+"%";
-    el.style.top=pos[1]+"%";
-    el.innerHTML=`
-      <img src="./${monsterFile(s.id)}?v=20260831-v60" alt="${s.name||`Stage ${s.id}`}">
-      <div class="lock">🔒</div>
-      <div class="status">${
-        s.completed
-          ? "✅ ผ่านแล้ว"
-          : s.unlocked
-            ? `Stage ${s.id}`
-            : `ต้องมี EXP ${Number(s.expRequired||0).toLocaleString()}`
-      }</div>
-    `;
-
-    el.onclick=()=>{
-      if(!s.unlocked){
-        toast(`🔒 Stage ${s.id} ต้องมี EXP ${Number(s.expRequired||0).toLocaleString()} และผ่านด่านก่อนหน้า`,true);
-        return;
-      }
-      location.href=`./battle_stage.html?stage=${encodeURIComponent(s.id)}`;
-    };
-
-    layer.appendChild(el);
-  }
-}
-
-(async()=>{
-  try{
-    const ok=await initLine();
-    if(ok===false)return;
-    render(await post("mapV5"));
-  }catch(error){
-    console.error(error);
-    toast(error?.message||String(error),true);
-  }
-})();
-</script>
-</body>
-</html>
+"use strict";const $=id=>document.getElementById(id);let state={exp:0,energy:0,progress:[]};
+function apiUrl(){return window.APP_CONFIG?.getApi?window.APP_CONFIG.getApi("BATTLE"):window.APP_CONFIG?.API?.BATTLE}
+async function initLine(){await liff.init({liffId:window.APP_CONFIG?.LIFF_ID||"2011201679-uNWz5yqF"});if(!liff.isLoggedIn()){liff.login({redirectUri:location.href});return false}return true}
+async function post(action,payload={}){const r=await fetch(apiUrl(),{method:"POST",headers:{"Content-Type":"application/json"},cache:"no-store",body:JSON.stringify({action,idToken:liff.getIDToken(),...payload})});const t=await r.text();const d=t?JSON.parse(t):{};if(!r.ok||d?.success===false)throw new Error(d?.error||d?.message||`HTTP ${r.status}`);return d}
+function render(){$("exp").textContent=state.exp.toLocaleString();$("energy").textContent=state.energy.toLocaleString();document.querySelectorAll(".card").forEach(btn=>{const s=Number(btn.dataset.stage),req=Number(btn.dataset.exp);const done=state.progress.some(x=>Number(x.stage_no??x.stageNo)===s&&Boolean(x.completed));const open=state.exp>=req;btn.classList.toggle("open",open);btn.classList.toggle("done",done);const lock=btn.querySelector(".lock");lock.textContent=done?"✅ ผ่านแล้ว":open?"⚔️ พร้อมต่อสู้":`🔒 ต้องมี EXP ${req.toLocaleString()}`;btn.onclick=()=>{if(!open&&!done){alert(`ต้องมี EXP ${req.toLocaleString()}`);return}location.href=(window.APP_CONFIG?.PAGE?.BATTLE_STAGE||"./battle_stage.html")+"?stage="+s}})}
+$("back").onclick=()=>location.href=window.APP_CONFIG?.PAGE?.BATTLE||"./battle.html";
+(async()=>{try{if(await initLine()===false)return;const d=await post("mapV5");state.exp=Number(d?.player?.exp??0);state.energy=Number(d?.healthEnergy?.available??d?.player?.energy??0);state.progress=Array.isArray(d?.progress)?d.progress:[];render()}catch(e){alert(e?.message||String(e))}})();
+</script></body></html>
