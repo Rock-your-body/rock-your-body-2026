@@ -1062,7 +1062,7 @@
         </div>
         <div>
           <label>Max Energy</label>
-          <input id="setMaxEnergy" type="number" value="200">
+          <input id="setMaxEnergy" type="number" value="99999">
         </div>
         <div>
           <label>Daily Steps Goal</label>
@@ -1907,7 +1907,7 @@ async function loadSettings(){
     const d=await post("systemSettings");
     const s=d?.settings||{};
     $("setProjectName").value=s.projectName||"ROCK YOUR BODY 2026";
-    $("setMaxEnergy").value=s.maxEnergy??200;
+    $("setMaxEnergy").value=s.maxEnergy??99999;
     $("setStepsGoal").value=s.stepsGoal??8000;
     $("setCaloriesGoal").value=s.caloriesGoal??300;
     $("setSleepGoal").value=s.sleepGoal??420;
@@ -1920,7 +1920,7 @@ async function saveSettings(){
     await post("saveSystemSettings",{
       settings:{
         projectName:$("setProjectName").value.trim(),
-        maxEnergy:Number($("setMaxEnergy").value||200),
+        maxEnergy:Number($("setMaxEnergy").value||99999),
         stepsGoal:Number($("setStepsGoal").value||8000),
         caloriesGoal:Number($("setCaloriesGoal").value||300),
         sleepGoal:Number($("setSleepGoal").value||420),
@@ -2083,7 +2083,7 @@ function renderTestState(
     Number(
       home?.max_energy ??
       canonical?.max_energy ??
-      200
+      99999
     );
 
 
