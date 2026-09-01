@@ -18,11 +18,34 @@ if (form) {
   let signup = false;
   const query = new URLSearchParams(location.search);
   const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+  const recoveryMode = query.get("type") === "recovery" || hash.get("type") === "recovery";
   const authError = query.get("error_description") || hash.get("error_description");
   if (authError) say(decodeURIComponent(authError.replace(/\+/g, " ")), true);
+  if (query.get("password") === "updated") say("ตั้งรหัสผ่านใหม่สำเร็จ กรุณาเข้าสู่ระบบด้วยรหัสใหม่");
 
   const { data: { session } } = await db.auth.getSession();
-  if (session) location.replace("./portal.html");
+  if (session && !recoveryMode) location.replace("./portal.html");
+
+  const resetButton = document.querySelector("#resetBtn");
+  const resendButton = document.createElement("button");
+  resendButton.type = "button";
+  resendButton.className = "link-btn";
+  resendButton.textContent = "ส่งอีเมลยืนยันอีกครั้ง";
+  resetButton.insertAdjacentElement("afterend", resendButton);
+
+  if (recoveryMode) {
+    document.querySelector("#authTitle").textContent = "ตั้งรหัสผ่านใหม่";
+    document.querySelector("#nameLabel").classList.add("hidden");
+    document.querySelector("#email").closest("label").classList.add("hidden");
+    document.querySelector("#password").autocomplete = "new-password";
+    document.querySelector("#password").value = "";
+    document.querySelector("#password").placeholder = "รหัสผ่านใหม่อย่างน้อย 8 ตัว";
+    document.querySelector("#submitText").textContent = "บันทึกรหัสผ่านใหม่";
+    document.querySelector("#modeBtn").classList.add("hidden");
+    resetButton.classList.add("hidden");
+    resendButton.classList.add("hidden");
+    say("กรุณากำหนดรหัสผ่านใหม่สำหรับบัญชีของคุณ");
+  }
 
   document.querySelector("#modeBtn").onclick = () => {
     signup = !signup;
@@ -38,7 +61,15 @@ if (form) {
     const email = document.querySelector("#email").value.trim();
     const password = document.querySelector("#password").value;
     let error;
-    if (signup) {
+    if (recoveryMode) {
+      if (password.length < 8) return say("รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัว", true);
+      ({ error } = await db.auth.updateUser({ password }));
+      if (!error) {
+        await db.auth.signOut();
+        location.replace(APP_URL + "?password=updated");
+        return;
+      }
+    } else if (signup) {
       const result = await db.auth.signUp({
         email,
         password,
@@ -56,25 +87,30 @@ if (form) {
       ({ error } = await db.auth.signInWithPassword({ email, password }));
     }
     if (error) {
-      say(error.message === "Email not confirmed" ? "อีเมลยังไม่ยืนยัน กรุณากด “ส่งอีเมลยืนยันอีกครั้ง”" : error.message, true);
+      const translated = error.message === "Email not confirmed"
+        ? "อีเมลยังไม่ยืนยัน กรุณากด “ส่งอีเมลยืนยันอีกครั้ง”"
+        : error.message === "Invalid login credentials"
+          ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง หากจำรหัสไม่ได้ให้กด “ลืมรหัสผ่าน”"
+          : error.message;
+      say(translated, true);
       return;
     }
     location.replace("./portal.html");
   });
 
-  const resetButton = document.querySelector("#resetBtn");
   resetButton.onclick = async () => {
     const email = document.querySelector("#email").value.trim();
     if (!email) return say("กรุณากรอกอีเมลก่อน", true);
+    resetButton.disabled = true;
+    say("กำลังส่งลิงก์ตั้งรหัสผ่านใหม่...");
     const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: APP_URL });
-    say(error ? error.message : "ส่งลิงก์ตั้งรหัสผ่านใหม่แล้ว", Boolean(error));
+    resetButton.disabled = false;
+    const text = error?.message?.toLowerCase().includes("rate")
+      ? "ส่งอีเมลถี่เกินไป กรุณารอประมาณ 1 นาทีแล้วลองใหม่"
+      : error?.message || "ส่งลิงก์ตั้งรหัสผ่านใหม่แล้ว กรุณาตรวจ Inbox และ Spam/Junk";
+    say(text, Boolean(error));
   };
 
-  const resendButton = document.createElement("button");
-  resendButton.type = "button";
-  resendButton.className = "link-btn";
-  resendButton.textContent = "ส่งอีเมลยืนยันอีกครั้ง";
-  resetButton.insertAdjacentElement("afterend", resendButton);
   resendButton.onclick = async () => {
     const email = document.querySelector("#email").value.trim();
     if (!email) return say("กรุณากรอกอีเมลก่อน", true);
