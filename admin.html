@@ -1,486 +1,3265 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Mission Control</title>
+import {
+  createClient
+} from "https://esm.sh/@supabase/supabase-js@2";
 
-  <style>
-    * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f4f7fb;
-      color: #17325c;
-    }
+/* =========================================================
+   ENV / CLIENT
+========================================================= */
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px;
-    }
+const SUPABASE_URL =
+  Deno.env.get(
+    "SUPABASE_URL"
+  ) ?? "";
 
-    .admin-card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 30px rgba(20, 50, 100, 0.08);
-      margin-bottom: 20px;
-    }
+const SUPABASE_SERVICE_ROLE_KEY =
+  Deno.env.get(
+    "SUPABASE_SERVICE_ROLE_KEY"
+  ) ?? "";
 
-    .title {
-      margin: 0 0 6px;
-      color: #0d3477;
-      font-size: 28px;
-      font-weight: 900;
-    }
+const LINE_LOGIN_CHANNEL_ID =
+  Deno.env.get(
+    "LINE_LOGIN_CHANNEL_ID"
+  ) ?? "";
 
-    .subtitle {
-      color: #73809a;
-      margin-bottom: 20px;
-    }
+let supabaseClient:
+  ReturnType<typeof createClient> |
+  null =
+    null;
 
-    .player-info {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      padding: 14px;
-      border-radius: 14px;
-      background: #eef4ff;
-      margin-bottom: 18px;
-    }
 
-    .player-info strong {
-      color: #0c367f;
-    }
+function db(){
 
-    .mission-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
+  if(!SUPABASE_URL){
+    throw new Error(
+      "SUPABASE_URL is not defined"
+    );
+  }
 
-    .mission {
-      border: 1px solid #d9e3f2;
-      border-radius: 16px;
-      padding: 16px;
-      background: #fff;
-    }
+  if(!SUPABASE_SERVICE_ROLE_KEY){
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY is not defined"
+    );
+  }
 
-    .mission-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
+  if(!supabaseClient){
 
-    .mission-name {
-      font-size: 18px;
-      font-weight: 900;
-      color: #123d84;
-    }
+    supabaseClient =
+      createClient(
+        SUPABASE_URL,
+        SUPABASE_SERVICE_ROLE_KEY,
+        {
+          auth:{
+            persistSession:false,
+            autoRefreshToken:false
+          }
+        }
+      );
+  }
 
-    .status {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 800;
-    }
+  return supabaseClient;
+}
 
-    .pending {
-      background: #fff4cc;
-      color: #8a6500;
-    }
 
-    .approved {
-      background: #dbf7e7;
-      color: #087443;
-    }
+/* =========================================================
+   RESPONSE
+========================================================= */
 
-    .cancelled {
-      background: #ffe0e0;
-      color: #b21f1f;
-    }
+const corsHeaders = {
+  "Access-Control-Allow-Origin":"*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods":
+    "GET, POST, OPTIONS"
+};
 
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
 
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-weight: 800;
-      cursor: pointer;
-    }
+function json(
+  data:unknown,
+  status=200
+){
 
-    .btn-cancel {
-      background: #d62828;
-      color: #fff;
-    }
-
-    .btn-reset {
-      background: #0d5bd7;
-      color: #fff;
-    }
-
-    .btn-cancel-all {
-      background: #8f1f1f;
-      color: #fff;
-    }
-
-    .btn-reset-all {
-      background: #138a54;
-      color: #fff;
-    }
-
-    .global-actions {
-      margin-top: 20px;
-      padding-top: 18px;
-      border-top: 1px solid #dfe6f1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .log {
-      margin-top: 16px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 14px;
-      color: #53627c;
-    }
-
-    @media (max-width: 750px) {
-      .mission-grid {
-        grid-template-columns: 1fr;
+  return new Response(
+    JSON.stringify(data),
+    {
+      status,
+      headers:{
+        ...corsHeaders,
+        "Content-Type":
+          "application/json; charset=utf-8"
       }
     }
-  </style>
-</head>
+  );
+}
 
-<body>
 
-<div class="container">
+function text(
+  value:unknown
+){
 
-  <div class="admin-card">
-    <h1 class="title">🛠 Admin Mission Control</h1>
-    <div class="subtitle">
-      จัดการ Mission ของผู้เล่นรายวัน
-    </div>
+  return String(
+    value ??
+    ""
+  ).trim();
+}
 
-    <div class="player-info">
-      <div><strong>Player ID:</strong> <span id="playerIdText">USER001</span></div>
-      <div><strong>วันที่:</strong> <span id="dateText"></span></div>
-    </div>
 
-    <div id="missionList" class="mission-grid"></div>
+function n(
+  value:unknown
+){
 
-    <div class="global-actions">
-      <button class="btn-cancel-all" onclick="cancelAllMissions()">
-        ❌ ยกเลิกทุก Mission วันนี้
-      </button>
-
-      <button class="btn-reset-all" onclick="resetAllMissions()">
-        🔄 คืนสถานะทุก Mission ให้ทำใหม่
-      </button>
-    </div>
-
-    <div class="log" id="adminLog">
-      ยังไม่มีการดำเนินการ
-    </div>
-  </div>
-
-</div>
-
-<script>
-  const PLAYER_ID = "USER001";
-
-  const MISSION_LIST = [
-    { id: "moveMore", name: "🚶 MOVE MORE" },
-    { id: "sleepWell", name: "😴 SLEEP WELL" },
-    { id: "eatSmart", name: "🥗 EAT SMART" },
-    { id: "hydrate", name: "💧 HYDRATE" }
-  ];
-
-  function getTodayKey() {
-    const now = new Date();
-
-    return [
-      now.getFullYear(),
-      String(now.getMonth() + 1).padStart(2, "0"),
-      String(now.getDate()).padStart(2, "0")
-    ].join("-");
+  if(
+    value === undefined ||
+    value === null ||
+    value === ""
+  ){
+    return null;
   }
 
-  function getStorageKey() {
-    return `mission_${PLAYER_ID}_${getTodayKey()}`;
+  const x =
+    Number(value);
+
+  return Number.isFinite(x)
+    ? x
+    : null;
+}
+
+
+function round1(
+  value:number
+){
+
+  return Math.round(
+    value * 10
+  ) / 10;
+}
+
+
+/* =========================================================
+   LINE / ADMIN
+========================================================= */
+
+async function verifyLineIdToken(
+  idToken:string
+){
+
+  if(!LINE_LOGIN_CHANNEL_ID){
+    throw new Error(
+      "LINE_LOGIN_CHANNEL_ID is not defined"
+    );
   }
 
-  function createDefaultData() {
-    const missions = {};
+  if(!idToken){
+    throw new Error(
+      "ไม่พบ LINE ID Token"
+    );
+  }
 
-    MISSION_LIST.forEach(item => {
-      missions[item.id] = {
-        status: "pending",
-        completed: false,
-        approved: false,
-        rewardClaimed: false,
-        cancelledByAdmin: false,
-        cancelledAt: null
-      };
-    });
+  const form =
+    new URLSearchParams();
 
+  form.set(
+    "id_token",
+    idToken
+  );
+
+  form.set(
+    "client_id",
+    LINE_LOGIN_CHANNEL_ID
+  );
+
+  const response =
+    await fetch(
+      "https://api.line.me/oauth2/v2.1/verify",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":
+            "application/x-www-form-urlencoded"
+        },
+        body:form
+      }
+    );
+
+  const raw =
+    await response.text();
+
+  let data:any = {};
+
+  try{
+    data =
+      raw
+        ? JSON.parse(raw)
+        : {};
+  }catch{
+    throw new Error(
+      "LINE verify response is not JSON"
+    );
+  }
+
+  if(!response.ok){
+    throw new Error(
+      "LINE authentication failed: " +
+      (
+        data?.error_description ||
+        data?.error ||
+        `HTTP ${response.status}`
+      )
+    );
+  }
+
+  if(!data?.sub){
+    throw new Error(
+      "LINE User ID not found"
+    );
+  }
+
+  return {
+    lineUserId:
+      String(data.sub),
+    displayName:
+      data?.name
+        ? String(data.name)
+        : ""
+  };
+}
+
+
+async function requireAdmin(
+  idToken:string
+){
+
+  const line =
+    await verifyLineIdToken(
+      idToken
+    );
+
+  const {
+    data:admin,
+    error
+  } =
+    await db()
+      .from(
+        "admin_users"
+      )
+      .select(
+        "id,line_user_id,display_name,role,is_active"
+      )
+      .eq(
+        "line_user_id",
+        line.lineUserId
+      )
+      .eq(
+        "is_active",
+        true
+      )
+      .maybeSingle();
+
+  if(error){
+    throw new Error(
+      "อ่านสิทธิ์ Admin ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  if(!admin){
+    throw new Error(
+      "ADMIN_FORBIDDEN"
+    );
+  }
+
+  return {
+    ...line,
+    admin
+  };
+}
+
+
+/* =========================================================
+   MISSION ADMIN
+========================================================= */
+
+async function missionQueue(
+  statusFilter = "pending"
+){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from(
+        "mission_submissions"
+      )
+      .select(
+        `
+          id,
+          player_id,
+          line_user_id,
+          mission_id,
+          category,
+          period_key,
+          attempt_no,
+          evidence_url,
+          evidence_link,
+          note,
+          metric_steps,
+          metric_calories,
+          metric_sleep_minutes,
+          exercise_type,
+          exercise_minutes,
+          status,
+          reward_coin,
+          reward_energy,
+          reward_exp,
+          submitted_at,
+          players:player_id (
+            id,
+            line_user_id,
+            line_display_name,
+            picture_url,
+            team_name
+          )
+        `
+      )
+      .in(
+        "status",
+        statusFilter === "all"
+          ? ["pending","approved","rejected"]
+          : [statusFilter]
+      )
+      .order(
+        "submitted_at",
+        {
+          ascending:true
+        }
+      );
+
+  if(error){
+    throw new Error(
+      "โหลดคิว Mission ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  const rows =
+    Array.isArray(data)
+      ? data
+      : [];
+
+  const submissions =
+    await Promise.all(
+      rows.map(
+        async (row:any) => {
+
+          const evidencePath =
+            text(
+              row?.evidence_url
+            );
+
+          let evidenceSignedUrl =
+            "";
+
+          if(evidencePath){
+
+            const {
+              data:signed,
+              error:signedError
+            } =
+              await db()
+                .storage
+                .from(
+                  "mission-evidence"
+                )
+                .createSignedUrl(
+                  evidencePath,
+                  60 * 30
+                );
+
+            if(!signedError){
+              evidenceSignedUrl =
+                text(
+                  signed?.signedUrl
+                );
+            }
+          }
+
+          return {
+            ...row,
+            evidence_signed_url:
+              evidenceSignedUrl
+          };
+        }
+      )
+    );
+
+  return {
+    success:true,
+    submissions
+  };
+}
+
+
+async function approveMission(
+  submissionId:string,
+  adminLineUserId:string
+){
+
+  if(!submissionId){
+    throw new Error(
+      "SUBMISSION_ID_REQUIRED"
+    );
+  }
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .rpc(
+        "approve_mission_submission",
+        {
+          p_submission_id:
+            submissionId,
+          p_admin_line_user_id:
+            adminLineUserId
+        }
+      );
+
+  if(error){
+    throw new Error(
+      error.message
+    );
+  }
+
+  return data;
+}
+
+
+async function rejectMission(
+  submissionId:string,
+  reason:string,
+  adminLineUserId:string
+){
+
+  if(!submissionId){
+    throw new Error(
+      "SUBMISSION_ID_REQUIRED"
+    );
+  }
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .rpc(
+        "reject_mission_submission",
+        {
+          p_submission_id:
+            submissionId,
+          p_admin_line_user_id:
+            adminLineUserId,
+          p_reason:
+            reason ||
+            null
+        }
+      );
+
+  if(error){
+    throw new Error(
+      error.message
+    );
+  }
+
+  return data;
+}
+
+
+
+/* =========================================================
+   ADMIN MISSION RESET / CANCEL V3.5
+========================================================= */
+
+async function adminMissionStateChange(
+  submissionId:string,
+  reason:string,
+  mode:"retry" | "cancel",
+  adminLineUserId:string
+){
+
+  if(!submissionId){
+    throw new Error(
+      "SUBMISSION_ID_REQUIRED"
+    );
+  }
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .rpc(
+        "admin_reset_mission_submission",
+        {
+          p_submission_id:
+            submissionId,
+
+          p_admin_line_user_id:
+            adminLineUserId,
+
+          p_mode:
+            mode,
+
+          p_reason:
+            reason ||
+            (
+              mode === "retry"
+                ? "Admin คืนสถานะให้ทำใหม่ย้อนหลัง"
+                : "Admin ยกเลิกภารกิจ"
+            )
+        }
+      );
+
+  if(error){
+    throw new Error(
+      "อัปเดตสถานะ Mission ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  return (
+    data ?? {
+      success:true
+    }
+  );
+}
+
+
+/* =========================================================
+   PLAYER NUTRITION / HEALTH ADMIN V3.5
+========================================================= */
+
+async function playerHealthAdminList(){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from(
+        "players"
+      )
+      .select(
+        `
+          id,
+          line_user_id,
+          line_display_name,
+          picture_url,
+          team_name,
+          status,
+          daily_calorie_target,
+          chronic_disease
+        `
+      )
+      .order(
+        "line_display_name",
+        {
+          ascending:true
+        }
+      );
+
+  if(error){
+    throw new Error(
+      "โหลด Nutrition / Health ของ Player ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  return {
+    success:true,
+    players:
+      data ??
+      []
+  };
+}
+
+
+async function savePlayerHealthAdmin(
+  body:any,
+  adminLineUserId:string
+){
+
+  const playerId =
+    text(
+      body?.playerId
+    );
+
+  if(!playerId){
+    throw new Error(
+      "PLAYER_ID_REQUIRED"
+    );
+  }
+
+  const dailyCalorieTarget =
+    Math.max(
+      0,
+      Number(
+        body?.dailyCalorieTarget ||
+        0
+      )
+    );
+
+  const chronicDisease =
+    text(
+      body?.chronicDisease
+    );
+
+  const {
+    error
+  } =
+    await db()
+      .from(
+        "players"
+      )
+      .update({
+        daily_calorie_target:
+          dailyCalorieTarget,
+
+        chronic_disease:
+          chronicDisease,
+
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq(
+        "id",
+        playerId
+      );
+
+  if(error){
+    throw new Error(
+      "บันทึก Nutrition / Health ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  return {
+    success:true,
+    playerId,
+    dailyCalorieTarget,
+    chronicDisease,
+    updatedBy:
+      adminLineUserId
+  };
+}
+
+
+
+async function playersList(){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from("players")
+      .select(
+        `
+          id,
+          line_user_id,
+          line_display_name,
+          picture_url,
+          team_name,
+          status,
+          player_wallets (
+            rock_coin,
+            energy,
+            max_energy,
+            exp,
+            updated_at
+          )
+        `
+      )
+      .order(
+        "line_display_name",
+        {
+          ascending:true
+        }
+      );
+
+  if(error){
+    throw new Error(
+      "โหลด Players ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  return {
+    success:true,
+    players:
+      data ??
+      []
+  };
+}
+
+
+
+/* =========================================================
+   ADMIN CONTROL CENTER V3.1
+========================================================= */
+
+async function dashboardSummary(){
+
+  const today =
+    new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone:"Asia/Bangkok",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+      }
+    ).format(new Date());
+
+
+  const [
+    pendingMission,
+    approvedMission,
+    rewardPending,
+    activePlayers
+  ] =
+    await Promise.all([
+
+      db()
+        .from("mission_submissions")
+        .select("id",{count:"exact",head:true})
+        .eq("status","pending"),
+
+      db()
+        .from("mission_submissions")
+        .select("id",{count:"exact",head:true})
+        .eq("status","approved")
+        .gte("approved_at",`${today}T00:00:00+07:00`),
+
+      db()
+        .from("admin_reward_fulfillments")
+        .select("id",{count:"exact",head:true})
+        .eq("status","pending"),
+
+      db()
+        .from("players")
+        .select("id",{count:"exact",head:true})
+        .eq("status","active")
+    ]);
+
+
+  return {
+    success:true,
+    summary:{
+      missionPending:
+        pendingMission.count ?? 0,
+
+      approvedToday:
+        approvedMission.count ?? 0,
+
+      rewardPending:
+        rewardPending.count ?? 0,
+
+      activePlayers:
+        activePlayers.count ?? 0
+    }
+  };
+}
+
+
+async function rewardQueue(
+  statusFilter = "pending"
+){
+
+  let query =
+    db()
+      .from("admin_reward_fulfillments")
+      .select(`
+        id,
+        submission_id,
+        player_id,
+        mission_id,
+        reward_name,
+        status,
+        note,
+        sent_at,
+        created_at,
+        players (
+          line_display_name,
+          team_name
+        )
+      `)
+      .order("created_at",{ascending:false});
+
+
+  if(
+    statusFilter !==
+    "all"
+  ){
+    query =
+      query.eq(
+        "status",
+        statusFilter
+      );
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await query;
+
+
+  if(error){
+    throw new Error(
+      "โหลด Reward Queue ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true,
+    items:
+      (data ?? [])
+        .map(
+          (row:any)=>({
+            ...row,
+            player_name:
+              row?.players?.line_display_name ?? null
+          })
+        )
+  };
+}
+
+
+async function updateRewardStatus(
+  rewardId:string,
+  status:string,
+  adminLineUserId:string
+){
+
+  const allowed =
+    new Set([
+      "pending",
+      "sent",
+      "cancelled"
+    ]);
+
+
+  if(
+    !allowed.has(
+      status
+    )
+  ){
+    throw new Error(
+      "INVALID_REWARD_STATUS"
+    );
+  }
+
+
+  const {
+    error
+  } =
+    await db()
+      .from("admin_reward_fulfillments")
+      .update({
+        status,
+        sent_at:
+          status === "sent"
+            ? new Date().toISOString()
+            : null,
+        updated_by_line_user_id:
+          adminLineUserId,
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq("id",rewardId);
+
+
+  if(error){
+    throw new Error(
+      "อัปเดต Reward ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true
+  };
+}
+
+
+async function updatePlayer(
+  body:any
+){
+
+  const playerId =
+    text(
+      body?.playerId
+    );
+
+
+  const patch:any = {};
+
+
+  if(
+    body?.lineDisplayName !==
+    undefined
+  ){
+    patch.line_display_name =
+      text(
+        body.lineDisplayName
+      );
+  }
+
+
+  if(
+    body?.teamName !==
+    undefined
+  ){
+    patch.team_name =
+      text(
+        body.teamName
+      );
+  }
+
+
+  if(
+    body?.status !==
+    undefined
+  ){
+
+    const allowed =
+      new Set([
+        "active",
+        "inactive",
+        "cancelled"
+      ]);
+
+
+    const status =
+      text(
+        body.status
+      );
+
+
+    if(
+      !allowed.has(
+        status
+      )
+    ){
+      throw new Error(
+        "INVALID_PLAYER_STATUS"
+      );
+    }
+
+
+    patch.status =
+      status;
+  }
+
+
+  const {
+    error
+  } =
+    await db()
+      .from("players")
+      .update(
+        patch
+      )
+      .eq(
+        "id",
+        playerId
+      );
+
+
+  if(error){
+    throw new Error(
+      "แก้ไข Player ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true
+  };
+}
+
+
+async function playerAdviceList(){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from("players")
+      .select(`
+        id,
+        line_display_name,
+        team_name,
+        status,
+        player_admin_advice (
+          advice_note,
+          updated_at
+        )
+      `)
+      .order(
+        "line_display_name",
+        {
+          ascending:true
+        }
+      );
+
+
+  if(error){
+    throw new Error(
+      "โหลดคำแนะนำผู้เล่นไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true,
+
+    items:
+      (data ?? [])
+        .map(
+          (row:any)=>{
+
+            const advice =
+              Array.isArray(
+                row.player_admin_advice
+              )
+                ? row.player_admin_advice[0]
+                : row.player_admin_advice;
+
+
+            return {
+              player_id:
+                row.id,
+
+              line_display_name:
+                row.line_display_name,
+
+              team_name:
+                row.team_name,
+
+              status:
+                row.status,
+
+              advice_note:
+                advice?.advice_note ?? "",
+
+              updated_at:
+                advice?.updated_at ?? null
+            };
+          }
+        )
+  };
+}
+
+
+async function savePlayerAdvice(
+  playerId:string,
+  adviceNote:string,
+  adminLineUserId:string
+){
+
+  const {
+    error
+  } =
+    await db()
+      .from("player_admin_advice")
+      .upsert(
+        {
+          player_id:
+            playerId,
+
+          advice_note:
+            adviceNote,
+
+          updated_by_line_user_id:
+            adminLineUserId,
+
+          updated_at:
+            new Date().toISOString()
+        },
+        {
+          onConflict:
+            "player_id"
+        }
+      );
+
+
+  if(error){
+    throw new Error(
+      "บันทึกคำแนะนำไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true
+  };
+}
+
+
+async function customMissionList(){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from("custom_missions")
+      .select("*")
+      .order("category",{ascending:true})
+      .order("sort_order",{ascending:true})
+      .order("name",{ascending:true});
+
+
+  if(error){
+    throw new Error(
+      "โหลด Custom Mission ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true,
+    items:
+      data ?? []
+  };
+}
+
+
+async function saveCustomMission(
+  body:any,
+  adminLineUserId:string
+){
+
+  const mission =
+    body?.mission ??
+    {};
+
+
+  const id =
+    text(
+      mission?.id
+    );
+
+
+  const name =
+    text(
+      mission?.name
+    );
+
+
+  const category =
+    text(
+      mission?.category
+    );
+
+
+  if(
+    !id ||
+    !name
+  ){
+    throw new Error(
+      "MISSION_ID_AND_NAME_REQUIRED"
+    );
+  }
+
+
+  if(
+    ![
+      "daily",
+      "weekly",
+      "monthly",
+      "bonus"
+    ].includes(
+      category
+    )
+  ){
+    throw new Error(
+      "INVALID_MISSION_CATEGORY"
+    );
+  }
+
+
+  const {
+    error
+  } =
+    await db()
+      .from("custom_missions")
+      .upsert(
+        {
+          id,
+          category,
+          name,
+          icon:
+            text(
+              mission?.icon
+            ),
+          description:
+            text(
+              mission?.description
+            ),
+          target_json:
+            mission?.targetJson ??
+            {},
+          reward_coin:
+            Number(
+              mission?.rewardCoin ??
+              0
+            ),
+          reward_energy:
+            Number(
+              mission?.rewardEnergy ??
+              0
+            ),
+          reward_exp:
+            Number(
+              mission?.rewardExp ??
+              0
+            ),
+          active:
+            Boolean(
+              mission?.active
+            ),
+          updated_by_line_user_id:
+            adminLineUserId,
+          updated_at:
+            new Date().toISOString()
+        },
+        {
+          onConflict:"id"
+        }
+      );
+
+
+  if(error){
+    throw new Error(
+      "บันทึก Custom Mission ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true
+  };
+}
+
+
+async function deleteCustomMission(
+  missionId:string
+){
+
+  const {
+    error
+  } =
+    await db()
+      .from("custom_missions")
+      .delete()
+      .eq(
+        "id",
+        missionId
+      );
+
+
+  if(error){
+    throw new Error(
+      "ลบ Custom Mission ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true
+  };
+}
+
+
+async function systemSettings(){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from("app_settings")
+      .select("key,value");
+
+
+  if(error){
+    throw new Error(
+      "โหลด Settings ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  const map:any = {};
+
+
+  for(
+    const row
+    of data ?? []
+  ){
+
+    map[
+      row.key
+    ] =
+      row.value;
+  }
+
+
+  return {
+    success:true,
+
+    settings:{
+      projectName:
+        map.projectName ??
+        "ROCK YOUR BODY 2026",
+
+      maxEnergy:
+        Number(
+          map.maxEnergy ??
+          200
+        ),
+
+      stepsGoal:
+        Number(
+          map.stepsGoal ??
+          8000
+        ),
+
+      caloriesGoal:
+        Number(
+          map.caloriesGoal ??
+          300
+        ),
+
+      sleepGoal:
+        Number(
+          map.sleepGoal ??
+          420
+        ),
+
+      maintenanceMessage:
+        String(
+          map.maintenanceMessage ??
+          ""
+        )
+    }
+  };
+}
+
+
+async function saveSystemSettings(
+  settings:any,
+  adminLineUserId:string
+){
+
+  const rows =
+    Object
+      .entries(
+        settings ?? {}
+      )
+      .map(
+        ([key,value])=>({
+          key,
+          value,
+          updated_by_line_user_id:
+            adminLineUserId,
+          updated_at:
+            new Date().toISOString()
+        })
+      );
+
+
+  if(
+    rows.length ===
+    0
+  ){
     return {
-      playerId: PLAYER_ID,
-      date: getTodayKey(),
-      missions: missions,
-      updatedAt: new Date().toISOString()
+      success:true
     };
   }
 
-  function loadMissionData() {
-    const key = getStorageKey();
-    const saved = localStorage.getItem(key);
 
-    if (!saved) {
-      const data = createDefaultData();
-      saveMissionData(data);
-      return data;
+  const {
+    error
+  } =
+    await db()
+      .from("app_settings")
+      .upsert(
+        rows,
+        {
+          onConflict:"key"
+        }
+      );
+
+
+  if(error){
+    throw new Error(
+      "บันทึก Settings ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true
+  };
+}
+
+
+
+/* =========================================================
+   BATTLE STAGE REWARD MANAGEMENT V3.2
+========================================================= */
+
+async function battleRewardList(
+  stageNo?:number | null
+){
+
+  let query =
+    db()
+      .from(
+        "battle_stage_rewards"
+      )
+      .select(
+        "*"
+      )
+      .order(
+        "stage_no",
+        {
+          ascending:true
+        }
+      )
+      .order(
+        "created_at",
+        {
+          ascending:true
+        }
+      );
+
+
+  if(
+    Number.isFinite(
+      Number(
+        stageNo
+      )
+    )
+  ){
+
+    query =
+      query.eq(
+        "stage_no",
+        Number(
+          stageNo
+        )
+      );
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await query;
+
+
+  if(error){
+
+    throw new Error(
+      "โหลด Battle Stage Rewards ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+
+  return {
+    success:true,
+    items:
+      Array.isArray(data)
+        ? data.map(
+            (item:any) => ({
+              ...item,
+              active:
+                item?.is_active !== false
+            })
+          )
+        : []
+  };
+}
+
+
+async function saveBattleReward(
+  reward:any,
+  adminLineUserId:string
+){
+
+  const stageNo =
+    Number(
+      reward?.stageNo ??
+      0
+    );
+
+
+  if(
+    !Number.isInteger(
+      stageNo
+    ) ||
+    stageNo < 1 ||
+    stageNo > 10
+  ){
+
+    throw new Error(
+      "INVALID_STAGE"
+    );
+  }
+
+
+  const rewardName =
+    text(
+      reward?.rewardName
+    );
+
+
+  if(!rewardName){
+
+    throw new Error(
+      "REWARD_NAME_REQUIRED"
+    );
+  }
+
+
+  const payload:any = {
+    /*
+      compatibility กับ schema เดิมที่มี stage_id NOT NULL
+      เช่น stage-001, stage-002, ... stage-010
+    */
+    stage_id:
+      `stage-${String(stageNo).padStart(3,"0")}`,
+
+    stage_no:
+      stageNo,
+
+    reward_type:
+      text(
+        reward?.rewardType
+      ) ||
+      "physical",
+
+    reward_name:
+      rewardName,
+
+    reward_amount:
+      Number(
+        reward?.rewardAmount ??
+        0
+      ),
+
+    description:
+      text(
+        reward?.description
+      ),
+
+    admin_note:
+      text(
+        reward?.adminNote
+      ),
+
+    is_active:
+      reward?.active !==
+      false,
+
+    updated_by_line_user_id:
+      adminLineUserId,
+
+    updated_at:
+      new Date()
+        .toISOString()
+  };
+
+
+  const id =
+    text(
+      reward?.id
+    );
+
+
+  if(id){
+
+    const {
+      error
+    } =
+      await db()
+        .from(
+          "battle_stage_rewards"
+        )
+        .update(
+          payload
+        )
+        .eq(
+          "id",
+          id
+        );
+
+
+    if(error){
+
+      throw new Error(
+        "แก้ไข Battle Reward ไม่สำเร็จ: " +
+        error.message
+      );
     }
 
-    try {
-      return JSON.parse(saved);
-    } catch (error) {
-      console.error("Mission data error:", error);
+  }else{
 
-      const data = createDefaultData();
-      saveMissionData(data);
-      return data;
+    payload.created_by_line_user_id =
+      adminLineUserId;
+
+
+    const {
+      error
+    } =
+      await db()
+        .from(
+          "battle_stage_rewards"
+        )
+        .insert(
+          payload
+        );
+
+
+    if(error){
+
+      throw new Error(
+        "เพิ่ม Battle Reward ไม่สำเร็จ: " +
+        error.message
+      );
     }
   }
 
-  function saveMissionData(data) {
-    data.updatedAt = new Date().toISOString();
 
-    localStorage.setItem(
-      getStorageKey(),
-      JSON.stringify(data)
+  return {
+    success:true
+  };
+}
+
+
+async function setBattleRewardActive(
+  rewardId:string,
+  active:boolean,
+  adminLineUserId:string
+){
+
+  const {
+    error
+  } =
+    await db()
+      .from(
+        "battle_stage_rewards"
+      )
+      .update({
+        is_active:
+          Boolean(
+            active
+          ),
+
+        updated_by_line_user_id:
+          adminLineUserId,
+
+        updated_at:
+          new Date()
+            .toISOString()
+      })
+      .eq(
+        "id",
+        rewardId
+      );
+
+
+  if(error){
+
+    throw new Error(
+      "อัปเดต Battle Reward ไม่สำเร็จ: " +
+      error.message
     );
   }
 
-  function getStatusText(status) {
-    if (status === "approved") return "อนุมัติแล้ว";
-    if (status === "cancelled") return "ถูกยกเลิก";
-    return "รอทำภารกิจ";
+
+  return {
+    success:true
+  };
+}
+
+
+async function deleteBattleReward(
+  rewardId:string,
+  adminLineUserId:string
+){
+
+  /*
+    Soft delete:
+    เก็บประวัติไว้ ไม่ลบจริง
+  */
+  const {
+    error
+  } =
+    await db()
+      .from(
+        "battle_stage_rewards"
+      )
+      .update({
+        is_active:false,
+
+        cancelled_at:
+          new Date()
+            .toISOString(),
+
+        updated_by_line_user_id:
+          adminLineUserId,
+
+        updated_at:
+          new Date()
+            .toISOString()
+      })
+      .eq(
+        "id",
+        rewardId
+      );
+
+
+  if(error){
+
+    throw new Error(
+      "ยกเลิก Battle Reward ไม่สำเร็จ: " +
+      error.message
+    );
   }
 
-  function getStatusClass(status) {
-    if (status === "approved") return "approved";
-    if (status === "cancelled") return "cancelled";
-    return "pending";
+
+  return {
+    success:true
+  };
+}
+
+
+/* =========================================================
+   INBODY REVIEW V2.8
+========================================================= */
+
+async function signedInBodyImage(
+  path:string | null
+){
+
+  if(!path){
+    return null;
   }
 
-  function renderMissions() {
-    const data = loadMissionData();
-    const container = document.getElementById("missionList");
+  const {
+    data,
+    error
+  } =
+    await db()
+      .storage
+      .from(
+        "inbody-results"
+      )
+      .createSignedUrl(
+        path,
+        15 * 60
+      );
 
-    document.getElementById("dateText").textContent = getTodayKey();
+  if(error){
+    console.warn(
+      "INBODY SIGNED URL ERROR:",
+      error
+    );
 
-    container.innerHTML = "";
-
-    MISSION_LIST.forEach(item => {
-      const mission = data.missions[item.id];
-
-      const card = document.createElement("div");
-      card.className = "mission";
-
-      card.innerHTML = `
-        <div class="mission-top">
-          <div class="mission-name">${item.name}</div>
-
-          <div class="status ${getStatusClass(mission.status)}">
-            ${getStatusText(mission.status)}
-          </div>
-        </div>
-
-        <div class="btn-row">
-          <button
-            class="btn-cancel"
-            onclick="cancelSingleMission('${item.id}')"
-          >
-            ❌ ยกเลิก Mission นี้
-          </button>
-
-          <button
-            class="btn-reset"
-            onclick="resetSingleMission('${item.id}')"
-          >
-            🔄 คืนสถานะให้ทำใหม่
-          </button>
-        </div>
-      `;
-
-      container.appendChild(card);
-    });
+    return null;
   }
 
-  /* -------------------------
-     1. ยกเลิกเฉพาะ 1 Mission
-  ------------------------- */
-  function cancelSingleMission(missionId) {
-    const ok = confirm(
-      "ต้องการยกเลิก Mission นี้ของผู้เล่นใช่หรือไม่?"
+  return data
+    ?.signedUrl ||
+    null;
+}
+
+
+async function inbodyQueue(){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from(
+        "inbody_results"
+      )
+      .select(
+        `
+          id,
+          player_id,
+          measured_at,
+          weight_kg,
+          skeletal_muscle_mass_kg,
+          body_fat_mass_kg,
+          body_fat_percent,
+          bmi,
+          bmr_kcal,
+          visceral_fat_area_cm2,
+          inbody_score,
+          note,
+          image_1_path,
+          image_2_path,
+          advice_status,
+          advice_note,
+          reviewed_at,
+          players:player_id (
+            id,
+            line_display_name,
+            picture_url,
+            team_name
+          )
+        `
+      )
+      .in(
+        "advice_status",
+        [
+          "pending_review",
+          "reviewed"
+        ]
+      )
+      .order(
+        "measured_at",
+        {
+          ascending:false
+        }
+      )
+      .limit(100);
+
+  if(error){
+    throw new Error(
+      "โหลดคิว InBody ไม่สำเร็จ: " +
+      error.message
     );
-
-    if (!ok) return;
-
-    const data = loadMissionData();
-    const mission = data.missions[missionId];
-
-    mission.status = "cancelled";
-    mission.completed = false;
-    mission.approved = false;
-    mission.rewardClaimed = false;
-
-    mission.cancelledByAdmin = true;
-    mission.cancelledAt = new Date().toISOString();
-
-    saveMissionData(data);
-
-    writeLog(
-      `ยกเลิก Mission "${missionId}" ของ ${PLAYER_ID}`
-    );
-
-    renderMissions();
   }
 
-  /* -------------------------
-     2. ยกเลิกทุก Mission วันนี้
-  ------------------------- */
-  function cancelAllMissions() {
-    const ok = confirm(
-      "ต้องการยกเลิกทุก Mission ของผู้เล่นในวันนี้ใช่หรือไม่?"
+  const rows =
+    await Promise.all(
+      (
+        data ||
+        []
+      )
+        .map(
+          async (
+            row:any
+          ) => ({
+            ...row,
+            image1Url:
+              await signedInBodyImage(
+                row.image_1_path
+              ),
+            image2Url:
+              await signedInBodyImage(
+                row.image_2_path
+              )
+          })
+        )
     );
 
-    if (!ok) return;
+  return {
+    success:true,
+    items:rows
+  };
+}
 
-    const data = loadMissionData();
 
-    Object.keys(data.missions).forEach(missionId => {
-      const mission = data.missions[missionId];
+function validateReviewValues(
+  values:any
+){
 
-      mission.status = "cancelled";
-      mission.completed = false;
-      mission.approved = false;
-      mission.rewardClaimed = false;
+  const checks = [
+    [
+      "weightKg",
+      n(values?.weightKg),
+      20,
+      400
+    ],
+    [
+      "skeletalMuscleMassKg",
+      n(
+        values
+          ?.skeletalMuscleMassKg
+      ),
+      1,
+      150
+    ],
+    [
+      "bodyFatMassKg",
+      n(
+        values
+          ?.bodyFatMassKg
+      ),
+      0,
+      250
+    ],
+    [
+      "bodyFatPercent",
+      n(
+        values
+          ?.bodyFatPercent
+      ),
+      1,
+      75
+    ],
+    [
+      "bmi",
+      n(values?.bmi),
+      8,
+      80
+    ],
+    [
+      "bmrKcal",
+      n(values?.bmrKcal),
+      500,
+      5000
+    ],
+    [
+      "visceralFatAreaCm2",
+      n(
+        values
+          ?.visceralFatAreaCm2
+      ),
+      0,
+      1000
+    ],
+    [
+      "inbodyScore",
+      n(
+        values
+          ?.inbodyScore
+      ),
+      0,
+      200
+    ]
+  ];
 
-      mission.cancelledByAdmin = true;
-      mission.cancelledAt = new Date().toISOString();
-    });
+  for(
+    const [
+      key,
+      value,
+      min,
+      max
+    ] of checks
+  ){
 
-    data.allCancelledByAdmin = true;
-    data.allCancelledAt = new Date().toISOString();
+    if(
+      value !== null &&
+      (
+        Number(value) <
+          Number(min) ||
+        Number(value) >
+          Number(max)
+      )
+    ){
+      throw new Error(
+        `${key} อยู่นอกช่วงที่ระบบรองรับ`
+      );
+    }
+  }
+}
 
-    saveMissionData(data);
 
-    writeLog(
-      `ยกเลิกทุก Mission วันนี้ของ ${PLAYER_ID}`
+async function currentHealthGoal(
+  playerId:string
+){
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from(
+        "player_health_goals"
+      )
+      .select("*")
+      .eq(
+        "player_id",
+        playerId
+      )
+      .eq(
+        "is_active",
+        true
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      )
+      .limit(1)
+      .maybeSingle();
+
+  if(error){
+    console.warn(
+      "CURRENT HEALTH GOAL ERROR:",
+      error
     );
-
-    renderMissions();
+    return null;
   }
 
-  /* -------------------------
-     3. คืนสถานะเฉพาะ 1 Mission
-        ให้ผู้เล่นทำใหม่
-  ------------------------- */
-  function resetSingleMission(missionId) {
-    const ok = confirm(
-      "ต้องการคืน Mission นี้ให้ผู้เล่นทำใหม่ใช่หรือไม่?"
+  return data ||
+    null;
+}
+
+
+function buildReviewedGoals(
+  weightKg:number | null,
+  bmrKcal:number | null,
+  previous:any
+){
+
+  const targetWaterMl =
+    weightKg !== null
+      ? Math.round(
+          Math.max(
+            1500,
+            Math.min(
+              4000,
+              weightKg * 30
+            )
+          )
+        )
+      : Number(
+          previous
+            ?.target_water_ml ||
+          2000
+        );
+
+  const targetProteinG =
+    weightKg !== null
+      ? round1(
+          weightKg * 1.2
+        )
+      : n(
+          previous
+            ?.target_protein_g
+        );
+
+  const targetCalories =
+    bmrKcal !== null
+      ? Math.round(
+          bmrKcal * 1.35
+        )
+      : n(
+          previous
+            ?.target_calories
+        );
+
+  const targetFatG =
+    targetCalories !== null
+      ? Math.round(
+          (
+            targetCalories *
+            0.25
+          ) /
+          9
+        )
+      : n(
+          previous
+            ?.target_fat_g
+        );
+
+  const targetCarbsG =
+    (
+      targetCalories !== null &&
+      targetProteinG !== null &&
+      targetFatG !== null
+    )
+      ? Math.max(
+          0,
+          Math.round(
+            (
+              targetCalories -
+              (
+                targetProteinG *
+                4
+              ) -
+              (
+                targetFatG *
+                9
+              )
+            ) /
+            4
+          )
+        )
+      : n(
+          previous
+            ?.target_carbs_g
+        );
+
+  return {
+    target_weight_kg:
+      n(
+        previous
+          ?.target_weight_kg
+      ),
+
+    target_body_fat_percent:
+      n(
+        previous
+          ?.target_body_fat_percent
+      ),
+
+    target_calories:
+      targetCalories,
+
+    target_protein_g:
+      targetProteinG,
+
+    target_fat_g:
+      targetFatG,
+
+    target_carbs_g:
+      targetCarbsG,
+
+    target_steps:
+      Number(
+        previous
+          ?.target_steps ||
+        8000
+      ),
+
+    target_sleep_minutes:
+      Number(
+        previous
+          ?.target_sleep_minutes ||
+        420
+      ),
+
+    target_water_ml:
+      targetWaterMl,
+
+    target_exercise_minutes_week:
+      Number(
+        previous
+          ?.target_exercise_minutes_week ||
+        150
+      ),
+
+    source_type:
+      "inbody-admin-review-v2.8",
+
+    rationale:{
+      version:
+        "admin-review-v2.8",
+      calorieMethod:
+        bmrKcal !== null
+          ? "Reviewed InBody BMR × 1.35"
+          : "preserved previous",
+      proteinMethod:
+        weightKg !== null
+          ? "Reviewed weight × 1.2 g/kg"
+          : "preserved previous",
+      waterMethod:
+        weightKg !== null
+          ? "Reviewed weight × 30 ml/kg, capped 1500–4000 ml"
+          : "preserved previous/default",
+      disclaimer:
+        "Wellness Estimate เท่านั้น ไม่ใช่การวินิจฉัยหรือแผนรักษาทางการแพทย์"
+    }
+  };
+}
+
+
+async function saveReviewedGoal(
+  playerId:string,
+  inbodyId:string,
+  weightKg:number | null,
+  bmrKcal:number | null
+){
+
+  if(
+    weightKg === null &&
+    bmrKcal === null
+  ){
+    return await currentHealthGoal(
+      playerId
     );
-
-    if (!ok) return;
-
-    const data = loadMissionData();
-    const mission = data.missions[missionId];
-
-    mission.status = "pending";
-    mission.completed = false;
-    mission.approved = false;
-    mission.rewardClaimed = false;
-
-    mission.cancelledByAdmin = false;
-    mission.cancelledAt = null;
-
-    mission.resetByAdmin = true;
-    mission.resetAt = new Date().toISOString();
-
-    saveMissionData(data);
-
-    writeLog(
-      `คืน Mission "${missionId}" ให้ ${PLAYER_ID} ทำใหม่`
-    );
-
-    renderMissions();
   }
 
-  /* -------------------------
-     คืนทุก Mission ให้ทำใหม่
-  ------------------------- */
-  function resetAllMissions() {
-    const ok = confirm(
-      "ต้องการคืนทุก Mission ให้ผู้เล่นเริ่มทำใหม่ใช่หรือไม่?"
+  const supabase =
+    db();
+
+  const previous =
+    await currentHealthGoal(
+      playerId
     );
 
-    if (!ok) return;
-
-    const data = loadMissionData();
-
-    Object.keys(data.missions).forEach(missionId => {
-      const mission = data.missions[missionId];
-
-      mission.status = "pending";
-      mission.completed = false;
-      mission.approved = false;
-      mission.rewardClaimed = false;
-
-      mission.cancelledByAdmin = false;
-      mission.cancelledAt = null;
-
-      mission.resetByAdmin = true;
-      mission.resetAt = new Date().toISOString();
-    });
-
-    data.allCancelledByAdmin = false;
-    data.allResetAt = new Date().toISOString();
-
-    saveMissionData(data);
-
-    writeLog(
-      `คืนทุก Mission วันนี้ให้ ${PLAYER_ID} ทำใหม่`
+  const goals =
+    buildReviewedGoals(
+      weightKg,
+      bmrKcal,
+      previous
     );
 
-    renderMissions();
+  const {
+    error:disableError
+  } =
+    await supabase
+      .from(
+        "player_health_goals"
+      )
+      .update({
+        is_active:false,
+        updated_at:
+          new Date()
+            .toISOString()
+      })
+      .eq(
+        "player_id",
+        playerId
+      )
+      .eq(
+        "is_active",
+        true
+      );
+
+  if(disableError){
+    throw new Error(
+      "ปิด Health Goal เดิมไม่สำเร็จ: " +
+      disableError.message
+    );
   }
 
-  function writeLog(message) {
-    const time = new Date().toLocaleString("th-TH");
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from(
+        "player_health_goals"
+      )
+      .insert({
+        player_id:
+          playerId,
+        source_inbody_id:
+          inbodyId,
+        is_active:true,
+        ...goals,
+        created_at:
+          new Date()
+            .toISOString(),
+        updated_at:
+          new Date()
+            .toISOString()
+      })
+      .select("*")
+      .single();
 
-    document.getElementById("adminLog").innerHTML =
-      `<strong>Admin Action:</strong> ${message}<br>` +
-      `<small>${time}</small>`;
+  if(error){
+    throw new Error(
+      "สร้าง Health Goal หลัง Review ไม่สำเร็จ: " +
+      error.message
+    );
   }
 
-  renderMissions();
-</script>
+  return data;
+}
 
-</body>
-</html>
+
+async function writeAuditLog(
+  params:{
+    actorType:string;
+    actorId?:string | null;
+    action:string;
+    entityType?:string | null;
+    entityId?:string | null;
+    playerId?:string | null;
+    metadata?:unknown;
+  }
+){
+
+  const {
+    error
+  } =
+    await db()
+      .from(
+        "system_audit_logs"
+      )
+      .insert({
+        actor_type:
+          params.actorType,
+        actor_id:
+          params.actorId ||
+          null,
+        action:
+          params.action,
+        entity_type:
+          params.entityType ||
+          null,
+        entity_id:
+          params.entityId ||
+          null,
+        player_id:
+          params.playerId ||
+          null,
+        metadata:
+          params.metadata ??
+          null,
+        created_at:
+          new Date()
+            .toISOString()
+      });
+
+  if(error){
+    console.warn(
+      "AUDIT LOG ERROR:",
+      error
+    );
+  }
+}
+
+
+async function createInBodyAdviceNotification(
+  playerId:string,
+  inbodyId:string,
+  advice:string
+){
+
+  const cleanAdvice =
+    text(advice);
+
+  const preview =
+    cleanAdvice.length > 140
+      ? cleanAdvice.slice(
+          0,
+          137
+        ) + "..."
+      : cleanAdvice;
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from(
+        "player_notifications"
+      )
+      .upsert(
+        {
+          player_id:
+            playerId,
+
+          notification_type:
+            "inbody_advice",
+
+          title:
+            "ผล InBody และคำแนะนำพร้อมแล้ว",
+
+          message:
+            preview ||
+            "ทีมสุขภาพบันทึกคำแนะนำ InBody ของคุณแล้ว",
+
+          target_page:
+            "./inbody.html",
+
+          source_type:
+            "inbody_review",
+
+          source_id:
+            inbodyId,
+
+          /*
+            Review ใหม่ = ถือเป็น notification ใหม่
+            แม้ source เดิมจะเคยมี notification มาก่อน
+          */
+          is_read:
+            false,
+
+          read_at:
+            null,
+
+          updated_at:
+            new Date()
+              .toISOString()
+        },
+        {
+          onConflict:
+            "player_id,source_type,source_id"
+        }
+      )
+      .select(
+        `
+          id,
+          player_id,
+          notification_type,
+          title,
+          message,
+          target_page,
+          is_read,
+          created_at,
+          updated_at
+        `
+      )
+      .single();
+
+  if(error){
+    throw new Error(
+      "สร้าง InBody Notification ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  return data;
+}
+
+
+async function reviewInBody(
+  body:any,
+  admin:any
+){
+
+  const inbodyId =
+    text(
+      body?.inbodyId
+    );
+
+  if(!inbodyId){
+    throw new Error(
+      "INBODY_ID_REQUIRED"
+    );
+  }
+
+  const advice =
+    text(
+      body?.advice
+    );
+
+  if(!advice){
+    throw new Error(
+      "กรุณากรอกคำแนะนำ"
+    );
+  }
+
+  validateReviewValues(
+    body
+  );
+
+  const supabase =
+    db();
+
+  const {
+    data:existing,
+    error:readError
+  } =
+    await supabase
+      .from(
+        "inbody_results"
+      )
+      .select(
+        `
+          id,
+          player_id,
+          measured_at,
+          weight_kg,
+          skeletal_muscle_mass_kg,
+          body_fat_mass_kg,
+          body_fat_percent,
+          bmi,
+          bmr_kcal,
+          visceral_fat_area_cm2,
+          inbody_score,
+          advice_status
+        `
+      )
+      .eq(
+        "id",
+        inbodyId
+      )
+      .maybeSingle();
+
+  if(readError){
+    throw new Error(
+      "อ่าน InBody ไม่สำเร็จ: " +
+      readError.message
+    );
+  }
+
+  if(!existing?.id){
+    throw new Error(
+      "ไม่พบ InBody Result"
+    );
+  }
+
+  const valueOrExisting =
+    (
+      incoming:unknown,
+      oldValue:unknown
+    ) => {
+
+      const parsed =
+        n(incoming);
+
+      return parsed !== null
+        ? parsed
+        : n(oldValue);
+    };
+
+  const reviewedValues = {
+    weight_kg:
+      valueOrExisting(
+        body?.weightKg,
+        existing.weight_kg
+      ),
+
+    skeletal_muscle_mass_kg:
+      valueOrExisting(
+        body?.skeletalMuscleMassKg,
+        existing
+          .skeletal_muscle_mass_kg
+      ),
+
+    body_fat_mass_kg:
+      valueOrExisting(
+        body?.bodyFatMassKg,
+        existing.body_fat_mass_kg
+      ),
+
+    body_fat_percent:
+      valueOrExisting(
+        body?.bodyFatPercent,
+        existing.body_fat_percent
+      ),
+
+    bmi:
+      valueOrExisting(
+        body?.bmi,
+        existing.bmi
+      ),
+
+    bmr_kcal:
+      valueOrExisting(
+        body?.bmrKcal,
+        existing.bmr_kcal
+      ),
+
+    visceral_fat_area_cm2:
+      valueOrExisting(
+        body?.visceralFatAreaCm2,
+        existing
+          .visceral_fat_area_cm2
+      ),
+
+    inbody_score:
+      valueOrExisting(
+        body?.inbodyScore,
+        existing.inbody_score
+      )
+  };
+
+  const {
+    data:updated,
+    error:updateError
+  } =
+    await supabase
+      .from(
+        "inbody_results"
+      )
+      .update({
+        ...reviewedValues,
+        advice_note:
+          advice,
+        advice_status:
+          "reviewed",
+        reviewed_at:
+          new Date()
+            .toISOString(),
+        reviewed_by_admin_id:
+          admin.id
+      })
+      .eq(
+        "id",
+        inbodyId
+      )
+      .select(
+        `
+          id,
+          player_id,
+          measured_at,
+          weight_kg,
+          skeletal_muscle_mass_kg,
+          body_fat_mass_kg,
+          body_fat_percent,
+          bmi,
+          bmr_kcal,
+          visceral_fat_area_cm2,
+          inbody_score,
+          advice_status,
+          advice_note,
+          reviewed_at
+        `
+      )
+      .single();
+
+  if(updateError){
+    throw new Error(
+      "บันทึกคำแนะนำ InBody ไม่สำเร็จ: " +
+      updateError.message
+    );
+  }
+
+  const goals =
+    await saveReviewedGoal(
+      updated.player_id,
+      updated.id,
+      n(updated.weight_kg),
+      n(updated.bmr_kcal)
+    );
+
+  const notification =
+    await createInBodyAdviceNotification(
+      updated.player_id,
+      updated.id,
+      advice
+    );
+
+  await writeAuditLog({
+    actorType:
+      "admin",
+    actorId:
+      String(
+        admin?.id ||
+        ""
+      ) ||
+      null,
+    action:
+      "inbody_review_saved",
+    entityType:
+      "inbody_result",
+    entityId:
+      updated.id,
+    playerId:
+      updated.player_id,
+    metadata:{
+      adviceStatus:
+        updated.advice_status,
+      notificationId:
+        notification?.id ||
+        null,
+      hasWeight:
+        n(updated.weight_kg) !==
+        null,
+      hasBmr:
+        n(updated.bmr_kcal) !==
+        null
+    }
+  });
+
+  /*
+    Sync reviewed weight to weight history.
+    This is best-effort because historical weight_logs schemas
+    may differ between older deployments.
+  */
+  if(
+    n(updated.weight_kg) !== null
+  ){
+
+    const {
+      error:weightError
+    } =
+      await supabase
+        .from(
+          "weight_logs"
+        )
+        .insert({
+          player_id:
+            updated.player_id,
+          weight:
+            n(
+              updated.weight_kg
+            ),
+          recorded_at:
+            updated.measured_at ||
+            new Date()
+              .toISOString()
+        });
+
+    if(weightError){
+      console.warn(
+        "REVIEWED INBODY WEIGHT SYNC ERROR:",
+        weightError
+      );
+    }
+  }
+
+  return {
+    success:true,
+    item:updated,
+    goals,
+    notification,
+    disclaimer:
+      "คำแนะนำนี้ใช้เพื่อ Wellness และการติดตามโครงการ ไม่ใช่การวินิจฉัยหรือคำสั่งรักษาทางการแพทย์"
+  };
+}
+
+
+async function reopenInBody(
+  inbodyId:string
+){
+
+  if(!inbodyId){
+    throw new Error(
+      "INBODY_ID_REQUIRED"
+    );
+  }
+
+  const {
+    data,
+    error
+  } =
+    await db()
+      .from(
+        "inbody_results"
+      )
+      .update({
+        advice_status:
+          "pending_review",
+        reviewed_at:null,
+        reviewed_by_admin_id:null
+      })
+      .eq(
+        "id",
+        inbodyId
+      )
+      .select(
+        "id,advice_status"
+      )
+      .single();
+
+  if(error){
+    throw new Error(
+      "เปิด Review ใหม่ไม่สำเร็จ: " +
+      error.message
+    );
+  }
+
+  return {
+    success:true,
+    item:data
+  };
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+Deno.serve(
+  async (
+    request
+  ) => {
+
+    if(
+      request.method ===
+      "OPTIONS"
+    ){
+      return new Response(
+        "ok",
+        {
+          headers:
+            corsHeaders
+        }
+      );
+    }
+
+    if(
+      request.method ===
+      "GET"
+    ){
+      return json({
+        success:true,
+        service:
+          "admin-api",
+        version:
+          "2026-08-31-ADMIN-CONTROL-CENTER-V3.2.2",
+        status:"ready",
+        actions:[
+          "missionQueue",
+          "approveMission",
+          "rejectMission",
+          "players",
+          "inbodyQueue",
+          "reviewInBody",
+          "reopenInBody"
+        ]
+      });
+    }
+
+    if(
+      request.method !==
+      "POST"
+    ){
+      return json(
+        {
+          success:false,
+          error:
+            "METHOD_NOT_ALLOWED"
+        },
+        405
+      );
+    }
+
+    try{
+
+      const body =
+        await request.json();
+
+      const action =
+        text(
+          body?.action
+        );
+
+      if(
+        action ===
+        "health"
+      ){
+        return json({
+          success:true,
+          service:
+            "admin-api",
+          version:
+            "2026-08-31-ADMIN-CONTROL-CENTER-V3.2.2",
+          status:"ready",
+          databaseConfigured:
+            Boolean(
+              SUPABASE_URL &&
+              SUPABASE_SERVICE_ROLE_KEY
+            ),
+          lineChannelConfigured:
+            Boolean(
+              LINE_LOGIN_CHANNEL_ID
+            )
+        });
+      }
+
+      if(!action){
+        return json(
+          {
+            success:false,
+            error:
+              "ACTION_REQUIRED"
+          },
+          400
+        );
+      }
+
+      const auth =
+        await requireAdmin(
+          text(
+            body?.idToken
+          )
+        );
+
+      if(
+        action ===
+        "missionQueue"
+      ){
+        return json(
+          await missionQueue(
+            text(
+              body?.status
+            ) ||
+            "pending"
+          )
+        );
+      }
+
+      if(
+        action ===
+        "approveMission"
+      ){
+        return json(
+          await approveMission(
+            text(
+              body?.submissionId
+            ),
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "rejectMission"
+      ){
+        return json(
+          await rejectMission(
+            text(
+              body?.submissionId
+            ),
+            text(
+              body?.reason
+            ),
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "resetMissionSubmission"
+      ){
+        return json(
+          await adminMissionStateChange(
+            text(
+              body?.submissionId
+            ),
+            text(
+              body?.reason
+            ),
+            "retry",
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "cancelMissionSubmission"
+      ){
+        return json(
+          await adminMissionStateChange(
+            text(
+              body?.submissionId
+            ),
+            text(
+              body?.reason
+            ),
+            "cancel",
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "playerHealthAdminList"
+      ){
+        return json(
+          await playerHealthAdminList()
+        );
+      }
+
+      if(
+        action ===
+        "savePlayerHealthAdmin"
+      ){
+        return json(
+          await savePlayerHealthAdmin(
+            body,
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "players"
+      ){
+        return json(
+          await playersList()
+        );
+      }
+
+      if(
+        action ===
+        "inbodyQueue"
+      ){
+        return json(
+          await inbodyQueue()
+        );
+      }
+
+      if(
+        action ===
+        "reviewInBody"
+      ){
+        return json(
+          await reviewInBody(
+            body,
+            auth.admin
+          )
+        );
+      }
+
+      if(
+        action ===
+        "reopenInBody"
+      ){
+        return json(
+          await reopenInBody(
+            text(
+              body?.inbodyId
+            )
+          )
+        );
+      }
+
+
+      if(
+        action ===
+        "dashboardSummary"
+      ){
+        return json(
+          await dashboardSummary()
+        );
+      }
+
+      if(
+        action ===
+        "rewardQueue"
+      ){
+        return json(
+          await rewardQueue(
+            text(
+              body?.status
+            ) ||
+            "pending"
+          )
+        );
+      }
+
+      if(
+        action ===
+        "updateRewardStatus"
+      ){
+        return json(
+          await updateRewardStatus(
+            text(
+              body?.rewardId
+            ),
+            text(
+              body?.status
+            ),
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "updatePlayer"
+      ){
+        return json(
+          await updatePlayer(
+            body
+          )
+        );
+      }
+
+      if(
+        action ===
+        "playerAdviceList"
+      ){
+        return json(
+          await playerAdviceList()
+        );
+      }
+
+      if(
+        action ===
+        "savePlayerAdvice"
+      ){
+        return json(
+          await savePlayerAdvice(
+            text(
+              body?.playerId
+            ),
+            text(
+              body?.adviceNote
+            ),
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "customMissionList"
+      ){
+        return json(
+          await customMissionList()
+        );
+      }
+
+      if(
+        action ===
+        "saveCustomMission"
+      ){
+        return json(
+          await saveCustomMission(
+            body,
+            auth.lineUserId
+          )
+        );
+      }
+
+      if(
+        action ===
+        "deleteCustomMission"
+      ){
+        return json(
+          await deleteCustomMission(
+            text(
+              body?.missionId
+            )
+          )
+        );
+      }
+
+      if(
+        action ===
+        "systemSettings"
+      ){
+        return json(
+          await systemSettings()
+        );
+      }
+
+      if(
+        action ===
+        "saveSystemSettings"
+      ){
+        return json(
+          await saveSystemSettings(
+            body?.settings,
+            auth.lineUserId
+          )
+        );
+      }
+
+
+
+      if(
+        action ===
+        "battleRewardList"
+      ){
+        return json(
+          await battleRewardList(
+            body?.stage
+          )
+        );
+      }
+
+
+      if(
+        action ===
+        "saveBattleReward"
+      ){
+        return json(
+          await saveBattleReward(
+            body?.reward,
+            auth.lineUserId
+          )
+        );
+      }
+
+
+      if(
+        action ===
+        "setBattleRewardActive"
+      ){
+        return json(
+          await setBattleRewardActive(
+            text(
+              body?.rewardId
+            ),
+            Boolean(
+              body?.active
+            ),
+            auth.lineUserId
+          )
+        );
+      }
+
+
+      if(
+        action ===
+        "deleteBattleReward"
+      ){
+        return json(
+          await deleteBattleReward(
+            text(
+              body?.rewardId
+            ),
+            auth.lineUserId
+          )
+        );
+      }
+
+
+      return json(
+        {
+          success:false,
+          error:
+            "UNKNOWN_ACTION",
+          receivedAction:
+            action
+        },
+        400
+      );
+
+    }catch(error){
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : String(error);
+
+      const status =
+        message ===
+          "ADMIN_FORBIDDEN"
+          ? 403
+          : (
+              message.includes(
+                "LINE"
+              ) ||
+              message.includes(
+                "ID Token"
+              )
+            )
+              ? 401
+              : 400;
+
+      return json(
+        {
+          success:false,
+          error:message
+        },
+        status
+      );
+    }
+  }
+);
