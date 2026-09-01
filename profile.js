@@ -1,1 +1,43 @@
-import{db}from"./auth.js";const $=s=>document.querySelector(s),{data:{session}}=await db.auth.getSession();if(session){const{data:p,error}=await db.from("user_profiles").select("*").eq("id",session.user.id).single();if(!error&&p){$("#profileName").value=p.full_name||"";$("#profileCode").value=p.employee_code||"";$("#profileDepartment").value=p.department||"";$("#profilePhone").value=p.phone||"";$("#profileEmail").value=session.user.email||"";$("#profileRole").value=p.role;$("#profileStatus").value=p.status;if(p.status!=="active"){document.querySelectorAll(".add").forEach(b=>b.disabled=true);const n=$("#notice");n.className="account-pending";n.innerHTML="<strong>บัญชียังไม่พร้อมใช้งาน</strong><br>กรุณากรอกโปรไฟล์ให้ครบ แล้วรอ HR หรือ Admin อนุมัติ"}}$("#profileForm").onsubmit=async e=>{e.preventDefault();const{data,error}=await db.rpc("update_my_profile",{p_full_name:$("#profileName").value.trim(),p_employee_code:$("#profileCode").value.trim()||null,p_department:$("#profileDepartment").value.trim()||null,p_phone:$("#profilePhone").value.trim()||null}),n=$("#notice");if(error){n.className="message bad";n.textContent=error.message;return}n.className="message good";n.textContent="บันทึกโปรไฟล์เรียบร้อย";$("#who").textContent=data.full_name||session.user.email}}
+import { db } from "./auth.js";
+import "./admin-users.js";
+
+const $ = (selector) => document.querySelector(selector);
+const { data: { session } } = await db.auth.getSession();
+
+if (session) {
+  const { data: profile, error } = await db.from("user_profiles").select("*").eq("id", session.user.id).single();
+  if (!error && profile) {
+    $("#profileName").value = profile.full_name || "";
+    $("#profileCode").value = profile.employee_code || "";
+    $("#profileDepartment").value = profile.department || "";
+    $("#profilePhone").value = profile.phone || "";
+    $("#profileEmail").value = session.user.email || "";
+    $("#profileRole").value = profile.role;
+    $("#profileStatus").value = profile.status;
+    if (profile.status !== "active") {
+      document.querySelectorAll(".add").forEach((button) => { button.disabled = true; });
+      const notice = $("#notice");
+      notice.className = "account-pending";
+      notice.innerHTML = "<strong>บัญชียังไม่พร้อมใช้งาน</strong><br>กรุณากรอกโปรไฟล์ให้ครบ แล้วรอ HR หรือ Admin อนุมัติ";
+    }
+  }
+
+  $("#profileForm").onsubmit = async (event) => {
+    event.preventDefault();
+    const { data, error: saveError } = await db.rpc("update_my_profile", {
+      p_full_name: $("#profileName").value.trim(),
+      p_employee_code: $("#profileCode").value.trim() || null,
+      p_department: $("#profileDepartment").value.trim() || null,
+      p_phone: $("#profilePhone").value.trim() || null,
+    });
+    const notice = $("#notice");
+    if (saveError) {
+      notice.className = "message bad";
+      notice.textContent = saveError.message;
+      return;
+    }
+    notice.className = "message good";
+    notice.textContent = "บันทึกโปรไฟล์เรียบร้อย";
+    $("#who").textContent = data.full_name || session.user.email;
+  };
+}
