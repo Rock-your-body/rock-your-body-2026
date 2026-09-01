@@ -1,2804 +1,485 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="utf-8">
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,viewport-fit=cover"
-  >
-  <title>ROCK YOUR BODY 2026 — ADMIN</title>
-
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-admin-v331-settings-fix"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Mission Control</title>
 
   <style>
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      min-height:100%;
-      background:#eef5fb;
-      color:#102c54;
-      font-family:"Prompt","Noto Sans Thai",Arial,sans-serif;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f4f7fb;
+      color: #17325c;
     }
 
-    button,input,select,textarea{
-      font:inherit;
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
     }
 
-    button{
-      cursor:pointer;
+    .admin-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(20, 50, 100, 0.08);
+      margin-bottom: 20px;
     }
 
-    .app{
-      width:min(1180px,100%);
-      margin:0 auto;
-      padding:18px;
+    .title {
+      margin: 0 0 6px;
+      color: #0d3477;
+      font-size: 28px;
+      font-weight: 900;
     }
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px 18px;
-      border-radius:20px;
-      color:#fff;
-      background:linear-gradient(135deg,#0b3e84,#0f8a7d);
-      box-shadow:0 12px 28px rgba(21,66,116,.15);
+    .subtitle {
+      color: #73809a;
+      margin-bottom: 20px;
     }
 
-    .topbar h1{
-      margin:0;
-      font-size:24px;
+    .player-info {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 14px;
+      border-radius: 14px;
+      background: #eef4ff;
+      margin-bottom: 18px;
     }
 
-    .topbar small{
-      opacity:.9;
-      font-weight:700;
+    .player-info strong {
+      color: #0c367f;
     }
 
-    .wallet{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
 
-    .pill{
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.15);
-      font-weight:900;
+    .mission {
+      border: 1px solid #d9e3f2;
+      border-radius: 16px;
+      padding: 16px;
+      background: #fff;
     }
 
-    .summary{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:12px;
-      margin-top:14px;
+    .mission-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
-    .summary-card{
-      padding:14px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid #d9e5f1;
-      box-shadow:0 6px 18px rgba(29,61,94,.06);
+    .mission-name {
+      font-size: 18px;
+      font-weight: 900;
+      color: #123d84;
     }
 
-    .summary-card small{
-      color:#6b809a;
-      font-weight:800;
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
     }
 
-    .summary-card b{
-      display:block;
-      margin-top:6px;
-      font-size:26px;
-      color:#0d3e7c;
+    .pending {
+      background: #fff4cc;
+      color: #8a6500;
     }
 
-    .tabs{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin:16px 0;
+    .approved {
+      background: #dbf7e7;
+      color: #087443;
     }
 
-    .tab{
-      border:0;
-      border-radius:12px;
-      padding:11px 14px;
-      background:#dfeaf6;
-      color:#174a84;
-      font-weight:900;
+    .cancelled {
+      background: #ffe0e0;
+      color: #b21f1f;
     }
 
-    .tab.active{
-      background:#174a84;
-      color:#fff;
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .panel{
-      display:none;
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    .panel.active{
-      display:block;
+    .btn-cancel {
+      background: #d62828;
+      color: #fff;
     }
 
-    .card{
-      margin-bottom:12px;
-      padding:16px;
-      border-radius:16px;
-      border:1px solid #d7e3ef;
-      background:#fff;
-      box-shadow:0 7px 18px rgba(29,61,94,.05);
+    .btn-reset {
+      background: #0d5bd7;
+      color: #fff;
     }
 
-    .row{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
+    .btn-cancel-all {
+      background: #8f1f1f;
+      color: #fff;
     }
 
-    .space{
-      justify-content:space-between;
+    .btn-reset-all {
+      background: #138a54;
+      color: #fff;
     }
 
-    .btn{
-      border:0;
-      border-radius:11px;
-      padding:10px 13px;
-      font-weight:900;
+    .global-actions {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid #dfe6f1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .primary{background:#1768d8;color:#fff}
-    .success{background:#1b9d62;color:#fff}
-    .danger{background:#d53b3b;color:#fff}
-    .warning{background:#e8a316;color:#fff}
-    .muted{background:#edf2f7;color:#35506f}
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      padding:5px 9px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      background:#edf2f7;
+    .log {
+      margin-top: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      color: #53627c;
     }
 
-    .badge.pending{background:#fff4d6;color:#9b6a00}
-    .badge.approved{background:#e9f8ef;color:#167042}
-    .badge.rejected{background:#ffeded;color:#b62d2d}
-    .badge.sent{background:#e6f2ff;color:#125cae}
-    .badge.cancelled{background:#f0f0f0;color:#666}
-
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-
-    .grid3{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-
-    label{
-      display:block;
-      margin-bottom:5px;
-      font-size:13px;
-      font-weight:900;
-      color:#365777;
-    }
-
-    input,select,textarea{
-      width:100%;
-      border:1px solid #cbd9e7;
-      border-radius:11px;
-      padding:10px 11px;
-      background:#fff;
-      color:#183a61;
-    }
-
-    textarea{
-      min-height:88px;
-      resize:vertical;
-    }
-
-    .player{
-      display:grid;
-      grid-template-columns:56px 1fr auto;
-      gap:12px;
-      align-items:center;
-    }
-
-    .avatar{
-      width:56px;
-      height:56px;
-      border-radius:50%;
-      object-fit:cover;
-      background:#e8eef5;
-    }
-
-    .muted-text{
-      color:#71849a;
-      font-size:13px;
-    }
-
-    .evidence{
-      max-width:170px;
-      border-radius:10px;
-      border:1px solid #d9e2eb;
-    }
-
-    .table-wrap{
-      overflow:auto;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:760px;
-    }
-
-    th,td{
-      padding:10px;
-      border-bottom:1px solid #e6edf4;
-      text-align:left;
-      vertical-align:top;
-      font-size:13px;
-    }
-
-    th{
-      color:#506a85;
-      background:#f6f9fc;
-    }
-
-    .empty{
-      padding:28px;
-      text-align:center;
-      color:#71849a;
-      font-weight:800;
-    }
-
-    #toast{
-      position:fixed;
-      left:50%;
-      bottom:22px;
-      transform:translateX(-50%);
-      z-index:9999;
-      display:none;
-      max-width:calc(100vw - 30px);
-      padding:11px 16px;
-      border-radius:13px;
-      background:#173a63;
-      color:#fff;
-      font-weight:900;
-      text-align:center;
-      box-shadow:0 8px 24px rgba(0,0,0,.22);
-    }
-
-    #toast.error{
-      background:#c83232;
-    }
-
-    @media(max-width:800px){
-      .summary,.grid2,.grid3{
-        grid-template-columns:1fr;
-      }
-      .player{
-        grid-template-columns:48px 1fr;
-      }
-      .player .actions{
-        grid-column:1/-1;
+    @media (max-width: 750px) {
+      .mission-grid {
+        grid-template-columns: 1fr;
       }
     }
-  
-
-    /* =========================================================
-       TEST CONTROL
-    ========================================================= */
-
-    .test-grid{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-
-    .test-stat{
-      padding:14px;
-      border-radius:15px;
-      background:#f6f9fd;
-      border:1px solid #d9e5f1;
-    }
-
-    .test-stat small{
-      display:block;
-      color:#68809b;
-      font-weight:800;
-    }
-
-    .test-stat b{
-      display:block;
-      margin-top:5px;
-      color:#0c428a;
-      font-size:23px;
-    }
-
-    .scenario-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:9px;
-      margin-top:10px;
-    }
-
-    .scenario{
-      min-height:72px;
-      border:1px solid #d1deeb;
-      border-radius:14px;
-      padding:10px;
-      background:#f7fbff;
-      color:#183f71;
-      font-weight:900;
-      text-align:left;
-    }
-
-    .scenario small{
-      display:block;
-      margin-top:4px;
-      color:#6a829b;
-      font-weight:700;
-    }
-
-    .progress-stage{
-      display:grid;
-      grid-template-columns:74px 1fr auto;
-      gap:10px;
-      align-items:center;
-      padding:9px 0;
-      border-bottom:1px solid #edf2f7;
-    }
-
-    .test-warning{
-      padding:12px 14px;
-      border-radius:13px;
-      background:#fff4d9;
-      color:#805b00;
-      border:1px solid #f2d58b;
-      font-weight:800;
-    }
-
-    @media(max-width:800px){
-      .test-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .scenario-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-</style>
+  </style>
 </head>
+
 <body>
 
-<div class="app">
+<div class="container">
 
-  <header class="topbar">
-    <div>
-      <h1>🛠️ ROCK YOUR BODY 2026 — ADMIN</h1>
-      <small>Mission • Reward • Player • Advice • Settings</small>
+  <div class="admin-card">
+    <h1 class="title">🛠 Admin Mission Control</h1>
+    <div class="subtitle">
+      จัดการ Mission ของผู้เล่นรายวัน
     </div>
 
-    <div class="wallet">
-      <span class="pill" id="adminName">ADMIN</span>
-      <button class="btn muted" onclick="reloadAll()">รีเฟรช</button>
-    </div>
-  </header>
-
-  <section class="summary">
-    <div class="summary-card">
-      <small>Mission รอตรวจ</small>
-      <b id="sumPending">0</b>
-    </div>
-    <div class="summary-card">
-      <small>อนุมัติแล้ววันนี้</small>
-      <b id="sumApproved">0</b>
-    </div>
-    <div class="summary-card">
-      <small>ของรางวัลรอส่ง</small>
-      <b id="sumRewards">0</b>
-    </div>
-    <div class="summary-card">
-      <small>ผู้เล่น Active</small>
-      <b id="sumPlayers">0</b>
-    </div>
-  </section>
-
-  <nav class="tabs">
-    <button class="tab active" data-tab="mission">🎯 Mission</button>
-    <button class="tab" data-tab="rewards">🎁 Rewards</button>
-    <button class="tab" data-tab="battle-rewards">⚔️ Stage Rewards</button>
-    <button class="tab" data-tab="players">👥 Players</button>
-    <button class="tab" data-tab="test-control">🧪 Test Control</button>
-    <button class="tab" data-tab="advice">💬 Advice</button>
-    <button class="tab" data-tab="missionset">➕ Mission Setup</button>
-    <button class="tab" data-tab="inbody">🧬 InBody Review</button>
-    <button class="tab" data-tab="settings">⚙️ Settings</button>
-  </nav>
-
-  <!-- MISSION -->
-  <section id="panel-mission" class="panel active">
-    <div class="card row space">
-      <div class="row">
-        <select id="missionStatusFilter" style="width:auto" onchange="loadMissionQueue()">
-          <option value="pending">รอตรวจ</option>
-          <option value="approved">อนุมัติแล้ว</option>
-          <option value="rejected">ปฏิเสธ</option>
-          <option value="all">ทั้งหมด</option>
-        </select>
-      </div>
-      <button class="btn primary" onclick="loadMissionQueue()">รีเฟรช Mission</button>
-    </div>
-    <div id="missionList"></div>
-  </section>
-
-  <!-- REWARDS -->
-  <section id="panel-rewards" class="panel">
-    <div class="card row space">
-      <div>
-        <b>🎁 การส่งของรางวัลให้ Player</b>
-        <div class="muted-text">แยกจาก Coin/Energy/EXP ในระบบ ใช้สำหรับของรางวัลจริง</div>
-      </div>
-      <select id="rewardStatusFilter" style="width:auto" onchange="loadRewards()">
-        <option value="pending">รอส่ง</option>
-        <option value="sent">ส่งแล้ว</option>
-        <option value="cancelled">ยกเลิก</option>
-        <option value="all">ทั้งหมด</option>
-      </select>
-    </div>
-    <div id="rewardList"></div>
-  </section>
-
-  <!-- BATTLE STAGE REWARDS -->
-  <section id="panel-battle-rewards" class="panel">
-
-    <div class="card">
-      <div class="row space">
-        <div>
-          <b>⚔️ กำหนดของรางวัลแต่ละ Battle Stage</b>
-          <div class="muted-text">
-            Admin สามารถเพิ่ม / แก้ไข / ปิดใช้งาน / ยกเลิกรางวัลแต่ละด่านได้
-          </div>
-        </div>
-
-        <button
-          class="btn primary"
-          onclick="resetBattleRewardForm()"
-        >
-          + เพิ่มรางวัล
-        </button>
-      </div>
-
-      <div class="grid3" style="margin-top:12px">
-
-        <div>
-          <label>Stage</label>
-          <select id="brStage">
-            <option value="1">Stage 1</option>
-            <option value="2">Stage 2</option>
-            <option value="3">Stage 3</option>
-            <option value="4">Stage 4</option>
-            <option value="5">Stage 5</option>
-            <option value="6">Stage 6</option>
-            <option value="7">Stage 7</option>
-            <option value="8">Stage 8</option>
-            <option value="9">Stage 9</option>
-            <option value="10">Stage 10</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Reward Type</label>
-          <select id="brType">
-            <option value="physical">ของรางวัลจริง</option>
-            <option value="coin">Rock Coin</option>
-            <option value="energy">Energy</option>
-            <option value="exp">EXP</option>
-            <option value="coupon">Coupon / Voucher</option>
-            <option value="other">อื่น ๆ</option>
-          </select>
-        </div>
-
-        <div>
-          <label>สถานะ</label>
-          <select id="brActive">
-            <option value="true">ใช้งาน</option>
-            <option value="false">ปิดใช้งาน</option>
-          </select>
-        </div>
-
-      </div>
-
-      <div class="grid2" style="margin-top:10px">
-
-        <div>
-          <label>ชื่อรางวัล</label>
-          <input
-            id="brName"
-            placeholder="เช่น กระบอกน้ำ ROCK YOUR BODY"
-          >
-        </div>
-
-        <div>
-          <label>จำนวน / มูลค่า</label>
-          <input
-            id="brAmount"
-            type="number"
-            min="0"
-            step="1"
-            value="1"
-          >
-        </div>
-
-      </div>
-
-      <div class="grid2" style="margin-top:10px">
-
-        <div>
-          <label>รายละเอียดรางวัล</label>
-          <textarea
-            id="brDescription"
-            placeholder="รายละเอียด / เงื่อนไขการรับของรางวัล"
-          ></textarea>
-        </div>
-
-        <div>
-          <label>หมายเหตุ Admin</label>
-          <textarea
-            id="brAdminNote"
-            placeholder="หมายเหตุสำหรับทีม Admin"
-          ></textarea>
-        </div>
-
-      </div>
-
-      <input id="brId" type="hidden">
-
-      <div class="row" style="margin-top:12px">
-        <button
-          class="btn success"
-          onclick="saveBattleReward()"
-        >
-          💾 บันทึกรางวัล
-        </button>
-
-        <button
-          class="btn muted"
-          onclick="resetBattleRewardForm()"
-        >
-          ล้างฟอร์ม
-        </button>
-      </div>
-
+    <div class="player-info">
+      <div><strong>Player ID:</strong> <span id="playerIdText">USER001</span></div>
+      <div><strong>วันที่:</strong> <span id="dateText"></span></div>
     </div>
 
-    <div class="card row space">
-      <div>
-        <b>รายการรางวัลตาม Stage</b>
-      </div>
+    <div id="missionList" class="mission-grid"></div>
 
-      <div class="row">
-        <select
-          id="battleRewardStageFilter"
-          style="width:auto"
-          onchange="loadBattleRewards()"
-        >
-          <option value="all">ทุก Stage</option>
-          <option value="1">Stage 1</option>
-          <option value="2">Stage 2</option>
-          <option value="3">Stage 3</option>
-          <option value="4">Stage 4</option>
-          <option value="5">Stage 5</option>
-          <option value="6">Stage 6</option>
-          <option value="7">Stage 7</option>
-          <option value="8">Stage 8</option>
-          <option value="9">Stage 9</option>
-          <option value="10">Stage 10</option>
-        </select>
+    <div class="global-actions">
+      <button class="btn-cancel-all" onclick="cancelAllMissions()">
+        ❌ ยกเลิกทุก Mission วันนี้
+      </button>
 
-        <button
-          class="btn primary"
-          onclick="loadBattleRewards()"
-        >
-          รีเฟรช
-        </button>
-      </div>
+      <button class="btn-reset-all" onclick="resetAllMissions()">
+        🔄 คืนสถานะทุก Mission ให้ทำใหม่
+      </button>
     </div>
 
-    <div id="battleRewardList"></div>
-
-  </section>
-
-
-  <!-- PLAYERS -->
-  <section id="panel-players" class="panel">
-    <div class="card">
-      <div class="grid2">
-        <div>
-          <label>ค้นหาผู้เล่น</label>
-          <input id="playerSearch" placeholder="ชื่อ / Team / LINE ID" oninput="renderPlayers()">
-        </div>
-        <div>
-          <label>สถานะ</label>
-          <select id="playerStatusFilter" onchange="renderPlayers()">
-            <option value="all">ทั้งหมด</option>
-            <option value="active">active</option>
-            <option value="inactive">inactive</option>
-            <option value="cancelled">cancelled</option>
-          </select>
-        </div>
-      </div>
+    <div class="log" id="adminLog">
+      ยังไม่มีการดำเนินการ
     </div>
-    <div id="playerList"></div>
-  </section>
-
-
-  <!-- TEST CONTROL -->
-  <section id="panel-test-control" class="panel">
-
-    <div class="card">
-      <div class="row space">
-        <div>
-          <b>🧪 ADMIN TEST CONTROL</b>
-          <div class="muted-text">
-            จำลอง EXP / Energy / Coin / Battle Stage เพื่อทดสอบระบบจริง
-          </div>
-        </div>
-
-        <button
-          class="btn primary"
-          onclick="loadTestPlayers()"
-        >
-          รีเฟรช Player
-        </button>
-      </div>
-
-      <div class="test-warning" style="margin-top:12px">
-        ใช้เฉพาะการทดสอบโดย Admin • การ Reset Battle จะยกเลิก Reward Battle ที่ยังเป็น pending แต่ไม่ลบประวัติที่ส่งแล้ว
-      </div>
-
-      <div class="grid2" style="margin-top:12px">
-
-        <div>
-          <label>เลือก Player</label>
-
-          <select
-            id="testPlayerSelect"
-            onchange="loadTestState()"
-          >
-            <option value="">
-              -- เลือก Player --
-            </option>
-          </select>
-        </div>
-
-        <div>
-          <label>เปิดหน้าทดสอบ</label>
-
-          <div class="row">
-            <button
-              class="btn muted"
-              onclick="openTestPage('HOME')"
-            >
-              HOME
-            </button>
-
-            <button
-              class="btn muted"
-              onclick="openTestPage('MISSION')"
-            >
-              MISSION
-            </button>
-
-            <button
-              class="btn primary"
-              onclick="openTestPage('BATTLE')"
-            >
-              BATTLE
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-
-    <div id="testPlayerCard" class="card" style="display:none">
-
-      <div class="row space">
-        <div>
-          <b id="testPlayerName">Player</b>
-          <div id="testPlayerMeta" class="muted-text"></div>
-        </div>
-
-        <button
-          class="btn primary"
-          onclick="loadTestState()"
-        >
-          รีเฟรชสถานะ
-        </button>
-      </div>
-
-
-      <div class="test-grid" style="margin-top:12px">
-
-        <div class="test-stat">
-          <small>Rock Coin</small>
-          <b id="testCoinStat">0</b>
-        </div>
-
-        <div class="test-stat">
-          <small>Energy</small>
-          <b id="testEnergyStat">0 / 200</b>
-        </div>
-
-        <div class="test-stat">
-          <small>EXP</small>
-          <b id="testExpStat">0</b>
-        </div>
-
-        <div class="test-stat">
-          <small>Battle ผ่านแล้ว</small>
-          <b id="testStageStat">0 / 10</b>
-        </div>
-
-      </div>
-
-
-      <div class="grid3" style="margin-top:14px">
-
-        <div>
-          <label>Rock Coin</label>
-          <input
-            id="testCoin"
-            type="number"
-            min="0"
-            step="1"
-          >
-        </div>
-
-        <div>
-          <label>Energy</label>
-          <input
-            id="testEnergy"
-            type="number"
-            min="0"
-            max="200"
-            step="1"
-          >
-        </div>
-
-        <div>
-          <label>EXP</label>
-          <input
-            id="testExp"
-            type="number"
-            min="0"
-            step="1"
-          >
-        </div>
-
-      </div>
-
-
-      <div class="row" style="margin-top:10px">
-
-        <button
-          class="btn success"
-          onclick="saveTestWallet()"
-        >
-          💾 บันทึก Coin / Energy / EXP
-        </button>
-
-        <button
-          class="btn danger"
-          onclick="resetTestBattle()"
-        >
-          ♻️ Reset Battle
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <b>⚡ Test Scenario สำเร็จรูป</b>
-
-      <div class="scenario-grid">
-
-        <button
-          class="scenario"
-          onclick="applyTestScenario('attack_fail')"
-        >
-          ❌ Attack Fail
-          <small>
-            Stage 1 • EXP ถึง • Energy 9 • ต้องใช้ 10
-          </small>
-        </button>
-
-        <button
-          class="scenario"
-          onclick="applyTestScenario('attack_exact')"
-        >
-          ✅ Energy พอดี
-          <small>
-            Stage 1 • Energy 10 • ชนะแล้วเหลือ 0
-          </small>
-        </button>
-
-        <button
-          class="scenario"
-          onclick="applyTestScenario('attack_high')"
-        >
-          ⚡ Energy 80
-          <small>
-            Stage 1 • ทดสอบชนะและหักเหลือ 70
-          </small>
-        </button>
-
-        <button
-          class="scenario"
-          onclick="applyTestScenario('stage5')"
-        >
-          🗺️ เปิด Stage 5
-          <small>
-            ผ่าน Stage 1-4 • EXP ถึง Stage 5
-          </small>
-        </button>
-
-        <button
-          class="scenario"
-          onclick="applyTestScenario('final_boss')"
-        >
-          👑 Final Boss
-          <small>
-            ผ่าน Stage 1-9 • EXP ถึง Stage 10 • Energy 200
-          </small>
-        </button>
-
-        <button
-          class="scenario"
-          onclick="applyTestScenario('wallet_max')"
-        >
-          🧪 MAX TEST
-          <small>
-            Coin 9,999 • Energy 200 • EXP 5,700
-          </small>
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="row space">
-        <div>
-          <b>⚔️ เตรียม Stage สำหรับทดสอบ</b>
-          <div class="muted-text">
-            ระบบจะทำ Stage ก่อนหน้าเป็น completed และ Stage เป้าหมาย HP เต็ม
-          </div>
-        </div>
-
-        <button
-          class="btn primary"
-          onclick="prepareTestStage()"
-        >
-          เตรียม Stage
-        </button>
-      </div>
-
-
-      <div class="grid2" style="margin-top:12px">
-
-        <div>
-          <label>Stage</label>
-
-          <select id="testStageNo">
-            <option value="1">Stage 1</option>
-            <option value="2">Stage 2</option>
-            <option value="3">Stage 3</option>
-            <option value="4">Stage 4</option>
-            <option value="5">Stage 5</option>
-            <option value="6">Stage 6</option>
-            <option value="7">Stage 7</option>
-            <option value="8">Stage 8</option>
-            <option value="9">Stage 9</option>
-            <option value="10">Stage 10</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Energy สำหรับทดสอบ</label>
-
-          <input
-            id="testStageEnergy"
-            type="number"
-            min="0"
-            max="200"
-            value="80"
-          >
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="grid2">
-
-      <div class="card">
-        <b>📊 Battle Progress</b>
-        <div id="testBattleProgress" style="margin-top:8px">
-          เลือก Player ก่อน
-        </div>
-      </div>
-
-      <div class="card">
-        <b>🎁 Battle Reward Queue</b>
-        <div id="testBattleRewards" style="margin-top:8px">
-          เลือก Player ก่อน
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ADVICE -->
-  <section id="panel-advice" class="panel">
-    <div class="card">
-      <b>💬 คำแนะนำของผู้เล่นแต่ละคน</b>
-      <div class="muted-text">บันทึกคำแนะนำ Wellness / การติดตาม / หมายเหตุของทีมโครงการ</div>
-    </div>
-    <div id="adviceList"></div>
-  </section>
-
-  <!-- MISSION SETUP -->
-  <section id="panel-missionset" class="panel">
-    <div class="card">
-      <div class="row space">
-        <div>
-          <b>➕ เพิ่ม / แก้ไข Mission</b>
-          <div class="muted-text">Mission ที่สร้างใหม่จะเก็บใน custom_missions และใช้เป็นรายการเสริมของระบบ</div>
-        </div>
-        <button class="btn primary" onclick="resetMissionForm()">สร้างใหม่</button>
-      </div>
-
-      <div class="grid2" style="margin-top:12px">
-        <div>
-          <label>Mission ID</label>
-          <input id="cmId" placeholder="เช่น bonus_walk_challenge">
-        </div>
-        <div>
-          <label>หมวด</label>
-          <select id="cmCategory">
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="bonus">Bonus</option>
-          </select>
-        </div>
-        <div>
-          <label>ชื่อภารกิจ</label>
-          <input id="cmName">
-        </div>
-        <div>
-          <label>Icon / Emoji</label>
-          <input id="cmIcon" placeholder="🎯">
-        </div>
-      </div>
-
-      <div style="margin-top:10px">
-        <label>รายละเอียด</label>
-        <textarea id="cmDescription"></textarea>
-      </div>
-
-      <div class="grid3" style="margin-top:10px">
-        <div><label>Coin</label><input id="cmCoin" type="number" min="0" value="10"></div>
-        <div><label>Energy</label><input id="cmEnergy" type="number" min="0" value="10"></div>
-        <div><label>EXP</label><input id="cmExp" type="number" min="0" value="10"></div>
-      </div>
-
-      <div class="grid2" style="margin-top:10px">
-        <div>
-          <label>Target JSON</label>
-          <textarea id="cmTarget" placeholder='{"steps":8000}'></textarea>
-        </div>
-        <div>
-          <label>สถานะ</label>
-          <select id="cmActive">
-            <option value="true">Active</option>
-            <option value="false">Inactive</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:12px">
-        <button class="btn success" onclick="saveCustomMission()">บันทึก Mission</button>
-      </div>
-    </div>
-
-    <div id="customMissionList"></div>
-  </section>
-
-  <!-- INBODY -->
-  <section id="panel-inbody" class="panel">
-    <div class="card row space">
-      <div><b>🧬 InBody Review</b></div>
-      <button class="btn primary" onclick="loadInBody()">รีเฟรช</button>
-    </div>
-    <div id="inbodyList"></div>
-  </section>
-
-  <!-- SETTINGS -->
-  <section id="panel-settings" class="panel">
-    <div class="card">
-      <b>⚙️ ตั้งค่าระบบ</b>
-
-      <div class="grid2" style="margin-top:12px">
-        <div>
-          <label>ชื่อโครงการ</label>
-          <input id="setProjectName" value="ROCK YOUR BODY 2026">
-        </div>
-        <div>
-          <label>Max Energy</label>
-          <input id="setMaxEnergy" type="number" value="200">
-        </div>
-        <div>
-          <label>Daily Steps Goal</label>
-          <input id="setStepsGoal" type="number" value="8000">
-        </div>
-        <div>
-          <label>Daily Calories Burn Goal</label>
-          <input id="setCaloriesGoal" type="number" value="300">
-        </div>
-        <div>
-          <label>Sleep Goal (minutes)</label>
-          <input id="setSleepGoal" type="number" value="420">
-        </div>
-        <div>
-          <label>Maintenance Message</label>
-          <input id="setMaintenanceMessage" placeholder="ข้อความประกาศ (ถ้ามี)">
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:12px">
-        <button class="btn success" onclick="saveSettings()">บันทึก Settings</button>
-      </div>
-    </div>
-  </section>
+  </div>
 
 </div>
 
-<div id="toast"></div>
-
 <script>
-"use strict";
+  const PLAYER_ID = "USER001";
 
-const $ = id => document.getElementById(id);
+  const MISSION_LIST = [
+    { id: "moveMore", name: "🚶 MOVE MORE" },
+    { id: "sleepWell", name: "😴 SLEEP WELL" },
+    { id: "eatSmart", name: "🥗 EAT SMART" },
+    { id: "hydrate", name: "💧 HYDRATE" }
+  ];
 
-let playersCache = [];
-let currentIdToken = "";
+  function getTodayKey() {
+    const now = new Date();
 
-function apiUrl(){
-  return window.APP_CONFIG?.getApi
-    ? window.APP_CONFIG.getApi("ADMIN")
-    : window.APP_CONFIG?.API?.ADMIN;
-}
-
-async function initLine(){
-  await liff.init({
-    liffId: window.APP_CONFIG?.LIFF_ID || "2011201679-uNWz5yqF"
-  });
-
-  if(!liff.isLoggedIn()){
-    liff.login({redirectUri:location.href});
-    return false;
+    return [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0")
+    ].join("-");
   }
 
-  currentIdToken = liff.getIDToken();
-
-  if(!currentIdToken || currentIdToken.split(".").length !== 3){
-    liff.logout();
-    liff.login({redirectUri:location.href});
-    return false;
+  function getStorageKey() {
+    return `mission_${PLAYER_ID}_${getTodayKey()}`;
   }
 
-  return true;
-}
+  function createDefaultData() {
+    const missions = {};
 
-async function post(action,payload={}){
-  const token = liff.getIDToken();
+    MISSION_LIST.forEach(item => {
+      missions[item.id] = {
+        status: "pending",
+        completed: false,
+        approved: false,
+        rewardClaimed: false,
+        cancelledByAdmin: false,
+        cancelledAt: null
+      };
+    });
 
-  const res = await fetch(apiUrl(),{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    cache:"no-store",
-    body:JSON.stringify({
-      action,
-      idToken:token,
-      ...payload
-    })
-  });
-
-  const raw = await res.text();
-  let data={};
-
-  try{data=raw?JSON.parse(raw):{}}
-  catch{throw new Error("Admin API ตอบกลับไม่ใช่ JSON")}
-
-  if(!res.ok || data?.success===false){
-    throw new Error(data?.error || data?.message || `HTTP ${res.status}`);
+    return {
+      playerId: PLAYER_ID,
+      date: getTodayKey(),
+      missions: missions,
+      updatedAt: new Date().toISOString()
+    };
   }
 
-  return data;
-}
-
-function toast(msg,error=false){
-  const el=$("toast");
-  el.textContent=msg;
-  el.className=error?"error":"";
-  el.style.display="block";
-  clearTimeout(window.__toast);
-  window.__toast=setTimeout(()=>el.style.display="none",3500);
-}
-
-function esc(value){
-  return String(value??"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;");
-}
-
-function statusBadge(status){
-  const s=String(status||"").toLowerCase();
-  return `<span class="badge ${esc(s)}">${esc(s||"-")}</span>`;
-}
-
-document.querySelectorAll(".tab").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    $(`panel-${btn.dataset.tab}`).classList.add("active");
-
-    if(btn.dataset.tab==="rewards") loadRewards();
-    if(btn.dataset.tab==="battle-rewards") loadBattleRewards();
-    if(btn.dataset.tab==="players") loadPlayers();
-    if(btn.dataset.tab==="test-control") loadTestPlayers();
-    if(btn.dataset.tab==="advice") loadAdvice();
-    if(btn.dataset.tab==="missionset") loadCustomMissions();
-    if(btn.dataset.tab==="inbody") loadInBody();
-    if(btn.dataset.tab==="settings") loadSettings();
-  });
-});
-
-async function loadSummary(){
-  try{
-    const d=await post("dashboardSummary");
-    $("sumPending").textContent=d?.summary?.missionPending??0;
-    $("sumApproved").textContent=d?.summary?.approvedToday??0;
-    $("sumRewards").textContent=d?.summary?.rewardPending??0;
-    $("sumPlayers").textContent=d?.summary?.activePlayers??0;
-  }catch(e){console.warn(e)}
-}
-
-async function loadMissionQueue(){
-  try{
-    const filter=$("missionStatusFilter").value;
-    const d=await post("missionQueue",{status:filter});
-    const rows=d?.items || d?.queue || d?.submissions || [];
-
-    $("missionList").innerHTML = rows.length
-      ? rows.map(m=>`
-        <article class="card">
-          <div class="row space">
-            <div>
-              <b>${esc(m?.player?.line_display_name || m?.player_name || m?.line_display_name || "Player")}</b>
-              ${statusBadge(m.status)}
-              <div class="muted-text">
-                ${esc(m.mission_id)} • ${esc(m.period_type||m.category||"")} • ${esc(m.period_key||"")}
-              </div>
-            </div>
-            <div>
-              <b>⭐ ${Number(m.reward_coin||0)} | ⚡ ${Number(m.reward_energy||0)} | EXP ${Number(m.reward_exp||0)}</b>
-            </div>
-          </div>
-
-          <div style="margin-top:8px">
-            ${m.exercise_type?`Exercise: ${esc(m.exercise_type)} ${Number(m.exercise_minutes||0)} นาที<br>`:""}
-            ${m.estimated_calories?`🔥 ${Number(m.estimated_calories||0)} kcal<br>`:""}
-            ${m.reject_reason?`เหตุผล Reject: ${esc(m.reject_reason)}<br>`:""}
-            ${(m.evidence_signed_url||m.evidence_link)
-      ? `<a href="${esc(m.evidence_signed_url||m.evidence_link)}" target="_blank" rel="noopener">เปิดหลักฐาน</a>`
-      : m.evidence_url
-        ? `<span class="muted-text">พบไฟล์หลักฐาน แต่ยังสร้างลิงก์เปิดไม่ได้</span>`
-        : ""}
-          </div>
-
-          ${m.status==="pending"?`
-            <div class="row" style="margin-top:12px">
-              <button class="btn success" onclick="approveMission('${esc(m.id)}')">Approve</button>
-              <input id="reject-${esc(m.id)}" placeholder="เหตุผล Reject" style="max-width:320px">
-              <button class="btn danger" onclick="rejectMission('${esc(m.id)}')">Reject</button>
-            </div>
-          `:""}
-        </article>
-      `).join("")
-      : `<div class="card empty">ไม่มี Mission ตามสถานะที่เลือก</div>`;
-  }catch(e){
-    $("missionList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
-  }
-}
-
-async function approveMission(id){
-  try{
-    await post("approveMission",{submissionId:id});
-    toast("อนุมัติ Mission แล้ว");
-    await Promise.all([loadMissionQueue(),loadSummary(),loadRewards()]);
-  }catch(e){toast(e.message,true)}
-}
-
-async function rejectMission(id){
-  try{
-    const reason=$(`reject-${id}`)?.value || "ไม่ผ่านเงื่อนไข";
-    await post("rejectMission",{submissionId:id,reason});
-    toast("ปฏิเสธ Mission แล้ว");
-    await Promise.all([loadMissionQueue(),loadSummary()]);
-  }catch(e){toast(e.message,true)}
-}
-
-async function loadRewards(){
-  try{
-    const status=$("rewardStatusFilter").value;
-    const d=await post("rewardQueue",{status});
-    const rows=d?.items||[];
-
-    $("rewardList").innerHTML=rows.length
-      ? rows.map(r=>`
-        <article class="card">
-          <div class="row space">
-            <div>
-              <b>🎁 ${esc(r.player_name || r.line_display_name || "Player")}</b>
-              ${statusBadge(r.status)}
-              <div class="muted-text">${esc(r.mission_id||"")} • ${esc(r.submission_id||"")}</div>
-            </div>
-            <div class="row">
-              ${r.status==="pending"?`
-                <button class="btn success" onclick="setRewardStatus('${esc(r.id)}','sent')">ส่งแล้ว</button>
-                <button class="btn danger" onclick="setRewardStatus('${esc(r.id)}','cancelled')">ยกเลิก</button>
-              `:""}
-            </div>
-          </div>
-          <div style="margin-top:8px">
-            <b>ของรางวัล:</b> ${esc(r.reward_name||"รางวัลกิจกรรม")}
-            ${r.note?`<br>หมายเหตุ: ${esc(r.note)}`:""}
-          </div>
-        </article>
-      `).join("")
-      : `<div class="card empty">ไม่มีรายการของรางวัล</div>`;
-  }catch(e){
-    $("rewardList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
-  }
-}
-
-async function setRewardStatus(id,status){
-  try{
-    await post("updateRewardStatus",{rewardId:id,status});
-    toast("อัปเดตสถานะของรางวัลแล้ว");
-    await Promise.all([loadRewards(),loadSummary()]);
-  }catch(e){toast(e.message,true)}
-}
-
-
-/* =========================================================
-   BATTLE STAGE REWARD MANAGEMENT V3.2
-========================================================= */
-
-let battleRewardsCache = [];
-
-
-function resetBattleRewardForm(){
-
-  $("brId").value = "";
-  $("brStage").value = "1";
-  $("brType").value = "physical";
-  $("brName").value = "";
-  $("brAmount").value = "1";
-  $("brDescription").value = "";
-  $("brAdminNote").value = "";
-  $("brActive").value = "true";
-}
-
-
-async function loadBattleRewards(){
-
-  try{
-
-    const stage =
-      $("battleRewardStageFilter")?.value ||
-      "all";
-
-
-    const d =
-      await post(
-        "battleRewardList",
-        {
-          stage:
-            stage === "all"
-              ? null
-              : Number(stage)
-        }
-      );
-
-
-    battleRewardsCache =
-      d?.items ||
-      [];
-
-
-    $("battleRewardList").innerHTML =
-      battleRewardsCache.length
-        ? battleRewardsCache
-            .map(
-              r => `
-                <article class="card">
-
-                  <div class="row space">
-
-                    <div>
-
-                      <b>
-                        ⚔️ Stage ${Number(r.stage_no || 0)}
-                        • ${esc(r.reward_name || "รางวัล")}
-                      </b>
-
-                      ${
-                        r.active
-                          ? '<span class="badge approved">ใช้งาน</span>'
-                          : '<span class="badge cancelled">ปิดใช้งาน</span>'
-                      }
-
-                      <div class="muted-text">
-                        ${esc(r.reward_type || "")}
-                        • จำนวน/มูลค่า ${Number(r.reward_amount || 0)}
-                      </div>
-
-                    </div>
-
-                    <div class="row">
-
-                      <button
-                        class="btn primary"
-                        onclick="editBattleReward('${esc(r.id)}')"
-                      >
-                        แก้ไข
-                      </button>
-
-                      ${
-                        r.active
-                          ? `
-                            <button
-                              class="btn warning"
-                              onclick="setBattleRewardActive('${esc(r.id)}',false)"
-                            >
-                              ปิดใช้งาน
-                            </button>
-                          `
-                          : `
-                            <button
-                              class="btn success"
-                              onclick="setBattleRewardActive('${esc(r.id)}',true)"
-                            >
-                              เปิดใช้งาน
-                            </button>
-                          `
-                      }
-
-                      <button
-                        class="btn danger"
-                        onclick="deleteBattleReward('${esc(r.id)}')"
-                      >
-                        ยกเลิก/ลบ
-                      </button>
-
-                    </div>
-
-                  </div>
-
-                  ${
-                    r.description
-                      ? `<div style="margin-top:8px">${esc(r.description)}</div>`
-                      : ""
-                  }
-
-                  ${
-                    r.admin_note
-                      ? `<div class="muted-text" style="margin-top:6px">Admin: ${esc(r.admin_note)}</div>`
-                      : ""
-                  }
-
-                </article>
-              `
-            )
-            .join("")
-        : `<div class="card empty">ยังไม่มีการกำหนดรางวัล Stage</div>`;
-
-  }catch(e){
-
-    $("battleRewardList").innerHTML =
-      `<div class="card empty">${esc(e.message)}</div>`;
-  }
-}
-
-
-function editBattleReward(
-  id
-){
-
-  const r =
-    battleRewardsCache.find(
-      x => x.id === id
-    );
-
-
-  if(!r){
-    return;
-  }
-
-
-  $("brId").value =
-    r.id ||
-    "";
-
-  $("brStage").value =
-    String(
-      r.stage_no ||
-      1
-    );
-
-  $("brType").value =
-    r.reward_type ||
-    "physical";
-
-  $("brName").value =
-    r.reward_name ||
-    "";
-
-  $("brAmount").value =
-    String(
-      r.reward_amount ??
-      1
-    );
-
-  $("brDescription").value =
-    r.description ||
-    "";
-
-  $("brAdminNote").value =
-    r.admin_note ||
-    "";
-
-  $("brActive").value =
-    String(
-      Boolean(
-        r.active
-      )
-    );
-
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-
-async function saveBattleReward(){
-
-  try{
-
-    const rewardName =
-      $("brName")
-        .value
-        .trim();
-
-
-    if(!rewardName){
-
-      throw new Error(
-        "กรุณากรอกชื่อรางวัล"
-      );
+  function loadMissionData() {
+    const key = getStorageKey();
+    const saved = localStorage.getItem(key);
+
+    if (!saved) {
+      const data = createDefaultData();
+      saveMissionData(data);
+      return data;
     }
 
+    try {
+      return JSON.parse(saved);
+    } catch (error) {
+      console.error("Mission data error:", error);
 
-    await post(
-      "saveBattleReward",
-      {
-        reward:{
-          id:
-            $("brId").value ||
-            null,
-
-          stageNo:
-            Number(
-              $("brStage").value ||
-              1
-            ),
-
-          rewardType:
-            $("brType").value,
-
-          rewardName,
-
-          rewardAmount:
-            Number(
-              $("brAmount").value ||
-              0
-            ),
-
-          description:
-            $("brDescription")
-              .value
-              .trim(),
-
-          adminNote:
-            $("brAdminNote")
-              .value
-              .trim(),
-
-          active:
-            $("brActive").value ===
-            "true"
-        }
-      }
-    );
-
-
-    toast(
-      "บันทึกรางวัล Stage แล้ว"
-    );
-
-
-    resetBattleRewardForm();
-
-    await loadBattleRewards();
-
-  }catch(e){
-
-    toast(
-      e.message,
-      true
-    );
-  }
-}
-
-
-async function setBattleRewardActive(
-  id,
-  active
-){
-
-  try{
-
-    await post(
-      "setBattleRewardActive",
-      {
-        rewardId:id,
-        active
-      }
-    );
-
-
-    toast(
-      active
-        ? "เปิดใช้งานรางวัลแล้ว"
-        : "ปิดใช้งานรางวัลแล้ว"
-    );
-
-
-    await loadBattleRewards();
-
-  }catch(e){
-
-    toast(
-      e.message,
-      true
-    );
-  }
-}
-
-
-async function deleteBattleReward(
-  id
-){
-
-  if(
-    !confirm(
-      "ยืนยันยกเลิกรางวัลนี้?"
-    )
-  ){
-    return;
+      const data = createDefaultData();
+      saveMissionData(data);
+      return data;
+    }
   }
 
+  function saveMissionData(data) {
+    data.updatedAt = new Date().toISOString();
 
-  try{
-
-    await post(
-      "deleteBattleReward",
-      {
-        rewardId:id
-      }
-    );
-
-
-    toast(
-      "ยกเลิกรางวัลแล้ว"
-    );
-
-
-    await loadBattleRewards();
-
-  }catch(e){
-
-    toast(
-      e.message,
-      true
+    localStorage.setItem(
+      getStorageKey(),
+      JSON.stringify(data)
     );
   }
-}
 
-
-async function loadPlayers(){
-  try{
-    const d=await post("players");
-    playersCache=d?.players||[];
-    renderPlayers();
-  }catch(e){
-    $("playerList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
+  function getStatusText(status) {
+    if (status === "approved") return "อนุมัติแล้ว";
+    if (status === "cancelled") return "ถูกยกเลิก";
+    return "รอทำภารกิจ";
   }
-}
 
-function renderPlayers(){
-  const q=($("playerSearch")?.value||"").toLowerCase();
-  const sf=$("playerStatusFilter")?.value||"all";
+  function getStatusClass(status) {
+    if (status === "approved") return "approved";
+    if (status === "cancelled") return "cancelled";
+    return "pending";
+  }
 
-  const rows=playersCache.filter(p=>{
-    const text=[
-      p.line_display_name,
-      p.team_name,
-      p.line_user_id
-    ].join(" ").toLowerCase();
+  function renderMissions() {
+    const data = loadMissionData();
+    const container = document.getElementById("missionList");
 
-    const status=String(p.status||"active").toLowerCase();
+    document.getElementById("dateText").textContent = getTodayKey();
 
-    return (!q || text.includes(q)) && (sf==="all" || status===sf);
-  });
+    container.innerHTML = "";
 
-  $("playerList").innerHTML=rows.length
-    ? rows.map(p=>{
-      const w=Array.isArray(p.player_wallets)?p.player_wallets[0]:p.player_wallets;
-      return `
-        <article class="card player">
-          <img class="avatar" src="${esc(p.picture_url||"")}" onerror="this.style.visibility='hidden'">
-          <div>
-            <b>${esc(p.line_display_name||"-")}</b>
-            ${statusBadge(p.status||"active")}
-            <div class="muted-text">
-              Team: ${esc(p.team_name||"-")}<br>
-              ⭐ ${Number(w?.rock_coin||0)} • ⚡ ${Number(w?.energy||0)}/${Number(w?.max_energy||200)} • EXP ${Number(w?.exp||0)}
-            </div>
+    MISSION_LIST.forEach(item => {
+      const mission = data.missions[item.id];
+
+      const card = document.createElement("div");
+      card.className = "mission";
+
+      card.innerHTML = `
+        <div class="mission-top">
+          <div class="mission-name">${item.name}</div>
+
+          <div class="status ${getStatusClass(mission.status)}">
+            ${getStatusText(mission.status)}
           </div>
-          <div class="actions row">
-            <button class="btn primary" onclick="editPlayer('${esc(p.id)}')">แก้ไข</button>
-            <button class="btn danger" onclick="cancelPlayer('${esc(p.id)}')">ยกเลิกผู้เล่น</button>
-          </div>
-        </article>
+        </div>
+
+        <div class="btn-row">
+          <button
+            class="btn-cancel"
+            onclick="cancelSingleMission('${item.id}')"
+          >
+            ❌ ยกเลิก Mission นี้
+          </button>
+
+          <button
+            class="btn-reset"
+            onclick="resetSingleMission('${item.id}')"
+          >
+            🔄 คืนสถานะให้ทำใหม่
+          </button>
+        </div>
       `;
-    }).join("")
-    : `<div class="card empty">ไม่พบผู้เล่น</div>`;
-}
 
-async function editPlayer(id){
-  const p=playersCache.find(x=>x.id===id);
-  if(!p)return;
-
-  const name=prompt("ชื่อผู้เล่น",p.line_display_name||"");
-  if(name===null)return;
-
-  const team=prompt("Team",p.team_name||"");
-  if(team===null)return;
-
-  try{
-    await post("updatePlayer",{
-      playerId:id,
-      lineDisplayName:name.trim(),
-      teamName:team.trim(),
-      status:p.status||"active"
+      container.appendChild(card);
     });
-    toast("บันทึกข้อมูลผู้เล่นแล้ว");
-    loadPlayers();
-  }catch(e){toast(e.message,true)}
-}
-
-async function cancelPlayer(id){
-  if(!confirm("ยืนยันยกเลิกผู้เล่นคนนี้?"))return;
-
-  try{
-    await post("updatePlayer",{playerId:id,status:"cancelled"});
-    toast("ยกเลิกผู้เล่นแล้ว");
-    await Promise.all([loadPlayers(),loadSummary()]);
-  }catch(e){toast(e.message,true)}
-}
-
-async function loadAdvice(){
-  try{
-    const d=await post("playerAdviceList");
-    const rows=d?.items||[];
-
-    $("adviceList").innerHTML=rows.length
-      ? rows.map(x=>`
-        <article class="card">
-          <b>${esc(x.line_display_name||"Player")}</b>
-          <div class="muted-text">${esc(x.team_name||"")}</div>
-          <textarea id="advice-${esc(x.player_id)}">${esc(x.advice_note||"")}</textarea>
-          <div class="row" style="margin-top:8px">
-            <button class="btn success" onclick="saveAdvice('${esc(x.player_id)}')">บันทึกคำแนะนำ</button>
-          </div>
-        </article>
-      `).join("")
-      : `<div class="card empty">ไม่มีข้อมูลผู้เล่น</div>`;
-  }catch(e){
-    $("adviceList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
   }
-}
 
-async function saveAdvice(playerId){
-  try{
-    const adviceNote=$(`advice-${playerId}`)?.value||"";
-    await post("savePlayerAdvice",{playerId,adviceNote});
-    toast("บันทึกคำแนะนำแล้ว");
-  }catch(e){toast(e.message,true)}
-}
+  /* -------------------------
+     1. ยกเลิกเฉพาะ 1 Mission
+  ------------------------- */
+  function cancelSingleMission(missionId) {
+    const ok = confirm(
+      "ต้องการยกเลิก Mission นี้ของผู้เล่นใช่หรือไม่?"
+    );
 
-function resetMissionForm(){
-  ["cmId","cmName","cmIcon","cmDescription","cmTarget"].forEach(id=>$(id).value="");
-  $("cmCoin").value=10;
-  $("cmEnergy").value=10;
-  $("cmExp").value=10;
-  $("cmActive").value="true";
-}
+    if (!ok) return;
 
-async function loadCustomMissions(){
-  try{
-    const d=await post("customMissionList");
-    const rows=d?.items||[];
+    const data = loadMissionData();
+    const mission = data.missions[missionId];
 
-    $("customMissionList").innerHTML=rows.length
-      ? rows.map(m=>`
-        <article class="card">
-          <div class="row space">
-            <div>
-              <b>${esc(m.icon||"🎯")} ${esc(m.name)}</b>
-              ${statusBadge(m.active?"active":"inactive")}
-              <div class="muted-text">${esc(m.id)} • ${esc(m.category)}</div>
-            </div>
-            <div class="row">
-              <button class="btn primary" onclick='fillMissionForm(${JSON.stringify(m).replaceAll("'","&#39;")})'>แก้ไข</button>
-              <button class="btn danger" onclick="deleteCustomMission('${esc(m.id)}')">ลบ</button>
-            </div>
-          </div>
-          <div style="margin-top:8px">${esc(m.description||"")}</div>
-          <div style="margin-top:8px">
-            ⭐ ${Number(m.reward_coin||0)} • ⚡ ${Number(m.reward_energy||0)} • EXP ${Number(m.reward_exp||0)}
-          </div>
-        </article>
-      `).join("")
-      : `<div class="card empty">ยังไม่มี Custom Mission</div>`;
-  }catch(e){
-    $("customMissionList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
+    mission.status = "cancelled";
+    mission.completed = false;
+    mission.approved = false;
+    mission.rewardClaimed = false;
+
+    mission.cancelledByAdmin = true;
+    mission.cancelledAt = new Date().toISOString();
+
+    saveMissionData(data);
+
+    writeLog(
+      `ยกเลิก Mission "${missionId}" ของ ${PLAYER_ID}`
+    );
+
+    renderMissions();
   }
-}
 
-function fillMissionForm(m){
-  $("cmId").value=m.id||"";
-  $("cmCategory").value=m.category||"daily";
-  $("cmName").value=m.name||"";
-  $("cmIcon").value=m.icon||"";
-  $("cmDescription").value=m.description||"";
-  $("cmCoin").value=m.reward_coin||0;
-  $("cmEnergy").value=m.reward_energy||0;
-  $("cmExp").value=m.reward_exp||0;
-  $("cmTarget").value=JSON.stringify(m.target_json||{},null,2);
-  $("cmActive").value=String(Boolean(m.active));
-  scrollTo({top:0,behavior:"smooth"});
-}
+  /* -------------------------
+     2. ยกเลิกทุก Mission วันนี้
+  ------------------------- */
+  function cancelAllMissions() {
+    const ok = confirm(
+      "ต้องการยกเลิกทุก Mission ของผู้เล่นในวันนี้ใช่หรือไม่?"
+    );
 
-async function saveCustomMission(){
-  try{
-    let targetJson={};
-    const raw=$("cmTarget").value.trim();
-    if(raw)targetJson=JSON.parse(raw);
+    if (!ok) return;
 
-    await post("saveCustomMission",{
-      mission:{
-        id:$("cmId").value.trim(),
-        category:$("cmCategory").value,
-        name:$("cmName").value.trim(),
-        icon:$("cmIcon").value.trim(),
-        description:$("cmDescription").value.trim(),
-        rewardCoin:Number($("cmCoin").value||0),
-        rewardEnergy:Number($("cmEnergy").value||0),
-        rewardExp:Number($("cmExp").value||0),
-        targetJson,
-        active:$("cmActive").value==="true"
-      }
+    const data = loadMissionData();
+
+    Object.keys(data.missions).forEach(missionId => {
+      const mission = data.missions[missionId];
+
+      mission.status = "cancelled";
+      mission.completed = false;
+      mission.approved = false;
+      mission.rewardClaimed = false;
+
+      mission.cancelledByAdmin = true;
+      mission.cancelledAt = new Date().toISOString();
     });
 
-    toast("บันทึก Mission แล้ว");
-    resetMissionForm();
-    loadCustomMissions();
-  }catch(e){toast(e.message,true)}
-}
+    data.allCancelledByAdmin = true;
+    data.allCancelledAt = new Date().toISOString();
 
-async function deleteCustomMission(id){
-  if(!confirm(`ลบ Mission ${id}?`))return;
-  try{
-    await post("deleteCustomMission",{missionId:id});
-    toast("ลบ Mission แล้ว");
-    loadCustomMissions();
-  }catch(e){toast(e.message,true)}
-}
+    saveMissionData(data);
 
-async function loadInBody(){
-  try{
-    const d=await post("inbodyQueue");
-    const rows=d?.items||d?.queue||[];
-
-    $("inbodyList").innerHTML=rows.length
-      ? rows.map(x=>`
-        <article class="card">
-          <div class="row space">
-            <div>
-              <b>${esc(x.line_display_name||x.player_name||"Player")}</b>
-              ${statusBadge(x.advice_status||"pending_review")}
-            </div>
-          </div>
-          <textarea id="inbody-note-${esc(x.id)}">${esc(x.advice_note||"")}</textarea>
-          <div class="row" style="margin-top:8px">
-            <button class="btn success" onclick="reviewInBody('${esc(x.id)}')">บันทึกคำแนะนำ</button>
-          </div>
-        </article>
-      `).join("")
-      : `<div class="card empty">ไม่มี InBody รอตรวจ</div>`;
-  }catch(e){
-    $("inbodyList").innerHTML=`<div class="card empty">${esc(e.message)}</div>`;
-  }
-}
-
-async function reviewInBody(id){
-  try{
-    const adviceNote=$(`inbody-note-${id}`)?.value||"";
-    await post("reviewInBody",{inbodyId:id,adviceNote,status:"reviewed"});
-    toast("บันทึก InBody Review แล้ว");
-    loadInBody();
-  }catch(e){toast(e.message,true)}
-}
-
-async function loadSettings(){
-  try{
-    const d=await post("systemSettings");
-    const s=d?.settings||{};
-    $("setProjectName").value=s.projectName||"ROCK YOUR BODY 2026";
-    $("setMaxEnergy").value=s.maxEnergy??200;
-    $("setStepsGoal").value=s.stepsGoal??8000;
-    $("setCaloriesGoal").value=s.caloriesGoal??300;
-    $("setSleepGoal").value=s.sleepGoal??420;
-    $("setMaintenanceMessage").value=s.maintenanceMessage||"";
-  }catch(e){toast(e.message,true)}
-}
-
-async function saveSettings(){
-
-  const button =
-    document.querySelector(
-      '#panel-settings button[onclick="saveSettings()"]'
+    writeLog(
+      `ยกเลิกทุก Mission วันนี้ของ ${PLAYER_ID}`
     );
 
-
-  const settings = {
-
-    projectName:
-      $("setProjectName")
-        .value
-        .trim(),
-
-    maxEnergy:
-      Number(
-        $("setMaxEnergy")
-          .value ||
-        200
-      ),
-
-    stepsGoal:
-      Number(
-        $("setStepsGoal")
-          .value ||
-        8000
-      ),
-
-    caloriesGoal:
-      Number(
-        $("setCaloriesGoal")
-          .value ||
-        300
-      ),
-
-    sleepGoal:
-      Number(
-        $("setSleepGoal")
-          .value ||
-        420
-      ),
-
-    maintenanceMessage:
-      $("setMaintenanceMessage")
-        .value
-        .trim()
-
-  };
-
-
-  try{
-
-    if(button){
-
-      button.disabled =
-        true;
-
-      button.textContent =
-        "กำลังบันทึก...";
-    }
-
-
-    const result =
-      await post(
-        "saveSystemSettings",
-        {
-          settings
-        }
-      );
-
-
-    /*
-      Backend V3.3.1 จะส่งค่าที่บันทึกกลับมา
-      ถ้าไม่มี settings ใน response
-      ให้โหลดซ้ำจาก DB เพื่อยืนยัน
-    */
-    const saved =
-      result?.settings;
-
-
-    if(saved){
-
-      $("setProjectName").value =
-        saved.projectName ??
-        settings.projectName;
-
-      $("setMaxEnergy").value =
-        saved.maxEnergy ??
-        settings.maxEnergy;
-
-      $("setStepsGoal").value =
-        saved.stepsGoal ??
-        settings.stepsGoal;
-
-      $("setCaloriesGoal").value =
-        saved.caloriesGoal ??
-        settings.caloriesGoal;
-
-      $("setSleepGoal").value =
-        saved.sleepGoal ??
-        settings.sleepGoal;
-
-      $("setMaintenanceMessage").value =
-        saved.maintenanceMessage ??
-        settings.maintenanceMessage;
-
-    }else{
-
-      await loadSettings();
-    }
-
-
-    toast(
-      "✅ บันทึก Settings สำเร็จ"
-    );
-
-
-  }catch(e){
-
-    console.error(
-      "[SAVE SETTINGS]",
-      e
-    );
-
-
-    toast(
-      "บันทึก Settings ไม่สำเร็จ: " +
-      (
-        e?.message ||
-        String(e)
-      ),
-      true
-    );
-
-
-  }finally{
-
-    if(button){
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "บันทึก Settings";
-    }
-  }
-}
-
-
-/* =========================================================
-   ADMIN TEST CONTROL V3.3
-========================================================= */
-
-let testState =
-  null;
-
-
-function selectedTestPlayerId(){
-
-  return (
-    $("testPlayerSelect")
-      ?.value ||
-    ""
-  );
-}
-
-
-async function loadTestPlayers(){
-
-  try{
-
-    if(
-      !playersCache.length
-    ){
-
-      const data =
-        await post(
-          "players"
-        );
-
-
-      playersCache =
-        data?.players ||
-        [];
-    }
-
-
-    const select =
-      $("testPlayerSelect");
-
-
-    const previous =
-      select.value;
-
-
-    select.innerHTML =
-      `<option value="">-- เลือก Player --</option>` +
-      playersCache
-        .map(
-          p => {
-
-            const wallet =
-              Array.isArray(
-                p.player_wallets
-              )
-                ? p.player_wallets[0]
-                : p.player_wallets;
-
-
-            return `
-              <option value="${esc(p.id)}">
-                ${esc(p.line_display_name || "Player")}
-                • ${esc(p.team_name || "-")}
-                • EXP ${Number(wallet?.exp || 0)}
-              </option>
-            `;
-          }
-        )
-        .join("");
-
-
-    if(
-      previous &&
-      playersCache.some(
-        p =>
-          p.id ===
-          previous
-      )
-    ){
-
-      select.value =
-        previous;
-    }
-
-
-    if(
-      select.value
-    ){
-
-      await loadTestState();
-    }
-
-
-  }catch(error){
-
-    toast(
-      error.message,
-      true
-    );
-  }
-}
-
-
-function renderTestState(
-  data
-){
-
-  testState =
-    data;
-
-
-  const player =
-    data?.player ||
-    {};
-
-
-  const home =
-    data
-      ?.wallet
-      ?.home ||
-    {};
-
-
-  const canonical =
-    data
-      ?.wallet
-      ?.canonical ||
-    {};
-
-
-  const rockCoin =
-    Number(
-      home?.rock_coin ??
-      canonical?.rock_coin ??
-      0
-    );
-
-
-  const energy =
-    Number(
-      home?.energy ??
-      canonical?.energy ??
-      0
-    );
-
-
-  const maxEnergy =
-    Number(
-      home?.max_energy ??
-      canonical?.max_energy ??
-      200
-    );
-
-
-  const exp =
-    Number(
-      home?.exp ??
-      canonical?.exp ??
-      0
-    );
-
-
-  const progress =
-    Array.isArray(
-      data?.progress
-    )
-      ? data.progress
-      : [];
-
-
-  const completedCount =
-    progress.filter(
-      row =>
-        row.completed
-    ).length;
-
-
-  $("testPlayerCard")
-    .style
-    .display =
-      "block";
-
-
-  $("testPlayerName")
-    .textContent =
-      player.line_display_name ||
-      "Player";
-
-
-  $("testPlayerMeta")
-    .textContent =
-      `${player.team_name || "-"} • ${player.line_user_id || ""}`;
-
-
-  $("testCoinStat")
-    .textContent =
-      rockCoin
-        .toLocaleString();
-
-
-  $("testEnergyStat")
-    .textContent =
-      `${energy.toLocaleString()} / ${maxEnergy.toLocaleString()}`;
-
-
-  $("testExpStat")
-    .textContent =
-      exp
-        .toLocaleString();
-
-
-  $("testStageStat")
-    .textContent =
-      `${completedCount} / 10`;
-
-
-  $("testCoin")
-    .value =
-      rockCoin;
-
-
-  $("testEnergy")
-    .value =
-      energy;
-
-
-  $("testExp")
-    .value =
-      exp;
-
-
-  renderTestBattleProgress(
-    data
-  );
-
-
-  renderTestBattleRewards(
-    data
-  );
-}
-
-
-function renderTestBattleProgress(
-  data
-){
-
-  const stages =
-    Array.isArray(
-      data?.stages
-    )
-      ? data.stages
-      : [];
-
-
-  const progress =
-    Array.isArray(
-      data?.progress
-    )
-      ? data.progress
-      : [];
-
-
-  $("testBattleProgress")
-    .innerHTML =
-      stages.length
-        ? stages
-            .map(
-              stage => {
-
-                const row =
-                  progress.find(
-                    p =>
-                      Number(
-                        p.stage_no
-                      ) ===
-                      Number(
-                        stage.stage_no
-                      )
-                  );
-
-
-                const completed =
-                  Boolean(
-                    row?.completed
-                  );
-
-
-                const hp =
-                  Number(
-                    row?.current_hp ??
-                    stage.max_hp ??
-                    0
-                  );
-
-
-                const maxHp =
-                  Number(
-                    stage.max_hp ||
-                    0
-                  );
-
-
-                return `
-                  <div class="progress-stage">
-                    <b>Stage ${Number(stage.stage_no)}</b>
-
-                    <div>
-                      ${esc(stage.monster_name || "")}
-                      <div class="muted-text">
-                        HP ${hp.toLocaleString()} / ${maxHp.toLocaleString()}
-                        • EXP ${Number(stage.exp_required || 0).toLocaleString()}
-                        • Energy ${Number(stage.attack_cost || 0)}
-                      </div>
-                    </div>
-
-                    ${
-                      completed
-                        ? `<span class="badge approved">ผ่านแล้ว</span>`
-                        : row
-                          ? `<span class="badge pending">พร้อมสู้</span>`
-                          : `<span class="badge">ยังไม่เริ่ม</span>`
-                    }
-                  </div>
-                `;
-              }
-            )
-            .join("")
-        : `<div class="empty">ไม่มี Stage Config</div>`;
-}
-
-
-function renderTestBattleRewards(
-  data
-){
-
-  const rewards =
-    Array.isArray(
-      data?.rewards
-    )
-      ? data.rewards
-      : [];
-
-
-  $("testBattleRewards")
-    .innerHTML =
-      rewards.length
-        ? rewards
-            .map(
-              reward => `
-                <div style="padding:9px 0;border-bottom:1px solid #edf2f7">
-                  <div class="row space">
-                    <b>${esc(reward.reward_name || "Battle Reward")}</b>
-                    ${statusBadge(reward.status)}
-                  </div>
-                  <div class="muted-text">
-                    ${esc(reward.mission_id || "")}
-                    • ${esc(reward.created_at || "")}
-                  </div>
-                </div>
-              `
-            )
-            .join("")
-        : `<div class="empty">ไม่มี Battle Reward</div>`;
-}
-
-
-async function loadTestState(){
-
-  const playerId =
-    selectedTestPlayerId();
-
-
-  if(!playerId){
-
-    $("testPlayerCard")
-      .style
-      .display =
-        "none";
-
-
-    $("testBattleProgress")
-      .innerHTML =
-        "เลือก Player ก่อน";
-
-
-    $("testBattleRewards")
-      .innerHTML =
-        "เลือก Player ก่อน";
-
-
-    return;
+    renderMissions();
   }
 
-
-  try{
-
-    const data =
-      await post(
-        "testControlState",
-        {
-          playerId
-        }
-      );
-
-
-    renderTestState(
-      data
+  /* -------------------------
+     3. คืนสถานะเฉพาะ 1 Mission
+        ให้ผู้เล่นทำใหม่
+  ------------------------- */
+  function resetSingleMission(missionId) {
+    const ok = confirm(
+      "ต้องการคืน Mission นี้ให้ผู้เล่นทำใหม่ใช่หรือไม่?"
     );
 
+    if (!ok) return;
 
-  }catch(error){
+    const data = loadMissionData();
+    const mission = data.missions[missionId];
 
-    toast(
-      error.message,
-      true
-    );
-  }
-}
+    mission.status = "pending";
+    mission.completed = false;
+    mission.approved = false;
+    mission.rewardClaimed = false;
 
+    mission.cancelledByAdmin = false;
+    mission.cancelledAt = null;
 
-async function saveTestWallet(){
+    mission.resetByAdmin = true;
+    mission.resetAt = new Date().toISOString();
 
-  const playerId =
-    selectedTestPlayerId();
+    saveMissionData(data);
 
-
-  if(!playerId){
-
-    toast(
-      "เลือก Player ก่อน",
-      true
+    writeLog(
+      `คืน Mission "${missionId}" ให้ ${PLAYER_ID} ทำใหม่`
     );
 
-
-    return;
+    renderMissions();
   }
 
-
-  try{
-
-    const data =
-      await post(
-        "testSetWallet",
-        {
-          playerId,
-
-          rockCoin:
-            Number(
-              $("testCoin")
-                .value ||
-              0
-            ),
-
-          energy:
-            Number(
-              $("testEnergy")
-                .value ||
-              0
-            ),
-
-          exp:
-            Number(
-              $("testExp")
-                .value ||
-              0
-            )
-        }
-      );
-
-
-    renderTestState(
-      data
+  /* -------------------------
+     คืนทุก Mission ให้ทำใหม่
+  ------------------------- */
+  function resetAllMissions() {
+    const ok = confirm(
+      "ต้องการคืนทุก Mission ให้ผู้เล่นเริ่มทำใหม่ใช่หรือไม่?"
     );
 
+    if (!ok) return;
 
-    toast(
-      "บันทึก Test Wallet แล้ว"
+    const data = loadMissionData();
+
+    Object.keys(data.missions).forEach(missionId => {
+      const mission = data.missions[missionId];
+
+      mission.status = "pending";
+      mission.completed = false;
+      mission.approved = false;
+      mission.rewardClaimed = false;
+
+      mission.cancelledByAdmin = false;
+      mission.cancelledAt = null;
+
+      mission.resetByAdmin = true;
+      mission.resetAt = new Date().toISOString();
+    });
+
+    data.allCancelledByAdmin = false;
+    data.allResetAt = new Date().toISOString();
+
+    saveMissionData(data);
+
+    writeLog(
+      `คืนทุก Mission วันนี้ให้ ${PLAYER_ID} ทำใหม่`
     );
 
-
-    /*
-      refresh Players cache
-    */
-    playersCache =
-      [];
-
-
-  }catch(error){
-
-    toast(
-      error.message,
-      true
-    );
-  }
-}
-
-
-async function resetTestBattle(){
-
-  const playerId =
-    selectedTestPlayerId();
-
-
-  if(!playerId){
-
-    toast(
-      "เลือก Player ก่อน",
-      true
-    );
-
-
-    return;
+    renderMissions();
   }
 
+  function writeLog(message) {
+    const time = new Date().toLocaleString("th-TH");
 
-  if(
-    !confirm(
-      "Reset Battle ของ Player นี้?\n\nProgress จะถูกล้าง และ Battle Reward ที่ยัง pending จะถูกยกเลิก"
-    )
-  ){
-
-    return;
+    document.getElementById("adminLog").innerHTML =
+      `<strong>Admin Action:</strong> ${message}<br>` +
+      `<small>${time}</small>`;
   }
 
-
-  try{
-
-    const data =
-      await post(
-        "testResetBattle",
-        {
-          playerId
-        }
-      );
-
-
-    renderTestState(
-      data
-    );
-
-
-    toast(
-      "Reset Battle แล้ว"
-    );
-
-
-  }catch(error){
-
-    toast(
-      error.message,
-      true
-    );
-  }
-}
-
-
-async function applyTestScenario(
-  scenario
-){
-
-  const playerId =
-    selectedTestPlayerId();
-
-
-  if(!playerId){
-
-    toast(
-      "เลือก Player ก่อน",
-      true
-    );
-
-
-    return;
-  }
-
-
-  try{
-
-    const data =
-      await post(
-        "testApplyScenario",
-        {
-          playerId,
-          scenario
-        }
-      );
-
-
-    renderTestState(
-      data
-    );
-
-
-    toast(
-      "เตรียม Test Scenario แล้ว"
-    );
-
-
-    playersCache =
-      [];
-
-
-  }catch(error){
-
-    toast(
-      error.message,
-      true
-    );
-  }
-}
-
-
-async function prepareTestStage(){
-
-  const playerId =
-    selectedTestPlayerId();
-
-
-  if(!playerId){
-
-    toast(
-      "เลือก Player ก่อน",
-      true
-    );
-
-
-    return;
-  }
-
-
-  try{
-
-    const data =
-      await post(
-        "testPrepareStage",
-        {
-          playerId,
-
-          stageNo:
-            Number(
-              $("testStageNo")
-                .value ||
-              1
-            ),
-
-          energy:
-            Number(
-              $("testStageEnergy")
-                .value ||
-              0
-            )
-        }
-      );
-
-
-    renderTestState(
-      data
-    );
-
-
-    toast(
-      `เตรียม Stage ${$("testStageNo").value} แล้ว`
-    );
-
-
-    playersCache =
-      [];
-
-
-  }catch(error){
-
-    toast(
-      error.message,
-      true
-    );
-  }
-}
-
-
-function openTestPage(
-  pageName
-){
-
-  const page =
-    window.APP_CONFIG
-      ?.getPage
-      ? window.APP_CONFIG.getPage(pageName)
-      : window.APP_CONFIG
-          ?.PAGE
-          ?.[pageName];
-
-
-  if(!page){
-
-    toast(
-      "ไม่พบ Page " +
-      pageName,
-      true
-    );
-
-
-    return;
-  }
-
-
-  window.open(
-    page,
-    "_blank"
-  );
-}
-
-
-async function reloadAll(){
-  await Promise.allSettled([
-    loadSummary(),
-    loadMissionQueue()
-  ]);
-  toast("รีเฟรชแล้ว");
-}
-
-(async()=>{
-  try{
-    const ready=await initLine();
-    if(ready===false)return;
-    await reloadAll();
-  }catch(e){
-    toast(e.message,true);
-  }
-})();
+  renderMissions();
 </script>
 
 </body>
