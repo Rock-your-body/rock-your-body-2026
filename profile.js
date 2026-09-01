@@ -1,6 +1,7 @@
 import { db } from "./auth.js";
 import "./admin-users.js";
 import "./admin-events.js";
+import "./expert-channels.js";
 
 const $ = (selector) => document.querySelector(selector);
 const { data: { session } } = await db.auth.getSession();
