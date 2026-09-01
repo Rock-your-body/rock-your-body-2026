@@ -9,7 +9,7 @@
   <title>ROCK YOUR BODY 2026 — ADMIN</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260901-admin-v350-mission-reset-nutrition-health"></script>
+  <script src="./app-config.js?v=20260901-admin-v360-mission-catalog"></script>
 
   <style>
     *{box-sizing:border-box}
@@ -1068,7 +1068,25 @@
       </div>
     </div>
 
-    <div id="customMissionList"></div>
+    <div class="card" style="margin-top:12px">
+      <div class="row space">
+        <div>
+          <b>📋 Mission ที่มีอยู่ในระบบตอนนี้</b>
+          <div class="muted-text">
+            แสดง Core Mission + Secret Mission + Custom Mission ที่ Admin สร้างเพิ่ม
+          </div>
+        </div>
+        <button class="btn primary" onclick="loadMissionCatalog()">รีเฟรชรายการ</button>
+      </div>
+
+      <div id="missionCatalogSummary" class="row" style="margin-top:12px"></div>
+      <div id="missionCatalogList" style="margin-top:12px"></div>
+    </div>
+
+    <div class="card">
+      <b>🧩 Custom Mission ที่ Admin สร้างเพิ่ม</b>
+      <div id="customMissionList" style="margin-top:10px"></div>
+    </div>
   </section>
 
   <!-- INBODY -->
@@ -1220,7 +1238,10 @@ document.querySelectorAll(".tab").forEach(btn=>{
     if(btn.dataset.tab==="nutrition-admin") loadNutritionAdmin();
     if(btn.dataset.tab==="test-control") loadTestPlayers();
     if(btn.dataset.tab==="advice") loadAdvice();
-    if(btn.dataset.tab==="missionset") loadCustomMissions();
+    if(btn.dataset.tab==="missionset"){
+      loadCustomMissions();
+      loadMissionCatalog();
+    }
     if(btn.dataset.tab==="inbody") loadInBody();
     if(btn.dataset.tab==="settings") loadSettings();
   });
@@ -2097,6 +2118,112 @@ function resetMissionForm(){
   $("cmActive").value="true";
 }
 
+
+/* =========================================================
+   MISSION CATALOG V3.6
+========================================================= */
+
+function missionCategoryLabel(category){
+
+  const map = {
+    daily:"☀️ Daily",
+    weekly:"📅 Weekly",
+    monthly:"🔥 Monthly",
+    bonus:"🎁 Bonus",
+    secret:"🎲 Secret"
+  };
+
+  return map[String(category||"").toLowerCase()] || category || "-";
+}
+
+
+async function loadMissionCatalog(){
+
+  try{
+
+    const d =
+      await post(
+        "missionCatalog"
+      );
+
+    const rows =
+      d?.missions ||
+      [];
+
+    const summary =
+      d?.summary ||
+      {};
+
+    $("missionCatalogSummary").innerHTML = `
+      <span class="badge">ทั้งหมด ${Number(summary.total||rows.length)}</span>
+      <span class="badge approved">Core ${Number(summary.core||0)}</span>
+      <span class="badge sent">Custom ${Number(summary.custom||0)}</span>
+      <span class="badge">Daily ${Number(summary.daily||0)}</span>
+      <span class="badge">Weekly ${Number(summary.weekly||0)}</span>
+      <span class="badge">Monthly ${Number(summary.monthly||0)}</span>
+      <span class="badge">Bonus ${Number(summary.bonus||0)}</span>
+      <span class="badge">Secret ${Number(summary.secret||0)}</span>
+    `;
+
+    $("missionCatalogList").innerHTML =
+      rows.length
+        ? `
+          <div class="table-wrap">
+            <table style="min-width:900px">
+              <thead>
+                <tr>
+                  <th>หมวด</th>
+                  <th>Mission ID</th>
+                  <th>ชื่อ Mission</th>
+                  <th>รางวัล</th>
+                  <th>Source</th>
+                  <th>สถานะ</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows.map(m=>`
+                  <tr>
+                    <td>${esc(missionCategoryLabel(m.category))}</td>
+                    <td><code>${esc(m.id)}</code></td>
+                    <td>
+                      <b>${esc(m.icon||"🎯")} ${esc(m.name||m.id)}</b>
+                      ${m.description?`<div class="muted-text">${esc(m.description)}</div>`:""}
+                    </td>
+                    <td>
+                      ⭐ ${Number(m.reward_coin||0)}
+                      &nbsp; ⚡ ${Number(m.reward_energy||0)}
+                      &nbsp; EXP ${Number(m.reward_exp||0)}
+                    </td>
+                    <td>
+                      ${
+                        m.source==="custom"
+                          ? '<span class="badge sent">CUSTOM</span>'
+                          : '<span class="badge approved">CORE</span>'
+                      }
+                    </td>
+                    <td>
+                      ${
+                        m.active===false
+                          ? '<span class="badge cancelled">Inactive</span>'
+                          : '<span class="badge approved">Active</span>'
+                      }
+                    </td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `
+        : `<div class="empty">ยังไม่มี Mission ใน Catalog</div>`;
+
+  }catch(e){
+
+    $("missionCatalogList").innerHTML =
+      `<div class="empty">${esc(e.message)}</div>`;
+  }
+}
+
+
 async function loadCustomMissions(){
   try{
     const d=await post("customMissionList");
@@ -2165,7 +2292,10 @@ async function saveCustomMission(){
 
     toast("บันทึก Mission แล้ว");
     resetMissionForm();
-    loadCustomMissions();
+    await Promise.all([
+      loadCustomMissions(),
+      loadMissionCatalog()
+    ]);
   }catch(e){toast(e.message,true)}
 }
 
@@ -2174,7 +2304,10 @@ async function deleteCustomMission(id){
   try{
     await post("deleteCustomMission",{missionId:id});
     toast("ลบ Mission แล้ว");
-    loadCustomMissions();
+    await Promise.all([
+      loadCustomMissions(),
+      loadMissionCatalog()
+    ]);
   }catch(e){toast(e.message,true)}
 }
 
