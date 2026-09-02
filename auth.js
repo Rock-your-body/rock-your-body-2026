@@ -34,9 +34,12 @@ if (form) {
   resetButton.insertAdjacentElement("afterend", resendButton);
 
   if (recoveryMode) {
+    const emailInput = document.querySelector("#email");
     document.querySelector("#authTitle").textContent = "ตั้งรหัสผ่านใหม่";
     document.querySelector("#nameLabel").classList.add("hidden");
-    document.querySelector("#email").closest("label").classList.add("hidden");
+    emailInput.closest("label").classList.add("hidden");
+    emailInput.required = false;
+    emailInput.disabled = true;
     document.querySelector("#password").autocomplete = "new-password";
     document.querySelector("#password").value = "";
     document.querySelector("#password").placeholder = "รหัสผ่านใหม่อย่างน้อย 8 ตัว";
