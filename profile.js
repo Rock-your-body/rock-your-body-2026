@@ -5,7 +5,8 @@ import "./expert-channels.js";
 import "./wellness-hub.js";
 
 const $ = (selector) => document.querySelector(selector);
-const { data: { session } } = await db.auth.getSession();
+const { data: { user: authenticatedUser } } = await db.auth.getUser();
+const session = authenticatedUser ? { user: authenticatedUser } : null;
 
 if (session) {
   const { data: profile, error } = await db.from("user_profiles").select("*").eq("id", session.user.id).single();
@@ -15,6 +16,7 @@ if (session) {
     $("#profileDepartment").value = profile.department || "";
     $("#profilePhone").value = profile.phone || "";
     $("#profileEmail").value = session.user.email || "";
+    $("#profileUserId").value = session.user.id;
     $("#profileRole").value = profile.role;
     $("#profileStatus").value = profile.status;
     if (profile.status !== "active") {
