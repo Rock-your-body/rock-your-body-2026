@@ -3,7 +3,7 @@
 /* ============================================================
    ROCK YOUR BODY 2026
    APP CONFIG
-   VERSION: 2026-08-31-BATTLE-STAGE-V7
+   VERSION: 2026-09-06-SUPABASE-AUTH
 ============================================================ */
 
 window.APP_CONFIG = {
@@ -16,7 +16,7 @@ window.APP_CONFIG = {
     "ROCK YOUR BODY 2026",
 
   VERSION:
-    "2026-08-31-battle-stage-v7",
+    "2026-09-06-supabase-auth",
 
 
   /* ==========================================================
@@ -36,28 +36,71 @@ window.APP_CONFIG = {
 
 
   /* ==========================================================
+     AUTH
+  ========================================================== */
+
+  AUTH: {
+
+    PROVIDER:
+      "supabase",
+
+    LOGIN_PAGE:
+      "./index.html",
+
+    PORTAL_PAGE:
+      "./portal.html"
+
+  },
+
+
+  /* ==========================================================
      EDGE FUNCTIONS
   ========================================================== */
 
   API: {
 
+    /*
+     * Player Dashboard API
+     *
+     * ใช้ Authorization:
+     * Bearer <Supabase access token>
+     *
+     * Edge Function ต้องอ่าน user จาก JWT
+     * ห้ามใช้ lineUserId หรือ X-Line-User-ID
+     */
     PLAYER:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
+
+
+    /*
+     * Compatibility
+     *
+     * โค้ดเก่าบางหน้าอาจยังเรียก API.DASHBOARD
+     * ให้ชี้มาที่ endpoint เดียวกันชั่วคราว
+     */
+    DASHBOARD:
+      "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/player-dashboard",
+
 
     MISSION:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/mission",
 
+
     ADMIN:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/admin-api",
+
 
     BATTLE:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/battle",
 
+
     INBODY:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/inbody",
 
+
     NUTRITION:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/nutrition",
+
 
     PROJECT_SETTINGS:
       "https://nztvqdzatdpauufpvdaa.supabase.co/functions/v1/project-settings"
@@ -71,23 +114,46 @@ window.APP_CONFIG = {
 
   PAGE: {
 
+    /*
+     * Supabase Email / Password Login
+     */
+    LOGIN:
+      "./index.html",
+
+
+    /*
+     * Supabase Portal
+     */
+    PORTAL:
+      "./portal.html",
+
+
     HOME:
       "./dashboard.html",
+
+
+    DASHBOARD:
+      "./dashboard.html",
+
 
     MISSION:
       "./mission.html",
 
+
     BATTLE:
       "./battle.html",
 
+
     /*
       Battle Map
+
       battle.html
           ↓
       battle_map.html
     */
     BATTLE_MAP:
       "./battle_map.html",
+
 
     /*
       Battle Stage
@@ -96,32 +162,41 @@ window.APP_CONFIG = {
       แล้วรับ ?stage=1 ถึง ?stage=10
 
       ตัวอย่าง:
+
       battle_stage.html?stage=1
       battle_stage.html?stage=10
     */
     BATTLE_STAGE:
       "./battle_stage.html",
 
+
     WEIGHT:
       "./weight-check.html",
+
 
     PROGRESS:
       "./progress.html",
 
+
     RANKING:
       "./ranking.html",
+
 
     REWARDS:
       "./rewards.html",
 
+
     PROJECT_SETTINGS:
       "./project-settings.html",
+
 
     NUTRITION:
       "./nutrition.html",
 
+
     INBODY:
       "./inbody.html",
+
 
     ADMIN:
       "./admin.html"
@@ -138,11 +213,14 @@ window.APP_CONFIG = {
     MOVE_MORE:
       "./mission.html?category=daily&mission=daily_move_more",
 
+
     EAT_SMART:
       "./nutrition.html?from=mission&mission=daily_eat_smart",
 
+
     EXERCISE:
       "./mission.html?category=daily&mission=daily_exercise_30",
+
 
     SLEEP:
       "./mission.html?category=daily&mission=daily_sleep"
@@ -157,8 +235,10 @@ window.APP_CONFIG = {
   MAX_ENERGY:
     200,
 
+
   EXP_PER_LEVEL:
     500,
+
 
   REFRESH_MS:
     30000,
@@ -173,8 +253,10 @@ window.APP_CONFIG = {
     STEPS:
       8000,
 
+
     CALORIES:
       300,
+
 
     SLEEP_MINUTES:
       420
@@ -191,11 +273,14 @@ window.APP_CONFIG = {
     MISSION_EVIDENCE:
       "mission-evidence",
 
+
     INBODY_RESULTS:
       "inbody-results",
 
+
     NUTRITION_EVIDENCE:
       "nutrition-evidence",
+
 
     ROCK_ASSETS:
       "rock-assets"
@@ -226,7 +311,8 @@ window.APP_CONFIG = {
     /*
       Battle Stage Template 01 - 10
 
-      ตั้งชื่อไฟล์ใน GitHub ให้ตรงนี้
+      ต้องตั้งชื่อไฟล์ใน GitHub
+      ให้ตรงกับค่าด้านล่าง
     */
     STAGE_TEMPLATE: {
 
@@ -317,6 +403,7 @@ window.APP_CONFIG = {
       expRequired: 0
     },
 
+
     2: {
       stage: 2,
       name: "จอมหวาน",
@@ -324,6 +411,7 @@ window.APP_CONFIG = {
       attackCost: 20,
       expRequired: 300
     },
+
 
     3: {
       stage: 3,
@@ -333,6 +421,7 @@ window.APP_CONFIG = {
       expRequired: 700
     },
 
+
     4: {
       stage: 4,
       name: "จอมเค็ม",
@@ -340,6 +429,7 @@ window.APP_CONFIG = {
       attackCost: 40,
       expRequired: 1200
     },
+
 
     5: {
       stage: 5,
@@ -349,6 +439,7 @@ window.APP_CONFIG = {
       expRequired: 1800
     },
 
+
     6: {
       stage: 6,
       name: "ปีศาจพักผ่อนน้อย",
@@ -356,6 +447,7 @@ window.APP_CONFIG = {
       attackCost: 60,
       expRequired: 2400
     },
+
 
     7: {
       stage: 7,
@@ -365,6 +457,7 @@ window.APP_CONFIG = {
       expRequired: 3300
     },
 
+
     8: {
       stage: 8,
       name: "ปีศาจพฤติกรรมเสี่ยง",
@@ -373,6 +466,7 @@ window.APP_CONFIG = {
       expRequired: 4300
     },
 
+
     9: {
       stage: 9,
       name: "ราชาความเสี่ยงสุขภาพ",
@@ -380,6 +474,7 @@ window.APP_CONFIG = {
       attackCost: 90,
       expRequired: 5500
     },
+
 
     10: {
       stage: 10,
@@ -407,18 +502,19 @@ window.APP_CONFIG.PAGES =
 ============================================================ */
 
 window.APP_CONFIG.getApi =
-  function(name){
+  function (name) {
 
     const key =
       String(
         name || ""
       )
-      .trim()
-      .toUpperCase();
+        .trim()
+        .toUpperCase();
 
 
     return (
-      window.APP_CONFIG.API[key] ||
+      window.APP_CONFIG
+        .API[key] ||
       ""
     );
   };
@@ -429,18 +525,19 @@ window.APP_CONFIG.getApi =
 ============================================================ */
 
 window.APP_CONFIG.getPage =
-  function(name){
+  function (name) {
 
     const key =
       String(
         name || ""
       )
-      .trim()
-      .toUpperCase();
+        .trim()
+        .toUpperCase();
 
 
     return (
-      window.APP_CONFIG.PAGE[key] ||
+      window.APP_CONFIG
+        .PAGE[key] ||
       ""
     );
   };
@@ -451,18 +548,19 @@ window.APP_CONFIG.getPage =
 ============================================================ */
 
 window.APP_CONFIG.getMissionRoute =
-  function(name){
+  function (name) {
 
     const key =
       String(
         name || ""
       )
-      .trim()
-      .toUpperCase();
+        .trim()
+        .toUpperCase();
 
 
     return (
-      window.APP_CONFIG.MISSION_ROUTE[key] ||
+      window.APP_CONFIG
+        .MISSION_ROUTE[key] ||
       ""
     );
   };
@@ -473,21 +571,19 @@ window.APP_CONFIG.getMissionRoute =
 ============================================================ */
 
 window.APP_CONFIG.getBattleStage =
-  function(stageNo){
+  function (stageNo) {
 
     const stage =
-      Math.max(
-        1,
-        Math.min(
-          10,
-          Number(stageNo) || 1
-        )
+      normalizeStage(
+        stageNo
       );
 
 
     return (
-      window.APP_CONFIG.BATTLE_STAGE[stage] ||
-      window.APP_CONFIG.BATTLE_STAGE[1]
+      window.APP_CONFIG
+        .BATTLE_STAGE[stage] ||
+      window.APP_CONFIG
+        .BATTLE_STAGE[1]
     );
   };
 
@@ -497,15 +593,11 @@ window.APP_CONFIG.getBattleStage =
 ============================================================ */
 
 window.APP_CONFIG.getBattleStageTemplate =
-  function(stageNo){
+  function (stageNo) {
 
     const stage =
-      Math.max(
-        1,
-        Math.min(
-          10,
-          Number(stageNo) || 1
-        )
+      normalizeStage(
+        stageNo
       );
 
 
@@ -523,15 +615,11 @@ window.APP_CONFIG.getBattleStageTemplate =
 ============================================================ */
 
 window.APP_CONFIG.getBattleMonster =
-  function(stageNo){
+  function (stageNo) {
 
     const stage =
-      Math.max(
-        1,
-        Math.min(
-          10,
-          Number(stageNo) || 1
-        )
+      normalizeStage(
+        stageNo
       );
 
 
@@ -549,22 +637,70 @@ window.APP_CONFIG.getBattleMonster =
 ============================================================ */
 
 window.APP_CONFIG.getBattleStageUrl =
-  function(stageNo){
+  function (stageNo) {
 
     const stage =
-      Math.max(
-        1,
-        Math.min(
-          10,
-          Number(stageNo) || 1
-        )
+      normalizeStage(
+        stageNo
       );
 
 
     return (
-      window.APP_CONFIG.PAGE.BATTLE_STAGE +
+      window.APP_CONFIG
+        .PAGE
+        .BATTLE_STAGE +
       "?stage=" +
-      encodeURIComponent(stage)
+      encodeURIComponent(
+        stage
+      )
+    );
+  };
+
+
+/* ============================================================
+   NORMALIZE BATTLE STAGE
+============================================================ */
+
+function normalizeStage(
+  stageNo
+) {
+
+  return Math.max(
+    1,
+    Math.min(
+      10,
+      Math.trunc(
+        Number(
+          stageNo
+        ) || 1
+      )
+    )
+  );
+}
+
+
+/* ============================================================
+   AUTH HELPERS
+============================================================ */
+
+window.APP_CONFIG.getLoginPage =
+  function () {
+
+    return (
+      window.APP_CONFIG
+        .PAGE.LOGIN ||
+      "./index.html"
+    );
+  };
+
+
+window.APP_CONFIG.getPortalPage =
+  function () {
+
+    return (
+      window.APP_CONFIG
+        .PAGE.PORTAL ||
+      "./portal.html"
     );
   };
 
@@ -576,4 +712,9 @@ window.APP_CONFIG.getBattleStageUrl =
 console.log(
   `[${window.APP_CONFIG.APP_NAME}]`,
   window.APP_CONFIG.VERSION
+);
+
+console.log(
+  "Authentication:",
+  window.APP_CONFIG.AUTH.PROVIDER
 );
