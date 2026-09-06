@@ -1,2 +1,200 @@
-<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ROCK YOUR BODY — เข้าสู่ระบบ</title><link rel="stylesheet" href="portal.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
-<body class="auth-page"><main class="auth-shell"><section class="brand"><div class="logo">RYB</div><p class="eyebrow">EMPLOYEE WELLNESS 2026</p><h1>สุขภาพที่ดี เริ่มจากข้อมูลที่เป็นของคุณ</h1><p>ระบบติดตามสุขภาพองค์กรที่ปลอดภัย แยกสิทธิ์พนักงาน HR และผู้ดูแลระบบ</p></section><section class="auth-card"><h2 id="authTitle">เข้าสู่ระบบ</h2><p class="muted">ใช้อีเมลและรหัสผ่านขององค์กร</p><form id="loginForm"><label id="nameLabel" class="hidden">ชื่อ-นามสกุล<input id="fullName" autocomplete="name"></label><label>อีเมล<input id="email" type="email" required autocomplete="email" placeholder="name@company.com"></label><label>รหัสผ่าน<input id="password" type="password" required minlength="8" autocomplete="current-password"></label><button id="submitText">เข้าสู่ระบบ</button></form><button class="link-btn" id="modeBtn" type="button">สมัครบัญชีใหม่</button><button class="link-btn" id="resetBtn" type="button">ลืมรหัสผ่าน</button><div id="message" class="message" role="alert"></div><p class="fine">บัญชีใหม่ต้องได้รับการอนุมัติจาก HR หรือ Admin ก่อนใช้งาน</p></section></main><script type="module" src="auth.js"></script></body></html>
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    ROCK YOUR BODY — เข้าสู่ระบบ
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="portal.css"
+  >
+
+  <!-- Supabase JavaScript SDK -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
+</head>
+
+<body class="auth-page">
+
+  <main class="auth-shell">
+
+    <!-- =====================================================
+         BRAND
+         ===================================================== -->
+
+    <section class="brand">
+
+      <div class="logo">
+        RYB
+      </div>
+
+      <p class="eyebrow">
+        EMPLOYEE WELLNESS 2026
+      </p>
+
+      <h1>
+        สุขภาพที่ดี
+        เริ่มจากข้อมูลที่เป็นของคุณ
+      </h1>
+
+      <p>
+        ระบบติดตามสุขภาพองค์กรที่ปลอดภัย
+        แยกสิทธิ์พนักงาน HR
+        และผู้ดูแลระบบ
+      </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         AUTHENTICATION
+         ===================================================== -->
+
+    <section class="auth-card">
+
+      <h2 id="authTitle">
+        เข้าสู่ระบบ
+      </h2>
+
+      <p class="muted">
+        ใช้อีเมลและรหัสผ่านขององค์กร
+      </p>
+
+
+      <!-- ===================================================
+           LOGIN / SIGNUP FORM
+           =================================================== -->
+
+      <form id="loginForm">
+
+        <!-- Full name appears only in Signup mode -->
+
+        <label
+          id="nameLabel"
+          class="hidden"
+        >
+          ชื่อ-นามสกุล
+
+          <input
+            id="fullName"
+            type="text"
+            autocomplete="name"
+            placeholder="ชื่อ-นามสกุล"
+          >
+        </label>
+
+
+        <!-- Email -->
+
+        <label>
+          อีเมล
+
+          <input
+            id="email"
+            type="email"
+            required
+            autocomplete="email"
+            placeholder="name@company.com"
+          >
+        </label>
+
+
+        <!-- Password -->
+
+        <label>
+          รหัสผ่าน
+
+          <input
+            id="password"
+            type="password"
+            required
+            minlength="8"
+            autocomplete="current-password"
+            placeholder="รหัสผ่านอย่างน้อย 8 ตัว"
+          >
+        </label>
+
+
+        <!-- Submit -->
+
+        <button
+          id="submitText"
+          type="submit"
+        >
+          เข้าสู่ระบบ
+        </button>
+
+      </form>
+
+
+      <!-- ===================================================
+           AUTH ACTIONS
+           =================================================== -->
+
+      <button
+        class="link-btn"
+        id="modeBtn"
+        type="button"
+      >
+        สมัครบัญชีใหม่
+      </button>
+
+
+      <button
+        class="link-btn"
+        id="resetBtn"
+        type="button"
+      >
+        ลืมรหัสผ่าน
+      </button>
+
+
+      <!-- auth.js จะสร้างปุ่ม
+           "ส่งอีเมลยืนยันอีกครั้ง"
+           ต่อจาก resetBtn อัตโนมัติ -->
+
+
+      <!-- ===================================================
+           MESSAGE
+           =================================================== -->
+
+      <div
+        id="message"
+        class="message"
+        role="alert"
+        aria-live="polite"
+      ></div>
+
+
+      <p class="fine">
+        บัญชีใหม่ต้องได้รับการอนุมัติจาก
+        HR หรือ Admin ก่อนใช้งาน
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================
+       APPLICATION AUTH LOGIC
+       ======================================================= -->
+
+  <script
+    type="module"
+    src="auth.js"
+  ></script>
+
+</body>
+
+</html>
