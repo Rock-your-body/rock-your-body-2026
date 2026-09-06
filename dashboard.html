@@ -15,8 +15,8 @@
     href="./base.css?v=20260831-home-v73-six-box-align"
   >
 
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="./app-config.js?v=20260831-home-v73-six-box-align"></script>
+  <script src="./app-config.js?v=20260906-supabase-auth"></script>
+  <script src="./rock-core.js?v=20260906-supabase-auth"></script>
 
   <style>
     /* =========================================================
@@ -47,7 +47,7 @@
 
 
       /* =====================================================
-         LINE NAME
+         USER NAME
       ====================================================== */
       --name-left:6.5%;
       --name-top:60.6%;
@@ -241,7 +241,7 @@
        COMMON LIVE DATA
     ========================================================= */
 
-    #lineName,
+    #userName,
     #level,
     #expValue,
     #coin,
@@ -267,10 +267,10 @@
 
 
     /* =========================================================
-       LINE NAME
+       USER NAME
     ========================================================= */
 
-    #lineName{
+    #userName{
       left:var(--name-left) !important;
       top:var(--name-top) !important;
       width:var(--name-width) !important;
@@ -516,12 +516,12 @@
 
   <img
     id="profileImage"
-    alt="LINE Profile"
+    alt="User Profile"
     draggable="false"
   >
 
   <div
-    id="lineName"
+    id="userName"
     class="home-live"
   >
     กำลังโหลด...
@@ -882,7 +882,8 @@
    ROCK YOUR BODY 2026
    HOME V7.3 SIX-BOX ALIGN ONLY
    READ FLOW:
-   LIFF ID Token
+   Supabase Auth
+   -> Authorization: Bearer <access_token>
    -> PLAYER API
    -> action=dashboard
    -> JSON ก้อนเดียว
@@ -1094,82 +1095,38 @@ function getApi(
 
 
 /* =========================================================
-   LIFF
+   SUPABASE AUTH
 ========================================================= */
 
-async function initLiff(){
+async function requireAuth(){
 
   if(
-    typeof liff ===
-    "undefined"
+    !window.ROCK ||
+    typeof ROCK.requireAuth !==
+      "function"
   ){
 
     throw new Error(
-      "LINE LIFF SDK ไม่พร้อม"
+      "ROCK Auth ยังไม่พร้อม"
     );
   }
 
 
-  await liff.init({
-
-    liffId:
-      window.APP_CONFIG
-        ?.LIFF_ID ||
-      "2011201679-uNWz5yqF"
-
-  });
+  const user =
+    await ROCK.requireAuth();
 
 
   if(
-    !liff.isLoggedIn()
+    !user
   ){
 
-    liff.login({
-
-      redirectUri:
-        window.location.href
-
-    });
-
-
-    return false;
+    throw new Error(
+      "กรุณาเข้าสู่ระบบ"
+    );
   }
 
 
-  const idToken =
-    liff.getIDToken();
-
-
-  if(
-    !idToken
-  ){
-
-    try{
-
-      liff.logout();
-
-    }catch(error){
-
-      console.warn(
-        "LIFF logout:",
-        error
-      );
-    }
-
-
-    liff.login({
-
-      redirectUri:
-        window.location.href
-
-    });
-
-
-    return false;
-  }
-
-
-  return true;
+  return user;
 }
 
 
@@ -1177,159 +1134,15 @@ async function initLiff(){
    PLAYER API
 ========================================================= */
 
-async function getFreshIdToken(){
-
-  if(
-    typeof liff ===
-    "undefined"
-  ){
-
-    throw new Error(
-      "LINE LIFF SDK ไม่พร้อม"
-    );
-  }
-
-
-  if(
-    !liff.isLoggedIn()
-  ){
-
-    liff.login({
-
-      redirectUri:
-        window.location.href
-
-    });
-
-
-    return null;
-  }
-
-
-  const token =
-    liff.getIDToken();
-
-
-  if(
-    !token
-  ){
-
-    try{
-
-      liff.logout();
-
-    }catch(error){
-
-      console.warn(
-        "LIFF logout:",
-        error
-      );
-    }
-
-
-    liff.login({
-
-      redirectUri:
-        window.location.href
-
-    });
-
-
-    return null;
-  }
-
-
-  return token;
-}
-
-
-function isTokenExpiredError(
-  result,
-  status
-){
-
-  const message =
-    String(
-      result?.error ||
-      result?.message ||
-      ""
-    )
-    .toLowerCase();
-
-
-  return (
-    status === 401 ||
-    message.includes(
-      "idtoken expired"
-    ) ||
-    message.includes(
-      "id token expired"
-    ) ||
-    message.includes(
-      "token expired"
-    ) ||
-    message.includes(
-      "authentication failed"
-    )
-  );
-}
-
-
-async function renewLineLogin(){
-
-  try{
-
-    if(
-      liff.isLoggedIn()
-    ){
-
-      liff.logout();
-    }
-
-  }catch(error){
-
-    console.warn(
-      "LIFF logout:",
-      error
-    );
-  }
-
-
-  sessionStorage.setItem(
-    "ryb_relogin_reason",
-    "token_expired"
-  );
-
-
-  liff.login({
-
-    redirectUri:
-      window.location.href
-
-  });
-}
-
-
 async function playerApi(
-  payload
+  payload = {}
 ){
 
-  const idToken =
-    await getFreshIdToken();
+  await requireAuth();
 
 
-  if(
-    !idToken
-  ){
-
-    return new Promise(
-      ()=>{}
-    );
-  }
-
-
-  const response =
-    await fetch(
+  const result =
+    await ROCK.api(
       getApi(
         "PLAYER"
       ),
@@ -1338,69 +1151,14 @@ async function playerApi(
         method:
           "POST",
 
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        cache:
-          "no-store",
-
         body:
-          JSON.stringify({
-
-            ...payload,
-
-            idToken
-
-          })
+          payload
 
       }
     );
 
 
-  const text =
-    await response.text();
-
-
-  let result = {};
-
-
-  try{
-
-    result =
-      text
-        ? JSON.parse(
-            text
-          )
-        : {};
-
-  }catch{
-
-    throw new Error(
-      "PLAYER API ตอบกลับไม่ใช่ JSON"
-    );
-  }
-
-
   if(
-    isTokenExpiredError(
-      result,
-      response.status
-    )
-  ){
-
-    await renewLineLogin();
-
-
-    return new Promise(
-      ()=>{}
-    );
-  }
-
-
-  if(
-    !response.ok ||
     result?.success ===
       false
   ){
@@ -1408,7 +1166,7 @@ async function playerApi(
     throw new Error(
       result?.error ||
       result?.message ||
-      `HTTP ${response.status}`
+      "PLAYER API error"
     );
   }
 
@@ -1657,13 +1415,23 @@ function normalizeHome(
 
           player.displayName,
 
-          player.lineDisplayName,
+          player.display_name,
 
-          player.line_display_name,
+          player.fullName,
 
-          raw.lineDisplayName
+          player.full_name,
+
+          raw.displayName,
+
+          raw.display_name,
+
+          raw.fullName,
+
+          raw.full_name
 
         ) ||
+        ROCK.getProfile()?.full_name ||
+        ROCK.getUser()?.email ||
         "ROCK HERO",
 
 
@@ -1674,9 +1442,20 @@ function normalizeHome(
 
           player.picture_url,
 
-          raw.pictureUrl
+          player.avatarUrl,
+
+          player.avatar_url,
+
+          raw.pictureUrl,
+
+          raw.picture_url,
+
+          raw.avatarUrl,
+
+          raw.avatar_url
 
         ) ||
+        ROCK.getProfile()?.avatar_url ||
         "",
 
 
@@ -2002,9 +1781,9 @@ function renderHome(
     );
 
 
-  /* ---------- LINE ---------- */
+  /* ---------- USER ---------- */
 
-  $("lineName").textContent =
+  $("userName").textContent =
     data.player.displayName;
 
 
@@ -2953,38 +2732,21 @@ $("battleHotspot")
 
   try{
 
-    const ready =
-      await initLiff();
+    /*
+      Supabase Auth:
+      - ตรวจ session
+      - redirect ไปหน้า Login ถ้ายังไม่เข้าสู่ระบบ
+      - ใช้ Supabase user.id เป็น identity
+    */
+    const user =
+      await requireAuth();
 
 
     if(
-      ready ===
-      false
+      !user
     ){
 
       return;
-    }
-
-
-    const reloginReason =
-      sessionStorage.getItem(
-        "ryb_relogin_reason"
-      );
-
-
-    if(
-      reloginReason ===
-      "token_expired"
-    ){
-
-      sessionStorage.removeItem(
-        "ryb_relogin_reason"
-      );
-
-
-      showToast(
-        "เชื่อมต่อ LINE ใหม่แล้ว"
-      );
     }
 
 
